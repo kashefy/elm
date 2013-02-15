@@ -1,0 +1,11 @@
+file I/O:
+    m_strMainInputDir: C:\Users\woodstock\Documents\grad\Thesis\code\repo-git\trunk\ModelFrontEnd\data\input\MNIST\
+
+data:
+    m_nofRows: 28
+    m_nofCols: 28
+
+m_cutOffBelow_orientResponseVals: 0.20
+
+parameter objects:
+    m_featParams: featParamFile.yml

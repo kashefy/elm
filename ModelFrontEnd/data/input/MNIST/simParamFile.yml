@@ -1,0 +1,34 @@
+file I/O:
+    m_strMainOutputDir: C:\Users\woodstock\Documents\grad\Thesis\code\repo-git\trunk\ModelFrontEnd\data\output\MNIST\
+    m_strMainInputDir: C:\Users\woodstock\Documents\grad\Thesis\code\repo-git\trunk\ModelFrontEnd\data\input\MNIST\
+
+data:
+    m_nofTrainStimuli: 75
+    m_nofTestStimuli: 25
+    m_nofRows: -1 # set to -1 if to be loaded by DataLoader object
+    m_nofCols: -1 # set to -1 if to be loaded by DataLoader object
+
+encoding:
+    m_encFrequency: 80
+    m_deltaT: 0.001
+    m_encDurationInMilSec: 100 #1000
+    m_popCodeFanOut: 1
+
+prediction:
+    m_nofCauses: -1 # set to -1 if to be loaded by DataLoader object
+    m_nofLearners: 6
+    m_nofLearners_layerF: 4
+
+parameter objects:
+    m_learnerParams: learnerParamFile.yml
+    m_competitionParams: competitionParamFile.yml
+    m_featParams: featParamFile.yml
+    m_attentionParams: attentionParamFile.yml
+    m_saliencyParams: saliencyParamFile.yml
+
+attention:
+    m_nofAttentions: 5
+
+evaluation:
+    m_predictionStatWindowSize: 5
+    m_activityMaskLowerThresholdExcl: 0.05

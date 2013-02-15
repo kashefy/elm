@@ -1,0 +1,20 @@
+//file I/O
+m_strMainOutputDir=C:\Users\woodstock\Documents\grad\Thesis\code\repo-git\trunk\ModelFrontEnd\data\output\barSet\
+m_strMainInputDir=C:\Users\woodstock\Documents\grad\Thesis\code\repo-git\trunk\ModelFrontEnd\data\input\barSet\
+//data
+m_nofTrainStimuli=6
+m_nofTestStimuli=6
+m_nofRows=11
+m_nofCols=11
+//encoding parameters
+m_encFrequency=80
+m_deltaT=0.001
+m_encDurationInMilSec=50
+m_popCodeFanOut=1
+//prediction parameters
+m_nofCauses=6
+m_nofLearners=6
+//parameter objects
+m_learnerParams=learnerParamFile.txt
+m_competitionParams=competitionParamFile.txt
+m_featParams=featParamFile.txt
