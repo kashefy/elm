@@ -16,9 +16,9 @@ public class ActivityMaskTest {
     
     public static int test_activity_sub_windows(){
         
-        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
         File mainInputDir = new File(strMainInputDir);
-        String strMainOutputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String strMainOutputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         File mainOutputDir = new File(strMainOutputDir);
         String strActivity = "activity\\";
         File attOutputDir = new File(mainOutputDir, strActivity);

@@ -21,9 +21,9 @@ public class AttentionTest {
     
     public static void test_attentionSalient(){
         
-        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
         File mainInputDir = new File(strMainInputDir);
-        String strMainOutputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String strMainOutputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         File mainOutputDir = new File(strMainOutputDir);
         String strAttOutputDir = "att\\";
         File attOutputDir = new File(mainOutputDir, strAttOutputDir);
@@ -78,11 +78,11 @@ public class AttentionTest {
     
     public static void test_attentionWindow_filterResponse_MNIST(){
         
-        String strMainInputDataDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+        String strMainInputDataDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
         File mainInputDir = new File(strMainInputDataDir);
         File featParamFile = new File(mainInputDir, "featParamFile_layerF.txt");
       
-        String strMainOnputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String strMainOnputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         File mainOutputDir = new File(strMainOnputDir);
         File attOutputDir = new File(mainOutputDir, "att");
         File filterOutputDir = new File(attOutputDir, "filterResponse");

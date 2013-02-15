@@ -17,7 +17,7 @@ public class SimulationTune {
     public static void tune_MNIST_layerF_onOff_learningRateZ(){
         
         String tune_suffix = "learningRateZ";
-        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         File tune_log_ile = new File(output_dir_name, "tune_log_"+tune_suffix+".txt"); 
         try(PrintWriter pw = new PrintWriter(new FileWriter(tune_log_ile))){
 
@@ -35,7 +35,7 @@ public class SimulationTune {
                     Stopwatch timer = new Stopwatch();
                     timer.start();
 
-                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
                     File input_dir = new File(str_main_input_dir);
                     AbstractSimulation simulation;
 
@@ -103,7 +103,7 @@ public class SimulationTune {
     public static void tune_MNIST_layerF_onOff_learningRateF(){
         
         String tune_suffix = "learningRateF";
-        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         File tune_log_ile = new File(output_dir_name, "tune_log_"+tune_suffix+".txt"); 
         try(PrintWriter pw = new PrintWriter(new FileWriter(tune_log_ile))){
 
@@ -120,7 +120,7 @@ public class SimulationTune {
                     Stopwatch timer = new Stopwatch();
                     timer.start();
 
-                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
                     File input_dir = new File(str_main_input_dir);
                     AbstractSimulation simulation;
 
@@ -186,7 +186,7 @@ public class SimulationTune {
     public static void tune_MNIST_layerF_onOff_wta_max_rate_factor_layerF(){
         
         String tune_suffix = "wta_max_rate_factor_layerF";
-        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         File tune_log_ile = new File(output_dir_name, "tune_log_"+tune_suffix+".txt"); 
         try(PrintWriter pw = new PrintWriter(new FileWriter(tune_log_ile))){
 
@@ -204,7 +204,7 @@ public class SimulationTune {
                     Stopwatch timer = new Stopwatch();
                     timer.start();
 
-                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
                     File input_dir = new File(str_main_input_dir);
                     AbstractSimulation simulation;
 
@@ -272,7 +272,7 @@ public class SimulationTune {
     public static void tune_MNIST_layerF_onOff_wta_max_rate_factor_layerZ(){
         
         String tune_suffix = "wta_max_rate_factor_layerZ";
-        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         File tune_log_ile = new File(output_dir_name, "tune_log_"+tune_suffix+".txt"); 
         try(PrintWriter pw = new PrintWriter(new FileWriter(tune_log_ile))){
 
@@ -290,7 +290,7 @@ public class SimulationTune {
                     Stopwatch timer = new Stopwatch();
                     timer.start();
 
-                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
                     File input_dir = new File(str_main_input_dir);
                     AbstractSimulation simulation;
 
@@ -356,7 +356,7 @@ public class SimulationTune {
     public static void tune_MNIST_layerF_onOff(){
         
         String tune_suffix = "tune";
-        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         File tune_log_ile = new File(output_dir_name, "tune_log_"+tune_suffix+".txt"); 
         try(PrintWriter pw = new PrintWriter(new FileWriter(tune_log_ile))){
 
@@ -376,7 +376,7 @@ public class SimulationTune {
                     Stopwatch timer = new Stopwatch();
                     timer.start();
 
-                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
                     File input_dir = new File(str_main_input_dir);
                     AbstractSimulation simulation;
 
@@ -442,7 +442,7 @@ public class SimulationTune {
     public static void tune_MNIST_layerF_onOff_loadF(){
         
         String tune_suffix = "tune";
-        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         File tune_log_ile = new File(output_dir_name, "tune_log_"+tune_suffix+".txt"); 
         try(PrintWriter pw = new PrintWriter(new FileWriter(tune_log_ile))){
 
@@ -462,7 +462,7 @@ public class SimulationTune {
                     Stopwatch timer = new Stopwatch();
                     timer.start();
 
-                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
                     File input_dir = new File(str_main_input_dir);
                     AbstractSimulation simulation;
 
@@ -528,7 +528,7 @@ public class SimulationTune {
     public static void tune_MNIST_layerF_onOff_loadF_indepLayer(){
         
         String tune_suffix = "tune";
-        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String output_dir_name = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         File tune_log_ile = new File(output_dir_name, "tune_log_"+tune_suffix+".txt"); 
         try(PrintWriter pw = new PrintWriter(new FileWriter(tune_log_ile))){
 
@@ -548,7 +548,7 @@ public class SimulationTune {
                     Stopwatch timer = new Stopwatch();
                     timer.start();
 
-                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+                    String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
                     File input_dir = new File(str_main_input_dir);
                     AbstractSimulation simulation;
 

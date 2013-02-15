@@ -15,8 +15,8 @@ public class SaliencyTest {
     
     public static void testEval(){
         
-        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
-        String strOutputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\filterResponse\\";
+        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
+        String strOutputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\filterResponse\\";
         
         DataLoaderImageSetCSV dataLoader = new DataLoaderImageSetCSV();
         dataLoader.setParams(strMainInputDir);

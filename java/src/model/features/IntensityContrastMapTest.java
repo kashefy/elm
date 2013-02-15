@@ -88,8 +88,8 @@ public class IntensityContrastMapTest {
     
         public static void test1(){
         
-        String strInputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
-        String strOutputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\filterResponse\\";
+        String strInputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
+        String strOutputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\filterResponse\\";
         
         
         int supportRadius = 14;
@@ -182,8 +182,8 @@ public class IntensityContrastMapTest {
         
     public static void test2(){
         
-        String strInputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
-        String strOutputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\filterResponse\\";
+        String strInputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
+        String strOutputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\filterResponse\\";
         
         int supportRadius = 14;
         double scale = 1.0;
@@ -298,8 +298,8 @@ public class IntensityContrastMapTest {
     
     public static void test3(){
         
-        String strInputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
-        String strOutputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\filterResponse\\";
+        String strInputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
+        String strOutputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\filterResponse\\";
         
         int supportRadius = 14;
         double scale = 1.0;

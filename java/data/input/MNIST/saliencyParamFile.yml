@@ -1,5 +1,5 @@
 file I/O:
-    m_strMainInputDir: C:\Users\woodstock\Documents\grad\Thesis\code\repo-git\trunk\ModelFrontEnd\data\input\MNIST\
+    m_strMainInputDir: C:\Users\woodstock\Documents\grad\Thesis\code\sem\java\data\input\MNIST\
 
 data:
     m_nofRows: 28

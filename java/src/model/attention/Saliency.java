@@ -147,7 +147,7 @@ public class Saliency extends AbstractSaliencyMeasure{
         // for later saveing
         m_orientDistsVarNorm = orientDistsVarNorm;
         m_arrResponseIntensContrastRect_0 = arrResponseIntensContrastRect[0];
-        //String strOutputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\filterResponse\\";
+        //String strOutputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\filterResponse\\";
         
         //FileIO.saveArrayToCSV(par_inputVals, m_nofRows, m_nofCols, strOutputPath + "stimRe.csv");
         //FileIO.saveArrayToCSV(orientDistsVarNorm.values(), m_nofRows, m_nofCols, strOutputPath + "orientDistsVarNorm.csv");

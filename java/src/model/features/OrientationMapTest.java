@@ -195,7 +195,7 @@ public class OrientationMapTest {
     
     public static void testFilterResponseBarStim(){
         
-        String strFeatParamFilename = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\barSet\\featParamFileSimplePatterns.txt";
+        String strFeatParamFilename = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\barSet\\featParamFileSimplePatterns.txt";
        String strFilterOutputDir = ".\\data\\output\\barSet\\FilterResponse\\";
        OrientationMap mapOrient = new OrientationMap();
               
@@ -243,7 +243,7 @@ public class OrientationMapTest {
     
     public static void testFilterResponseBarStimWithNoise(){
         
-        String strFeatParamFilename = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\barNoiseSet\\featParamFile.txt";
+        String strFeatParamFilename = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\barNoiseSet\\featParamFile.txt";
        String strFilterOutputDir = ".\\data\\output\\barNoiseSet\\FilterResponse\\";
        OrientationMap mapOrient = new OrientationMap();
               
@@ -301,12 +301,12 @@ public class OrientationMapTest {
     
     public static void testFilterResponseMNIST(){
         
-        String strInputDataDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+        String strInputDataDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
         File inputDataDir = new File(strInputDataDir);
         String strFeatParamFilename = "featParamFile.txt";
         File featParamFile = new File(inputDataDir, "featParamFile.txt");
       
-        String strMainOnputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String strMainOnputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         File mainOnputDir = new File(strMainOnputDir);
         String strFilterOutputDir = "filterResponse\\";
         File filterOutputDir = new File(mainOnputDir, strFilterOutputDir);

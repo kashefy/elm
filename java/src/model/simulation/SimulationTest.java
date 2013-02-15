@@ -15,7 +15,7 @@ public class SimulationTest {
     
     public static void testAttSeq(){
         
-        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
         AbstractSimulation simulation;
         
         simulation = new SimulationSceneSampler();
@@ -33,7 +33,7 @@ public class SimulationTest {
     
     public static void testSimplePatterns(){
         
-        String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\barSet\\";
+        String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\barSet\\";
         File main_input_dir = new File(str_main_input_dir);
         AbstractSimulation simulation;
         
@@ -56,7 +56,7 @@ public class SimulationTest {
         Stopwatch timer = new Stopwatch();
         timer.start();
         
-        String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\txt";
+        String str_main_input_dir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\txt";
         File main_input_dir = new File(str_main_input_dir);
         AbstractSimulation simulation;
         
@@ -85,7 +85,7 @@ public class SimulationTest {
         Stopwatch timer = new Stopwatch();
         timer.start();
         
-        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
         AbstractSimulation simulation;
         
         simulation = new SimulationMNISTInterm();
@@ -109,7 +109,7 @@ public class SimulationTest {
         Stopwatch timer = new Stopwatch();
         timer.start();
         
-        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
         File input_dir = new File(strMainInputDir);
         AbstractSimulation simulation;
         
@@ -139,7 +139,7 @@ public class SimulationTest {
         Stopwatch timer = new Stopwatch();
         timer.start();
         
-        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\input\\MNIST\\";
+        String strMainInputDir = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\input\\MNIST\\";
         File input_dir = new File(strMainInputDir);
         AbstractSimulation simulation;
         

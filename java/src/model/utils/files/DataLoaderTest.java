@@ -32,7 +32,7 @@ public class DataLoaderTest {
         int nofSamples = dataLoader.getNofSamples();
         nofSamples = 1;
         
-        String strOut = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String strOut = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         
         for(int i=0; i<nofSamples; i++){
             
@@ -79,7 +79,7 @@ public class DataLoaderTest {
         
         int nofSamples = dataLoader.getNofSamples();
         
-        String strOut = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\MNIST\\";
+        String strOut = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\";
         
         
         for(int i=0; i<nofSamples; i++){

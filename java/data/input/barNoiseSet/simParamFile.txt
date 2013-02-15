@@ -1,6 +1,6 @@
 //file I/O
-m_strMainOutputDir=C:\Users\woodstock\Documents\grad\Thesis\code\repo-git\trunk\ModelFrontEnd\data\output\barSet\
-m_strMainInputDir=C:\Users\woodstock\Documents\grad\Thesis\code\repo-git\trunk\ModelFrontEnd\data\input\barSet\
+m_strMainOutputDir=C:\Users\woodstock\Documents\grad\Thesis\code\sem\java\data\output\barSet\
+m_strMainInputDir=C:\Users\woodstock\Documents\grad\Thesis\code\sem\java\data\input\barSet\
 //data
 m_nofTrainStimuli=6
 m_nofTestStimuli=6
