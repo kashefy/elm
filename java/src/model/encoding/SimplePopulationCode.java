@@ -36,7 +36,7 @@ public class SimplePopulationCode extends AbstractPopulationCode
      * @see AbstractPopulationCode#getStateOfNeurons(double[])
      */
     @Override
-    double[] calcStateOfNeurons(double[] par_inputVals) 
+    public double[] calcStateOfNeurons(double[] par_inputVals) 
     {
         // since we have binary x values, each variable xk is associated
         // with n yi values. n is determined by fanOut value
@@ -47,7 +47,51 @@ public class SimplePopulationCode extends AbstractPopulationCode
         }
 
         int j; // index of output nodes
-        for(int i = 0; i < m_nofInputs; i++){
+        for(int i = 0; i < m_nofInputs; ++i){
+
+                j = i*m_nfanOut;
+                if(m_biasIndex != NO_BIAS)
+                    ++j;
+                
+                // output nodes per input node are antognistic
+                switch(m_nfanOut){
+                    
+                    case 2:
+                        stateVals[j  ] =   par_inputVals[i];
+                        stateVals[j+1] = 1-par_inputVals[i];
+                        
+                        break;
+                    case 3:
+                        stateVals[j  ] = par_inputVals[i];
+                        stateVals[j+1] = -1;    // constant for this node
+                        stateVals[j+2] = 1-par_inputVals[i];
+                        
+                        break;
+                    default: // case: 1
+                        stateVals[j] = par_inputVals[i];
+                }
+
+        }
+
+        return stateVals;
+    }
+    
+    /*
+     * @see AbstractPopulationCode#getStateOfNeurons(int[])
+     */
+    @Override
+    public int[] calcStateOfNeurons(int[] par_inputVals) 
+    {
+        // since we have binary x values, each variable xk is associated
+        // with n yi values. n is determined by fanOut value
+        int[] stateVals = new int[ m_nofNodes ];
+
+        if(m_biasIndex != NO_BIAS){
+            stateVals[ m_biasIndex ] = m_biasValue; // bias term?
+        }
+
+        int j; // index of output nodes
+        for(int i = 0; i < m_nofInputs; ++i){
 
                 j = i*m_nfanOut;
                 if(m_biasIndex != NO_BIAS)

@@ -379,7 +379,7 @@ public class SimulationTune {
                     File input_dir = new File(str_main_input_dir);
                     AbstractSimulation simulation;
 
-                    simulation = new SimulationMNIST_layerF_onOff();
+                    simulation = new SimulationMNIST_layerF_onOff_loadF_indepLayer();
 
                     SimulationParams sim_params = new SimulationParams();
                     sim_params.load(new File(input_dir, "simParamFile_layerF.yml").getPath());

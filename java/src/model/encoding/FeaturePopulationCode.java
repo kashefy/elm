@@ -163,7 +163,7 @@ public class FeaturePopulationCode extends SimplePopulationCode{
      * @see PopulationCode#getStateOfNeurons(double[])
      */
     @Override
-    double[] calcStateOfNeurons(double[] par_inputVals) 
+    public double[] calcStateOfNeurons(double[] par_inputVals) 
     {
         // each variable xk is associated
         // with n yi values. n is determined by fanOut value

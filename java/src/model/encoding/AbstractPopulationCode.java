@@ -40,6 +40,11 @@ public abstract class AbstractPopulationCode
 	abstract double[] calcStateOfNeurons(double[] inputs);
         
         /*
+	 * @see AbstractPopulationCode#getStateOfNeurons(double[])
+	 */
+        abstract int[] calcStateOfNeurons(int[] inputs);
+        
+        /*
          * 
          */
         public int[][] sampleStateOfNeurons(double[] par_index, int nofSamples){

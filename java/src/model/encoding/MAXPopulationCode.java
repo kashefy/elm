@@ -8,8 +8,6 @@ package model.encoding;
  *
  * @author woodstock
  */
-import model.*;
-import model.utils.*;
 
 public class MAXPopulationCode extends SimplePopulationCode{
     
@@ -17,7 +15,7 @@ public class MAXPopulationCode extends SimplePopulationCode{
      * @see AbstractPopulationCode#getStateOfNeurons(double[])
      */
     @Override
-    double[] calcStateOfNeurons(double[] par_inputVals) 
+    public double[] calcStateOfNeurons(double[] par_inputVals) 
     {
         // since we have binary x values, each variable xk is associated
         // with n yi values. n is determined by fanOut value
