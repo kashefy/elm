@@ -18,7 +18,7 @@ function [] = display_masks(par_masks_learners, par_figure_id, par_masks_singles
         colormap(gray);
         axis image
         if i==1
-            title('aggregate masks');
+            title('mask aggregates');
         end
         if i < nofMasks
             set(gca, 'XTick', []);
