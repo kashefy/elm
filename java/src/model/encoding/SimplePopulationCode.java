@@ -49,28 +49,22 @@ public class SimplePopulationCode extends AbstractPopulationCode
         int j; // index of output nodes
         for(int i = 0; i < m_nofInputs; ++i){
 
-                j = i*m_nfanOut;
-                if(m_biasIndex != NO_BIAS)
-                    ++j;
-                
-                // output nodes per input node are antognistic
-                switch(m_nfanOut){
-                    
-                    case 2:
-                        stateVals[j  ] =   par_inputVals[i];
-                        stateVals[j+1] = 1-par_inputVals[i];
-                        
-                        break;
-                    case 3:
-                        stateVals[j  ] = par_inputVals[i];
-                        stateVals[j+1] = -1;    // constant for this node
-                        stateVals[j+2] = 1-par_inputVals[i];
-                        
-                        break;
-                    default: // case: 1
-                        stateVals[j] = par_inputVals[i];
-                }
+            j = i*m_nfanOut;
+            double state = par_inputVals[i];
+            if(m_biasIndex != NO_BIAS)
+                ++j;
 
+            // output nodes per input node are antognistic
+            switch(m_nfanOut){
+
+                case 2:
+                    int k = (state < 0.5) ? 0 : 1;
+                    stateVals[j+k] = 1.0;
+                    //stateVals[j+(k+1)%2] = 0.0; // array already initialized to all-zeros
+                    break;
+                default: // case: 1
+                    stateVals[j] = par_inputVals[i];
+            }
         }
 
         return stateVals;
