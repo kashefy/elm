@@ -1,11 +1,16 @@
 function [] = display_masks(par_masks_learners, par_figure_id, par_masks_singles)
 
     nofMasks = length(par_masks_learners);
-    nofPlotRows = nofMasks;
-    nofPlotCols = 1;
+    
     if nargin > 2 % have mask samples?
+        nofPlotRows = nofMasks;
+        nofPlotCols = 1;
+        
         [~, nofSingleMasks] = size(par_masks_singles);
-        nofPlotCols = nofPlotCols+nofSingleMasks;
+        nofPlotCols = nofPlotCols + nofSingleMasks;
+    else
+        nofPlotRows = 1;
+        nofPlotCols = nofMasks;
     end
     %clims = [min(nodes(:)), max(nodes(:))];
     clims = [0, 1];

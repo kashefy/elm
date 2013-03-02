@@ -36,8 +36,8 @@ for i = 1:nof_learners
     for r = 1:nof_nodes_per_dim
         for c = 1:nof_nodes_per_dim
 
-            orient_index = max_i(i, k);
-            canvas{r, c} = orient_index * arr_orients{orient_index} * mask(r, c);
+            feat_index = max_i(i, k);
+            canvas{r, c} = feat_index * arr_orients{feat_index} * mask(r, c);
             k = k+1;    
         end
     end
