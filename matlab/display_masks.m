@@ -3,6 +3,7 @@ function [] = display_masks(par_masks_learners, par_figure_id, par_masks_singles
     nofMasks = length(par_masks_learners);
     
     if nargin > 2 % have mask samples?
+
         nofPlotRows = nofMasks;
         nofPlotCols = 1;
         

@@ -1,19 +1,24 @@
+ close all
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
  setDir = 'MNIST\\tune_0\\';
  
  filename = 'masksLearners_layerF.csv';
  [arr_masks_learners_layerF, arr_masks_singles_layerF] = load_masks(fullfile(modelOutputPath, setDir, filename), fullfile(modelOutputPath, setDir, 'activity_layerF'));
  display_masks(arr_masks_learners_layerF, 2000, arr_masks_singles_layerF);
+ % polarize mask value using threshold
  for i = 1:length(arr_masks_learners_layerF)
-     arr_masks_learners_layerF{i}(arr_masks_learners_layerF{i}<0.2) = 0;
+     arr_masks_learners_layerF{i} = arr_masks_learners_layerF{i} > 0.2;
  end
  
  filename = 'weights_layerF.csv';
- slicing = {[972, 12], [162, 2]};
+ nof_orientations = 12;
+ nof_intensities = 2;
+ dims = [9, 9];
+ slicing = {[prod(dims)*nof_orientations, nof_orientations], [prod(dims)*nof_intensities, nof_intensities]};
  weights = read_weights(fullfile(modelOutputPath, setDir, filename), slicing);
  display_weights_orient(weights{1}, 4000, arr_masks_learners_layerF);
  
- display_weights_intensity(weights{2}, 4002, arr_masks_learners_layerF);
+ display_weights_intensity(weights{2}, 4002);
  
 
 %% layerF

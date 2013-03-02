@@ -1,5 +1,5 @@
 % Display weights
-function [] = display_weights_orient(par_weights, par_figure_id, par_masks)
+function [] = display_weights_intensity(par_weights, par_figure_id, par_masks)
 
 [nof_learners, nof_features, nof_nodes] = size(par_weights);
 nof_nodes_per_dim = floor(sqrt(nof_nodes));
@@ -8,13 +8,12 @@ nof_nodes_per_dim = floor(sqrt(nof_nodes));
 % drop singleton feature dim, since max is over feature dim
 max_i = squeeze(max_i);
 
-arr_orients = cell(1, nof_features);
-angle_step = 180/nof_features;
-orient_dim = 16;
-arr_angle_deg = 0:angle_step:180-angle_step;
+feat_step = 2/nof_features;
+arr_feat_values = 0:feat_step:nof_features-feat_step;
+arr_intensities = cell(1, nof_features);
 for i = 1:nof_features
 
-    arr_orients{i} = gen_bar_stimulus(orient_dim, arr_angle_deg(i), 5);
+    arr_intensities{i} = i;
 end
 
 % subplot per learner, intensity = winning orientation
@@ -37,23 +36,21 @@ for i = 1:nof_learners
         for c = 1:nof_nodes_per_dim
 
             feat_index = max_i(i, k);
-            canvas{r, c} = arr_angle_deg(feat_index) * arr_orients{feat_index} * mask(r, c);
+            canvas{r, c} = arr_feat_values(feat_index) * arr_intensities{feat_index} * mask(r, c);
             k = k+1;    
         end
     end
     to_disp = cell2mat(canvas);
     subplot(nof_plot_rows, nof_plot_cols, i)
-    h = imagesc(to_disp, [arr_angle_deg(1), arr_angle_deg(nof_features)]);
-    set(h, 'alphadata', to_disp > 0);
+    imagesc(to_disp, [arr_feat_values(1), arr_feat_values(nof_features)]);
     axis image
-    set(gca, 'XTick', [], 'YTick', []);
+    set(gca, 'XTick', [1, nof_nodes_per_dim], 'YTick', [1, nof_nodes_per_dim]);
     if i == nof_learners/2
         title('winning feature per pixel');
     end
 end
 colormap(jet(nof_features));
 h = colorbar('location', 'EastOutside');
-set(gca, 'YTick', []);
-ylabel(h, 'orientation[deg]');
+ylabel(h, 'intensity');
 suptitle('weights per learner');
 end
