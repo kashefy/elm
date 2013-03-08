@@ -44,7 +44,7 @@ for i = 1:nof_learners
     subplot(nof_plot_rows, nof_plot_cols, i)
     imagesc(to_disp, [arr_feat_values(1), arr_feat_values(nof_features)]);
     axis image
-    set(gca, 'XTick', [1, nof_nodes_per_dim], 'YTick', [1, nof_nodes_per_dim]);
+    set(gca, 'XTick', nof_nodes_per_dim, 'YTick', nof_nodes_per_dim);
     if i == nof_learners/2
         title('winning feature per pixel');
     end
