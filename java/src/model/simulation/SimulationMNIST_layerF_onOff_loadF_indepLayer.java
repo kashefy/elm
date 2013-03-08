@@ -221,7 +221,7 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
 
                             weightWatch_layerF[ li ][ww][ iteration_layerF ] = m_arrZNeurons_layerF[ li ].getWeights()[ arrWeightIndicies_layerF[ww] ];
                         }
-                        if(m_bload_layer_f){
+                        if(!m_bload_layer_f){
                             m_arrZNeurons_layerF[li].update();
                         }
                     }
