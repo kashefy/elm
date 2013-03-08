@@ -58,20 +58,20 @@ public class FeaturePopulationCode extends SimplePopulationCode{
         double elementReal, elementImag, elementMagn; 
         double [] elementFeatures;
              
-        for(int r=0; r<nofRows; r++){
+        for(int r=0; r<nofRows; ++r){
 
             int rowOffset = r*nofCols;
-            for(int c=0; c<nofCols; c++){
+            for(int c=0; c<nofCols; ++c){
 
                 //elementRealIndex = new int[]{r,c,0};
                 //elementImagIndex = new int[]{r,c,1};
-                elementMagnIndex = new int[]{r,c};
+                elementMagnIndex = new int[]{r, c};
 
                 elementFeatures = new double[ nofFeatureSets ];
                 
                 int posOffset = (rowOffset + c)*nofFeatureSets;
 
-                for(int fi=0; fi<nofFeatureSets; fi++){
+                for(int fi=0; fi<nofFeatureSets; ++fi){
 
                     // get real and imaginary response components separately
                     //featureElements = m_features[ fi ];
@@ -191,14 +191,14 @@ public class FeaturePopulationCode extends SimplePopulationCode{
         double elementReal, elementImag, elementMagn; 
         double [] elementFeatures;
              
-        for(int r=0; r<nofRows; r++){
+        for(int r=0; r<nofRows; ++r){
 
             int rowOffset = r*nofCols;
-            for(int c=0; c<nofCols; c++){
+            for(int c=0; c<nofCols; ++c){
 
                 //elementRealIndex = new int[]{r,c,0};
                 //elementImagIndex = new int[]{r,c,1};
-                elementMagnIndex = new int[]{r,c};
+                elementMagnIndex = new int[]{r, c};
 
                 elementFeatures = new double[ nofFeatureSets ];
 
@@ -288,7 +288,7 @@ public class FeaturePopulationCode extends SimplePopulationCode{
             if( distrV_sumOfAbs > 0.0 ){
             
                 samplesSubset = sample(distr, par_nofSamples);
-                for(int j=0; j<par_nofSamples; j++){
+                for(int j=0; j<par_nofSamples; ++j){
                 
                     stateSamples[ i + samplesSubset[j] ][j] = 1;
                 
@@ -381,7 +381,7 @@ public class FeaturePopulationCode extends SimplePopulationCode{
         int boundIndex = nofNodes;
         int maxIndex = 0;
         double maxVal = par_inputs[j++]; //-1;
-        for(; j<boundIndex; j++){
+        for(; j<boundIndex; ++j){
 
             //double candidate = Math.abs(par_inputs[j]);
             double candidate = par_inputs[j];
@@ -428,12 +428,12 @@ public class FeaturePopulationCode extends SimplePopulationCode{
 //        }
 //        System.out.println();
         
-        for(int t=0; t<nofSamples; t++){
+        for(int t=0; t<nofSamples; ++t){
             
             double r = StdRandom.uniform();
             int j=0;
             while(p[j]<r){
-                j++;
+                ++j;
             }
             samples[t] = j;
         }
@@ -468,7 +468,7 @@ public class FeaturePopulationCode extends SimplePopulationCode{
         double r = StdRandom.uniform();
         int i=0;
         while(p[i]<r){
-            i++;
+            ++i;
         }
 
         popCode[ i ] = 1.0;
@@ -482,27 +482,27 @@ public class FeaturePopulationCode extends SimplePopulationCode{
         double[] arrInputs = new double[ nofNodes ];
         
         // set values
-        for(int i=0; i<nofNodes; i++){
+        for(int i=0; i<nofNodes; ++i){
             
             arrInputs[i] = StdRandom.random();
         }
         
         int [] arrCount = new int [ nofNodes ];
-        for(int ti=0; ti<nofTrials; ti++){
+        for(int ti=0; ti<nofTrials; ++ti){
             
             double[] popCode = new double [nofNodes];
             int wIndex = encodeViaProb(arrInputs, popCode);
             arrCount[wIndex]++;
         }
         
-        for(int i=0; i<nofNodes; i++){
+        for(int i=0; i<nofNodes; ++i){
 
             System.out.print(arrInputs[i] +"  ");
                 
          }
         System.out.println();
                 
-        for(int i=0; i<nofNodes; i++){
+        for(int i=0; i<nofNodes; ++i){
 
             System.out.print(arrCount[i] +"  ");
                 

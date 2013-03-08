@@ -82,7 +82,7 @@ public class IntensityContrastMap extends AbstractFeatureMap{
         int nofRows = par_responseRef.dims()[ FileIO.DIM_INDEX_ROWS ];
         int nofCols = par_responseRef.dims()[ FileIO.DIM_INDEX_COLS ];
         int nofElements = nofRows*nofCols; 
-        for(int i=0; i<nofElements; i++){
+        for(int i=0; i<nofElements; ++i){
             
             double val = values[i];
             if(val<threshold){

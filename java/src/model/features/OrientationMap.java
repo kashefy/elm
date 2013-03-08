@@ -75,7 +75,7 @@ public class OrientationMap extends AbstractFeatureMap{
             m_nofOrientations = (int)Math.floor(180/m_orientationResolution);
             m_orientationsInDeg = new double [ m_nofOrientations ];
             double thetaInDeg = 0;
-            for(int o=0; o<m_nofOrientations; o++){
+            for(int o=0; o<m_nofOrientations; ++o){
                 
                 m_orientationsInDeg[o] = thetaInDeg;
                 thetaInDeg += m_orientationResolution;
@@ -97,7 +97,7 @@ public class OrientationMap extends AbstractFeatureMap{
             
             double thetaInRad = 0;
             int rowIndex = s*m_nofOrientations;
-            for(int o=0; o<m_nofOrientations; o++){
+            for(int o=0; o<m_nofOrientations; ++o){
                 
                 thetaInRad = Math.toRadians(m_orientationsInDeg[o]);
                 m_gaborFilterBank[ rowIndex + o ] = new Gabor(m_supportRadius,thetaInRad,scale,m_frequency,m_elongation);
@@ -128,12 +128,12 @@ public class OrientationMap extends AbstractFeatureMap{
         m_gaborFilterBank = new Gabor[ m_nofFeatureSets ];
         
         double scale = m_startingScale;
-        for(int s=0; s<m_nofScales; s++){
+        for(int s=0; s<m_nofScales; ++s){
             
             double thetaInDeg = 0;
             double thetaInRad;
             int rowIndex = s*m_nofOrientations;
-            for(int o=0; o<m_nofOrientations; o++){
+            for(int o=0; o<m_nofOrientations; ++o){
                 
                 m_orientationsInDeg[o] = thetaInDeg;
                 thetaInRad = Math.toRadians(thetaInDeg);
@@ -170,11 +170,11 @@ public class OrientationMap extends AbstractFeatureMap{
         m_gaborFilterBank = new Gabor[ m_nofFeatureSets ];
         
         double scale = m_startingScale;
-        for(int s=0; s<m_nofScales; s++){
+        for(int s=0; s<m_nofScales; ++s){
             
             double thetaInRad = 0;
             int rowIndex = s*m_nofOrientations;
-            for(int o=0; o<m_nofOrientations; o++){
+            for(int o=0; o<m_nofOrientations; ++o){
                 
                 thetaInRad = Math.toRadians(m_orientationsInDeg[o]);
                 m_gaborFilterBank[ rowIndex + o ] = new Gabor(m_supportRadius,thetaInRad,scale,m_frequency,m_elongation);
@@ -193,7 +193,7 @@ public class OrientationMap extends AbstractFeatureMap{
         // create a file with filter attributes
         try (PrintWriter pw = new PrintWriter(new FileWriter(new File(outputDir, "filterAttr.txt")))){
             
-            for(int i=0; i<nofFilters; i++){
+            for(int i=0; i<nofFilters; ++i){
 
                 pw.println(m_gaborFilterBank[i].toString());
 
@@ -206,7 +206,7 @@ public class OrientationMap extends AbstractFeatureMap{
         
         String strExt = ".csv"; // file extension
 
-        for(int i=0; i<nofFilters; i++){
+        for(int i=0; i<nofFilters; ++i){
             
             strPrefix = Integer.toString(i);
             ComplexArray filter = new ComplexArray(m_gaborFilterBank[i]);        
@@ -243,7 +243,7 @@ public class OrientationMap extends AbstractFeatureMap{
             int nofColsStim = m_currentStimulus.dims()[ FileIO.DIM_INDEX_COLS ];
             arrOutput = new ComplexArray[ m_nofFeatureSets ];
 
-            for(int i=0; i<m_nofFeatureSets; i++){
+            for(int i=0; i<m_nofFeatureSets; ++i){
 
                 // check if stimulus and filter have the same dimensions
                 ComplexArray filterToUse = m_gaborFilterBank[i];
@@ -304,7 +304,7 @@ public class OrientationMap extends AbstractFeatureMap{
         
         m_filterBankToSize = new ComplexArray [ nofFilters ];
         
-        for(int i=0; i<nofFilters; i++){
+        for(int i=0; i<nofFilters; ++i){
             
             // check if stimulus and filter have the same dimensions
             ComplexArray filterToUse = m_gaborFilterBank[i];
@@ -389,7 +389,7 @@ public class OrientationMap extends AbstractFeatureMap{
         
         RealArray neighDist = new RealArray(dims);
         
-        for(int r=0; r<nofRows; r++){
+        for(int r=0; r<nofRows; ++r){
             
             int rStartiIncl = r-par_neighborhood;
             if(rStartiIncl < 0){
@@ -401,7 +401,7 @@ public class OrientationMap extends AbstractFeatureMap{
                 rEndiExcl = nofRows;
             }
             
-            for(int c=0; c<nofCols; c++){
+            for(int c=0; c<nofCols; ++c){
                 
                 int cStartiIncl = c-par_neighborhood;
                 if(cStartiIncl < 0){
@@ -414,12 +414,12 @@ public class OrientationMap extends AbstractFeatureMap{
                 }
                 RealArray sub = par_input.subarray(rStartiIncl,rEndiExcl,cStartiIncl,cEndiExcl);
                 double meanOrient = sub.aMean();
-                double currOrient = par_input.get(r,c);
+                double currOrient = par_input.get(r, c);
                 double newOrient = Math.abs(currOrient - meanOrient);
                 if(newOrient > 90){
                     newOrient -= 90;
                 }
-                neighDist.set(newOrient, r,c);
+                neighDist.set(newOrient, r, c);
             }
         }
         
