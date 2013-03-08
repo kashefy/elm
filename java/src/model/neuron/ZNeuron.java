@@ -64,7 +64,7 @@ public class ZNeuron extends AbstractLearner{
         m_biasLearningRate = new LearningRate();
         m_biasLearningRate.setParams(m_learingRateEtaInitVal);
         m_arrLearningRate = new LearningRate[m_nofEvidence];
-        for(int i=0; i<m_nofEvidence; i++){
+        for(int i=0; i<m_nofEvidence; ++i){
             
             m_arrLearningRate[i] = new LearningRate();
             m_arrLearningRate[i].setParams(m_learingRateEtaInitVal);
@@ -87,7 +87,7 @@ public class ZNeuron extends AbstractLearner{
         
         // init learning rate
         m_biasLearningRate.init();
-        for(int i=0; i<m_nofEvidence; i++){
+        for(int i=0; i<m_nofEvidence; ++i){
             
             m_arrLearningRate[i].init();
         }
@@ -159,7 +159,7 @@ public class ZNeuron extends AbstractLearner{
         if(m_nBias > 0)
             m_nBias = -m_nBias; // keep all negative
 
-        for(int wi = 0; wi < m_nofEvidence; wi++){
+        for(int wi = 0; wi < m_nofEvidence; ++wi){
             
             double weight = generator.nextGaussian();
             if(weight > 0)
@@ -237,7 +237,7 @@ public class ZNeuron extends AbstractLearner{
         // update all other weights
         if(m_bFiredRecently){
 
-            for(int wi=0; wi<m_nofEvidence; wi++){
+            for(int wi=0; wi<m_nofEvidence; ++wi){
 
                 wOld = m_weights[ wi ];
                 nEta = m_arrLearningRate[wi].getEta();
@@ -290,7 +290,7 @@ public class ZNeuron extends AbstractLearner{
             
         // u = bh.w' * [x];
         nMembranePotential += m_nBias;
-        for(int yi=0; yi<m_nofEvidence; yi++){
+        for(int yi=0; yi<m_nofEvidence; ++yi){
 
             int nInputFiredRecently = hasInputFiredRecently(yi);
             if(nInputFiredRecently > 0){
@@ -311,7 +311,7 @@ public class ZNeuron extends AbstractLearner{
         while(nInputFiredRecently == 0 && t >= 0){
 
             nInputFiredRecently += m_spikeHistory[ par_inputNodeIndex ][t];
-            t--;
+            --t;
         }
         return nInputFiredRecently;
     }
@@ -323,7 +323,7 @@ public class ZNeuron extends AbstractLearner{
     
     protected void updateHistory(int [] par_spikes){
         
-        for(int yi=0; yi<m_nofEvidence; yi++){
+        for(int yi=0; yi<m_nofEvidence; ++yi){
             
             m_spikeHistory[yi][ m_historyLength-1 ] = par_spikes[yi];
         
@@ -344,9 +344,9 @@ public class ZNeuron extends AbstractLearner{
         // shift spike history to left, m_arrSpikeHistory[m_lengthSpikeHistory-1] is most current
 	// time point
         // perform for all nodes
-        for(int yi=0; yi<m_nofEvidence; yi++){
+        for(int yi=0; yi<m_nofEvidence; ++yi){
             
-            for (int i=0; i<par_nSteps; i++){
+            for (int i=0; i<par_nSteps; ++i){
 
                 System.arraycopy(m_spikeHistory[yi], 1, m_spikeHistory[yi], 0, m_historyLength-1);
                 m_spikeHistory[yi][ m_historyLength-1 ] = -1;

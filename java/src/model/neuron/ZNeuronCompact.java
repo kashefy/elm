@@ -22,7 +22,7 @@ public class ZNeuronCompact extends ZNeuron{
     @Override
     protected void updateHistory(int [] par_spikes){
 
-        for(int yi=0; yi<m_nofEvidence; yi++){
+        for(int yi=0; yi<m_nofEvidence; ++yi){
 
             if(par_spikes[yi] == 1){
             
@@ -56,13 +56,12 @@ public class ZNeuronCompact extends ZNeuron{
         
         // move spike History in time by decrementing times by 1 towards 0, nothing < 0
         // perform for all nodes
-        for(int yi=0; yi<m_nofEvidence; yi++){
+        for(int yi=0; yi<m_nofEvidence; ++yi){
             
             int spikeHistoryVal = m_spikeHistoryCompact[yi];
             if(spikeHistoryVal > 0){
                 
-                spikeHistoryVal--;
-                m_spikeHistoryCompact[yi] = spikeHistoryVal;
+                m_spikeHistoryCompact[yi] = --spikeHistoryVal;
             }
         }
     }

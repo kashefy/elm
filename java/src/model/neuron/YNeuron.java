@@ -115,7 +115,7 @@ public class YNeuron
 	 */
 	public int resetHistory(){
             
-            for(int i = 0; i < m_lengthSpikeHistory; i++){
+            for(int i = 0; i < m_lengthSpikeHistory; ++i){
 
                 m_arrSpikeHistory[i] = 0;
             }
@@ -129,7 +129,7 @@ public class YNeuron
 	{
             int count = 0;
 
-            for(int i = 0; i < 1000; i++)
+            for(int i = 0; i < 1000; ++i)
             {
                     count += this.calcState();
             }

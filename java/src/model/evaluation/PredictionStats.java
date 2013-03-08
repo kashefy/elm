@@ -86,7 +86,7 @@ public class PredictionStats {
             
             if(par_learnerIndex == RESPONSE_ALL){
 
-                for(int li=0; li<m_nofLearners; li++){
+                for(int li=0; li<m_nofLearners; ++li){
                     
                     m_histograms[ li ].increment(label_name_index);
                 }
@@ -99,7 +99,7 @@ public class PredictionStats {
             
             if(m_windowSize > 0){// implicit calculation and resetting
             
-                m_response_count++;
+                ++m_response_count;
                 if(m_response_count % m_windowSize == 0){
                     
                     m_arr_results_avg_cond_entropy.add(calcConditionalEntropy());
@@ -113,7 +113,7 @@ public class PredictionStats {
         
         m_arrFiringProb = new double [ m_nofLearners ][ m_nofCauses ];
         double [][] arrFiringProbToExport = new double [ m_nofLearners ][ m_nofCauses ];
-        for(int i=0; i<m_nofLearners; i++){
+        for(int i=0; i<m_nofLearners; ++i){
 
             m_arrFiringProb[ i ] = m_histograms[ i ].normalize();
             
@@ -126,7 +126,7 @@ public class PredictionStats {
     public int[][] getFiringCounts(){
         
         int [][] arrFiringCountsToExport = new int [ m_nofLearners ][ m_nofCauses ];
-        for(int i=0; i<m_nofLearners; i++){
+        for(int i=0; i<m_nofLearners; ++i){
 
             arrFiringCountsToExport[i] = m_histograms[i].getCounts();
         }
@@ -136,7 +136,7 @@ public class PredictionStats {
     public int[] calcFiringSums(){
         
         int [] arrFiringSumsToExport = new int [ m_nofLearners ];
-        for(int i=0; i<m_nofLearners; i++){
+        for(int i=0; i<m_nofLearners; ++i){
 
             arrFiringSumsToExport[i] = m_histograms[i].calcSum();
         }
@@ -146,7 +146,7 @@ public class PredictionStats {
     public double calcFiringSums(int[] par_arrVvalueRef){
         
         int sum = 0;
-        for(int i=0; i<m_nofLearners; i++){
+        for(int i=0; i<m_nofLearners; ++i){
 
             int val = m_histograms[i].calcSum();
             par_arrVvalueRef[i] = val;
@@ -163,7 +163,7 @@ public class PredictionStats {
     public int [] findMax(){
         
         int [] arrMax = new int [ m_nofLearners ]; 
-        for(int i=0; i<m_nofLearners; i++){
+        for(int i=0; i<m_nofLearners; ++i){
             
             arrMax[i] = m_histograms[i].findMax();
         }

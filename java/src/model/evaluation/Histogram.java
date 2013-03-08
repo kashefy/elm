@@ -43,7 +43,7 @@ public class Histogram {
         calcSum();
         normalizedCounts = new double [ m_nofBins ];
         if(m_sum != 0){
-            for(int i=0; i<m_nofBins; i++){
+            for(int i=0; i<m_nofBins; ++i){
 
                 normalizedCounts[i] = (double)(m_counts[i])/(double)(m_sum);
             }
@@ -72,7 +72,7 @@ public class Histogram {
         
         int maxIndex = 0;
         int maxVal = 0;
-        for(int i=1; i<m_nofBins; i++){
+        for(int i=1; i<m_nofBins; ++i){
             
             int candidate = m_counts[i];
             if(candidate > maxVal){
@@ -92,7 +92,7 @@ public class Histogram {
     public int calcSum(){
         
         m_sum = 0;
-        for(int i=0; i<m_nofBins; i++){
+        for(int i=0; i<m_nofBins; ++i){
             
             m_sum += m_counts[i];
         }
@@ -113,7 +113,7 @@ public class Histogram {
         this.init();
         
         int nofTrials = 1000000;
-        for(int i=0; i<nofTrials; i++){
+        for(int i=0; i<nofTrials; ++i){
             
             int sample = generator.nextInt(m_nofBins);
             //System.out.println(sample);
@@ -122,7 +122,7 @@ public class Histogram {
         
         int [] c = this.getCounts();
         
-        for(int i=0; i<this.getNofBins(); i++)
+        for(int i=0; i<this.getNofBins(); ++i)
             System.out.print(c[i]+" ");
         System.out.println();
         
