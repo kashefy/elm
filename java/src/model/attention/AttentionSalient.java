@@ -87,7 +87,7 @@ public class AttentionSalient extends AbstractAttention{
         int rStart = m_windowRow;
         int rEnd = rStart + m_nofWindowRows;
         int cStart = m_windowCol;
-        for(int r=rStart; r<rEnd; r++){
+        for(int r=rStart; r<rEnd; ++r){
 
             int rWindow = r-rStart;
                         

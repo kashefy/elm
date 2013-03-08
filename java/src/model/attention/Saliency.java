@@ -89,17 +89,17 @@ public class Saliency extends AbstractSaliencyMeasure{
         int [][] spikeTrains;
         int nofSamples = 1;
         spikeTrains = m_featPopCoder.sampleStateOfNeurons(popCodeStateValsDistr, nofSamples);
-        int nofPixels = par_inputVals.length;
-        double [] orientVals = new double [ nofPixels ];
-        double [] orientResponseVals = new double [ nofPixels ];
+        int nof_pixels = par_inputVals.length;
+        double [] orientVals = new double [ nof_pixels ];
+        double [] orientResponseVals = new double [ nof_pixels ];
         int nofOrientations = m_arrFeatMaps[ FEAT_MAP_INDEX_ORIENT ].getNofFeatureSets();
         double orientResolution = 180.0/(double)nofOrientations;
         int j=0;
-        for(int i=0; i<nofPixels; i++){
+        for(int i=0; i<nof_pixels; ++i){
             
             int nodeOffset = i*nofOrientations;
             boolean b_found_spike = false;
-            for(int featIndex = 0; featIndex < nofOrientations && !b_found_spike; featIndex++){
+            for(int featIndex = 0; featIndex < nofOrientations && !b_found_spike; ++featIndex){
                 
                 b_found_spike = spikeTrains[ nodeOffset + featIndex ][ nofSamples-1 ] == 1;
                 if(b_found_spike){
@@ -120,7 +120,7 @@ public class Saliency extends AbstractSaliencyMeasure{
         orientResponse = orientResponse.uAdd(-orientResponse.aMin());
         orientResponse = orientResponse.uMul(1.0/orientResponse.aMax());
         //orientResponse = ModelUtils.normalizeMm(orientResponse, 3, 1.0);
-        for(int i=0; i<nofPixels; i++){
+        for(int i=0; i<nof_pixels; ++i){
             
             if(orientResponseVals[i] < m_cutOffBelow_orientResponseVals)
                orientDistsVarNorm.values()[i] = 0; 
@@ -134,7 +134,7 @@ public class Saliency extends AbstractSaliencyMeasure{
         m_arrFeatMaps[ FEAT_MAP_INDEX_INTENSCONTRAST ].setStimulus(stimulus);
         ComplexArray [] arrResponseIntensContrast = m_arrFeatMaps[ FEAT_MAP_INDEX_INTENSCONTRAST ].convolve();
         RealArray [] arrResponseIntensContrastRect = new RealArray[ m_arrFeatMaps[ FEAT_MAP_INDEX_INTENSCONTRAST ].getNofFeatureSets() ];
-        for(int i=0; i<m_arrFeatMaps[ FEAT_MAP_INDEX_INTENSCONTRAST ].getNofFeatureSets(); i++){
+        for(int i=0; i<m_arrFeatMaps[ FEAT_MAP_INDEX_INTENSCONTRAST ].getNofFeatureSets(); ++i){
             
             arrResponseIntensContrastRect[i] = IntensityContrastMap.rectify(arrResponseIntensContrast[i].torRe());
             arrResponseIntensContrastRect[i] = ModelUtils.normalizeMm(arrResponseIntensContrastRect[i], 3, 1.0);
@@ -172,7 +172,7 @@ public class Saliency extends AbstractSaliencyMeasure{
         int [][] samples;
         double [] arr_saliencyVals = new double[ nofSamples ];
         samples = m_saliencyDistr.sample(nofSamples);
-        for(int i=0; i<nofSamples; i++){
+        for(int i=0; i<nofSamples; ++i){
             
             System.arraycopy(samples[i], 0, par_arr_locRef[i], 0, 2);
             arr_saliencyVals[i] = m_saliency.get(par_arr_locRef[i]);
