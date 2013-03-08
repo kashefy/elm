@@ -26,26 +26,29 @@ import org.shared.array.RealArray;
 
 public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNIST_layerF_onOff{
     
+    private boolean m_bload_layer_f = false;
+    
     public void init(){
         
         super.init();
-//        DataLoaderWeightSet weightLoader = new DataLoaderWeightSet();
-//        weightLoader.setParams(m_params.getMainOutputDir());
-//        weightLoader.setWeightValueFilename("weights_layerF.csv");
-//        weightLoader.init();
-//        weightLoader.load();
-//        DataLoaderWeightSet biasLoader = new DataLoaderWeightSet();
-//        biasLoader.setParams(m_params.getMainOutputDir());
-//        biasLoader.setWeightValueFilename("biases_layerF.csv");
-//        biasLoader.init();
-//        biasLoader.load();
-//        
-//        for(int li=0; li<m_nofLearners_layerF; li++){
-//            
-//            m_arrZNeurons_layerF[li].setWeights( weightLoader.getSample(li) );
-//            m_arrZNeurons_layerF[li].setBias( biasLoader.getSample(li)[0] );
-//        }
-        
+        if(m_bload_layer_f){
+            DataLoaderWeightSet weightLoader = new DataLoaderWeightSet();
+            weightLoader.setParams(m_params.getMainOutputDir());
+            weightLoader.setWeightValueFilename("weights_layerF.csv");
+            weightLoader.init();
+            weightLoader.load();
+            DataLoaderWeightSet biasLoader = new DataLoaderWeightSet();
+            biasLoader.setParams(m_params.getMainOutputDir());
+            biasLoader.setWeightValueFilename("biases_layerF.csv");
+            biasLoader.init();
+            biasLoader.load();
+
+            for(int li=0; li<m_nofLearners_layerF; ++li){
+
+                m_arrZNeurons_layerF[li].setWeights( weightLoader.getSample(li) );
+                m_arrZNeurons_layerF[li].setBias( biasLoader.getSample(li)[0] );
+            }
+        }
     }
     
     public void learn(){
@@ -218,7 +221,9 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
 
                             weightWatch_layerF[ li ][ww][ iteration_layerF ] = m_arrZNeurons_layerF[ li ].getWeights()[ arrWeightIndicies_layerF[ww] ];
                         }
-                        m_arrZNeurons_layerF[li].update();               
+                        if(m_bload_layer_f){
+                            m_arrZNeurons_layerF[li].update();
+                        }
                     }
                     
                     ModelUtils.insertColumn(spikes_atT_out, spikes_f, yt);
