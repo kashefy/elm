@@ -9,6 +9,7 @@ package model.utils;
  * @author woodstock
  */
 import java.util.Random;
+import java.lang.UnsupportedOperationException;
 import model.utils.files.FileIO;
 import org.shared.array.*;
 
@@ -33,7 +34,7 @@ public class ModelUtils {
         
        int nofDims = par_realArray.dims().length;
        int [] arrDims = new int [ nofDims + 1];
-       for(int i=0; i<nofDims; i++){
+       for(int i=0; i<nofDims; ++i){
            arrDims[i] = par_realArray.dims()[i];
        }
        arrDims[ nofDims ] = 2;
@@ -53,7 +54,7 @@ public class ModelUtils {
         double [] par_complexVals = new double[ length*2 ];
         
         int i2;
-        for(int i=0; i<length; i++){
+        for(int i=0; i<length; ++i){
                
             i2 = i*2;
             par_complexVals [  i2  ] = par_realVals[ i ];
@@ -69,8 +70,8 @@ public class ModelUtils {
         
         ComplexArray padded;
         int [] oldDims = par_input.dims();
-        int nofOldRows = oldDims[0];
-        int nofOldCols = oldDims[1];
+        int nofOldRows = oldDims[FileIO.DIM_INDEX_ROWS];
+        int nofOldCols = oldDims[FileIO.DIM_INDEX_COLS];
         padded = new ComplexArray(par_newDims);
         
         int nofRowsToOp = Math.min(nofOldRows, par_newDims[0]);
@@ -78,12 +79,12 @@ public class ModelUtils {
         
         // we can assume that elements beyond the old dimensions are already zero
         // we only need to insert the elements from the old matrix
-        for(int r=0; r<nofRowsToOp; r++){
+        for(int r=0; r<nofRowsToOp; ++r){
 
-            for(int c=0; c<nofColsToOp; c++){
+            for(int c=0; c<nofColsToOp; ++c){
 
-                padded.set(par_input.get(r,c,0), r,c,0);// real component
-                padded.set(par_input.get(r,c,1), r,c,1);// imaginary component
+                padded.set(par_input.get(r, c, 0), r, c, 0);// real component
+                padded.set(par_input.get(r, c, 1), r, c, 1);// imaginary component
             }
         }
 
@@ -108,11 +109,11 @@ public class ModelUtils {
             
         // we can assume that elements beyond the old dimensions are already zero
         // we only need to insert the elements from the old matrix
-        for(int r=0; r<nofRowsToOp; r++){
+        for(int r=0; r<nofRowsToOp; ++r){
 
-            for(int c=0; c<nofColsToOp; c++){
+            for(int c=0; c<nofColsToOp; ++c){
 
-                padded.set(par_input.get(r,c), r,c);
+                padded.set(par_input.get(r, c), r, c);
             }
         }
         
@@ -200,17 +201,17 @@ public class ModelUtils {
         // we can assume that elements beyond the old dimensions are already zero
         // we only need to insert the elements from the old matrix
         int r = rowStart;
-        for(int ri=0; ri<nofRowsToOp; ri++){
+        for(int ri=0; ri<nofRowsToOp; ++ri){
 
             int c = colStart;
-            for(int ci=0; ci<nofColsToOp; ci++){
+            for(int ci=0; ci<nofColsToOp; ++ci){
 
-                padded.set(par_input.get(ri,ci), r,c);
-                c++;
+                padded.set(par_input.get(ri, ci), r, c);
+                ++c;
                 
                 //System.out.printf("y =%n%s%n", padded.toString());
             }
-            r++;
+            ++r;
         }
         
         return padded;
@@ -245,7 +246,7 @@ public class ModelUtils {
         
         int nofRows = par_arrInput.length;
         int [] column = new int[ nofRows ];
-        for(int row=0; row<nofRows; row++){
+        for(int row=0; row<nofRows; ++row){
             
             column[ row ] = par_arrInput[ row ][ par_columnOfInterest ];
         }
@@ -258,9 +259,9 @@ public class ModelUtils {
         int nofRows = par_arrInput.length;
         int nofCols = par_columnRangeOfInterestSEnd-par_columnRangeOfInterestStart+1;
         int [][] columnsOfInterest = new int[ nofRows ][ nofCols ];
-        for(int row=0; row<nofRows; row++){
+        for(int row=0; row<nofRows; ++row){
             
-            for(int col=par_columnRangeOfInterestStart; col<=par_columnRangeOfInterestSEnd; col++){
+            for(int col=par_columnRangeOfInterestStart; col<=par_columnRangeOfInterestSEnd; ++col){
                
                 columnsOfInterest[ row ][ col ] = par_arrInput[ row ][ col ];
             }
@@ -276,7 +277,7 @@ public class ModelUtils {
             return false;
         else{
          
-            for(int row=0; row<nofRows; row++){
+            for(int row=0; row<nofRows; ++row){
 
                 par_arr_dst[ row ][ par_pos ] = par_arr_new_column[ row ];
             }
@@ -289,7 +290,7 @@ public class ModelUtils {
         int nofInputs = par_arrInput.length;
         double [] cumSum = new double [ nofInputs ];
         double intermSum = 0;
-        for(int i=0; i<nofInputs; i++){
+        for(int i=0; i<nofInputs; ++i){
             
             intermSum += par_arrInput[i];
             cumSum[i] = intermSum;
@@ -316,7 +317,7 @@ public class ModelUtils {
             int nofInputs = par_arrInput.length;
             double [] cumSum = new double [ nofInputs ];
             double intermSum = 0;
-            for(int i=0; i<nofInputs && intermSum<par_partial_limit; i++){
+            for(int i=0; i<nofInputs && intermSum<par_partial_limit; ++i){
 
                 intermSum += par_arrInput[i];
                 cumSum[i] = intermSum;
@@ -333,7 +334,7 @@ public class ModelUtils {
         int nofInputs = par_nofElements;
         double [] cumSum = new double [ nofInputs ];
         double intermSum = 0;
-        for(int i=par_start, reli=0; reli<par_nofElements; i++, reli++){
+        for(int i=par_start, reli=0; reli<par_nofElements; ++i, ++reli){
             
             intermSum += par_arrInput[i];
             cumSum[ reli ] = intermSum;
@@ -373,13 +374,7 @@ public class ModelUtils {
 
     public static RealArray crop(RealArray par_input, int [] par_boundaries){
         
-        int [] dims = par_input.dims();
-        int nofRowsOld = dims[ FileIO.DIM_INDEX_ROWS ];
-        int nofColsOld = dims[ FileIO.DIM_INDEX_COLS ];
-        
-        //RealArray output = 
-        
-        return null;
+        throw new UnsupportedOperationException();
     }
     
     public static void testNextPow2(){
