@@ -9,23 +9,20 @@ package model.encoding;
  * @author woodstock
  */
 import java.util.Random;
+import java.util.Arrays;
+import model.utils.ModelUtils;
 
 public class PopulationCodeTest {
 
     
-    public void testGradientMAXPopCode(){
+    public void gradientMAXPopCode(){
         
         GradientMAXPopulationCode softMaxPopCoder = new GradientMAXPopulationCode();
         int nofInputs = 4;
         int nfanOut = 1;
         
-        Random generator = new Random();
         double [] input = new double[ nofInputs ];
-        
-        for(int i=0; i<nofInputs; i++){
-            
-            input[i] = generator.nextDouble();
-        }
+        ModelUtils.rand(input);
         
         double [] popCode;
         
@@ -46,33 +43,35 @@ public class PopulationCodeTest {
         System.out.println(" bi = " + softMaxPopCoder.getBiasIndex());
     }
         
-    public void testMAXPopCode(){
+    public void maxPopCode(){
         
         MAXPopulationCode maxPopCoder = new MAXPopulationCode();
         int nofInputs = 3;
         int nfanOut = 1;
         
-        Random generator = new Random();
         double [] input = new double[ nofInputs ];
+        ModelUtils.rand(input);
         
-        for(int i=0; i<nofInputs; i++){
-            
-            input[i] = generator.nextDouble();
-        }
         double [] popCode;
         
         maxPopCoder.init(nofInputs, nfanOut);
         popCode = maxPopCoder.calcStateOfNeurons(input);
         
-        int nofNodes = maxPopCoder.getnofNodes();
-        for(int i=0; i<nofInputs; i++){
+        System.out.println(Arrays.toString(input));
+        System.out.println(Arrays.toString(popCode));
+    }
+    
+    public void rankPopulationCode(){
         
-            System.out.print(input[i]+" ");
-        } 
-        System.out.println();
-        for(int i=0; i<nofNodes; i++){
+        int n = 3;
+        double [] input = new double[n];
+        ModelUtils.rand(input);
         
-            System.out.print(popCode[i]+" ");
-        }        
+        AbstractPopulationCode pop_coder = new RankPopulationCode();
+        pop_coder.init(n, n);
+        double[] pop_code = pop_coder.calcStateOfNeurons(input);
+        
+        System.out.println(Arrays.toString(input));
+        System.out.println(Arrays.toString(pop_code));
     }
 }

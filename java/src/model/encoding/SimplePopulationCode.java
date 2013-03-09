@@ -15,7 +15,7 @@ public class SimplePopulationCode extends AbstractPopulationCode
     protected int m_biasValue;
     protected int m_biasIndex;
 
-    /*
+    /**
      * @param par_nofInput - number of x input variables
      * @param par_fanOut - number of output variables mapped to each input variable. Currently only works with par_nfanOut = 3;
      */
@@ -32,7 +32,7 @@ public class SimplePopulationCode extends AbstractPopulationCode
         m_nofNodes += (m_biasIndex == NO_BIAS)? 0:1;            
     }
 
-    /*
+    /**
      * @see AbstractPopulationCode#getStateOfNeurons(double[])
      */
     @Override

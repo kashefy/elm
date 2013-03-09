@@ -42,6 +42,7 @@ import model.features.IntensityContrastMapTest;
 import model.utils.Distribution2D;
 import model.attention.*;
 import model.utils.Distribution1D;
+import model.utils.ModelUtilsTest;
 import model.utils.files.DataLoaderImageSetCSV_incremental;
 
 public class ModelFrontEndGUI extends javax.swing.JFrame {
@@ -80,23 +81,30 @@ public class ModelFrontEndGUI extends javax.swing.JFrame {
         
         
         //StdRandom.test1();
-        //ModelUtils.testPad2();
-        //ModelUtils.testExtractColumn();
+        //ModelUtilsTest.pad2();
+        //ModelUtilsTest.extract_column();
         //DataLoaderTest.testLoadMNISTCSV();
         //DataLoaderTest.testTranslation();
-        //ModelUtils.testNextPow2();
-        //ModelUtils.testPad3();
+        //ModelUtilsTest.nextPow2();
+        //ModelUtilsTest.pad3();
         //new Distribution2D().test();
         //new Distribution1D().test();
-        //ModelUtils.testNeighVar();
+        //ModelUtilsTest.neighVar();
         //DataLoaderImageSetCSV_incremental.test_tree_set();
         
         //double [] x = new double[]{1,10,100,1000};
         //double [] y = ModelUtils.cumulativeSum(x);
         
-        //new PopulationCodeTest().testMAXPopCode();
+        //new PopulationCodeTest().maxPopCode();
         //new PopulationCodeTest().testSoftMAXPopCode();
         //FeaturePopulationCode.testEncodeViaProb();
+        //ModelUtilsTest.argsort_double();
+        //ModelUtilsTest.argsort_int();
+        //ModelUtilsTest.argmax_double();
+        //ModelUtilsTest.argmax_int();
+        //ModelUtilsTest.argmin_double();
+        //ModelUtilsTest.argmin_int();
+        new PopulationCodeTest().rankPopulationCode();
         
         //SimulationTest.testSimplePatterns();
         //SimulationTest.testMNIST();
@@ -106,7 +114,7 @@ public class ModelFrontEndGUI extends javax.swing.JFrame {
         //SimulationTest.testMNIST_layerF_onOff();
         //SimulationTest.test_MNIST_layerIndep();
         
-        SimulationTune.tune_MNIST_layerF_onOff();
+        //SimulationTune.tune_MNIST_layerF_onOff();
 //        SimulationTune.tune_MNIST_layerF_onOff_learningRateF();
 //        SimulationTune.tune_MNIST_layerF_onOff_learningRateZ();
 //        SimulationTune.tune_MNIST_layerF_onOff_wta_max_rate_factor_layerF();

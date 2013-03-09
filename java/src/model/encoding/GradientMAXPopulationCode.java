@@ -88,29 +88,23 @@ public class GradientMAXPopulationCode extends MAXPopulationCode{
         return stateVals;
     }
     
-    // select strongest to activate and shut down the rest
-    // output nodes per input node are antognistic
+    // pop code shows linear order of activation
     // return index of strongest popCode for input set
     private int encode(double [] par_inputs, double [] par_elementPopCode){
         
         int nofInputs = par_inputs.length;
         int nofNodes = nofInputs;
         
-        double [] popCode = par_elementPopCode;
-        System.arraycopy(par_inputs, 0, popCode, 0, nofNodes);
-        
-        //popCode = new double[ nofNodes ];
+        assert par_elementPopCode.length >= nofInputs;
 
-        // j: index of input AND output nodes
-        // select strongest to activate and shut down the rest
-
-        int j=0;
+        // find min and max
+        int j=0; // index of input AND output nodes
         int boundIndex = nofNodes;
         int maxIndex = 0;
         int minIndex = 0;
         double maxVal = par_inputs[j++]; //-1;
         double minVal = maxVal;
-        for(; j<boundIndex; j++){
+        for(; j<boundIndex; ++j){
 
             //double candidate = Math.abs(par_inputs[j]);
             double candidate = par_inputs[j];
@@ -124,30 +118,22 @@ public class GradientMAXPopulationCode extends MAXPopulationCode{
                 minVal = candidate;
                 minIndex = j;
             }
-            
-            // don't need to set zero values, can assume they are already set to zero.
-            // when created, arrays are automatically initialized with the default value of their type 
-            // popCode[ j ] = 0.0;
         }
         // determine linear order of elements
-        //popCode[ maxIndex ] = 1.0;
-        //popCode[ minIndex ] = 0.0;
-        
         double height = maxVal-minVal;
         
-        for(int i=0; i<nofNodes; i++){
+        for(int i=0; i<nofNodes; ++i){
             
-            double val = popCode[i];
+            double val = par_inputs[i];
             val = (val-minVal)/height;
-            popCode[i] = val;
+            par_elementPopCode[i] = val;
         }
         
         return maxIndex;
-    }    
+    }
     
     public GradientMAXPopulationCode(){
         
         super();
     }
-    
 }

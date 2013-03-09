@@ -111,7 +111,6 @@ public class AttentionSalient extends AbstractAttention{
         
         m_nofSceneRows = -1;
         m_nofSceneCols = -1;
-        
         m_saliency = new Saliency();
     }
 }

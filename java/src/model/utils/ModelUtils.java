@@ -8,8 +8,8 @@ package model.utils;
  *
  * @author woodstock
  */
+import java.util.Arrays;
 import java.util.Random;
-import java.lang.UnsupportedOperationException;
 import model.utils.files.FileIO;
 import org.shared.array.*;
 
@@ -371,201 +371,7 @@ public class ModelUtils {
         
         return nextPow;
     }
-
-    public static RealArray crop(RealArray par_input, int [] par_boundaries){
         
-        throw new UnsupportedOperationException();
-    }
-    
-    public static void testNextPow2(){
-        
-        Random generator;
-        generator = new Random();
-        
-        int nofTrials = 10;
-        for(int i=0; i<nofTrials; i++){
-            
-            int n = generator.nextInt()%100;
-            int nextPow = nextPow(n, 2);
-            
-            System.out.println(n+" "+nextPow);
-        }
-        
-        
-    }   
-    
-    public static void testPad2(){
-        
-        int nofRows = 3;
-        int nofCols = 3;
-        int nGuardBandWidth = 2;
-        int [][] x = new int [ nofRows ][ nofCols ];
-        for(int r=0; r<nofRows; r++){
-            
-            for(int c=0; c<nofCols; c++){
-                
-                x[r][c] = r+c;
-            }
-        }
-        
-
-        System.out.println("x");
-        for(int r=0; r<nofRows; r++){
-            
-            for(int c=0; c<nofCols; c++){
-                
-                System.out.print(x[r][c] + "  ");
-            }
-            System.out.println();
-        }
-        
-        int [][] y;
-        y = pad2D(x, nGuardBandWidth, MODE_PAD_ROWS_BOTTOM);
-        System.out.println("rows");
-        System.out.println(y.length);
-        System.out.println(y[0].length);
-        for(int r=0; r<nofRows+nGuardBandWidth; r++){
-            
-            for(int c=0; c<nofCols; c++){
-                
-                System.out.print(y[r][c] + "  ");
-            }
-            System.out.println();
-        }
-        
-        y = pad2D(x, nGuardBandWidth, MODE_PAD_COLS_RIGHT);
-        System.out.println("cols");
-        System.out.println(y.length);
-        System.out.println(y[0].length);
-        for(int r=0; r<nofRows; r++){
-            
-            for(int c=0; c<nofCols+nGuardBandWidth; c++){
-                
-                System.out.print(y[r][c] + "  ");
-            }
-            System.out.println();
-        }
-        
-        y = pad2D(x, nGuardBandWidth, MODE_PAD_BOTH_BOTTOMRIGHT);
-
-        System.out.println("both");
-        System.out.println(y.length);
-        System.out.println(y[0].length);
-        for(int r=0; r<nofRows+nGuardBandWidth; r++){
-            
-            for(int c=0; c<nofCols+nGuardBandWidth; c++){
-                
-                System.out.print(y[r][c] + "  ");
-            }
-            System.out.println();
-        }
-        
-    }
-    
-    public static void testPad3(){
-        
-        int nofRows = 3;
-        int nofCols = 3;
-        int nGuardBandWidth = 2;
-        RealArray x = new RealArray(nofRows,nofCols);
-        for(int r=0; r<nofRows; r++){
-            
-            for(int c=0; c<nofCols; c++){
-                
-                x.set(r+c,r,c);
-            }
-        }
-        System.out.printf("x =%n%s%n", x.toString());
-        
-        //RealArray y = pad2D(x, nGuardBandWidth, MODE_PAD_BOTH_BOTTOMRIGHT);
-        RealArray y = pad2D(x, nGuardBandWidth, MODE_PAD_BOTH_SURROUND);
-        //RealArray y = pad2D(x, nGuardBandWidth, MODE_PAD_COLS_LEFT);
-        //RealArray y = pad2D(x, nGuardBandWidth, MODE_PAD_COLS_RIGHT);
-        //RealArray y = pad2D(x, nGuardBandWidth, MODE_PAD_ROWS_BOTTOM);
-        //RealArray y = pad2D(x, nGuardBandWidth, MODE_PAD_ROWS_TOP);
-        
-        System.out.printf("y =%n%s%n", y.toString());
-        
-        RealArray z0 = pad2D(y, -nGuardBandWidth, MODE_PAD_BOTH_SURROUND);
-        
-        
-        System.out.printf("z0 =%n%s%n", z0.toString());
-        
-        //RealArray z1 = pad2D(z0, -nGuardBandWidth, MODE_PAD_COLS_RIGHT);
-        
-        //System.out.printf("z =%n%s%n", y.toString());
-        
-        
-    }
-    
-    public static void testExtractColumn(){
-        
-        int nofRows = 3;
-        int nofCols = 3;
-        int [][] x = new int [ nofRows ][ nofCols ];
-        for(int r=0; r<nofRows; r++){
-            
-            for(int c=0; c<nofCols; c++){
-                
-                x[r][c] = r+c;
-            }
-        }
-        x[0][2]=100;
-        int nColumnOfInterest;
-        int [] y;
-        nColumnOfInterest = 0;
-        y = extractColumns(x, nColumnOfInterest);
-        
-        System.out.println("x");
-        for(int r=0; r<nofRows; r++){
-            
-            for(int c=0; c<nofCols; c++){
-                
-                System.out.print(x[r][c] + "  ");
-            }
-            System.out.println();
-        }
-        
-        System.out.print("column of interest" + nColumnOfInterest + ": ");  
-        for(int c=0; c<nofCols; c++){
-                
-                System.out.print(y[c] + "  ");
-        }
-
-        nColumnOfInterest = 2;
-        y = extractColumns(x, nColumnOfInterest);
-
-        System.out.print("column of interest" + nColumnOfInterest + ": ");        
-        for(int c=0; c<nofCols; c++){
-                
-                System.out.print(y[c] + "  ");
-        }
-
-    }
-    
-    public static void testStopwatch(){
-        
-        Stopwatch stopwatch;
-        stopwatch = new Stopwatch();
-        
-        stopwatch.start();
-        
-        int sum=0;
-        int N = 1000000;
-        for(int i=0; i<N; i++){
-            
-            sum += i;
-        }
-        try{
-        Thread.currentThread().sleep(2000);//sleep for 1000 ms
-        }catch(Exception e){
-            
-        }
-        stopwatch.stop();
-        
-        System.out.println(stopwatch.getElapsedTime());
-    }
-    
     public static RealArray calcNeighVar(RealArray par_input, int par_neighborhood){
         
         int [] dims = par_input.dims();
@@ -669,33 +475,158 @@ public class ModelUtils {
         return normM;
     }
     
+    /**
+     * @brief indicies that would sort the array
+     * @param par_input_vals
+     * @return array of indicies to sort that input array
+     */
+    public static int[] argsort(int [] par_input_vals){
         
-    
-    public static void testNeighVar(){
-        
-        int nofRows = 10;
-        int nofCols = 10;
-        RealArray input = new RealArray(nofRows,nofCols);
-        
-        for(int r=0; r<nofRows; r++){
-            
-            for(int c=0; c<nofCols; c++){
-                
-                input.set(r+c, r,c);
-            }
+        int n = par_input_vals.length;
+        int [] indicies = new int[n];
+        int [] input_vals = new int[n];
+        System.arraycopy(par_input_vals, 0, input_vals, 0, n);
+        Arrays.sort(input_vals);
+        // what happens for duplicate values in the array?
+        for(int i=0; i<n; ++i){
+            indicies[i] = Arrays.binarySearch(input_vals, par_input_vals[i]);
         }
-        System.out.printf("i =%n%s%n", input.toString());
-        RealArray output = calcNeighVar(input,2);
-        
-        double min = output.aMin();
-        output = output.uAdd(-min);
-        double max = output.aMax();
-        output = output.uMul(1.0/max);
-        
-        System.out.printf("n =%n%s%n", output.toString());
-        
+        return indicies;
     }
     
- 
+    /**
+     * @see ModelUtils#rand(int[])
+     */
+    public static int[] argsort(double [] par_input_vals){
+        
+        int n = par_input_vals.length;
+        int [] indicies = new int[n];
+        double [] input_vals = new double[n];
+        System.arraycopy(par_input_vals, 0, input_vals, 0, n);
+        Arrays.sort(input_vals);
+        // what happens for duplicate values in the array?
+        for(int i=0; i<n; ++i){
+            indicies[i] = Arrays.binarySearch(input_vals, par_input_vals[i]);
+        }
+        return indicies;
+    }
     
+    /**
+     * @breif argument of the maximum
+     * @param par_input
+     * @return argmax
+     */
+    public static int argmax(double [] par_input){
+        
+        int arg_max = 0;
+        if (par_input != null){
+            double max = par_input[0];
+            for(int i=1; i<par_input.length; ++i){
+
+                double candidate = par_input[i];
+                if(candidate > max){
+
+                    max = candidate;
+                    arg_max = i;
+                }
+            }
+        }
+        return arg_max;
+    }
+
+    /**
+     * @breif argument of the maximum
+     * @param par_input
+     * @return argmax
+     */
+    public static int argmax(int [] par_input){
+        
+        int arg_max = 0;
+        if (par_input != null){
+            int max = par_input[0];
+            for(int i=1; i<par_input.length; ++i){
+
+                int candidate = par_input[i];
+                if(candidate > max){
+
+                    max = candidate;
+                    arg_max = i;
+                }
+            }
+        }
+        return arg_max;
+    }
+    
+    /**
+     * @brief argument of the minimum
+     * @param par_input
+     * @return argmin
+     */
+    public static int argmin(double [] par_input){
+        
+        int arg_min = 0;
+        if (par_input != null){
+            double max = par_input[0];
+            for(int i=1; i<par_input.length; ++i){
+
+                double candidate = par_input[i];
+                if(candidate < max){
+
+                    max = candidate;
+                    arg_min = i;
+                }
+            }
+        }
+        return arg_min;
+    }
+
+    /**
+     * @brief argument of the minimum
+     * @param par_input
+     * @return argmin
+     */
+    public static int argmin(int[] par_input){
+        
+        int arg_min = 0;
+        if (par_input != null){
+            int max = par_input[0];
+            for(int i=1; i<par_input.length; ++i){
+
+                int candidate = par_input[i];
+                if(candidate < max){
+
+                    max = candidate;
+                    arg_min = i;
+                }
+            }
+        }
+        return arg_min;
+    }
+
+    /**
+     * @brief fill array x with random numbers sampled from a uniform distribution
+     * @param x array to populate
+     */
+    public static void rand(int [] x){
+        
+        Random generator = new Random();
+        for(int i=0; i<x.length; ++i){
+            
+            x[i] = generator.nextInt();
+        }
+        return;
+    }
+      
+    /**
+     * @see ModelUtils#rand(int[])
+     */
+    public static void rand(double [] x){
+        
+        Random generator = new Random();
+        for(int i=0; i<x.length; ++i){
+            
+            x[i] = generator.nextInt();
+        }
+        return;
+    }
 }
