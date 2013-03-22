@@ -235,14 +235,14 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
             }
             
             int [][] spikes_f2z;
-            spikes_f2z = resample_spike_train_layerF(spikes_f_per_stimulus);
+            spikes_f2z = resample_spike_train(spikes_f_per_stimulus);
             spikes_f2z = refactor_spike_train_layerF(spikes_f2z);
             
             for(int ft=0; ft<nof_responses_per_stimulus_y2f; ++ft){
                 //arrResponse_layerF[ si ][ ai ][ yt ] = wta_response;
                 //arrResponse1D_layerF[ (si*m_nofAttentions+ai)*nof_responses_per_window_y2f+yt ] = wta_response;
 
-                // create array for f spikes at time ft
+                // create array for f spikes at time t
                 // traverse through columns of spikes_f[][]
                 int [] spikes_atT;
                 if(ft < nof_responses_per_stimulus_y2f){
@@ -475,12 +475,12 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
             }
 
             int [][] spikes_f2z;
-            spikes_f2z = resample_spike_train_layerF(spikes_f_per_stimulus);
+            spikes_f2z = resample_spike_train(spikes_f_per_stimulus);
             spikes_f2z = refactor_spike_train_layerF(spikes_f2z);
             
             for(int ft=0; ft<nof_responses_per_stimulus_f2Z; ++ft){
 
-                // create array for f spikes at time ft
+                // create array for f spikes at time t
                 // traverse through columns of spikes_f[][]
                 int [] spikes_atT_in;
                 if(ft < nof_responses_per_window_y2f){
@@ -659,81 +659,13 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         m_log_results.close();
     }
     
-    // resample spikes from layer F
-    private int [][] resample_spike_train_layerF(int[][] par_spike_train){
+    // resample spikes
+    private int [][] resample_spike_train(int[][] par_spike_train){
         
-        int n = par_spike_train[0].length;
-        int [][] result = new int[m_nofLearners_layerF][n];
-        
-        Histogram spiking_hist_layerF = new Histogram();
-        spiking_hist_layerF.setParams(m_nofLearners_layerF+1); // +1 when no F fires
-        spiking_hist_layerF.init();
-        for(int ft=0; ft<n; ++ft){
-
-            int[] spikes_at_T = ModelUtils.extractColumns(par_spike_train, ft);
-            boolean bno_f_fired = true;
-            for(int i=0; i<m_nofLearners_layerF; ++i){
-
-                if(spikes_at_T[i]> 0){
-                    spiking_hist_layerF.increment(i);
-                    bno_f_fired = false;
-                }
-            }
-            if(bno_f_fired){
-
-                spiking_hist_layerF.increment(m_nofLearners_layerF);
-            }
-        }
-        Distribution1D spiking_distr_layerF = new Distribution1D();
-        spiking_distr_layerF.setParams(m_nofLearners_layerF);
-        spiking_distr_layerF.init();
-        spiking_distr_layerF.evalDistr(spiking_hist_layerF.normalize());
-
-        int nof_samples_per_to_merge = 1; // produce at least 1 sample
-        for(int ft=0; ft<n; ++ft){
-
-            int [] samples = spiking_distr_layerF.sample(nof_samples_per_to_merge);
-            for(int sample_i=0; sample_i<nof_samples_per_to_merge; sample_i++){
-
-                int ft_spiking_node = samples[sample_i];
-                if(ft_spiking_node<m_nofLearners_layerF){
-                    result[ft_spiking_node][ft] = 1;
-                }
-            }
-        }
-
-        // verify resampled spike train has similar distribution
-//
-//        Histogram spiking_hist_layerF2 = new Histogram();
-//        spiking_hist_layerF2.setParams(m_nofLearners_layerF+1); // +1 when no F fires
-//        spiking_hist_layerF2.init();
-//        for(int ft=0; ft<n; ++ft){
-//
-//            int[] spikes_at_T = ModelUtils.extractColumns(result, ft);
-//            boolean bno_f_fired = true;
-//            for(int i=0; i<m_nofLearners_layerF; ++i){
-//
-//                if(spikes_at_T[i]> 0){
-//                    spiking_hist_layerF2.increment(i);
-//                    bno_f_fired = false;
-//                }
-//            }
-//            if(bno_f_fired){
-//
-//                spiking_hist_layerF2.increment(m_nofLearners_layerF);
-//            }
-//
-//        }
-//        double[] x = spiking_hist_layerF.normalize();
-//        double[] y = spiking_hist_layerF2.normalize();
-//        double z = 0;
-//        for(int i=0; i<x.length; ++i){
-//            z += Math.abs(x[i]-y[i]);
-//        }
-//        System.out.println(z/x.length);
-//        System.out.println(java.util.Arrays.toString(x));
-//        System.out.println(java.util.Arrays.toString(y));
-        return result;
+        int _T = par_spike_train[0].length;
+        double [] spikes_distr = AbstractEncoder.spikes2distr(par_spike_train);
+        int [][] resampled = AbstractEncoder.distr2spikes(spikes_distr, _T);
+        return resampled;
     }
     
     // re-invent layer F spike train

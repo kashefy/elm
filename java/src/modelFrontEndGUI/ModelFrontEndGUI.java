@@ -104,7 +104,7 @@ public class ModelFrontEndGUI extends javax.swing.JFrame {
         //ModelUtilsTest.argmax_int();
         //ModelUtilsTest.argmin_double();
         //ModelUtilsTest.argmin_int();
-        new PopulationCodeTest().rankPopulationCode();
+        //new PopulationCodeTest().rankPopulationCode();
         
         //SimulationTest.testSimplePatterns();
         //SimulationTest.testMNIST();
@@ -114,7 +114,7 @@ public class ModelFrontEndGUI extends javax.swing.JFrame {
         //SimulationTest.testMNIST_layerF_onOff();
         //SimulationTest.test_MNIST_layerIndep();
         
-        //SimulationTune.tune_MNIST_layerF_onOff();
+        SimulationTune.tune_MNIST_layerF_onOff();
 //        SimulationTune.tune_MNIST_layerF_onOff_learningRateF();
 //        SimulationTune.tune_MNIST_layerF_onOff_learningRateZ();
 //        SimulationTune.tune_MNIST_layerF_onOff_wta_max_rate_factor_layerF();
