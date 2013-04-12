@@ -66,9 +66,9 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         
         //int [][][] arrResponse_layerF = new int [ nofStimuli ][ m_params.getNofAttentions() ][ nof_responses_per_window_y2f ];
         int [] arr_response1D_layerF = new int [ nofStimuli * nof_responses_per_stimulus_y2f ];
-        
+        int [] arr_response1D_layerF_label = new int [ nofStimuli * nof_responses_per_stimulus_y2f ];
         // activity mask will be reduced to mask weights of nodes with low activity
-        int[] arrTrainLabelNames = m_dataLoader.determineLabelSet(0,nofStimuli-1);
+        int[] arrTrainLabelNames = m_dataLoader.determineLabelSet(0, nofStimuli-1);
         int nofCauses = m_params.getNofCauses();
         int nofMasks = nofCauses;
 //        ActivityMask [] arrActivityMask = new ActivityMask[ nofMasks_layerZ ];
@@ -229,6 +229,7 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                     ModelUtils.insertColumn(spikes_atT_out, spikes_f, yt);
                     ModelUtils.insertColumn(spikes_atT_out, spikes_f_per_stimulus, attention_offset+yt);
                     arr_response1D_layerF[ iteration_layerF ] = wta_response;
+                    arr_response1D_layerF_label[ iteration_layerF ] = nCurrent_label;
                     iteration_layerF++;
                     //System.out.print(wta_response + " ");
                 }
@@ -292,6 +293,7 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         ModelPredictionTest.saveBiases( new File( m_params.getMainOutputDir(), "biases.csv" ).getPath(), m_arrZNeurons);
         
         FileIO.saveArrayToCSV(arr_response1D_layerF, 1, nofStimuli * m_nofAttentions * nof_responses_per_window_y2f, new File( m_params.getMainOutputDir(), "response1D_layerF_learn.csv").getPath());
+        FileIO.saveArrayToCSV(arr_response1D_layerF_label, 1, nofStimuli * m_nofAttentions * nof_responses_per_window_y2f, new File( m_params.getMainOutputDir(), "response1D_layerF_label_learn.csv").getPath());        
         FileIO.saveArrayToCSV(arr_response1D_layerZ, 1, nofStimuli * nof_responses_per_stimulus_f2Z, new File( m_params.getMainOutputDir(), "response1D_layerZ_learn.csv").getPath());
 //        for(int mi=0; mi<nofMasks; mi++){
 //            arrActivityMask[mi].calc_activity_intensity();
@@ -669,21 +671,45 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
     }
     
     // re-invent layer F spike train
+    // -bi state (m_nofLearners_layerF*2)
+    // -ranking per f (m_nofLearners_layerF*m_nofLearners_layerF)
     private int [][] refactor_spike_train_layerF(int[][] par_spike_train){
         
-        int n = par_spike_train[0].length;
+        int _T = par_spike_train[0].length;
+        int n = m_nofLearners_layerF*2 + m_nofLearners_layerF*m_nofLearners_layerF;
+        int [][] result = new int[n][_T];
         
-        // bi state (m_nofLearners_layerF*2)
         SimplePopulationCode bi_state_pop_code = new SimplePopulationCode();
         bi_state_pop_code.init(m_nofLearners_layerF, 2);
         
-        // ranking per f (m_nofLearners_layerF*m_nofLearners_layerF)
-        
-        int [][] result = new int[ m_nofLearners_layerF*2 + m_nofLearners_layerF*m_nofLearners_layerF][n];
-        for(int ft=0; ft<n; ++ft){
+        RankPopulationCode rank_pop_code = new RankPopulationCode();
+        rank_pop_code.init(m_nofLearners_layerF, m_nofLearners_layerF);
+
+        for(int ft=0; ft<_T; ++ft){
 
             int[] spikes_at_T = ModelUtils.extractColumns(par_spike_train, ft);
-            ModelUtils.insertColumn(bi_state_pop_code.calcStateOfNeurons(spikes_at_T), result, ft);
+            int [] bi_state = bi_state_pop_code.calcStateOfNeurons(spikes_at_T);
+            
+            double [] membrane_pot = new double[m_nofLearners_layerF];
+            for(int fi=0; fi<m_nofLearners_layerF; ++fi){
+                membrane_pot[fi] = m_arrZNeurons_layerF[fi].getPredictionValue();
+            }
+            double [] rank_double = rank_pop_code.calcStateOfNeurons(membrane_pot);
+            int [] rank = new int[rank_double.length];
+            for(int i=0; i<rank_double.length; ++i){
+                rank[i] = (int)rank_double[i];
+            }
+            
+            int [] spikes_at_T_new = new int [n];
+            System.arraycopy(bi_state, 0, spikes_at_T_new, 0, bi_state.length);
+            System.arraycopy(rank, 0, spikes_at_T_new, bi_state.length, rank.length);
+            ModelUtils.insertColumn(spikes_at_T_new, result, ft);
+            
+//            System.out.println(Arrays.toString(spikes_at_T));
+//            System.out.println(Arrays.toString(bi_state));
+//            System.out.println(Arrays.toString(membrane_pot));
+//            System.out.println(Arrays.toString(rank));
+//            System.out.println(Arrays.toString(spikes_at_T_new));
         }
         
         return result;
