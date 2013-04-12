@@ -21,6 +21,14 @@
  display_weights_intensity(weights{2}, 4002);
  
 
+ filename = 'response1D_layerF_label_learn.csv';
+ filepath_labels = fullfile(modelOutputPath, setDir, filename);
+ filename = 'response1D_layerF_learn.csv';
+ filepath_responses_layerF = fullfile(modelOutputPath, setDir, filename);
+ filename = 'response1D_layerZ_learn.csv';
+ filepath_responses_layerZ = fullfile(modelOutputPath, setDir, filename);
+ display_response_and_label(filepath_labels, filepath_responses_layerF, 5000, filepath_responses_layerZ);
+
 %% layerF
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\';
  setDir = 'MNIST\\tune_tune_0\\';
