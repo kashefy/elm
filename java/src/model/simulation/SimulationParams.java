@@ -40,11 +40,15 @@ public class SimulationParams extends AbstractParams{
     private double m_deltaT;
     private int m_encDurationInMilSec;
     private int m_popCodeFanOut;
+    private boolean m_do_intensity;
+    private boolean m_do_orient;
 
     // prediction parameters
     private int m_nofCauses;
     private int m_nofLearners;
     private int m_nofLearners_layerF;
+    private boolean m_b_learn_gaps;
+    private boolean m_b_load_layerF;
     
     // parameter objects
     private LearnerParams m_learnerParams;
@@ -88,12 +92,16 @@ public class SimulationParams extends AbstractParams{
             m_deltaT = (double) encoding_parameters.get("m_deltaT");
             m_encDurationInMilSec = (int) encoding_parameters.get("m_encDurationInMilSec");
             m_popCodeFanOut = (int) encoding_parameters.get("m_popCodeFanOut");
+            m_do_orient = (boolean) encoding_parameters.get("m_do_orient");
+            m_do_intensity = (boolean) encoding_parameters.get("m_do_intensity");
 
             Map prediction_parameters = (Map) root.get("prediction");
             m_nofCauses = (int) prediction_parameters.get("m_nofCauses");
             m_nofLearners = (int) prediction_parameters.get("m_nofLearners");
             m_nofLearners_layerF = (int) prediction_parameters.get("m_nofLearners_layerF");
-
+            //m_b_learn_gaps = (boolean) prediction_parameters.get("m_b_learn_gaps");
+            m_b_load_layerF = (boolean) prediction_parameters.get("m_b_load_layerF");
+            
             Map parameter_objects = (Map) root.get("parameter objects");
             Set<String> keys = parameter_objects.keySet();
             for(String key : keys){
@@ -495,6 +503,14 @@ public class SimulationParams extends AbstractParams{
     public void setNofLearners(int m_nofZNeurons) {
         this.m_nofLearners = m_nofZNeurons;
     }
+    
+    public boolean is_load_layerF() {
+        return m_b_load_layerF;
+    }
+
+    public void set_load_layerF(boolean par_b_load_layerF) {
+        this.m_b_load_layerF = par_b_load_layerF;
+    }
 
     public int getPopCodeFanOut() {
         return m_popCodeFanOut;
@@ -526,6 +542,30 @@ public class SimulationParams extends AbstractParams{
 
     public void setMainOutputDir(String m_strMainOutputDir) {
         this.m_strMainOutputDir = m_strMainOutputDir;
+    }
+    
+    public boolean get_learn_gaps() {
+        return m_b_learn_gaps;
+    }
+
+    public void set_learn_gaps(boolean par_b_learn_gaps) {
+        this.m_b_learn_gaps = par_b_learn_gaps;
+    }
+
+    public boolean is_do_intensity() {
+        return m_do_intensity;
+    }
+
+    public void set_do_intensity(boolean par_do_intensity) {
+        this.m_do_intensity = par_do_intensity;
+    }
+
+    public boolean is_do_orient() {
+        return m_do_orient;
+    }
+
+    public void set_do_orient(boolean par_do_orient) {
+        this.m_do_orient = par_do_orient;
     }
     
     public SimulationParams(){

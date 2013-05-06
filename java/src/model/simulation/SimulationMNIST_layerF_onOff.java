@@ -110,45 +110,51 @@ public class SimulationMNIST_layerF_onOff extends AbstractSimulation{
         
         m_nofStimElements = m_nofRows * m_nofCols;
         
-        // feature maps inits       
-        m_mapOrient = new OrientationMap(); 
-        m_mapOrient.setStartingScale(0.2*16/m_params.getFeatureMapParamsRef().getSupportRadius());
-        m_mapOrient.setParams(m_params.getFeatureMapParamsRef());
-        m_mapOrient.init();
-        
-        EncoderParams encoder_params = new EncoderParams();
-        encoder_params.set_feature_map(m_mapOrient);
-        encoder_params.set_frequency(m_params.getEncFrequency());
-        encoder_params.set_delta_t(m_params.getDeltaT());
-        encoder_params.set_duration_milSec(m_params.getEncDurationInMilSec());
-        encoder_params.set_nof_pop_code_inputs(m_nofRows*m_nofCols*m_mapOrient.getNofFeatureSets());
-        encoder_params.set_pop_code_fan_out(m_params.getPopCodeFanOut());
-        encoder_params.set_arr_input_dims(m_windowDims);
-        
-        EncoderParams encoder_params_onOff = new EncoderParams();
-        encoder_params_onOff.set_frequency(m_params.getEncFrequency());
-        encoder_params_onOff.set_delta_t(m_params.getDeltaT());
-        encoder_params_onOff.set_duration_milSec(m_params.getEncDurationInMilSec());
-        encoder_params_onOff.set_nof_pop_code_inputs(m_nofRows*m_nofCols);
-        encoder_params_onOff.set_pop_code_fan_out(2);
-        encoder_params_onOff.set_arr_input_dims(m_windowDims);
-        
         // encoding inits
-        // need to improve init for m_encoder to conform with other inits
-        //m_encoder = new Encoder();
-        m_encoder = new EncoderSoftMax();
-        m_encoder.set_params(encoder_params);
-        m_encoder.init();
-        
-        m_encoder_onOff = new Encoder();
-        m_encoder_onOff.set_params(encoder_params_onOff);
-        m_encoder_onOff.init();
+        m_nofYNeurons = 0;
+        if(m_params.is_do_orient()){
+            
+            // feature maps inits
+            m_mapOrient = new OrientationMap(); 
+            m_mapOrient.setStartingScale(0.2*16/m_params.getFeatureMapParamsRef().getSupportRadius());
+            m_mapOrient.setParams(m_params.getFeatureMapParamsRef());
+            m_mapOrient.init();
+
+            EncoderParams encoder_params = new EncoderParams();
+            encoder_params.set_feature_map(m_mapOrient);
+            encoder_params.set_frequency(m_params.getEncFrequency());
+            encoder_params.set_delta_t(m_params.getDeltaT());
+            encoder_params.set_duration_milSec(m_params.getEncDurationInMilSec());
+            encoder_params.set_nof_pop_code_inputs(m_nofRows*m_nofCols*m_mapOrient.getNofFeatureSets());
+            encoder_params.set_pop_code_fan_out(m_params.getPopCodeFanOut());
+            encoder_params.set_arr_input_dims(m_windowDims);
+            
+            //m_encoder = new Encoder();
+            m_encoder = new EncoderSoftMax();
+            m_encoder.set_params(encoder_params);
+            m_encoder.init();
+
+            m_nofYNeurons += m_encoder.getNofEncoderNodes();
+        }
+        if(m_params.is_do_intensity()){
+            
+            EncoderParams encoder_params_onOff = new EncoderParams();
+            encoder_params_onOff.set_frequency(m_params.getEncFrequency());
+            encoder_params_onOff.set_delta_t(m_params.getDeltaT());
+            encoder_params_onOff.set_duration_milSec(m_params.getEncDurationInMilSec());
+            encoder_params_onOff.set_nof_pop_code_inputs(m_nofRows*m_nofCols);
+            encoder_params_onOff.set_pop_code_fan_out(2);
+            encoder_params_onOff.set_arr_input_dims(m_windowDims);
+            
+            m_encoder_onOff = new Encoder();
+            m_encoder_onOff.set_params(encoder_params_onOff);
+            m_encoder_onOff.init();
+            
+            m_nofYNeurons += m_encoder_onOff.getNofEncoderNodes();
+        }
         
         // predictors/classifiers
-        m_nofYNeurons = m_encoder.getNofEncoderNodes(); // get value from enocder
-        m_nofYNeurons += m_encoder_onOff.getNofEncoderNodes();
-        
-        m_params.getLearnerParams_layerF_Ref().setNofInputNodes(m_nofYNeurons);
+        m_params.getLearnerParams_layerF_Ref().setNofInputNodes(m_nofYNeurons); // m_nofYNeurons set during encodier initializations
         
         m_nofLearners_layerF = m_params.getNofLeaners_layerF();
         m_arrZNeurons_layerF = new ZNeuron[ m_nofLearners_layerF ];       
@@ -161,6 +167,7 @@ public class SimulationMNIST_layerF_onOff extends AbstractSimulation{
             m_arrZNeurons_layerF[zi].init();
         } 
         
+        //m_params.getLearnerParamsRef().setNofInputNodes(m_nofLearners_layerF*2+m_nofLearners_layerF*m_nofLearners_layerF);
         m_params.getLearnerParamsRef().setNofInputNodes(m_nofLearners_layerF*2);
         m_nofLearners_layerZ = m_params.getNofLeaners();
         m_arrZNeurons = new ZNeuron[ m_nofLearners_layerZ ];       
@@ -327,8 +334,14 @@ public class SimulationMNIST_layerF_onOff extends AbstractSimulation{
 //                        arrActivityMask[li].addSample(window_of_ttention);
 //                }
                 
-                int [][] spikes_y_p1 = m_encoder.encode(window_of_attention);
-                int [][] spikes_y_p2 = m_encoder_onOff.encode(window_of_attention);
+                int [][] spikes_y_p1 = null;
+                if(m_params.is_do_orient()){
+                    spikes_y_p1 = m_encoder.encode(window_of_attention);
+                }
+                int [][] spikes_y_p2 = null;
+                if(m_params.is_do_intensity()){
+                   spikes_y_p2 = m_encoder_onOff.encode(window_of_attention);
+                }
                 int [][] spikes_f = new int [ m_nofLearners_layerF ][ nof_responses_per_window_y2f ]; 
 
                 // for each column in all spike trains of layer F
@@ -341,11 +354,19 @@ public class SimulationMNIST_layerF_onOff extends AbstractSimulation{
                     int [] spikes_atT_out;
                     if(yt < m_params.getEncDurationInMilSec()){
 
-                        int [] spikes_atT_in_p1 = ModelUtils.extractColumns(spikes_y_p1, yt);
-                        int [] spikes_atT_in_p2 = ModelUtils.extractColumns(spikes_y_p2, yt);
                         spikes_atT_in = new int [m_nofYNeurons];
-                        System.arraycopy(spikes_atT_in_p1, 0, spikes_atT_in, 0, m_encoder.getNofEncoderNodes());
-                        System.arraycopy(spikes_atT_in_p2, 0, spikes_atT_in, m_encoder.getNofEncoderNodes(), m_encoder_onOff.getNofEncoderNodes());
+                        int [] spikes_atT_in_p1;
+                        if(m_params.is_do_orient()){
+                            spikes_atT_in_p1 = ModelUtils.extractColumns(spikes_y_p1, yt);
+                            System.arraycopy(spikes_atT_in_p1, 0, spikes_atT_in, 0, m_encoder.getNofEncoderNodes());
+                        
+                        }
+                        
+                        int [] spikes_atT_in_p2;
+                        if(m_params.is_do_intensity()){
+                           spikes_atT_in_p2 = ModelUtils.extractColumns(spikes_y_p2, yt);
+                           System.arraycopy(spikes_atT_in_p2, 0, spikes_atT_in, m_nofYNeurons-m_encoder_onOff.getNofEncoderNodes(), m_encoder_onOff.getNofEncoderNodes());
+                        }
                     }
                     else{
                         spikes_atT_in = allZeroSpikeTrain_layerF;
@@ -634,23 +655,40 @@ public class SimulationMNIST_layerF_onOff extends AbstractSimulation{
                 
                 m_attention.attend(null);
                 double [] window_of_attention = m_attention.getWindow();
-                int [][] spikes_y_p1 = m_encoder.encode(window_of_attention);
-                int [][] spikes_y_p2 = m_encoder_onOff.encode(window_of_attention);
-                int [][] spikes_f = new int [ m_nofLearners_layerF ][ nof_responses_per_window_y2f ];
                 
+                int [][] spikes_y_p1 = null;
+                if(m_params.is_do_orient()){
+                    spikes_y_p1 = m_encoder.encode(window_of_attention);
+                }
+                int [][] spikes_y_p2 = null;
+                if(m_params.is_do_intensity()){
+                   spikes_y_p2 = m_encoder_onOff.encode(window_of_attention);
+                }
+                int [][] spikes_f = new int [ m_nofLearners_layerF ][ nof_responses_per_window_y2f ]; 
+
+                // for each column in all spike trains of layer F
+                // predict - compete
                 for(int yt=0; yt<nof_responses_per_window_y2f; yt++){
 
                     // create array for spikes of all y neurons at time yt
-                    // traverse through columns of spikes_y[][]                    
+                    // traverse through columns of spikes_y[][]
                     int [] spikes_atT_in;
                     int [] spikes_atT_out;
                     if(yt < m_params.getEncDurationInMilSec()){
 
-                        int [] spikes_atT_in_p1 = ModelUtils.extractColumns(spikes_y_p1, yt);
-                        int [] spikes_atT_in_p2 = ModelUtils.extractColumns(spikes_y_p2, yt);
                         spikes_atT_in = new int [m_nofYNeurons];
-                        System.arraycopy(spikes_atT_in_p1, 0, spikes_atT_in, 0, m_encoder.getNofEncoderNodes());
-                        System.arraycopy(spikes_atT_in_p2, 0, spikes_atT_in, m_encoder.getNofEncoderNodes(), m_encoder_onOff.getNofEncoderNodes());
+                        int [] spikes_atT_in_p1;
+                        if(m_params.is_do_orient()){
+                            spikes_atT_in_p1 = ModelUtils.extractColumns(spikes_y_p1, yt);
+                            System.arraycopy(spikes_atT_in_p1, 0, spikes_atT_in, 0, m_encoder.getNofEncoderNodes());
+                        
+                        }
+                        
+                        int [] spikes_atT_in_p2;
+                        if(m_params.is_do_intensity()){
+                           spikes_atT_in_p2 = ModelUtils.extractColumns(spikes_y_p2, yt);
+                           System.arraycopy(spikes_atT_in_p2, 0, spikes_atT_in, m_nofYNeurons-m_encoder_onOff.getNofEncoderNodes(), m_encoder_onOff.getNofEncoderNodes());
+                        }
                     }
                     else{
                         spikes_atT_in = allZeroSpikeTrain_layerF;

@@ -21,7 +21,7 @@ public class YNeuron
 	 * @param par_nPopCodeInput - m_popCodeVal neuron gets from population code (0 or 1)
 	 * @param par_frequency - frequency at which neuron is firing. Values < 0 are equal to infinite firing rate
 	 */
-        public void init(double par_frequency, double par_deltaT_milSec,int par_lengthSpikeHistory){
+        public void init(double par_frequency, double par_deltaT_milSec, int par_lengthSpikeHistory){
 	        
             m_deltaT_milSec = par_deltaT_milSec;
             m_lengthSpikeHistory = par_lengthSpikeHistory;
