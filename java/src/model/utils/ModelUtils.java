@@ -253,6 +253,17 @@ public class ModelUtils {
         return column;
     }
     
+    public static double [] extractColumns(double par_arrInput[][], int par_columnOfInterest){
+        
+        int nofRows = par_arrInput.length;
+        double [] column = new double[ nofRows ];
+        for(int row=0; row<nofRows; ++row){
+            
+            column[ row ] = par_arrInput[ row ][ par_columnOfInterest ];
+        }
+        return column;
+    }
+    
     public static int [][] extractColumns(int par_arrInput[][], int par_columnRangeOfInterestStart, int par_columnRangeOfInterestSEnd){
         
         // start and end columns included
