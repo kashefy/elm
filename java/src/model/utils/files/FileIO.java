@@ -14,6 +14,7 @@ import java.awt.image.*;
 
 import org.shared.array.*;
 
+
 public class FileIO {
     
     public static String DIR_NAME_TUNE = "tune";
@@ -130,6 +131,30 @@ public class FileIO {
          }
     }
     
+    public static void saveArrayToCSV(int[] par_arrayValues, int par_nofRows, int par_nofCols, String par_strOutputFilePath, boolean par_bAppend){
+        
+         try(PrintWriter pw = new PrintWriter(new FileWriter(par_strOutputFilePath, par_bAppend),par_bAppend)){
+             
+             for(int i=0; i<par_nofRows; i++){
+                 
+                 int rowOffset = i*par_nofCols;
+                 for(int j=0;j<par_nofCols; j++){
+
+                     pw.print(par_arrayValues[rowOffset+j]);
+                     if (j<par_nofCols-1)
+                         pw.print(",");
+                 }
+                 pw.println();
+                 
+             }          
+             pw.close();
+         }
+         catch (Exception e){
+
+             System.err.println("Error: " + e.getMessage());
+         }
+    }
+    
     // save java 2D array of integers to a text file/CSV
     public static void saveArrayToCSV(int[][] par_arrayValues, String par_strOutputFilePath){
         
@@ -141,6 +166,31 @@ public class FileIO {
                  
                  int nofCols = par_arrayValues[i].length;
                  for(int j=0;j<nofCols; j++){
+
+                     pw.print(par_arrayValues[i][j]);
+                     if (j<nofCols-1)
+                         pw.print(",");
+                 }
+                 pw.println();
+             }          
+             pw.close();
+         }
+         catch (Exception e){
+
+             System.err.println("Error: " + e.getMessage());
+         }
+    }
+    
+    public static void saveArrayToCSV(int[][] par_arrayValues, String par_strOutputFilePath, boolean par_bAppend){
+        
+         try(PrintWriter pw = new PrintWriter(new FileWriter(par_strOutputFilePath, par_bAppend), par_bAppend)){
+             
+             int nofRows = par_arrayValues.length;
+             
+             for(int i=0; i<nofRows; ++i){
+                 
+                 int nofCols = par_arrayValues[i].length;
+                 for(int j=0;j<nofCols; ++j){
 
                      pw.print(par_arrayValues[i][j]);
                      if (j<nofCols-1)
@@ -167,6 +217,31 @@ public class FileIO {
                  
                  int nofCols = par_arrayValues[i].length;
                  for(int j=0;j<nofCols; j++){
+
+                     pw.print(par_arrayValues[i][j]);
+                     if (j<nofCols-1)
+                         pw.print(",");
+                 }
+                 pw.println();
+             }          
+             pw.close();
+         }
+         catch (Exception e){
+
+             System.err.println("Error: " + e.getMessage());
+         }
+    }
+    
+    public static void saveArrayToCSV(double[][] par_arrayValues, String par_strOutputFilePath, boolean par_bAppend){
+        
+         try(PrintWriter pw = new PrintWriter(new FileWriter(par_strOutputFilePath, par_bAppend),par_bAppend)){
+             
+             int nofRows = par_arrayValues.length;
+             
+             for(int i=0; i<nofRows; ++i){
+                 
+                 int nofCols = par_arrayValues[i].length;
+                 for(int j=0;j<nofCols; ++j){
 
                      pw.print(par_arrayValues[i][j]);
                      if (j<nofCols-1)
