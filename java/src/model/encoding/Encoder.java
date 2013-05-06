@@ -64,7 +64,7 @@ public class Encoder extends AbstractEncoder{
         for(int i=0; i<nofNodes; i++){
             
             m_arrSpikingNode[i] = new YNeuron();
-            m_arrSpikingNode[i].init(m_frequency,m_deltaT_sec,(int)m_deltaT_milSec*m_durationInMilSec);
+            m_arrSpikingNode[i].init(m_frequency, m_deltaT_sec, (int)(m_durationInMilSec/m_deltaT_milSec));
         } 
     }
         
@@ -99,7 +99,7 @@ public class Encoder extends AbstractEncoder{
         for(int i=0; i<nofNodes; i++){
             
             m_arrSpikingNode[i] = new YNeuron();
-            m_arrSpikingNode[i].init(m_frequency,m_deltaT_sec,(int)m_deltaT_milSec*m_durationInMilSec);
+            m_arrSpikingNode[i].init(m_frequency,m_deltaT_sec, (int)(m_durationInMilSec/m_deltaT_milSec));
         }         
     }
     
@@ -138,7 +138,7 @@ public class Encoder extends AbstractEncoder{
     public int[][] genSpikeTrains(double [] par_inputVals){
         
         int nofNodes = popCoder.getnofNodes();
-        int nof_spikes_per_node = (int)m_deltaT_milSec*m_durationInMilSec;
+        int nof_spikes_per_node = (int)(m_durationInMilSec/m_deltaT_milSec);
         int [][] spikeTrains = new int[ nofNodes ][ nof_spikes_per_node ];
                      
         for (int yi=0; yi<nofNodes; yi++){

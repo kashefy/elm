@@ -51,7 +51,7 @@ public class EncoderSoftMax extends Encoder{
         int nofNodes = popCoder.getnofNodes();
         int [][] spikeTrains;
         //int [][] spikeTrains = new int[ nofNodes ][ m_durationInMilSec ];
-        spikeTrains = popCoder.sampleStateOfNeurons(m_popCodeStateVals, (int)m_deltaT_milSec*m_durationInMilSec);
+        spikeTrains = popCoder.sampleStateOfNeurons(m_popCodeStateVals, (int)(m_durationInMilSec/m_deltaT_milSec));
                              
         return spikeTrains;
     }
