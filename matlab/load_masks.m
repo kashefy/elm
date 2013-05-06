@@ -9,7 +9,7 @@ function [ output, output_singles ] = load_masks(par_strFilenameMasks, par_strSi
         K = dir(par_strSingleMasksDir);
         % assuming first two elements are '.' and '..', removing them
         K(1:2)=[];
-        nofSingleMasks = 8;
+        nofSingleMasks = 25;
         arrSingleMasks = cell(nofMasks, nofSingleMasks);
 
         filenames = cell(1, length(K));
@@ -34,6 +34,7 @@ function [ output, output_singles ] = load_masks(par_strFilenameMasks, par_strSi
                     singleMaskIndicies = randi(nofSingleMasksInFile, 1, nofSingleMasks);
                     singleMaskIndicies = unique(singleMaskIndicies);
                 end
+                singleMaskIndicies = sort(singleMaskIndicies);
                 singleMaskVals = singleMaskVals(singleMaskIndicies, :);
                 for mi = 1:min(nofSingleMasks, nofSingleMasksInFile)
                     arrSingleMasks{filenameIndex,mi} = reshape(singleMaskVals(mi,:), nofRows, nofCols)';
