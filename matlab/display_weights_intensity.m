@@ -20,7 +20,8 @@ end
 figure(par_figure_id);
 nof_weighing_mech = 1;
 nof_plot_rows = nof_weighing_mech;
-nof_plot_cols = nof_learners; 
+nof_plot_cols = nof_learners;
+nof_plot_slots_per_col = 4;
     
 for i = 1:nof_learners
     
@@ -41,16 +42,29 @@ for i = 1:nof_learners
         end
     end
     to_disp = cell2mat(canvas);
-    subplot(nof_plot_rows, nof_plot_cols, i)
+    
+    plot_slot_start = (i-1)*nof_plot_slots_per_col + 1;
+    plot_slot_end = plot_slot_start + nof_plot_slots_per_col - 1;
+    sub_plot = subplot(nof_plot_rows, nof_plot_slots_per_col*nof_plot_cols+4, [plot_slot_start, plot_slot_end]);
+    
     imagesc(to_disp, [arr_feat_values(1), arr_feat_values(nof_features)]);
-    axis image
-    set(gca, 'XTick', nof_nodes_per_dim, 'YTick', nof_nodes_per_dim);
+    if i == 1
+        set(gca, 'YTick', nof_nodes_per_dim);
+    else
+        set(gca, 'YTick', []);
+    end
+    set(gca, 'XTick', nof_nodes_per_dim);
     if i == nof_learners/2
         title('winning feature per pixel');
     end
+    axis image
 end
+% add colorbar while preserving subplot size
+pos_gca = get(sub_plot, 'position');
 colormap(jet(nof_features));
-h = colorbar('location', 'EastOutside');
-ylabel(h, 'intensity');
+handle_colorbar = colorbar('location', 'EastOutside');
+ylabel(handle_colorbar, 'intensity');
+set(sub_plot, 'position', pos_gca);
+set(handle_colorbar, 'location', 'EastOutside');
 suptitle('weights per learner');
 end

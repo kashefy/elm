@@ -21,7 +21,8 @@ end
 figure(par_figure_id);
 nof_weighing_mech = 1;
 nof_plot_rows = nof_weighing_mech;
-nof_plot_cols = nof_learners; 
+nof_plot_cols = nof_learners;
+nof_plot_slots_per_col = 4;
     
 for i = 1:nof_learners
     
@@ -42,7 +43,9 @@ for i = 1:nof_learners
         end
     end
     to_disp = cell2mat(canvas);
-    subplot(nof_plot_rows, nof_plot_cols, i)
+    plot_slot_start = (i-1)*nof_plot_slots_per_col + 1;
+    plot_slot_end = plot_slot_start + nof_plot_slots_per_col-1;
+    subplot(nof_plot_rows, nof_plot_slots_per_col*nof_plot_cols, [plot_slot_start, plot_slot_end])
     h = imagesc(to_disp, [arr_angle_deg(1), arr_angle_deg(nof_features)]);
     set(h, 'alphadata', to_disp > 0);
     axis image
