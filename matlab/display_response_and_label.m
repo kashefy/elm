@@ -53,4 +53,9 @@ function [] = display_response_and_label(par_filepath_label, par_filepath_respon
     end
     
     suptitle('labels and responses');
+    
+    set(gcf, 'PaperPositionMode', 'auto');
+    set(gcf, 'units', 'normalized', 'outerposition', [0 0 1 1]);
+    saveas(gcf, 'response_n_label.png');
+    
 end

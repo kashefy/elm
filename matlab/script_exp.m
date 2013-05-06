@@ -1,4 +1,28 @@
- close all
+% %%
+% s = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\t.data';
+% fid = fopen(s);
+% %d = str2num(fgetl(fid));
+% %R = d(1);
+% dim = fread(fid, 4, 'uint8');
+% 
+% R = typecast(uint8(dim), 'int32');
+% R = typecast(uint8(flipdim(dim, 1)), 'int32');
+% dim = fread(fid, 4, 'uint8');
+% C = typecast(uint8(flipdim(dim, 1)), 'int32');
+% %C = d(2);
+% x = zeros(R, C);
+% for r=1:R
+%     a = fread(fid, C*8, 'uint8');
+%     disp(char(a(1:8)));
+%     typecast(uint8(flipdim(a(1:8),1)), 'double')
+% end
+% disp(x)
+% fclose(fid);
+
+%%
+
+
+close all
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
  setDir = 'MNIST\\tune_0\\';
  
@@ -14,11 +38,13 @@
  nof_orientations = 12;
  nof_intensities = 2;
  dims = [9, 9];
- slicing = {[prod(dims)*nof_orientations, nof_orientations], [prod(dims)*nof_intensities, nof_intensities]};
+%  slicing = {[prod(dims)*nof_orientations, nof_orientations], [prod(dims)*nof_intensities, nof_intensities]};
+%  weights = read_weights(fullfile(modelOutputPath, setDir, filename), slicing);
+%  display_weights_orient(weights{1}, 4000, arr_masks_learners_layerF);
+%  display_weights_intensity(weights{2}, 4002);
+ slicing = {[prod(dims)*nof_intensities, nof_intensities]};
  weights = read_weights(fullfile(modelOutputPath, setDir, filename), slicing);
- display_weights_orient(weights{1}, 4000, arr_masks_learners_layerF);
- 
- display_weights_intensity(weights{2}, 4002);
+ display_weights_intensity(weights{1}, 4002);
  
 
  filename = 'response1D_layerF_label_learn.csv';
@@ -27,8 +53,29 @@
  filepath_responses_layerF = fullfile(modelOutputPath, setDir, filename);
  filename = 'response1D_layerZ_learn.csv';
  filepath_responses_layerZ = fullfile(modelOutputPath, setDir, filename);
- display_response_and_label(filepath_labels, filepath_responses_layerF, 5000, filepath_responses_layerZ);
+ filename = 'membrane_pot_layerZ_learn.csv';
+ filepath_membrane_pot_layerZ = fullfile(modelOutputPath, setDir, filename);
+ display_response_and_label(filepath_labels, filepath_responses_layerF, 5000, filepath_responses_layerZ, filepath_membrane_pot_layerZ);
 
+ %% weight and rate watch
+
+ modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
+ str_set_dir =  'MNIST\\tune_0';
+ str_watch_dir = 'watch';
+ dir_watch = fullfile(modelOutputPath, str_set_dir, str_watch_dir);
+ %weight_watch = load_weight_watch(dir_watch, 'weightWatch_layerF');
+ %display_weight_watch(weight_watch, 6000);
+ load_display_weight_watch(dir_watch, 'weightWatch_layerF', 6000);
+ %weight_watch = load_weight_watch(dir_watch, 'weightWatch_layerZ');
+ %display_weight_watch(weight_watch, 6010);
+
+ %% spikes f2Z
+modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
+str_main_dir = modelOutputPath;
+str_set_dir =  'MNIST\\tune_0';
+spikes_f2Z = dlmread(fullfile(modelOutputPath, str_set_dir, 'spikes_f2Z.csv'))';
+figure(7000);
+imagesc(spikes_f2Z);
 %% layerF
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\';
  setDir = 'MNIST\\tune_tune_0\\';
@@ -111,51 +158,6 @@ strSuffix = 'All';
 figureOffset = 8000;
 displayAttention(strPath, strSuffix, figureOffset);
     
-
-%% weight and rate watch
-str_main_dir = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\';
-str_set_dir = 'MNIST';
-str_watch_dir = 'watch';
-figure_offset_weight_watch = 3000;
-
-arr_weight_watch = [];
-arr_weight_watch_layerF = [];
-
-for i_learner = 0:100
-    
-    str_weight_watch_filename = ['weightWatch', num2str(i_learner), '.csv'];
-    str_weight_watch_filepath = fullfile(str_main_dir, str_set_dir, str_watch_dir, str_weight_watch_filename);
-    
-    status = exist(str_weight_watch_filepath, 'file');
-    
-    if status == 2 % 2 == name is the full pathname to any file
-        
-        weight_watch_i = dlmread(str_weight_watch_filepath);
-        arr_weight_watch = [arr_weight_watch, weight_watch_i'];
-    end
-    
-    % layerF
-    str_weight_watch_filename = ['weightWatch_layerF', num2str(i_learner), '.csv'];
-    str_weight_watch_filepath = fullfile(str_main_dir, str_set_dir, str_watch_dir, str_weight_watch_filename);
-    
-    status = exist(str_weight_watch_filepath, 'file');
-    
-    if status == 2 % 2 == name is the full pathname to any file
-        
-        weight_watch_i = dlmread(str_weight_watch_filepath);
-        arr_weight_watch_layerF = [arr_weight_watch_layerF, weight_watch_i'];
-    end
-end
-
-figure(figure_offset_weight_watch);
-subplot(2,1,1)
-plot(arr_weight_watch);
-title('weightWatch');
-
-figure(figure_offset_weight_watch+10);
-subplot(2,1,1)
-plot(arr_weight_watch_layerF);
-title('weightWatch layerF');
 
 
 
