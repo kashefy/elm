@@ -22,7 +22,7 @@ public class DataLoggerTest {
         int cache_size = 2;
         String filepath = "tmp.csv";
         DataLogger data_logger = new DataLogger();
-        data_logger.set_params(filepath, nof_cols, cache_size);
+        data_logger.set_params(filepath, nof_cols, cache_size, true, false);
         data_logger.init();
         
         double [][] reference = new double[nof_rows][nof_cols];

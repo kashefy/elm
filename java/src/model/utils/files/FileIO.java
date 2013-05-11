@@ -11,7 +11,9 @@ package model.utils.files;
 import java.io.*;
 import javax.imageio.*;
 import java.awt.image.*;
-
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Collections;
 import org.shared.array.*;
 
 
@@ -83,6 +85,30 @@ public class FileIO {
     
     // save matrix of doubles to a text file/CSV. Needs debugging. Does not store pixel values in correct intensity range.
     public static void saveArrayToCSV(double[] par_arrayValues, int par_nofRows, int par_nofCols, String par_strOutputFilePath, boolean par_bAppend){
+        
+         try(PrintWriter pw = new PrintWriter(new FileWriter(par_strOutputFilePath, par_bAppend),par_bAppend)){
+             
+             for(int i=0; i<par_nofRows; i++){
+                 
+                 int rowOffset = i*par_nofCols;
+                 for(int j=0;j<par_nofCols; j++){
+
+                     pw.print(par_arrayValues[rowOffset+j]);
+                     if (j<par_nofCols-1)
+                         pw.print(",");
+                 }
+                 pw.println();
+                 
+             }          
+             pw.close();
+         }
+         catch (Exception e){
+
+             System.err.println("Error: " + e.getMessage());
+         }
+    }
+    
+    public static void saveArrayToCSV(float[] par_arrayValues, int par_nofRows, int par_nofCols, String par_strOutputFilePath, boolean par_bAppend){
         
          try(PrintWriter pw = new PrintWriter(new FileWriter(par_strOutputFilePath, par_bAppend),par_bAppend)){
              
@@ -242,7 +268,97 @@ public class FileIO {
                  
                  int nofCols = par_arrayValues[i].length;
                  for(int j=0;j<nofCols; ++j){
+                     
+                     pw.print(par_arrayValues[i][j]);
+                     if (j<nofCols-1)
+                         pw.print(",");
+                 }
+                 pw.println();
+             }          
+             pw.close();
+         }
+         catch (Exception e){
 
+             System.err.println("Error: " + e.getMessage());
+         }
+    }
+    
+    /**
+     * @brief save 2D array to data file (byte arrays)
+     *        field 1 : no. of columns (int32/4 bytes)
+     *        remaining fields saved column wise for easier loading with MATLAB's fread(fid, [C, inf], 'double')', (double/8 bytes)
+     * @param par_arrayValues: data to save
+     * @param par_strOutputFilePath: target path
+     * @param par_bAppend whether to append or not, row/col fields only written when par_bAppend==False, up to the user to control dimensions when appending
+     */
+    public static void saveArrayToDataFile(double[][] par_arrayValues, String par_strOutputFilePath, boolean par_bAppend){
+        
+        try (FileOutputStream pw = new FileOutputStream(new File(par_strOutputFilePath), par_bAppend)) {
+            
+            int nof_rows = par_arrayValues.length;
+            int nof_cols = par_arrayValues[0].length;
+            
+            if (!par_bAppend){
+                pw.write(int2ByteArray(nof_cols));
+            }
+             
+            byte [] arr_values_bytes = new byte[nof_rows*nof_cols*8];
+            
+            int k =0;
+            for(int i=0; i<nof_rows; ++i){
+                for(int j=0;j<nof_cols; ++j){
+
+                    ByteBuffer.wrap(arr_values_bytes).putDouble(k, par_arrayValues[i][j]);
+                    k += 8;
+                }
+            }
+            pw.write(arr_values_bytes);
+            pw.close();
+         }
+         catch (Exception e){
+             System.err.println("Error: " + e.getMessage());
+         }
+    }
+    
+    public static void saveArrayToDataFile(double[] par_arrayValues, int par_nof_rows, int par_nof_cols, String par_strOutputFilePath, boolean par_bAppend){
+        
+        try (FileOutputStream pw = new FileOutputStream(new File(par_strOutputFilePath), par_bAppend)) {
+            
+            
+            if (!par_bAppend){
+                pw.write(int2ByteArray(par_nof_cols));
+            }
+            byte [] arr_values_bytes = new byte[par_nof_rows*par_nof_cols*8];
+            
+            int k = 0;
+            int l = 0;
+            for(int i=0; i<par_nof_rows; ++i){
+                for(int j=0;j<par_nof_cols; ++j){
+
+                    ByteBuffer.wrap(arr_values_bytes).putDouble(k, par_arrayValues[l]);
+                    k += 8;
+                    ++l;
+                }
+            }
+            pw.write(arr_values_bytes);
+            pw.close();
+         }
+         catch (Exception e){
+             System.err.println("Error: " + e.getMessage());
+         }
+    }
+    
+    public static void saveArrayToCSV(float[][] par_arrayValues, String par_strOutputFilePath, boolean par_bAppend){
+        
+         try(PrintWriter pw = new PrintWriter(new FileWriter(par_strOutputFilePath, par_bAppend),par_bAppend)){
+             
+             int nofRows = par_arrayValues.length;
+             
+             for(int i=0; i<nofRows; ++i){
+                 
+                 int nofCols = par_arrayValues[i].length;
+                 for(int j=0;j<nofCols; ++j){
+                     
                      pw.print(par_arrayValues[i][j]);
                      if (j<nofCols-1)
                          pw.print(",");
@@ -307,5 +423,53 @@ public class FileIO {
         if( pos_dot > 0)
             ext = par_filename.substring(pos_dot + 1).toLowerCase();
         return ext;
+    }
+    
+    /**
+     * Convert value to byte array using ieee-be/Big-endian ordering
+     * @param value
+     * @return byte array
+     */
+    public static byte[] double2ByteArray(double value) {
+        
+        byte[] bytes = new byte[8];
+        ByteBuffer.wrap(bytes).putDouble(value);
+        return bytes;
+    }
+    
+    /**
+     * Convert value to byte array using ieee-be/Big-endian ordering
+     * @param value
+     * @return byte array
+     */
+    public static byte[] int2ByteArray(int value) {
+        
+        byte[] bytes = new byte[4];
+        ByteBuffer.wrap(bytes).putInt(value);
+        return bytes;
+    }
+    
+    public static byte[] reverse_byte_array(byte[] bytes){
+        
+        byte[] bytes_reversed = new byte[bytes.length];
+        for(int i=0, j=bytes.length-1; i<bytes.length; ++i, --j)
+            bytes_reversed[i] = bytes[j];
+        return bytes_reversed;
+    }
+        
+    public static void test_saveArrayToDataFile(){
+        
+        String s = "t.data";
+        int nof_rows = 4;
+        int nof_cols = 3;
+        double[][] x = new double[nof_rows][nof_cols];
+        for(int r=0; r<nof_rows; ++r){
+            for(int c=0; c<nof_cols; ++c){
+                x[r][c] = r*10+c+1.234;
+            }
+        }
+        saveArrayToDataFile(x, s, false);
+        saveArrayToDataFile(x, s, true);
+        return;
     }
 }

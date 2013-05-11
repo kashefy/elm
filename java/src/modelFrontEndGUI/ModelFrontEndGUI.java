@@ -44,6 +44,7 @@ import model.attention.*;
 import model.utils.Distribution1D;
 import model.utils.ModelUtilsTest;
 import model.utils.files.DataLoaderImageSetCSV_incremental;
+import model.utils.files.DataLoggerTest;
 
 public class ModelFrontEndGUI extends javax.swing.JFrame {
 
@@ -91,6 +92,9 @@ public class ModelFrontEndGUI extends javax.swing.JFrame {
         //new Distribution1D().test();
         //ModelUtilsTest.neighVar();
         //DataLoaderImageSetCSV_incremental.test_tree_set();
+        //DataLoggerTest.test_double();
+        //DataLoggerTest.test_int();
+        //FileIO.test_saveArrayToDataFile();
         
         //double [] x = new double[]{1,10,100,1000};
         //double [] y = ModelUtils.cumulativeSum(x);
@@ -113,6 +117,7 @@ public class ModelFrontEndGUI extends javax.swing.JFrame {
         //SimulationTest.testMNIST_layerF();
         //SimulationTest.testMNIST_layerF_onOff();
         //SimulationTest.test_MNIST_layerIndep();
+       
         
         SimulationTune.tune_MNIST_layerF_onOff();
 //        SimulationTune.tune_MNIST_layerF_onOff_learningRateF();

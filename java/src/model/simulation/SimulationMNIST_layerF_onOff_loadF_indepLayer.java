@@ -68,9 +68,9 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         
         int [] arr_response1D_layerZ = new int [ nofStimuli * nof_responses_per_stimulus_f2Z ];
         DataLogger membrane_pot_logger_layerZ = new DataLogger();
-        membrane_pot_logger_layerZ.set_params(new File(m_params.getMainOutputDir(), "membrane_pot_layerZ_learn.csv").getPath(), m_nofLearners_layerZ, 1000);
+        membrane_pot_logger_layerZ.set_params(new File(m_params.getMainOutputDir(), "membrane_pot_layerZ_learn.csv").getPath(), 
+                m_nofLearners_layerZ, 2000, true, false);
         membrane_pot_logger_layerZ.init();
-        //double [][] arr_membrane_pot_layerZ = new double [m_nofLearners_layerZ][ nofStimuli * nof_responses_per_stimulus_f2Z ];
         
         //int [][][] arrResponse_layerF = new int [ nofStimuli ][ m_params.getNofAttentions() ][ nof_responses_per_window_y2f ];
         int [] arr_response1D_layerF = new int [ nofStimuli * nof_responses_per_stimulus_y2f ];
@@ -134,16 +134,26 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         DataLogger[] weight_watch_logger_layerZ = new DataLogger[m_nofLearners_layerZ];
         for(int li=0; li<m_nofLearners_layerZ; ++li){
             weight_watch_logger_layerZ[li] = new DataLogger();
-            weight_watch_logger_layerZ[li].set_params(new File(watch_dir, "weightWatch_layerZ_"+li+".csv").getPath(), m_arrZNeurons[li].getNofEvidence(), 1000);
+            weight_watch_logger_layerZ[li].set_params(new File(watch_dir, "weightWatch_layerZ_"+li+".dat").getPath(), 
+                    m_arrZNeurons[li].getNofEvidence(), 2000, false, true);
             weight_watch_logger_layerZ[li].init();
         }
+        
+        DataLogger bias_watch_logger_layerZ = new DataLogger();
+        bias_watch_logger_layerZ.set_params(new File(watch_dir, "bias_watch_layerZ.csv").getPath(), m_nofLearners_layerZ);
+        bias_watch_logger_layerZ.init();
         
         DataLogger[] weight_watch_logger_layerF = new DataLogger[m_nofLearners_layerF];
         for(int li=0; li<m_nofLearners_layerF; ++li){
             weight_watch_logger_layerF[li] = new DataLogger();
-            weight_watch_logger_layerF[li].set_params(new File(watch_dir, "weightWatch_layerF_"+li+".csv").getPath(), m_arrZNeurons_layerF[li].getNofEvidence(), 1000);
+            weight_watch_logger_layerF[li].set_params(new File(watch_dir, "weightWatch_layerF_"+li+".dat").getPath(), 
+                    m_arrZNeurons_layerF[li].getNofEvidence(), 2000, false, true);
             weight_watch_logger_layerF[li].init();
         }
+        
+        DataLogger bias_watch_logger_layerF = new DataLogger();
+        bias_watch_logger_layerF.set_params(new File(watch_dir, "bias_watch_layerF.csv").getPath(), m_nofLearners_layerF);
+        bias_watch_logger_layerF.init();
         
         DataLoggerInt spikes_f2Z_logger = new DataLoggerInt();
         spikes_f2Z_logger.set_params(new File(m_params.getMainOutputDir(), "spikes_f2Z.csv").getPath(), m_arrZNeurons[0].getNofEvidence(), 1000);
@@ -244,13 +254,16 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                     }
                     
                     // update F // unless pre-learned and loaded from file
+                    double [] arr_bias_layer_F = new double[m_nofLearners_layerF];
                     for(int li=0; li<m_nofLearners_layerF; ++li){
 
                         weight_watch_logger_layerF[li].add_sample(m_arrZNeurons_layerF[li].getWeights());
+                        arr_bias_layer_F[li] = m_arrZNeurons_layerF[li].getBias();
                         if(!m_bload_layer_f){
                             m_arrZNeurons_layerF[li].update();
                         }
                     }
+                    bias_watch_logger_layerF.add_sample(arr_bias_layer_F);
                     
                     ModelUtils.insertColumn(spikes_atT_out, spikes_f, yti);
                     ModelUtils.insertColumn(spikes_atT_out, spikes_f_per_stimulus, attention_offset+yti);
@@ -308,11 +321,14 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                 }
 
                 // update Z
+                double [] arr_bias_layerZ = new double[m_nofLearners_layerZ];
                 for(int li=0; li<m_nofLearners_layerZ; ++li){
                     
                     weight_watch_logger_layerZ[li].add_sample(m_arrZNeurons[li].getWeights());
+                    arr_bias_layerZ[li] = m_arrZNeurons[li].getBias();
                     m_arrZNeurons[li].update();               
                 }
+                bias_watch_logger_layerZ.add_sample(arr_bias_layerZ);
                 arr_response1D_layerZ[ iteration_layerZ ] = wta_response;
 
                 ++iteration_layerZ;
@@ -350,11 +366,13 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
             
             weight_watch_logger_layerZ[li].flush();
         }
+        bias_watch_logger_layerZ.flush();
         
         for(int li=0; li<m_nofLearners_layerF; li++){
         
             weight_watch_logger_layerF[li].flush();
         }
+        bias_watch_logger_layerF.flush();
     }  
     public void test(){
         
