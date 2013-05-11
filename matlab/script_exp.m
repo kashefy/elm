@@ -1,24 +1,3 @@
-% %%
-% s = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\t.data';
-% fid = fopen(s);
-% %d = str2num(fgetl(fid));
-% %R = d(1);
-% dim = fread(fid, 4, 'uint8');
-% 
-% R = typecast(uint8(dim), 'int32');
-% R = typecast(uint8(flipdim(dim, 1)), 'int32');
-% dim = fread(fid, 4, 'uint8');
-% C = typecast(uint8(flipdim(dim, 1)), 'int32');
-% %C = d(2);
-% x = zeros(R, C);
-% for r=1:R
-%     a = fread(fid, C*8, 'uint8');
-%     disp(char(a(1:8)));
-%     typecast(uint8(flipdim(a(1:8),1)), 'double')
-% end
-% disp(x)
-% fclose(fid);
-
 %%
 
 
@@ -63,11 +42,9 @@ close all
  str_set_dir =  'MNIST\\tune_0';
  str_watch_dir = 'watch';
  dir_watch = fullfile(modelOutputPath, str_set_dir, str_watch_dir);
- %weight_watch = load_weight_watch(dir_watch, 'weightWatch_layerF');
- %display_weight_watch(weight_watch, 6000);
  load_display_weight_watch(dir_watch, 'weightWatch_layerF', 6000);
- %weight_watch = load_weight_watch(dir_watch, 'weightWatch_layerZ');
- %display_weight_watch(weight_watch, 6010);
+ load_display_weight_watch(dir_watch, 'weightWatch_layerZ', 6010);
+ 
 
  %% spikes f2Z
 modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
@@ -76,6 +53,17 @@ str_set_dir =  'MNIST\\tune_0';
 spikes_f2Z = dlmread(fullfile(modelOutputPath, str_set_dir, 'spikes_f2Z.csv'))';
 figure(7000);
 imagesc(spikes_f2Z);
+%%
+s = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\t.data';
+fid = fopen(s);
+dim = fread(fid, 1, 'int32', 0, 'b');
+C = dim(1);
+%C = dim(2);
+v = fread(fid, [C,inf], 'double', 0, 'b');
+vt = v';
+fclose(fid);
+x=3+1
+
 %% layerF
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\';
  setDir = 'MNIST\\tune_tune_0\\';
