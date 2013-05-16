@@ -70,11 +70,17 @@ function [ ] = display_prediction_stats(par_firingProbs, par_condEntropy, par_fi
         distance_i = sqrt(sum(diff.^2, 1));
         distance(:, i) = distance_i;
     end
-    subplot(2, 2, 3)
+    sub_plot = subplot(2, 2, 3);
     imagesc(distance);
     title('distance matrix(c)')
     xlabel('c_i');
     ylabel('c_j');
+    
+    pos_gca = get(sub_plot, 'position');
+    handle_colorbar = colorbar('location', 'EastOutside');
+    ylabel(handle_colorbar, 'distance', 'FontSize', 8);
+    set(sub_plot, 'position', pos_gca);
+    set(handle_colorbar, 'location', 'EastOutside');
     
     set(gcf, 'PaperPositionMode', 'auto');
     set(gcf, 'units', 'normalized', 'outerposition', [0 0 1 1]);
