@@ -28,6 +28,9 @@ public class SimulationParams extends AbstractParams{
     
     // logging
     private boolean m_log_fresh;
+    private boolean m_b_log_weight_watch_layerF;
+    private boolean m_b_log_weight_watch_layerZ;
+    
     
     // data
     private int m_nofTrainStimuli;
@@ -80,6 +83,8 @@ public class SimulationParams extends AbstractParams{
             Map file_io = (Map) root.get("file I/O");
             m_strMainOutputDir = (String) file_io.get("m_strMainOutputDir");
             m_strMainInputDir = (String) file_io.get("m_strMainInputDir");
+            m_b_log_weight_watch_layerF = (boolean) file_io.get("m_b_log_weight_watch_layerF");
+            m_b_log_weight_watch_layerZ = (boolean) file_io.get("m_b_log_weight_watch_layerZ");
 
             Map data = (Map) root.get("data");
             m_nofTrainStimuli = (int) data.get("m_nofTrainStimuli");
@@ -346,6 +351,22 @@ public class SimulationParams extends AbstractParams{
         else{
             load_txt(file);
         }
+    }
+
+    public boolean is_log_weight_watch_layerF() {
+        return m_b_log_weight_watch_layerF;
+    }
+
+    public void set_do_log_weight_watch_layerF(boolean par_b_log_weight_watch_layerF) {
+        this.m_b_log_weight_watch_layerF = par_b_log_weight_watch_layerF;
+    }
+
+    public boolean is_log_weight_watch_layerZ() {
+        return m_b_log_weight_watch_layerZ;
+    }
+
+    public void set_do_log_weight_watch_layerZ(boolean par_b_log_weight_watch_layerZ) {
+        this.m_b_log_weight_watch_layerZ = par_b_log_weight_watch_layerZ;
     }
     
     public boolean get_log_append() {

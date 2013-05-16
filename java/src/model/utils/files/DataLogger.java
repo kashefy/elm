@@ -25,7 +25,8 @@ public class DataLogger{
     public void set_params(String par_filepath,
             int par_nof_cols){
         
-        this.set_params(par_filepath, par_nof_cols, 2000, false, true);
+        boolean as_bin = "dat".equals(FileIO.extension(par_filepath));
+        this.set_params(par_filepath, par_nof_cols, 2000, false, as_bin);
     }
     
     public void set_params(String par_filepath,
