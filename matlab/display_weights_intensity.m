@@ -16,7 +16,7 @@ for i = 1:nof_features
     arr_intensities{i} = i;
 end
 
-% subplot per learner, intensity = winning orientation
+% subplot per learner, intensity = winning feature
 figure(par_figure_id);
 nof_weighing_mech = 1;
 nof_plot_rows = nof_weighing_mech;
@@ -73,7 +73,7 @@ set(gcf, 'units', 'normalized', 'outerposition', [0 0 1 1]);
 saveas(gcf, 'weights_pl_intensity.png');
 % produce weight value figures
 
-% subplot per learner, intensity = winning orientation
+% subplot per learner, intensity = winning feature intenisty
 figure(par_figure_id+1);
 nof_plot_rows = nof_features;
 min_weight = min(par_weights(:));
@@ -88,7 +88,7 @@ for i = 1:nof_learners
     end
     
     for fi = 1:nof_features
-        weights = reshape(squeeze(par_weights(i, fi, :)), nof_nodes_per_dim, nof_nodes_per_dim);
+        weights = reshape(squeeze(par_weights(i, fi, :)), nof_nodes_per_dim, nof_nodes_per_dim)';
         to_disp = weights .* mask;
     
         plot_feature_offset = nof_plot_slots_per_col*nof_plot_cols*(fi-1);

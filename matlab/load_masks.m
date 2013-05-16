@@ -18,7 +18,7 @@ function [ output, output_singles ] = load_masks(par_strFilenameMasks, par_strSi
             filenameIndex = filenames{k};
             dot_indicies  = find(filenameIndex=='.');
             filenameIndex = filenameIndex(1:dot_indicies(1)-1);
-            filenameIndex = str2num(filenameIndex)+1;
+            filenameIndex = str2double(filenameIndex)+1;
             
             if K(k).bytes > 0
                 singleMaskVals = dlmread(fullfile(par_strSingleMasksDir, filenames{k}));
@@ -28,23 +28,17 @@ function [ output, output_singles ] = load_masks(par_strFilenameMasks, par_strSi
                 nofRows = floor(sqrt(nofNodesPerSingleMask));
                 nofCols = floor(sqrt(nofNodesPerSingleMask));
                 
-                singleMaskIndicies = [];
-                while length(singleMaskIndicies) < min(nofSingleMasks, nofSingleMasksInFile)
-                    
-                    singleMaskIndicies = randi(nofSingleMasksInFile, 1, nofSingleMasks);
-                    singleMaskIndicies = unique(singleMaskIndicies);
-                end
-                singleMaskIndicies = sort(singleMaskIndicies);
+                singleMaskIndicies = randperm(nofSingleMasksInFile);
                 singleMaskVals = singleMaskVals(singleMaskIndicies, :);
                 for mi = 1:min(nofSingleMasks, nofSingleMasksInFile)
-                    arrSingleMasks{filenameIndex,mi} = reshape(singleMaskVals(mi,:), nofRows, nofCols)';
+                    arrSingleMasks{filenameIndex, mi} = reshape(singleMaskVals(mi,:), nofRows, nofCols)';
                 end
             end
         end
         output_singles = arrSingleMasks;
     end
     
-    for i=1:nofMasks
+    parfor i=1:nofMasks
 
         maskNodes = nodes(i, :);
 

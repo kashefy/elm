@@ -32,8 +32,18 @@ function [] = display_response_and_label(par_filepath_label, par_filepath_respon
         set(gca, 'YDir', 'Reverse');
         axis tight
         
-        membrane_pot_layerZ = dlmread(par_filepath_membrane_pot_layerZ, ',');
+        
         subplot(nof_plot_rows, 1, 4)
+        [~, ~, ext] = fileparts(par_filepath_membrane_pot_layerZ);
+         if strcmp(ext, '.csv')
+             membrane_pot_layerZ = dlmread(par_filepath_membrane_pot_layerZ, ',');
+         else
+            fid = fopen(par_filepath_membrane_pot_layerZ);
+            dim = fread(fid, 1, 'int32', 0, 'b');
+            nof_cols = dim(1);
+            membrane_pot_layerZ = fread(fid, [nof_cols, inf], 'double', 0, 'b')';
+            fclose(fid);
+         end
         plot(membrane_pot_layerZ)
         title('u layerZ', 'LineWidth', 10);
         ylabel('mem. pot. u');

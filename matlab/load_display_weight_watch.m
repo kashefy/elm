@@ -14,13 +14,12 @@ function [] = load_display_weight_watch(par_str_weight_dir, par_str_filename_fil
          dot_indicies  = find(filename=='.');
          under_indicies = find(filename=='_');
          str_index = filename(under_indicies(end)+1:dot_indicies(end)-1);
-         i = str2num(str_index)+1;
+         i = str2double(str_index)+1;
          
          plot_slot_start = (i-1)*nof_plot_slots_per_row + 1;
          plot_slot_end = plot_slot_start + nof_plot_slots_per_row-1;
          
          subplot(nof_plot_slots_per_row*nof_plot_rows, nof_plot_cols, [plot_slot_start, plot_slot_end])
-         disp(filepath)
          [~, ~, ext] = fileparts(filepath);
          if strcmp(ext, '.csv')
              learner_weight_watch = dlmread(filepath);
@@ -29,8 +28,8 @@ function [] = load_display_weight_watch(par_str_weight_dir, par_str_filename_fil
             fid = fopen(filepath);
             dim = fread(fid, 1, 'int32', 0, 'b');
             nof_cols = dim(1);
-            learner_weight_watch = fread(fid, [nof_cols,inf], 'double', 0, 'b');
-            imagesc(learner_weight_watch);
+            learner_weight_watch = fread(fid, [nof_cols, inf], 'double', 0, 'b');
+            imagesc(learner_weight_watch);%(:,1:1:end));
             fclose(fid);
          end
          

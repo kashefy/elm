@@ -1,4 +1,4 @@
-function [] = display_masks(par_masks_learners, par_figure_id, par_masks_singles)
+function [] = display_masks(par_masks_learners, par_figure_id, par_masks_singles, par_plot_filename_suffix)
 
     nof_masks = length(par_masks_learners);
     
@@ -66,6 +66,7 @@ function [] = display_masks(par_masks_learners, par_figure_id, par_masks_singles
             end
         end
     end
-    
-    
+    set(gcf, 'PaperPositionMode', 'auto');
+    set(gcf, 'units', 'normalized', 'outerposition', [0 0 1 1]);
+    saveas(gcf, ['masks_', par_plot_filename_suffix, '.png']);
 end
