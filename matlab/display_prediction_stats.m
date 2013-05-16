@@ -1,6 +1,6 @@
 function [ ] = display_prediction_stats(par_firingProbs, par_condEntropy, par_figure_offset, par_figure_title)
 
-    [nofLearners, ~] = size(par_firingProbs);
+    [nofLearners, nof_classes] = size(par_firingProbs);
     figure(par_figure_offset+0)   
     nof_plot_rows = nofLearners;
     nof_plot_slots_per_row = 4;
@@ -37,7 +37,15 @@ function [ ] = display_prediction_stats(par_firingProbs, par_condEntropy, par_fi
     
     %% 
     figure(par_figure_offset+2)
-    sub_plot = subplot(2, 1, 1);
+    
+    subplot(2, 2, 1)
+    barh([1:nof_classes], -sum(par_firingProbs.*log2(par_firingProbs), 1))
+    xlabel('connd. entropy(c_i)');
+    ylabel('c_i');
+    axis tight
+    %ylim([0, -log2(1/nof_classes)])
+    
+    sub_plot = subplot(2, 2, 2);
     imagesc(par_firingProbs');
     ylabel('c_i');
     xlabel('z_j');
@@ -49,8 +57,7 @@ function [ ] = display_prediction_stats(par_firingProbs, par_condEntropy, par_fi
     set(sub_plot, 'position', pos_gca);
     set(handle_colorbar, 'location', 'EastOutside');
     
-    subplot(2, 1, 2)
-    x = -sum(par_firingProbs.*log2(par_firingProbs));
+    subplot(2, 2, 4)
     bar([1:nofLearners], -sum(par_firingProbs.*log2(par_firingProbs), 2))
     ylabel('connd. entropy(z_j)');
     xlabel('z_j');
@@ -61,4 +68,6 @@ function [ ] = display_prediction_stats(par_firingProbs, par_condEntropy, par_fi
     set(gcf, 'units', 'normalized', 'outerposition', [0 0 1 1]);
     saveas(gcf, ['prediction_stats_heat_', par_figure_title, '.png']);
 
+ 
+    
 end
