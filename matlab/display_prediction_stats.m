@@ -39,7 +39,7 @@ function [ ] = display_prediction_stats(par_firingProbs, par_condEntropy, par_fi
     figure(par_figure_offset+2)
     
     subplot(2, 2, 1)
-    barh([1:nof_classes], -sum(par_firingProbs.*log2(par_firingProbs), 1))
+    barh(1:nof_classes, -sum(par_firingProbs.*log2(par_firingProbs), 1))
     xlabel('connd. entropy(c_i)');
     ylabel('c_i');
     axis tight
@@ -58,7 +58,7 @@ function [ ] = display_prediction_stats(par_firingProbs, par_condEntropy, par_fi
     set(handle_colorbar, 'location', 'EastOutside');
     
     subplot(2, 2, 4)
-    bar([1:nofLearners], -sum(par_firingProbs.*log2(par_firingProbs), 2))
+    bar(1:nofLearners, -sum(par_firingProbs.*log2(par_firingProbs), 2))
     ylabel('connd. entropy(z_j)');
     xlabel('z_j');
     axis tight
