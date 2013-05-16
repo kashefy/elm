@@ -64,10 +64,21 @@ function [ ] = display_prediction_stats(par_firingProbs, par_condEntropy, par_fi
     axis tight
     ylim([0, -log2(1/nofLearners)])
     
+    distance = zeros(nof_classes);
+    for i=1:nof_classes
+        diff = bsxfun(@minus, par_firingProbs, par_firingProbs(:, i));
+        distance_i = sqrt(sum(diff.^2, 1));
+        distance(:, i) = distance_i;
+    end
+    subplot(2, 2, 3)
+    imagesc(distance);
+    title('distance matrix(c)')
+    xlabel('c_i');
+    ylabel('c_j');
+    
     set(gcf, 'PaperPositionMode', 'auto');
     set(gcf, 'units', 'normalized', 'outerposition', [0 0 1 1]);
     saveas(gcf, ['prediction_stats_heat_', par_figure_title, '.png']);
 
- 
     
 end
