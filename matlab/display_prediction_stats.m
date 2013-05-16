@@ -40,7 +40,7 @@ function [ ] = display_prediction_stats(par_firingProbs, par_condEntropy, par_fi
     
     subplot(2, 2, 1)
     barh(1:nof_classes, -sum(par_firingProbs.*log2(par_firingProbs), 1))
-    xlabel('connd. entropy(c_i)');
+    xlabel('cond. entropy(c_i)');
     ylabel('c_i');
     axis tight
     %ylim([0, -log2(1/nof_classes)])
