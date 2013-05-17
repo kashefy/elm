@@ -1,26 +1,24 @@
 %%
-
-
-close all
+ close all
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
  setDir = 'MNIST\\tune_0\\';
  
  filename = 'masksLearners_layerF.csv';
  [arr_masks_learners_layerF, arr_masks_singles_layerF] = load_masks(fullfile(modelOutputPath, setDir, filename), fullfile(modelOutputPath, setDir, 'activity_layerF'));
- display_masks(arr_masks_learners_layerF, 2000, arr_masks_singles_layerF);
+ display_masks(arr_masks_learners_layerF, 2000, arr_masks_singles_layerF, 'layerF');
  % polarize mask value using threshold
- for i = 1:length(arr_masks_learners_layerF)
+ parfor i = 1:length(arr_masks_learners_layerF)
      arr_masks_learners_layerF{i} = arr_masks_learners_layerF{i} > 0.2;
  end
  
  filename = 'weights_layerF.csv';
- nof_orientations = 12;
+ nof_orientations = 4;%12;
  nof_intensities = 2;
  dims = [9, 9];
 %  slicing = {[prod(dims)*nof_orientations, nof_orientations], [prod(dims)*nof_intensities, nof_intensities]};
-%  weights = read_weights(fullfile(modelOutputPath, setDir, filename), slicing);
-%  display_weights_orient(weights{1}, 4000, arr_masks_learners_layerF);
-%  display_weights_intensity(weights{2}, 4002);
+%   weights = read_weights(fullfile(modelOutputPath, setDir, filename), slicing);
+%   display_weights_orient(weights{1}, 4000, arr_masks_learners_layerF);
+%   display_weights_intensity(weights{2}, 4002);
  slicing = {[prod(dims)*nof_intensities, nof_intensities]};
  weights = read_weights(fullfile(modelOutputPath, setDir, filename), slicing);
  display_weights_intensity(weights{1}, 4002);
@@ -32,11 +30,10 @@ close all
  filepath_responses_layerF = fullfile(modelOutputPath, setDir, filename);
  filename = 'response1D_layerZ_learn.csv';
  filepath_responses_layerZ = fullfile(modelOutputPath, setDir, filename);
- filename = 'membrane_pot_layerZ_learn.csv';
+ filename = 'membrane_pot_layerZ_learn.dat';
  filepath_membrane_pot_layerZ = fullfile(modelOutputPath, setDir, filename);
  display_response_and_label(filepath_labels, filepath_responses_layerF, 5000, filepath_responses_layerZ, filepath_membrane_pot_layerZ);
-
- %% weight and rate watch
+%% weight and rate watch
 
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
  str_set_dir =  'MNIST\\tune_0';
@@ -44,6 +41,9 @@ close all
  dir_watch = fullfile(modelOutputPath, str_set_dir, str_watch_dir);
  load_display_weight_watch(dir_watch, 'weightWatch_layerF', 6000);
  load_display_weight_watch(dir_watch, 'weightWatch_layerZ', 6010);
+
+load_display_X_per_learner(fullfile(modelOutputPath, str_set_dir, str_watch_dir, 'bias_watch_layerF.dat'), 8000);
+load_display_X_per_learner(fullfile(modelOutputPath, str_set_dir, str_watch_dir, 'bias_watch_layerZ.dat'), 8010);
  
 
  %% spikes f2Z
@@ -65,17 +65,19 @@ fclose(fid);
 x=3+1
 
 %% layerF
- modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\repo-git\\trunk\\ModelFrontEnd\\data\\output\\';
- setDir = 'MNIST\\tune_tune_0\\';
+ modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
+ setDir = 'MNIST\\tune_0\\';
+
+  % visualize prediction stats
+filename = 'predictionStats_layerF.csv';
+[ firingProbs, condEntropyFinal, preferredCause] = load_prediction_stats([modelOutputPath, setDir,  filename]);
+display_prediction_stats(firingProbs, condEntropyFinal, 500, 'layerF');
+%%
  % visualize learner response
  filename = 'response.csv';
  nofCauses = 2;
  %drawResponseHist([modelOutputPath, setDir,  filename], nofCauses);
  
-  % visualize prediction stats
-filename = 'predictionStats_layerF.csv';
-[ firingProbs, condEntropyFinal, preferredCause] = loadPredictionStats([modelOutputPath, setDir,  filename]);
-displayPredictionStats(firingProbs, condEntropyFinal, 500, 'predictionStats_layerF');
 filename = 'predictionStats_F2Z.csv';
 [ firingProbs, condEntropyFinal, preferredCause] = loadPredictionStats([modelOutputPath, setDir,  filename]);
 displayPredictionStats(firingProbs, condEntropyFinal, 600, 'predictionStats_F2Z');
