@@ -31,7 +31,7 @@ function [ output, output_singles ] = load_masks(par_strFilenameMasks, par_strSi
                 singleMaskIndicies = randperm(nofSingleMasksInFile);
                 singleMaskVals = singleMaskVals(singleMaskIndicies, :);
                 for mi = 1:min(nofSingleMasks, nofSingleMasksInFile)
-                    arrSingleMasks{filenameIndex, mi} = reshape(singleMaskVals(mi,:), nofRows, nofCols)';
+                    arrSingleMasks{filenameIndex, mi} = reshape(singleMaskVals(mi, :), nofRows, nofCols)';
                 end
             end
         end
