@@ -1,6 +1,8 @@
 file I/O:
     m_strMainOutputDir: C:\Users\woodstock\Documents\grad\Thesis\code\sem\java\data\output\MNIST\
     m_strMainInputDir: C:\Users\woodstock\Documents\grad\Thesis\code\sem\java\data\input\MNIST\
+    m_b_log_weight_watch_layerF : false
+    m_b_log_weight_watch_layerZ : false
 
 data:
     m_nofTrainStimuli: 75
@@ -9,15 +11,19 @@ data:
     m_nofCols: -1 # set to -1 if to be loaded by DataLoader object
 
 encoding:
-    m_encFrequency: 60000
-    m_deltaT: 0.001
-    m_encDurationInMilSec: 50
+    m_encFrequency: 40
+    m_deltaT: 0.001 # [sec]
+    m_encDurationInMilSec: 250 #50 # [millisecond]
     m_popCodeFanOut: 1
+    m_do_orient: false
+    m_do_intensity: true
 
 prediction:
     m_nofCauses: -1 # set to -1 if to be loaded by DataLoader object
     m_nofLearners: 4
-    m_nofLearners_layerF: 8
+    m_nofLearners_layerF: 16
+    m_b_load_layerF: false
+#   m_b_learn_gaps: false
 
 parameter objects:
     m_learnerParams: learnerParamFile.yml
@@ -29,7 +35,7 @@ parameter objects:
     m_saliencyParams: saliencyParamFile.yml
 
 attention:
-    m_nofAttentions: 5
+    m_nofAttentions: 3
 
 evaluation:
     m_predictionStatWindowSize: 55

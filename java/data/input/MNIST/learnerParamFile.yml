@@ -1,5 +1,5 @@
 m_learningRateEtaInitVal: 0.01
-m_historyLength: 8
+m_historyLength: 5
 
 weights:
     m_bInitRandWeights: true
