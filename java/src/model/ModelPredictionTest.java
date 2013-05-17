@@ -1700,7 +1700,7 @@ public class ModelPredictionTest {
         int nofNodes = par_arrMasks[0].get_nof_nodes();
         double [] arrNodes = new double [ nofMasks*nofNodes ];
         int nodeArrayIndex = 0;
-        for(int i=0; i<nofMasks; i++){
+        for(int i=0; i<nofMasks; ++i){
             
             //System.arraycopy(par_arrMasks[ i ].get_mask(), 0, arrNodes, nodeArrayIndex, nofNodes);
             System.arraycopy(par_arrMasks[ i ].get_activity(), 0, arrNodes, nodeArrayIndex, nofNodes);

@@ -371,20 +371,19 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         arrAvgCondEntropy = predictionStats_layerZ.get_results_avg_cond_entropy();
         FileIO.saveArrayToCSV( arrAvgCondEntropy, 1, arrAvgCondEntropy.length, new File(watch_dir, "watchAvgCondEntropy_layerZ.csv").getPath() );
         
-        if(m_params.is_log_weight_watch_layerZ())
-            for(int li=0; li<m_nofLearners_layerZ; li++){
+        for(int li=0; li<m_nofLearners_layerZ && m_params.is_log_weight_watch_layerZ(); ++li){
 
-                weight_watch_logger_layerZ[li].flush();
-            }
+            weight_watch_logger_layerZ[li].flush();
+        }
         bias_watch_logger_layerZ.flush();
         
-        if(m_params.is_log_weight_watch_layerF())
-            for(int li=0; li<m_nofLearners_layerF; li++){
+        for(int li=0; li<m_nofLearners_layerF && m_params.is_log_weight_watch_layerF(); ++li){
 
-                weight_watch_logger_layerF[li].flush();
-            }
+            weight_watch_logger_layerF[li].flush();
+        }
         bias_watch_logger_layerF.flush();
-    }  
+    }
+    
     public void test(){
         
         m_wta.refToLearners(m_arrZNeurons);
