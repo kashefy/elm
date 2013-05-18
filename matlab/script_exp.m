@@ -65,13 +65,14 @@ fclose(fid);
 x=3+1
 
 %% layerF
- modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
- setDir = 'MNIST\\tune_0\\';
+ modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output';
+ setDir = 'MNIST_all_classes\\tune_0';
 
   % visualize prediction stats
-filename = 'predictionStats_layerF.csv';
-[ firingProbs, condEntropyFinal, preferredCause] = load_prediction_stats([modelOutputPath, setDir,  filename]);
-display_prediction_stats(firingProbs, condEntropyFinal, 500, 'layerF');
+filename_prefix = 'predictionStats_layerF';
+[ firingProbs, ~, ~] = load_prediction_stats(fullfile(modelOutputPath, setDir, [filename_prefix, '.csv']));
+arr_label_id = dlmread(fullfile(modelOutputPath, setDir, [filename_prefix, '_label_ids.csv']));
+display_prediction_stats(firingProbs, label_id, 500, 'layerF');
 %%
  % visualize learner response
  filename = 'response.csv';
