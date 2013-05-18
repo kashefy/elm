@@ -8,7 +8,7 @@ function [ output, output_singles ] = load_masks(par_strFilenameMasks, par_strSi
         
         K = dir(par_strSingleMasksDir);
         % assuming first two elements are '.' and '..', removing them
-        K(1:2)=[];
+        K(1:2) = [];
         nofSingleMasks = 25;
         arrSingleMasks = cell(nofMasks, nofSingleMasks);
 
