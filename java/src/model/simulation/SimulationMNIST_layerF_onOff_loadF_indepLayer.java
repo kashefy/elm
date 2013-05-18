@@ -645,7 +645,7 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         System.out.println("layer F:");
         for(int li=0; li<m_nofLearners_layerF; ++li){
 
-            for(int ci=0; ci<nofCauses; ci++){
+            for(int ci=0; ci<nofCauses; ++ci){
 
                 System.out.print(firingCounts[li][ci] + "  ");
             }            
@@ -667,6 +667,9 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         m_log_results.format("%.3f,", firing_uniformity);
 
         ModelPredictionTest.savePredictionStats(new File(m_params.getMainOutputDir(), "predictionStats_layerF.csv").getPath(), arr_firing_probs, arrCondEntropy);
+        
+        int[] arr_label_id = predictionStats_layerF.get_label_names();
+        FileIO.saveArrayToCSV(arr_label_id, 1, arr_label_id.length, new File(m_params.getMainOutputDir(), "predictionStats_layerF_label_ids.csv").getPath());
         
         // print prediction stats
         firingCounts = predictionStats.getFiringCounts();
@@ -701,6 +704,8 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         m_log_results.format("%.3f,", firing_uniformity);
         
         ModelPredictionTest.savePredictionStats(new File(m_params.getMainOutputDir(), "predictionStats.csv").getPath(), arr_firing_probs, arrCondEntropy);
+        arr_label_id = predictionStats.get_label_names();
+        FileIO.saveArrayToCSV(arr_label_id, 1, arr_label_id.length, new File(m_params.getMainOutputDir(), "predictionStats_label_ids.csv").getPath());
         
         // print prediction stats F2Z
         firingCounts = predictionStats_F2Z.getFiringCounts();
@@ -733,6 +738,8 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         
         ModelPredictionTest.savePredictionStats(new File(m_params.getMainOutputDir(), "predictionStats_F2Z.csv").getPath(), arr_firing_probs, arrCondEntropy);
         //m_nofLearners -= m_nofLearnersAux;
+        arr_label_id = predictionStats_F2Z.get_label_names();
+        FileIO.saveArrayToCSV(arr_label_id, 1, arr_label_id.length, new File(m_params.getMainOutputDir(), "predictionStats_F2Z_label_ids.csv").getPath());
         
         m_log_results.println();
         m_log_results.close();
