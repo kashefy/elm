@@ -24,9 +24,9 @@
  display_weights_intensity(weights{1}, 4002);
  
 
- filename = 'response1D_layerF_label_learn.csv';
+ filename = 'response_1D_layerF_label_learn.csv';
  filepath_labels = fullfile(modelOutputPath, setDir, filename);
- filename = 'response1D_layerF_learn.csv';
+ filename = 'response_1D_layerF_learn.csv';
  filepath_responses_layerF = fullfile(modelOutputPath, setDir, filename);
  filename = 'response1D_layerZ_learn.csv';
  filepath_responses_layerZ = fullfile(modelOutputPath, setDir, filename);
@@ -66,13 +66,14 @@ x=3+1
 
 %% layerF
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output';
- setDir = 'MNIST_all_classes\\tune_0';
+ %setDir = 'MNIST_all_classes\\tune_0';
+ setDir = 'MNIST\\tune_0';
 
   % visualize prediction stats
 filename_prefix = 'predictionStats_layerF';
 [ firingProbs, ~, ~] = load_prediction_stats(fullfile(modelOutputPath, setDir, [filename_prefix, '.csv']));
 arr_label_id = dlmread(fullfile(modelOutputPath, setDir, [filename_prefix, '_label_ids.csv']));
-display_prediction_stats(firingProbs, label_id, 500, 'layerF');
+display_prediction_stats(firingProbs, arr_label_id, 500, 'layerF');
 %%
  % visualize learner response
  filename = 'response.csv';

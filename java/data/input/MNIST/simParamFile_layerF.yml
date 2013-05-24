@@ -22,7 +22,7 @@ prediction:
     m_nofCauses: -1 # set to -1 if to be loaded by DataLoader object
     m_nofLearners: 4
     m_nofLearners_layerF: 16
-    m_b_load_layerF: false
+    m_b_load_layerF: true
 #   m_b_learn_gaps: false
 
 parameter objects:
