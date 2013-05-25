@@ -330,7 +330,7 @@ public class ZNeuron extends AbstractLearner{
         }
     }
     
-    protected void resetHistory(){
+    public void resetHistory(){
         
         m_spikeHistory = new int[ m_nofEvidence ][ m_historyLength ];
     }

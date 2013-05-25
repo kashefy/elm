@@ -13,7 +13,7 @@ import model.utils.StdRandom;
 import model.utils.ModelUtils;
 import org.shared.array.RealArray;
 
-public class CompetitionWTAPoissonRate extends AbstractCompetition{
+public class WTAPoissonRate extends AbstractCompetition{
     
     private double m_dt;
     private double m_maxRate;
@@ -116,7 +116,7 @@ public class CompetitionWTAPoissonRate extends AbstractCompetition{
         m_generator = new Random();
     }
 
-    public CompetitionWTAPoissonRate() {
+    public WTAPoissonRate() {
         
     }
 }

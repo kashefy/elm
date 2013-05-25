@@ -13,7 +13,7 @@ data:
 encoding:
     m_encFrequency: 40
     m_deltaT: 0.001 # [sec]
-    m_encDurationInMilSec: 250 #50 # [millisecond]
+    m_encDurationInMilSec: 500 #50 # [millisecond]
     m_popCodeFanOut: 1
     m_do_orient: false
     m_do_intensity: true
@@ -23,7 +23,6 @@ prediction:
     m_nofLearners: 4
     m_nofLearners_layerF: 16
     m_b_load_layerF: true
-#   m_b_learn_gaps: false
 
 parameter objects:
     m_learnerParams: learnerParamFile.yml

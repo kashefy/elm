@@ -17,7 +17,7 @@ import model.neuron.*;
 import model.utils.*;
 import java.util.Random;
 
-public class CompetitionWTAOU extends AbstractCompetition{
+public class WTAOU extends AbstractCompetition{
     
     private double m_dt;        // time resolution
             
@@ -209,7 +209,7 @@ public class CompetitionWTAOU extends AbstractCompetition{
        m_generator  = new Random();
     }
     
-    public CompetitionWTAOU(){
+    public WTAOU(){
         
     }
 }

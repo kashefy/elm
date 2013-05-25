@@ -548,7 +548,7 @@ public class ModelPredictionTest {
         
         AbstractCompetition wta;
         //wta = new CompetitionWTAOU();
-        wta = new CompetitionWTAPoissonRate();
+        wta = new WTAPoissonRate();
         wta.setParams(competitionParams);
         
         // combined initializations
@@ -598,9 +598,9 @@ public class ModelPredictionTest {
 //            wtaOU.setInhibitionParams(inhibitionAmplitude, inhibitionTau, inhibitonOffset);
 //            wtaOU.setOUParams(ouTau, ouSigma, ouMu);
 //        }
-//        else if(wta instanceof CompetitionWTAPoissonRate){
+//        else if(wta instanceof WTAPoissonRate){
 //            
-//            CompetitionWTAPoissonRate wtaPR = (CompetitionWTAPoissonRate)wta;
+//            WTAPoissonRate wtaPR = (WTAPoissonRate)wta;
 //            wtaPR.setParams(competitionDt, competitionMaxRate);
 //        }
         wta.init();
@@ -908,7 +908,7 @@ public class ModelPredictionTest {
         
         AbstractCompetition wta;
         //wta = new CompetitionWTAOU();
-        wta = new CompetitionWTAPoissonRate();
+        wta = new WTAPoissonRate();
         wta.setParams(competitionParams);
         
         // combined initializations
@@ -981,9 +981,9 @@ public class ModelPredictionTest {
 //            wtaOU.setInhibitionParams(inhibitionAmplitude, inhibitionTau, inhibitonOffset);
 //            wtaOU.setOUParams(ouTau, ouSigma, ouMu);
 //        }
-//        else if(wta instanceof CompetitionWTAPoissonRate){
+//        else if(wta instanceof WTAPoissonRate){
 //            
-//            CompetitionWTAPoissonRate wtaPR = (CompetitionWTAPoissonRate)wta;
+//            WTAPoissonRate wtaPR = (WTAPoissonRate)wta;
 //            wtaPR.setParams(competitionDt, competitionMaxRate);
 //        }
         wta.init();
@@ -1308,7 +1308,7 @@ public class ModelPredictionTest {
         
         AbstractCompetition wta;
         //wta = new CompetitionWTAOU();
-        wta = new CompetitionWTAPoissonRate();
+        wta = new WTAPoissonRate();
         wta.setParams(competitionParams);
         
         //// combined, interdependent initializations

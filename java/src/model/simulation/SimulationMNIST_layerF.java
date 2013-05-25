@@ -171,18 +171,18 @@ public class SimulationMNIST_layerF extends AbstractSimulation{
         
         // competition inits
         //wta = new CompetitionWTAOU();
-        m_wta = new CompetitionWTAPoissonRate();
+        m_wta = new WTAPoissonRate();
         m_wta.setParams(m_params.getCompetitionParamsRef());
         m_wta.init();
         m_wta.refToLearners(m_arrZNeurons);
         
         //m_wtaWithAux = new CompetitionWTAOU();
-        m_wtaAll = new CompetitionWTAPoissonRate();
+        m_wtaAll = new WTAPoissonRate();
         m_wtaAll.setParams(m_params.getCompetitionParams_layerF_ref());
         m_wtaAll.init();
         m_wtaAll.refToLearners(m_arrZNeuronsAll);
         
-        m_wta_layerF = new CompetitionWTAPoissonRate();
+        m_wta_layerF = new WTAPoissonRate();
         m_wta_layerF.setParams(m_params.getCompetitionParams_layerF_ref());
         m_wta_layerF.init();
         m_wta_layerF.refToLearners(m_arrZNeurons_layerF);

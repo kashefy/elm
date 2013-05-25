@@ -32,7 +32,7 @@ public class ZNeuronCompact extends ZNeuron{
     }
     
     @Override
-    protected void resetHistory(){
+    public void resetHistory(){
         
         m_spikeHistoryCompact = new int[ m_nofEvidence ];
     }

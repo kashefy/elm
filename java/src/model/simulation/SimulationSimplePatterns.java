@@ -122,7 +122,7 @@ public class SimulationSimplePatterns extends AbstractSimulation{
         
         // competition inits
         //wta = new CompetitionWTAOU();
-        m_wta = new CompetitionWTAPoissonRate();
+        m_wta = new WTAPoissonRate();
         m_wta.setParams(m_params.getCompetitionParamsRef());
         m_wta.init();
         m_wta.refToLearners(m_arrZNeurons);
