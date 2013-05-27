@@ -52,8 +52,7 @@ public class ModelFrontEndGUI extends javax.swing.JFrame {
     public ModelFrontEndGUI() {
         initComponents();
         
-        //randomTests();
-              
+        System.loadLibrary("opencv_java245");
         //new OrientationMapTest().test1();
         //new OrientationMapTest().test2();
         //new OrientationMapTest().test3();
