@@ -12,7 +12,7 @@
  end
  
  filename = 'weights_layerF.csv';
- nof_orientations = 4;%12;
+ nof_orientations = 6;%12;
  nof_intensities = 2;
  dims = [9, 9];
 %  slicing = {[prod(dims)*nof_orientations, nof_orientations], [prod(dims)*nof_intensities, nof_intensities]};
@@ -26,9 +26,9 @@
 
  filename = 'response_1D_layerF_label_learn.csv';
  filepath_labels = fullfile(modelOutputPath, setDir, filename);
- filename = 'response_1D_layerF_learn.csv';
+ filename = 'response_layerF_learn.csv';
  filepath_responses_layerF = fullfile(modelOutputPath, setDir, filename);
- filename = 'response1D_layerZ_learn.csv';
+ filename = 'response_1D_layerZ_learn.csv';
  filepath_responses_layerZ = fullfile(modelOutputPath, setDir, filename);
  filename = 'membrane_pot_layerZ_learn.dat';
  filepath_membrane_pot_layerZ = fullfile(modelOutputPath, setDir, filename);
@@ -52,7 +52,7 @@ str_main_dir = modelOutputPath;
 str_set_dir =  'MNIST\\tune_0';
 spikes_f2Z = dlmread(fullfile(modelOutputPath, str_set_dir, 'spikes_f2Z.csv'))';
 figure(7000);
-imagesc(spikes_f2Z);
+imagesc(spikes_f2Z(1:2:end,:));
 %%
 s = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\t.data';
 fid = fopen(s);

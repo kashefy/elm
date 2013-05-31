@@ -12,9 +12,9 @@ fid_labels      = fopen([ strOutputPath strOutputFilename_labels ], 'w');
 
 load([strInputPath strInputFilename]);
 % filter out classes
-classesToInclude = [0, 1, 2, 4];%[2, 4];%[4, 7, 1, 2, 3, 5, 6, 8, 9, 0]; % insert here the digit classes to include
+classesToInclude = [4, 7, 1, 2, 3, 5, 6, 8, 9, 0]; %[0, 1, 2, 4];%% insert here the digit classes to include
 nofClassesToInclude = length(classesToInclude);
-includeIndicies = zeros(1,length(y));
+includeIndicies = zeros(1, length(y));
 for i=1:nofClassesToInclude
     
     includeIndicies = includeIndicies | y == classesToInclude(i);
@@ -25,7 +25,7 @@ X = X(:,includeIndicies);
 y = y(includeIndicies);
 [ nofPixels nofImages ] = size(X);
 
-nofImages = 1000;
+nofImages = 20000;
 imgDims = floor(sqrt(nofPixels));
 imgMode = 0; % binary
 %imgMode = 1; % [0,1]
