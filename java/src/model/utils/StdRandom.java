@@ -314,13 +314,14 @@ public final class StdRandom {
         
         int N = 99999;
         String strOutputFilePath = "rand.csv";
+        double max_rate = 50.0;
         
         try{
             PrintWriter pw = new PrintWriter(new FileWriter(strOutputFilePath));  
 
-            for(int i=0; i<N; i++){
+            for(int i=0; i<N; ++i){
 
-                double val = StdRandom.exp(200.0);
+                double val = StdRandom.exp(max_rate);
                 pw.print(val);
                 pw.println();
             }
