@@ -49,16 +49,12 @@ public class SimulationMNIST_layerF_onOff extends AbstractSimulation{
     // prediction, learning, classification
     int m_nofYNeurons; // get value from enocder
     int m_nofLearners_layerZ;
-    int m_nofLearnersAux;
     int m_nofLearners_layerF;
     ZNeuron [] m_arrZNeurons;
-    ZNeuron [] m_arrZNeuronsAux;
-    ZNeuron [] m_arrZNeuronsAll;
     ZNeuron [] m_arrZNeurons_layerF;
     
     // competition
     AbstractCompetition m_wta;
-    AbstractCompetition m_wtaAll;
     AbstractCompetition m_wta_layerF;
     
     // attention
@@ -178,32 +174,6 @@ public class SimulationMNIST_layerF_onOff extends AbstractSimulation{
             m_arrZNeurons[zi] = new ZNeuronCompact();
             m_arrZNeurons[zi].setParams(m_params.getLearnerParamsRef());
             m_arrZNeurons[zi].init();
-        } 
-        
-        // auxillary learners
-        // 0: (predict, fire, update) 100%
-        // 1: predict 100%, fire 10%, update 100%
-        // 2: predict 100%, fire when no one else fires, update 100%
-        // 3: (predict, fire, update) 100% on noise stim only
-        m_nofLearnersAux = 4;
-        m_arrZNeuronsAux = new ZNeuron[ m_nofLearnersAux ];       
-        
-        for(int zi=0; zi<m_nofLearnersAux; zi++){
-            
-            m_arrZNeuronsAux[zi] = new ZNeuronCompact();
-            m_arrZNeuronsAux[zi].setParams(m_params.getLearnerParamsRef());
-            m_arrZNeuronsAux[zi].init();
-        } 
-        
-        m_arrZNeuronsAll = new ZNeuron[ m_nofLearners_layerZ+m_nofLearnersAux ];
-        int relzi = 0;
-        for(int zi=0; zi<m_nofLearners_layerZ; zi++, relzi++){
-            
-            m_arrZNeuronsAll[relzi] = m_arrZNeurons[zi];
-        } 
-        for(int zi=0; zi<m_nofLearnersAux; zi++, relzi++){
-            
-            m_arrZNeuronsAll[relzi] = m_arrZNeuronsAux[zi];
         }
         
         // competition inits
@@ -213,17 +183,10 @@ public class SimulationMNIST_layerF_onOff extends AbstractSimulation{
         m_wta.init();
         m_wta.refToLearners(m_arrZNeurons);
         
-        //m_wtaWithAux = new CompetitionWTAOU();
-        m_wtaAll = new WTAPoissonRate();
-        m_wtaAll.setParams(m_params.getCompetitionParams_layerF_ref());
-        m_wtaAll.init();
-        m_wtaAll.refToLearners(m_arrZNeuronsAll);
-        
         m_wta_layerF = new WTAPoissonRate();
         m_wta_layerF.setParams(m_params.getCompetitionParams_layerF_ref());
         m_wta_layerF.init();
         m_wta_layerF.refToLearners(m_arrZNeurons_layerF);
-        
     }
     
     public void learn(){
@@ -524,47 +487,12 @@ public class SimulationMNIST_layerF_onOff extends AbstractSimulation{
             m_arrZNeurons[zi].init();
             m_arrZNeurons[zi].setWeights(weightLoader.getSample(zi));
             m_arrZNeurons[zi].setBias(biasLoader.getSample(zi)[0]);
-        } 
-        
-        weightLoader = new DataLoaderWeightSet();
-        weightLoader.setParams(m_params.getMainOutputDir());
-        weightLoader.setWeightValueFilename("weightsAux.csv");
-        weightLoader.init();
-        weightLoader.load();
-        biasLoader = new DataLoaderWeightSet();
-        biasLoader.setParams(m_params.getMainOutputDir());
-        biasLoader.setWeightValueFilename("biasesAux.csv");
-        biasLoader.init();
-        biasLoader.load();
-        
-        for(int zi=0; zi<m_nofLearnersAux; zi++){
-            
-            m_arrZNeuronsAux[zi] = new ZNeuronCompact();
-            m_arrZNeuronsAux[zi].setParams(m_params.getLearnerParamsRef());
-            m_arrZNeuronsAux[zi].init();
-            m_arrZNeuronsAux[zi].setWeights(weightLoader.getSample(zi));
-            m_arrZNeuronsAux[zi].setBias(biasLoader.getSample(zi)[0]);
-        } 
+        }
     }
     
     public void test(){
         
-//        // combine learners with aux learners
-//        ZNeuron [] old = m_arrZNeurons;
-//        m_arrZNeurons = new ZNeuron[ m_nofLearners_layerZ + m_nofLearnersAux ];
-//        for(int i=0; i<m_nofLearners; i++){
-//            
-//            m_arrZNeurons[i] = old[i];
-//        }
-//        int reli = m_nofLearners_layerZ;
-//        for(int i=0; i<m_nofLearnersAux; i++){
-//            
-//            m_arrZNeurons[reli++] = m_arrZNeuronsAux[i];
-//        }
-//        m_nofLearners_layerZ += m_nofLearnersAux;
-        
         m_wta.refToLearners(m_arrZNeurons);
-        m_wtaAll.refToLearners(m_arrZNeuronsAll);
         
         int starti =  m_params.getNofTrainStimuli();
         int endi = m_totalNofStimuli;

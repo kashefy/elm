@@ -30,12 +30,11 @@ public class CompetitionParams extends AbstractParams{
     private double m_ouMu;      // Offset of OU process
     
     // Parameters for Poisson rate
-    //private double m_dt;        // time resolution
     private double m_maxRate;
     private double m_maxRateFactor;
 
 
-    public double getDt() {
+    public double get_dt() {
         return m_dt;
     }
 
@@ -63,7 +62,7 @@ public class CompetitionParams extends AbstractParams{
         return m_ouTau;
     }
     
-    public int setDt(double par_dt){
+    public int set_dt(double par_dt){
         
         if(par_dt < 0)
             return 1;
@@ -98,7 +97,7 @@ public class CompetitionParams extends AbstractParams{
     public void calcMaxRateFromFactor(double par_maxRateFactor) {
         
         m_maxRateFactor = par_maxRateFactor;
-        setMaxRate(1.0/(m_maxRateFactor * m_dt));
+        setMaxRate(1./(m_maxRateFactor * m_dt));
     }
     
     public void setInhibitionParams(double par_inhibtionAmplitude,
@@ -140,7 +139,12 @@ public class CompetitionParams extends AbstractParams{
             }
             else if( root.containsKey("m_maxRateFactor") ){
                 
-                m_maxRateFactor = (double) root.get("m_maxRateFactor");
+                Object node = root.get("m_maxRateFactor");
+                try{
+                    m_maxRateFactor = (double) node;
+                }catch(ClassCastException e){
+                    m_maxRateFactor = (double)(int)node;
+                }
                 calcMaxRateFromFactor(m_maxRateFactor);  
             }
         }

@@ -169,7 +169,7 @@ public class WTAOU extends AbstractCompetition{
     
     public int setParams(CompetitionParams par_params){
         
-        m_dt = par_params.getDt();
+        m_dt = par_params.get_dt();
         
         setInhibitionParams(par_params.getInhibitionAmplitude(), 
                 par_params.getInhibitionTau(), 

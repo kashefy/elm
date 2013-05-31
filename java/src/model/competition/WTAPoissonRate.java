@@ -24,8 +24,7 @@ public class WTAPoissonRate extends AbstractCompetition{
 
     public int setParams(CompetitionParams par_params){
         
-        m_dt        = par_params.getDt();
-        m_maxRate   = par_params.getMaxRate();
+        setParams(par_params.get_dt(), par_params.getMaxRate());
         return 0;
     }
         
@@ -60,7 +59,7 @@ public class WTAPoissonRate extends AbstractCompetition{
         //  
         //else
         //  params.next_spiketime = params.next_spiketime - dt;
-        int wtaIndex = -1;
+        int winner_index = -1;
         int nofLearners = m_arrLearners.length;
         m_arrOutcome = new int[ nofLearners ];
         
@@ -71,16 +70,13 @@ public class WTAPoissonRate extends AbstractCompetition{
             RealArray uRel = new RealArray(nofLearners);
             RealArray softMax = new RealArray(nofLearners);
             
-            for(int i=0; i<nofLearners; i++){
+            for(int i=0; i<nofLearners; ++i)
                 u.set(m_arrLearners[i].getPredictionValue(), i);
-            }
-            
             //System.out.printf("u =%n%s%n", u.toString());
-           
             //double um = -u.aMean();
             uRel = u.uAdd(-u.aMean()); // u contains result as well
             //uRel.uAdd(-u.aMax())
-            softMax = uRel.uExp().uMul(1.0/uRel.aSum()); // uRel contains result as well
+            softMax = uRel.uExp().uMul(1./uRel.aSum()); // uRel contains result as well
             
             double r; // draw from an (0,1) interval, uniformly distributed
             do{
@@ -88,30 +84,25 @@ public class WTAPoissonRate extends AbstractCompetition{
             }while(r==0);// to exclude 0
             
             double [] p = ModelUtils.cumulativeSum(softMax.values(), r);
-            //RealArray arrp = new RealArray(p);
-            //System.out.printf("p =%n%s%n", arrp.toString());
             
             int i=0;
-            while(p[i]<r){
-                i++;
-            }
+            while(p[i]<r)
+                ++i;
             m_arrOutcome[i] = 1; // the one to fire
-            wtaIndex = i;
+            winner_index = i;
             m_spikeTime = computeNextSpikeTime();
-                        
         }
         else{
             
             m_spikeTime -= m_dt;
         }
-        
-        return wtaIndex;
+        return winner_index;
     }
     
     @Override
     public void init(){
         
-        m_lambda    = m_maxRate;
+        m_lambda    = 1./m_maxRate;
         m_spikeTime = computeNextSpikeTime();
         m_generator = new Random();
     }

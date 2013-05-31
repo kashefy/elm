@@ -541,7 +541,7 @@ public class ModelPredictionTest {
         double ouMu     = 150;      // Offset of OU process
         
         CompetitionParams competitionParams = new CompetitionParams();
-        competitionParams.setDt(competitionDt);
+        competitionParams.set_dt(competitionDt);
         competitionParams.setMaxRate(competitionMaxRate);
         competitionParams.setInhibitionParams(inhibitionAmplitude, inhibitionTau, inhibitonOffset);
         competitionParams.setOUParams(ouTau, ouSigma, ouMu);
@@ -901,7 +901,7 @@ public class ModelPredictionTest {
         double ouMu     = 150;      // Offset of OU process
         
         CompetitionParams competitionParams = new CompetitionParams();
-        competitionParams.setDt(competitionDt);
+        competitionParams.set_dt(competitionDt);
         competitionParams.setMaxRate(competitionMaxRate);
         competitionParams.setInhibitionParams(inhibitionAmplitude, inhibitionTau, inhibitonOffset);
         competitionParams.setOUParams(ouTau, ouSigma, ouMu);
@@ -1301,7 +1301,7 @@ public class ModelPredictionTest {
         double ouMu     = 150;      // Offset of OU process
         
         CompetitionParams competitionParams = new CompetitionParams();
-        competitionParams.setDt(competitionDt);
+        competitionParams.set_dt(competitionDt);
         competitionParams.setMaxRate(competitionMaxRate);
         competitionParams.setInhibitionParams(inhibitionAmplitude, inhibitionTau, inhibitonOffset);
         competitionParams.setOUParams(ouTau, ouSigma, ouMu);
