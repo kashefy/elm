@@ -1,8 +1,8 @@
 function [ ] = display_prediction_stats(par_firingProbs, par_arr_label_id, par_figure_offset, par_figure_title)
     
-    [nofLearners, nof_classes] = size(par_firingProbs);
+    [nof_learners, nof_classes] = size(par_firingProbs);
     figure(par_figure_offset+0);
-    nof_plot_rows = nofLearners;
+    nof_plot_rows = nof_learners;
     nof_plot_slots_per_row = 4;
     nof_plot_cols = 1;
     
@@ -10,7 +10,7 @@ function [ ] = display_prediction_stats(par_firingProbs, par_arr_label_id, par_f
     
     max_prob = max(par_firingProbs(:));
 
-    for i = 1:nofLearners
+    for i = 1:nof_learners
         
         plot_slot_start = (i-1)*nof_plot_slots_per_row + 1;
         plot_slot_end = plot_slot_start + nof_plot_slots_per_row-1;
@@ -24,7 +24,7 @@ function [ ] = display_prediction_stats(par_firingProbs, par_arr_label_id, par_f
         ylabel(['p(z', num2str(i), '|c)']);
         axis tight;
         ylim([0 max_prob]);
-        if i==nofLearners
+        if i==nof_learners
             %xlabel(['class c, cEntr=', num2str(par_condEntropy(i))]);
             xlabel('class c');
             set(gca, 'XTickLabel', par_arr_label_id);
@@ -42,7 +42,9 @@ function [ ] = display_prediction_stats(par_firingProbs, par_arr_label_id, par_f
     figure(par_figure_offset+2);
     
     subplot(2, 2, 1)
-    p = bsxfun(@rdivide, par_firingProbs, sum(par_firingProbs, 1));
+    p = par_firingProbs;
+    p(p==0) = 1e-99;
+    p = bsxfun(@rdivide, p, sum(p, 1));
     barh(1:nof_classes, -sum(p.*log2(p), 1));
     xlabel('cond. entropy(c_i)');
     ylabel('c_i');
@@ -65,12 +67,14 @@ function [ ] = display_prediction_stats(par_firingProbs, par_arr_label_id, par_f
     set(handle_colorbar, 'location', 'EastOutside');
     
     subplot(2, 2, 4)
-    p = bsxfun(@rdivide, par_firingProbs, sum(par_firingProbs, 2));
-    bar(1:nofLearners, -sum(p.*log2(p), 2));
+    p = par_firingProbs;
+    p(p==0) = 1e-99;
+    p = bsxfun(@rdivide, p, sum(p, 2));
+    bar(1:nof_learners, -sum(p.*log2(p), 2));
     ylabel('connd. entropy(z_j)');
     xlabel('z_j');
     axis tight
-    ylim([0, -log2(1/nofLearners)]);
+    ylim([0, -log2(1/nof_learners)]);
     
     % distance matrix
     distance = zeros(nof_classes);
