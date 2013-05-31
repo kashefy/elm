@@ -1704,7 +1704,6 @@ public class ModelPredictionTest {
             
             //System.arraycopy(par_arrMasks[ i ].get_mask(), 0, arrNodes, nodeArrayIndex, nofNodes);
             System.arraycopy(par_arrMasks[ i ].get_activity(), 0, arrNodes, nodeArrayIndex, nofNodes);
-            
             nodeArrayIndex += nofNodes;
         }
         

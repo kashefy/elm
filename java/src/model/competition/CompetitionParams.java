@@ -140,11 +140,7 @@ public class CompetitionParams extends AbstractParams{
             else if( root.containsKey("m_maxRateFactor") ){
                 
                 Object node = root.get("m_maxRateFactor");
-                try{
-                    m_maxRateFactor = (double) node;
-                }catch(ClassCastException e){
-                    m_maxRateFactor = (double)(int)node;
-                }
+                m_maxRateFactor = resolve_int_double_node(node, m_maxRateFactor);
                 calcMaxRateFromFactor(m_maxRateFactor);  
             }
         }

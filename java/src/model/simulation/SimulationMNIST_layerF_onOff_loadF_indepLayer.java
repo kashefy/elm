@@ -610,7 +610,7 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                     if( !layerF_fired ){
                         predictionStats_F2Z.addResponse(wta_response, AbstractCompetition.WTA_NONE);
                     }
-                    //arr_ActivityMask[ wta_response ].addSample( stimulus );
+                    arr_ActivityMask_layerZ[ wta_response ].addSample( stimulus );
                     //arr_ActivityMask_layerZ[ wta_response ].addSample( window_of_attention, m_attention.getWindowLoc(), m_attention.getWindowDims() );
                 }
                 else{

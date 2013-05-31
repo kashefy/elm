@@ -93,7 +93,7 @@ public class SimulationParams extends AbstractParams{
             m_nofCols = (int) data.get("m_nofCols");
 
             Map encoding_parameters = (Map) root.get("encoding");
-            m_encFrequency = (int) encoding_parameters.get("m_encFrequency");
+            m_encFrequency = resolve_int_double_node(encoding_parameters.get("m_encFrequency"), m_encFrequency);
             m_deltaT = (double) encoding_parameters.get("m_deltaT");
             m_encDurationInMilSec = (int) encoding_parameters.get("m_encDurationInMilSec");
             m_popCodeFanOut = (int) encoding_parameters.get("m_popCodeFanOut");

@@ -33,6 +33,17 @@
  filename = 'membrane_pot_layerZ_learn.dat';
  filepath_membrane_pot_layerZ = fullfile(modelOutputPath, setDir, filename);
  display_response_and_label(filepath_labels, filepath_responses_layerF, 5000, filepath_responses_layerZ, filepath_membrane_pot_layerZ);
+%% layerF
+ modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output';
+ %setDir = 'MNIST_all_classes\\tune_0';
+ setDir = 'MNIST\\tune_0';
+
+  % visualize prediction stats
+filename_prefix = 'predictionStats_layerF';
+[ firingProbs, ~, ~] = load_prediction_stats(fullfile(modelOutputPath, setDir, [filename_prefix, '.csv']));
+arr_label_id = dlmread(fullfile(modelOutputPath, setDir, [filename_prefix, '_label_ids.csv']));
+display_prediction_stats(firingProbs, arr_label_id, 500, 'layerF');
+
 %% weight and rate watch
 
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
@@ -64,16 +75,6 @@ vt = v';
 fclose(fid);
 x=3+1
 
-%% layerF
- modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output';
- %setDir = 'MNIST_all_classes\\tune_0';
- setDir = 'MNIST\\tune_0';
-
-  % visualize prediction stats
-filename_prefix = 'predictionStats_layerF';
-[ firingProbs, ~, ~] = load_prediction_stats(fullfile(modelOutputPath, setDir, [filename_prefix, '.csv']));
-arr_label_id = dlmread(fullfile(modelOutputPath, setDir, [filename_prefix, '_label_ids.csv']));
-display_prediction_stats(firingProbs, arr_label_id, 500, 'layerF');
 %%
  % visualize learner response
  filename = 'response.csv';
