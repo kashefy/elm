@@ -141,11 +141,11 @@ public class Encoder extends AbstractEncoder{
         int nof_spikes_per_node = (int)(m_durationInMilSec/m_deltaT_milSec);
         int [][] spikeTrains = new int[ nofNodes ][ nof_spikes_per_node ];
                      
-        for (int yi=0; yi<nofNodes; yi++){
+        for (int yi=0; yi<nofNodes; ++yi){
 
             m_arrSpikingNode[yi].setPopCodeValue(m_popCodeStateVals[yi]);
             // generate spike train for each spiking node
-            for (int t=0; t<nof_spikes_per_node; t++){
+            for (int t=0; t<nof_spikes_per_node; ++t){
                
                m_arrSpikingNode[yi].calcState();
             }
