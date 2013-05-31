@@ -15,11 +15,15 @@ function [] = display_response_and_label(par_filepath_label, par_filepath_respon
     axis tight
     
     response = dlmread(par_filepath_response);
+    [~, nof_learners] = size(response);
+    no_winner = sum(response, 2) == 0;
+    response_extend = horzcat(no_winner, response);
     subplot(nof_plot_rows, 1, 2)
-    plot(response, '.')
+    imagesc(response_extend')
     title('response');
     ylabel('learner index');
     set(gca, 'YDir', 'Reverse');
+    %set(gca, 'YTick', -1:2:nof_learners, 'YTickLabel', -1:nof_learners);
     axis tight
     
     if nargin > 3
