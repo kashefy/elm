@@ -30,8 +30,8 @@
      slicing{length(slicing)+1} = [prod(dims)*nof_orientations, nof_orientations];
  end
  if sim_params.encoding.m_do_intensity
- nof_intensities = 2;
- slicing{length(slicing)+1} = [prod(dims)*nof_intensities, nof_intensities];
+     nof_intensities = 2;
+     slicing{length(slicing)+1} = [prod(dims)*nof_intensities, nof_intensities];
  end
  
  weights = read_weights(fullfile(modelOutputPath, setDir, filename), slicing);
