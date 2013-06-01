@@ -19,6 +19,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.util.*;
+import javax.print.attribute.standard.OutputDeviceAssigned;
 
 public class SimulationParams extends AbstractParams{
     
@@ -587,6 +588,81 @@ public class SimulationParams extends AbstractParams{
 
     public void set_do_orient(boolean par_do_orient) {
         this.m_do_orient = par_do_orient;
+    }
+    
+    @Override
+    public void save(String par_filepath){
+        
+        Yaml yaml = new Yaml();
+        Map<String, Object> root = new HashMap<>();
+        try(PrintWriter p = new PrintWriter(par_filepath)){
+
+            Map<String, Object> file_io = new HashMap<>();
+            file_io.put("m_strMainOutputDir", m_strMainOutputDir);
+            file_io.put("m_strMainInputDir", m_strMainInputDir);
+            file_io.put("m_b_log_weight_watch_layerF", m_b_log_weight_watch_layerF);
+            file_io.put("m_b_log_weight_watch_layerZ", m_b_log_weight_watch_layerZ);
+            root.put("file I/O", file_io);
+            
+            Map<String, Object> data = new HashMap<>();
+            data.put("m_nofTrainStimuli", m_nofTrainStimuli);
+            data.put("m_nofTestStimuli", m_nofTestStimuli);
+            data.put("m_nofRows", m_nofRows);
+            data.put("m_nofCols", m_nofCols);
+            root.put("data", data);
+            
+            Map<String, Object> encoding_parameters = new HashMap<>();
+            encoding_parameters.put("m_encFrequency", m_encFrequency);
+            encoding_parameters.put("m_deltaT", m_deltaT);
+            encoding_parameters.put("m_encDurationInMilSec", m_encDurationInMilSec);
+            encoding_parameters.put("m_popCodeFanOut", m_popCodeFanOut);
+            encoding_parameters.put("m_do_orient", m_do_orient);
+            encoding_parameters.put("m_do_intensity", m_do_intensity);
+            root.put("encoding", encoding_parameters);
+
+            Map<String, Object> prediction_parameters = new HashMap<>();
+            prediction_parameters.put("m_nofCauses", m_nofCauses);
+            prediction_parameters.put("m_nofLearners", m_nofLearners);
+            prediction_parameters.put("m_nofLearners_layerF", m_nofLearners_layerF);
+            prediction_parameters.put("m_b_load_layerF", m_b_load_layerF);
+            root.put("prediction", prediction_parameters);
+            
+            Map<String, Object> parameter_objects = new HashMap<>();
+            File dir_config = new File(m_strMainOutputDir, FileIO.DIR_NAME_CONFIG);
+            String filename_params;
+            String str_filepath;
+//            parameter_objects.put("m_learnerParams", "learnerParamFile.yml");
+//            parameter_objects.put("m_learnerParams_layerF", "learnerParamFile_layerF.yml");
+//            parameter_objects.put("m_competitionParams", "competitionParamFile.yml");
+//            parameter_objects.put("m_competitionParams_layerF", "competitionParamFile_layerF.yml");
+            filename_params = "featParamFile_layerF.yml";
+            str_filepath = new File(dir_config, filename_params).getPath();
+            parameter_objects.put("m_featParams", str_filepath);
+            m_featParams.save(str_filepath);
+            
+            filename_params = "attentionParamFile.yml";
+            str_filepath = new File(dir_config, filename_params).getPath();
+            parameter_objects.put("m_attentionParams", str_filepath);
+            m_attentionParams.save(str_filepath);
+//            parameter_objects.put("m_saliencyParams", "saliencyParamFile.yml");
+            root.put("parameter objects", parameter_objects);
+            
+            
+            Map<String, Object> attention_parameters = new HashMap<>();
+            attention_parameters.put("m_nofAttentions", m_nofAttentions);
+            root.put("attention", attention_parameters);
+            
+            Map<String, Object> evaluation_parameters = new HashMap<>();
+            evaluation_parameters.put("m_predictionStatWindowSize", m_predictionStatWindowSize);
+            evaluation_parameters.put("m_activityMaskLowerThresholdExcl", m_activityMaskLowerThresholdExcl);
+            root.put("evaluation", evaluation_parameters);
+            
+            p.println(yaml.dump(root));
+            p.close();
+        }
+        catch(Exception e){
+            System.err.println("Error: " + e.getMessage());
+        }
     }
     
     public SimulationParams(){

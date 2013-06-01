@@ -146,6 +146,37 @@ public class AttentionParams extends AbstractParams{
         }
     }
     
+    @Override
+    public void save(String par_str_filepath){
+        
+        Yaml yaml = new Yaml();
+        Map<String, Object> root = new HashMap<>();
+        try(PrintWriter p = new PrintWriter(par_str_filepath)){
+
+            Map<String, Object> file_io = new HashMap<>();
+            file_io.put("m_strMainInputDir", m_strMainInputDir);
+            root.put("file I/O", file_io);
+            
+            Map<String, Object> data = new HashMap<>();
+            data.put("m_nofWindowRows", m_nofWindowRows);
+            data.put("m_nofWindowCols", m_nofWindowCols);
+            root.put("data", data);
+            
+            Map<String, Object> parameter_objects = new HashMap<>();
+            String filename_params;
+            filename_params = "saliencyParamFile.yml";
+            parameter_objects.put("m_saliencyParams", filename_params);
+            //m_saliencyParams.save(filename_params);
+            root.put("parameter objects", parameter_objects);
+            
+            p.println(yaml.dump(root));
+            p.close();
+        }
+        catch(Exception e){
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+    
     public int get_nofWindowCols() {
         return m_nofWindowCols;
     }

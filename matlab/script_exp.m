@@ -1,8 +1,15 @@
 %%
+ x = ReadYaml('C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\tune_0\\\\simParamFile_layerF.yml');
+ 
+%%
  close all
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
  setDir = 'MNIST\\tune_0\\';
+ dir_config = 'config';
  
+ featParams_layerF = ReadYaml(fullfile(modelOutputPath, setDir, dir_config, 'featParamFile_layerF.yml'));
+ attentionParams = ReadYaml(fullfile(modelOutputPath, setDir, dir_config, 'attentionParamFile.yml'));
+
  filename = 'masksLearners_layerF.csv';
  [arr_masks_learners_layerF, arr_masks_singles_layerF] = load_masks(fullfile(modelOutputPath, setDir, filename), fullfile(modelOutputPath, setDir, 'activity_layerF'));
  display_masks(arr_masks_learners_layerF, 2000, arr_masks_singles_layerF, 'layerF');
@@ -10,11 +17,14 @@
  parfor i = 1:length(arr_masks_learners_layerF)
      arr_masks_learners_layerF{i} = arr_masks_learners_layerF{i} > 0.2;
  end
- 
- filename = 'weights_layerF.csv';
- nof_orientations = 6;%12;
+ filename = 'masksLearners_layerZ.csv';
+ [arr_masks_learners_layerZ, arr_masks_singles_layerZ] = load_masks(fullfile(modelOutputPath, setDir, filename), fullfile(modelOutputPath, setDir, 'activity_layerZ'));
+ display_masks(arr_masks_learners_layerZ, 2010, arr_masks_singles_layerZ, 'layerZ');
+
+ nof_orientations = floor(180/featParams_layerF.m_orientationResolution);
  nof_intensities = 2;
- dims = [9, 9];
+ dims = [attentionParams.data.m_nofWindowRows, attentionParams.data.m_nofWindowCols];
+ filename = 'weights_layerF.csv';
 %  slicing = {[prod(dims)*nof_orientations, nof_orientations], [prod(dims)*nof_intensities, nof_intensities]};
 %   weights = read_weights(fullfile(modelOutputPath, setDir, filename), slicing);
 %   display_weights_orient(weights{1}, 4000, arr_masks_learners_layerF);

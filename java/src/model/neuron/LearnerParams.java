@@ -237,6 +237,12 @@ public class LearnerParams extends AbstractParams{
             load_txt(file);
         }
     }
+    
+    @Override
+    public void save(String par_str_filepath){
+        
+        throw new UnsupportedOperationException("Saving to file not supported.");
+    }
 
     public LearnerParams() {
         

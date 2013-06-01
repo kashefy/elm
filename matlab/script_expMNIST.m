@@ -8,7 +8,7 @@ strOutputFilename_metaData  = 'metaData.csv';
 strOutputFilename_vals      = 'values.csv';
 strOutputFilename_labels    = 'labels.csv';
 
-fid_labels      = fopen([ strOutputPath strOutputFilename_labels ], 'w');
+fid_labels = fopen([ strOutputPath strOutputFilename_labels ], 'w');
 
 load([strInputPath strInputFilename]);
 % filter out classes
@@ -17,9 +17,7 @@ classesToInclude = [0, 1, 2, 4];
 nofClassesToInclude = length(classesToInclude);
 includeIndicies = zeros(1, length(y));
 for i=1:nofClassesToInclude
-    
     includeIndicies = includeIndicies | y == classesToInclude(i);
-
 end
 includeIndicies = find(includeIndicies);
 X = X(:,includeIndicies);

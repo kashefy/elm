@@ -123,13 +123,35 @@ public class FeatureMapParams extends AbstractParams{
             if( root.containsKey("m_orientationsInDeg") ){
                 
                 System.err.println("loading m_orientationsInDeg from file not supported yet.");
-                 m_orientationInitMode = ORIENT_INIT_MODE_ARBITRARY;
+                m_orientationInitMode = ORIENT_INIT_MODE_ARBITRARY;
             }
             m_gaborFrequency = (double) root.get("m_gaborFrequency");  
             m_elongation = (double) root.get("m_elongation");
         }
         catch(Exception e){
 
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+    
+    @Override
+    public void save(String par_filepath){
+        
+        Yaml yaml = new Yaml();
+        Map<String, Object> root = new HashMap<>();
+        try(PrintWriter p = new PrintWriter(par_filepath)){
+
+            root.put("m_supportRadius", m_supportRadius);
+            root.put("m_nofScales", m_nofScales);
+            root.put("m_scalingFactor", m_scalingFactor);
+            root.put("m_orientationResolution", m_orientationResolution);
+            root.put("m_gaborFrequency", m_gaborFrequency);
+            root.put("m_elongation", m_elongation);
+            
+            p.println(yaml.dump(root));
+            p.close();
+        }
+        catch(Exception e){
             System.err.println("Error: " + e.getMessage());
         }
     }

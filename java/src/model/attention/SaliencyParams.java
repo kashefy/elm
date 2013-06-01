@@ -163,6 +163,12 @@ public class SaliencyParams extends AbstractParams{
         }
     }
     
+    @Override
+    public void save(String par_str_filepath){
+        
+        throw new UnsupportedOperationException("Saving to file not supported.");
+    }
+    
     public SaliencyParams(){
         
     }

@@ -24,6 +24,7 @@ public class FileIO {
     public static String DIR_NAME_ACTIVITY_LAYER_Z = "activity_layerZ";
     public static String DIR_NAME_ATTENTION = "att";
     public static String DIR_NAME_WATCH = "watch";
+    public static String DIR_NAME_CONFIG = "config";
     public static String FILTER_RESPONSE = "filterResponse";
     
     public static int DIM_INDEX_ROWS = 0;

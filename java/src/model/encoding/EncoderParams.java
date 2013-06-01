@@ -14,6 +14,7 @@ import model.utils.files.FileIO;
 import model.features.AbstractFeatureMap;
 import java.io.*;
 import java.util.*;
+import java.lang.UnsupportedOperationException;
 
 public class EncoderParams extends AbstractParams{
     
@@ -28,7 +29,13 @@ public class EncoderParams extends AbstractParams{
     @Override
     public void load(String par_strFilename){
         
-        System.err.println("loading from file not supported.");
+        throw new UnsupportedOperationException("Loading from file not supported.");
+    }
+    
+    @Override
+    public void save(String par_str_filepath){
+        
+        throw new UnsupportedOperationException("Saving to file not supported.");
     }
 
     /**

@@ -58,7 +58,7 @@ public class ActivityMask {
         
         if(m_sampleCount > 0){
             
-            for(int i=0; i<m_nofNodes; i++){
+            for(int i=0; i<m_nofNodes; ++i){
 
                 m_arrSumOfDiff[i] += Math.abs(m_prevSample[i]-par_sample[i]);
                 m_arrSum[i] += Math.abs(par_sample[i]);

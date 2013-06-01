@@ -382,7 +382,8 @@ public class SimulationTune {
                     simulation = new SimulationMNIST_layerF_onOff_loadF_indepLayer();
 
                     SimulationParams sim_params = new SimulationParams();
-                    sim_params.load(new File(input_dir, "simParamFile_layerF.yml").getPath());
+                    String filename_sim_params = "simParamFile_layerF.yml";
+                    sim_params.load(new File(input_dir, filename_sim_params).getPath());
 
                     File main_output_dir = new File(sim_params.getMainOutputDir());
                     File tune_dir = new File(main_output_dir, FileIO.DIR_NAME_TUNE+"_"+tune_iteration);
@@ -397,7 +398,8 @@ public class SimulationTune {
                         FileIO.DIR_NAME_ACTIVITY_LAYER_Z, 
                         FileIO.DIR_NAME_ATTENTION, 
                         FileIO.DIR_NAME_WATCH, 
-                        FileIO.FILTER_RESPONSE};
+                        FileIO.FILTER_RESPONSE,
+                        FileIO.DIR_NAME_CONFIG};
                     for ( String sub_dir_name : arr_sub_dir_names ){
 
                         File sub_dir = new File(tune_dir, sub_dir_name);
@@ -410,6 +412,9 @@ public class SimulationTune {
                     }
 
                     sim_params.setMainOutputDir(tune_dir.getPath());
+                    
+                    File dir_config = new File(tune_dir, FileIO.DIR_NAME_CONFIG);
+                    sim_params.save(new File(dir_config, filename_sim_params).getPath());
 
                     sim_params.set_log_append( rep>0 );
 
@@ -427,7 +432,8 @@ public class SimulationTune {
                     int elapsed_time_minutes = (int)elapsed_time_seconds/60;
                     elapsed_time_seconds = elapsed_time_seconds % 60;
                     System.out.println(elapsed_time_minutes + " min " + elapsed_time_seconds + " sec");
-                    pw.println(); 
+                    pw.println();
+                    
                 }
             }
             pw.close();

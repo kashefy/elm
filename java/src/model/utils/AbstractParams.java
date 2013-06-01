@@ -12,6 +12,8 @@ public abstract class AbstractParams {
     
     public abstract void load(String par_path);
     
+    public abstract void save(String par_filepath);
+    
     public static int resolve_int_double_node(Object par_node, int par_value){
         
         try{
