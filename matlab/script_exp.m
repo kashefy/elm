@@ -6,9 +6,10 @@
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
  setDir = 'MNIST\\tune_0\\';
  dir_config = 'config';
- 
- featParams_layerF = ReadYaml(fullfile(modelOutputPath, setDir, dir_config, 'featParamFile_layerF.yml'));
- attentionParams = ReadYaml(fullfile(modelOutputPath, setDir, dir_config, 'attentionParamFile.yml'));
+
+ sim_params = ReadYaml(fullfile(modelOutputPath, setDir, dir_config, 'simParamFile_layerF.yml'));
+ feat_params_layerF = ReadYaml(fullfile(modelOutputPath, setDir, dir_config, 'featParamFile_layerF.yml'));
+ attention_params = ReadYaml(fullfile(modelOutputPath, setDir, dir_config, 'attentionParamFile.yml'));
 
  filename = 'masksLearners_layerF.csv';
  [arr_masks_learners_layerF, arr_masks_singles_layerF] = load_masks(fullfile(modelOutputPath, setDir, filename), fullfile(modelOutputPath, setDir, 'activity_layerF'));
@@ -21,19 +22,27 @@
  [arr_masks_learners_layerZ, arr_masks_singles_layerZ] = load_masks(fullfile(modelOutputPath, setDir, filename), fullfile(modelOutputPath, setDir, 'activity_layerZ'));
  display_masks(arr_masks_learners_layerZ, 2010, arr_masks_singles_layerZ, 'layerZ');
 
- nof_orientations = floor(180/featParams_layerF.m_orientationResolution);
- nof_intensities = 2;
- dims = [attentionParams.data.m_nofWindowRows, attentionParams.data.m_nofWindowCols];
+ slicing = {};
  filename = 'weights_layerF.csv';
-%  slicing = {[prod(dims)*nof_orientations, nof_orientations], [prod(dims)*nof_intensities, nof_intensities]};
-%   weights = read_weights(fullfile(modelOutputPath, setDir, filename), slicing);
-%   display_weights_orient(weights{1}, 4000, arr_masks_learners_layerF);
-%   display_weights_intensity(weights{2}, 4002);
- slicing = {[prod(dims)*nof_intensities, nof_intensities]};
- weights = read_weights(fullfile(modelOutputPath, setDir, filename), slicing);
- display_weights_intensity(weights{1}, 4002);
+ dims = [attention_params.data.m_nofWindowRows, attention_params.data.m_nofWindowCols];
+ if sim_params.encoding.m_do_orient
+     nof_orientations = floor(180/feat_params_layerF.m_orientationResolution);
+     slicing{length(slicing)+1} = [prod(dims)*nof_orientations, nof_orientations];
+ end
+ if sim_params.encoding.m_do_intensity
+ nof_intensities = 2;
+ slicing{length(slicing)+1} = [prod(dims)*nof_intensities, nof_intensities];
+ end
  
-
+ weights = read_weights(fullfile(modelOutputPath, setDir, filename), slicing);
+  
+ if sim_params.encoding.m_do_orient
+     display_weights_orient(weights{1}, 4000, arr_masks_learners_layerF);
+ end
+ if sim_params.encoding.m_do_intensity
+     display_weights_intensity(weights{1}, 4002); 
+ end
+ 
  filename = 'response_1D_layerF_label_learn.csv';
  filepath_labels = fullfile(modelOutputPath, setDir, filename);
  filename = 'response_layerF_learn.csv';
