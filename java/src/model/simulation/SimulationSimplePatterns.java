@@ -157,7 +157,7 @@ public class SimulationSimplePatterns extends AbstractSimulation{
                 
                 // transform input into set of spike trains
                 int [][] spikesY = m_encoder.encode(m_stimuli[ si ]);
-                arrActivityMask[si].addSample(m_stimuli[ si ]);
+                arrActivityMask[si].add_sample(m_stimuli[ si ]);
                 
                 // for each column in all spike trains
                 // predict - compete - update
@@ -168,7 +168,7 @@ public class SimulationSimplePatterns extends AbstractSimulation{
                     int [] spikesYAtT;
                     if(yt < m_params.getEncDurationInMilSec()){
                     
-                        spikesYAtT = ModelUtils.extractColumns(spikesY, yt);
+                        spikesYAtT = ModelUtils.extract_columns(spikesY, yt);
                     }
                     else
                         spikesYAtT = new int [ m_nofYNeurons ];
@@ -241,7 +241,7 @@ public class SimulationSimplePatterns extends AbstractSimulation{
 
                     // create array for spikes of all y neurons at time yt
                     // traverse through columns of spikesY[][]                    
-                    int [] spikesYAtT = (yt < m_params.getEncDurationInMilSec())? ModelUtils.extractColumns(spikesY, yt) : allZeroSpikeTrain;
+                    int [] spikesYAtT = (yt < m_params.getEncDurationInMilSec())? ModelUtils.extract_columns(spikesY, yt) : allZeroSpikeTrain;
 
                     int responseIndex = repOffset+yt;
                     for(int zi=0; zi<m_nofLearners; zi++){

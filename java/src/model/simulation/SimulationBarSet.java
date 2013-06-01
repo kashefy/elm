@@ -174,7 +174,7 @@ public class SimulationBarSet extends AbstractSimulation{
             for(int li=0; li<nofCauses; li++){
                 
                 if(nCurrentLabel == arrTrainLabelNames[li])
-                    arrActivityMask[li].addSample(stimulus);
+                    arrActivityMask[li].add_sample(stimulus);
             }   
 
             // for each column in all spike trains
@@ -186,7 +186,7 @@ public class SimulationBarSet extends AbstractSimulation{
                 int [] spikesYAtT;
                 if(yt < m_params.getEncDurationInMilSec()){
 
-                    spikesYAtT = ModelUtils.extractColumns(spikesY, yt);
+                    spikesYAtT = ModelUtils.extract_columns(spikesY, yt);
                 }
                 else
                     spikesYAtT = allZeroSpikeTrain;
@@ -309,7 +309,7 @@ public class SimulationBarSet extends AbstractSimulation{
 
                 // create array for spikes of all y neurons at time yt
                 // traverse through columns of spikesY[][]                    
-                int [] spikesYAtT = (yt < m_params.getEncDurationInMilSec())? ModelUtils.extractColumns(spikesY, yt) : allZeroSpikeTrain;
+                int [] spikesYAtT = (yt < m_params.getEncDurationInMilSec())? ModelUtils.extract_columns(spikesY, yt) : allZeroSpikeTrain;
 
                 for(int zi=0; zi<m_nofLearners; zi++){
 
@@ -324,7 +324,7 @@ public class SimulationBarSet extends AbstractSimulation{
                         wtaResponse = PredictionStats.RESPONSE_ALL;
                     predictionStats.addResponse(wtaResponse, nCurrentLabel);
                     
-                    arrActivityMask[wtaResponse].addSample(stimulus);
+                    arrActivityMask[wtaResponse].add_sample(stimulus);
                 }
                 else 
                     noWinnerCount++;

@@ -13,16 +13,16 @@ data:
 encoding:
     m_encFrequency: 4e7
     m_deltaT: 0.001 # [sec]
-    m_encDurationInMilSec: 50 # [millisecond]
+    m_encDurationInMilSec: 150 # [millisecond]
     m_popCodeFanOut: 1
-    m_do_orient: false
-    m_do_intensity: true
+    m_do_orient: true
+    m_do_intensity: false
 
 prediction:
     m_nofCauses: -1 # set to -1 if to be loaded by DataLoader object
-    m_nofLearners: 16
-    m_nofLearners_layerF: 32
-    m_b_load_layerF: true
+    m_nofLearners: 4
+    m_nofLearners_layerF: 16
+    m_b_load_layerF: false
 
 parameter objects:
     m_learnerParams: learnerParamFile.yml

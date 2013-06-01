@@ -236,7 +236,7 @@ public class SimulationMNISTInterm extends AbstractSimulation{
             for(int li=0; li<nofCauses; li++){
 
                     if(nCurrentLabel == arrTrainLabelNames[li])
-                        arrActivityMask[li].addSample(stimulus);
+                        arrActivityMask[li].add_sample(stimulus);
             } 
                             
             m_attention.setScene(stimulus);
@@ -254,8 +254,8 @@ public class SimulationMNISTInterm extends AbstractSimulation{
                     int [] spikesYAtTSub;
                     if(yt < m_params.getEncDurationInMilSec()){
 
-                        spikesYAtT = ModelUtils.extractColumns(spikesY, yt);
-                        spikesYNoiseAtT = ModelUtils.extractColumns(spikesYNoise, yt);
+                        spikesYAtT = ModelUtils.extract_columns(spikesY, yt);
+                        spikesYNoiseAtT = ModelUtils.extract_columns(spikesYNoise, yt);
                         
                         m_attention.attend(stimulus);
                         int [] windowLoc = m_attention.getWindowLoc();
@@ -557,10 +557,10 @@ public class SimulationMNISTInterm extends AbstractSimulation{
                     // traverse through columns of spikesY[][]                    
                     int [] spikesYAtT;
                     int [] spikesYAtTSub;
-                    //spikesYAtT = (yt < m_params.getEncDurationInMilSec())? ModelUtils.extractColumns(spikesY, yt) : allZeroSpikeTrain;
+                    //spikesYAtT = (yt < m_params.getEncDurationInMilSec())? ModelUtils.extract_columns(spikesY, yt) : allZeroSpikeTrain;
                     if(yt < m_params.getEncDurationInMilSec()){
                         
-                        spikesYAtT = ModelUtils.extractColumns(spikesY, yt);
+                        spikesYAtT = ModelUtils.extract_columns(spikesY, yt);
                         
                         m_attention.attend(stimulus);
                         int [] windowLoc = m_attention.getWindowLoc();
@@ -599,7 +599,7 @@ public class SimulationMNISTInterm extends AbstractSimulation{
                             wtaResponse = PredictionStats.RESPONSE_ALL;
                         predictionStats.addResponse(wtaResponse, nCurrentLabel);
 
-                        arrActivityMask[wtaResponse].addSample(stimulus);
+                        arrActivityMask[wtaResponse].add_sample(stimulus);
                     }
                     else 
                         noWinnerCount++;

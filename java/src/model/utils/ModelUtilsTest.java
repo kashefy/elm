@@ -292,7 +292,7 @@ public class ModelUtilsTest {
         int nColumnOfInterest;
         int [] y;
         nColumnOfInterest = 0;
-        y = ModelUtils.extractColumns(x, nColumnOfInterest);
+        y = ModelUtils.extract_columns(x, nColumnOfInterest);
         
         System.out.println("x");
         for(int r=0; r<nofRows; r++){
@@ -311,7 +311,7 @@ public class ModelUtilsTest {
         }
 
         nColumnOfInterest = 2;
-        y = ModelUtils.extractColumns(x, nColumnOfInterest);
+        y = ModelUtils.extract_columns(x, nColumnOfInterest);
 
         System.out.print("column of interest" + nColumnOfInterest + ": ");        
         for(int c=0; c<nofCols; c++){

@@ -235,14 +235,14 @@ public class ModelUtils {
             arrOutput = new int[ nofRows+par_bandWdith ][ nofCols+par_bandWdith ];
         }
        
-        for(int row=0; row<nofRows; row++){
+        for(int row=0; row<nofRows; ++row){
             
             System.arraycopy(par_arrInput[ row ], 0, arrOutput[ row ], 0, nofCols);
         }
         return arrOutput;
     }
     
-    public static int [] extractColumns(int par_arrInput[][], int par_columnOfInterest){
+    public static int [] extract_columns(int par_arrInput[][], int par_columnOfInterest){
         
         int nofRows = par_arrInput.length;
         int [] column = new int[ nofRows ];
@@ -253,7 +253,7 @@ public class ModelUtils {
         return column;
     }
     
-    public static double [] extractColumns(double par_arrInput[][], int par_columnOfInterest){
+    public static double [] extract_columns(double par_arrInput[][], int par_columnOfInterest){
         
         int nofRows = par_arrInput.length;
         double [] column = new double[ nofRows ];
@@ -264,7 +264,7 @@ public class ModelUtils {
         return column;
     }
     
-    public static int [][] extractColumns(int par_arrInput[][], int par_columnRangeOfInterestStart, int par_columnRangeOfInterestSEnd){
+    public static int [][] extract_columns(int par_arrInput[][], int par_columnRangeOfInterestStart, int par_columnRangeOfInterestSEnd){
         
         // start and end columns included
         int nofRows = par_arrInput.length;
@@ -280,7 +280,7 @@ public class ModelUtils {
         return columnsOfInterest;
     }
     
-    public static boolean insertColumn(int par_arr_new_column[], int par_arr_dst[][], int par_pos){
+    public static boolean insert_column(int par_arr_new_column[], int par_arr_dst[][], int par_pos){
         
         int nofRows = par_arr_dst.length;
         int size_new_col = par_arr_new_column.length;

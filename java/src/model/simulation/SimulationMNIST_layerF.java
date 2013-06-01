@@ -293,7 +293,7 @@ public class SimulationMNIST_layerF extends AbstractSimulation{
 //                for(int li=0; li<nofCauses; li++){
 //                
 //                    if(nCurrent_label == arrTrainLabelNames[li])
-//                        arrActivityMask[li].addSample(window_of_ttention);
+//                        arrActivityMask[li].add_sample(window_of_ttention);
 //                }
                 
                 int [][] spikes_y = m_encoder.encode(window_of_ttention);
@@ -309,7 +309,7 @@ public class SimulationMNIST_layerF extends AbstractSimulation{
                     int [] spikes_atT_out;
                     if(yt < m_params.getEncDurationInMilSec()){
 
-                        spikes_atT_in = ModelUtils.extractColumns(spikes_y, yt);
+                        spikes_atT_in = ModelUtils.extract_columns(spikes_y, yt);
                     }
                     else{
                         spikes_atT_in = allZeroSpikeTrain_layerF;
@@ -353,7 +353,7 @@ public class SimulationMNIST_layerF extends AbstractSimulation{
                     }
                     
                     if(yt < nof_responses_per_window_f2Z){
-                        ModelUtils.insertColumn(spikes_atT_out, spikes_f, yt);
+                        ModelUtils.insert_column(spikes_atT_out, spikes_f, yt);
                     }
                     arr_response1D_layerF[ iteration_layerF ] = wta_response;
                     iteration_layerF++;
@@ -369,7 +369,7 @@ public class SimulationMNIST_layerF extends AbstractSimulation{
                     int [] spikes_atT;
                     if(ft < nof_responses_per_window_y2f){
 
-                        spikes_atT = ModelUtils.extractColumns(spikes_f, ft);
+                        spikes_atT = ModelUtils.extract_columns(spikes_f, ft);
                     }
                     else{
                         spikes_atT = allZeroSpikeTrain_layerF;
@@ -607,7 +607,7 @@ public class SimulationMNIST_layerF extends AbstractSimulation{
                     int [] spikes_atT_out;
                     if(yt < m_params.getEncDurationInMilSec()){
 
-                        spikes_atT_in = ModelUtils.extractColumns(spikes_y, yt);
+                        spikes_atT_in = ModelUtils.extract_columns(spikes_y, yt);
                     }
                     else{
                         spikes_atT_in = allZeroSpikeTrain_layerF;
@@ -629,7 +629,7 @@ public class SimulationMNIST_layerF extends AbstractSimulation{
                         if( wta_response_layerF == AbstractCompetition.WTA_ALL )
                             wta_response_layerF = PredictionStats.RESPONSE_ALL;
                         predictionStats_layerF.addResponse( wta_response_layerF, nCurrentLabel );
-                        arrActivityMask_layerF[ wta_response_layerF ].addSample( window_of_attention );
+                        arrActivityMask_layerF[ wta_response_layerF ].add_sample( window_of_attention );
                         
                         spikes_atT_out = arr_wta_response_layerF;
                     }
@@ -638,7 +638,7 @@ public class SimulationMNIST_layerF extends AbstractSimulation{
                         spikes_atT_out = allZeroSpikeTrain;
                         noWinnerCount_layerF++;
                     }
-                    ModelUtils.insertColumn(spikes_atT_out, spikes_f, yt);
+                    ModelUtils.insert_column(spikes_atT_out, spikes_f, yt);
                     arrResponse_layerF[ relSi ][ai][ yt ] = wta_response_layerF;
                 }
                 //System.out.println();
@@ -649,7 +649,7 @@ public class SimulationMNIST_layerF extends AbstractSimulation{
                     int [] spikes_atT_in;
                     if(ft < nof_responses_per_window_y2f){
 
-                        spikes_atT_in = ModelUtils.extractColumns(spikes_f, ft);
+                        spikes_atT_in = ModelUtils.extract_columns(spikes_f, ft);
                         
 //                        boolean no_fire_layerF = true;
 //                        for(int fi=0; fi<m_nofLearners_layerF; fi++){
@@ -687,7 +687,7 @@ public class SimulationMNIST_layerF extends AbstractSimulation{
                                 predictionStats_F2Z.addResponse(wta_response, fi);
                             }
                         }
-                        //arr_ActivityMask[ wta_response ].addSample( stimulus );
+                        //arr_ActivityMask[ wta_response ].add_sample( stimulus );
                         arr_ActivityMask_layerZ[ wta_response ].addSample( window_of_attention, m_attention.getWindowLoc(), m_attention.getWindowDims() );
                     }
                     else{

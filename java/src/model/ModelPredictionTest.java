@@ -637,7 +637,7 @@ public class ModelPredictionTest {
                     int [] spikesYAtT;
                     if(yt < durationInMilSec){
                     
-                        spikesYAtT = ModelUtils.extractColumns(spikesY, yt);
+                        spikesYAtT = ModelUtils.extract_columns(spikesY, yt);
                     }
                     else
                         spikesYAtT = new int [ nofYNeurons ];
@@ -734,7 +734,7 @@ public class ModelPredictionTest {
                     // create array for spikes of all y neurons at time yt
                     int [] spikesYAtT;
                     
-                    spikesYAtT = ModelUtils.extractColumns(spikesY, yt);
+                    spikesYAtT = ModelUtils.extract_columns(spikesY, yt);
 
 //                    for(int yi=0; yi<nofYNeurons; yi++){
 //
@@ -1020,7 +1020,7 @@ public class ModelPredictionTest {
                     int [] spikesYAtT;
                     if(yt < durationInMilSec){
                     
-                        spikesYAtT = ModelUtils.extractColumns(spikesY, yt);
+                        spikesYAtT = ModelUtils.extract_columns(spikesY, yt);
                     }
                     else
                         spikesYAtT = new int [ nofYNeurons ];
@@ -1142,7 +1142,7 @@ public class ModelPredictionTest {
                     // create array for spikes of all y neurons at time yt
                     int [] spikesYAtT;
                     
-                    spikesYAtT = ModelUtils.extractColumns(spikesY, yt);
+                    spikesYAtT = ModelUtils.extract_columns(spikesY, yt);
 
 //                    for(int yi=0; yi<nofYNeurons; yi++){
 //
@@ -1386,7 +1386,7 @@ public class ModelPredictionTest {
                     int [] spikesYAtT;
                     if(yt < durationInMilSec){
                     
-                        spikesYAtT = ModelUtils.extractColumns(spikesY, yt);
+                        spikesYAtT = ModelUtils.extract_columns(spikesY, yt);
                     }
                     else
                         spikesYAtT = new int [ nofYNeurons ];
@@ -1530,7 +1530,7 @@ public class ModelPredictionTest {
                     // create array for spikes of all y neurons at time yt
                     int [] spikesYAtT;
                     
-                    spikesYAtT = ModelUtils.extractColumns(spikesY, yt);
+                    spikesYAtT = ModelUtils.extract_columns(spikesY, yt);
 
 //                    for(int yi=0; yi<nofYNeurons; yi++){
 //

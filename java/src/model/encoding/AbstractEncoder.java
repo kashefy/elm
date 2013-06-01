@@ -36,7 +36,7 @@ public abstract class AbstractEncoder {
         spiking_hist_layerF.init();
         for(int ft=0; ft<_T; ++ft){
 
-            int[] spikes_at_T = ModelUtils.extractColumns(par_spike_train, ft);
+            int[] spikes_at_T = ModelUtils.extract_columns(par_spike_train, ft);
             boolean bno_f_fired = true;
             for(int i=0; i<n; ++i){
 

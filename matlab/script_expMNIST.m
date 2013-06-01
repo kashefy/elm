@@ -8,10 +8,8 @@ strOutputFilename_metaData  = 'metaData.csv';
 strOutputFilename_vals      = 'values.csv';
 strOutputFilename_labels    = 'labels.csv';
 
-fid_labels = fopen([ strOutputPath strOutputFilename_labels ], 'w');
-
 load([strInputPath strInputFilename]);
-% filter out classes
+% filter classes
 %classesToInclude = [4, 7, 1, 2, 3, 5, 6, 8, 9, 0];
 classesToInclude = [0, 1, 2, 4];
 nofClassesToInclude = length(classesToInclude);

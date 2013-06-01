@@ -230,7 +230,7 @@ public class SimulationMNIST extends AbstractSimulation{
             for(int li=0; li<nofCauses; li++){
                 
                 if(nCurrentLabel == arrTrainLabelNames[li])
-                    arrActivityMask[li].addSample(stimulus);
+                    arrActivityMask[li].add_sample(stimulus);
             }   
             
             int [][] spikesYNoise = m_encoder.encode(dataLoaderNoise.getSample(0));
@@ -245,8 +245,8 @@ public class SimulationMNIST extends AbstractSimulation{
                 int [] spikesYNoiseAtT;
                 if(yt < m_params.getEncDurationInMilSec()){
 
-                    spikesYAtT = ModelUtils.extractColumns(spikesY, yt);
-                    spikesYNoiseAtT = ModelUtils.extractColumns(spikesYNoise, yt);
+                    spikesYAtT = ModelUtils.extract_columns(spikesY, yt);
+                    spikesYNoiseAtT = ModelUtils.extract_columns(spikesYNoise, yt);
                 }
                 else{
                     spikesYAtT = allZeroSpikeTrain;
@@ -502,7 +502,7 @@ public class SimulationMNIST extends AbstractSimulation{
 
                 // create array for spikes of all y neurons at time yt
                 // traverse through columns of spikesY[][]                    
-                int [] spikesYAtT = (yt < m_params.getEncDurationInMilSec())? ModelUtils.extractColumns(spikesY, yt) : allZeroSpikeTrain;
+                int [] spikesYAtT = (yt < m_params.getEncDurationInMilSec())? ModelUtils.extract_columns(spikesY, yt) : allZeroSpikeTrain;
 
                 for(int zi=0; zi<m_nofLearners; zi++){
 
@@ -517,7 +517,7 @@ public class SimulationMNIST extends AbstractSimulation{
                         wtaResponse = PredictionStats.RESPONSE_ALL;
                     predictionStats.addResponse(wtaResponse, nCurrentLabel);
                     
-                    arrActivityMask[wtaResponse].addSample(stimulus);
+                    arrActivityMask[wtaResponse].add_sample(stimulus);
                 }
                 else 
                     noWinnerCount++;

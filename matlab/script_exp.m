@@ -1,7 +1,4 @@
 %%
- x = ReadYaml('C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\tune_0\\\\simParamFile_layerF.yml');
- 
-%%
  close all
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
  setDir = 'MNIST\\tune_0\\';

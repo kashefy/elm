@@ -54,7 +54,7 @@ public class ActivityMask {
         }
     }
     
-    public void addSample(double [] par_sample){
+    public void add_sample(double [] par_sample){
         
         if(m_sampleCount > 0){
             

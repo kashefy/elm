@@ -272,7 +272,7 @@ public class Simulation_MNIST_layerIndep extends AbstractSimulation{
 //                for(int li=0; li<nofCauses; li++){
 //                
 //                    if(nCurrent_label == arrTrainLabelNames[li])
-//                        arrActivityMask[li].addSample(windowOfAttention);
+//                        arrActivityMask[li].add_sample(windowOfAttention);
 //                }
                 
                 int [][] spikesY = m_encoder.encode(windowOfAttention); // [ Z ][ ty ]
@@ -291,7 +291,7 @@ public class Simulation_MNIST_layerIndep extends AbstractSimulation{
                     int [] spikesAtT;
                     if(ty < m_params.getEncDurationInMilSec()){
 
-                        spikesAtT = ModelUtils.extractColumns(spikesY, ty);
+                        spikesAtT = ModelUtils.extract_columns(spikesY, ty);
                     }
                     else{
                         spikesAtT = allZeroSpikeTrain_Y2F;
@@ -583,7 +583,7 @@ public class Simulation_MNIST_layerIndep extends AbstractSimulation{
                     int [] spikesAtT;
                     if(ty < m_params.getEncDurationInMilSec()){
 
-                        spikesAtT = ModelUtils.extractColumns(spikesY, ty);
+                        spikesAtT = ModelUtils.extract_columns(spikesY, ty);
                     }
                     else{
                         spikesAtT = allZeroSpikeTrain_Y2F;
@@ -607,7 +607,7 @@ public class Simulation_MNIST_layerIndep extends AbstractSimulation{
                         spiking_hist_layerF.increment(wta_response_layerF);
                         
                         predictionStats_layerF.addResponse( wta_response_layerF, nCurrentLabel );
-                        arrActivityMask_layerF[ wta_response_layerF ].addSample( windowOfAttention );//////////////
+                        arrActivityMask_layerF[ wta_response_layerF ].add_sample( windowOfAttention );//////////////
                     }
                     else{
                         noWinnerCount_layerF++;
@@ -662,7 +662,7 @@ public class Simulation_MNIST_layerIndep extends AbstractSimulation{
                             if(spikesAtT[fi] > 0)
                                 predictionStats_F2Z.addResponse(wta_response, fi);
                         }
-                        arr_ActivityMask[ wta_response ].addSample( stimulus );
+                        arr_ActivityMask[ wta_response ].add_sample( stimulus );
                     }
                     else{
                         noWinnerCount_layerZ++;

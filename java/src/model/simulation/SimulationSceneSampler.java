@@ -176,7 +176,7 @@ public class SimulationSceneSampler extends SimulationMNIST{
 
                         // create array for spikes of all y neurons at time yt
                         // traverse through columns of spikesY[][]                    
-                        int [] spikesYAtT = (yt < m_params.getEncDurationInMilSec())? ModelUtils.extractColumns(spikesY, yt) : allZeroSpikeTrain;
+                        int [] spikesYAtT = (yt < m_params.getEncDurationInMilSec())? ModelUtils.extract_columns(spikesY, yt) : allZeroSpikeTrain;
 
                         for(int zi=0; zi<m_nofLearners; zi++){
 
