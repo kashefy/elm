@@ -24,8 +24,7 @@ function [] = display_masks(par_masks_learners, par_figure_id, par_masks_singles
         plot_slot_start = (plotIndex-1)*nof_plot_slots_per_col + 1;
         plot_slot_end = plot_slot_start + nof_plot_slots_per_col-1;
         subplot(nof_plot_rows, nof_plot_slots_per_col*nof_plot_cols, [plot_slot_start, plot_slot_end])
-    
-        %subplot(nof_plot_rows, nof_plot_cols, plotIndex);
+        
         imagesc(par_masks_learners{i}, clims);
         colormap(gray);
         axis image
@@ -35,8 +34,7 @@ function [] = display_masks(par_masks_learners, par_figure_id, par_masks_singles
         if i < nof_masks
             set(gca, 'XTick', []);
         end
-        h = ylabel(['m', num2str(i-1)]);
-        ylabel(h, 'FontSize', 5);
+        ylabel(sprintf('m%d', i-1), 'FontSize', 5);
 
         plotIndex = plotIndex+1;
         if nargin > 2 % have mask samples?
@@ -49,7 +47,6 @@ function [] = display_masks(par_masks_learners, par_figure_id, par_masks_singles
                     plot_slot_end = plot_slot_start + nof_plot_slots_per_col-1;
                     subplot(nof_plot_rows, nof_plot_slots_per_col*nof_plot_cols, [plot_slot_start, plot_slot_end])
 
-                    %subplot(nof_plot_rows, nof_plot_cols, plotIndex);
                     imagesc(par_masks_singles{i,mi},[0, 1]);
                     
                     colormap(gray);
