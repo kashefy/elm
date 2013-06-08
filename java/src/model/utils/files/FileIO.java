@@ -12,6 +12,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collections;
+import org.opencv.core.Core.MinMaxLocResult;
 import org.shared.array.*;
 
 import org.opencv.core.Mat;
@@ -37,7 +38,11 @@ public class FileIO {
         Mat src = new Mat(par_height, par_width, CvType.CV_64FC1);
         src.put(0, 0, par_values);
         Mat dst = new Mat(par_height, par_width, CvType.CV_8UC1);
-        src.convertTo(dst, CvType.CV_8UC1, 255, 0);
+        
+        MinMaxLocResult result = org.opencv.core.Core.minMaxLoc(src);
+        double scale = 255./result.maxVal;
+        double shift = -result.minVal/255.*result.maxVal;
+        src.convertTo(dst, CvType.CV_8UC1, scale, shift);
         Highgui.imwrite(par_str_output_filepath, dst);
     }
     
