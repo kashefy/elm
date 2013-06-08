@@ -21,8 +21,19 @@ function [ output, output_singles ] = load_masks(par_strFilenameMasks, par_strSi
             filenameIndex = str2double(filenameIndex)+1;
             
             if K(k).bytes > 0
-                singleMaskVals = dlmread(fullfile(par_strSingleMasksDir, filenames{k}));
-
+                str_filepath = fullfile(par_strSingleMasksDir, filenames{k});
+                [~, ~, ext] = fileparts(str_filepath);
+                if strcmp(ext, '.csv')
+                    values = dlmread(str_filepath, ',');
+                else
+                    fid = fopen(par_str_filepath);
+                    dim = fread(fid, 1, 'int32', 0, 'b');
+                    nof_cols = dim(1);
+                    values = fread(fid, [nof_cols,inf], 'double', 0, 'b')';
+                    fclose(fid);
+                end
+                singleMaskVals = values;
+                
                 [nofSingleMasksInFile, nofNodesPerSingleMask] = size(singleMaskVals);
 
                 nofRows = floor(sqrt(nofNodesPerSingleMask));

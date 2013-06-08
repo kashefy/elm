@@ -1,4 +1,68 @@
 %%
+figure()
+x = dlmread('C:\Users\woodstock\Documents\grad\Thesis\code\sem\java\x\di.csv');
+d = sqrt(length(x));
+x = reshape(x, d, d);
+nof_plot_rows = 3;
+nof_plot_cols = 7;
+nof_plot_slots_per_col = 4;
+
+plot_slot_start = 1;
+plot_slot_end = plot_slot_start + nof_plot_slots_per_col - 1;
+sub_plot = subplot(nof_plot_rows, nof_plot_slots_per_col*nof_plot_cols, [plot_slot_start, plot_slot_end]);
+imagesc(x)
+axis image
+y = dlmread('C:\Users\woodstock\Documents\grad\Thesis\code\sem\java\x\df.csv');
+y1 = reshape(y, 6, []);
+dy = sqrt(length(y1(1,:)));
+clim = [min(y(:)), max(y(:))];
+for i=1:6
+    yi = reshape(y1(i,:), dy, dy);
+    
+    plot_slot_start = (i-1+1)*nof_plot_slots_per_col + 1;
+    plot_slot_end = plot_slot_start + nof_plot_slots_per_col - 1;
+    sub_plot = subplot(nof_plot_rows, nof_plot_slots_per_col*nof_plot_cols, [plot_slot_start, plot_slot_end]);
+    
+    imagesc(yi, clim);
+    axis image
+end
+
+y = dlmread('C:\Users\woodstock\Documents\grad\Thesis\code\sem\java\x\d.csv');
+y1 = reshape(y, 6, []);
+dy = sqrt(length(y1(1,:)));
+clim = [min(y(:)), max(y(:))];
+for i=1:6
+    yi = reshape(y1(i,:), dy, dy);
+    plot_slot_start = (i-1+1+nof_plot_cols)*nof_plot_slots_per_col + 1;
+    plot_slot_end = plot_slot_start + nof_plot_slots_per_col - 1;
+    sub_plot = subplot(nof_plot_rows, nof_plot_slots_per_col*nof_plot_cols, [plot_slot_start, plot_slot_end]);
+    
+    imagesc(yi, clim);
+    axis image
+end
+
+yprs = dlmread('C:\Users\woodstock\Documents\grad\Thesis\code\sem\java\x\dprs.csv');
+%assert(all(y == yprs))
+
+ysp = dlmread('C:\Users\woodstock\Documents\grad\Thesis\code\sem\java\x\sp.csv');
+ysp_sum = sum(ysp, 2);
+y = reshape(ysp_sum, 6, []);
+clim = [min(y(:)), max(y(:))];
+for i=1:6
+    yi = reshape(y(i,:), dy, dy);
+    plot_slot_start = (i-1+1+nof_plot_cols*2)*nof_plot_slots_per_col + 1;
+    plot_slot_end = plot_slot_start + nof_plot_slots_per_col - 1;
+    sub_plot = subplot(nof_plot_rows, nof_plot_slots_per_col*nof_plot_cols, [plot_slot_start, plot_slot_end]);
+    
+    imagesc(yi, clim);
+    axis image
+end
+yp = permute(y, [3,1,2]);
+yp = [yp; yp];
+display_weights_orient(yp, 4);
+
+
+%%
  close all
  modelOutputPath = 'C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\';
  setDir = 'MNIST\\tune_0\\';
