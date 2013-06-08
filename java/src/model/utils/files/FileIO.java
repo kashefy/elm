@@ -9,13 +9,14 @@ package model.utils.files;
  * @author woodstock
  */
 import java.io.*;
-import javax.imageio.*;
-import java.awt.image.*;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collections;
 import org.shared.array.*;
 
+import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
+import org.opencv.core.CvType;
 
 public class FileIO {
     
@@ -31,32 +32,13 @@ public class FileIO {
     public static int DIM_INDEX_COLS = 1;
     
     // save matrix to image. Needs debugging. Does not store pixel values in correct intensity range.
-    public static void saveArrayToImg(float[] par_arrayValues, int par_width, int par_height, String par_strOutputFilePath){
+    public static void saveArrayToImg(double[] par_values, int par_width, int par_height, String par_str_output_filepath){
         
-         BufferedImage imgToSave = new BufferedImage(par_width, par_height,BufferedImage.TYPE_BYTE_GRAY);
-         WritableRaster wras = imgToSave.getRaster();
-         
-          // Put the pixels on the raster, using values between 0 and 255.
-         for(int h=0; h<par_height; h++){
-             
-             int rowOffset = h*par_width;
-            for(int w=0; w<par_width; w++){
-                
-                //int value = 127+(int)(128*Math.sin(w/32.)*Math.sin(h/32.)); // Weird sin pattern.
-                //wras.setSample(w,h,0,value);
-                 wras.setSample(w,h,0,par_arrayValues[ rowOffset+w ]); 
-            }
-        }
-        
-         File outputfile = new File(par_strOutputFilePath);
-         try{
-         
-             ImageIO.write(imgToSave, "png", outputfile); // Store the image using the PNG format.
-                 
-         } catch (IOException e) {
-
-             System.err.println("Error: " + e.getMessage());
-         }
+        Mat src = new Mat(par_height, par_width, CvType.CV_64FC1);
+        src.put(0, 0, par_values);
+        Mat dst = new Mat(par_height, par_width, CvType.CV_8UC1);
+        src.convertTo(dst, CvType.CV_8UC1, 255, 0);
+        Highgui.imwrite(par_str_output_filepath, dst);
     }
     
     // save matrix of doubles to a text file/CSV. Needs debugging. Does not store pixel values in correct intensity range.

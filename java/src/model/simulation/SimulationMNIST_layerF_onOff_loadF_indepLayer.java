@@ -193,19 +193,8 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
             }
             double [] stimulus = m_dataLoader.getSample(si);
             
-//            Mat mat_stimulus = new Mat(m_attention.getSceneDims()[FileIO.DIM_INDEX_ROWS], 
-//                    m_attention.getSceneDims()[FileIO.DIM_INDEX_COLS], CvType.CV_8UC1);
-//            for(int i=0; i<m_attention.getSceneDims()[FileIO.DIM_INDEX_ROWS]; ++i){
-//                for(int j=0; j<m_attention.getSceneDims()[FileIO.DIM_INDEX_COLS]; ++j){
-//                    byte [] p = new byte[1];
-//                    if(stimulus[i*m_attention.getSceneDims()[FileIO.DIM_INDEX_COLS]+j] > 0){
-//                        p[0] = Byte.MAX_VALUE;
-//                    }
-//                    mat_stimulus.put(i, j, p);
-//                }
-//            }
-//            String filename = String.format(".\\x\\s-%04d", si)+".png";
-//            Highgui.imwrite(filename, mat_stimulus);
+            String filename = String.format(".\\x\\s-%04d", si)+".png";
+            FileIO.saveArrayToImg(stimulus, m_attention.getSceneDims()[FileIO.DIM_INDEX_COLS], m_attention.getSceneDims()[FileIO.DIM_INDEX_ROWS], filename);
             m_attention.setScene(stimulus);
             
             int [][] spikes_f_per_stimulus = new int [ m_nofLearners_layerF ][ m_nof_responses_per_stimulus_y2f ];
@@ -217,19 +206,10 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                 m_attention.attend(null);
                 double [] window_of_attention = m_attention.getWindow();
                 
-//                Mat mat_att_window = new Mat(m_attention.getWindowDims()[FileIO.DIM_INDEX_ROWS], 
-//                        m_attention.getWindowDims()[FileIO.DIM_INDEX_COLS], CvType.CV_8UC1);
-//                for(int i=0; i<m_attention.getWindowDims()[FileIO.DIM_INDEX_ROWS]; ++i){
-//                    for(int j=0; j<m_attention.getWindowDims()[FileIO.DIM_INDEX_COLS]; ++j){
-//                        byte [] p = new byte[1];
-//                        if(window_of_attention[i*m_attention.getWindowDims()[FileIO.DIM_INDEX_COLS]+j] > 0){
-//                            p[0] = Byte.MAX_VALUE;
-//                        }
-//                        mat_att_window.put(i, j, p);
-//                    }
-//                }
-//                filename = String.format(".\\x\\s-%04d", si)+"_"+ai+".png";
-//                Highgui.imwrite(filename, mat_att_window);
+                filename = String.format(".\\x\\s-%04d", si)+"_"+ai+".png";
+                FileIO.saveArrayToImg(window_of_attention,
+                        m_attention.getWindowDims()[FileIO.DIM_INDEX_ROWS], 
+                        m_attention.getWindowDims()[FileIO.DIM_INDEX_COLS], filename);
                 
                 int [][] spikes_y_p1 = m_params.is_do_orient()? m_encoder.encode(window_of_attention) : null;
 
