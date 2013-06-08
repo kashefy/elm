@@ -29,30 +29,26 @@ public class EncoderSoftMax extends Encoder{
      * @return population code
      */
     @Override
-    public double[] genPopCode(double [] par_inputVals){
+    public double[] genPopCode(double [] par_input_vals){
         
-        double [] popCodeStateValsDistr;
-        popCodeStateValsDistr = popCoder.calcStateOfNeuronsDistr(par_inputVals);
+        double [] pop_code_distr_vals = popCoder.calcStateOfNeuronsDistr(par_input_vals);
 
         //be extra cautious and create an explicit copy
-        m_popCodeStateVals = new double[ popCodeStateValsDistr.length ];
-        System.arraycopy(popCodeStateValsDistr, 0, m_popCodeStateVals, 0, popCodeStateValsDistr.length);
-        return popCodeStateValsDistr;
+        m_popCodeStateVals = new double[ pop_code_distr_vals.length ];
+        System.arraycopy(pop_code_distr_vals, 0, m_popCodeStateVals, 0, pop_code_distr_vals.length);
+        return pop_code_distr_vals;
     }
     
     /**
-     * assumes population code has already been generated via genPopCode()
+     * assumes the  code has already been generated via genPopCode()
      * @param input is unused
      * @return spike trains from pre-generated population code
      */
     @Override
     public int[][] genSpikeTrains(double [] par_inputVals){
         
-        int nofNodes = popCoder.getnofNodes();
         int [][] spikeTrains;
-        //int [][] spikeTrains = new int[ nofNodes ][ m_durationInMilSec ];
-        spikeTrains = popCoder.sampleStateOfNeurons(m_popCodeStateVals, (int)(m_durationInMilSec/m_deltaT_milSec));
-                             
+        spikeTrains = popCoder.sampleStateOfNeurons(m_popCodeStateVals, nof_spikes_per_train);
         return spikeTrains;
     }
     

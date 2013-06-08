@@ -17,6 +17,7 @@ public class Encoder extends AbstractEncoder{
     protected double m_deltaT_sec;
     protected double m_deltaT_milSec;
     protected int m_durationInMilSec;
+    protected int nof_spikes_per_train;
     
     protected AbstractPopulationCode popCoder;
     protected int m_nofPopCodeInputs;
@@ -45,6 +46,7 @@ public class Encoder extends AbstractEncoder{
     @Override
     public void init(){
         
+        nof_spikes_per_train = (int)(m_durationInMilSec/m_deltaT_milSec);
         if(m_featureMap != null){
            
             popCoder = new FeaturePopulationCode();
@@ -77,6 +79,7 @@ public class Encoder extends AbstractEncoder{
         m_deltaT_sec    = par_deltaT;
         m_deltaT_milSec = m_deltaT_sec*1000;
         m_durationInMilSec  = par_duration;
+        nof_spikes_per_train = (int)(m_durationInMilSec/m_deltaT_milSec);
         
         m_nofPopCodeInputs = par_nofPopCodeInputs;
         m_nPopCodeFanOut = par_nPopCodeFanOut;
@@ -99,7 +102,7 @@ public class Encoder extends AbstractEncoder{
         for(int i=0; i<nofNodes; i++){
             
             m_arrSpikingNode[i] = new YNeuron();
-            m_arrSpikingNode[i].init(m_frequency,m_deltaT_sec, (int)(m_durationInMilSec/m_deltaT_milSec));
+            m_arrSpikingNode[i].init(m_frequency,m_deltaT_sec, nof_spikes_per_train);
         }         
     }
     

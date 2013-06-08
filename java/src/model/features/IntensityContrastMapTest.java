@@ -161,7 +161,7 @@ public class IntensityContrastMapTest {
         for(int i=0; i<arrStimuliVals.length; i++){
         
             double [] stimulusValsComplex;
-            stimulusValsComplex = ModelUtils.prepRealValuesForComplex(arrStimuliVals[i]);
+            stimulusValsComplex = ModelUtils.real2Complex(arrStimuliVals[i]);
             int [] dims = new int[]{nofRowsStim, nofColsStim, 2};
             ComplexArray stimulus = new ComplexArray(stimulusValsComplex, dims);
 
@@ -192,7 +192,7 @@ public class IntensityContrastMapTest {
         //GaborCircular filter = new GaborCircular(supportRadius, scale, frequency);
         LaplacianOfGaussian filterLap  = new LaplacianOfGaussian(supportRadius, scale);
         int [] dimsFilter = new int[]{filterLap.dims()[0], filterLap.dims()[1], 2};
-        double [] filterLapComplexVals = ModelUtils.prepRealValuesForComplex(filterLap.values());
+        double [] filterLapComplexVals = ModelUtils.real2Complex(filterLap.values());
         ComplexArray filter = new ComplexArray(filterLapComplexVals, dimsFilter);
         //filter.
 
@@ -277,7 +277,7 @@ public class IntensityContrastMapTest {
         for(int i=0; i<arrStimuliVals.length; i++){
         
             double [] stimulusValsComplex;
-            stimulusValsComplex = ModelUtils.prepRealValuesForComplex(arrStimuliVals[i]);
+            stimulusValsComplex = ModelUtils.real2Complex(arrStimuliVals[i]);
             int [] dims = new int[]{nofRowsStim, nofColsStim, 2};
             ComplexArray stimulus = new ComplexArray(stimulusValsComplex, dims);
 
@@ -309,7 +309,7 @@ public class IntensityContrastMapTest {
         diffOfG.init();
         RealArray filterReal = diffOfG.getKernelRef();
         ComplexArray filter;
-        filter = new ComplexArray(ModelUtils.prepRealValuesForComplex(filterReal.values()),supportRadius*2+1,supportRadius*2+1,2);
+        filter = new ComplexArray(ModelUtils.real2Complex(filterReal.values()),supportRadius*2+1,supportRadius*2+1,2);
         
         
         int nofRowsStim = supportRadius*2+1;
@@ -374,7 +374,7 @@ public class IntensityContrastMapTest {
         for(int i=0; i<arrStimuliVals.length; i++){
         
             double [] stimulusValsComplex;
-            stimulusValsComplex = ModelUtils.prepRealValuesForComplex(arrStimuliVals[i]);
+            stimulusValsComplex = ModelUtils.real2Complex(arrStimuliVals[i]);
             int [] dims = new int[]{nofRowsStim, nofColsStim, 2};
             ComplexArray stimulus = new ComplexArray(stimulusValsComplex, dims);
 

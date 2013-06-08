@@ -46,7 +46,7 @@ public class OrientationMapTest {
        double angleInDeg = 120.0;
        double [] stimulusRealVals = genBarStimulusVals(nofRows,nofCols,x0,y0,band,angleInDeg);
            
-       double [] stimulusComplexVals = ModelUtils.prepRealValuesForComplex(stimulusRealVals);
+       double [] stimulusComplexVals = ModelUtils.real2Complex(stimulusRealVals);
        stimulus = new ComplexArray(stimulusComplexVals,nofRows,nofCols,2);
        
 //       double [] a = new double[]{1,2,3,4,5,6,7,8,9,10,11,12,70,80,90,100,110,120,10,20,30,40,50,60};
@@ -104,7 +104,7 @@ public class OrientationMapTest {
        int band = 2;
        double angleInDeg = -60.0;
        double [] stimulusRealVals = genBarStimulusVals(nofRows,nofCols,x0,y0,band,angleInDeg); 
-       double [] stimulusComplexVals = ModelUtils.prepRealValuesForComplex(stimulusRealVals);
+       double [] stimulusComplexVals = ModelUtils.real2Complex(stimulusRealVals);
        stimulus = new ComplexArray(stimulusComplexVals,nofRows,nofCols,2);
      
        ComplexArray[] output = mapOrient.convolve(stimulus);
@@ -151,7 +151,7 @@ public class OrientationMapTest {
        double angleInDeg = 120.0;
        double [] stimulusRealVals = genBarStimulusVals(nofRows,nofCols,x0,y0,band,angleInDeg);
            
-       double [] stimulusComplexVals = ModelUtils.prepRealValuesForComplex(stimulusRealVals);
+       double [] stimulusComplexVals = ModelUtils.real2Complex(stimulusRealVals);
        stimulus = new ComplexArray(stimulusComplexVals,nofRows,nofCols,2);
        
 //       double [] a = new double[]{1,2,3,4,5,6,7,8,9,10,11,12,70,80,90,100,110,120,10,20,30,40,50,60};
@@ -218,7 +218,7 @@ public class OrientationMapTest {
        double angleInDeg = 52.0;
        double [] stimulusRealVals = genBarStimulusVals(nofRows,nofCols,x0,y0,band,angleInDeg);
            
-       double [] stimulusComplexVals = ModelUtils.prepRealValuesForComplex(stimulusRealVals);
+       double [] stimulusComplexVals = ModelUtils.real2Complex(stimulusRealVals);
        stimulus = new ComplexArray(stimulusComplexVals,nofRows,nofCols,2);
      
        mapOrient.setStimulus(stimulus);
@@ -276,7 +276,7 @@ public class OrientationMapTest {
                stimulusRealVals[i] = 1-stimulusRealVals[i];
        }
            
-       double [] stimulusComplexVals = ModelUtils.prepRealValuesForComplex(stimulusRealVals);
+       double [] stimulusComplexVals = ModelUtils.real2Complex(stimulusRealVals);
        stimulus = new ComplexArray(stimulusComplexVals,nofRows,nofCols,2);
      
        mapOrient.setStimulus(stimulus);
@@ -335,7 +335,7 @@ public class OrientationMapTest {
         //            
         //            stimulusRealVals[i] = 1-stimulusRealVals[i];
         //        }
-        double [] stimulusComplexVals = ModelUtils.prepRealValuesForComplex(stimulusRealVals);
+        double [] stimulusComplexVals = ModelUtils.real2Complex(stimulusRealVals);
         stimulus = new ComplexArray(stimulusComplexVals,nofRows,nofCols,2);
 
         mapOrient.setStimulus(stimulus);

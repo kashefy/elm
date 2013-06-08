@@ -110,7 +110,7 @@ public class IntensityContrastMap extends AbstractFeatureMap{
         m_filterKernelReal = m_filterKernelReal.subarray(0,28,0,28);
         int nofRows = m_supportRadius*2;//+1;
         int nofCols = nofRows;
-        m_filterKernelComplex = new ComplexArray(ModelUtils.prepRealValuesForComplex(m_filterKernelReal.values()),nofRows,nofCols,2);
+        m_filterKernelComplex = new ComplexArray(ModelUtils.real2Complex(m_filterKernelReal.values()),nofRows,nofCols,2);
         m_filterKernelComplexFFT = m_filterKernelComplex.fft();
     }
     

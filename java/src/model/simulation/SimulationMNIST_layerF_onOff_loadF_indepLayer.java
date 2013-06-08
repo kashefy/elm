@@ -193,9 +193,10 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
             }
             double [] stimulus = m_dataLoader.getSample(si);
             
-            String filename = String.format(".\\x\\s-%04d", si)+".png";
-            FileIO.saveArrayToImg(stimulus, m_attention.getSceneDims()[FileIO.DIM_INDEX_COLS], m_attention.getSceneDims()[FileIO.DIM_INDEX_ROWS], filename);
+//            String filename = String.format(".\\x\\s-%04d", si)+".png";
+//            FileIO.saveArrayToImg(stimulus, m_attention.getSceneDims()[FileIO.DIM_INDEX_COLS], m_attention.getSceneDims()[FileIO.DIM_INDEX_ROWS], filename);
             m_attention.setScene(stimulus);
+            //m_attention.save(".\\x\\");
             
             int [][] spikes_f_per_stimulus = new int [ m_nofLearners_layerF ][ m_nof_responses_per_stimulus_y2f ];
             
@@ -206,10 +207,10 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                 m_attention.attend(null);
                 double [] window_of_attention = m_attention.getWindow();
                 
-                filename = String.format(".\\x\\s-%04d", si)+"_"+ai+".png";
-                FileIO.saveArrayToImg(window_of_attention,
-                        m_attention.getWindowDims()[FileIO.DIM_INDEX_ROWS], 
-                        m_attention.getWindowDims()[FileIO.DIM_INDEX_COLS], filename);
+//                filename = String.format(".\\x\\s-%04d", si)+"_"+ai+".png";
+//                FileIO.saveArrayToImg(window_of_attention,
+//                        m_attention.getWindowDims()[FileIO.DIM_INDEX_ROWS], 
+//                        m_attention.getWindowDims()[FileIO.DIM_INDEX_COLS], filename);
                 
                 int [][] spikes_y_p1 = m_params.is_do_orient()? m_encoder.encode(window_of_attention) : null;
 
@@ -399,14 +400,14 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         
         File dir_activity_layerF = new File(m_params.getMainOutputDir(), FileIO.DIR_NAME_ACTIVITY_LAYER_F);
         int nofMasks_layerF = m_nofLearners_layerF;
-        ActivityMask [] arrActivityMask_layerF = new ActivityMask[ nofMasks_layerF ];
+        ActivityMask [] arr_activity_mask_layerF = new ActivityMask[ nofMasks_layerF ];
         for(int mi=0; mi<nofMasks_layerF; ++mi){
             
-            arrActivityMask_layerF[mi] = new ActivityMask();
-            arrActivityMask_layerF[mi].setParams(m_nofRows*m_nofCols);
-            arrActivityMask_layerF[mi].set_lower_threshold_excl( m_params.get_activityMaskLowerThresholdExcl() );
-            arrActivityMask_layerF[mi].enable_logging( dir_activity_layerF.getPath(), Integer.toString(mi) );
-            arrActivityMask_layerF[mi].init();
+            arr_activity_mask_layerF[mi] = new ActivityMask();
+            arr_activity_mask_layerF[mi].setParams(m_nofRows*m_nofCols);
+            arr_activity_mask_layerF[mi].set_lower_threshold_excl( m_params.get_activityMaskLowerThresholdExcl() );
+            arr_activity_mask_layerF[mi].enable_logging( dir_activity_layerF.getPath(), Integer.toString(mi) );
+            arr_activity_mask_layerF[mi].init();
         }
         
         int [] scene_dims = m_attention.getSceneDims();
@@ -415,14 +416,14 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         
         File dir_activity_layerZ = new File(m_params.getMainOutputDir(), FileIO.DIR_NAME_ACTIVITY_LAYER_Z);
         int nofMasks_layerZ = m_nofLearners_layerZ;
-        ActivityMask [] arr_ActivityMask_layerZ = new ActivityMask[ nofMasks_layerZ ];
+        ActivityMask [] arr_activity_mask_layerZ = new ActivityMask[ nofMasks_layerZ ];
         for(int mi=0; mi<nofMasks_layerZ; ++mi){
             
-            arr_ActivityMask_layerZ[mi] = new ActivityMask();
-            arr_ActivityMask_layerZ[mi].setParams(nof_scene_rows, nof_scene_cols );
-            arr_ActivityMask_layerZ[mi].set_lower_threshold_excl( m_params.get_activityMaskLowerThresholdExcl() );
-            arr_ActivityMask_layerZ[mi].enable_logging( dir_activity_layerZ.getPath(), Integer.toString(mi) );
-            arr_ActivityMask_layerZ[mi].init();
+            arr_activity_mask_layerZ[mi] = new ActivityMask();
+            arr_activity_mask_layerZ[mi].setParams(nof_scene_rows, nof_scene_cols );
+            arr_activity_mask_layerZ[mi].set_lower_threshold_excl( m_params.get_activityMaskLowerThresholdExcl() );
+            arr_activity_mask_layerZ[mi].enable_logging( dir_activity_layerZ.getPath(), Integer.toString(mi) );
+            arr_activity_mask_layerZ[mi].init();
         }
         
         // membranePotential_layerF : nofZ,nofstimuli,nofAttentios,durationOfSpikeTrain Y for each stimulus per F
@@ -520,7 +521,7 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                         if( wta_response_layerF == AbstractCompetition.WTA_ALL )
                             wta_response_layerF = PredictionStats.RESPONSE_ALL;
                         predictionStats_layerF.addResponse( wta_response_layerF, nCurrentLabel );
-                        arrActivityMask_layerF[ wta_response_layerF ].add_sample( window_of_attention );
+                        arr_activity_mask_layerF[ wta_response_layerF ].add_sample( window_of_attention );
                         
                         spikes_atT_out = arr_wta_response_layerF;
                     }
@@ -580,7 +581,7 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                     if( !layerF_fired ){
                         predictionStats_F2Z.addResponse(wta_response, AbstractCompetition.WTA_NONE);
                     }
-                    arr_ActivityMask_layerZ[ wta_response ].add_sample( stimulus );
+                    arr_activity_mask_layerZ[ wta_response ].add_sample( stimulus );
                     //arr_ActivityMask_layerZ[ wta_response ].add_sample( window_of_attention, m_attention.getWindowLoc(), m_attention.getWindowDims() );
                 }
                 else{
@@ -588,18 +589,19 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                 }
                 arrResponse_layerZ[ relSi ][ ft ] = wta_response;
             }
-            //System.out.println();
         }    
 
         for(int mi=0; mi<nofMasks_layerF; ++mi){
-            arrActivityMask_layerF[mi].calc_activity_intensity();
+            arr_activity_mask_layerF[mi].calc_activity_intensity();
+            arr_activity_mask_layerF[mi].flush();
         }
-        ModelPredictionTest.saveMasks( new File(m_params.getMainOutputDir(), "masksLearners_layerF.csv").getPath(), arrActivityMask_layerF );
+        ModelPredictionTest.saveMasks( new File(m_params.getMainOutputDir(), "masksLearners_layerF.csv").getPath(), arr_activity_mask_layerF );
         
         for(int mi=0; mi<nofMasks_layerZ; ++mi){
-            arr_ActivityMask_layerZ[mi].calc_activity_intensity();
+            arr_activity_mask_layerZ[mi].calc_activity_intensity();
+            arr_activity_mask_layerZ[mi].flush();
         }
-        ModelPredictionTest.saveMasks( new File(m_params.getMainOutputDir(), "masksLearners_layerZ.csv").getPath(), arr_ActivityMask_layerZ );
+        ModelPredictionTest.saveMasks( new File(m_params.getMainOutputDir(), "masksLearners_layerZ.csv").getPath(), arr_activity_mask_layerZ );
 
         //ModelPredictionTest.saveResponses(m_params.getMainOutputDir()+"response_layerF.csv", arrResponse_layerF); 
         ModelPredictionTest.saveResponses(new File(m_params.getMainOutputDir(),"response_layerZ_test.csv").getPath(), arrResponse_layerZ);    

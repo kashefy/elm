@@ -64,7 +64,7 @@ public class DiffOfGaussians2DSq{
             }
             x++;
         }
-        double [] valsComplex = ModelUtils.prepRealValuesForComplex(vals);
+        double [] valsComplex = ModelUtils.real2Complex(vals);
         //int [] dims = new int[]{nofRows, nofCols, 2};
         //m_kernel = new ComplexArray(valsComplex,dims);
         int [] dims = new int[]{nofRows, nofCols};

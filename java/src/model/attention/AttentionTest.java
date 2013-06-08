@@ -118,7 +118,7 @@ public class AttentionTest {
         attention.attend(null);
         double[] windowRealVals = attention.getWindow();
         int [] windowDims = attention.getWindowDims();
-        double [] windowComplexVals = ModelUtils.prepRealValuesForComplex(windowRealVals);
+        double [] windowComplexVals = ModelUtils.real2Complex(windowRealVals);
         ComplexArray windowComplex = new ComplexArray(windowComplexVals, windowDims[ FileIO.DIM_INDEX_ROWS ], windowDims[ FileIO.DIM_INDEX_COLS ], 2);
 
         mapOrient.setStimulus(windowComplex);

@@ -5,6 +5,7 @@
 package model.evaluation;
 
 import java.io.File;
+import model.utils.files.DataLogger;
 import model.utils.files.FileIO;
 
 /**
@@ -13,7 +14,7 @@ import model.utils.files.FileIO;
  */
 public class ActivityMask {
     
-    private int m_nofNodes;
+    private int m_nof_nodes;
     private int m_nof_rows;
     private int m_nof_cols;
     private double [] m_arrSum;
@@ -22,35 +23,38 @@ public class ActivityMask {
     private double [] m_prevSample;
     private int m_sampleCount;
     private double m_lowerThresholdExcl; // [0,value)
-    private boolean m_bLog;
+    private boolean m_do_log;
     private String m_strLogDir;
     private String m_strLogPrefix;
     
     private static String LOG_EXT = ".csv";
+    private DataLogger m_single_mask_logger;
     
-    public void setParams(int par_nofNodes){
+    public void setParams(int par_nof_nodes){
         
-        m_nofNodes = par_nofNodes;
+        m_nof_nodes = par_nof_nodes;
     }
     
     public void setParams(int par_nof_rows, int par_nof_cols){
         
         m_nof_rows = par_nof_rows;
         m_nof_cols = par_nof_cols;
-        m_nofNodes = m_nof_rows*m_nof_cols;
+        m_nof_nodes = m_nof_rows*m_nof_cols;
     }
     
     public void init(){
         
         m_sampleCount = 0;
-        m_arrSum = new double [ m_nofNodes ];
-        m_arrSumOfDiff = new double [ m_nofNodes ];
-        m_arrActivity = new double [ m_nofNodes ];
-        m_prevSample = new double [ m_nofNodes ];
+        m_arrSum = new double [ m_nof_nodes ];
+        m_arrSumOfDiff = new double [ m_nof_nodes ];
+        m_arrActivity = new double [ m_nof_nodes ];
+        m_prevSample = new double [ m_nof_nodes ];
         
-        if(m_bLog){
+        if(m_do_log){
             
-            FileIO.saveArrayToCSV(m_prevSample, 0, 0, new File(m_strLogDir, m_strLogPrefix + LOG_EXT).getPath(), false);
+            m_single_mask_logger = new DataLogger();
+            m_single_mask_logger.set_params(new File(m_strLogDir, m_strLogPrefix + LOG_EXT).getPath(), m_nof_nodes, 2000, true, LOG_EXT.equals(".dat"));
+            m_single_mask_logger.init();
         }
     }
     
@@ -58,17 +62,17 @@ public class ActivityMask {
         
         if(m_sampleCount > 0){
             
-            for(int i=0; i<m_nofNodes; ++i){
+            for(int i=0; i<m_nof_nodes; ++i){
 
                 m_arrSumOfDiff[i] += Math.abs(m_prevSample[i]-par_sample[i]);
                 m_arrSum[i] += Math.abs(par_sample[i]);
             }
         }
-        System.arraycopy(par_sample, 0, m_prevSample, 0, m_nofNodes);
+        System.arraycopy(par_sample, 0, m_prevSample, 0, m_nof_nodes);
         
-        if(m_bLog){
+        if(m_do_log){
             
-            FileIO.saveArrayToCSV(par_sample, 1, m_nofNodes, new File(m_strLogDir, m_strLogPrefix + LOG_EXT).getPath(), true);
+            m_single_mask_logger.add_sample(par_sample);
         }
         m_sampleCount++;
     }
@@ -105,7 +109,7 @@ public class ActivityMask {
             }
         }
         
-        if(m_bLog){
+        if(m_do_log){
             
             FileIO.saveArrayToCSV(par_sample, 1, nof_rows_sub*nof_cols_sub, new File(m_strLogDir, m_strLogPrefix + LOG_EXT).getPath(), true);
         }
@@ -114,14 +118,14 @@ public class ActivityMask {
     
     public double [] calc_activity_diff(){
         
-        double [] arrActivityToExp = new double[ m_nofNodes ];
+        double [] arrActivityToExp = new double[ m_nof_nodes ];
         if(m_sampleCount > 1){
  
-            for(int i=0; i<m_nofNodes; i++){
+            for(int i=0; i<m_nof_nodes; i++){
 
                 m_arrActivity[i] = m_arrSumOfDiff[i]/(double)m_sampleCount;
             }
-            System.arraycopy(m_arrActivity, 0, arrActivityToExp, 0, m_nofNodes);
+            System.arraycopy(m_arrActivity, 0, arrActivityToExp, 0, m_nof_nodes);
         }
         
         return arrActivityToExp;
@@ -129,14 +133,14 @@ public class ActivityMask {
     
     public double [] calc_activity_intensity(){
         
-        double [] arrActivityToExp = new double[ m_nofNodes ];
+        double [] arrActivityToExp = new double[ m_nof_nodes ];
         if(m_sampleCount > 1){
  
-            for(int i=0; i<m_nofNodes; i++){
+            for(int i=0; i<m_nof_nodes; i++){
 
                 m_arrActivity[i] = m_arrSum[i]/(double)m_sampleCount;
             }
-            System.arraycopy(m_arrActivity, 0, arrActivityToExp, 0, m_nofNodes);
+            System.arraycopy(m_arrActivity, 0, arrActivityToExp, 0, m_nof_nodes);
         }
         
         return arrActivityToExp;
@@ -144,8 +148,8 @@ public class ActivityMask {
     
     public double [] get_activity(){
         
-        double [] arrActivityToExp = new double[ m_nofNodes ];
-        System.arraycopy(m_arrActivity, 0, arrActivityToExp, 0, m_nofNodes);
+        double [] arrActivityToExp = new double[ m_nof_nodes ];
+        System.arraycopy(m_arrActivity, 0, arrActivityToExp, 0, m_nof_nodes);
         return arrActivityToExp;
     }
     
@@ -160,8 +164,8 @@ public class ActivityMask {
      */
     public double [] get_mask(){
         
-        double [] arrActivityToExp = new double[ m_nofNodes ];
-        for(int i=0; i<m_nofNodes; i++){
+        double [] arrActivityToExp = new double[ m_nof_nodes ];
+        for(int i=0; i<m_nof_nodes; i++){
 
             arrActivityToExp[i] = (m_arrActivity[i] > m_lowerThresholdExcl)? 1.0 : 0.0;
         } 
@@ -180,23 +184,28 @@ public class ActivityMask {
     }
 
     public int get_nof_nodes() {
-        return m_nofNodes;
+        return m_nof_nodes;
     }
 
     public void set_nof_nodes(int par_nofNodes) {
-        this.m_nofNodes = par_nofNodes;
+        this.m_nof_nodes = par_nofNodes;
     }
     
     public void enable_logging(String par_strLogDir, String par_strLogPrefix){
         
-        m_bLog = true;
+        m_do_log = true;
         m_strLogDir     = par_strLogDir;
         m_strLogPrefix  = par_strLogPrefix;
     }
     
+    public void flush(){
+        if(m_do_log)
+            m_single_mask_logger.flush();
+    }
+    
     public ActivityMask(){
     
-        m_bLog = false;
+        m_do_log = false;
         m_nof_rows = -1;
         m_nof_cols = -1;
     }

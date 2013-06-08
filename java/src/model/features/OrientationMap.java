@@ -235,13 +235,13 @@ public class OrientationMap extends AbstractFeatureMap{
     // will pad filters if necessary
     public ComplexArray [] convolve(){
 
-            ComplexArray [] arrOutput = null;
+            ComplexArray [] arr_output = null;
             if(m_currentStimulus == null || m_currentStimulusFFT == null)
                 return null;
 
-            int nofRowsStim = m_currentStimulus.dims()[ FileIO.DIM_INDEX_ROWS ];
-            int nofColsStim = m_currentStimulus.dims()[ FileIO.DIM_INDEX_COLS ];
-            arrOutput = new ComplexArray[ m_nofFeatureSets ];
+            int nof_rows_stim = m_currentStimulus.dims()[ FileIO.DIM_INDEX_ROWS ];
+            int nof_cols_stim = m_currentStimulus.dims()[ FileIO.DIM_INDEX_COLS ];
+            arr_output = new ComplexArray[ m_nofFeatureSets ];
 
             for(int i=0; i<m_nofFeatureSets; ++i){
 
@@ -249,8 +249,8 @@ public class OrientationMap extends AbstractFeatureMap{
                 ComplexArray filterToUse = m_gaborFilterBank[i];
                 ComplexArray filterToUseFFT = m_gaborFilterBankFFT[i];
                 int [] filterDims =  filterToUse.dims();
-                int dRows = filterDims[ FileIO.DIM_INDEX_ROWS ] - nofRowsStim;
-                int dCols = filterDims[ FileIO.DIM_INDEX_COLS ] - nofColsStim;
+                int dRows = filterDims[ FileIO.DIM_INDEX_ROWS ] - nof_rows_stim;
+                int dCols = filterDims[ FileIO.DIM_INDEX_COLS ] - nof_cols_stim;
 
                 if(dRows != 0 || dCols != 0){
 
@@ -269,8 +269,8 @@ public class OrientationMap extends AbstractFeatureMap{
 
                         // verify
                         filterDims =  alternateFilter.dims();
-                        dRows = filterDims[0] - nofRowsStim;
-                        dCols = filterDims[1] - nofColsStim;
+                        dRows = filterDims[0] - nof_rows_stim;
+                        dCols = filterDims[1] - nof_cols_stim;
 
                         if(dRows != 0 || dCols != 0){
 
@@ -286,11 +286,11 @@ public class OrientationMap extends AbstractFeatureMap{
                     filterToUseFFT = alternateFilterFFT;
                 }
 
-                arrOutput[ i ] = m_currentStimulusFFT.eMul(filterToUse.fft()).ifft().fftShift();
+                arr_output[ i ] = m_currentStimulusFFT.eMul(filterToUse.fft()).ifft().fftShift();
                 //arrOutput[ i ] = m_currentStimulusFFT.eMul(filterToUseFFT).ifft().fftShift();
                 //arrOutput[ i ] = m_currentStimulusFFT.eMul(filterToUse.fft()).ifft();
             }
-            return arrOutput;
+            return arr_output;
     }
         
     @Override

@@ -4,7 +4,6 @@
  */
 package model.attention;
 
-import java.util.Random;
 import model.utils.files.FileIO;
 
 /**
@@ -54,11 +53,6 @@ public class AttentionSalient extends AbstractAttention{
         
         m_windowCol = winCentreRef[ FileIO.DIM_INDEX_COLS ];
         m_windowCol = rectifyWindowCoordinate(m_windowCol, m_nofWindowCols, m_nofSceneCols);
-        
-//        System.out.print(m_windowRow);
-//        System.out.print(":");
-//        System.out.print(m_windowCol);
-//        System.out.println();
     }
     
     /**
@@ -90,12 +84,6 @@ public class AttentionSalient extends AbstractAttention{
         for(int r=rStart; r<rEnd; ++r){
 
             int rWindow = r-rStart;
-                        
-//            System.out.print(r);
-//            System.out.print(" ");
-//            System.out.print(rWindow);
-//            System.out.println();
-            
             System.arraycopy(m_arrScene, r*m_nofSceneCols+cStart, window, rWindow*m_nofWindowCols, m_nofWindowCols);
         }
         return window;
@@ -105,6 +93,11 @@ public class AttentionSalient extends AbstractAttention{
     public void save(String par_strPath){
         
         m_saliency.save(par_strPath);
+    }
+    
+    public double[] get_orient_pop_code_vals(){
+        
+        return m_saliency.get_orient_pop_code_vals();
     }
    
     public AttentionSalient(){

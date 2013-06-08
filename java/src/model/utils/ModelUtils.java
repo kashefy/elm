@@ -39,7 +39,7 @@ public class ModelUtils {
        }
        arrDims[ nofDims ] = 2;
        
-       double [] complexVals = ModelUtils.prepRealValuesForComplex(par_realArray.values());
+       double [] complexVals = ModelUtils.real2Complex(par_realArray.values());
        ComplexArray complexArray = new ComplexArray(complexVals,arrDims);
        
        //System.out.printf("ri =%n%s%n", par_realArray.toString());
@@ -48,7 +48,7 @@ public class ModelUtils {
        return complexArray;
     }
     
-    public static double [] prepRealValuesForComplex(double [] par_realVals){
+    public static double [] real2Complex(double [] par_realVals){
         
         int length = par_realVals.length;
         double [] par_complexVals = new double[ length*2 ];

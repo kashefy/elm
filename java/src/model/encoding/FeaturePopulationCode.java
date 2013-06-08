@@ -10,7 +10,12 @@ package model.encoding;
  */
 import model.features.AbstractFeatureMap;
 import model.utils.*;
+import model.utils.files.FileIO;
 import org.shared.array.*;
+
+import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
+import org.opencv.core.CvType;
 
 public class FeaturePopulationCode extends SimplePopulationCode{
     
@@ -18,19 +23,19 @@ public class FeaturePopulationCode extends SimplePopulationCode{
     ComplexArray [] m_features;
     int [] m_inputDims;
     int [] m_inputComplexDims;
-    protected double m_min_response_sum_val;
+    protected double m_min_response_sum;
 
     public double get_min_response_sum_val() {
         
-        return m_min_response_sum_val;
+        return m_min_response_sum;
     }
 
     public void set_min_response_sum_val(double par_min_response_sum_val) {
         
-        this.m_min_response_sum_val = par_min_response_sum_val;
+        this.m_min_response_sum = par_min_response_sum_val;
     }
     
-    private double[] extractFeatures(double[] par_inputVals){
+    private double[] extract_features(double[] par_inputVals){
 
         // each variable xk is associated
         // with n yi values. n is determined by fanOut value
@@ -38,61 +43,36 @@ public class FeaturePopulationCode extends SimplePopulationCode{
         
         // input Vals -> complex valued stimulus -> response/features
         ComplexArray stimulus;
-        double [] stimulusComplexVals = ModelUtils.prepRealValuesForComplex(par_inputVals);
-        stimulus = new ComplexArray(stimulusComplexVals,m_inputComplexDims); // works for N-D input
+        double [] stimulusComplexVals = ModelUtils.real2Complex(par_inputVals);
+        stimulus = new ComplexArray(stimulusComplexVals, m_inputComplexDims); // works for N-D input
         //m_features =  m_featureMap.convolve(stimulus);
         m_featureMap.setStimulus(stimulus);
         m_features =  m_featureMap.convolve();
-        
-        int i=0;
-        
-        int nofFeatureSets = m_features.length;
+        int nof_features = m_features.length;
         
         ComplexArray complexFeatureElements;
         RealArray realFeatureElements;
-        int [] featureDims = m_features[0].dims();
-        int nofRows = featureDims[0];
-        int nofCols = featureDims[1];
-        int complexDim = featureDims[2];
-        int [] elementRealIndex, elementImagIndex, elementMagnIndex;
-        double elementReal, elementImag, elementMagn; 
-        double [] elementFeatures;
+        int [] feat_dims = m_features[0].dims(); // assumes same equal dims accross features // revise for different scales
+        int nof_rows = feat_dims[0];
+        int nof_cols = feat_dims[1];
              
-        for(int r=0; r<nofRows; ++r){
+        for(int r=0; r<nof_rows; ++r){
 
-            int rowOffset = r*nofCols;
-            for(int c=0; c<nofCols; ++c){
+            int row_offset = r*nof_cols;
+            for(int c=0; c<nof_cols; ++c){
 
-                //elementRealIndex = new int[]{r,c,0};
-                //elementImagIndex = new int[]{r,c,1};
-                elementMagnIndex = new int[]{r, c};
+                int [] elementMagnIndex = new int[]{r, c};
+                int pos_offset = (row_offset + c)*nof_features;
 
-                elementFeatures = new double[ nofFeatureSets ];
-                
-                int posOffset = (rowOffset + c)*nofFeatureSets;
+                for(int fi=0; fi<nof_features; ++fi){
 
-                for(int fi=0; fi<nofFeatureSets; ++fi){
-
-                    // get real and imaginary response components separately
-                    //featureElements = m_features[ fi ];
-                    //elementReal = featureElements.get(elementRealIndex);
-                    //elementImag = featureElements.get(elementImagIndex);
-                    
                     // get response magnitude
                     realFeatureElements = m_features[ fi ].torAbs();
-                    elementMagn = realFeatureElements.get(elementMagnIndex);
-                    
-                    elementFeatures[ fi ] = elementMagn;    
-                    features[ posOffset + fi ] = elementMagn;
+                    double element_mag = realFeatureElements.get(elementMagnIndex);
+                    features[ pos_offset + fi ] = element_mag;
                 }
             }
         }
-        
-//        if (m_biasIndex >=0 && par_inputVals.length*nofFeatureSets+1 == m_nofNodes){
-//
-//            features[ m_biasIndex ] = 1; // bias term
-//        }
-
         return features;
     }
     
@@ -103,60 +83,28 @@ public class FeaturePopulationCode extends SimplePopulationCode{
     public double[] calcStateOfNeuronsDistr(double[] par_inputVals) 
     {
         // each variable xk is associated
-        // with n yi values. n is determined by fanOut value
-        double[] stateOfNeuronsDistrVals = new double[ m_nofNodes ];
+        // with n*yi values. n is determined by fanOut value
+        double [] state_of_neurons_distr_vals = new double[ m_nofNodes ];
+        double [] features = extract_features(par_inputVals);
         
-        double[] features = extractFeatures(par_inputVals);
+        RealArray x = new RealArray(features, features.length);
+        x.uMul(1./x.aMax()); // this will directly manipulate double [] features
         
-        int nofFeatureSets = m_features.length;
-        double [] elementFeatures = new double[ nofFeatureSets ];
-        double [] no_response = new double[ nofFeatureSets ];
-             
-        for(int i=0; i<m_nofNodes; i+=nofFeatureSets){
+        double [] element_features = new double[ m_features.length ];
+        for(int i=0; i<m_nofNodes; i+=m_features.length){
 
-            System.arraycopy(features, i, elementFeatures, 0, nofFeatureSets);
-            //System.arraycopy(features, t, stateOfNeuronsDistrVals, t, nofFeatureSets);
-            
-//                        if(i==2958){
-//                            System.out.println();  
-//                 for(int fi=0; fi<nofFeatureSets; fi++){
-//
-//                    System.out.print(elementFeatures[ fi ] +" ");    
-//
-//                }                     
-//                System.out.println();    
-//                
-//            }
-            double [] singleDistr;
-            RealArray elementFeaturesV = new RealArray(elementFeatures, nofFeatureSets);
-            double elementFeaturesV_sum = elementFeaturesV.aSum();
-            if( elementFeaturesV_sum < m_min_response_sum_val ) {
-                // no significant response to any feature 
-                singleDistr = no_response;
+            System.arraycopy(features, i, element_features, 0, m_features.length);
+            double elementFeaturesV_sum = new RealArray(element_features, m_features.length).aSum();
+            if( elementFeaturesV_sum >= m_min_response_sum ) {
+                // significant response to any feature?
+                double [] element_distr_vals = eval_distr(element_features);
+                System.arraycopy(element_distr_vals, 0, state_of_neurons_distr_vals, i, m_features.length);
             }
-            else{
-                singleDistr = evalDistr(elementFeatures);
-            }
-            System.arraycopy(singleDistr, 0, stateOfNeuronsDistrVals, i, nofFeatureSets);
-//            if(t==2958){
-//                        
-//                System.out.println();
-//                for(int fi=0; fi<nofFeatureSets; fi++){
-//                    System.out.print(elementFeatures[fi]+" ");
-//                }
-//                System.out.println();
-//                System.out.print("r: ");
-//                evalDistr(elementFeatures);
-//
-//                System.out.print("e: ");
-//                for(int j=0; j<50; j++){
-//                        int m = encodeViaProb(elementFeatures, new double[nofFeatureSets]);
-//                        System.out.print(m+ " ");
-//                }
-//                System.out.println();
-//            }
         }
-        return stateOfNeuronsDistrVals;
+//        FileIO.saveArrayToCSV(par_inputVals, 1, par_inputVals.length, "./x/di.csv");
+//        FileIO.saveArrayToCSV(features, 1, features.length, "./x/df.csv");
+//        FileIO.saveArrayToCSV(state_of_neurons_distr_vals, 1, state_of_neurons_distr_vals.length, "./x/d.csv");
+        return state_of_neurons_distr_vals;
     }
     
     /*
@@ -171,7 +119,7 @@ public class FeaturePopulationCode extends SimplePopulationCode{
         
         // input Vals -> complex valued stimulus -> response/features
         ComplexArray stimulus;
-        double [] stimulusComplexVals = ModelUtils.prepRealValuesForComplex(par_inputVals);
+        double [] stimulusComplexVals = ModelUtils.real2Complex(par_inputVals);
         stimulus = new ComplexArray(stimulusComplexVals,m_inputComplexDims); // works for N-D input
         //m_features =  m_featureMap.convolve(stimulus);
         m_featureMap.setStimulus(stimulus);
@@ -195,19 +143,11 @@ public class FeaturePopulationCode extends SimplePopulationCode{
 
             int rowOffset = r*nofCols;
             for(int c=0; c<nofCols; ++c){
-
-                //elementRealIndex = new int[]{r,c,0};
-                //elementImagIndex = new int[]{r,c,1};
+                
                 elementMagnIndex = new int[]{r, c};
-
                 elementFeatures = new double[ nofFeatureSets ];
 
                 for(int featSetIndex=0; featSetIndex<nofFeatureSets; featSetIndex++){
-
-                    // get real and imaginary response components separately
-                    //featureElements = m_features[ fi ];
-                    //elementReal = featureElements.get(elementRealIndex);
-                    //elementImag = featureElements.get(elementImagIndex);
                     
                     // get response magnitude
                     realFeatureElements = m_features[ featSetIndex ].torAbs();
@@ -218,20 +158,7 @@ public class FeaturePopulationCode extends SimplePopulationCode{
                
                 double [] elementPopCode = new double[ nofFeatureSets ];
                 int maxIndex = encode(elementFeatures, elementPopCode);
-//                for(int z=0;z<elementFeatures.length;z++){
-//                    System.out.print(elementFeatures[z]+" ");
-//                }
-//                System.out.println();
-//                for(int z=0;z<elementPopCode.length;z++){
-//                    System.out.print(elementPopCode[z]+" ");
-//                }
-//                System.out.println();
-                
-//                // General case: store popCode into stateVal by array copy
 //                //i=(a * B * C) + (b * C) + (c * 1)
-//                t = nofFeatureSets*(rowOffset + c);
-//                //System.out.println(t+" "+maxIndex);
-//                System.arraycopy(elementPopCode, 0, stateVals, rowOffset + c*nofFeatureSets, elementPopCode.length);
                 
                 // Specific case when we have a single 1 for each pop Code, we can perform fewer array access operations
                 i = nofFeatureSets*(rowOffset + c) + maxIndex;
@@ -242,20 +169,12 @@ public class FeaturePopulationCode extends SimplePopulationCode{
                 if (elementFeatures[maxIndex] > 0.1);
                     stateVals[i] += 1;
             }
-            
         }
         
         if (m_biasIndex >=0 && par_inputVals.length*nofFeatureSets+1 == m_nofNodes){
             
             stateVals[ m_biasIndex ] = 1; // bias term
         }
-        
-//        System.out.println("pop");
-//        for(t=0; t<stateVals.length; t++){
-//            if(t<stateVals.length-1)
-//                System.out.print(stateVals[t]+", ");
-//        }
-//        System.out.println();
 
         return stateVals;
     }
@@ -264,65 +183,26 @@ public class FeaturePopulationCode extends SimplePopulationCode{
     public int [][] sampleStateOfNeurons(double [] par_arrInputDistr, int par_nofSamples){
         // each variable xk is associated
         // with n yi values. n is determined by fanOut value
+        
         int[][] stateSamples = new int[ m_nofNodes ][ par_nofSamples ];
         int nofFeatureSets = m_features.length;
         double [] distr = new double[ nofFeatureSets ];
-        int [] samplesSubset_allZero = new int[ nofFeatureSets ];
-   
+        
+        //FileIO.saveArrayToCSV(par_arrInputDistr, 1, par_arrInputDistr.length, "./x/dprs.csv");
         for(int i=0; i<m_nofNodes; i+=nofFeatureSets){
             
             System.arraycopy(par_arrInputDistr, i, distr, 0, nofFeatureSets);
-            
-//            if(i==2958){
-//                 for(int fi=0; fi<nofFeatureSets; fi++){
-//
-//                    System.out.print(distr[ fi ] +" ");    
-//
-//                }                     
-//                System.out.println();    
-//                
-//            }
-            int [] samplesSubset;
             RealArray distrV = new RealArray(distr, nofFeatureSets);
             double distrV_sumOfAbs = distrV.uAbs().aSum(); // = 0.0 for non-responsive to any feature
-            if( distrV_sumOfAbs > 0.0 ){
+            if(distrV_sumOfAbs > 0.0){
             
-                samplesSubset = sample(distr, par_nofSamples);
+                int [] samples_subset = sample(distr, par_nofSamples);
                 for(int j=0; j<par_nofSamples; ++j){
-                
-                    stateSamples[ i + samplesSubset[j] ][j] = 1;
-                
-//                if(i==2958){
-//                    System.out.print(samplesSubset[j]+" ");    
-//                }
+                    stateSamples[ i + samples_subset[j] ][j] = 1;
                 }   
             }
         }
-                //double [] elementPopCode = new double[ nofFeatureSets ];
-                //int maxIndex = encode(elementFeatures, elementPopCode);
-//                for(int z=0;z<elementFeatures.length;z++){
-//                    System.out.print(elementFeatures[z]+" ");
-//                }
-//                System.out.println();
-//                for(int z=0;z<elementPopCode.length;z++){
-//                    System.out.print(elementPopCode[z]+" ");
-//                }
-//                System.out.println();
-                
-//                // General case: store popCode into stateVal by array copy
-//                //i=(a * B * C) + (b * C) + (c * 1)
-//                t = nofFeatureSets*(rowOffset + c);
-//                //System.out.println(t+" "+maxIndex);
-//                System.arraycopy(elementPopCode, 0, stateVals, rowOffset + c*nofFeatureSets, elementPopCode.length);
-                
-                // Specific case when we have a single 1 for each pop Code, we can perform fewer array access operations
-//                t = nofFeatureSets*(rowOffset + c) + maxIndex;
-//                // readjust index to account for bias term if any
-//                if(m_biasIndex <= t && m_biasIndex >= 0){
-//                    t++;
-//                }
-//                if (elementFeatures[maxIndex] > 0.1);
-//                    stateVals[t] += 1;
+        //FileIO.saveArrayToCSV(stateSamples, ".\\x\\sp.csv");
         return stateSamples;
     }
     
@@ -390,45 +270,43 @@ public class FeaturePopulationCode extends SimplePopulationCode{
                 maxVal = candidate;
                 maxIndex = j;
             }
-            
-            // don't need to set zero values, can assume they are already set to zero.
-            // when created, arrays are automatically initialized with the default value of their type 
-            // popCode[ j ] = 0.0;
         }
         popCode[ maxIndex ] = 1.0;
         return maxIndex;
     }
     
-    private static double [] evalDistr(double [] par_inputs){
+    private static double [] eval_distr(double [] par_inputs){
         
-        int nofInputs = par_inputs.length;
-        double [] inputs = new double[ nofInputs ];
-        System.arraycopy(par_inputs, 0, inputs, 0, nofInputs);
+        int n = par_inputs.length;
+        double [] inputs = new double[n];
+        System.arraycopy(par_inputs, 0, inputs, 0, n);
         
-        RealArray softMax = new RealArray(inputs,nofInputs); 
-        softMax = softMax.uExp();      // to handle negative and zero values 
-        softMax = softMax.uPow(10);    // to suppress values < 1.0
-        //softMax = softMax.uAdd(1.0);   // to handle zero values   
-        double sum = softMax.aSum();
+        RealArray soft_max = new RealArray(inputs, n);
         
-        softMax = softMax.uMul(1.0/sum);  
+        soft_max = soft_max.uMul(1./soft_max.aSum());
+        soft_max = soft_max.uExp();      // to handle negative and zero values 
+        soft_max = soft_max.uPow(10);    // to suppress values < 1.0
+        //soft_max = soft_max.uAdd(1.0);   // to handle zero values   
+        double sum = soft_max.aSum();
+        
+        soft_max = soft_max.uMul(1./sum);  
             
-        return softMax.values();
+        return soft_max.values();
     }
     
-    private static int [] sample(double [] par_distribution, int nofSamples){
+    private static int [] sample(double [] par_distribution, int nof_samples){
               
-        int [] samples = new int [ nofSamples ];
+        int [] samples = new int [ nof_samples ];
         double [] p = ModelUtils.cumulativeSum(par_distribution);
         
 //        for(int j=0; j<nofInputs; j++){
 //            
-//            System.out.print(softMax.values()[j] + " ");
+//            System.out.print(soft_max.values()[j] + " ");
 //
 //        }
 //        System.out.println();
         
-        for(int t=0; t<nofSamples; ++t){
+        for(int t=0; t<nof_samples; ++t){
             
             double r = StdRandom.uniform();
             int j=0;
@@ -460,7 +338,7 @@ public class FeaturePopulationCode extends SimplePopulationCode{
         
 //        for(int j=0; j<nofInputs; j++){
 //            
-//            System.out.print(softMax.values()[j] + " ");
+//            System.out.print(soft_max.values()[j] + " ");
 //
 //        }
 //        System.out.println();
@@ -512,6 +390,6 @@ public class FeaturePopulationCode extends SimplePopulationCode{
     
     public FeaturePopulationCode(){
         
-        m_min_response_sum_val = Double.NEGATIVE_INFINITY;
+        m_min_response_sum = 3e-0;//Double.NEGATIVE_INFINITY;
     }
 }

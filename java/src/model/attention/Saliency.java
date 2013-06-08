@@ -40,6 +40,8 @@ public class Saliency extends AbstractSaliencyMeasure{
     RealArray m_orientDistsVarNorm;
     RealArray m_arrResponseIntensContrastRect_0;
     
+    double [] m_orient_pop_code_vals;
+    
     @Override
     public void setParams(SaliencyParams par_params){
         
@@ -74,26 +76,20 @@ public class Saliency extends AbstractSaliencyMeasure{
     }
     
     @Override
-    public void eval(double [] par_inputVals){
+    public void eval(double [] par_input_vals){
 
-        double [] stimulusValsComplex;
-         stimulusValsComplex = ModelUtils.prepRealValuesForComplex(par_inputVals);
-        int [] dimsComplex = new int[]{m_nofRows, m_nofCols, 2};
-        ComplexArray stimulus = new ComplexArray(stimulusValsComplex, dimsComplex);
-        
+        ComplexArray stimulus = new ComplexArray(ModelUtils.real2Complex(par_input_vals), new int[]{m_nofRows, m_nofCols, 2});
         m_saliency = new RealArray(m_nofRows, m_nofCols);
         
         // orientation
-        double [] popCodeStateValsDistr;
-        popCodeStateValsDistr = m_featPopCoder.calcStateOfNeuronsDistr(par_inputVals);
-        int [][] spikeTrains;
+        m_orient_pop_code_vals = m_featPopCoder.calcStateOfNeuronsDistr(par_input_vals);
         int nofSamples = 1;
-        spikeTrains = m_featPopCoder.sampleStateOfNeurons(popCodeStateValsDistr, nofSamples);
-        int nof_pixels = par_inputVals.length;
-        double [] orientVals = new double [ nof_pixels ];
+        int [][] spike_trains = m_featPopCoder.sampleStateOfNeurons(m_orient_pop_code_vals, nofSamples);
+        int nof_pixels = par_input_vals.length;
+        double [] orient_vals = new double [ nof_pixels ];
         double [] orientResponseVals = new double [ nof_pixels ];
         int nofOrientations = m_arrFeatMaps[ FEAT_MAP_INDEX_ORIENT ].getNofFeatureSets();
-        double orientResolution = 180.0/(double)nofOrientations;
+        double orient_resolution = 180./(double)nofOrientations;
         int j=0;
         for(int i=0; i<nof_pixels; ++i){
             
@@ -101,15 +97,15 @@ public class Saliency extends AbstractSaliencyMeasure{
             boolean b_found_spike = false;
             for(int featIndex = 0; featIndex < nofOrientations && !b_found_spike; ++featIndex){
                 
-                b_found_spike = spikeTrains[ nodeOffset + featIndex ][ nofSamples-1 ] == 1;
+                b_found_spike = spike_trains[ nodeOffset + featIndex ][ nofSamples-1 ] == 1;
                 if(b_found_spike){
-                    orientVals[i] = featIndex*orientResolution;
-                    orientResponseVals[i] = popCodeStateValsDistr[  nodeOffset + featIndex ];
+                    orient_vals[i] = featIndex*orient_resolution;
+                    orientResponseVals[i] = m_orient_pop_code_vals[  nodeOffset + featIndex ];
                 }
             }
         }
         
-        RealArray orients = new RealArray(orientVals,m_nofRows, m_nofCols);
+        RealArray orients = new RealArray(orient_vals,m_nofRows, m_nofCols);
         RealArray orientDists = OrientationMap.calcNeighOrientDist(orients, 3);
         RealArray orientDistsVar = ModelUtils.calcNeighVar(orientDists, 3);
         RealArray orientDistsVarNorm = ModelUtils.normalizeMm(orientDistsVar, 3, 1.0);
@@ -144,12 +140,12 @@ public class Saliency extends AbstractSaliencyMeasure{
         
         m_saliencyDistr.evalDistr(m_saliency.values());
 
-        // for later saveing
+        // for later saving
         m_orientDistsVarNorm = orientDistsVarNorm;
         m_arrResponseIntensContrastRect_0 = arrResponseIntensContrastRect[0];
         //String strOutputPath = "C:\\Users\\woodstock\\Documents\\grad\\Thesis\\code\\sem\\java\\data\\output\\MNIST\\filterResponse\\";
         
-        //FileIO.saveArrayToCSV(par_inputVals, m_nofRows, m_nofCols, strOutputPath + "stimRe.csv");
+        //FileIO.saveArrayToCSV(par_input_vals, m_nofRows, m_nofCols, strOutputPath + "stimRe.csv");
         //FileIO.saveArrayToCSV(orientDistsVarNorm.values(), m_nofRows, m_nofCols, strOutputPath + "orientDistsVarNorm.csv");
         //FileIO.saveArrayToCSV(arrResponseIntensContrastRect[0].values(), m_nofRows, m_nofCols, strOutputPath + "intens.csv");
         //FileIO.saveArrayToCSV(m_saliency.values(), m_nofRows, m_nofCols, strOutputPath + "saliency.csv");
@@ -200,9 +196,20 @@ public class Saliency extends AbstractSaliencyMeasure{
             FileIO.saveArrayToCSV(m_orientDistsVarNorm.values(), m_nofRows, m_nofCols, new File(output_dir, "orientDistsVarNorm.csv").getPath());
             FileIO.saveArrayToCSV(m_arrResponseIntensContrastRect_0.values(), m_nofRows, m_nofCols, new File(output_dir, "intens.csv").getPath());
             FileIO.saveArrayToCSV(m_saliency.values(), m_nofRows, m_nofCols, new File(output_dir, "saliency.csv").getPath());
+            
+            FileIO.saveArrayToImg(m_orientDistsVarNorm.values(), m_nofCols, m_nofRows, new File(output_dir, "orientDistsVarNorm.png").getPath());
+            FileIO.saveArrayToImg(m_arrResponseIntensContrastRect_0.values(), m_nofCols, m_nofRows, new File(output_dir, "intens.png").getPath());
+            FileIO.saveArrayToImg(m_saliency.values(), m_nofCols, m_nofRows, new File(output_dir, "saliency.png").getPath());
         }
         else{
             System.err.println(par_strPath + " is not a directory.");
         }
+    }
+
+    public double[] get_orient_pop_code_vals(){
+        
+        double [] arr_to_export = new double[m_orient_pop_code_vals.length];
+        System.arraycopy(m_orient_pop_code_vals, 0, arr_to_export, 0, m_orient_pop_code_vals.length);
+        return arr_to_export;
     }
 }
