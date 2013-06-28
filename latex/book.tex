@@ -97,7 +97,9 @@ extending SEM by learning features such as orientations
 
 \section{extend SEM. feature layer}
 
-extending SEM by learning features
+\paragraph extending SEM by learning features
+
+\paragraph We have seen the computational power of the SEM model as an unsupervised method for identifying hidden causes. So far the hidden causes have been used synonymously with predefined classes (e.g. digits\cite{LeCun1998}). We will extend the SEM model in a way that breaks this assumption. We will insert an additional WTA circuit, that will be responsible for learning hidden causes that depict abstract features of the object we're attempting to detect and recognize. This feature layer will contribute to the bottom-up learning as we expose it to the low-level input and and have it drive the WTA circuit already encountered in the original SEM architecture. With this additional feature-WTA circuit introduced we no longer require presentation of the entire stimulus but will restrict stimulus presentation to subregions within the space of a stimulus. These subregions may represent salient regions within of a stimulus. The definition and method of selecting these subregions will be discussed in more detail as we discusss the object detection framework.  
 
 \part{Object detection}
 
