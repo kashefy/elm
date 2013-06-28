@@ -354,8 +354,8 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         ModelPredictionTest.saveWeights(new File( m_params.getMainOutputDir(), "weights_layerF.csv" ).getPath(), m_arrZNeurons_layerF);
         ModelPredictionTest.saveBiases(new File( m_params.getMainOutputDir(), "biases_layerF.csv" ).getPath(), m_arrZNeurons_layerF);
         
-        ModelPredictionTest.saveWeights(new File( m_params.getMainOutputDir(), "weights.csv" ).getPath(), m_arrZNeurons);
-        ModelPredictionTest.saveBiases(new File( m_params.getMainOutputDir(), "biases.csv" ).getPath(), m_arrZNeurons);
+        ModelPredictionTest.saveWeights(new File( m_params.getMainOutputDir(), "weights_layerZ.csv" ).getPath(), m_arrZNeurons);
+        ModelPredictionTest.saveBiases(new File( m_params.getMainOutputDir(), "biases_layerZ.csv" ).getPath(), m_arrZNeurons);
         
         respsonse_1D_logger_layerZ.flush();
         respsonse_logger_layerF.flush();
@@ -428,11 +428,11 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         
         // membranePotential_layerF : nofZ,nofstimuli,nofAttentios,durationOfSpikeTrain Y for each stimulus per F
         //double [][][][] arr_membranePotential_layerF = new double [ m_nofLearners_layerF ][ nofStimuli ][ m_nofAttentions ][ m_nof_responses_per_window_y2f ] ;
-        int [][][] arrResponse_layerF = new int [ nofStimuli ][ m_nofAttentions ][ m_nof_responses_per_window_y2f ];
+        //int [][][] arrResponse_layerF = new int [ nofStimuli ][ m_nofAttentions ][ m_nof_responses_per_window_y2f ];
         
         // membrane_pot_layerZ : nofZ,nofstimuli,durationOfSpikeTrain F for each stimulus per Z
-        double [][] membrane_pot_layerZ = new double [ m_nofLearners_layerZ ][ nofStimuli*m_nof_responses_per_stimulus_f2Z ] ;
-        int [][] arrResponse_layerZ = new int [ nofStimuli ][ m_nof_responses_per_stimulus_f2Z ];
+        //double [][] membrane_pot_layerZ = new double [ m_nofLearners_layerZ ][ nofStimuli*m_nof_responses_per_stimulus_f2Z ] ;
+        //int [][] arrResponse_layerZ = new int [ nofStimuli ][ m_nof_responses_per_stimulus_f2Z ];
         
         int noWinnerCount_layerF = 0;
         int noWinnerCount_layerZ = 0;
@@ -540,7 +540,7 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                         }
                     }
                     ModelUtils.insert_column(spikes_atT_out, spikes_f_per_stimulus, yti);
-                    arrResponse_layerF[ relSi ][ai][ yti ] = wta_response_layerF;
+                    //arrResponse_layerF[ relSi ][ai][ yti ] = wta_response_layerF;
                 }
             }
 
@@ -559,7 +559,7 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                 for(int li=0; li<m_nofLearners_layerZ; ++li){
 
                     double membranePotential_layerZ = m_arrZNeurons[li].predict( spikes_atT_in );
-                    membrane_pot_layerZ[li][ relSi*m_nof_responses_per_stimulus_f2Z+ft ] = membranePotential_layerZ;
+                    //membrane_pot_layerZ[li][ relSi*m_nof_responses_per_stimulus_f2Z+ft ] = membranePotential_layerZ;
                 }
 
                 // let Z neurons compete
@@ -587,7 +587,7 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
                 else{
                     noWinnerCount_layerZ++;
                 }
-                arrResponse_layerZ[ relSi ][ ft ] = wta_response;
+                //arrResponse_layerZ[ relSi ][ ft ] = wta_response;
             }
         }    
 
@@ -604,8 +604,8 @@ public class SimulationMNIST_layerF_onOff_loadF_indepLayer extends SimulationMNI
         ModelPredictionTest.saveMasks( new File(m_params.getMainOutputDir(), "masksLearners_layerZ.csv").getPath(), arr_activity_mask_layerZ );
 
         //ModelPredictionTest.saveResponses(m_params.getMainOutputDir()+"response_layerF.csv", arrResponse_layerF); 
-        ModelPredictionTest.saveResponses(new File(m_params.getMainOutputDir(),"response_layerZ_test.csv").getPath(), arrResponse_layerZ);    
-        FileIO.saveArrayToCSV(membrane_pot_layerZ, new File(m_params.getMainOutputDir(),"membrane_pot_layerZ.csv").getPath());
+        //ModelPredictionTest.saveResponses(new File(m_params.getMainOutputDir(),"response_layerZ_test.csv").getPath(), arrResponse_layerZ);    
+        //FileIO.saveArrayToCSV(membrane_pot_layerZ, new File(m_params.getMainOutputDir(),"membrane_pot_layerZ.csv").getPath());
         
         System.out.println("test set size: "+m_params.getNofTestStimuli());
         
