@@ -1,42 +1,13 @@
-%% Based on a TeXnicCenter-Template by Gyorgy SZEIDL.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{report}
 
-%----------------------------------------------------------
-%
-\documentclass{report}%
-%
-%----------------------------------------------------------
-% This is a sample document for the standard LaTeX Book Class
-% Class options
-%       --  Body text point size:
-%                        10pt (default), 11pt, 12pt
-%       --  Paper size:  letterpaper (8.5x11 inch, default)
-%                        a4paper, a5paper, b5paper,
-%                        legalpaper, executivepaper
-%       --  Orientation (portrait is the default):
-%                        landscape
-%       --  Printside:   oneside, twoside (default)
-%       --  Quality:     final(default), draft
-%       --  Title page:  titlepage, notitlepage
-%       --  Columns:     onecolumn (default), twocolumn
-%       --  Start chapter on left:
-%                        openright(no, default), openany
-%       --  Equation numbering (equation numbers on right is the default):
-%                        leqno
-%       --  Displayed equations (centered is the default):
-%                        fleqn (flush left)
-%       --  Open bibliography style (closed bibliography is the default):
-%                        openbib
-% For instance the command
-%          \documentclass[a4paper,12pt,reqno]{book}
-% ensures that the paper size is a4, fonts are typeset at the size 12p
-% and the equation numbers are on the right side.
-%
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{graphicx}
+
+\graphicspath{ {./figures/} }
+
 \begin{document}
 
-%\frontmatter
 \title{Scale- and Translation-Invariant Unsupervised Learning of Hidden Causes Using Spiking Neurons with Top-Down Attention}
 \author{Youssef Kashef}
 \date{7. August 2013}
@@ -45,53 +16,69 @@
 
 \chapter{Abstract}
 
-Nessler et al have demonstrated the ability of a spiking neuronal network governed by spike-timing-dependent-plasticity and a stochastic winner-take-all circuit to learn and predict causes from visual input. We aim to increase the computational power of the existing network through invariance to translation and scale. The visual system of the brain masters the recognition of objects wherever they appear in the visual scene and regardless of scale, orientation or even with partial occlusions. It achieves this through attention. Therefore, we turn to the pool of literature on modeling visual attention systems inspired from the brain. The architecture of the extended model is composed of the existing recognition module whose response modulates the attention module to be constructed in a top-down manner. This modulation will allow the attention module to alter the input window exposed for recognition. Attention is modeled as a network measuring for saliency in a scene by feature extraction with the use of hierarchies. The design and development of this extended model to achieve the required invariance using processes that approximate their biological counterparts is presented. Emphasis is put on making these approximations through computationally economic implementations. Evaluation of the model is based on its performance in a set of experiments as well as its computational efficiency. Experiments are constructed to scrutinize the behavior of the model, its ability to converge onto a sight within a scene that enables recognition. Artificial as well as natural images are used to further reveal the capabilities and limitations of our approach.
+Nessler et al. have demonstrated the ability of a spiking neuronal network governed by spike-timing-dependent-plasticity (STDP) and a stochastic winner-take-all (WTA) circuit to learn and predict causes from visual input. We aim to increase the computational power of the existing network through invariance to translation and scale. The visual system of the brain masters the recognition of objects wherever they appear in the visual scene and regardless of scale, orientation or even with partial occlusions. It achieves this through attention. Therefore, we turn to the pool of literature on modeling visual attention systems inspired from the brain. The architecture of the extended model is composed of the existing recognition module whose response modulates the attention module to be constructed in a top-down manner. This modulation will allow the attention module to alter the input window exposed for recognition. Attention is modeled as a network measuring for saliency in a scene by feature extraction with the use of hierarchies. The design and development of this extended model to achieve the required invariance using processes that approximate their biological counterparts is presented. Emphasis is put on making these approximations through computationally economic implementations. Evaluation of the model is based on its performance in a set of experiments as well as its computational efficiency. Experiments are constructed to scrutinize the behavior of the model, its ability to converge onto a sight within a scene that enables recognition. Artificial as well as natural images are used to further reveal the capabilities and limitations of our approach.
 
 \chapter{Introduction}
 
 elaborated abstract with references.......\cite{Nessler2010}
 
-%\mainmatter
+\chapter{Object Recognition with Spike-based Expectation Maximization}
 
-\chapter{Object Recognition with Spike Expectation Maximization}
-
-\section{Spike Expectation Maximization}
+\section{Spike-based Expectation Maximization}
 
 Literature review of existing SEM model
 
-Nessler et. al have articulated a bayesian model of how the brain analyszes sensory stimuli. The model demostrates the learning of hidden causes in visual stimuli emerging through by identifying correlations of a winner-take-all (WTA) network of spiking neurons that are activated continuously in the presence of their preferred stimulus. The model demonstrates utilizing Spike Time Dependent Plasticity (STDP) in WTA circuits as an approximation of Expectation Maximization. 
+Nessler et. al have articulated a model of bayesian modules of how the brain analyzes sensory stimuli. The model demostrates the learning of hidden causes in visual stimuli emerging through correlations in a stochasitc soft winner-take-all (WTA) network of spiking neurons activated continuously in the presence of their preferred stimulus \cite{Nessler2010}. It utilizes spike-timing-dependent-plasticity (STDP) in WTA circuits as an approximation of Expectation Maximization \cite{Nessler2013}. This model forms the basis of the presented work.
+
+More emphasis will be put on how the WTA circuit in the SEM model, used as our main building block, is constructed. It comprises of a feed-forward single layer spiking neural network. The input layer is made out of spiking nodes whose firing activity is governed  by a poisson process. External vvariables undergo a population coding that determine the modality of the poisson process. In the example offered by Nessler. The external variables are intensity values (pixels) form a static visual stimulus (image). The population coding polarizes these intensity values into binary on-off states which directly determines the firing probability of the poisson process. A spiking neuron is assigned to encode each state of the population code generate for each pixel. The firing rate of these neurons will be proportional to the state of the node in the population code. 
 
 \section{SEM for learning features}
 
 \subsection{Extending SEM by learning orientations}
 
-The current encoding of external variables accounts for the intensities of the spatial units (pixels) of a presented stimulus. The encoding of intensities is performed through a population coding by antognistic binary nodes per pixel that drive a poisson process \cite{Nessler2010}. Prallel to these intensity encoded nodes, we add a WTA circuit per pixel that determines the preferred orientation of this node relative to its spatial neighbors. This creates an orientation map of the presented stimulus. Whilst counter-intuitive with traditional learning models, SEM benefits from increasing the dimensionality of its feature space as this increases its resolution for detecting correlations between an output node $z$ and input nodes $y$ on a linear scale. Recalling the use of using population coding to encode in atagonistic (on-node, off-node) fashion, thus letting the WTA learn the likelihood of an input node firing, or not firing, explicitly, as shown by \ref{eqn_corr}.
+The current encoding of external variables accounts for the intensities of the spatial units (pixels) of a presented stimulus. The encoding of intensities is performed through a population coding by antognistic binary nodes per pixel that drive a poisson process \cite{Nessler2010}. Parallel to these intensity encoded nodes, we add a WTA circuit per pixel that determines the preferred orientation of this node relative to its spatial neighbors. This creates an orientation map of the presented stimulus. Whilst counter-intuitive with traditional learning models, SEM benefits from elaborating the dimensionality of WTA
+s feature space as this increases its resolution for detecting correlations between an output node $z$ and input nodes $y$ on a linear scale. Although practically an increase in dimension, which the SEM aims to reduce, it is preferable to describe it as an albaoration of dimensionality since the added dimensions, or nodes, do not carry any new information, but rather refine its representation. Recalling the use of using population coding to encode in atagonistic (on-node, off-node) fashion, thus letting the WTA learn the likelihood of an input node firing, or not firing, explicitly, as shown by \ref{eqn_corr}.
 
 \begin{equation}
 	p(z=1|y) \propto y*p(y=1|z) + (1-y)*p(y=0|z)
 	\label{eqn_corr}
 \end{equation}
 
+where
+\begin{itemize}
+  \item $z$ denotes an output node,
+  \item $y$ denotes an input node
+\end{itemize}
+
 As we introduce the orientation map we may add additional operands to \ref{eqn_corr} to account for the nodes preferred orientation.
 
 \begin{equation}
 	\begin{split}
-		p(z=1|y) \propto &\frac{y_I*p(y_I=1|z) + (1-y_I)*p(y_I=0|z)}{N_o-2} \\
-			&+ \frac{a}{N_o}[y_o*p(y_O=O_i)+(N_O-1)*\sum_{i\neq o_i}p(y_O=o_i)]\\
+		p(z=1|y_I \cup y_O) \propto &y_I*p(y_I=1|z) + (1-y_I)*p(y_I=0|z) \\
+			&+ y_o*p(y_O=O_p|z)+\sum_{i\neq o_i} (1-y_O)p(y_O=o_i|z)\\
 	\end{split}
 	\label{eqn_corr2}
 \end{equation}
 
 where
 \begin{itemize}
-  \item $y_I$ denotes an intensity node,
-  \item $y_I$ denotes an intensity node,
-  \item $N_O$ denotes the number of orientations available,
-  \item $y_O$ denotes an orientation node,
-  \item $O$ denotes the available orientation. Orientations can be defined discretly and arbitrarily (e.g. 30, 60,...180 degrees) or they can be learned \cite{Nessler2010},
+  \item $y_I$ denotes an input intensity node,
+  \item $y_O$ denotes an orientation input node,
+  \item $O$ denotes the set of orientations available. Orientations can be defined discretly and arbitrarily (e.g. 30, 60,...180 degrees) or they can be learned \cite{Nessler2010},
+  \item $O_p$ denotes the preferred orientation
 \end{itemize}
 
-We redesign the network with a cascade of hierarchical WTA circuits. The input layer is a matrix of WTA circuits per spatial. Each input WTA circuit decides on the preferred orientation and intensity of its input. We will experiment with configuring the input WTA circuit to only relay intensity, only orientation, or both information. 
+We redesign the network with a cascade of hierarchical WTA circuits. The input layer is a matrix of WTA circuits per spatial. Each input WTA circuit decides on the preferred orientation and intensity of its input. We will experiment with configuring the input WTA circuit to only relay intensity, only orientation, or both information.
+
+The WTA circuits responsible to determine the preferred orientation from a set of predefined discrete set of orientations for each spatial node are activated by convoling the stimulus with a bank of two-dimensional Gabor filters. The filters are defined with different angular orientations and scales. By comparing the magnitude of responses between the filters at each pixel we can decide on its preferred orientation. It is worth mentioning that talking about the preferred orientation if a pixel would not make a lot of sense. The transfomations do yield responses for each pixel but they only becomes informative in relation to the responses of its neighbors.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{filters_real}
+\caption{Example of Gabor filters (real part). Defined at orientations [0, 150] degrees with 30 degrees increments. \label{fig:filters_real}}
+\end{figure}
+
+Parameterized Gabor functions are an adequate approximation of simple cells in the primary visual cortex \cite{Serre2004}. Daugman demonstrates the construction of a neural network to achieve this transformation \cite{Daugman1988}. However, this work adopts the traditional systems' approach for defining and applying the filters. 
 
 \section{Extending SEM for learning hidden features}
 
@@ -144,8 +131,6 @@ Some text for the second Appendix.
 \chapter{Afterword}
 
 That's all folks!
-
-The back matter often includes one or more of an index, an afterword,
 
 \section{Acknowledgments}
 
