@@ -28,16 +28,16 @@ elaborated abstract with references.......\cite{Nessler2010}
 
 Literature review of existing SEM model
 
-Nessler et. al have articulated a model of bayesian modules of how the brain analyzes sensory stimuli. The model demostrates the learning of hidden causes in visual stimuli emerging through correlations in a stochasitc soft winner-take-all (WTA) network of spiking neurons activated continuously in the presence of their preferred stimulus \cite{Nessler2010}. It utilizes spike-timing-dependent-plasticity (STDP) in WTA circuits as an approximation of Expectation Maximization \cite{Nessler2013}. This model forms the basis of the presented work.
+Nessler et. al articulate a model of bayesian modules of how the brain analyzes sensory stimuli. The model demostrates the learning of hidden causes in visual stimuli emerging through correlations in a stochasitc soft winner-take-all (WTA) network of spiking neurons activated continuously in the presence of their preferred stimulus \cite{Nessler2010}. It utilizes spike-timing-dependent-plasticity (STDP) in WTA circuits as an approximation of Expectation Maximization \cite{Nessler2013}. This model forms the basis of the presented work.
 
-More emphasis will be put on how the WTA circuit in the SEM model, used as our main building block, is constructed. It comprises of a feed-forward single layer spiking neural network. The input layer is made out of spiking nodes whose firing activity is governed  by a poisson process. External vvariables undergo a population coding that determine the modality of the poisson process. In the example offered by Nessler. The external variables are intensity values (pixels) form a static visual stimulus (image). The population coding polarizes these intensity values into binary on-off states which directly determines the firing probability of the poisson process. A spiking neuron is assigned to encode each state of the population code generate for each pixel. The firing rate of these neurons will be proportional to the state of the node in the population code. 
+More emphasis will be put on how the WTA circuit in the SEM model is constructed. This WTA circuit constitutres our main building block. It comprises of a feed-forward single layer spiking neural network. The input layer is made out of spiking nodes whose firing activity is governed  by a poisson process. External variables undergo a population coding that determine the modality of this poisson process. In the example offered by Nessler the external variables are intensity values, pixels, form a static visual stimulus, an image. The population coding polarizes the pixel intensity values into binary on-off states which directly determine the firing probability of the poisson process. A spiking neuron is assigned to encode each state of the population code generated for each pixel. In this case two spiking nodes per pixel. An On-node and an Off-node. The firing rate of these neurons is proportional to the state of the node in the population code.
 
 \section{SEM for learning features}
 
 \subsection{Extending SEM by learning orientations}
 
-The current encoding of external variables accounts for the intensities of the spatial units (pixels) of a presented stimulus. The encoding of intensities is performed through a population coding by antognistic binary nodes per pixel that drive a poisson process \cite{Nessler2010}. Parallel to these intensity encoded nodes, we add a WTA circuit per pixel that determines the preferred orientation of this node relative to its spatial neighbors. This creates an orientation map of the presented stimulus. Whilst counter-intuitive with traditional learning models, SEM benefits from elaborating the dimensionality of WTA
-s feature space as this increases its resolution for detecting correlations between an output node $z$ and input nodes $y$ on a linear scale. Although practically an increase in dimension, which the SEM aims to reduce, it is preferable to describe it as an albaoration of dimensionality since the added dimensions, or nodes, do not carry any new information, but rather refine its representation. Recalling the use of using population coding to encode in atagonistic (on-node, off-node) fashion, thus letting the WTA learn the likelihood of an input node firing, or not firing, explicitly, as shown by \ref{eqn_corr}.
+The current encoding of external variables accounts for the intensities of the spatial units (pixels) of the presented stimulus. The encoding of intensities is performed through a population coding by antognistic binary nodes per pixel that drive a poisson process \cite{Nessler2010}. Parallel to these intensity encoded nodes, we add a WTA circuit per pixel that determines the preferred orientation of this node relative to its spatial neighbors. This creates an orientation map of the presented stimulus. Whilst counter-intuitive with traditional learning models, SEM benefits from elaborating the dimensionality of WTA
+s feature space as this increases its resolution for detecting correlations between an output node $z$ and input nodes $y$ on a linear scale. Since SEM aims to reduce dimensionality, it is preferable to describe it as an elaboration of dimensionality. The added dimensions, or nodes, do not carry new information, but rather refine its representation. Recalling the use of using population coding to encode in atagonistic (On-node, Off-node) fashion, thus letting the WTA learn the likelihood of an input node firing and not firing explicitly, as shown by \ref{eqn_corr}.
 
 \begin{equation}
 	p(z=1|y) \propto y*p(y=1|z) + (1-y)*p(y=0|z)
@@ -50,7 +50,7 @@ where
   \item $y$ denotes an input node
 \end{itemize}
 
-As we introduce the orientation map we may add additional operands to \ref{eqn_corr} to account for the nodes preferred orientation.
+As we introduce the orientation map we may add additional operands to \ref{eqn_corr} to account for the node's preferred orientation.
 
 \begin{equation}
 	\begin{split}
@@ -68,9 +68,9 @@ where
   \item $O_p$ denotes the preferred orientation
 \end{itemize}
 
-We redesign the network with a cascade of hierarchical WTA circuits. The input layer is a matrix of WTA circuits per spatial. Each input WTA circuit decides on the preferred orientation and intensity of its input. We will experiment with configuring the input WTA circuit to only relay intensity, only orientation, or both information.
+We redesign the network with a cascade of hierarchical WTA circuits. The input layer is a matrix of WTA circuits per pixel. Each input WTA circuit decides on the preferred orientation and intensity of its input. We will experiment with configuring the input WTA circuit to only relay intensity, or only orientation, or both information.
 
-The WTA circuits responsible to determine the preferred orientation from a set of predefined discrete set of orientations for each spatial node are activated by convoling the stimulus with a bank of two-dimensional Gabor filters. The filters are defined with different angular orientations and scales. By comparing the magnitude of responses between the filters at each pixel we can decide on its preferred orientation. It is worth mentioning that talking about the preferred orientation if a pixel would not make a lot of sense. The transfomations do yield responses for each pixel but they only becomes informative in relation to the responses of its neighbors.
+The WTA circuits responsible to determine the preferred orientation of all input nodes are activated by convoling the stimulus with a bank of two-dimensional Gabor filters. The filters are defined with different scales and angular orientations from a predefined discrete set. By comparing the magnitude of responses between the filters at each pixel we can decide on the pixel's preferred orientation. Talking about the preferred orientation of a pixel would not actually make a lot of sense. The transfomations do yield responses for each pixel but they only becomes informative in relation to the responses of its neighbors.
 
 \begin{figure}[h]
 \centering
@@ -88,21 +88,13 @@ We have seen the computational power of the SEM model as an unsupervised method 
 
 \chapter{Object detection}
 
-\section{Attention}
+\section{Visual Attention}
 
-Attention is the ability to economize computational power and reduce its entropy. 
+Selective Attention delivers a strategy to economize computational power and reduce its entropy. It' evolutionary motivation comes for the organism's need to detect prey rapidly. Itti et al. propose a framework for attention of interations between bootom-up cues and top-down cues that are task-dependent \cite{Itti2001}. The bottom-up cues are triggered by mechanism for static feature detection and possibly also temporal event detections. Top-down attention may originate from predictive mechanisms that bias selectivity. 
 
-\section{Attention mechanisms}
+\paragraph{}Itti et. al anchor their bottom-up computational model of attention as a saliency search within a visual scene. They demonstrate how attention is achieved in an image based environment. The image is evaluated for conspicuities in features such as illumination, color, texture or other. The feature extraction is pre-attentive. A spatial map of each feature at different spatial scales is inufied into a single conspicuity map for this feature. The conspicutiy maps are combined linearly into a saliency map of the image. The saliency map represents a reconsiliation of the pre-attentive features as the magnitudies need to be normalized before we can can combine them. The saliency map seeds the search to locate visual objects in a scene. The objects can later be processed for recognition with less computational overheads \cite{Itti2000, Itti2001}.
 
-literature reivew of attention mechanisms
-
-\section{Bottom-up Attention}
-
-what we used from Itti's
-
-\section{Top down attention}
-
-describe attempt
+\paragraph{}A computational model of top-down attention is proposed by Baluch et al. The top-down model is described as a mechanism that influences the stimulus drive generated from the familiar bottom-up mechanism. The influences come in the form of feature bias, spatial bias, context or a task being carried out. These same influences can generate an attention field independent of the stimulus drive. The attention field and modulated stimulus drive are multiplied and normalized to yield a response to apply detection on. An analogous top-down attention model is presented that involves a learned approach. A learner is presented with bottom-Up derived features to predict top-down saliency. Top-down saliency is multipled by bottom-saiency to form a unified priority map over the visual space \cite{Baluch2011}.
 
 \chapter{Achieving invariance}
 
