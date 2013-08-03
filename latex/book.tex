@@ -27,31 +27,31 @@ ETH Z{\"u}rich\\
 
 \begin{abstract}
 
-Nessler et al. have demonstrated the ability of a spiking neuronal network governed by spike-timing-dependent-plasticity (STDP) and a stochastic winner-take-all (WTA) circuit to learn and predict causes from visual input. We aim to increase the computational power of the existing network through invariance to translation and scale. The visual system of the brain masters the recognition of objects wherever they appear in the visual scene, regardless of scale, orientation or even with partial occlusions. It achieves this through attention. Therefore, we turn to the pool of literature on modeling visual attention systems inspired from the brain. The architecture of the extended model is composed of the existing recognition module receiving bottom-up input from an attention module. Pre-attentive computations allow the attention module to alter the input window exposed for recognition. Attention is modeled as a network measuring for saliency in a scene by feature extraction with the use of hierarchies. The design and development of this extended model to achieve the required invariance by using processes that approximate their biological counterparts is presented. Emphasis is put on making these approximations through computationally economic implementations. Evaluation of the model is based on its performance and convergence in a set of experiments as well as its computational efficiency. Experiments are constructed to scrutinize the behavior of the model, its ability to converge onto a sight within a scene that enables recognition. Artificial as well as natural images are used to further reveal the capabilities and limitations of our approach. A top-down feedback signal of the recognition module that modulates attention is discussed.
+Nessler et al. have demonstrated the ability of a spiking neuronal network governed by spike-timing-dependent-plasticity (STDP) and a stochastic winner-take-all (WTA) circuit to learn and predict causes from visual input. We aim to increase the computational power of the existing network through invariance to translation and scale. The visual system of the brain masters the recognition of objects wherever they appear in the visual scene, regardless of scale, orientation or even with partial occlusions. It leverages this through attention. Therefore, we turn to the pool of literature on modeling visual attention systems inspired from the brain. The architecture of the extended model is composed of the existing recognition module receiving bottom-up input from an attention module. Pre-attentive computations allow the attention module to alter the input window exposed for recognition. Attention is modeled as a network measuring for saliency in a scene by feature extraction with the use of hierarchies. The design and development of this extended model to achieve the required invariance by using processes that approximate their biological counterparts is presented. Emphasis is put on making these approximations through computationally economic implementations. Evaluation of the model is based on its performance and convergence in a set of experiments as well as its computational efficiency. Experiments are constructed to scrutinize the behavior of the model, its ability to converge onto a sight within a scene that enables recognition. Artificial data as well as images of handwritten digits are used to further reveal the capabilities and limitations of our approach. A top-down feedback signal of the recognition module that modulates attention is discussed.
 
 \end{abstract}
 
 \chapter{Introduction}
 
-\paragraph{}\textbf{Spike-based Expectation Maximization (SEM)} is a model of bayesian modules articulated by Nessler et. al of how the brain analyzes sensory stimuli. The model demostrates the learning of hidden causes in visual stimuli emerging through correlations in a stochasitc soft winner-take-all (WTA) network of spiking neurons. The spiking neurons are activated continuously in the presence of their preferred stimulus \cite{Nessler2010}. Spike-timing-dependent-plasticity (STDP) in WTA circuits defines the learning method for recognizing the hidden causes in the stimulus. The utilizaton of STDP acts as an approximation of traditional Expectation Maximization \cite{Nessler2013}. This model forms the basis of the presented work.
+\paragraph{}\textbf{Spike-based Expectation Maximization (SEM)} is a model of bayesian modules articulated by Nessler et. al of how the brain analyzes sensory stimuli. The model demonstrates the learning of hidden causes in visual stimuli emerging through correlations in a stochastic soft winner-take-all (WTA) network of spiking neurons. The spiking neurons are activated continuously in the presence of their preferred stimulus \cite{Nessler2010}. Spike-timing-dependent-plasticity (STDP) in WTA circuits defines the learning method for recognizing the hidden causes in the stimulus. The utilization of STDP acts as an approximation of traditional Expectation Maximization \cite{Nessler2013}. This model forms the basis of the presented work.
 
-More emphasis will be put on how the WTA circuit in the SEM model is constructed and utilized. This WTA circuit constitutes our main building block. It comprises of a feed-forward single layer spiking neural network. The input layer is made out of spiking nodes whose firing activity is governed  by a poisson process. External variables undergo a population coding that determines the modality of this poisson process. In the example offered by Nessler et al, the external variables are intensity values, pixel values, form a static visual stimulus, an image. The population coding polarizes the pixel intensity values into binary On-Off states which directly determine the firing probability of the poisson process. A spiking neuron is assigned to encode each state of the population code generated for each pixel. In this case, two spiking nodes per pixel. An On-node and an Off-node. The firing rate of these neurons is proportional to the state of the node in the population code \cite{Nessler2010}.
+More emphasis will be put on how the WTA circuit in the SEM model is constructed and utilized. This WTA circuit constitutes our main building block. It comprises of a feed-forward single layer spiking neural network. The input layer is made out of spiking nodes whose firing activity is governed  by a Poisson process. External variables undergo a population coding that determines the modality of this Poisson process. In the example offered by Nessler et al, the external variables are pixel intensity values, form a static visual image stimulus. The population coding polarizes the pixel intensity values into binary On-Off states which directly determine the firing probability of the Poisson process. A spiking neuron is assigned to encode each state of the population code generated for each pixel. In this case, two spiking nodes per pixel. An On-node and an Off-node. The firing rate of these neurons is proportional to the state of the node in the population code \cite{Nessler2010}.
 
-\paragraph{}\textbf{Selective Attention} delivers a strategy to economize computational power and reduce its entropy. Its evolutionary motivation comes for the organism's need to detect prey rapidly. Itti et al. propose a framework for attention involving interactions between bootom-up cues that are stimulus driven and top-down cues that are task-dependent \cite{Itti2001}. The bottom-up cues are triggered by a mechanism for static feature detection and possibly also temporal event detection. Top-down attention may originate from predictive mechanisms that bias selectivity. Top-down cues may also arise from indepdendent motor control \cite{Olshausen1993}.
+\paragraph{}\textbf{Selective Attention} delivers a strategy to economize computational power and reduce its entropy. Its evolutionary motivation comes for the organism's need to detect prey rapidly. Itti et al. propose a framework for attention involving interactions between bottom-up cues that are stimulus driven and top-down cues that are task-dependent \cite{Itti2001}. The bottom-up cues are triggered by a mechanism for static feature detection and possibly also temporal event detection. Top-down attention may originate from predictive mechanisms that bias selectivity. Top-down cues may also arise from independent motor control \cite{Olshausen1993}.
 
-Extending the SEM model with feature-based modules and providing input that is previously filtered by an attention module we demonstrate a reduction in dimensionality, increase in computational efficiency and invariance to scale and translation.
+Extending the SEM model with feature-based modules and providing input that is previously filtered by an attention module we provides a reduction in dimensionality, increase in computational efficiency and invariance to scale and translation.
 
 \chapter{Methods}
 \section{Object Recognition using Spike-based Expectation Maximization}
 
 \subsection{Extending SEM by learning orientations}
 
-The original SEM model is made out of an input layer receiving signals from external variables $x$. Population codes determine the state of a set of spiking neurons $y$ for each node $x$. The spiking pattern of each node $y$ follows a poisson process. Spikes generated from all $y$ neurons serve as input to a WTA circuit of $z$ neurons with weights \textbf{$w$} for each neuron. The $z$ neurons form the output layer. The use of notations $x$, and $z$ is to draw the connection to the Expectation Maximization algorithm that the model approximates. As it tries to maximize $E_p*[log \hspace{5 pt} p(y|\textbf{w})]$ with $q(z|y)=p(z|y,\textbf{w}^{old})$ in the E-Step, where $\textbf{w}^{old}$ is the weight vector for each of the $z$ neurons and replacing \textbf{$w$} with updated weights for the M-step \cite{Nessler2010, Nessler2013, Habenschuss2013}.
-Applied to an example, $x$ variables are pixels from a static image of a handwritten digit. Two $y$ neurons fire antognistically, depending on the intensity level of their associated $X$ node (where $X\in x$). Nurons in the $z$ layer produce a firing pattern that is distinct for to the hidden cause. The handwritten digits can be categorized into distinct classes and we see that the SEM can produce a unique firing pattern for each class through unsupervised learning \cite{Nessler2010}. 
+The original SEM model is made out of an input layer receiving signals from external variables $x$. Population codes determine the state of a set of spiking neurons $y$ for each node $x$. The spiking pattern of each node $y$ follows a Poisson process. Spikes generated from all $y$ neurons serve as input to a WTA circuit of $z$ neurons with weights $\textbf{w}$ for each neuron. The $z$ neurons form the output layer. The use of notations $x$, and $z$ is to draw the connection to the Expectation Maximization algorithm that the model approximates. As it tries to maximize $E_p*[log \hspace{5 pt} p(y|\textbf{w})]$ with $q(z|y)=p(z|y,\textbf{w}^{old})$ in the E-Step, where $\textbf{w}^{old}$ is the weight vector for each of the $z$ neurons and replacing $\textbf{w}$ with updated weights for the M-step \cite{Nessler2010, Nessler2013, Habenschuss2013}.
+Applied to an example, $x$ variables are pixels from a static image of a handwritten digit. Two $y$ neurons fire antognistically, depending on the intensity level of their associated $X$ node (where $X\in x$). Neurons in the $z$ layer produce a firing pattern that is distinct for to the hidden cause. The handwritten digits can be categorized into distinct classes and we see that the SEM can produce a unique firing pattern for each class through unsupervised learning \cite{Nessler2010}. 
 
-\paragraph{}We will keep the WTA circuit as our main building block. We will also preserve the hebbian learning rule to update the weights of $z$ neurons to use for the M-Step \cite{Nessler2010}. The population coding for polarizing intensity values to drive the poisson process will remain useful, but the population coding will also be the first entry point for the extension.
+\paragraph{}We will keep the WTA circuit as our main building block. We will also preserve the hebbian learning rule to update the weights of $z$ neurons to use for the M-Step \cite{Nessler2010}. The population coding for polarizing intensity values to drive the Poisson process will remain useful, but the population coding will also be the first entry point for the extensions.
 
-The current encoding of external variables accounts for the intensities of the spatial units, pixels, of the presented stimulus. The encoding of intensities is performed through a population coding by antognistic binary nodes per pixel that drive a poisson process \cite{Nessler2010}. Parallel to these intensity encoded nodes, we add a WTA circuit per pixel that determines the preferred orientation of this node relative to its spatial neighbors. This creates an orientation map of the presented stimulus. Whilst counter-intuitive with traditional learning models, SEM benefits from elaborating the dimensionality of WTA's feature space as this increases its resolution for detecting correlations between an output node $z$ and input nodes $y$ on a linear scale. Since SEM aims to reduce dimensionality, it is preferable to describe it as an elaboration of dimensionality. The added dimensions, or nodes, do not carry new information, but rather refine its representation. Recalling the use of using population coding to encode in atagonistic (On-node, Off-node) fashion, thus letting the WTA learn the likelihood of an input node firing and not firing explicitly, as shown by \ref{eqn_corr}.
+The current encoding of external variables accounts for the intensities of the spatial units, pixels, of the presented stimulus. The encoding of intensities is performed through a population coding by antognistic binary nodes per pixel that drive a Poisson process \cite{Nessler2010}. Parallel to these intensity-encoded nodes, we add a WTA circuit per pixel that determines the preferred orientation of this node relative to its spatial neighbors. This creates an orientation map of the presented stimulus. Whilst counter-intuitive with traditional learning models, SEM benefits from elaborating the dimensionality of WTA's feature space as this increases its resolution for detecting correlations between an output node $z$ and input nodes $y$ on a linear scale. Since SEM aims to reduce dimensionality, it is preferable to describe it as an elaboration of dimensionality. The added dimensions, or nodes, do not carry new information, but rather refine its representation. Recalling the use of population coding to encode in atagonistic (On-node, Off-node) fashion, thus letting the WTA learn the likelihood of an input node firing and not firing explicitly, as shown by \ref{eqn_corr}.
 
 \begin{equation}
 	p(z=1|y) \propto y*p(y=1|z) + (1-y)*p(y=0|z)
@@ -78,7 +78,7 @@ where
 \begin{itemize}
   \item $y_I$ denotes an input intensity node,
   \item $y_O$ denotes an orientation input node,
-  \item $O$ denotes the set of orientations available. Orientations can be defined discretly and arbitrarily (e.g. 30, 60,...180 degrees) or they can be learned \cite{Nessler2010},
+  \item $O$ denotes the set of orientations available. Orientations can be defined discretely and arbitrarily (e.g. 30, 60,...180 degrees) or they can be learned \cite{Nessler2010},
   \item $O_p$ denotes the preferred orientation
 \end{itemize}
 
@@ -96,12 +96,12 @@ We redesign the network with a cascade of hierarchical WTA circuits. The input l
 \caption{Example of Gabor filters (real part). Defined at orientations [0, 150] degrees with increments of 30 degrees. \label{fig:filters_real}}
 \end{figure}
 
-The WTA circuits responsible to determine the preferred orientation of all input nodes are activated by convoling the stimulus with a bank of two-dimensional Gabor filters. The filters are defined with different scales and angular orientations from a predefined discrete set. \Cref{fig:filters_real} provides an illustrative example of such Gabor filters. By comparing the magnitude of responses between the filters at each pixel we can decide on the pixel's preferred orientation. Talking about the preferred orientation of a single pixel does not actually carry much meaning. The transfomations do yield responses for each pixel but they only become informative in relation to the responses of its neighbors. Examples of filter responses to a binary image stimulus are shown in \cref{fig:response4}
+The WTA circuits responsible to determine the preferred orientation of all input nodes are activated by convolving the stimulus with a bank of two-dimensional Gabor filters. The filters are defined with different scales and angular orientations from a predefined discrete set. \Cref{fig:filters_real} provides an illustrative example of such Gabor filters. By comparing the magnitude of responses between the filters at each pixel we can decide on the pixel's preferred orientation. Talking about the preferred orientation of a single pixel does not actually carry much meaning. The transformations do yield responses for each pixel but they only become informative in relation to the responses of its neighbors. Examples of filter responses to a binary image stimulus are shown in \cref{fig:response4}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.8\textwidth]{response4}
-\caption{Example of filter response magnitudes when convoling a binary image with Gabor filters defined at different scales and orientations.
+\caption{Example of filter response magnitudes when convolving a binary image with Gabor filters defined at different scales and orientations.
 \label{fig:response4}}
 \end{figure}
 
@@ -109,44 +109,37 @@ Parameterized Gabor functions are an adequate approximation of simple cells in t
 
 \subsection{Extending SEM by learning hidden features}
 
-We have seen the computational power of the SEM model as an unsupervised method for identifying hidden causes. So far the hidden causes have been used synonymously with predefined classes (e.g. numerical digits from the MNIST database \cite{LeCun1998}). We extend the SEM model in a way that breaks this assumption. We insert an additional layer, a WTA circuit, responsible for learning hidden causes that depict abstract features of the object we attempt to detect and recognize. This feature layer will contribute to the bottom-up learning as we expose it to the low-level input and and have it drive the WTA circuit already encountered in the original SEM architecture. With this additional feature-WTA circuit introduced, we no longer require presentation of the entire stimulus but will restrict stimulus presentation to subregions within the space of a stimulus. These subregions may represent salient regions within a stimulus. The definition and method of selecting these subregions will be discussed in more detail as we discusss the object detection module.
+We have seen the computational power of the SEM model as an unsupervised method for identifying hidden causes. So far the hidden causes have been used synonymously with predefined classes (e.g. numerical digits from the MNIST database \cite{LeCun1998}). We extend the SEM model in a way that breaks this assumption. We insert an additional layer, a WTA circuit, responsible for learning hidden causes that depict abstract features of the object we attempt to detect and recognize. This feature layer will contribute to the bottom-up learning as we expose it to the low-level input and and have it drive the WTA circuit already encountered in the original SEM architecture. With this additional feature-WTA circuit introduced, we no longer require presentation of the entire stimulus but will restrict stimulus presentation to subregions within the space of a stimulus. These subregions may represent salient regions within a stimulus. The definition and method of selecting these subregions will be discussed in more detail as we discuss the object detection module.
 
 \section{Object Detection Using Visual Attention}
 
 \subsection{Achieving invariance}
 
-\paragraph{}Itti et. al anchor their bottom-up computational model of attention as a saliency search within a visual scene. They demonstrate how attention is achieved in an image based environment. The image is evaluated for conspicuities in features such as illumination, color, texture or other. The feature extraction is pre-attentive. A spatial map of each feature at different spatial scales is unified into a single conspicuity map for this feature. The conspicutiy maps are combined linearly into a saliency map of the image. The saliency map represents a reconsiliation of the pre-attentive features as the magnitudies need to be normalized before we can can combine them. The saliency map seeds the search to locate visual objects in a scene. The objects can later be processed for recognition with less computational overheads \cite{Itti2000, Itti2001}.
+\paragraph{}Itti et. al anchor their bottom-up computational model of attention as a saliency search within a visual scene. They demonstrate how attention is achieved in an image based environment. The image is evaluated for conspicuities in features such as illumination, color, texture or other. The feature extraction is pre-attentive. A spatial map of each feature at different spatial scales is unified into a single conspicuity map for this feature. The conspicuity maps are combined linearly into a saliency map of the image. The saliency map represents a reconciliation of the pre-attentive features as the magnitudes need to be normalized before we can can combine them. The saliency map seeds the search to locate visual objects in a scene. The objects can later be processed for recognition with less computational overheads \cite{Itti2000, Itti2001}.
 
-The above saliency mechansim defines the distribution from which we sample windows of attention. The windows of attention are forwarded to the recognition module as a continuous feed of input. Itti et al. emphasize that their model does not cover any top-down attention components, yet they address the importance of preventing the 'focus of attention from immediately returning to the previously-attended location' \cite{Itti2000}. This is expected to happen in a purely bottom-up method as the saliency value remains constant. Therefore, we need to bias the model to attend to the second-most-likely salient location. Since we are using windows of attention as input to a recognition system, inhibition of return (IOR) enables such input to be more diverse. The proposed mechanism for IOR, adopted fro Itti et al is the convolution of the saliency map with a Off-centre-On-urround kernel that inhibits the centre located on top of the previous window of attention and enhances the saliency of its surroundings. Itti et al. point out that the effect of IOR should remain transient and need only be maintained temporarily \cite{Itti2000}.
+The above saliency mechanism defines the distribution from which we sample windows of attention. The windows of attention are forwarded to the recognition module as a continuous feed of input. Itti et al. emphasize that their model does not cover any top-down attention components, yet they address the importance of preventing the "`focus of attention from immediately returning to the previously-attended location"' \cite{Itti2000}. This is expected to happen in a purely bottom-up method as the saliency value remains constant. Therefore, we need to bias the model to attend to the second-most likely salient location. Since we are using windows of attention as input to a recognition system, inhibition of return (IOR) enables such input to be more diverse. The proposed mechanism for IOR, adopted from Itti et al is the convolution of the saliency map with a Off-center-On-surround kernel that inhibits the center located on top of the previous window of attention and enhances the saliency of its surroundings. Itti et al. point out that the effect of IOR should remain transient and need only be maintained temporarily \cite{Itti2000}.
 
-\paragraph{}Olshausen et al.'s earlier attempt to formalize a framework for attention includes the concept of bottom-up flow of information before attempting recognition but also mention the presence of a top-down mechansim intercepting the signal. This mechanism arises from "control-neurons" that dynamically modulate synapses, or weights, for routing a selected spatial window from lower levels in the visual system to higher ones \cref{Olshausen1993}. They describe how scale-invariance is achieved through magnification of the window of attention to fit a "canonical reference window". This concept is computationally equivalent to resizing an image via interpolation leading to a blurred appearance of the attended window inside the reference frame. Their control units come into play as they can shift the window of attention up or down scale levels or translate within a single plane, scale. This conscious control represents behavioral control of attention that can arise from motor control. This motor control can be voluntary or not, however the authors are more focused on the case of involuntary control. To demonstrate the employment of the same control neurons as part of a closed-loop autonomous system, Olshousen et al. describe a strategy that governs these control units.
+\paragraph{}Olshausen et al.'s earlier attempt to formalize a framework for attention includes the concept of bottom-up flow of information before attempting recognition but also mentions the presence of a top-down mechanism intercepting the signal. This mechanism arises from "`control-neurons"' that dynamically modulate synapses, or weights, for routing a selected spatial window from lower levels in the visual system to higher levels \cref{Olshausen1993}. They describe how scale-invariance is achieved through magnification of the window of attention to fit a "`canonical reference window"'. This concept is computationally equivalent to resizing an image via interpolation leading to a blurred appearance of the attended window inside the reference frame. Their control units come into play as they can shift the window of attention up or down scale levels or translate within a single plane, scale. This conscious control represents behavioral control of attention that can arise from motor control. This motor control can be voluntary or not, however the authors are more focused on the case of involuntary control. To demonstrate the employment of the same control neurons as part of a closed-loop autonomous system, Olshousen et al. describe a strategy that governs these control units.
 This strategy is made out of:
 \begin{itemize}
   \item Low-pass filter the visual scene into blobs.
   \item Point the reference window to the location of the blob, adapting to its topography (i.e. size and location).
-  \item Pass original input represented by the blob to the recognition module.
-  \item Assess match of the presented object with previously learned objects. Take action according to recognition results (e.g. learn as a new object, discard it, perform a task, etc.) \cite{Olshausen1993}
+  \item Pass the original input represented by the blob to the recognition module.
+  \item Assess the matching of the presented object with previously learned objects. Take action according to recognition results (e.g. learn as a new object, discard it, perform a task, etc.) \cite{Olshausen1993}
 \end{itemize}
-The authors provide an elaborate derivation and description of this model. We see them taking the initial steps of what we learn from Itti's salient-based model in addition to the notion of turning the open-loop system into a closed-loop one through the feedback signal of modulatory control neurons whose activiy is a relay of the response of a recognition module. However we encounter some gaps in how some of the intermediate steps of modulation are defined, as these may depend on application or the recognition module itself, how it operates, how it responds. 
+The authors provide an elaborate derivation and description of this model. We see them taking the initial steps of what we learn from Itti's salient-based model in addition to the notion of turning the open-loop system into a closed-loop one through the feedback signal of modulatory control neurons whose activity is a relay of the response of a recognition module. However, we encounter some gaps in how some of the intermediate steps of modulation are defined, as these may depend on application or the recognition module itself, how it operates, how it responds. 
 
-\paragraph{}A computational model of top-down attention is proposed by Baluch et al. The top-down model is described as a mechanism that influences the stimulus drive generated from the familiar bottom-up mechanism. The influences come in the form of feature bias, spatial bias, context or a task being carried out. These same influences can generate an attention field independent of the stimulus drive. The attention field and modulated stimulus drive are multiplied and normalized to yield a response to apply detection on. An analogous top-down attention model is presented that involves a learned approach. A learner is presented with bottom-up derived features to predict top-down saliency. Top-down saliency is multipled by bottom-saiency to form a unified priority map over the visual space \cite{Baluch2011}. This model provides a concise interaction of bottom-up and top-down mechanisms, thus bridging bridging Itti et al's with Olshausen et al's frameworks.
+\paragraph{}A computational model of top-down attention is proposed by Baluch et al. The top-down model is described as a mechanism that influences the stimulus drive generated from the familiar bottom-up mechanism. The influences come in the form of feature bias, spatial bias, context or a task being carried out. These same influences can generate an attention field independent of the stimulus drive. The attention field and modulated stimulus drive are multiplied and normalized to yield a response to apply detection on. An analogous top-down attention model is presented that involves a learned approach. A learner is presented with bottom-up derived features to predict top-down saliency. Top-down saliency is multipled by bottom-saliency to form a unified priority map over the visual space \cite{Baluch2011}. This model provides a concise interaction of bottom-up and top-down mechanisms, thus bridging Itti et al.'s with Olshausen et al's frameworks.
 
-\paragraph{}The SEM model requires some extensions to achieve scale- and translation invariance. Scale invariance can be achieved through the use of intermediate layers that learn features of visual objects that are more abstract than pixel intensity values. We can predefine these features in the form of orientation maps. It is also possible to let the SEM model learn abstract features driven by the stimuli. The features can be pre-extracted using decimated versions of the orginal visual stimulus, thus reusing existing neurons in the network as if they were with enlarged receptive fields. We expect that these abstract features can pick up simple shapes such as oriented bars as well as more complex shapes. The network wiring will emerge from the features extracted by the data and the interactions within the stochastic processes within the SEM. The model will become invariant to XY-plane translations through the use of selective visual attenion. Bottom-up saliency-based attention is employed following the model proposed by Itti, Koch and Niebur \cite{Itti2000}. The introduction of a top-down component can be made by using the spikes of the output layer as a feed-back signal to modulates attention.
+\paragraph{}The SEM model requires some extensions to achieve scale- and translation invariance. Scale invariance can be achieved through the use of intermediate layers that learn features of visual objects that are more abstract than pixel intensity values. We can predefine these features in the form of orientation maps. It is also possible to let the SEM model learn abstract features driven by the stimuli. The features can be pre-extracted using decimated versions of the orginal visual stimulus, thus reusing existing neurons in the network as if they were with enlarged receptive fields. We expect that these abstract feature nodes can pick up simple shapes such as oriented bars as well as more complex shapes. The network wiring will emerge from the features extracted by the data and the interactions within the stochastic processes of the SEM. The model will become invariant to XY-plane translations through the use of selective visual attenion. Bottom-up saliency-based attention is employed following the model proposed by Itti, Koch and Niebur \cite{Itti2000}. The introduction of a top-down component is discussed as the component may use output-layer spikes as a feed-back signal to modulates attention.
 
 \subsection{Feature-population coding}
 
-Towards invariance to translation we employ Itti et al.'s bottom-up saliency-based attention mechanism. It serves the purpose of locating regions within a visual scene to present to the network. Population coding will be used for encoding an analog and/or binary state of a neuron, $y$ neurons, into spike trains. The state of these neurons will be derived from pixel intensity values, binary, and analog filter responses when convolving salient regions with filters from a predefined filter bank. Population coding derived from filter responses will be referred to as feature population coding. The original simple population coding and feature population coding generate input to the new network iluustrted in \cref{fig:fig_network}.
+Towards invariance to translation we employ Itti et al.'s bottom-up saliency-based attention mechanism. It serves the purpose of locating regions within a visual scene to present to the network. Population coding will be used for encoding an analog and/or binary state of a neuron, $y$ neurons, into spike trains. The state of these neurons will be derived from pixel intensity values, binary, and analog filter responses when convolving salient regions with filters from a predefined filter bank. Population coding derived from filter responses will be referred to as feature population coding. The original simple population coding and feature population coding generate input to a new network whose acrchitecture is illustrted in \cref{fig:architecture_recognition}.
 
-We refer to the original population coding as 'simple' because it operates directly on the bi-state external variable and only generates spikes that elaborate on these two states. The feature popluation coding investigates the use of a soft-WTA circuit to determine the state of the spiking neuron in a population \ref{fig:network_learn_orientations}. The population represents a set of feature states and the soft-WTA circuit determines the dominant state(s). In this case the population represents the response of a node after convolving the stimulus with a bank of Gabor filters. The WTA circuit draws the preferred orientation from the stochastic process whose distribution is defined by the analog response to each filter. The use of winner-take-all circuits correlates with the HMAX framework \cite{Serre2004, Riesenhuber1999}. Employment of the soft-max operator allows for a representation of intermedia features (i.e. an angular orientation that lies between two states in the predefined set). It also provides good mitigation against local maxima during the learning process.
+We refer to the original population coding as 'simple' because it operates directly on the bi-state external variable and only generates spikes that elaborate on these two states. The feature popluation coding investigates the use of a soft-WTA circuit to determine the state of the spiking neuron in a population \ref{fig:network_learn_orientations}. The population represents a set of feature states and the soft-WTA circuit determines the dominant state(s). In this case the population represents the response of a node after convolving the stimulus with a bank of Gabor filters. The WTA circuit draws the preferred orientation from the stochastic process whose distribution is defined by the analog response to each filter. The use of winner-take-all circuits correlates with the HMAX framework \cite{Serre2004, Riesenhuber1999}. Employment of the soft-max operator allows for a representation of intermediate features (i.e. an angular orientation that lies between two predefined states). It also provides good mitigation against local maxima during the learning process.
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.8\textwidth]{network}
-\caption{The network with which SEM is extended. The network is composed of multiple layers, namely a layer of spiking $y$ neurons that are stimulated by intensities and filter responses of the presented salient image region, a layer of $z$ neurons inside a WTA circuit that learn the patterns presented to them which will be referred to as the $f$ layer, or $f$ neurons, and finally the WTA circuit of $z$ neurons that learn the spiking pattern of the $f$ layer in a familiar and equivalent WTA fashion.
-\label{fig:fig_network}}
-\end{figure}
-
-The bottom-up attention mechansim employed is a varied implementation of Itti et al.'s model. Their model defines a salient-based mechanism to evaluate a visual scene on location worth attending to.
+The bottom-up attention mechansim employed is a varied implementation of Itti et al.'s model. Their model defines a salient-based mechanism to evaluate a visual scene on locations worth attending to.
 The commonalities between this intepretation and the original model are:
 \begin{itemize}
   \item the use feature maps based on intensity and orientation,
@@ -161,7 +154,7 @@ As for differences, unlike the original model, this intepretation:
 
 \subsection{Learning abstract features}
 
-The attention mechanism provides a continuous feed of subregions in the original stimulus space that may contain patterns worth learning for recognizing objects. This can happen whether the attention mechanism is a purely stimulus-driven or modulated by top-down cues. We are willing to restrict the input space used for training and testing the recognition system to patterns that qualify as salient. The SEM model treats such salient windows as its external variables $x$. Population coding, simple and feature-population coding, produces spike trains that represent the intensities in the pixels and their the orientation map of such a window. A layer of $f$ neurons interact within a soft-WTA circuit. These $f$ neurons employ the same learning rule. Their WTA-circuit is essentially the building block brought over from the original SEM model. This layer is described as the abstract feature layer, or F-layer, as it learns to disriminate the abstract features provided by the salient window input. The spikes emerging from the F-layer activate the $z$ neurons in the output layer. The output layer remains responsible for learning the hidden causes. Except that it now disriminates such causes in the distribution of abstract feautres, of far more reduced dimnensionality.
+The attention mechanism provides a continuous feed of subregions in the original stimulus space that may contain patterns worth learning for recognizing objects. This can happen whether the attention mechanism is a purely stimulus-driven or modulated by top-down cues. We are willing to restrict the input space used for training and testing the recognition system to patterns that qualify as salient. The SEM model treats such salient windows as its external variables $x$. Population coding, simple and feature-population coding, produces spike trains that represent the intensities in the pixels and their the orientation map of such a window. A layer of $f$ neurons interact within a soft-WTA circuit. These $f$ neurons employ the same learning rule. Their WTA-circuit is essentially the building block brought over from the original SEM model. This layer is described as the abstract feature layer, or $f$-layer, as it learns to disriminate the abstract features provided by the salient window input. The spikes emerging from the $f$-layer activate the $z$ neurons in the output layer. The output layer remains responsible for learning the hidden causes. Except that it now disriminates such causes in the distribution of abstract feautres, of far more reduced dimnensionality.
 
 \begin{figure}[ht]
 \centering
@@ -170,44 +163,101 @@ The attention mechanism provides a continuous feed of subregions in the original
 \label{fig:architecture_recognition}}
 \end{figure}
 
-\Cref{fig:network} illustrates the wiring of a spiking neural network responsible for recognizing hidden causes in visual objects. The causes are represented by spiking patterns of the output-layer neurons that discriminate the spiking pattern of preceeding neurons in an intermediate layer. Neurons of the intermediate layer respond to the presence of abstract features present in a series of windows of attention. With the presentation of a stimulus a detection module employing selective visual attention generates this series of windows of attention which are encoded into spike trains through population coding. Population coding may be 'simple', based on pixel intensity values, more complex by evaluating the response of the sub image to filters, or both.\\
+\Cref{fig:architecture_recognition} illustrates the wiring of a spiking neural network responsible for recognizing hidden causes in visual objects. The causes are represented by spiking patterns of the output-layer neurons that discriminate the spiking pattern of preceeding neurons in an intermediate layer. Neurons of the intermediate layer respond to the presence of abstract features present in a series of windows of attention. With the presentation of a stimulus a detection module employing selective visual attention generates this series of windows of attention which are encoded into spike trains through population coding. Population coding may be 'simple', based on pixel intensity values, more complex by evaluating the response of the subimage to filters, or both. \Cref{fig:architecture_recognition} reveals this configurability through the placement of switches in front of a population coding module.\\
+
+We recall the use of population coding to encode antagonistic On- and Off-states of a node exciting $z$ neurons. This elaborate representation of the node increases the likelhood of a $z$ neuron detecting correlations, as formulated in \ref{eqn_corr}. We may reuse this technique in elaborating the representation of $f$ spikes exciting $z$ neurons in the output layer. $z$ neurons learn patterns of $f$ nodes firing and not-firing explicitly.\\
 
 Here it becomes necessary to point out a predicament. Attention windows arrive at the recognition module serially. This does not cause any problems for the $f$ neurons as the scope of their operation is within a single window of attention. However, in the case $z$ neurons in the output layer need a larger scope as their response needs to be associated with the original stimulus. 
 We may at first look at it as a problem of detecting a temporal pattern. Panchev et. al demonstrate the detection of temporal patterns using spiking neurons. There model is employed in the context of training robots a natural language of instructions. The learning mechanism models dendritic and somatic membrane potentials, thus not restricting itself to only timing information through STDP but also temporal integration of amplitude information. They key takeaway of their work is in achieving a temporal "delay" mechanism and to encode the spatio-temporal structure of the delay mechanism into spikes and have neurons learn such spiking patterns \cite{Panchev2006}. A similar solution to detecting spatio-temporal patterns is demonstrated by Byrnes et. al. Their work abstracts the spatio-temporal patterns as a temporal sequence of symbols. The spiking patterns of neuron reflect the detection of a symbol suceeding the detection of a previous symbol. The preceeding symbol primes the model and this biases the model when the most recent symbol is introduced \cite{Byrnes2010}. This state machine logic aligns well with the problem at hand. To draw an analogy with the model of Byrnes et al. The windows of attention would be represented by symbols and the stimulus would be encoded by the temporal sequence of such symbols. However, our model may not necessarily benefit from learning suc explicit temporal patterns of windows of attention. The presence of symbols is sufficient, yet their temporal order may be negligible. It may suffice to treat the the sequence of symbols $ABC$ the same as the sequence $CBA$, $ACB$ or any permutation of this sequence. Therefore, a solution to this problem is likely to lie in the use of a state machine that models memory and preserves the state of the output layer for different windows of attention belonging to the same stimulus, while remaining invariant to the sequence of such states. We learn that markov chains present a possible approach for maintaining temporal states. Other works dealing with the detection of spatio-temporal patterns also teach us that this may be achieved through the use of self-excitatory synapses for neurons in the output layer. The different ways of approaching this are quite intriguing. We opt for a simple time-delay mechanism:\\
-Time-delay components are needed to reconcile attention windows arriving at the recognition module serially. For associating the response of $z$ neurons to a stimulus we employ a time-delay component in the network. The time-delay component is represented by associating $f$ neurons with multiple WTA circuits at the same time. The WTA circuits differ in the timing at which they inhibit the $f$ neurons. The number of WTA circuits matches the number of windows of attention sampled from the same stimulus. Effectively this results in superimposing $f$-layer spike trains for each window of attention assicated with the same stimulus. Furthermore, this time-delay mechanism effectively discards the temporal information of the sequence.\\
 
-We can now explain the flow of information inside the model illustrated by \cref{network} the following way: Given a stimulus the detection module provides a series of attention window in serial fashion. Population coding represents each window in spike trains that excite learners in the intermediate $f$-layer. For each window of attention a WTA circuit with a delay component inhibits $f$ neurons. This leads to the superimposition of $f$ spike trains due to different windows of attention of the same stimulus. The superimposed $f$-layer spike trains provde excitatory input to $z$ neurons that compete in a soft-WTA circuit and form the output layer of the recognition module.
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{time_delay_circuit}
+\caption{A simplified abstraction of a time-delayed WTA circuit.
+\label{fig:time_delay_circuit}}
+\end{figure}
+
+Time-delay components are needed to reconcile attention windows arriving at the recognition module serially. For associating the response of $z$ neurons to a stimulus we employ a time-delay circuit as abstracted by \cref{}. The time-delay is represented by associating $f$ neurons with multiple of such time-delayed WTA circuits at the same time. The time-delayed WTA circuits differ in the timing at which they inhibit the $f$ neurons. The number of WTA circuits matches the number of windows of attention sampled from the same stimulus. Effectively this results in superimposing $f$-layer spike trains for each window of attention assicated with the same stimulus. Furthermore, this time-delay mechanism effectively discards the temporal information of the sequence.\\
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.8\textwidth]{network}
-\caption{The network of the recognition module extending the SEM model. Input is provided by the attention mechanism in the form of windows of attention. Population coding encodes analog intensity or filter response values into spike trains which activate a soft-WTA circuit. Spikes generated from the $f$ neurons of the soft-WTA circuit in the abstract feature layer excite $z$ neurons in the output layer. $z$ neurons in the abstract feature layer are responsible for learning and predicting the abstract pattern in the window of attention. $z$ neurons in the output layer are responsible for learning spiking patterns of the preceeding layer associated with hidden causes in the orignal stimulus.
+\caption{The revised network of the recognition module. Input is provided serially by the attention mechanism in the form of windows of attention. Population coding encodes analog intensity or filter response values into spike trains which activate a soft-WTA circuit. Spikes generated from the $z_F$ or $f$ neurons excite $z$ neurons in the output layer. $f$ neurons in the abstract feature layer are responsible for learning and predicting the abstract pattern in the window of attention. The spiking of $f$ neurons is modulated by time-delayed soft-WTA circtuis. Each time-delayed WTA is responsible for reconciling the serial arrival of an attention window temporaly and superimposing $f$ spike trains due to that window onto a spike train combining spikes due to all windows associated with the same stimulus. $z$ neurons in the output layer are exposed to spikes due to all windows of the same stimulus simultaneously. They are responsible for learning spiking patterns of the preceeding layer associated with hidden causes in the orignal stimulus.
 \label{fig:network}}
 \end{figure}
 
-Prior to presenting results an elaboration on how methods were applied and how the experimentations was carried on. The simulations carried out define the various parameters of the model such as:
+We can now explain the flow of information inside the model illustrated by \cref{network} the following way: Given a stimulus the detection module provides a series of attention window in serial fashion. Population coding represents each window in spike trains that excite learners in the intermediate $f$-layer. For each window of attention a WTA circuit with a delay component inhibits $f$ neurons. This leads to the superimposition of $f$ spike trains due to different windows of attention of the same stimulus. The superimposed $f$-layer spike trains provde excitatory input to $z$ neurons that compete in a soft-WTA circuit and form the output layer of the recognition module.
+
+\subsection{Experimentation}
+
+Prior to presenting results we elaborate on how methods were applied and how the experimentations was carried out. The simulations carried out define the various parameters of the model such as:
 \begin{itemize}
-  \item Defining the dataset of static image stimuli.
-  \item Splitting the dataset into completly separate train and test sets.
-  \item Defining encoding strategies of the population coding, such as the encoding frequency of the poisson process, the sampling rate to treat spike trains as time-series signals, duration of spike trains, enabling/disabling encoding strategies (i.e. simple population coding, feature populating coding, or both as depicted by the switches in \cref{fig:architecture_recognition} 
-  \item Prediction parameters: Number of $z$ and $f$ neurons. Whether to train them simultaneously or independently (i.e. simulate the learning of $z$ neurons with pre-learned $f$ neurons)
-  \item Learning parameters for either layer: This covers learning rates, initialization of weights, numerical scale and limit of weights, duration of a node's spiking history.
-  \item Competition parameters that set the behavior of the WTA circuits: Refactory period for inhibition, parameters for modeling an Ornstein-Uhlenbeck process. Competition parameters may differ between the layers.
-  \item Feature paramters relevant for defining feature population coding or defining of pre-attentive features: This involves Gabor function paramters (e.g. filter support radius, number of orientations, orientation resolution, defined scales, frequency and elongation of the gabor kernel.
-  \item Attention parameters: Size of attention window, maximum number of attention windows per stimulus (=number of time-delay WTA components)
-  \item Saliency parameters: Dimensions of the saliency map and lower threshold values for clipping filter responses that are too low.
+  \item Defining the \textbf{dataset} of static image stimuli.
+  \item Splitting the dataset into completly separate \textbf{train} and \textbf{test} sets.
+  \item Defining \textbf{encoding strategies} of the population coding, such as the encoding frequency of the poisson process, the sampling rate to treat spike trains as time-series signals, duration of spike trains, enabling/disabling encoding strategies (i.e. simple population coding, feature populating coding, or both as depicted by the switches in \cref{fig:architecture_recognition} 
+  \item \textbf{Prediction parameters}: Number of $z$ and $f$ neurons. Whether to train them simultaneously or independently (i.e. simulate the learning of $z$ neurons with pre-learned $f$ neurons)
+  \item \textbf{Learning parameters} for either layer: This covers learning rates, initialization of weights, numerical scale and limit of weights, duration of a node's spiking history.
+  \item \textbf{Competition parameters} that set the behavior of the WTA circuits: Refactory period for inhibition, parameters for modeling an Ornstein-Uhlenbeck process. Competition parameters may differ between the layers.
+  \item \textbf{Feature paramters} relevant for defining feature population coding or defining of pre-attentive features: This involves Gabor function paramters (e.g. filter support radius, number of orientations, orientation resolution, defined scales, frequency and elongation of the gabor kernel.
+  \item \textbf{Attention parameters}: Size of attention window, maximum number of attention windows per stimulus (=number of time-delay WTA components)
+  \item \textbf{Saliency parameters}: Dimensions of the saliency map and lower threshold values for clipping filter responses that are too low.
   \end{itemize}
+  
+\textbf{Simulation}: The simulations mainly involve:
+\begin{itemize}
+  \item Constructing a dataset of multiple classes of handwritten digits.
+  \item Splitting the dataset into separated train and test partitions.
+  \item The procedure of train and test phases of the experiment are identical excpet that in the train or learning phases weights may be updated. As for the test phase weights remain static.
+  \item For each stimulus image:
+  \begin{itemize}
+  	\item An image is fed into the attention module, which evaluates a saliency map of the stimulus.
+  	\item Windows of attention are sampled from a two-dimensional saliency distribution.
+  	\item For each window of attention
+  	\begin{itemize}
+	  	\item The window of attention is encoded into $y$ spike trains.
+	  	\item $y$ spikes are fed into time delayed WTA-circuits that modulate the spiking of $f$ neurons
+		\end{itemize}
+		\item $f$ spikes superimposed by time-delayed WTA-circuits may be re-encoded for more elaborate representation as formulated in \ref{eqn_corr}.
+		\item $f$ spikes are fed into WTA-circuits modulating the spiking of $z$ neurons
+	\end{itemize}
+\end{itemize}
+The above procedure is populated with mechanisms for evaluating, logging and oberving behaviors such as shape of attention windows, weight updates, spiking patterns, calculating conditional entropy of spiking nodes and measuring computational performance (e.g. speed)\\
+
+\textbf{Evaluation methodology:} For evaluating the impact of configurations in the model we try to follow Nessler et al.'s methodology. Although the SEM model is an unsupervised learning model we make use of the labeled dataset from \cref{LeCun1998} post-learning. The evaluation methods involve calculating firing probabilities of $z$ neurons given the presentation of a particular class (e.g. $p(z=1|c=C)$). Or measuring the conditional entropy of firing. For the original SEM model, the success of an experiment was measured in how low conditional entropy and how fast it declined, as this reflected the specialization of a learner to a particular class \cite{Nessler2010}. As we extend the SEM with an additional layer of abstract features, we do not expect conditional entropy to behave the same way. We do not state expectations on the distribution of $f$ or $z$ neurons to a particular class. It is almost meaningless to do so for $f$ neurons since they are originally intended to learn generalized patterns that span across different classes. Therefore we allow for a many-to-many relationship. We may observe $f$ neurons specialized to a pattern that is present in a single class (low entropy), we may also encounter an $f$ neuron learning a generic shape observed in multiple classes (high-entropy). We continue relying on the firing probability distribuitions of the spiking learners in either layer given a stimulus class. The measure of evaluation will be in the uniqueness of such probabiliities, so that we may conclude that each class may be represented by a distinct firing patterns that enables successful recognition. The uniqueness may be measured by the euclidian distance of two multi-dimensional distributions given two different classes $D(c_i, c_j)$ as formulated in \ref{eqn_eval_distance}.
+
+\begin{equation}
+		D(c_i, c_j) = D(c_j, c_i) = \sqrt{\sum_{k=1}^{K} [c_i(k)-c_j(k)]^2} \\
+	\label{eqn_eval_distance}
+\end{equation}
+where
+\begin{itemize}
+	\item $i$, $j$ denote a class of set of classes $c$,
+  \item $c_i$ denotes the firing probability distribution of a learner given class $i$,
+  \item $k$ denotes the dimension or index of the learner within the distribution, while $K$ denotes the space of learners whose firing probabiities form the distribution $c_i$ and $c_j$.
+\end{itemize}
+
+A more sophisticated and appropiate measure for measuring difference between probability distributions is provided by the Kullback-Leibler (KL) Divergence. The symmetric KL divergence is defined as $D_{KL}(c_i||c_j)+D_{KL}(c_j||c_i)$ where $D_{KL}(c_i||c_j)$ is defined in \ref{eqn_eval_kldiv}:
+
+\begin{equation}
+		D_{KL}(c_i||c_j) = \sum_{\substack{
+																	   k=1 \\
+																	   c_i(k) \neq 0 \\
+																	   c_j(k) \neq 0
+																	  }}^{K} c_i(k) \ln{\frac{c_i(k)}{c_j(k)}}  \\
+	\label{eqn_eval_kldiv}
+\end{equation}
+where distributions $c_i$ and $c_j$ sum up to 1 \cite{Kullback1951}.
 
 \chapter{Results}
 
-\section{Exploiting inherit noise of a stochastic process}
+\section{Exploiting inherit noise of a stochastic process for handling missing values}
 
-The first extension to the SEM network was to enrich the representation of the external variables $x$. Instead or in a addition to bi-state pixel values we convolve the image input with a set of Gabor filters. A WTA-circuit is appplied to the response of each pixel to the Gabor filters to determine its preferred orientation through a stochasitc process. The use of the stochastic process is not as noise-free as applying $argmax(y_i)$, where $y_i$ denotes the magnitude responses of pixel $i$. The $argmax$ operator would even align well with the HMAX paradigm presented in the works of Riesenhuber, Poggio and Serre\cref{Riesenhuber1999, Riesenhuber2000, Serre2004, Serre}. However we have found that the noise inherit in the stochastic process mitigates the computational pitfall of low magnitdue response vectors very well. To elaborate, parts of the stimulus with very low intensity values, will results in low magnitude response values for all filters in the filter bank. However the insignificant response vector for a pixel still yields a result from the $argmax$ operator. It will actually yield a near constant result. To avoid learners from learning this constant pattern that does not carry any true information, we need a mechanism to handle such low response values. The problem is not really in the response vector of all-low magnitudes. We can generalize the problem to pixel response vectors with high uniformity. We can still align this model with the HMAX model if we resort a stochastic process. The stochastic process is able to resolve high-uniformity, high entropy, distribution of pixel response vectors through its inherit noise. If a learner relies on such response vectors as weights, the spike trains coding the response vector will reflect the uniformity and the learning rule will yield accordingly uniform weight distributions for the corresponding pixel, leaving such weights computationally useless. We find that the weight vector associated with this pixel is as uniform as the response, thus with the use of a soft-WTA the contribution of this vector of weights for this pixel relative to the global weight vector of the learner is merely constant. Thus the membrane potential of this neuron will not experience fluctuations due to these weights but rather weights whose local vectors have low entropy. \Cref{fig:weightsPerOrientation} depicts the distribution of weights associated with different orientations after a learning process involving handwritten digits as stimuli. We find that outer areas with generally low intensity activity are high regardless of orientation.
+The first extension to the SEM network was to enrich the representation of the external variables $x$. Instead or in a addition to bi-state pixel values we convolve the image input with a set of Gabor filters. A WTA-circuit is appplied to the response of each pixel to the Gabor filters to determine its preferred orientation through a stochasitc process. The use of the stochastic process is not as noise-free as applying $argmax(y_i)$, where $y_i$ denotes the magnitude responses of pixel $i$. The $argmax$ operator would even align well with the HMAX paradigm presented in the works of Riesenhuber, Poggio and Serre\cref{Riesenhuber1999, Riesenhuber2000, Serre2004, Serre}. However we have find that noise inherit in the stochastic process mitigates the computational pitfall of low magnitdue response vectors very well. To elaborate, parts of the stimulus with very low intensity values, will result in low magnitude response values for all filters in the filter bank. Nessler et al. refer to this as "missing values" \cref{Nessler2013}. However, the insignificant response vector for a pixel still yields a result from the $argmax$ operator. It will actually yield a near constant result. To avoid learners from learning this constant pattern that does not carry any true information, we need a mechanism to handle such low response values. The problem is not really in the response vector of all-low magnitudes. We can generalize the problem to pixel response vectors with high uniformity. We can still align this model with the HMAX model if we resort a stochastic process. The stochastic process is able to resolve high-uniformity, high entropy, distribution of pixel response vectors through its inherit noise. If a learner relies on such response vectors as weights, the spike trains coding the response vector will reflect the uniformity and the learning rule will yield accordingly uniform weight distributions for the corresponding pixel, leaving such weights computationally useless. We find that the weight vector associated with this pixel is as uniform as the response, thus with the use of a soft-WTA the contribution of this vector of weights for this pixel relative to the global weight vector of the learner is merely constant. Thus the membrane potential of this neuron will not experience fluctuations due to these weights but rather weights whose local vectors have low entropy. \Cref{fig:weightsPerOrientation} depicts the distribution of weights associated with different orientations after a learning process involving handwritten digits as stimuli. We find that outer areas with generally low intensity activity are high regardless of orientation.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.8\textwidth]{weightsPerOrientation}
-\caption{Example of $z$ neuron weight distributions for different orientations when using a hard max operator such as $argmax$ without accoutning for the uniformity of a pixel's response. Each row of subplots is reserved for a learner $Zi$, while each column is associated for an orientation. This is from an experiment involving handwritten variants of the digits 1 and 7 \cref{LeCun1998}. Blue colored regions have low weight values that yellow, orange and red, represent strong weights.
+\includegraphics[width=1.2\textwidth]{weightsPerOrientation}
+\caption{Example of $z$ neuron weight distributions for different orientations when using while utilizing a stochastic processi for handling missing values and accounting for the uniformity of a pixel's response. Each row of subplots is reserved for a learner $Zi$, while each column is associated for an orientation. This is from an experiment involving handwritten variants of the digits 1 and 7 \cref{LeCun1998}. Blue colored regions have low weight values that yellow, orange and red, represent strong weights.
 \label{fig:weightsPerOrientation}}
 \end{figure}
 
@@ -244,7 +294,7 @@ The selection of the attention window is determined through a stochasitc process
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.8\textwidth]{attention_windows_examples}
+\includegraphics[width=1.0\textwidth]{attention_windows_examples}
 \caption{Examples of attention windows determined by sampling from a two-dimensional saliency distribution.
 \label{fig:attention_windows_examples}}
 \end{figure}
@@ -252,39 +302,178 @@ The selection of the attention window is determined through a stochasitc process
 \section{The $f$-layer}
 
 The injection of an intermediate layer with excitaroy synapses to $z$ neurons in the output layer provides a reduction of dimensionality for these neurons and exploits the input provided from the attention mechanism. This layer is mainly concerned with learning abstract geometrical shapes based on low-level features such as intensities and orientation maps.\\
-In order to reconcile the arrival of attention windows serially and the need of presenting $z$ neurons with $f$ layer spikes representing the entire stimulus and not just individual windows, we employ a separate WTA-circuit onto $f$ neurons for each window of attention, thus introducing a delay of the $f$ spikes due to a particular window. This delay is inversely proportional with the the order of the window's arrival. It effectivley discards the temporal ordering of windows and presents the $z$ neurons with a spike patterns that are invariant to the order the windows were evlauated in.\\
-
-The extended SEM network up to and including the $f$-layer is essentially a network for disriminating hidden causes using intenstity and orientation features, while restricting the size of the learning nodes' receptive fields.\\
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.8\textwidth]{attention_windows_examples}
-\caption{TODO use correct image
-\label{fig:attention_windows_examples}}
+\includegraphics[width=0.8\textwidth]{architecture_model}
+\caption{Block diagram of extended SEM model.
+\label{fig:architecture_model}}
 \end{figure}
 
-\chapter{Discussion}
+\Cref{fig:architecture_model} illustrates a high-level diagram of the extended SEM model and dissection of a stimulus into windows of attention for performing recognition. In order to reconcile the arrival of attention windows serially and the need of presenting $z$ neurons with $f$ layer spikes representing the entire stimulus and not just individual windows, we employ a separate WTA-circuit onto $f$ neurons for each window of attention, thus introducing a delay of the $f$ spikes due to a particular window. This delay is inversely proportional with the the order of the window's arrival. It effectivley discards the temporal ordering of windows and presents the $z$ neurons with a spike patterns that are invariant to the order the windows were evlauated in.\\
 
-\chapter{Conclusion}
+The extended SEM network up to and including the $f$-layer is essentially a network for discriminating hidden causes using intenstity and orientation features, while restricting the size of the learning nodes' receptive fields.\\
 
-That's all folks!
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{response_n_label_all_classes}
+\caption{Simulation traces. a) Raster plot of class labels during training phase (dataset composed of digits 0-9). b) Raster plot of $f$-layer spikes. c) Raster plot of output layer spikes. d) Line plots of membrane potential $u$ for output-layer nodes $z$. Each line represents a $z$ neuron. d) Heat map of membrane potential $u$ for output-layer nodes $z$. A projection of d) onto the XZ-plane. Each row in the heat map represents $u$ of a single neuron $z$. All plots are vertically aligned.
+\label{fig:response_n_label_all_classes}}
+\end{figure}
+
+The computational capabilities of the extended SEM at recognizing visual objects can be demonstrated with reference to \cref{fig:response_n_label_all_classes}. The illustration demonstrates a raster plot of class labels which are available but are kept unused during the training process as this is an unspervised model. Additionally we see the raster plots spikes of $f$ and $z$ neurons as well as line plots of $z$ neurons' membrane potentials $u$. The membrane potentials are also visualized as a heat map. Unlike raster plots provided by Nessler et al. We no longer recognize the firing patterns visually. Learners have become responsive to more complex distribution patterns that vary in uniformity, unlike low-entropy spiking patterns found in the original SEM model \cite{Nessler2010}. Still, we see neuron-specialization taking place as vertical uniformities in response and membrane potentials degrade with time.\\
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{response_n_label_all_classes}
+\caption{Simulation traces. a) Raster plot of class labels during training phase (dataset composed of digits 0-9). b) Raster plot of $f$-layer spikes. c) Raster plot of output layer spikes. d) Line plots of membrane potential $u$ for output-layer nodes $z$. Each line represents a $z$ neuron. d) Heat map of membrane potential $u$ for output-layer nodes $z$. A projection of d) onto the XZ-plane. Each row in the heat map represents $u$ of a single neuron $z$. All plots are vertically aligned. It is visible how the neuron specialization develops with time for either layer.
+\label{fig:response_n_label_all_classes}}
+\end{figure}
+
+A visual aid for assessing simulation results is in visualizing the receptive fields of the spiking nodes. A simple technique for this is Spike-triggered average (STA). To view the average stimulus preceeding a spike for each learner, we traverse the spike train of each learner and accumulate a sum of the external variables that have induced a spike. For this exercise we neglect the neurons' accumulation of a history window. The accumulated sum of external variable is divided by the number of spikes, yielding the average stimulus. As we preserve the spatial arrangemnt of external variables we can visualize the STA as an image. For $f$ neurons the dimensions of this image correspond to the dimensions of the attention windows. For $z$ neurons the dimensions match those of the original stimulus. \Cref{masks_layerF_all_classes_no_singles} illustrates an example of STA for representing the receptive fields of the $f$ neurons, while \cref{masks_layerZSub_all_classes_no_single} illustrates this for $z$ neurons. We find the STAs of $z$ with few if not any contrast for identifying which class a $z$ neuron prefers. \Cref{masks_layerF_all_classes_singles} and \cref{masks_layerZSub_all_classes_singles} provide an addiotnal view of neuron STAs with samples of spike inducing stimuli. Looking at \cref{masks_layerZSub_all_classes_singles} we need something to verify the internal models of the $z$ neurons.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{masks_layerF_all_classes_no_singles}
+\caption{Examples of STA for $f$ neurons. Optimal simulation conditions chosen for assessing upper bounds for such visualizations.
+\label{fig:masks_layerF_all_classes_no_singles}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{masks_layerZSub_all_classes_no_singles}
+\caption{Examples of STA for $z$ neurons. Optimal simulation conditions chosen for assessing upper bounds for such visualizations.
+\label{fig:masks_layerZ_all_classes_no_singles}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{masks_layerF_all_classes_singles}
+\caption{Examples of STA for $f$ neurons with individual samples of spike inducing stimuli. Optimal simulation conditions chosen for assessing upper bounds for such visualizations.
+\label{fig:masks_layerF_all_classes_no_singles}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{masks_layerZSub_all_classes_singles}
+\caption{Examples of STA for $z$ neurons with individual samples of spike inducing stimuli. Optimal simulation conditions chosen for assessing upper bounds for such visualizations.
+\label{fig:masks_layerZSub_all_classes_singles}}
+\end{figure}
+
+In addition to using STA for visualizing receptive fields, we can look directly at the $f$ neurons' weight vectors \textbf{$w$}. \Cref{fig:weights_pl_pf_intensity} provides us with a visualization of weights of synapses encdoing intensities. Intensity coding synapses are two-fold, a synapse for learning the pixels Off-state and a second for learning the pixel's Off-state. A more compressed visualization of this, would be to apply an $argmax$ operator for the two synapses associated with each pixel like in \cref{weights_pl_intensity}. While we use visibility over the actual weight values, we still get a sense of the neuron's receptive filed.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{weights_pl_pf_intensity}
+\caption{Receptive fields of $f$ neurons by visualizing weights of synapses encdoing pixel intensity states (i.e. Off-state and On-state). Each sub image is the receptive field of an $f$ neuron.
+\label{fig:weights_pl_pf_intensity}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{weights_pl_intensity}
+\caption{Receptive fields of $f$ neurons by compressing weights of synapses encdoing pixel intensity states via the $argmax$ operator. This yields the preferred state for this pixel. Each sub image is the receptive field of an $f$ neuron.
+\label{fig:weights_pl_intensity}}
+\end{figure}
+
+Doing the same for $z$ neurons would not be as illustrative as the weights correspond abstract features. We have seen that STAs of $z$ neurons are not very informative. We could visualize the $z$ neurons receptive field by cascading the receptive fields of $f$ neurons. By keeping track of the spatial alignment of attention windows that result in an $f$ neuron firing we would be able to reconstruct an cascade of such windows. We may look at this as an STA of local windows. \Cref{fig:attention_windows_examples} is an example of such a reconstruction mechanism with a minimal number of sample windows and stimuli. 
+
+In order to assess the computational value from the simulation data we resort to evaluating the probability distributions of spiking nodes in the presence of distinct classes. It is worth inspecting such distributions resulting from simulations that use a larger number of learners for either layer. \Cref{prediction_stats_heat_layerZ} provides a comprehensive outlook on prediction statistics generated from a simulation. This particular simulation included samples from all classes of digits [0, 9]. We notice that learners no longer acquire low conditional entropy as expected in the original SEM model. An alternative measure of distribution divergence is illustrated in \cref{prediction_stats_kl_layerZ_0-9}. From this we get a sense of how the recognition of a class is coded in the spiking pattern of the $z$ neuron and how unique the signature for each class is.\\
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{prediction_stats_heat_layerZ}
+\caption{Prediction statistics for $z$. (a) cnoditional entropy of a classes, (b) heat map of conditional firing probabilities of learners, (c) sorted distribution of a conditional firing probabilities, (d) distance matrix for measuring divergence between distributions, (e) conditional entropy learners 
+\label{fig:prediction_stats_heat_layerZ}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{prediction_stats_kl_layerZ_0-9}
+\caption{KL-divergence of firing probability distributions for $z$ neurons. As the conditional entropy is becoming less indicative we evlaute the model based on the presence of distinct distributions of classes in the learners.
+\label{fig:prediction_stats_kl_layerZ_0-9}}
+\end{figure}
+
+We recall the discussion of \cref{fig:architecture_recognition}, where we point out that the $f$ layer may be configured to recieve spikes which encode intensity variables, feature variables or both. So far we've seen receptive responses and receptive fields of $f$ neurons receiving intensity encoding spikes. \Cref{weights_orient_layerF}. In order to investigate the impact of different configurations. A simulation is run for the remaining configurations. \Cref{response_n_label_all_classes_lowFiringRate} demonstrates the outcome of a simulation where $f$ neurons rely only on spikes generated from feature population coding. It is visible that inspite of the large dataset the firing activity of all learners appears insignificant. The suspicion arose that the firing rate of feature population coding was not compatible with the learning rate of the $f$ neurons. However it turns out that the problem was due to insignificant filter response magnitudes. Gabor filter kernels were defined according to the dimensions of the attention windows which were too small yielding a compromised kernel definition.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{weights_orient_layerF}
+\caption{Receptive fields of $f$ neurons by compressing weights of synapses encdoing preferred orientations of pixel's via feature population coding. The color depicts an orientation angle. Each image column denotes the receptive field of an $f$ neuron. The rows differ in the masking of missing values. The top row masks units with very small magnitudes, while the second row masks the weight matrix by multiplying it with the neurons STA.
+\label{fig:weights_orient_layerF}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{response_n_label_all_classes_lowFiringRate}
+\caption{Simulation traces. a) Raster plot of class labels during training phase (dataset composed of digits 0-9). b) Raster plot of $f$-layer spikes. c) Raster plot of output layer spikes. d) Line plots of membrane potential $u$ for output-layer nodes $z$. Each line represents a $z$ neuron. d) Heat map of membrane potential $u$ for output-layer nodes $z$. A projection of d) onto the XZ-plane. Each row in the heat map represents $u$ of a single neuron $z$. All plots are vertically aligned. This simulation is uses an identical configuration as the simulation in \cref{fig:response_n_label_all_classes}, except that it used a richer dataset and that it relied solely on feature population coding. The low firing activity is attributed to Gabor filter kernels being defined with image dimensions that were too small for yileding informative responses.
+\label{fig:response_n_label_all_classes_lowFiringRate}}
+\end{figure}
+
+For assessing the extended SEM model's robustness to translated stimuli, we induce translation artifacts into the existing dataset and observe the divergence of firing probability distributions between a reference model and a test model. The reference model has only seen data in its original form \ref{LeCun1998}. If we look at the individual samples in this data we may find that the objects are reasonably centered. The slight shift of the object in the XY-plane is expected and may have happened in the recording process. We do not consider these shifts to be significant translations. The reference model undergoes the training and testing phase. We will use the statistics obtained from the testing phase as a reference for comparison.\\
+Before executing the simulation on the test model, we generate a revised dataset using the original data while inducing random translation artifacts that place the original object onto a larger canvas. The translations are drawn from a uniform distribution. We reduce the revised dataset to a single class. The model is configured to cope with the new dimensions of the stimulus, these settings will propagate into the relevant internal components such as the filter kernels. However, we will ignore the learning phase and proceed to the test phase immediately. The weights of the learners will be initialized with weight vectors obtained from the reference model. This experiment investigates if a model that has no notion of translated objects will produce spiking patterns that are similar to the reference. This assesses the invariance to translation. The attention module is essentially the only component that has to cope with the translations. The recognition system is unaware of these altered circumstances. \\
+The assessment scale invariance uses the same methodology, by utilizing the learner weights of the reference model and running through the testing phase of a simulation while exposing the model to scaled versions of the stimuli.\\
+\Cref{fig:comparison_of_cond-prob-distr_tns-layerF-and-layerZ} shows the conditional probability distribution of firing activity of $f$ and $z$ neurons. In order to quanitfy similarities between these distributions we compute the KL-divergence between the three variants of the model. \Cref{KLDiv_ts_layerF-and-layerZ} visualizes the divergence of the probabilty distributions. First we see the KL-divergence of neurons' firing probabilites for the different classes to get a sense of how specialized the neurons are. The class that was used for these experiments is present in this set. The lower plots illustrate the divergence of the firing patterns for $f$ as well as $z$ neurons given a common class while varying the experimental condition (i.e. original unaltered stimulus as reference, exposed to stimuli with translation artefacts, exposed to stimuli with translation and scale artefacts). As the upper and lower KL-dvergence matricies share the same heat intensity scale, we may visually compare that the model when exposed to the artefacts emits spiking patterns that don't deviate to the extent of confusing the firing pattern with a different class. However, there is divergence for the same class after having induced artefacts into the stimuli. The divergence is less for the $f$-layer than the output layer. The divergence increases with adding the scale artefact ontop of the translation artefact.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{comparison_of_cond-prob-distr_tns-layerF-and-layerZ}
+\caption{Comparison of conditional firing probability distributions of learners, $f$ and $z$, between a reference model and test models that utilize what the reference model has learned while exposing them to tranlated and scaled variations of the original stimuli of a single class.
+\label{fig:comparison_of_cond-prob-distr_tns-layerF-and-layerZ}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{KLDiv_ts_layerF-and-layerZ}
+\caption{KL-divergence of firing probability distributions for $f$ neurons (left) and $z$ neurons (right). The upper divergence matricies illustrate the measure of distances of two neurons' distributions given the same class. The lower half of the plot illustrated the KL-divergence pf probability distribution after exposing a trained model to stimuli with translated and scaled artiefacts. The divergence is calculated between the model exposed to these artefacts and the reference model that was used for training the learners and was only exposed to unaltered stimuli. Vertically aligned heat maps share the same intensity scale.
+\label{fig:KLDiv_ts_layerF-and-layerZ}}
+\end{figure}
+
+\chapter{Discussion and Conclusion}
+
+The original SEM model is extended to acquire the ability to recgonize objects regardless of their position in the XY-plane or their appearance in difference scales on the same plane. This invariance was established through a modular architecure. The model is composed of a detection model governed by visual attention. The module has no concpet of the objects it detects, it detects them based on their salient appearance in the visual scene. The second module is responsible for recognition. The recognition module is passive in that it is fed visual stimulus and learns to disciminate the hidden causes it finds in them. The recognition modules, especially in this purely bottom-up, feed-forward, topology of the system, has no influence over the detection module providing it with visual input. The bottom-up framework inspired by Itti et al. faciliates the modularity of the architecture. Modularity provides some conviences when experimentation and prototyping as we keep components fixed while we tune others.\\
+Inspite of modularity and independence of the detection and recognition modules, we observe that invariance did not emerge solely from attention alone. The use of feature population coding and the injection of an intermediate layer of learners for learning abstract data-driven features, contribute significantly to this. The feature population coding serves the purpose of providing a richer feature representation than intensity alone. We have seen it benefit the recognition module and lowering firing entropy, thus enabling neurons to create more distinct internal modules of objects, with no need for more data and longer training experiments.
+
+The $f$-layer may be the most effective extension to the SEM model as it integrates in such an intriguing way. The $f$-layer is made out of all the building blocks we have encountered in the original SEM model. It accepts spiking input from population coding, it a network of learners in a WTA circuit and population coding again which is applied on it to facilitate higher correlations for successive layers. Here population coding serves the purpose of a increasing the layer's fan out, since its nodes are already spiking. By learning abstract shapes $f$ neurons in the same layer may play roles of simple cells as well as complex cells. That they exist in the same layer and are governed by the same WTA circuit is not intuitive from a biological standpoint when we think of the hiearchies in the visual system. This may put the biological plausability of the how the layer is situated within the model into question. A thought that arises from this, is that since there are no restrictions that promote any particular complexity of the shape that an $f$ neuron learns, there should not be a distinction in how complex or simple they are. It may even be expected for these varying complexities to arise considering how few layers we have in the network. Hence $f$ neurons provide a good mechanism for avoiding the complexities of constructing multi-layered networks.
+
+A critical 
+low firing problem TODO
+
+
+
+This is HMAX TODO
+
+Top down TODO
+
+While conducting the experiment we observed that the intensity contrast feautre, one of pre-attentive feature for evaluating conspicuity and saliency, is ill-defined for such an experiment. The kernel of the filter for measuring intensity contrast is a two-dimensional Difference of Gaussians. The definition of the kernel resulted in high response magniutdes in image areas with no intensity activity, thus dominated by missing values. TODO
+
+
 
 \chapter{Acknowledgments}
 
-Michael
-My family: Sahra, father
-My friends Malte Alf
-Matthew Cook
-INI
+For this part I'd like shed some light on the people who helped me come this far.\\
+Foremost, I would like to state my sincere gratitude to Dr. Michael Pfeiffer, my direct supervisor in this work. I thank him for his academic guidance, walking me through all of the concepts I had to deal with for this work and his patience with me until I was able to comprehend them. He has never been reluctant to giving advice and being hands-on with discussions and tackling the issues and questions but with a good balance for leaving space for my own experimentation.\\
+
+I would also like to thank my lovely wife Sahra Rheinfrank, who has beared with me for the majority of this journey. I especially woud like to thank her for helping me with the figures in this work and making them more presentable than scribbles in my notebook. I would also like to thank my father, Atef Abdallah, who inspires me to increase efforts towards things that are good and never to work without dedication and passion.
+My gratidue also goes to my friend Malte Alf. I am thankful for his friendship support, keeping a sane mind and making a solid argument to getting things done.\\
+
+Dr. Matthew Cook is probably made the most effective contribution as it only took a single meeting with him to reinvent this work to what it is now. Thank you Matthew for inspiring this and sharing good ideas.\\
+
+The folks at the Institute of Informatics for having me with them during my studies. Giving me a proper perspective to the excitngly vast field of Neuroscience I was unaware of. I thank you for sharing your passion for the science, the institute and what you stand for. I believe I have learned more from casual conversation than in the lecture rooms. The conversations may have at least helped in bringing the lecturer's point over.
 
 \appendix
 
-\chapter{The First Appendix}
+\chapter{Appendix A}
 
-The \verb"\appendix" command should be used only once. Subsequent appendices can
-be created using the Chapter command.
+config TODO
 
-\chapter{The Second Appendix}
+where is the code TODO
+
+library dependencies TODO
+
+code flow TODO
+
+\chapter{Appendix B}
 
 Some text for the second Appendix.
 
