@@ -16,8 +16,6 @@ set(BUILD_TESTS ON CACHE BOOL "Whether to build test projects.")
 
 include(cmake/FileSystemUtils.cmake)
 
-include_directories(${${ROOT_PROJECT}_INCLUDE_DIRS})
-
 # Setup build and install locations
 if(NOT RUNTIME_INSTALL_DIRECTORY)
     set(RUNTIME_INSTALL_DIRECTORY "bin" CACHE STRING "Install sub-directory of CMAKE_INSTALL_PREFIX for RUNTIME targets (binaries, and *.dll on windows).")
