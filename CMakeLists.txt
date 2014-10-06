@@ -33,7 +33,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE PATH "Output directory for
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE PATH "Output directory for applications")
 
 # ----------------------------------------------------------------------------
-# LOCATE DEPENDENCIES: GTest
+# LOCATE DEPENDENCIES: GTest, OpenCV
 # ----------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------
@@ -46,9 +46,9 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE PATH "Output directory 
 # INPUTS:  GTEST_ROOT, GTEST_MSVC_SEARCH
 # For details, look for FindGTest.cmake located in the cmake folder: /usr/share/cmake28/Modules/FindGTest.cmake
 # ----------------------------------------------------------------------------
-message(STATUS "GTEST_ROOT=${GTEST_ROOT}")
 
 if(BUILD_TESTS)
+    message(STATUS "GTEST_ROOT=${GTEST_ROOT}")
     find_package(GTest REQUIRED)
     if(GTEST_FOUND)
         list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${GTEST_INCLUDE_DIRS})
@@ -61,6 +61,27 @@ if(BUILD_TESTS)
     endif(GTEST_FOUND)
 endif(BUILD_TESTS)
 
+# ----------------------------------------------------------------------------
+# OpenCV
+# ----------------------------------------------------------------------------
+# find_package OpenCV
+# Defines: OpenCV_FOUND, OpenCV_INCLUDE_DIRS, OpenCV_LIBS, OpenCV_LINK_LIBRARIES
+# ----------------------------------------------------------------------------
+# Force the user to tell us which OpenCV they want (otherwise find_package can find the wrong one, cache it and changes to OpenCV_DIR are ignored)
+
+if(DEFINED OpenCV_DIR)
+    find_package(OpenCV REQUIRED core PATHS ${OpenCV_DIR})
+    if(OpenCV_FOUND)
+        list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${OpenCV_INCLUDE_DIRS})
+        list(APPEND ${ROOT_PROJECT}_LIBS ${OpenCV_LIBS})
+    else(OpenCV_FOUND)
+        message(SEND_ERROR "Failed to find OpenCV. Double check that \"OpenCV_DIR\" to the root build directory of OpenCV.")
+    endif(OpenCV_FOUND)
+else(DEFINED OpenCV_DIR)
+    set(OpenCV_DIR "" CACHE PATH "Root directory for OpenCV build directory." )
+    message(FATAL_ERROR "\"OpenCV_DIR\" not set. Please explicitly provide the path to the root build directory of OpenCV.")
+endif(DEFINED OpenCV_DIR)
+
 include_directories(${${ROOT_PROJECT}_INCLUDE_DIRS})
 
 add_subdirectory(modules)
@@ -69,14 +90,15 @@ add_subdirectory(samples)
 # Build test projects
 if(BUILD_TESTS)
 
+    message(STATUS "Configure unittest project")
     include(cmake/BuildTests.cmake)
     build_tests("run_unittests" "*unittests*")
     add_definitions(-D__WITH_GTEST) # Useful in case test class needs to be friend of class under test
 
-    # Migrate test data(if the test-data directory exists
+    # Copy over test data (if it exists)
     if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
 
-        status("Copying testdata")
+        status("Copying test-data")
         file(COPY ${CMAKE_SOURCE_DIR}/testdata DESTINATION ${EXECUTABLE_OUTPUT_PATH})
 
     endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
