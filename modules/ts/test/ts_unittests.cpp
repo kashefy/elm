@@ -34,11 +34,30 @@ TEST(MatAssertionsTest, MatFEq) {
 
 TEST(MatAssertionsTest, MatFNotEq) {
 
+    const int R=3, C=2;
+    Mat a = Mat::zeros(R, C, CV_32FC1);
+    Mat b = Mat::ones(R, C, CV_32FC1);
+
+    EXPECT_MAT_DIMS_EQ(a, b);
+    EXPECT_FALSE( Equal(a, b) );
+}
+
+TEST(MatAssertionsTest, MatFNotEqDims) {
+
     Mat a = Mat::zeros(3, 2, CV_32FC1);
     Mat b = Mat::ones(2, 3, CV_32FC1);
 
     EXPECT_FALSE( EqualDims(a, b) );
     EXPECT_FALSE( Equal(a, b) );
+}
+
+TEST(MatAssertionsTest, FailureMessage) {
+
+    Mat a = Mat::zeros(3, 2, CV_32FC1);
+    Mat b = Mat::ones(3, 2, CV_32FC1);
+    Mat cmp_out;
+    compare(a, b, cmp_out, CMP_NE);
+    EXPECT_GT( MatFailureMessageNonZero(a, b, cmp_out).size(), 0) << "Failure message is empty";
 }
 
 } // namespace
