@@ -66,4 +66,28 @@ TEST(DistrSampler1D, Gaussian) {
     EXPECT_MAT_NEAR(hist/static_cast<float>(N)*SIZE, pdf, 0.2f);
 }
 
+TEST(DistrSampler2D, Uniform) {
+
+    const int ROWS = 7, COLS = 10, N = 2e4;
+    MatF pdf_uniform = MatF::ones(ROWS, COLS);
+
+    DistributionSampler2D to; // test object
+    to.pdf(pdf_uniform);
+
+    MatF hist = MatF::zeros(ROWS, COLS);
+
+    for(int i=0; i<N; i++) {
+
+        cv::Point2i sampled_point = to.Sample();
+        EXPECT_TRUE( sampled_point.inside(cv::Rect(0, 0, COLS, ROWS)) );
+        hist(sampled_point.y, sampled_point.x)++;
+    }
+
+    EXPECT_MAT_NEAR(hist/static_cast<float>(N)*ROWS*COLS, pdf_uniform, 0.2f);
+
+    cv::Mat m, s;
+    cv::meanStdDev(hist, m, s);
+    EXPECT_NEAR(s.at<float>(0, 0), 0, 1e-5);
+}
+
 } // namespace
