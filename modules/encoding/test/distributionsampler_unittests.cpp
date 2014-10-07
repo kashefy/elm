@@ -1,8 +1,6 @@
-#include "encoding/distributionsampler1d.h"
+#include "encoding/distributionsampler.h"
 
-#include "gtest/gtest.h"
 #include "ts/ts.h"
-#include <iostream>
 
 namespace {
 

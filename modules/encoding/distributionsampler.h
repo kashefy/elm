@@ -1,5 +1,5 @@
-#ifndef SEM_ENCODING_BASE_DISTRIBUTIONSAMPLER_H_
-#define SEM_ENCODING_BASE_DISTRIBUTIONSAMPLER_H_
+#ifndef SEM_ENCODING_DISTRIBUTIONSAMPLER_H_
+#define SEM_ENCODING_DISTRIBUTIONSAMPLER_H_
 
 #include <core/typedefs.h>
 
@@ -22,4 +22,12 @@ protected:
     MatF pdf_;                  ///< probability density function
 };
 
-#endif // SEM_ENCODING_BASE_DISTRIBUTIONSAMPLER_H_
+class DistributionSampler1D : public base_DistributionSampler
+{
+public:
+    DistributionSampler1D();
+
+    int Sample() const;
+};
+
+#endif // SEM_ENCODING_DISTRIBUTIONSAMPLER_H_
