@@ -94,7 +94,7 @@ if(BUILD_TESTS)
 
     message(STATUS "Configure unittest project")
     include(cmake/BuildTests.cmake)
-    build_tests("run_unittests" "*unittests*")
+    build_tests("run_unittests" "*unittest*")
     add_definitions(-D__WITH_GTEST) # Useful in case test class needs to be friend of class under test
 
     # Copy over test data (if it exists)
