@@ -87,7 +87,9 @@ include_directories(${${ROOT_PROJECT}_INCLUDE_DIRS})
 add_subdirectory(modules)
 add_subdirectory(samples)
 
-# Build test projects
+# ----------------------------------------------------------------------------
+# Test Projects
+# ----------------------------------------------------------------------------
 if(BUILD_TESTS)
 
     message(STATUS "Configure unittest project")
