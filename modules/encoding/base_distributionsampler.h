@@ -1,5 +1,5 @@
-#ifndef SEM_ENCODING_BASE_DISTRIBUTIONSAMPLER_H
-#define SEM_ENCODING_BASE_DISTRIBUTIONSAMPLER_H
+#ifndef SEM_ENCODING_BASE_DISTRIBUTIONSAMPLER_H_
+#define SEM_ENCODING_BASE_DISTRIBUTIONSAMPLER_H_
 
 #include <core/typedefs.h>
 
@@ -15,14 +15,11 @@ public:
      */
     void pdf(const MatF &pdf);
 
-    float sample() const;
-
 protected:
     base_DistributionSampler();
 
-    static cv::RNG rng_;
-    MatF pdf_;
-
+    static cv::RNG rng_;        ///< random number generator
+    MatF pdf_;                  ///< probability density function
 };
 
-#endif // SEM_ENCODING_BASE_DISTRIBUTIONSAMPLER_H
+#endif // SEM_ENCODING_BASE_DISTRIBUTIONSAMPLER_H_
