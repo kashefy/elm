@@ -1,7 +1,6 @@
 #include "encoding/distributionsampler.h"
 
 #include "core/mat_utils.h"
-#include <iostream>
 
 using namespace cv;
 
