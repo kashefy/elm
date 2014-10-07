@@ -4,7 +4,7 @@
 
 void sem::CumSum(const MatF &src, MatF &dst)
 {
-    if(dst.total() < src.total()) {
+    if(dst.total() < src.total() && src.total() > 0) {
 
         dst = MatF::zeros(src.rows, src.cols);
     }
