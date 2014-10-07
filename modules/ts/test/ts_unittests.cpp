@@ -4,6 +4,9 @@ using namespace cv;
 
 namespace {
 
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims and elem. values)
+ */
 TEST(MatAssertionsTest, MatFEq) {
 
     const int R = 3;
@@ -32,6 +35,9 @@ TEST(MatAssertionsTest, MatFEq) {
     EXPECT_MAT_EQ(a, b);
 }
 
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims, non-equal elem. values)
+ */
 TEST(MatAssertionsTest, MatFNotEq) {
 
     const int R=3, C=2;
@@ -42,6 +48,29 @@ TEST(MatAssertionsTest, MatFNotEq) {
     EXPECT_FALSE( Equal(a, b) );
 }
 
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims, single value different)
+ */
+TEST(MatAssertionsTest, MatFNotEqSingleEl) {
+
+    const int R=3, C=2;
+    Mat a = Mat::ones(R, C, CV_32FC1);
+
+    for(int r=0; r<R; r++) {
+        for(int c=0; c<C; c++) {
+
+            Mat b = a.clone();
+            EXPECT_MAT_DIMS_EQ(a, b);
+            EXPECT_MAT_EQ(a, b);
+            b.at<float>(r, c) += 123;
+            EXPECT_FALSE( Equal(a, b) );
+        }
+    }
+}
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (non-equal dims, non-equal elem. values)
+ */
 TEST(MatAssertionsTest, MatFNotEqDims) {
 
     Mat a = Mat::zeros(3, 2, CV_32FC1);
@@ -51,6 +80,21 @@ TEST(MatAssertionsTest, MatFNotEqDims) {
     EXPECT_FALSE( Equal(a, b) );
 }
 
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (non-equal dims, equal elem. values)
+ */
+TEST(MatAssertionsTest, MatFNotEqDimsAllZeros) {
+
+    Mat a = Mat::zeros(3, 2, CV_32FC1);
+    Mat b = Mat::zeros(2, 3, CV_32FC1);
+
+    EXPECT_FALSE( EqualDims(a, b) );
+    EXPECT_FALSE( Equal(a, b) );
+}
+
+/**
+ * @brief test failure message
+ */
 TEST(MatAssertionsTest, FailureMessage) {
 
     Mat a = Mat::zeros(3, 2, CV_32FC1);
