@@ -6,6 +6,9 @@
 #include <string>
 #include <opencv2/core.hpp>
 
+::testing::AssertionResult InClosed(float x, float a, float b);
+#define EXPECT_IN_CLOSED(x, a, b) EXPECT_TRUE( InClosed(x, a, b) )
+
 ::testing::AssertionResult EqualDims(const cv::Mat& a, const cv::Mat& b);
 #define EXPECT_MAT_DIMS_EQ(a, b) EXPECT_TRUE( EqualDims(a, b) )
 

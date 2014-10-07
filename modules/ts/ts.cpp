@@ -1,10 +1,17 @@
 #include "ts/ts.h"
 
 #include <opencv2/core.hpp>
+#include "ts/interval.h"
 
 using namespace std;
 using namespace testing;
 using namespace cv;
+
+AssertionResult InClosed(float x, float a, float b) {
+
+    if(IntervalClosed(a, b).In(x)) { return AssertionSuccess(); }
+    else { return AssertionFailure() << a << "<=" << x << "<=" << b << " Failed."; }
+}
 
 AssertionResult EqualDims(const Mat& a, const Mat& b) {
 
