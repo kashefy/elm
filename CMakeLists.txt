@@ -4,17 +4,29 @@
 
 cmake_minimum_required(VERSION 2.8.8)
 
+# ----------------------------------------------------------------------------
 # Define root variables
+# ----------------------------------------------------------------------------
 set(ROOT_PROJECT sem)
 project(${ROOT_PROJECT})
 set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules)
 set(${ROOT_PROJECT}_LIBS "")
 set(${ROOT_PROJECT}_MODULES "")
 
+
+# ----------------------------------------------------------------------------
 # Set default behavior
+# ----------------------------------------------------------------------------
 set(BUILD_TESTS ON CACHE BOOL "Whether to build test projects.")
 
 include(cmake/FileSystemUtils.cmake)
+
+# ----------------------------------------------------------------------------
+# Set global CMake variables
+# ----------------------------------------------------------------------------
+# Print all warnings
+# With C++11 support
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
 
 # Setup build and install locations
 if(NOT RUNTIME_INSTALL_DIRECTORY)
