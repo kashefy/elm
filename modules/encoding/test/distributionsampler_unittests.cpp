@@ -40,10 +40,7 @@ TEST(DistrSampler1D, Gaussian) {
 
     // generate gaussian pdf
     cv::Mat data(1, N, CV_32FC1);
-    for(int i=0; i<N; i++) {
-
-        cv::randn(data, MEAN, STD_DEV);
-    }
+    cv::randn(data, MEAN, STD_DEV);
 
     float pdf_values[SIZE] = {};
     for (int i=0; i<N; i++) {
