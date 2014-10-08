@@ -6,5 +6,6 @@
 
 typedef cv::Mat_<float> MatF;
 typedef std::vector< MatF > VecMatF;
+typedef cv::Mat_<int> MatI;
 
 #endif // SEM_CORE_TYPEDEFS_H_
