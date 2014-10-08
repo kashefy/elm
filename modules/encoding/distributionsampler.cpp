@@ -12,6 +12,11 @@ void base_DistributionSampler::pdf(const MatF &pdf) {
     sem::CumSum(pdf_, pdf_);
 }
 
+MatF base_DistributionSampler::pdf() const
+{
+    return pdf_;
+}
+
 base_DistributionSampler::base_DistributionSampler()
 {
 }
@@ -45,3 +50,13 @@ Point2i DistributionSampler2D::Sample() const {
     }
     return Point2i(i%pdf_.cols, i/pdf_.cols);
 }
+
+PoissonProcess::PoissonProcess(float frequency, float delta_t_msec)
+    : DistributionSampler1D()
+{
+    MatF firing_prob(1, 1);
+    firing_prob(0, 0) = frequency*delta_t_msec;
+    pdf_ = firing_prob;
+}
+
+

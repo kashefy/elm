@@ -90,4 +90,36 @@ TEST(DistrSampler2D, Uniform) {
     EXPECT_NEAR(s.at<float>(0, 0), 0, 1e-5);
 }
 
+class PoissonProcessTest : public testing::Test
+{
+protected:
+    PoissonProcessTest()
+        : frequency_(-5.f),
+          delta_t_msec_(1.f),
+          to_(0.f, 0.f) // dummy initialization
+    {
+
+    }
+
+    virtual void SetUp()
+    {
+        to_ = PoissonProcess(frequency_, delta_t_msec_); // -ve frequency => inf firing rate, 1 msec time resolution
+    }
+
+    float frequency_;
+    float delta_t_msec_;
+
+    PoissonProcess to_; ///< test object
+};
+
+TEST_F(PoissonProcessTest, PDF)
+{
+    MatF pdf = to_.pdf();
+    EXPECT_MAT_DIMS_EQ(pdf, MatF(1, 1));
+
+    float firing_prob = pdf(0, 0);
+    EXPECT_LT(firing_prob, 0);
+    EXPECT_FLOAT_EQ(firing_prob, frequency_*delta_t_msec_);
+}
+
 } // namespace
