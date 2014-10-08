@@ -10,7 +10,7 @@ void sem::CumSum(const MatF &src, MatF &dst)
     }
 
     float interm_sum = 0;
-    for(int i = 0; i < src.total(); i++) {
+    for(unsigned int i = 0; i < src.total(); i++) {
 
         interm_sum += src(i);
         dst(i) = interm_sum;
