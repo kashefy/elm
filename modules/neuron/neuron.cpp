@@ -28,7 +28,5 @@ int YNeuron::State(float state)
         // TODO: unsupported state, should throw and exception
     }
 
-    //
-
     return spike;
 }
