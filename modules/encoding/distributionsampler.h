@@ -44,6 +44,20 @@ public:
 };
 
 /**
+ * @brief Class for simulating f-Hz Poisson process
+ */
+class PoissonProcess : public DistributionSampler1D
+{
+public:
+    /**
+     * @brief Construct a Poisson Process instance
+     * @param frequency
+     * @param time resolution in milliseconds
+     */
+    PoissonProcess(float frequency, float delat_t_msec);
+};
+
+/**
  * @brief The DistributionSampler from two-dimensional PDF
  */
 class DistributionSampler2D : public base_DistributionSampler
@@ -56,20 +70,6 @@ public:
      * @return point index
      */
     cv::Point2i Sample() const;
-};
-
-/**
- * @brief Class for simulating f-Hz Poisson process
- */
-class PoissonProcess : public DistributionSampler1D
-{
-public:
-    /**
-     * @brief Construct a Poisson Process instance
-     * @param frequency
-     * @param time resolution in milliseconds
-     */
-    PoissonProcess(float frequency, float delat_t_msec);
 };
 
 #endif // SEM_ENCODING_DISTRIBUTIONSAMPLER_H_

@@ -7,8 +7,9 @@ namespace {
 
 TEST(DistrSampler1D, Uniform) {
 
-    const int SIZE = 10, N=2000;
-    MatF pdf_uniform = MatF::ones(1, SIZE);
+    const int SIZE = 10, N = 1e4;
+    const float MEAN = 1.f/static_cast<float>(SIZE);
+    MatF pdf_uniform = MatF::ones(1, SIZE)*MEAN;
 
     DistributionSampler1D to; // test object
     to.pdf(pdf_uniform);
@@ -22,11 +23,14 @@ TEST(DistrSampler1D, Uniform) {
         hist(sampled_index)++;
     }
 
-    EXPECT_MAT_NEAR(hist/static_cast<float>(N)*SIZE, pdf_uniform, 0.2);
+    EXPECT_EQ(cv::sum(hist)(0), N);
+    MatF hist_normalized = hist/static_cast<float>(N);
+    EXPECT_MAT_NEAR(hist_normalized, pdf_uniform, 0.2f);
 
     cv::Mat m, s;
-    cv::meanStdDev(hist, m, s);
-    EXPECT_NEAR(s.at<float>(0, 0), 0, 1e-5);
+    cv::meanStdDev(hist_normalized, m, s);
+    EXPECT_NEAR(m.at<double>(0, 0), MEAN, 0.1);
+    EXPECT_NEAR(s.at<double>(0, 0), 0., 0.1);
 }
 
 TEST(DistrSampler1D, Gaussian) {
@@ -63,13 +67,16 @@ TEST(DistrSampler1D, Gaussian) {
         hist(sampled_index)++;
     }
 
-    EXPECT_MAT_NEAR(hist/static_cast<float>(N)*SIZE, pdf, 0.2f);
+    EXPECT_EQ(cv::sum(hist)(0), N);
+    MatF hist_normalized = hist/static_cast<float>(N)*SIZE;
+    EXPECT_MAT_NEAR(hist_normalized, pdf, 0.2f);
 }
 
 TEST(DistrSampler2D, Uniform) {
 
     const int ROWS = 7, COLS = 10, N = 2e4;
-    MatF pdf_uniform = MatF::ones(ROWS, COLS);
+    const float MEAN = 1.f/static_cast<float>(ROWS*COLS);
+    MatF pdf_uniform = MatF::ones(ROWS, COLS)*MEAN;
 
     DistributionSampler2D to; // test object
     to.pdf(pdf_uniform);
@@ -83,19 +90,22 @@ TEST(DistrSampler2D, Uniform) {
         hist(sampled_point.y, sampled_point.x)++;
     }
 
-    EXPECT_MAT_NEAR(hist/static_cast<float>(N)*ROWS*COLS, pdf_uniform, 0.2f);
+    EXPECT_EQ(cv::sum(hist)(0), N);
+    MatF hist_normalized = hist/static_cast<float>(N);
+    EXPECT_MAT_NEAR(hist_normalized, pdf_uniform, 0.2f);
 
     cv::Mat m, s;
-    cv::meanStdDev(hist, m, s);
-    EXPECT_NEAR(s.at<float>(0, 0), 0, 1e-5);
+    cv::meanStdDev(hist_normalized, m, s);
+    EXPECT_NEAR(m.at<double>(0, 0), MEAN, 0.1);
+    EXPECT_NEAR(s.at<double>(0, 0), 0., 0.1);
 }
 
 class PoissonProcessTest : public testing::Test
 {
 protected:
     PoissonProcessTest()
-        : frequency_(-5.f),
-          delta_t_msec_(1.f),
+        : frequency_(1.f),
+          delta_t_msec_(1000.f),
           to_(0.f, 0.f) // dummy initialization
     {
 
@@ -117,9 +127,61 @@ TEST_F(PoissonProcessTest, PDF)
     MatF pdf = to_.pdf();
     EXPECT_MAT_DIMS_EQ(pdf, MatF(1, 1));
 
-    float firing_prob = pdf(0, 0);
-    EXPECT_LT(firing_prob, 0);
-    EXPECT_FLOAT_EQ(firing_prob, frequency_*delta_t_msec_);
+    float lambda = pdf(0, 0);
+    EXPECT_LE(lambda, 0);
+    EXPECT_FLOAT_EQ(lambda, 1.f-frequency_*delta_t_msec_/1000.f);
+}
+
+TEST_F(PoissonProcessTest, Sample)
+{
+    const int N = 100;
+    for(int i=0; i<N; i++) {
+
+        EXPECT_EQ(1, to_.Sample());
+    }
+}
+
+TEST_F(PoissonProcessTest, SampleZeroFreq)
+{
+    PoissonProcess to(0.f, 1.f);
+    const int N = 100;
+    for(int i=0; i<N; i++) {
+
+        EXPECT_EQ(0, to.Sample());
+    }
+}
+
+TEST_F(PoissonProcessTest, SampleZeroDeltaT)
+{
+    PoissonProcess to(40.f, 0.f);
+    const int N = 100;
+    for(int i=0; i<N; i++) {
+
+        EXPECT_EQ(0, to.Sample());
+    }
+}
+
+TEST_F(PoissonProcessTest, SampleZeroFreqAndDeltaT)
+{
+    PoissonProcess to(0.f, 0.f);
+    const int N = 100;
+    for(int i=0; i<N; i++) {
+
+        EXPECT_EQ(0, to.Sample());
+    }
+}
+
+TEST_F(PoissonProcessTest, SampleCoinToss)
+{
+    PoissonProcess to(50.f, 10.f);
+    const int N = 1e4;
+    int net = 0;
+    for(int i=0; i<N; i++) {
+
+        net += to.Sample();
+    }
+    float rate = net/static_cast<float>(N);
+    EXPECT_NEAR(rate, 0.5f, 0.02f);
 }
 
 } // namespace

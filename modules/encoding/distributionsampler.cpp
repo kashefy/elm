@@ -28,12 +28,20 @@ DistributionSampler1D::DistributionSampler1D()
 
 int DistributionSampler1D::Sample() const {
 
-    const float R = float(rng_);
+    const float RANDOM = float(rng_);
     int i = 0;
-    while(pdf_(i) < R){
+    while(pdf_(i) < RANDOM && i < static_cast<int>(pdf_.total())){
         i++;
     }
     return i;
+}
+
+PoissonProcess::PoissonProcess(float frequency, float delta_t_msec)
+    : DistributionSampler1D()
+{
+    MatF firing_prob(1, 1);
+    firing_prob(0, 0) = frequency*delta_t_msec/1000.f;
+    pdf_ = 1.f-firing_prob;
 }
 
 DistributionSampler2D::DistributionSampler2D()
@@ -43,20 +51,12 @@ DistributionSampler2D::DistributionSampler2D()
 
 Point2i DistributionSampler2D::Sample() const {
 
-    const float R = float(rng_);
+    const float RANDOM = float(rng_);
     int i = 0;
-    while(pdf_(i) < R){
+    while(pdf_(i) < RANDOM){
         i++;
     }
     return Point2i(i%pdf_.cols, i/pdf_.cols);
-}
-
-PoissonProcess::PoissonProcess(float frequency, float delta_t_msec)
-    : DistributionSampler1D()
-{
-    MatF firing_prob(1, 1);
-    firing_prob(0, 0) = frequency*delta_t_msec;
-    pdf_ = firing_prob;
 }
 
 
