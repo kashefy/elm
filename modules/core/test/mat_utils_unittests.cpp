@@ -78,7 +78,6 @@ TEST(MatUtilsTest, CumSum_ones_neg) {
  */
 TEST(MatUtilsTest, CumSum_empty) {
 
-    int N = 10;
     MatF in = MatF::zeros(0, 0);
     MatF out;
     sem::CumSum(in, out);
