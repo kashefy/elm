@@ -31,6 +31,11 @@ bool SpikingHistory::Recent(int index) const
     return history_(index) > 0;
 }
 
+cv::Mat SpikingHistory::Recent() const
+{
+    return history_ != 0;
+}
+
 void SpikingHistory::Update(const cv::Mat &spike_mask)
 {
     history_.setTo(len_, spike_mask);

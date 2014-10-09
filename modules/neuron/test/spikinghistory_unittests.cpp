@@ -70,7 +70,7 @@ TEST_F(SpikingHistoryTest, AdvanceThenReset)
     EXPECT_MAT_EQ(to_.History(), expected) << "History mismatch after Reset";
 }
 
-TEST_F(SpikingHistoryTest, Recent)
+TEST_F(SpikingHistoryTest, RecentIndex)
 {
     for(int i=0; i<len_*3; i++) {
 
@@ -79,6 +79,27 @@ TEST_F(SpikingHistoryTest, Recent)
 
             if(i < len_) { EXPECT_TRUE  (to_.Recent(index)); }
             else         { EXPECT_FALSE (to_.Recent(index)); }
+        }
+        to_.Advance();
+    }
+}
+
+TEST_F(SpikingHistoryTest, Recent)
+{
+    for(int i=0; i<len_*3; i++) {
+
+        MatI h = to_.History();
+        for(int index=0; index<h.cols; index++) {
+
+            if(i < len_) {
+
+                EXPECT_TRUE(to_.Recent(index));
+                EXPECT_GE(cv::sum(to_.Recent())[0], h.cols);
+            }
+            else {
+                EXPECT_FALSE(to_.Recent(index));
+                EXPECT_EQ(cv::sum(to_.Recent())[0], 0);
+            }
         }
         to_.Advance();
     }
@@ -103,5 +124,5 @@ TEST_F(SpikingHistoryTest, Update)
 
         if(n-1 < len_-1)    { EXPECT_TRUE  (to_.Recent(0)); }
         else                { EXPECT_FALSE (to_.Recent(0)); }
-    };
+    }
 }

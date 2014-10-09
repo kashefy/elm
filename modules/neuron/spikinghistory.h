@@ -40,6 +40,12 @@ public:
     virtual bool Recent(int index) const;
 
     /**
+     * @brief Obtain vector indicating which indice recently fired
+     * @return mask indices that recently fired
+     */
+    virtual cv::Mat Recent() const;
+
+    /**
      * @brief update history with new set of spiking input
      * @param spiking input mask vector (spike vector != 0)
      */
