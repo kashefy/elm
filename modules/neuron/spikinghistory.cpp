@@ -9,7 +9,7 @@ SpikingHistory::SpikingHistory(int dims, int len)
 
 void SpikingHistory::Advance()
 {
-    cv::Mat mask_rows = history_ != 0;
+    cv::Mat mask_rows = history_ > 0;
     cv::subtract(history_,
                  MatI::ones(history_.rows, history_.cols),
                  history_,
@@ -23,7 +23,7 @@ MatI SpikingHistory::History() const
 
 void SpikingHistory::Reset()
 {
-    history_ = MatI::zeros(1, dims_)+len_;
+    history_ = MatI::zeros(1, dims_);
 }
 
 bool SpikingHistory::Recent(int index) const
@@ -33,7 +33,7 @@ bool SpikingHistory::Recent(int index) const
 
 cv::Mat SpikingHistory::Recent() const
 {
-    return history_ != 0;
+    return history_ > 0;
 }
 
 void SpikingHistory::Update(const cv::Mat &spike_mask)

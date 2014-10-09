@@ -15,6 +15,7 @@ protected:
         len_ = 5;
         dims_ = 3;
         to_ = SpikingHistory(dims_, len_);
+        to_.Update(cv::Mat::ones(1, dims_, CV_8UC1));
     }
 
     SpikingHistory to_; ///< test object
@@ -24,17 +25,16 @@ protected:
 
 TEST_F(SpikingHistoryTest, InitialHistory)
 {
-    MatI h = to_.History();
-    EXPECT_MAT_EQ(h,  MatI::zeros(1, dims_)+len_) << "History mismatch";
+    EXPECT_MAT_EQ(SpikingHistory(dims_, len_).History(),  MatI::zeros(1, dims_)) << "History mismatch";
 }
 
 TEST_F(SpikingHistoryTest, Reset)
 {
-    MatI expected = MatI::zeros(1, dims_)+len_;
+    MatI expected = MatI::zeros(1, dims_);
     for(int i=0; i<len_*3; i++) {
 
-        EXPECT_MAT_EQ(to_.History(), expected) << "History mismatch at i=" << i;
         to_.Reset();
+        EXPECT_MAT_EQ(to_.History(), expected) << "History mismatch at i=" << i;
     }
 }
 
@@ -67,7 +67,7 @@ TEST_F(SpikingHistoryTest, AdvanceThenReset)
 
     to_.Reset();
 
-    EXPECT_MAT_EQ(to_.History(), expected) << "History mismatch after Reset";
+    EXPECT_MAT_EQ(to_.History(), MatI::zeros(1, dims_)) << "History mismatch after Reset";
 }
 
 TEST_F(SpikingHistoryTest, RecentIndex)
@@ -116,7 +116,7 @@ TEST_F(SpikingHistoryTest, Update)
 
         MatI spikes = MatI::zeros(1, dims_);
         spikes(index) = 1;
-        cv::Mat mask = spikes != 0;
+        cv::Mat mask = spikes > 0;
 
         to_.Update(mask);
 
