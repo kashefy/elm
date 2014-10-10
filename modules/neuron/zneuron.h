@@ -13,7 +13,11 @@ public:
     ZNeuron();
 
     /**
-     * @brief initialize object
+     * @brief initialize neuron with random weights and bias
+     *
+     * Values are drawn from a half-normal distribution, where x < 0
+     * then scaled by 0.01
+     *
      * @param number of features
      * @param spiking input history length
      */
