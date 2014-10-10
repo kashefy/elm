@@ -4,20 +4,9 @@
 #include "gtest/gtest.h"
 
 #include <string>
-#include <opencv2/core.hpp>
+#include "ts/mat_assertions.h"
 
 ::testing::AssertionResult InClosed(float x, float a, float b);
 #define EXPECT_IN_CLOSED(x, a, b) EXPECT_TRUE( InClosed(x, a, b) )
-
-::testing::AssertionResult EqualDims(const cv::Mat& a, const cv::Mat& b);
-#define EXPECT_MAT_DIMS_EQ(a, b) EXPECT_TRUE( EqualDims(a, b) )
-
-std::string MatFailureMessageNonZero(const cv::Mat& a, const cv::Mat& b, const cv::Mat& cmp);
-
-::testing::AssertionResult Equal(const cv::Mat& a, const cv::Mat& b);
-#define EXPECT_MAT_EQ(a, b) EXPECT_TRUE( Equal(a, b) )
-
-::testing::AssertionResult Near(const cv::Mat& a, const cv::Mat& b, float tolerance);
-#define EXPECT_MAT_NEAR(a, b, t) EXPECT_TRUE( Near(a, b, t) )
 
 #endif // SEM_MODULES_TS_H_

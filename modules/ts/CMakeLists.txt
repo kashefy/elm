@@ -10,5 +10,6 @@ file (GLOB SRC_LIST *.c*)
 file (GLOB HEADERS  *.h*)
 
 add_library (${MODULE_NAME} ${SRC_LIST} ${HEADERS})
-target_link_libraries(${MODULE_NAME} ${${ROOT_PROJECT}_LIBS})
+add_dependencies(${MODULE_NAME} core)
+target_link_libraries(${MODULE_NAME} ${${ROOT_PROJECT}_LIBS} core)
 
