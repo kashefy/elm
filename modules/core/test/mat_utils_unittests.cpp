@@ -5,6 +5,7 @@
 #include <string>
 
 using namespace std;
+using namespace cv;
 using namespace sem;
 
 /**
@@ -82,5 +83,41 @@ TEST(MatUtilsTest, CumSum_empty) {
     MatF out;
     sem::CumSum(in, out);
     EXPECT_EQ(out.total(), 0);
+}
+
+/**
+ * @brief test utility function for getting mat type string representation
+ */
+TEST(MatUtilsTest, TypeToString)
+{
+    Mat a;
+    a = Mat(1, 1, CV_32FC1);
+    EXPECT_GT(MatTypeToString(a).size(), 0);
+    EXPECT_EQ(MatTypeToString(a), "CV_32F");
+
+    EXPECT_GT(MatTypeToString(a).size(), 0);
+    EXPECT_EQ(MatTypeToString(a), MatTypeToString(Mat(1, 1, CV_32FC2)));
+
+    a = Mat(1, 1, CV_32SC1);
+    EXPECT_GT(MatTypeToString(a).size(), 0);
+    EXPECT_EQ(MatTypeToString(a), MatTypeToString(Mat(1, 1, CV_32SC2)));
+}
+
+/**
+ * @brief test utility function for getting mat type string representation
+ * with same type but different number of channels
+ */
+TEST(MatUtilsTest, TypeToStringChannels)
+{
+    for(int ch=1; ch<=4; ch++) {
+
+        EXPECT_EQ(MatTypeToString(Mat(1, 1, CV_MAKETYPE(CV_8U, ch))),   "CV_8U");
+        EXPECT_EQ(MatTypeToString(Mat(1, 1, CV_MAKETYPE(CV_8S, ch))),   "CV_8S");
+        EXPECT_EQ(MatTypeToString(Mat(1, 1, CV_MAKETYPE(CV_16U, ch))),  "CV_16U");
+        EXPECT_EQ(MatTypeToString(Mat(1, 1, CV_MAKETYPE(CV_16S, ch))),  "CV_16S");
+        EXPECT_EQ(MatTypeToString(Mat(1, 1, CV_MAKETYPE(CV_32S, ch))),  "CV_32S");
+        EXPECT_EQ(MatTypeToString(Mat(1, 1, CV_MAKETYPE(CV_32F, ch))),  "CV_32F");
+        EXPECT_EQ(MatTypeToString(Mat(1, 1, CV_MAKETYPE(CV_64F, ch))),  "CV_64F");
+    }
 }
 
