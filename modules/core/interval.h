@@ -1,5 +1,5 @@
-#ifndef SEM_TS_INTERVAL_H_
-#define SEM_TS_INTERVAL_H_
+#ifndef SEM_CORE_INTERVAL_H_
+#define SEM_CORE_INTERVAL_H_
 
 /**
  * @brief Base class for intervals of real numbers
@@ -45,4 +45,4 @@ public:
     bool In(float x) const;
 };
 
-#endif // SEM_TS_INTERVAL_H_
+#endif // SEM_CORE_INTERVAL_H_

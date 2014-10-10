@@ -1,6 +1,6 @@
 #include "ts/ts.h"
 
-#include "ts/interval.h"
+#include "core/interval.h"
 #include "core/mat_utils.h"
 
 using namespace std;
