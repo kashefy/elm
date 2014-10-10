@@ -100,4 +100,13 @@ MatF ZNeuron::Bias() const
     return MatF(1, 1).setTo(bias_);
 }
 
+void ZNeuron::LetFire(bool let_fire)
+{
+    has_fired_ = let_fire;
+}
+
+bool ZNeuron::HasFired() const
+{
+    return has_fired_;
+}
 

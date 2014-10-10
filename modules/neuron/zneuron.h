@@ -29,21 +29,33 @@ public:
 
     /**
      * @brief Get neuron's weight vector, including bias term
-     * @return neuron weights excluding bias term
+     * @return neuron weights excluding bias term, log scale
      */
     MatF Weights() const;
 
     /**
      * @brief get bias term
-     * @return neuron's bias term (single element)
+     * @return neuron's bias term (single element) log scale
      */
     MatF Bias() const;
+
+    /**
+     * @brief Let this neuron fire. Let it spike.
+     * @param Whether to spike or not
+     */
+    void LetFire(bool let_fire=true);
+
+    /**
+     * @brief Check if neuron was set to fire
+     * @return true if fired/spiked
+     */
+    bool HasFired() const;
 
 protected:
 
     bool has_fired_;            ///< indicate whether neuron fired since last input
     float bias_;                 ///< bias term
-    MatF weights_;              ///< Neuron weights, excluding bias term
+    MatF weights_;              ///< Neuron weights, excluding bias term, log scale
     SpikingHistory history_;    ///< spiking input history
 };
 
