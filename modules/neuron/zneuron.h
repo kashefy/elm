@@ -25,13 +25,21 @@ public:
 
     /**
      * @brief Get neuron's weight vector, including bias term
-     * @return neuron weights including bias term at 0-index
+     * @return neuron weights excluding bias term
      */
     MatF Weights() const;
 
+    /**
+     * @brief get bias term
+     * @return neuron's bias term (single element)
+     */
+    MatF Bias() const;
+
 protected:
 
-    MatF weights_;              ///< Neuron weights, including bias at index 0
+    bool has_fired_;            ///< indicate whether neuron fired since last input
+    float bias_;                 ///< bias term
+    MatF weights_;              ///< Neuron weights, excluding bias term
     SpikingHistory history_;    ///< spiking input history
 };
 
