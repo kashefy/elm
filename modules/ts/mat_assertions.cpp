@@ -8,7 +8,9 @@ using namespace cv;
 
 AssertionResult IsType(const Mat &a, int mat_type)
 {
-    if(a.type() == mat_type) { return AssertionSuccess(); }
+    if((a.type() & CV_MAT_DEPTH_MASK) == (mat_type & CV_MAT_DEPTH_MASK)) {
+        return AssertionSuccess();
+    }
     else { return AssertionFailure() << MatTypeFailureMessage(a, mat_type); }
 }
 

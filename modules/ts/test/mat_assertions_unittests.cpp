@@ -1,5 +1,7 @@
 #include "ts/ts.h"
 
+#include "core/typedefs.h"
+
 using namespace cv;
 
 namespace {
@@ -95,13 +97,67 @@ TEST(MatAssertionsTest, MatFNotEqDimsAllZeros) {
 /**
  * @brief test failure message
  */
-TEST(MatAssertionsTest, FailureMessage) {
-
+TEST(MatAssertionsTest, FailureMessage)
+{
     Mat a = Mat::zeros(3, 2, CV_32FC1);
     Mat b = Mat::ones(3, 2, CV_32FC1);
     Mat cmp_out;
     compare(a, b, cmp_out, CMP_NE);
     EXPECT_GT( MatFailureMessageNonZero(a, b, cmp_out).size(), 0) << "Failure message is empty";
+}
+
+/**
+ * Series of tests around Mat type failure message
+ */
+TEST(MatTypeAssertionsTest, FailureMessage)
+{
+    Mat matf = Mat::zeros(3, 2, CV_32FC1);
+    EXPECT_GT( MatTypeFailureMessage(matf, CV_32S).size(), 0 ) << "Failure message is empty";
+    EXPECT_GT( MatTypeFailureMessage(matf, CV_8UC1).size(), 0 ) << "Failure message is empty";
+    EXPECT_GT( MatTypeFailureMessage(matf, CV_16SC2).size(), 0 ) << "Failure message is empty";
+}
+
+/**
+ * Series of tests around Mat type assertions
+ */
+TEST(MatTypeAssertionsTest, Type)
+{
+    Mat a = Mat(1, 1, CV_32FC1);
+    EXPECT_TRUE( IsType(a, CV_32F)) << "It's a 32-bit float matrix.";
+    EXPECT_TRUE( IsType(Mat(1, 1, CV_32FC2), a.type()) ) << "It's a 32-bit float matrix.";
+    EXPECT_FALSE( IsType(Mat(1, 1, CV_32SC2), a.type()) ) << " 32-bit signed int != 32-bit float.";
+}
+
+TEST(MatTypeAssertionsTest, TemplateType)
+{
+    MatF a = MatF(1, 1);
+    EXPECT_TRUE( IsType(a, CV_32F)) << "It's a 32-bit float matrix.";
+    EXPECT_TRUE( IsType(Mat(1, 1, CV_32FC2), a.type()) ) << "It's a 32-bit float matrix.";
+    EXPECT_FALSE( IsType(Mat(1, 1, CV_32SC2), a.type()) ) << " 32-bit signed int != 32-bit float.";
+
+    MatI b = MatI(1, 1);
+    EXPECT_TRUE( IsType(b, CV_32S)) << "It's a 32-bit signed integer matrix.";
+    EXPECT_TRUE( IsType(Mat(1, 1, CV_32SC2), b.type()) ) << "It's a 32-bit signed int matrix.";
+    EXPECT_FALSE( IsType(Mat(1, 1, CV_16SC1), b.type()) ) << "16-bit signed int != 32-bit signed int.";
+}
+
+/**
+ * @brief test utility function for getting mat type string representation
+ * with same type but different number of channels
+ */
+TEST(MatTypeAssertionsTest, TypeChannels)
+{
+    Size s(1, 1);
+    for(int ch=1; ch<=4; ch++) {
+
+        EXPECT_TRUE( IsType(Mat(s, CV_MAKETYPE(CV_8U, ch)),  CV_8U) );
+        EXPECT_TRUE( IsType(Mat(s, CV_MAKETYPE(CV_8S, ch)),  CV_8S) );
+        EXPECT_TRUE( IsType(Mat(s, CV_MAKETYPE(CV_16U, ch)), CV_16U) );
+        EXPECT_TRUE( IsType(Mat(s, CV_MAKETYPE(CV_16S, ch)), CV_16S) );
+        EXPECT_TRUE( IsType(Mat(s, CV_MAKETYPE(CV_32S, ch)), CV_32S) );
+        EXPECT_TRUE( IsType(Mat(s, CV_MAKETYPE(CV_32F, ch)), CV_32F) );
+        EXPECT_TRUE( IsType(Mat(s, CV_MAKETYPE(CV_64F, ch)), CV_64F) );
+    }
 }
 
 } // namespace
