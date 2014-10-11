@@ -72,4 +72,9 @@ public:
     cv::Point2i Sample() const;
 };
 
+namespace sem
+{
+float randexp(float lambda);
+}
+
 #endif // SEM_CORE_DISTRIBUTIONSAMPLER_H_

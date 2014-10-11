@@ -181,4 +181,54 @@ TEST_F(PoissonProcessTest, SampleCoinToss)
     EXPECT_NEAR(rate, 0.5f, 0.02f);
 }
 
+TEST(ExponentialPDFTest, Sample)
+{
+    const double PDF_END=10.;   // last x element in pdf function
+    const int SIZE=30, N=2000;  // no. of bins, no. of samples to draw
+    const float LAMBDA = 1.f;
+
+    // generate exponential pdf
+    MatF pdf(1, SIZE);
+    double x = 0.;
+    for (int i=0; i<SIZE; i++,
+         x += PDF_END/static_cast<double>(SIZE)) {
+
+        double f = exp(-static_cast<double>(LAMBDA)*x);
+        pdf(i) = LAMBDA*static_cast<float>(f);
+    }
+
+    // add generated pdf to a sampler and draw samples from it
+    DistributionSampler1D to; // test object
+    to.pdf(pdf);
+
+    // generate a histogram from sampled values
+    // also sample values from randexp() function
+    MatF hist1 = MatF::zeros(1, SIZE);
+    MatF hist2 = MatF::zeros(1, SIZE);
+
+    for(int i=0; i<N; i++) {
+
+        // collect samples drawn from pdf into a histogram
+        int sampled_index = to.Sample();
+        EXPECT_IN_CLOSED(sampled_index, 0, SIZE-1) << "Sample out of bounds.";
+        hist1(sampled_index)++;
+
+        // collect samples drawn from exp. sampling function into a second histogram
+        float v = sem::randexp(LAMBDA);
+        int x = static_cast<int>(v*SIZE/PDF_END); // find the right bin for it
+        if(x < SIZE) {
+            hist2(x)++;
+        }
+    }
+
+    EXPECT_EQ(cv::sum(hist1)(0), N);
+
+    // compare each histogram of drawn samples to original exponential pdf
+    MatF hist1_normalized = hist1/hist1(0);
+    EXPECT_MAT_NEAR(hist1_normalized, pdf, 0.2f);
+
+    MatF hist2_normalized = hist2/hist2(0);
+    EXPECT_MAT_NEAR(hist2_normalized, pdf, 0.2f);
+}
+
 } // namespace

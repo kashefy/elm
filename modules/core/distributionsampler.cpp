@@ -59,4 +59,10 @@ Point2i DistributionSampler2D::Sample() const {
     return Point2i(i%pdf_.cols, i/pdf_.cols);
 }
 
+float sem::randexp(float lambda)
+{
+    Mat u(1, 1, CV_64FC1);
+    randu(u, 0, 1);
+    return static_cast<float>(-log(1.-u.at<double>(0)))/lambda;
+}
 
