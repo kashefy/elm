@@ -59,8 +59,8 @@ string MatFailureMessageNonZero(const Mat& a, const Mat& b, const Mat& cmp) {
                   case CV_64F:  failure_msg << "(" << a.at<double>(r, c)    << ") (" << b.at<double>(r, c)  << ")" ; break;
                   default: break;
                 }
+                failure_msg << std::endl;
             }
-            failure_msg << std::endl;
         }
     }
     return failure_msg.str();
