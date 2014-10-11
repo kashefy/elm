@@ -1,7 +1,9 @@
 #include "core/distributionsampler.h"
 
-#include "ts/ts.h"
 #include <opencv2/imgproc.hpp>
+
+#include "core/area.h"
+#include "ts/ts.h"
 
 namespace {
 
@@ -282,8 +284,16 @@ TEST(ExponentialPDFTest, Lambda)
 TEST(ExponentialPDFTest, Moments)
 {
     const float PDF_END=10.;   // last x element in pdf function
-    const int SIZE=50, N=3000;  // no. of bins, no. of samples to draw
+    const int SIZE=50, N=2000;  // no. of bins, no. of samples to draw
     const float PDF_SCALE_FACTOR=static_cast<float>(SIZE)/PDF_END;
+
+    MatF x(1, SIZE);
+    float x_val = 0.f;
+    for(int i=0; i<SIZE; i++) {
+
+        x(i) = x_val;
+        x_val += 1.f/PDF_SCALE_FACTOR;
+    }
 
     // generate a histogram from sampled values
     // also sample values from randexp() function
@@ -306,25 +316,12 @@ TEST(ExponentialPDFTest, Moments)
 
     // check moments
     double lambda = 0.5;
-
-    MatF X(1, SIZE);
-    float x=0.f;
-    for(int i=0; i<SIZE; i++) {
-        X(i) = x;
-        x += 1.f/PDF_SCALE_FACTOR;
-    }
-
     for(int i=0; i<static_cast<int>(hists.size()); i++) {
 
         MatF pdf;
-        cv::multiply(hists[i], X, pdf);
-        std::cout<<pdf<<std::endl;
-        cv::Mat m, s;
+        cv::divide(hists[i], cv::sum(hists[i]/PDF_SCALE_FACTOR)(0), pdf);
 
-        cv::meanStdDev(pdf, m, s);
-        std::cout<<"i"<<i<<"m"<<m<<std::endl;
-        EXPECT_NEAR(m.at<double>(0), 1./lambda, 0.01) << lambda;
-
+        EXPECT_NEAR(Trapz()(x, pdf), 1.f, 0.2f);
         lambda += 0.5;
     }
 }
