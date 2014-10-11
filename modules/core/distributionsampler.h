@@ -1,5 +1,5 @@
-#ifndef SEM_ENCODING_DISTRIBUTIONSAMPLER_H_
-#define SEM_ENCODING_DISTRIBUTIONSAMPLER_H_
+#ifndef SEM_CORE_DISTRIBUTIONSAMPLER_H_
+#define SEM_CORE_DISTRIBUTIONSAMPLER_H_
 
 #include <core/typedefs.h>
 
@@ -72,4 +72,4 @@ public:
     cv::Point2i Sample() const;
 };
 
-#endif // SEM_ENCODING_DISTRIBUTIONSAMPLER_H_
+#endif // SEM_CORE_DISTRIBUTIONSAMPLER_H_

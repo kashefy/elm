@@ -1,7 +1,7 @@
-#include "encoding/distributionsampler.h"
+#include "core/distributionsampler.h"
 
 #include "ts/ts.h"
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/imgproc.hpp>
 
 namespace {
 

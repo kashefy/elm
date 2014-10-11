@@ -1,4 +1,4 @@
-#include "encoding/distributionsampler.h"
+#include "core/distributionsampler.h"
 
 #include "core/mat_utils.h"
 
