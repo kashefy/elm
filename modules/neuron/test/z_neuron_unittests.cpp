@@ -143,24 +143,7 @@ TEST_F(ZNeuronTest, LearnNoFire)
         float bias_prev = to_.Bias()(0);
 
         to_.Predict( MatI::ones(1, nb_features_) > 0 );
-        to_.LetFire(false);
-        to_.Learn();
-        EXPECT_MAT_EQ(initial_weights, to_.Weights());
-
-        EXPECT_GT(bias_prev, to_.Bias()(0)) << "Bias not decaying";
-    }
-}
-
-TEST_F(ZNeuronTest, LearnFireFalse)
-{
-    const MatF initial_weights = to_.Weights().clone();
-    for(int i=0; i<50; i++) {
-
-        float bias_prev = to_.Bias()(0);
-
-        to_.Predict( MatI::ones(1, nb_features_) > 0 );
-        to_.LetFire(false);
-        to_.Learn();
+        to_.Learn( MatI::zeros(1, 1) );
         EXPECT_MAT_EQ(initial_weights, to_.Weights());
 
         EXPECT_GT(bias_prev, to_.Bias()(0)) << "Bias not decaying";
@@ -175,8 +158,7 @@ TEST_F(ZNeuronTest, LearnAlwaysFire)
         float bias_prev = to_.Bias()(0);
 
         to_.Predict( MatI::ones(1, nb_features_) > 0 );
-        to_.LetFire();
-        to_.Learn();
+        to_.Learn( MatI::ones(1, 1) );
         EXPECT_FALSE( Equal(initial_weights, to_.Weights()) );
         EXPECT_LT(bias_prev, to_.Bias()(0)) << "Bias not increasing";
     }
@@ -191,8 +173,7 @@ TEST_F(ZNeuronTest, Learn)
     for(int i=0; i<50; i++) {
 
         to_.Predict( f.next(0) > 0 );
-        to_.LetFire();
-        to_.Learn();
+        to_.Learn( MatI::ones(1, 1) );
 
         EXPECT_FALSE( Equal(weights_prev, to_.Weights()) );
         for(int j=0; j<weights_prev.cols; j+=2) {

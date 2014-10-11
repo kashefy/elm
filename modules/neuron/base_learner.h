@@ -12,9 +12,10 @@ public:
     virtual ~base_Learner() {}
 
     /**
-     * @brief learn from most recent state and/or prediction
+     * @brief learn from most provided state and/or prediction
+     * @param target state
      */
-    virtual void Learn() = 0;
+    virtual void Learn(const cv::Mat &target) = 0;
 
     /**
      * @brief predict learner state

@@ -24,11 +24,12 @@ void ZNeuron::init(int nb_features, int len_history)
     history_ = SpikingHistory(nb_features, len_history);
 }
 
-void ZNeuron::Learn()
+void ZNeuron::Learn(const Mat &target)
 {
     double limit_factor;
     double delta_w, w_old, w0, w;
     double eta;  // learning rate
+    const bool has_fired = countNonZero(target) > 0;
 
     // determine limit factor
     w_old = bias_;
@@ -40,7 +41,7 @@ void ZNeuron::Learn()
         // limit_factor;
     // Nessler's (2010) STDP equation (12)
     delta_w = eta * limit_factor;
-    delta_w *= has_fired_? 1-exp(w_old) : -exp(w_old);
+    delta_w *= has_fired? 1-exp(w_old) : -exp(w_old);
     w0 = w_old + delta_w;
 
     // bh.w(1,i) = max(bh.w(1,i), -bh.limit);
@@ -48,7 +49,7 @@ void ZNeuron::Learn()
     //m_biasLearningRate.update(m_nBias);         // TODO adaptive learning rate
 
     // update all other weights
-    if(has_fired_) {
+    if(has_fired) {
 
         // TODO: vectorize
         for(int wi=0; wi<weights_.cols; ++wi) {
@@ -98,15 +99,5 @@ MatF ZNeuron::Weights() const
 MatF ZNeuron::Bias() const
 {
     return MatF(1, 1).setTo(bias_);
-}
-
-void ZNeuron::LetFire(bool let_fire)
-{
-    has_fired_ = let_fire;
-}
-
-bool ZNeuron::HasFired() const
-{
-    return has_fired_;
 }
 

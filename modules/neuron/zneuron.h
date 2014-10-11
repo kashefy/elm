@@ -23,7 +23,7 @@ public:
      */
     void init(int nb_features, int len_history);
 
-    void Learn();
+    void Learn(const cv::Mat &target);
 
     cv::Mat Predict(const cv::Mat &evidence);
 
@@ -39,22 +39,9 @@ public:
      */
     MatF Bias() const;
 
-    /**
-     * @brief Let this neuron fire. Let it spike.
-     * @param Whether to spike or not
-     */
-    void LetFire(bool let_fire=true);
-
-    /**
-     * @brief Check if neuron was set to fire
-     * @return true if fired/spiked
-     */
-    bool HasFired() const;
-
 protected:
 
-    bool has_fired_;            ///< indicate whether neuron fired since last input
-    float bias_;                 ///< bias term
+    float bias_;                ///< bias term
     MatF weights_;              ///< Neuron weights, excluding bias term, log scale
     SpikingHistory history_;    ///< spiking input history
 };
