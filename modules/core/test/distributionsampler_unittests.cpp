@@ -181,6 +181,10 @@ TEST_F(PoissonProcessTest, SampleCoinToss)
     EXPECT_NEAR(rate, 0.5f, 0.02f);
 }
 
+/**
+ * @brief Compare theoretical pdf for exponential distr.
+ * to pdf generate from 1) pdf sampler 2) randexp()
+ */
 TEST(ExponentialPDFTest, Sample)
 {
     const double PDF_END=10.;   // last x element in pdf function
@@ -215,9 +219,9 @@ TEST(ExponentialPDFTest, Sample)
 
         // collect samples drawn from exp. sampling function into a second histogram
         float v = sem::randexp(LAMBDA);
-        int x = static_cast<int>(v*SIZE/PDF_END); // find the right bin for it
-        if(x < SIZE) {
-            hist2(x)++;
+        int bin = static_cast<int>(v*SIZE/PDF_END); // find the right bin for it
+        if(bin < SIZE) {
+            hist2(bin)++;
         }
     }
 
@@ -229,6 +233,100 @@ TEST(ExponentialPDFTest, Sample)
 
     MatF hist2_normalized = hist2/hist2(0);
     EXPECT_MAT_NEAR(hist2_normalized, pdf, 0.2f);
+}
+
+/**
+ * @brief Compare samples from randexp() with different lambda values
+ */
+TEST(ExponentialPDFTest, Lambda)
+{
+    const float PDF_END=5.;   // last x element in pdf function
+    const int SIZE=10, N=2000;  // no. of bins, no. of samples to draw
+    const float PDF_SCALE_FACTOR=static_cast<float>(SIZE)/PDF_END;
+
+    // generate a histogram from sampled values
+    // also sample values from randexp() function
+    std::vector<MatF> hists;
+
+    // collect samples drawn from exp. sampling function into a second histogram
+    int hist_index=0;
+    for(float lambda=0.5f; lambda<=1.5f; lambda+=0.5f, hist_index++) {
+
+        hists.push_back(MatF::zeros(1, SIZE)); // initialize histogram counts
+        for(int i=0; i<N; i++) {
+
+            float v = sem::randexp(lambda);
+            int bin = static_cast<int>(v*PDF_SCALE_FACTOR); // find the right bin for it
+            if(bin < SIZE) {
+                hists[hist_index](bin)++;
+            }
+        }
+    }
+
+    // compare pdf amplitudes
+    for(int i=1; i<static_cast<int>(hists.size()); i++) {
+
+        // left part of pdf
+        cv::Mat gt = hists[i] > hists[i-1];
+
+        EXPECT_EQ(cv::countNonZero(gt.colRange(0, 2)), 2)
+                << "hist[" << i <<"] <= hist[" << i-1 << "]";
+
+        // pdf tail
+        cv::Mat lt = hists[i] < hists[i-1];
+        EXPECT_EQ(cv::countNonZero(lt.colRange(lt.cols-4, lt.cols-2)), 2)
+                << "hist[" << i <<"] >= hist[" << i-1 << "]";
+    }
+}
+
+TEST(ExponentialPDFTest, Moments)
+{
+    const float PDF_END=10.;   // last x element in pdf function
+    const int SIZE=50, N=3000;  // no. of bins, no. of samples to draw
+    const float PDF_SCALE_FACTOR=static_cast<float>(SIZE)/PDF_END;
+
+    // generate a histogram from sampled values
+    // also sample values from randexp() function
+    std::vector<MatF> hists;
+
+    // collect samples drawn from exp. sampling function into a second histogram
+    int hist_index=0;
+    for(float lambda=0.5f; lambda<=1.5f; lambda+=0.5f, hist_index++) {
+
+        hists.push_back(MatF::zeros(1, SIZE)); // initialize histogram counts
+        for(int i=0; i<N; i++) {
+
+            float v = sem::randexp(lambda);
+            int bin = static_cast<int>(v*PDF_SCALE_FACTOR); // find the right bin for it
+            if(bin < SIZE) {
+                hists[hist_index](bin)++;
+            }
+        }
+    }
+
+    // check moments
+    double lambda = 0.5;
+
+    MatF X(1, SIZE);
+    float x=0.f;
+    for(int i=0; i<SIZE; i++) {
+        X(i) = x;
+        x += 1.f/PDF_SCALE_FACTOR;
+    }
+
+    for(int i=0; i<static_cast<int>(hists.size()); i++) {
+
+        MatF pdf;
+        cv::multiply(hists[i], X, pdf);
+        std::cout<<pdf<<std::endl;
+        cv::Mat m, s;
+
+        cv::meanStdDev(pdf, m, s);
+        std::cout<<"i"<<i<<"m"<<m<<std::endl;
+        EXPECT_NEAR(m.at<double>(0), 1./lambda, 0.01) << lambda;
+
+        lambda += 0.5;
+    }
 }
 
 } // namespace
