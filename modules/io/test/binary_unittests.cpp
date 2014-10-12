@@ -23,3 +23,14 @@ TEST(EndianTest, ExtraMacro)
             << "Non-identical macros";
 }
 
+TEST(EndianTest, SwapEndianness)
+{
+    int32_t x = 17301504, dst = 2049;
+    int32_t backup = x;
+    EXPECT_NE(x, dst);
+    sem::SwapEndian<int32_t>(&x);
+    EXPECT_EQ(dst, x);
+    sem::SwapEndian<int32_t>(&x);
+    EXPECT_EQ(backup, x);
+}
+

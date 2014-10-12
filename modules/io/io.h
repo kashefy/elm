@@ -1,10 +1,4 @@
-#ifndef IO_H
-#define IO_H
+#ifndef SEM_IO_H_
+#define SEM_IO_H_
 
-class io
-{
-public:
-    io();
-};
-
-#endif // IO_H
+#endif // SEM_IO_H_
