@@ -24,6 +24,12 @@ public:
      */
     virtual cv::Mat Predict(const cv::Mat& evidence) = 0;
 
+    /**
+     * @brief Get learner's state
+     * @return learner's state from most recent prediction
+     */
+    virtual cv::Mat State() const = 0;
+
 protected:
     base_Learner();
 };

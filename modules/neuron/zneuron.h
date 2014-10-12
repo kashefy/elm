@@ -25,7 +25,18 @@ public:
 
     void Learn(const cv::Mat &target);
 
+    /**
+     * @brief Predict
+     * @param evidence
+     * @return membrane potential
+     */
     cv::Mat Predict(const cv::Mat &evidence);
+
+    /**
+     * @brief Z Neuron state State
+     * @return membrane potential
+     */
+    cv::Mat State() const;
 
     /**
      * @brief Get neuron's weight vector, including bias term
@@ -44,6 +55,7 @@ protected:
     float bias_;                ///< bias term
     MatF weights_;              ///< Neuron weights, excluding bias term, log scale
     SpikingHistory history_;    ///< spiking input history
+    float u_;                   ///< membrane potential
 };
 
 #endif // SEM_NEURON_ZNEURON_H_

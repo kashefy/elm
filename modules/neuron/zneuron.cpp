@@ -74,7 +74,7 @@ void ZNeuron::Learn(const Mat &target)
 
 Mat ZNeuron::Predict(const Mat &evidence)
 {
-    float u = bias_;  // membrane potential u
+    u_ = bias_;  // membrane potential u
 
     history_.Advance();
     history_.Update(evidence != 0);
@@ -86,9 +86,14 @@ Mat ZNeuron::Predict(const Mat &evidence)
     add(sub_weights, weights_, sub_weights, evidence > 0);
 
     //sub_weights.setTo(weights_, evidence > 0);
-    u += sum(sub_weights)(0);
+    u_ += sum(sub_weights)(0);
 
-    return Mat(1, 1, CV_32FC1).setTo(u);
+    return Mat(1, 1, CV_32FC1, u_);
+}
+
+Mat ZNeuron::State() const
+{
+    return Mat(1, 1, CV_32FC1, u_);
 }
 
 MatF ZNeuron::Weights() const
@@ -98,6 +103,6 @@ MatF ZNeuron::Weights() const
 
 MatF ZNeuron::Bias() const
 {
-    return MatF(1, 1).setTo(bias_);
+    return MatF(1, 1, bias_);
 }
 

@@ -281,7 +281,7 @@ TEST(ExponentialPDFTest, Lambda)
     }
 }
 
-TEST(ExponentialPDFTest, Moments)
+TEST(ExponentialPDFTest, PDFArea)
 {
     const float PDF_END=10.;   // last x element in pdf function
     const int SIZE=50, N=2000;  // no. of bins, no. of samples to draw
