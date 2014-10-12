@@ -46,7 +46,7 @@ protected:
      */
     base_WTA(float delta_t_msec);
 
-    float delta_t_msec_;    ///< time resolution in milliseonds
+    float delta_t_sec_;    ///< time resolution in seconds
 };
 
 #endif // SEM_NEURON_COMPETITION_H_

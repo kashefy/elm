@@ -15,7 +15,7 @@ WTAPoisson::WTAPoisson(float max_frequency, float delta_t_msec)
 
 void WTAPoisson::NextSpikeTime()
 {
-    next_spike_time_ = sem::randexp(lambda_);
+    next_spike_time_sec_ = sem::randexp(lambda_);
 }
 
 Mat WTAPoisson::Compete(vector<shared_ptr<base_Learner> > &learners)
@@ -25,7 +25,7 @@ Mat WTAPoisson::Compete(vector<shared_ptr<base_Learner> > &learners)
     MatI winners = MatI::zeros(1, nb_learners);
 
     // time to spike or still in refractory period
-    if(next_spike_time_ < delta_t_msec_) { // time to spike
+    if(next_spike_time_sec_ < delta_t_sec_) { // time to spike
 
         // Distribution of learner states
         MatF u(1, nb_learners);
@@ -52,7 +52,7 @@ Mat WTAPoisson::Compete(vector<shared_ptr<base_Learner> > &learners)
     }
     else { // refractory period
 
-        next_spike_time_ -= delta_t_msec_;
+        next_spike_time_sec_ -= delta_t_sec_;
     }
 
     return winners > 0;

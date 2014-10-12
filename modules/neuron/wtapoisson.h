@@ -27,7 +27,7 @@ protected:
     void NextSpikeTime();
 
     float lambda_;  ///< Lambda variable for Poisson Rate
-    float next_spike_time_; ///< timestamp for next spike event in msec
+    float next_spike_time_sec_; ///< timestamp for next spike event in seconds
 };
 
 #endif // SEM_NEURON_WTAPOISSON_H_
