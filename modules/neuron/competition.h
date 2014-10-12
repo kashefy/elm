@@ -2,6 +2,7 @@
 #define SEM_NEURON_COMPETITION_H_
 
 #include <vector>
+#include <memory>
 
 #include "neuron/base_learner.h"
 
@@ -12,14 +13,14 @@
 class base_Competition
 {
 public:
-    virtual ~base_Competition() {}
+    virtual ~base_Competition();
 
     /**
      * @brief Let learners compete
      * @param reference to vector of learners, manipulate in place
      * @return competition outcome
      */
-    virtual cv::Mat Compete(std::vector<base_Learner>& learners) = 0;
+    virtual cv::Mat Compete(std::vector<std::shared_ptr<base_Learner> >& learners) = 0;
 
 protected:
     base_Competition();
@@ -31,12 +32,12 @@ protected:
 class base_WTA : public base_Competition
 {
 public:
-    virtual ~base_WTA() {}
+    virtual ~base_WTA();
 
     /**
      * \see base_Competition::Compete
      */
-    virtual cv::Mat Compete(std::vector<base_Learner> &learners);
+    virtual cv::Mat Compete(std::vector<std::shared_ptr<base_Learner> > &learners) = 0;
 
 protected:
     /**

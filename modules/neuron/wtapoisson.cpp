@@ -2,21 +2,23 @@
 
 #include "core/distributionsampler.h"
 
+using namespace std;
 using namespace cv;
 
 WTAPoisson::WTAPoisson(float max_frequency, float delta_t_msec)
     : base_WTA(delta_t_msec),
-      lambda_(1./max_frequency)
+      lambda_(max_frequency)
 {
-    next_spike_time_ = NextSpikeTime();
+    NextSpikeTime();
+
 }
 
-float WTAPoisson::NextSpikeTime() const
+void WTAPoisson::NextSpikeTime()
 {
-    return sem::randexp(lambda_);
+    next_spike_time_ = sem::randexp(lambda_);
 }
 
-Mat WTAPoisson::Compete(std::vector<base_Learner> &learners)
+Mat WTAPoisson::Compete(vector<shared_ptr<base_Learner> > &learners)
 {
     int nb_learners = static_cast<int>(learners.size());
     // results represent which learner fired (1) and which were inhibited (0)
@@ -29,7 +31,7 @@ Mat WTAPoisson::Compete(std::vector<base_Learner> &learners)
         MatF u(1, nb_learners);
         for(int i=0; i<nb_learners; i++) {
 
-            u.row(i) = learners[i].State();
+            u.col(i) = learners[i]->State();
         }
 
         // normalize learner state distribution
@@ -45,6 +47,8 @@ Mat WTAPoisson::Compete(std::vector<base_Learner> &learners)
         sampler.pdf(soft_max);
 
         winners(sampler.Sample()) = 1;
+
+        NextSpikeTime();
     }
     else { // refractory period
 

@@ -17,15 +17,14 @@ public:
      */
     WTAPoisson(float max_frequency, float delta_t_msec);
 
-    virtual cv::Mat Compete(std::vector<base_Learner> &learners);
+    virtual cv::Mat Compete(std::vector<std::shared_ptr<base_Learner> > &learners);
 
+protected:
     /**
      * @brief Compute next spike time for inhibiting neuron
      * @return next spike time in milliseconds
      */
-    float NextSpikeTime() const;
-
-private:
+    void NextSpikeTime();
 
     float lambda_;  ///< Lambda variable for Poisson Rate
     float next_spike_time_; ///< timestamp for next spike event in msec
