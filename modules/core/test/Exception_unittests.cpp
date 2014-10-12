@@ -28,3 +28,8 @@ TEST(ExceptionTest, NotImplementedMsg)
     }
 }
 
+TEST(ExceptionTest, ThrowFileError)
+{
+    EXPECT_THROW(SEM_THROW_FILEIO_ERROR("Could not open foo.bar"), ExceptionFileIOError);
+}
+

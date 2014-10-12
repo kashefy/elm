@@ -22,3 +22,9 @@ ExceptionNotImpl::ExceptionNotImpl(const std::string &msg)
                 CV_Func, __FILE__, __LINE__ )
 {
 }
+
+ExceptionFileIOError::ExceptionFileIOError(const std::string &msg)
+    : Exception(CV_StsObjectNotFound, String(msg),
+                CV_Func, __FILE__, __LINE__ )
+{
+}
