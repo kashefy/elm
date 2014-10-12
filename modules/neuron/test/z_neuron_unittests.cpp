@@ -114,6 +114,9 @@ TEST_F(ZNeuronTest, PredictStateless)
         EXPECT_MAT_TYPE(u, CV_32F) << "Unexpected Mat type";
         EXPECT_LT(u.at<float>(0), 0);
 
+        Mat state = to_.State();
+        EXPECT_MAT_EQ(state, u);
+
         if(i == 0) {
 
             u.copyTo(initial_u);

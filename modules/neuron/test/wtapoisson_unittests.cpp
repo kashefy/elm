@@ -25,6 +25,7 @@ protected:
 
             shared_ptr<ZNeuron> p(new ZNeuron);
             p->init(1, 1);
+            p->Predict(MatI::ones(1, 1) > 0);
             learners_.push_back(p);
         }
     }
@@ -90,6 +91,37 @@ TEST_F(WTAPoissonTest, FiringRate)
         rate *= 1000; // since time resolution was in milliseconds
         EXPECT_NEAR(rate, f, 7.f);
     }
+}
+
+TEST_F(WTAPoissonTest, LearnerStateDistr)
+{
+    cv::Mat distr = to_.LearnerStateDistr(learners_);
+    EXPECT_MAT_TYPE(distr, CV_32F);
+    int nb_learners = static_cast<int>(learners_.size());
+    EXPECT_MAT_DIMS_EQ(distr, MatF(1, nb_learners));
+
+    MatF u(1, nb_learners);
+    for(int i=0; i<nb_learners; i++) {
+
+        u(i) = learners_[i]->State().at<float>(0);
+
+        EXPECT_GE(distr.at<float>(i), 0);
+    }
+
+    double min_val, max_val;
+    int min_idx1[2] = {-1, -1}, max_idx1[2] = {-1, -1};
+
+    cv::minMaxIdx(distr, &min_val, &max_val, min_idx1, max_idx1);
+    EXPECT_EQ(min_idx1[0], max_idx1[0]);
+    EXPECT_NE(min_idx1[1], max_idx1[1]);
+
+    int min_idx2[2] = {-1, -1}, max_idx2[2] = {-1, -1};
+    cv::minMaxIdx(u, &min_val, &max_val, min_idx2, max_idx2);
+    EXPECT_EQ(min_idx2[0], max_idx2[0]);
+    EXPECT_NE(min_idx2[1], max_idx2[1]);
+
+    EXPECT_MAT_EQ(MatI(1, 2, min_idx1), MatI(1, 2, min_idx2));
+    EXPECT_MAT_EQ(MatI(1, 2, max_idx1), MatI(1, 2, max_idx2));
 }
 
 

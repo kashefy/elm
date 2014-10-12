@@ -19,6 +19,8 @@ public:
 
     virtual cv::Mat Compete(std::vector<std::shared_ptr<base_Learner> > &learners);
 
+    cv::Mat LearnerStateDistr(const std::vector<std::shared_ptr<base_Learner> > &learners) const;
+
 protected:
     /**
      * @brief Compute next spike time for inhibiting neuron
