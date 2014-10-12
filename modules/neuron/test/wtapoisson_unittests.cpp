@@ -74,21 +74,22 @@ TEST_F(WTAPoissonTest, NeverFire)
 
 TEST_F(WTAPoissonTest, FiringRate)
 {
-    const int N=3e3;
-    const float FREQ=40.f;
-    WTAPoisson to(FREQ, delta_t_msec_);
+    const int N=1e3;
+    for(float f=20.f; f<=80.f; f+=20.f) {
 
-    int spike_count = 0;
+        WTAPoisson to(f, delta_t_msec_);
 
-    for(int i=0; i<N; i++) {
+        int spike_count = 0;
+        for(int i=0; i<N; i++) {
 
-        cv::Mat outcome = to.Compete(learners_);
-        spike_count += cv::countNonZero(outcome);
+            cv::Mat outcome = to.Compete(learners_);
+            spike_count += cv::countNonZero(outcome);
+        }
+
+        float rate = spike_count/static_cast<float>(N);
+        rate *= 1000; // since time resolution was in milliseconds
+        EXPECT_NEAR(rate, f, 7.f);
     }
-
-    float rate = spike_count/static_cast<float>(N);
-    rate *= 1000; // since time resolution was in milliseconds
-    EXPECT_NEAR(rate, FREQ, 1.f);
 }
 
 
