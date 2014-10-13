@@ -21,11 +21,11 @@ ReadMNISTLabel::ReadMNISTLabel(const string &path)
 
     input_.read(reinterpret_cast<char*>(&tmp_i), sizeof(int32_t));
     if(IS_32_LITTLE_ENDIAN) { SwapEndian<int32_t>(&tmp_i); }
-    if(tmp_i != MAGIC_NUMBER_) {
+    if(tmp_i != MAGIC_NUMBER) {
 
         stringstream s;
         s << "Unexpected magic number ("
-          << tmp_i << "), expecting " << MAGIC_NUMBER_;
+          << tmp_i << "), expecting " << MAGIC_NUMBER;
         SEM_THROW_FILEIO_ERROR(s.str());
     }
 
@@ -45,10 +45,12 @@ unsigned char ReadMNISTLabel::Next()
 
         input_.read(reinterpret_cast<char*>(&next_label), sizeof(unsigned char));
     }
-    else {
-        next_label = EOF;
-    }
     nb_items_--;
 
     return next_label;
+}
+
+bool ReadMNISTLabel::IS_EOF() const
+{
+    return nb_items_ <= 0;
 }

@@ -13,15 +13,18 @@
 class ReadMNISTLabel
 {
 public:
+    static const int MAGIC_NUMBER = 2049; ///< used to validate file integrity, see MNIST site
+
     ReadMNISTLabel(const std::string &path);
 
     unsigned char Next();
+
+    bool IS_EOF() const;
 
 protected:
     std::ifstream input_; ///< input streams
     int nb_items_;        ///< total no. of items
 
-    const int MAGIC_NUMBER_ = 2049; ///< used to validate file integrity, see MNIST site
 };
 
 #endif // SEM_IO_READMNIST_H_
