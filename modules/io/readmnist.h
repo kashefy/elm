@@ -73,9 +73,15 @@ public:
 
     ReadMNISTImages();
 
+    virtual int ReadHeader(const std::string &path);
+
     virtual int MagicNumber() const;
 
     virtual cv::Mat Next();
+
+protected:
+    int rows_;   ///< no. of rows per image
+    int cols_;   ///< no. of columns per image
 };
 
 #endif // SEM_IO_READMNIST_H_
