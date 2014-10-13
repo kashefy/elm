@@ -27,7 +27,7 @@ public:
      * total no. of items
      * series label values [0,10)
      */
-    void Save(int magic_number=ReadMNISTLabel::MAGIC_NUMBER) const
+    void Save(int magic_number) const
     {
         ofstream out;
         out.open(path_.string().c_str(), ios::out | ios::binary);
@@ -62,6 +62,10 @@ protected:
     bfs::path path_;
 };
 
+/**
+ * @brief class for testing ReadMNISTLabel
+ * Fake data is written to disk first, then removed after last test
+ */
 class ReadMNISTLabelTest : public testing::Test
 {
 protected:
@@ -69,7 +73,8 @@ protected:
     {
         bfs::create_directory(test_data_dir_);
         FakeMNISTLabelWriter writer(test_data_path_);
-        writer.Save();
+
+        writer.Save(ReadMNISTLabels().MagicNumber());
     }
 
     static void TearDownTestCase()
@@ -88,14 +93,19 @@ const bfs::path ReadMNISTLabelTest::test_data_path_(test_data_dir_/"fake_label_d
 
 TEST_F(ReadMNISTLabelTest, WrongPath)
 {
-    EXPECT_THROW(ReadMNISTLabel("foo.bar"), ExceptionFileIOError);
+    EXPECT_THROW(ReadMNISTLabels().ReadHeader("foo.bar"), ExceptionFileIOError);
 }
 
-TEST_F(ReadMNISTLabelTest, ReadFake)
+TEST_F(ReadMNISTLabelTest, ReadHeader)
 {
-    ReadMNISTLabel to(test_data_path_.string().c_str());
-
     const int N = FakeMNISTLabelWriter::NB_ITEMS;
+    EXPECT_EQ(N, ReadMNISTLabels().ReadHeader(test_data_path_.string().c_str()));
+}
+
+TEST_F(ReadMNISTLabelTest, Next)
+{
+    ReadMNISTLabels to;
+    const int N = to.ReadHeader(test_data_path_.string().c_str());
 
     EXPECT_GT(N, 0);
 
@@ -118,6 +128,7 @@ TEST_F(ReadMNISTLabelTest, Invalid)
 {
     bfs::path p = test_data_dir_/"fake_label_data_wrong_magic.tmp";
     FakeMNISTLabelWriter writer(p);
-    writer.Save(ReadMNISTLabel::MAGIC_NUMBER+5);
-    EXPECT_THROW(ReadMNISTLabel to(p.string().c_str()), ExceptionFileIOError);
+    ReadMNISTLabels to;
+    writer.Save(to.MagicNumber()+5);
+    EXPECT_THROW(to.ReadHeader(p.string().c_str()), ExceptionFileIOError);
 }

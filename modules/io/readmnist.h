@@ -18,6 +18,20 @@ public:
     virtual ~base_ReadMNISTFile();
 
     /**
+     * @brief Get magic number expected in file header
+     * with which we verify the file's integrity
+     * @return expected number in file header
+     */
+    virtual int MagicNumber() const = 0;
+
+    /**
+     * @brief read file header
+     * @param path
+     * @return no. of items
+     */
+    virtual int ReadHeader(const std::string &path);
+
+    /**
      * @brief read next item
      * @return item value encapsulated in a matrix object
      */
@@ -30,7 +44,7 @@ public:
     virtual bool IS_EOF() const;
 
 protected:
-    base_ReadMNISTFile(const std::string &path);
+    base_ReadMNISTFile();
 
 protected:
     std::ifstream input_; ///< input stream
@@ -40,12 +54,26 @@ protected:
 /**
  * @brief class for reading MNIST label data
  */
-class ReadMNISTLabel : public base_ReadMNISTFile
+class ReadMNISTLabels : public base_ReadMNISTFile
 {
 public:
     static const int MAGIC_NUMBER = 2049; ///< used to validate file integrity, see MNIST site
 
-    ReadMNISTLabel(const std::string &path);
+    ReadMNISTLabels();
+
+    virtual int MagicNumber() const;
+
+    virtual cv::Mat Next();
+};
+
+class ReadMNISTImages : public base_ReadMNISTFile
+{
+public:
+    static const int MAGIC_NUMBER = 2051; ///< used to validate file integrity, see MNIST site
+
+    ReadMNISTImages();
+
+    virtual int MagicNumber() const;
 
     virtual cv::Mat Next();
 };
