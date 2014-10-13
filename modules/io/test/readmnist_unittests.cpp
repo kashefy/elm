@@ -1,11 +1,11 @@
 #include "io/readmnist.h"
 
-#include "ts/ts.h"
+#include "ts/ts.h"          ///< custom assertions
 
 #include <boost/filesystem.hpp>
 
 #include "core/exception.h"
-#include "io/binary.h"
+#include "io/binary.h"      ///< determine and swap endianness
 
 using namespace std;
 namespace bfs=boost::filesystem; // use alias
@@ -18,7 +18,6 @@ public:
 
     virtual ~FakeMNISTLabelsWriter()
     {
-
     }
 
     FakeMNISTLabelsWriter(const bfs::path& p)
@@ -104,8 +103,8 @@ protected:
     static const bfs::path test_data_dir_;
     static const bfs::path test_data_path_;
 };
-const bfs::path ReadMNISTLabelsTest::test_data_dir_("tmp_ReadMNISTLabelsTest");
-const bfs::path ReadMNISTLabelsTest::test_data_path_(test_data_dir_/"fake_labels_data.tmp");
+const bfs::path ReadMNISTLabelsTest::test_data_dir_("tmp_ReadMNISTFileTest");
+const bfs::path ReadMNISTLabelsTest::test_data_path_(test_data_dir_/"fake_data.tmp");
 
 TEST_F(ReadMNISTLabelsTest, WrongPath)
 {
