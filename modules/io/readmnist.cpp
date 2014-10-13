@@ -8,7 +8,22 @@
 using namespace std;
 using namespace sem;
 
+base_ReadMNISTFile::base_ReadMNISTFile(const string &path)
+    : nb_items_(0)
+{
+}
+
+base_ReadMNISTFile::~base_ReadMNISTFile()
+{
+}
+
+bool base_ReadMNISTFile::IS_EOF() const
+{
+    return nb_items_ <= 0;
+}
+
 ReadMNISTLabel::ReadMNISTLabel(const string &path)
+    : base_ReadMNISTFile(path)
 {
     input_.open(path, ios::in | ios::binary);
 
@@ -38,7 +53,7 @@ ReadMNISTLabel::ReadMNISTLabel(const string &path)
     nb_items_ = static_cast<int>(tmp_i);
 }
 
-unsigned char ReadMNISTLabel::Next()
+cv::Mat ReadMNISTLabel::Next()
 {
     unsigned char next_label;
     if(nb_items_ > 0) {
@@ -47,10 +62,5 @@ unsigned char ReadMNISTLabel::Next()
     }
     nb_items_--;
 
-    return next_label;
-}
-
-bool ReadMNISTLabel::IS_EOF() const
-{
-    return nb_items_ <= 0;
+    return cv::Mat1b(1, 1, next_label);
 }

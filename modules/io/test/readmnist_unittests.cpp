@@ -104,7 +104,7 @@ TEST_F(ReadMNISTLabelTest, ReadFake)
         if(i<N) {
 
             EXPECT_FALSE(to.IS_EOF());
-            int label = static_cast<int>(to.Next());
+            int label = static_cast<int>(to.Next().at<unsigned char>(0));
             EXPECT_EQ(label, i%N);
 
             if(i<N-1) { EXPECT_FALSE(to.IS_EOF()); }
