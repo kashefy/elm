@@ -16,13 +16,13 @@ public:
      * @param in input
      * @param kernels vector of kernels
      */
-    virtual void State(const MatF& in, const VecMatF& kernels=VecMatF()) = 0;
+    virtual void State(const cv::Mat1f& in, const VecMat1f& kernels=VecMat1f()) = 0;
 
     /**
      * @brief get population code
      * @return population code
      */
-    virtual MatF PopCode() = 0;
+    virtual cv::Mat1f PopCode() = 0;
 
 protected:
     base_PopulationCode();
@@ -36,12 +36,12 @@ class MutexPopulationCode : public base_PopulationCode
 public:
     MutexPopulationCode();
 
-    virtual void State(const MatF& in, const VecMatF& kernels=VecMatF());
+    virtual void State(const cv::Mat1f& in, const VecMat1f& kernels=VecMat1f());
 
-    virtual MatF PopCode();
+    virtual cv::Mat1f PopCode();
 
 protected:
-    MatF state_;    ///< internal state
+    cv::Mat1f state_;    ///< internal state
 };
 
 #endif // SEM_ENCODING_POPULATIONCODE_H_

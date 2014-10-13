@@ -5,11 +5,11 @@
 using namespace std;
 using namespace cv;
 
-void sem::CumSum(const MatF &src, MatF &dst)
+void sem::CumSum(const Mat1f &src, Mat1f &dst)
 {
     if(dst.total() < src.total() && src.total() > 0) {
 
-        dst = MatF::zeros(src.rows, src.cols);
+        dst = Mat1f::zeros(src.rows, src.cols);
     }
 
     float interm_sum = 0;

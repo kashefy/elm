@@ -2,6 +2,8 @@
 
 #include "core/exception.h"
 
+using namespace cv;
+
 base_AUC::base_AUC()
 {
 
@@ -13,7 +15,7 @@ Trapz::Trapz()
 
 }
 
-float Trapz::operator ()(const MatF &x, const MatF &y) const
+float Trapz::operator ()(const Mat1f &x, const Mat1f &y) const
 {
     if(x.total() < 2 || y .total() < 2) {
 

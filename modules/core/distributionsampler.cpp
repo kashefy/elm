@@ -6,13 +6,13 @@ using namespace cv;
 
 cv::RNG base_DistributionSampler::rng_(0xFFFFFFFF);
 
-void base_DistributionSampler::pdf(const MatF &pdf) {
+void base_DistributionSampler::pdf(const Mat1f &pdf) {
 
     pdf_ = pdf/sum(pdf)(0);
     sem::CumSum(pdf_, pdf_);
 }
 
-MatF base_DistributionSampler::pdf() const
+Mat1f base_DistributionSampler::pdf() const
 {
     return pdf_;
 }
@@ -39,7 +39,7 @@ int DistributionSampler1D::Sample() const {
 PoissonProcess::PoissonProcess(float frequency, float delta_t_msec)
     : DistributionSampler1D()
 {
-    MatF firing_prob(1, 1);
+    Mat1f firing_prob(1, 1);
     firing_prob(0, 0) = frequency*delta_t_msec/1000.f;
     pdf_ = 1.f-firing_prob;
 }

@@ -18,8 +18,8 @@ TEST(MatUtilsTest, CumSum_zeros) {
 
         for(int c=1; c<N; c++) {
 
-            MatF in = MatF::zeros(r, c);
-            MatF out;
+            Mat1f in = Mat1f::zeros(r, c);
+            Mat1f out;
             sem::CumSum(in, out);
             EXPECT_MAT_EQ(in, out);
         }
@@ -36,8 +36,8 @@ TEST(MatUtilsTest, CumSum_ones) {
 
         for(int c=1; c<N; c++) {
 
-            MatF in = MatF::ones(r, c);
-            MatF out;
+            Mat1f in = Mat1f::ones(r, c);
+            Mat1f out;
             sem::CumSum(in, out);
 
             // check output
@@ -60,8 +60,8 @@ TEST(MatUtilsTest, CumSum_ones_neg) {
 
         for(int c=1; c<N; c++) {
 
-            MatF in = -MatF::ones(r, c);
-            MatF out;
+            Mat1f in = -Mat1f::ones(r, c);
+            Mat1f out;
             sem::CumSum(in, out);
 
             // check output
@@ -79,8 +79,8 @@ TEST(MatUtilsTest, CumSum_ones_neg) {
  */
 TEST(MatUtilsTest, CumSum_empty) {
 
-    MatF in = MatF::zeros(0, 0);
-    MatF out;
+    Mat1f in = Mat1f::zeros(0, 0);
+    Mat1f out;
     sem::CumSum(in, out);
     EXPECT_EQ(out.total(), 0);
 }
@@ -105,14 +105,14 @@ TEST(MatUtilsTest, TypeToString)
 
 TEST(MatUtilsTest, TemplateTypeToString)
 {
-    MatF a(1, 1);
+    Mat1f a(1, 1);
     EXPECT_GT(MatTypeToString(a).size(), 0);
     EXPECT_EQ(MatTypeToString(a), "CV_32F");
 
     EXPECT_GT(MatTypeToString(a).size(), 0);
     EXPECT_EQ(MatTypeToString(a), MatTypeToString(Mat(1, 1, CV_32FC2)));
 
-    MatI b = MatI(1, 1);
+    Mat1i b(1, 1);
     EXPECT_GT(MatTypeToString(b).size(), 0);
     EXPECT_EQ(MatTypeToString(b), "CV_32S");
     EXPECT_EQ(MatTypeToString(b), MatTypeToString(Mat(1, 1, CV_32SC2)));

@@ -1,14 +1,14 @@
 #ifndef SEM_CORE_AREA_H_
 #define SEM_CORE_AREA_H_
 
-#include <core/typedefs.h>
+#include <opencv2/core.hpp>
 
 class base_AUC
 {
 public:
     virtual ~base_AUC() {}
 
-    virtual float operator ()(const MatF &x, const MatF &y) const = 0;
+    virtual float operator ()(const cv::Mat1f &x, const cv::Mat1f &y) const = 0;
 
 protected:
     base_AUC();
@@ -19,7 +19,7 @@ class Trapz : public base_AUC
 public:
     Trapz();
 
-    virtual float operator ()(const MatF &x, const MatF &y) const;
+    virtual float operator ()(const cv::Mat1f &x, const cv::Mat1f &y) const;
 
 protected:
     float Trapezoidal(float x1, float x2, float y1, float y2) const;

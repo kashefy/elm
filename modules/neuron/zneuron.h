@@ -42,18 +42,18 @@ public:
      * @brief Get neuron's weight vector, including bias term
      * @return neuron weights excluding bias term, log scale
      */
-    MatF Weights() const;
+    cv::Mat1f Weights() const;
 
     /**
      * @brief get bias term
      * @return neuron's bias term (single element) log scale
      */
-    MatF Bias() const;
+    cv::Mat1f Bias() const;
 
 protected:
 
     float bias_;                ///< bias term
-    MatF weights_;              ///< Neuron weights, excluding bias term, log scale
+    cv::Mat1f weights_;              ///< Neuron weights, excluding bias term, log scale
     SpikingHistory history_;    ///< spiking input history
     float u_;                   ///< membrane potential
 };

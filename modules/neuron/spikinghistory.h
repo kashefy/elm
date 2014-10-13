@@ -1,7 +1,7 @@
 #ifndef SEM_NEURON_SPIKINGHISTORY_H_
 #define SEM_NEURON_SPIKINGHISTORY_H_
 
-#include "core/typedefs.h"
+#include <opencv2/core.hpp>
 
 /**
  * @brief Class for tracking spiking history
@@ -25,7 +25,7 @@ public:
      * @brief Get History
      * @return history
      */
-    virtual MatI History() const;
+    virtual cv::Mat1i History() const;
 
     /**
      * @brief Reset history so far
@@ -55,7 +55,7 @@ protected:
 
     int len_;        ///< history length
     int dims_;       ///< no. of input dimensions to track
-    MatI history_;  ///< input history
+    cv::Mat1i history_;  ///< input history
 };
 
 #endif // SEM_NEURON_SPIKINGHISTORY_H_

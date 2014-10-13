@@ -4,6 +4,7 @@
 #include "ts/ts.h"
 
 using namespace std;
+using namespace cv;
 
 class WTAPoissonTest : public testing::Test
 {
@@ -25,7 +26,7 @@ protected:
 
             shared_ptr<ZNeuron> p(new ZNeuron);
             p->init(1, 1);
-            p->Predict(MatI::ones(1, 1) > 0);
+            p->Predict(Mat1i::ones(1, 1) > 0);
             learners_.push_back(p);
         }
     }
@@ -44,8 +45,8 @@ TEST_F(WTAPoissonTest, AlwaysFire)
     const int N=100;
     for(int i=0; i<N; i++) {
 
-        cv::Mat outcome = to_.Compete(learners_);
-        EXPECT_EQ(cv::countNonZero(outcome), 1) << "Expecting 1 learner to fire.";
+        Mat outcome = to_.Compete(learners_);
+        EXPECT_EQ(countNonZero(outcome), 1) << "Expecting 1 learner to fire.";
     }
 }
 
@@ -67,8 +68,8 @@ TEST_F(WTAPoissonTest, NeverFire)
 
         for(int j=0; j<nb_wta; j++) {
 
-            cv::Mat outcome = wtas[j].Compete(learners_);
-            EXPECT_EQ(cv::countNonZero(outcome), 0) << "Learner fired.";
+            Mat outcome = wtas[j].Compete(learners_);
+            EXPECT_EQ(countNonZero(outcome), 0) << "Learner fired.";
         }
     }
 }
@@ -83,8 +84,8 @@ TEST_F(WTAPoissonTest, FiringRate)
         int spike_count = 0;
         for(int i=0; i<N; i++) {
 
-            cv::Mat outcome = to.Compete(learners_);
-            spike_count += cv::countNonZero(outcome);
+            Mat outcome = to.Compete(learners_);
+            spike_count += countNonZero(outcome);
         }
 
         float rate = spike_count/static_cast<float>(N);
@@ -95,12 +96,12 @@ TEST_F(WTAPoissonTest, FiringRate)
 
 TEST_F(WTAPoissonTest, LearnerStateDistr)
 {
-    cv::Mat distr = to_.LearnerStateDistr(learners_);
+    Mat distr = to_.LearnerStateDistr(learners_);
     EXPECT_MAT_TYPE(distr, CV_32F);
     int nb_learners = static_cast<int>(learners_.size());
-    EXPECT_MAT_DIMS_EQ(distr, MatF(1, nb_learners));
+    EXPECT_MAT_DIMS_EQ(distr, Mat1f(1, nb_learners));
 
-    MatF u(1, nb_learners);
+    Mat1f u(1, nb_learners);
     for(int i=0; i<nb_learners; i++) {
 
         u(i) = learners_[i]->State().at<float>(0);
@@ -111,17 +112,17 @@ TEST_F(WTAPoissonTest, LearnerStateDistr)
     double min_val, max_val;
     int min_idx1[2] = {-1, -1}, max_idx1[2] = {-1, -1};
 
-    cv::minMaxIdx(distr, &min_val, &max_val, min_idx1, max_idx1);
+    minMaxIdx(distr, &min_val, &max_val, min_idx1, max_idx1);
     EXPECT_EQ(min_idx1[0], max_idx1[0]);
     EXPECT_NE(min_idx1[1], max_idx1[1]);
 
     int min_idx2[2] = {-1, -1}, max_idx2[2] = {-1, -1};
-    cv::minMaxIdx(u, &min_val, &max_val, min_idx2, max_idx2);
+    minMaxIdx(u, &min_val, &max_val, min_idx2, max_idx2);
     EXPECT_EQ(min_idx2[0], max_idx2[0]);
     EXPECT_NE(min_idx2[1], max_idx2[1]);
 
-    EXPECT_MAT_EQ(MatI(1, 2, min_idx1), MatI(1, 2, min_idx2));
-    EXPECT_MAT_EQ(MatI(1, 2, max_idx1), MatI(1, 2, max_idx2));
+    EXPECT_MAT_EQ(Mat1i(1, 2, min_idx1), Mat1i(1, 2, min_idx2));
+    EXPECT_MAT_EQ(Mat1i(1, 2, max_idx1), Mat1i(1, 2, max_idx2));
 }
 
 

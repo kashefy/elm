@@ -5,18 +5,20 @@
 #include "core/area.h"
 #include "ts/ts.h"
 
+using namespace cv;
+
 namespace {
 
 TEST(DistrSampler1D, Uniform) {
 
     const int SIZE = 10, N = 1e4;
     const float MEAN = 1.f/static_cast<float>(SIZE);
-    MatF pdf_uniform = MatF::ones(1, SIZE)*MEAN;
+    Mat1f pdf_uniform = Mat1f::ones(1, SIZE)*MEAN;
 
     DistributionSampler1D to; // test object
     to.pdf(pdf_uniform);
 
-    MatF hist = MatF::zeros(1, SIZE);
+    Mat1f hist = Mat1f::zeros(1, SIZE);
 
     for(int i=0; i<N; i++) {
 
@@ -25,12 +27,12 @@ TEST(DistrSampler1D, Uniform) {
         hist(sampled_index)++;
     }
 
-    EXPECT_EQ(cv::sum(hist)(0), N);
-    MatF hist_normalized = hist/static_cast<float>(N);
+    EXPECT_EQ(sum(hist)(0), N);
+    Mat1f hist_normalized = hist/static_cast<float>(N);
     EXPECT_MAT_NEAR(hist_normalized, pdf_uniform, 0.2f);
 
-    cv::Mat m, s;
-    cv::meanStdDev(hist_normalized, m, s);
+    Mat m, s;
+    meanStdDev(hist_normalized, m, s);
     EXPECT_NEAR(m.at<double>(0, 0), MEAN, 0.1);
     EXPECT_NEAR(s.at<double>(0, 0), 0., 0.1);
 }
@@ -41,8 +43,8 @@ TEST(DistrSampler1D, Gaussian) {
     const float MEAN = 5.f, STD_DEV = 2.f;
 
     // generate gaussian pdf
-    cv::Mat data(1, N, CV_32FC1);
-    cv::randn(data, MEAN, STD_DEV);
+    Mat data(1, N, CV_32FC1);
+    randn(data, MEAN, STD_DEV);
 
     float pdf_values[SIZE] = {};
     for (int i=0; i<N; i++) {
@@ -54,10 +56,10 @@ TEST(DistrSampler1D, Gaussian) {
     }
 
     DistributionSampler1D to; // test object
-    cv::Mat pdf = cv::Mat(1,10, CV_32FC1, pdf_values)/static_cast<float>(N)*SIZE;
+    Mat pdf = Mat(1,10, CV_32FC1, pdf_values)/static_cast<float>(N)*SIZE;
     to.pdf(pdf);
 
-    MatF hist = MatF::zeros(1, SIZE);
+    Mat1f hist = Mat1f::zeros(1, SIZE);
 
     for(int i=0; i<N; i++) {
 
@@ -66,8 +68,8 @@ TEST(DistrSampler1D, Gaussian) {
         hist(sampled_index)++;
     }
 
-    EXPECT_EQ(cv::sum(hist)(0), N);
-    MatF hist_normalized = hist/static_cast<float>(N)*SIZE;
+    EXPECT_EQ(sum(hist)(0), N);
+    Mat1f hist_normalized = hist/static_cast<float>(N)*SIZE;
     EXPECT_MAT_NEAR(hist_normalized, pdf, 0.2f);
 }
 
@@ -75,26 +77,26 @@ TEST(DistrSampler2D, Uniform) {
 
     const int ROWS = 7, COLS = 10, N = 2e4;
     const float MEAN = 1.f/static_cast<float>(ROWS*COLS);
-    MatF pdf_uniform = MatF::ones(ROWS, COLS)*MEAN;
+    Mat1f pdf_uniform = Mat1f::ones(ROWS, COLS)*MEAN;
 
     DistributionSampler2D to; // test object
     to.pdf(pdf_uniform);
 
-    MatF hist = MatF::zeros(ROWS, COLS);
+    Mat1f hist = Mat1f::zeros(ROWS, COLS);
 
     for(int i=0; i<N; i++) {
 
-        cv::Point2i sampled_point = to.Sample();
-        EXPECT_TRUE( sampled_point.inside(cv::Rect(0, 0, COLS, ROWS)) );
+        Point2i sampled_point = to.Sample();
+        EXPECT_TRUE( sampled_point.inside(Rect(0, 0, COLS, ROWS)) );
         hist(sampled_point.y, sampled_point.x)++;
     }
 
-    EXPECT_EQ(cv::sum(hist)(0), N);
-    MatF hist_normalized = hist/static_cast<float>(N);
+    EXPECT_EQ(sum(hist)(0), N);
+    Mat1f hist_normalized = hist/static_cast<float>(N);
     EXPECT_MAT_NEAR(hist_normalized, pdf_uniform, 0.2f);
 
-    cv::Mat m, s;
-    cv::meanStdDev(hist_normalized, m, s);
+    Mat m, s;
+    meanStdDev(hist_normalized, m, s);
     EXPECT_NEAR(m.at<double>(0, 0), MEAN, 0.1);
     EXPECT_NEAR(s.at<double>(0, 0), 0., 0.1);
 }
@@ -123,8 +125,8 @@ protected:
 
 TEST_F(PoissonProcessTest, PDF)
 {
-    MatF pdf = to_.pdf();
-    EXPECT_MAT_DIMS_EQ(pdf, MatF(1, 1));
+    Mat1f pdf = to_.pdf();
+    EXPECT_MAT_DIMS_EQ(pdf, Mat1f(1, 1));
 
     float lambda = pdf(0, 0);
     EXPECT_LE(lambda, 0);
@@ -194,7 +196,7 @@ TEST(ExponentialPDFTest, Sample)
     const float LAMBDA = 1.f;
 
     // generate exponential pdf
-    MatF pdf(1, SIZE);
+    Mat1f pdf(1, SIZE);
     double x = 0.;
     for (int i=0; i<SIZE; i++,
          x += PDF_END/static_cast<double>(SIZE)) {
@@ -209,8 +211,8 @@ TEST(ExponentialPDFTest, Sample)
 
     // generate a histogram from sampled values
     // also sample values from randexp() function
-    MatF hist1 = MatF::zeros(1, SIZE);
-    MatF hist2 = MatF::zeros(1, SIZE);
+    Mat1f hist1 = Mat1f::zeros(1, SIZE);
+    Mat1f hist2 = Mat1f::zeros(1, SIZE);
 
     for(int i=0; i<N; i++) {
 
@@ -227,13 +229,13 @@ TEST(ExponentialPDFTest, Sample)
         }
     }
 
-    EXPECT_EQ(cv::sum(hist1)(0), N);
+    EXPECT_EQ(sum(hist1)(0), N);
 
     // compare each histogram of drawn samples to original exponential pdf
-    MatF hist1_normalized = hist1/hist1(0);
+    Mat1f hist1_normalized = hist1/hist1(0);
     EXPECT_MAT_NEAR(hist1_normalized, pdf, 0.2f);
 
-    MatF hist2_normalized = hist2/hist2(0);
+    Mat1f hist2_normalized = hist2/hist2(0);
     EXPECT_MAT_NEAR(hist2_normalized, pdf, 0.2f);
 }
 
@@ -248,13 +250,13 @@ TEST(ExponentialPDFTest, Lambda)
 
     // generate a histogram from sampled values
     // also sample values from randexp() function
-    std::vector<MatF> hists;
+    std::vector<Mat1f> hists;
 
     // collect samples drawn from exp. sampling function into a second histogram
     int hist_index=0;
     for(float lambda=0.5f; lambda<=1.5f; lambda+=0.5f, hist_index++) {
 
-        hists.push_back(MatF::zeros(1, SIZE)); // initialize histogram counts
+        hists.push_back(Mat1f::zeros(1, SIZE)); // initialize histogram counts
         for(int i=0; i<N; i++) {
 
             float v = sem::randexp(lambda);
@@ -269,14 +271,14 @@ TEST(ExponentialPDFTest, Lambda)
     for(int i=1; i<static_cast<int>(hists.size()); i++) {
 
         // left part of pdf
-        cv::Mat gt = hists[i] > hists[i-1];
+        Mat gt = hists[i] > hists[i-1];
 
-        EXPECT_EQ(cv::countNonZero(gt.colRange(0, 2)), 2)
+        EXPECT_EQ(countNonZero(gt.colRange(0, 2)), 2)
                 << "hist[" << i <<"] <= hist[" << i-1 << "]";
 
         // pdf tail
-        cv::Mat lt = hists[i] < hists[i-1];
-        EXPECT_EQ(cv::countNonZero(lt.colRange(lt.cols-4, lt.cols-2)), 2)
+        Mat lt = hists[i] < hists[i-1];
+        EXPECT_EQ(countNonZero(lt.colRange(lt.cols-4, lt.cols-2)), 2)
                 << "hist[" << i <<"] >= hist[" << i-1 << "]";
     }
 }
@@ -287,7 +289,7 @@ TEST(ExponentialPDFTest, PDFArea)
     const int SIZE=50, N=2000;  // no. of bins, no. of samples to draw
     const float PDF_SCALE_FACTOR=static_cast<float>(SIZE)/PDF_END;
 
-    MatF x(1, SIZE);
+    Mat1f x(1, SIZE);
     float x_val = 0.f;
     for(int i=0; i<SIZE; i++) {
 
@@ -297,13 +299,13 @@ TEST(ExponentialPDFTest, PDFArea)
 
     // generate a histogram from sampled values
     // also sample values from randexp() function
-    std::vector<MatF> hists;
+    std::vector<Mat1f> hists;
 
     // collect samples drawn from exp. sampling function into a second histogram
     int hist_index=0;
     for(float lambda=0.5f; lambda<=1.5f; lambda+=0.5f, hist_index++) {
 
-        hists.push_back(MatF::zeros(1, SIZE)); // initialize histogram counts
+        hists.push_back(Mat1f::zeros(1, SIZE)); // initialize histogram counts
         for(int i=0; i<N; i++) {
 
             float v = sem::randexp(lambda);
@@ -318,8 +320,8 @@ TEST(ExponentialPDFTest, PDFArea)
     double lambda = 0.5;
     for(int i=0; i<static_cast<int>(hists.size()); i++) {
 
-        MatF pdf;
-        cv::divide(hists[i], cv::sum(hists[i]/PDF_SCALE_FACTOR)(0), pdf);
+        Mat1f pdf;
+        divide(hists[i], sum(hists[i]/PDF_SCALE_FACTOR)(0), pdf);
 
         EXPECT_NEAR(Trapz()(x, pdf), 1.f, 0.2f);
         lambda += 0.5;

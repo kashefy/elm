@@ -11,10 +11,10 @@ ZNeuron::ZNeuron()
 
 void ZNeuron::init(int nb_features, int len_history)
 {
-    weights_ = MatF(1, nb_features);
+    weights_ = Mat1f(1, nb_features);
 
     const float MEAN=0.f, STD_DEV=1.f, SCALE=-0.01f;
-    MatF random_vals(1, nb_features+1);   // add 1 for bias term
+    Mat1f random_vals(1, nb_features+1);   // add 1 for bias term
     randn(random_vals, MEAN, STD_DEV);
     random_vals = abs(random_vals) * SCALE;
 
@@ -83,7 +83,7 @@ Mat ZNeuron::Predict(const Mat &evidence)
     // u = bh.w' * [x];
 
     // Sum subset of weights with spiking evidence
-    MatF sub_weights = MatF::zeros(1, evidence.cols);
+    Mat1f sub_weights = Mat1f::zeros(1, evidence.cols);
     add(sub_weights, weights_, sub_weights, evidence > 0);
 
     //sub_weights.setTo(weights_, evidence > 0);
@@ -97,13 +97,13 @@ Mat ZNeuron::State() const
     return Mat(1, 1, CV_32FC1, u_);
 }
 
-MatF ZNeuron::Weights() const
+Mat1f ZNeuron::Weights() const
 {
     return weights_;
 }
 
-MatF ZNeuron::Bias() const
+Mat1f ZNeuron::Bias() const
 {
-    return MatF(1, 1, bias_);
+    return Mat1f(1, 1, bias_);
 }
 

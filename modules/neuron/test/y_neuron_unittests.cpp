@@ -3,6 +3,8 @@
 #include "core/exception.h"
 #include "ts/ts.h"
 
+using cv::Mat1f;
+
 namespace {
 
 class YNeuronTest : public ::testing::Test
@@ -10,7 +12,7 @@ class YNeuronTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        pc_ = MatF(10, 1);
+        pc_ = Mat1f(10, 1);
         for(int i=0; i<pc_.rows; i++) {
 
             pc_(i) = static_cast<float>(i%2);
@@ -23,7 +25,7 @@ protected:
         to_.init(frequency_, delta_t_msec_);
     }
 
-    MatF pc_;           ///< population codes
+    Mat1f pc_;           ///< population codes
     float frequency_;
     float delta_t_msec_;
 

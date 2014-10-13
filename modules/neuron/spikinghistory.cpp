@@ -1,5 +1,7 @@
 #include "neuron/spikinghistory.h"
 
+using namespace cv;
+
 SpikingHistory::SpikingHistory(int dims, int len)
     : len_(len),
       dims_(dims)
@@ -9,21 +11,21 @@ SpikingHistory::SpikingHistory(int dims, int len)
 
 void SpikingHistory::Advance()
 {
-    cv::Mat mask_rows = history_ > 0;
-    cv::subtract(history_,
-                 MatI::ones(history_.rows, history_.cols),
-                 history_,
-                 mask_rows);
+    Mat mask_rows = history_ > 0;
+    subtract(history_,
+             Mat1i::ones(history_.rows, history_.cols),
+             history_,
+             mask_rows);
 }
 
-MatI SpikingHistory::History() const
+Mat1i SpikingHistory::History() const
 {
     return history_;
 }
 
 void SpikingHistory::Reset()
 {
-    history_ = MatI::zeros(1, dims_);
+    history_ = Mat1i::zeros(1, dims_);
 }
 
 bool SpikingHistory::Recent(int index) const

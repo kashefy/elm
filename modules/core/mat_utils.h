@@ -11,7 +11,7 @@ namespace sem {
  * @param src matrix
  * @param dst matrix
  */
-void CumSum(const MatF &src, MatF &dst);
+void CumSum(const cv::Mat1f &src, cv::Mat1f &dst);
 
 /**
  * @brief Get string representation of matrix type

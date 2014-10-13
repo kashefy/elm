@@ -9,7 +9,7 @@ namespace {
 /**
  * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims and elem. values)
  */
-TEST(MatAssertionsTest, MatFEq) {
+TEST(MatAssertionsTest, Mat1fEq) {
 
     const int R = 3;
     const int C = 2;
@@ -40,7 +40,7 @@ TEST(MatAssertionsTest, MatFEq) {
 /**
  * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims, non-equal elem. values)
  */
-TEST(MatAssertionsTest, MatFNotEq) {
+TEST(MatAssertionsTest, Mat1fNotEq) {
 
     const int R=3, C=2;
     Mat a = Mat::zeros(R, C, CV_32FC1);
@@ -53,7 +53,7 @@ TEST(MatAssertionsTest, MatFNotEq) {
 /**
  * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims, single value different)
  */
-TEST(MatAssertionsTest, MatFNotEqSingleEl) {
+TEST(MatAssertionsTest, Mat1fNotEqSingleEl) {
 
     const int R=3, C=2;
     Mat a = Mat::ones(R, C, CV_32FC1);
@@ -73,7 +73,7 @@ TEST(MatAssertionsTest, MatFNotEqSingleEl) {
 /**
  * @brief test OpenCV Mat Assertions with 2 Mats of float (non-equal dims, non-equal elem. values)
  */
-TEST(MatAssertionsTest, MatFNotEqDims) {
+TEST(MatAssertionsTest, Mat1fNotEqDims) {
 
     Mat a = Mat::zeros(3, 2, CV_32FC1);
     Mat b = Mat::ones(2, 3, CV_32FC1);
@@ -85,7 +85,7 @@ TEST(MatAssertionsTest, MatFNotEqDims) {
 /**
  * @brief test OpenCV Mat Assertions with 2 Mats of float (non-equal dims, equal elem. values)
  */
-TEST(MatAssertionsTest, MatFNotEqDimsAllZeros) {
+TEST(MatAssertionsTest, Mat1fNotEqDimsAllZeros) {
 
     Mat a = Mat::zeros(3, 2, CV_32FC1);
     Mat b = Mat::zeros(2, 3, CV_32FC1);
@@ -130,12 +130,12 @@ TEST(MatTypeAssertionsTest, Type)
 
 TEST(MatTypeAssertionsTest, TemplateType)
 {
-    MatF a = MatF(1, 1);
+    Mat1f a = Mat1f(1, 1);
     EXPECT_TRUE( IsType(a, CV_32F)) << "It's a 32-bit float matrix.";
     EXPECT_TRUE( IsType(Mat(1, 1, CV_32FC2), a.type()) ) << "It's a 32-bit float matrix.";
     EXPECT_FALSE( IsType(Mat(1, 1, CV_32SC2), a.type()) ) << " 32-bit signed int != 32-bit float.";
 
-    MatI b = MatI(1, 1);
+    Mat1i b = Mat1i(1, 1);
     EXPECT_TRUE( IsType(b, CV_32S)) << "It's a 32-bit signed integer matrix.";
     EXPECT_TRUE( IsType(Mat(1, 1, CV_32SC2), b.type()) ) << "It's a 32-bit signed int matrix.";
     EXPECT_FALSE( IsType(Mat(1, 1, CV_16SC1), b.type()) ) << "16-bit signed int != 32-bit signed int.";

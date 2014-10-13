@@ -13,19 +13,19 @@ public:
      * Prepare pdf for sampling by converting into a series of bin widths
      * @param probability density function
      */
-    void pdf(const MatF &pdf);
+    void pdf(const cv::Mat1f &pdf);
 
     /**
      * @brief Get stored pdf
      * @return probability density function
      */
-    MatF pdf() const;
+    cv::Mat1f pdf() const;
 
 protected:
     base_DistributionSampler();
 
     static cv::RNG rng_;        ///< random number generator
-    MatF pdf_;                  ///< probability density function
+    cv::Mat1f pdf_;                  ///< probability density function
 };
 
 /**

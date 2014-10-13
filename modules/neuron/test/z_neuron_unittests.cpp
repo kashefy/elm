@@ -44,7 +44,7 @@ public:
      */
     Mat next(int state) {
 
-        MatI f = MatI::zeros(1, nb_features_);
+        Mat1i f = Mat1i::zeros(1, nb_features_);
         for(int i=state % 2; i<nb_features_; i+=2) {
 
             f(i)++;
@@ -59,15 +59,15 @@ TEST_F(ZNeuronTest, InitialState)
 {
     ZNeuron to;
     EXPECT_TRUE(to.Weights().empty());
-    EXPECT_MAT_EQ(to.Bias(), MatF::zeros(1, 1));
+    EXPECT_MAT_EQ(to.Bias(), Mat1f::zeros(1, 1));
 }
 
 TEST_F(ZNeuronTest, Init)
 {
     // check weights
-    MatF w = to_.Weights();
+    Mat1f w = to_.Weights();
     EXPECT_FALSE(w.empty());
-    EXPECT_MAT_DIMS_EQ(w, MatF::zeros(1, nb_features_));
+    EXPECT_MAT_DIMS_EQ(w, Mat1f::zeros(1, nb_features_));
     EXPECT_MAT_TYPE(w, CV_32F);
 
     for(int i=0; i<w.cols; i++) {
@@ -80,7 +80,7 @@ TEST_F(ZNeuronTest, Init)
     EXPECT_NE(s.at<float>(0), 0);
 
     // check bias
-    EXPECT_MAT_DIMS_EQ(to_.Bias(), MatF::zeros(1, 1));
+    EXPECT_MAT_DIMS_EQ(to_.Bias(), Mat1f::zeros(1, 1));
 }
 
 TEST_F(ZNeuronTest, Predict)
@@ -89,7 +89,7 @@ TEST_F(ZNeuronTest, Predict)
     for(int i=0; i<N; i++) {
 
         // setup evidence vector
-        MatF features(1, nb_features_);
+        Mat1f features(1, nb_features_);
         randn(features, 0, 1);
         Mat u = to_.Predict(features > 0);
         EXPECT_MAT_DIMS_EQ(u, Mat::zeros(1, 1, u.type())) << "Expecting scalar result from Predict method";
@@ -130,8 +130,8 @@ TEST_F(ZNeuronTest, PredictStateless)
 
 TEST_F(ZNeuronTest, WeightsCopied)
 {
-    MatF w = to_.Weights();
-    const MatF w_clone = to_.Weights();
+    Mat1f w = to_.Weights();
+    const Mat1f w_clone = to_.Weights();
 
     w += 1.f;
 
@@ -140,13 +140,13 @@ TEST_F(ZNeuronTest, WeightsCopied)
 
 TEST_F(ZNeuronTest, LearnNoFire)
 {
-    const MatF initial_weights = to_.Weights().clone();
+    const Mat1f initial_weights = to_.Weights().clone();
     for(int i=0; i<50; i++) {
 
         float bias_prev = to_.Bias()(0);
 
-        to_.Predict( MatI::ones(1, nb_features_) > 0 );
-        to_.Learn( MatI::zeros(1, 1) );
+        to_.Predict( Mat1i::ones(1, nb_features_) > 0 );
+        to_.Learn( Mat1i::zeros(1, 1) );
         EXPECT_MAT_EQ(initial_weights, to_.Weights());
 
         EXPECT_GT(bias_prev, to_.Bias()(0)) << "Bias not decaying";
@@ -155,13 +155,13 @@ TEST_F(ZNeuronTest, LearnNoFire)
 
 TEST_F(ZNeuronTest, LearnAlwaysFire)
 {
-    const MatF initial_weights = to_.Weights().clone();
+    const Mat1f initial_weights = to_.Weights().clone();
     for(int i=0; i<50; i++) {
 
         float bias_prev = to_.Bias()(0);
 
-        to_.Predict( MatI::ones(1, nb_features_) > 0 );
-        to_.Learn( MatI::ones(1, 1) );
+        to_.Predict( Mat1i::ones(1, nb_features_) > 0 );
+        to_.Learn( Mat1i::ones(1, 1) );
         EXPECT_FALSE( Equal(initial_weights, to_.Weights()) );
         EXPECT_LT(bias_prev, to_.Bias()(0)) << "Bias not increasing";
     }
@@ -169,14 +169,14 @@ TEST_F(ZNeuronTest, LearnAlwaysFire)
 
 TEST_F(ZNeuronTest, Learn)
 {
-    MatF weights_prev = to_.Weights().clone();
+    Mat1f weights_prev = to_.Weights().clone();
     float bias_prev = to_.Bias()(0);
     FakeEvidence f(nb_features_);
 
     for(int i=0; i<50; i++) {
 
         to_.Predict( f.next(0) > 0 );
-        to_.Learn( MatI::ones(1, 1) );
+        to_.Learn( Mat1i::ones(1, 1) );
 
         EXPECT_FALSE( Equal(weights_prev, to_.Weights()) );
         for(int j=0; j<weights_prev.cols; j+=2) {
