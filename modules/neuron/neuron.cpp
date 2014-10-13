@@ -1,5 +1,7 @@
 #include "neuron/neuron.h"
 
+#include "core/exception.h"
+
 YNeuron::YNeuron()
     : poisson_(0.f, 0.f) // dummy initialization, ugly
 {
@@ -24,8 +26,7 @@ int YNeuron::State(float state)
         spike = poisson_.Sample();
     }
     else {
-
-        // TODO: unsupported state, should throw and exception
+        SEM_THROW_NOT_IMPLEMENTED_WMSG("Analog state not supported.");
     }
 
     return spike;

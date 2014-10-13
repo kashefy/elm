@@ -6,6 +6,7 @@
 
 #define SEM_THROW_BAD_DIMS(msg) throw ExceptionBadDims(msg)
 #define SEM_THROW_NOT_IMPLEMENTED throw ExceptionNotImpl("Not implemented yet.")
+#define SEM_THROW_NOT_IMPLEMENTED_WMSG(msg) throw ExceptionNotImpl(msg)
 #define SEM_THROW_FILEIO_ERROR(msg) throw ExceptionFileIOError(msg)
 
 class Exception : public cv::Exception

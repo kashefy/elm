@@ -1,5 +1,6 @@
 #include "neuron/neuron.h"
 
+#include "core/exception.h"
 #include "ts/ts.h"
 
 namespace {
@@ -36,6 +37,17 @@ TEST_F(YNeuronTest, PopCodeZero)
 
         EXPECT_EQ(to_.State(0), 0);
     }
+}
+
+TEST_F(YNeuronTest, InvalidState)
+{
+    EXPECT_THROW(to_.State(2.f), ExceptionNotImpl);
+    EXPECT_THROW(to_.State(0.5f), ExceptionNotImpl);
+    EXPECT_THROW(to_.State(0.1f), ExceptionNotImpl);
+
+    EXPECT_NO_THROW(to_.State(-1.f));
+    EXPECT_NO_THROW(to_.State(0.f));
+    EXPECT_NO_THROW(to_.State(1.f));
 }
 
 TEST_F(YNeuronTest, FreqInf)
