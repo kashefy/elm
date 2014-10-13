@@ -27,6 +27,7 @@ include(cmake/FileSystemUtils.cmake)
 # Print all warnings
 # With C++11 support
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
+set(CMAKE_VERBOSE ON CACHE BOOL "Verbose mode")
 
 # Setup build and install locations
 if(NOT RUNTIME_INSTALL_DIRECTORY)
@@ -45,11 +46,13 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE PATH "Output directory for
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE PATH "Output directory for applications")
 
 # ----------------------------------------------------------------------------
-# LOCATE DEPENDENCIES: GTest, OpenCV
+# LOCATE DEPENDENCIES: GTest, OpenCV, Boost
 # ----------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------
 # GTest package
+# ----------------------------------------------------------------------------
+# Testing framework
 # ----------------------------------------------------------------------------
 # NOTE: This needs to happen before OpenCV as OpenCV introduced a bug:
 # Their ts module results in multiple definitions at linking time
@@ -76,6 +79,12 @@ endif(BUILD_TESTS)
 # ----------------------------------------------------------------------------
 # OpenCV
 # ----------------------------------------------------------------------------
+# Matrix definitions operations
+# Image processing
+# Image visuzalization
+# Image and Video I/O
+# Exception handling
+# ----------------------------------------------------------------------------
 # find_package OpenCV
 # Defines: OpenCV_FOUND, OpenCV_INCLUDE_DIRS, OpenCV_LIBS, OpenCV_LINK_LIBRARIES
 # ----------------------------------------------------------------------------
@@ -93,6 +102,40 @@ else(DEFINED OpenCV_DIR)
     set(OpenCV_DIR "" CACHE PATH "Root directory for OpenCV build directory." )
     message(FATAL_ERROR "\"OpenCV_DIR\" not set. Please explicitly provide the path to the root build directory of OpenCV.")
 endif(DEFINED OpenCV_DIR)
+
+# ----------------------------------------------------------------------------
+# Boost
+# ----------------------------------------------------------------------------
+# Whatever STL can't do yet
+#
+# File system operations
+# serialization
+#
+# platform independence
+#
+# If a feature does appear in STL, check it out and migrate over.
+# ----------------------------------------------------------------------------
+#
+# find_package Boost
+# Defines: Boost_FOUND, Boost_LIBRARIES,...
+# ----------------------------------------------------------------------------
+# Force the user to tell us which OpenCV they want (otherwise find_package can find the wrong one, cache it and changes to OpenCV_DIR are ignored)
+
+set(BOOST_MIN_VERSION "1.56.0" CACHE STRING "Minimum version of boost to link against (e.g. C:/BOOST_1_56_0 is 1.56.0")
+
+# Don't forget to include 'system'
+set(BOOST_COMPONENTS system filesystem serialization)
+
+find_package(Boost ${BOOST_MIN_VERSION} REQUIRED COMPONENTS ${BOOST_COMPONENTS})
+if(Boost_FOUND)
+    list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
+    list(APPEND ${ROOT_PROJECT}_LIBS ${Boost_LIBRARIES})
+else(Boost_FOUND)
+    if(NOT DEFINED BOOST_ROOT)
+        set(BOOST_ROOT "" CACHE PATH "Boost installation prefix.")
+    endif(NOT DEFINED BOOST_ROOT)
+    message(FATAL_ERROR "Failed to find Boost (or missing components). Check that \"BOOST_ROOT\" is properly set")
+endif(Boost_FOUND)
 
 include_directories(${${ROOT_PROJECT}_INCLUDE_DIRS})
 
