@@ -26,6 +26,7 @@ void ZNeuron::init(int nb_features, int len_history)
 
 void ZNeuron::Learn(const Mat &target)
 {
+    const double WEIGHT_LIMIT = 5.0;
     double limit_factor;
     double delta_w, w_old, w0, w;
     double eta;  // learning rate
@@ -45,7 +46,7 @@ void ZNeuron::Learn(const Mat &target)
     w0 = w_old + delta_w;
 
     // bh.w(1,i) = max(bh.w(1,i), -bh.limit);
-    bias_ = static_cast<float>(max(w0, -5.0)); // TODO: define const weight limit
+    bias_ = static_cast<float>(max(w0, -WEIGHT_LIMIT));
     //m_biasLearningRate.update(m_nBias);         // TODO adaptive learning rate
 
     // update all other weights
@@ -65,7 +66,7 @@ void ZNeuron::Learn(const Mat &target)
             // bh.w(2:(bh.dim+1),i) = max(bh.w(2:(bh.dim+1),i), -bh.limit);
 
             w = w_old + delta_w;
-            w = max(w, -5.0); // TODO: define const weight limit
+            w = max(w, -WEIGHT_LIMIT);
             weights_(wi) = static_cast<float>(w);
             //m_arrLearningRate[wi].update(w);         // TODO: adaptive learning rate
         }
