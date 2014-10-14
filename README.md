@@ -33,6 +33,17 @@ Build the run_unittests target and running the resulting executable binary runs 
 * Deployment instructions
 The installation step produces all artifacts to link against this framework.
 
+### Build issues ###
+
+Linking error when building in Ubuntu:
+The error message looks something like
+...undefined reference to symbol 'pthread_key_delete@@GLIBC_2.2.5'...
+...'pthread_key_delete@@GLIBC_2.2.5' is defined in DSO /lib/x86_64-linux-gnu/libpthread.so.0 so try adding it to the linker command line...
+
+Resolve by adding -pthread or -lpthread to the linker. You can do so by reconifuring CMake and adding the option:
+-DCMAKE_EXE_LINKER_FLAGS="-pthread"
+
+
 ### Contribution guidelines ###
 
 * Writing tests: Google Test framework used for writing C++ unit tests. Please see source files under sub directories **/test/ for examples. modules/ts contains utilities used for testing (e.g. custom assertions)
