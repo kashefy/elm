@@ -6,14 +6,12 @@
 
 using namespace std;
 
-TEST(ExceptionTest, ThrowBadDims)
+TEST(ExceptionTest, Throw)
 {
     EXPECT_THROW(SEM_THROW_BAD_DIMS("bad dims"), ExceptionBadDims);
-}
-
-TEST(ExceptionTest, ThrowNotImplemented)
-{
     EXPECT_THROW(SEM_THROW_NOT_IMPLEMENTED, ExceptionNotImpl);
+    EXPECT_THROW(SEM_THROW_FILEIO_ERROR("Could not open foo.bar"), ExceptionFileIOError);
+    EXPECT_THROW(SEM_THROW_VALUE_ERROR("Bad value"), ExceptionValueError);
 }
 
 TEST(ExceptionTest, NotImplementedMsg)
@@ -26,10 +24,5 @@ TEST(ExceptionTest, NotImplementedMsg)
         std::string msg(e.what());
         EXPECT_NE(msg.find("Not implemented yet"), msg.npos);
     }
-}
-
-TEST(ExceptionTest, ThrowFileError)
-{
-    EXPECT_THROW(SEM_THROW_FILEIO_ERROR("Could not open foo.bar"), ExceptionFileIOError);
 }
 

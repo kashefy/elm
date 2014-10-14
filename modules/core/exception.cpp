@@ -28,3 +28,9 @@ ExceptionFileIOError::ExceptionFileIOError(const std::string &msg)
                 CV_Func, __FILE__, __LINE__ )
 {
 }
+
+ExceptionValueError::ExceptionValueError(const std::string &msg)
+    : Exception(CV_StsBadArg, String(msg),
+                CV_Func, __FILE__, __LINE__ )
+{
+}

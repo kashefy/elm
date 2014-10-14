@@ -8,6 +8,7 @@
 #define SEM_THROW_NOT_IMPLEMENTED throw ExceptionNotImpl("Not implemented yet.")
 #define SEM_THROW_NOT_IMPLEMENTED_WMSG(msg) throw ExceptionNotImpl(msg)
 #define SEM_THROW_FILEIO_ERROR(msg) throw ExceptionFileIOError(msg)
+#define SEM_THROW_VALUE_ERROR(msg) throw ExceptionValueError(msg)
 
 class Exception : public cv::Exception
 {
@@ -32,6 +33,12 @@ class ExceptionFileIOError : public Exception
 {
 public:
     ExceptionFileIOError(const std::string &msg);
+};
+
+class ExceptionValueError : public Exception
+{
+public:
+    ExceptionValueError(const std::string &msg);
 };
 
 #endif // SEM_CORE_EXCEPTION_H_
