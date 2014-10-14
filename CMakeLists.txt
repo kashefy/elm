@@ -91,7 +91,7 @@ endif(BUILD_TESTS)
 # Force the user to tell us which OpenCV they want (otherwise find_package can find the wrong one, cache it and changes to OpenCV_DIR are ignored)
 
 if(DEFINED OpenCV_DIR)
-    find_package(OpenCV REQUIRED core PATHS ${OpenCV_DIR})
+    find_package(OpenCV REQUIRED core highgui PATHS ${OpenCV_DIR})
     if(OpenCV_FOUND)
         list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${OpenCV_INCLUDE_DIRS})
         list(APPEND ${ROOT_PROJECT}_LIBS ${OpenCV_LIBS})
