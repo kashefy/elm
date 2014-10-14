@@ -137,3 +137,59 @@ TEST(MatUtilsTest, TypeToStringChannels)
     }
 }
 
+TEST(MatARangeTest, Empty)
+{
+    EXPECT_TRUE(ARange(0, 0, 0).empty());
+    EXPECT_TRUE(ARange(1, 3, 0).empty());
+    EXPECT_TRUE(ARange(10, 3, 0).empty());
+    EXPECT_TRUE(ARange(10, 30, 50).empty());
+}
+
+TEST(MatARangeTest, Invalid)
+{
+    EXPECT_THROW(ARange(1, 3, -1), ExceptionValueError);
+    EXPECT_THROW(ARange(1, -3, 1), ExceptionValueError);
+}
+
+TEST(MatARangeTest, Increasing)
+{
+//    {
+//        Mat1i x = ARange(1000, 1010, 1);
+
+//        EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
+//        EXPECT_MAT_DIMS_EQ(x, Mat(1, 9, CV_32SC1));
+
+//        for(int i=0; i<static_cast<int>(x.total()); i++) {
+//            EXPECT_EQ(x(i), 1000+i);
+//        }
+//    }
+
+    {
+        Mat x = ARange<unsigned char>(0, 5, 2);
+
+        std::cout<<x<<std::endl;
+        EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
+        EXPECT_MAT_DIMS_EQ(x, Mat(1, 3, CV_32SC1));
+
+
+        for(int i=0, j=0; i<static_cast<int>(x.total()); i++, j+=2) {
+            EXPECT_EQ(x.at<unsigned char>(i), static_cast<unsigned char>(j));
+        }
+    }
+
+//    {
+//        Mat x = ARange<float>(-1.f, 1.f, 0.5f);
+
+//        EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
+//        EXPECT_MAT_DIMS_EQ(x, Mat(1, 5, CV_32SC1));
+
+//        float j = -1.f;
+//        for(int i=0; i<static_cast<int>(x.total()); i++) {
+//            EXPECT_FLOAT_EQ(x.at<float>(i), j);
+//            j += 0.5f;
+//        }
+//    }
+}
+
+
+
