@@ -13,13 +13,13 @@ set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules)
 set(${ROOT_PROJECT}_LIBS "")
 set(${ROOT_PROJECT}_MODULES "")
 
-
 # ----------------------------------------------------------------------------
 # Set default behavior
 # ----------------------------------------------------------------------------
 set(BUILD_TESTS ON CACHE BOOL "Whether to build test projects.")
 
 include(cmake/FileSystemUtils.cmake)
+include(cmake/MessageUtils.cmake)
 
 # ----------------------------------------------------------------------------
 # Set global CMake variables
@@ -161,3 +161,29 @@ if(BUILD_TESTS)
     endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
 
 endif(BUILD_TESTS)
+
+
+# ----------------------------------------------------------------------------
+# Done configuring the build.
+# Let's print some summary info
+# ----------------------------------------------------------------------------
+
+status("")
+
+status("Build:")
+status("    unit-tests:  "   BUILD_TESTS THEN YES ELSE NO)
+
+status("")
+
+status("Resolve Dependencies:")
+status("")
+status("    GTest:    "   GTEST_FOUND THEN ${GTEST_ROOT} ELSE NO)
+status("")
+status("    OpenCV:    "   OpenCV_FOUND THEN "${OpenCV_VERSION_MAJOR}.${OpenCV_VERSION_MINOR}.${OpenCV_VERSION_PATCH} (${OpenCV_VERSION})" ELSE NO)
+status("        lib Dir.:  "   OpenCV_FOUND THEN "${OpenCV_DIR}/lib" ELSE "-")
+status("        modules :  "      OpenCV_FOUND THEN ${OpenCV_LIBS} ELSE "-")
+status("")
+status("    Boost:    "   Boost_FOUND THEN "${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION} (${Boost_VERSION})"  ELSE NO)
+status("        lib Dir.:  "   Boost_FOUND THEN "${BOOST_ROOT}/lib" ELSE "-")
+status("        components :  "      Boost_FOUND THEN ${Boost_LIBRARIES} ELSE "-")
+status("")
