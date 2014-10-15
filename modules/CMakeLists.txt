@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------
 SUBDIRLIST(MODULES_LIST ${CMAKE_CURRENT_SOURCE_DIR})
 foreach(MODULE_NAME ${MODULES_LIST})
-    add_subdirectory (${MODULE_NAME})
+    add_subdirectory(${MODULE_NAME})
 endforeach()
 
 # Propagate the modules up to parent level

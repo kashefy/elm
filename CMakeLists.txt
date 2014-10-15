@@ -17,6 +17,7 @@ set(${ROOT_PROJECT}_MODULES "")
 # Set default behavior
 # ----------------------------------------------------------------------------
 set(BUILD_TESTS ON CACHE BOOL "Whether to build test projects.")
+set(FORCE_IN_SOURCE OFF CACHE BOOL "Whether to force allow in-source builds.")
 
 include(cmake/FileSystemUtils.cmake)
 include(cmake/ListUtils.cmake)
@@ -44,6 +45,13 @@ endif(NOT ARCHIVE_INSTALL_DIRECTORY)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE PATH "Output directory for libraries")
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE PATH "Output directory for applications")
+
+# Prevent in-source builds
+get_filename_component(PATH_A ${CMAKE_SOURCE_DIR} REALPATH)
+get_filename_component(PATH_B ${CMAKE_BINARY_DIR} REALPATH)
+if(${FORCE_IN_SOURCE} AND (${PATH_A} STREQUAL ${PATH_B}))
+    message(FATAL_ERROR "In-source builds not permitted pass FORCE_IN_SOURCE=ON to override.")
+endif()
 
 # ----------------------------------------------------------------------------
 # LOCATE DEPENDENCIES: GTest, OpenCV, Boost
