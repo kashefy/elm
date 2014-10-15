@@ -2,7 +2,7 @@
 #  CMake file for encoding module
 # ----------------------------------------------------------------------------
 
-set (MODULE_NAME encoding)
+set (MODULE_NAME ${ROOT_PROJECT}_encoding)
 
 project (${MODULE_NAME})
 

@@ -2,7 +2,7 @@
 #  CMake file for neuron module
 # ----------------------------------------------------------------------------
 
-set (MODULE_NAME neuron)
+set (MODULE_NAME ${ROOT_PROJECT}_neuron)
 
 project (${MODULE_NAME})
 

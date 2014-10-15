@@ -2,7 +2,7 @@
 #  CMake file for core module
 # ----------------------------------------------------------------------------
 
-set(MODULE_NAME core)
+set(MODULE_NAME ${ROOT_PROJECT}_core)
 
 project(${MODULE_NAME})
 
