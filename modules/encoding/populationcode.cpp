@@ -25,3 +25,18 @@ Mat1f MutexPopulationCode::PopCode()
 {
     return state_;
 }
+
+SoftMaxPopulationCode::SoftMaxPopulationCode()
+    :base_PopulationCode()
+{
+}
+
+void SoftMaxPopulationCode::State(const cv::Mat1f &in, const VecMat1f &kernels)
+{
+
+}
+
+cv::Mat1f SoftMaxPopulationCode::PopCode()
+{
+
+}
