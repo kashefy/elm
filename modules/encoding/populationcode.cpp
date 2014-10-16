@@ -1,5 +1,8 @@
 #include "encoding/populationcode.h"
 
+#include <opencv2/features2d.hpp>
+#include <opencv2/imgproc.hpp>
+
 using cv::Mat1f;
 
 base_PopulationCode::base_PopulationCode()
@@ -33,7 +36,13 @@ SoftMaxPopulationCode::SoftMaxPopulationCode()
 
 void SoftMaxPopulationCode::State(const cv::Mat1f &in, const VecMat1f &kernels)
 {
+    const int NB_KERNELS = static_cast<int>(kernels.size());
+    VecMat1f r;
+    r.reserve(NB_KERNELS);
+    for(int k=0; k<NB_KERNELS; k++) {
 
+        cv::filter2D(in, r[i], 0, kernels[i]);
+    }
 }
 
 cv::Mat1f SoftMaxPopulationCode::PopCode()
