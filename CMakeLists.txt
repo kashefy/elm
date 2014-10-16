@@ -170,7 +170,7 @@ if(BUILD_TESTS)
     if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
 
         status("Copying test-data")
-        file(COPY ${CMAKE_SOURCE_DIR}/testdata DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+        file(COPY ${CMAKE_SOURCE_DIR}/test-data DESTINATION ${EXECUTABLE_OUTPUT_PATH})
 
     endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
 
@@ -204,4 +204,11 @@ status("        lib Dir.:  "   Boost_FOUND THEN "${BOOST_ROOT}/lib" ELSE "-")
 set(Boost_LIB_NAMES ${Boost_LIBRARIES})
 convert_to_lib_name(Boost_LIB_NAMES ${Boost_LIB_NAMES})
 status("        components :  "      Boost_FOUND THEN ${Boost_LIB_NAMES} ELSE "-")
+
+status("")
+
+status("paths:")
+status("    install prefix:\t${CMAKE_INSTALL_PREFIX}")
+status("    test-data     :\t${EXECUTABLE_OUTPUT_PATH}/test-data")
+
 status("")
