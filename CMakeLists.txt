@@ -185,6 +185,9 @@ endif(BUILD_TESTS)
 status("")
 
 status("Build:")
+set(MODULE_NAMES ${${ROOT_PROJECT}_MODULES})
+strip_lib_prefix(MODULE_NAMES ${MODULE_NAMES})
+status("    modules:  "      ${MODULE_NAMES})
 status("    unit-tests:  "   BUILD_TESTS THEN YES ELSE NO)
 
 status("")
