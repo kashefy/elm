@@ -116,6 +116,80 @@ TEST_F(SynthBarsTest, Uniform)
     EXPECT_MAT_NEAR(s, cv::Mat1d::zeros(1, 1), 1e-2);
 }
 
+/**
+ * @brief Spot-check bar lines
+ */
+TEST_F(SynthBarsTest, BarLines)
+{
+    const int SIZE=28;
+    const int NB_VARIATIONS=4;
+    const float DELTA=180.f/NB_VARIATIONS;
+    cv::Mat1b variations_covered = cv::Mat1b::zeros(1, NB_VARIATIONS);
+    cv::Mat1b covered_enough = cv::Mat1b::ones(1, NB_VARIATIONS);
+    to_.Reset(SIZE, SIZE, NB_VARIATIONS);
+
+    const uchar ON=static_cast<uchar>(255);
+    const uchar OFF=static_cast<uchar>(0);
+
+    int i=0;
+    int MAX_ITERATIONS=50;
+
+    while(cv::countNonZero(covered_enough) > 0 && i < MAX_ITERATIONS) {
+
+        cv::Mat img, label;
+        to_.Next(img, label);
+
+        float angle = label.at<float>(0);
+        if(angle == 0.f) {
+
+            // horizontal line
+            for(int i=0; i<SIZE; i++) {
+
+                EXPECT_EQ(img.at<uchar>(SIZE/2, i), ON) << "No horizontal line.";
+            }
+            EXPECT_MAT_EQ(img.rowRange(0, 4), cv::Mat1b(4, SIZE, OFF));
+            EXPECT_MAT_EQ(img.rowRange(SIZE-4, SIZE), cv::Mat1b(4, SIZE, OFF));
+        }
+        else if(angle == 45.f) {
+
+            EXPECT_EQ(img.at<uchar>(0, 0), OFF) << "diagonal not /";
+            EXPECT_EQ(img.at<uchar>(SIZE-1, 0), ON) << "diagonal not /";
+            EXPECT_EQ(img.at<uchar>(0, SIZE-1), ON) << "diagonal not /";
+            EXPECT_EQ(img.at<uchar>(SIZE-1, SIZE-1), OFF) << "diagonal not /";
+
+        }
+        else if(angle == 90.f) {
+
+            // vertical line
+            for(int i=0; i<SIZE; i++) {
+
+                EXPECT_EQ(img.at<uchar>(i, SIZE/2), ON) << "No vertical line.";
+            }
+            EXPECT_MAT_EQ(img.colRange(0, 4), cv::Mat1b(SIZE, 4, OFF));
+            EXPECT_MAT_EQ(img.colRange(SIZE-4, SIZE), cv::Mat1b(SIZE, 4, OFF));
+        }
+        else if(angle == 135.f) {
+
+            EXPECT_EQ(img.at<uchar>(0, 0), ON) << "diagonal not \\";
+            EXPECT_EQ(img.at<uchar>(SIZE-1, 0), OFF) << "diagonal not \\";
+            EXPECT_EQ(img.at<uchar>(0, SIZE-1), OFF) << "diagonal not \\";
+            EXPECT_EQ(img.at<uchar>(SIZE-1, SIZE-1), ON) << "diagonal not \\";
+        }
+
+        EXPECT_EQ(img.at<uchar>(SIZE/2, SIZE/2), ON) << "not centered";
+
+        int bin = static_cast<int>(angle/DELTA);
+        variations_covered(bin)++;
+
+        cv::compare(variations_covered,
+                    cv::Mat1b(1, NB_VARIATIONS, static_cast<uchar>(5)),
+                    covered_enough, cv::CMP_LT);
+    }
+
+    EXPECT_FALSE(cv::countNonZero(covered_enough) > 0 && i < MAX_ITERATIONS)
+            << "Insufficient coverage of orientation variations" << variations_covered;
+}
+
 TEST_F(SynthBarsTest, DISABLED_Display)
 {
     to_.Reset(100, 100, 6);

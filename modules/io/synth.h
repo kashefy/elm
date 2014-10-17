@@ -36,14 +36,14 @@ public:
      * @brief Set Bar parameters
      * @param rows no. of rows
      * @param cols no. of columns
-     * @param nb_variations: no. of variations, yields bars oriented at [0, 1/v, 2/v 180] degrees
+     * @param nb_variations: no. of variations, yields bars oriented at [0, 1/v, 2/v 180) degrees
      */
     void Reset(int rows, int cols, int nb_variations);
 
     /**
      * @brief Next oriented bar
      * @param[out] oriented bar image
-     * @param[out] bar angle in degrees (0 for vertical)
+     * @param[out] bar angle in degrees (0 for horizontal, 90 for vertical, 45 for /, 135 for \\)
      */
     virtual void Next(cv::Mat &feature, cv::Mat &label);
 
@@ -51,7 +51,7 @@ public:
      * @brief Calculate angle from index integer
      * @return angle [deg]
      */
-    float IndexToDeg(int index) const;
+    float IndexToDeg(unsigned int index) const;
 
 private:
     int rows_;      ///< no. of rows in bar image

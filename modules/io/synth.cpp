@@ -28,11 +28,12 @@ void SynthBars::Reset(int rows, int cols, int nb_variations)
     nb_variations_ = nb_variations;
     delta_ = 180.f/static_cast<float>(nb_variations_);
 }
-
+#include <iostream>
 void SynthBars::Next(Mat &feature, Mat &label)
 {
     Point2i centre(cols_/2, rows_/2);
-    label = Mat1f(1, 1, -IndexToDeg(randu<int>()%nb_variations_));
+    unsigned int index = randu<unsigned int>()%nb_variations_;
+    label = Mat1f(1, 1, -IndexToDeg(index));
     Mat1f mag(1, 1, rows_+cols_), x, y;
 
     polarToCart(mag, label, x, y, true);
@@ -51,7 +52,7 @@ void SynthBars::Next(Mat &feature, Mat &label)
     label = abs(label); // keep in [0, 180) range
 }
 
-float SynthBars::IndexToDeg(int index) const
+float SynthBars::IndexToDeg(unsigned int index) const
 {
     return (index % nb_variations_) * delta_;
 }
