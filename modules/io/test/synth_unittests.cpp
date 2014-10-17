@@ -79,15 +79,15 @@ TEST_F(SynthBarsTest, Next)
 /**
  * @brief test that bar orientations are unifromly distributed
  */
-TEST_F(SynthBarsTest, DISABLED_Uniform)
+TEST_F(SynthBarsTest, Uniform)
 {
-    const int N=1e3;
-    const int ROWS=100;
-    const int COLS=100;
-    const int NB_VARIATIONS=6;
+    const int N=4e3;
+    const int ROWS=3;
+    const int COLS=3;
+    const int NB_VARIATIONS=4;
     to_.Reset(ROWS, COLS, NB_VARIATIONS);
 
-    cv::Mat1i counts = cv::Mat1i::zeros(1, NB_VARIATIONS);
+    cv::Mat1f counts = cv::Mat1f::zeros(1, NB_VARIATIONS);
 
     for(int i=0; i<N; i++) {
 
@@ -96,7 +96,7 @@ TEST_F(SynthBarsTest, DISABLED_Uniform)
 
         float angle = label.at<float>(0);
 
-        EXPECT_IN_CLOSED(angle, 0, 180-1);
+        EXPECT_IN_LCLOSED_ROPEN(angle, 0, 180);
 
         int bin = static_cast<int>(angle/180.f*NB_VARIATIONS);
 
@@ -105,11 +105,15 @@ TEST_F(SynthBarsTest, DISABLED_Uniform)
         counts(bin)++;
     }
 
+    EXPECT_FLOAT_EQ(cv::sum(counts)(0), N);
+
+    cv::Mat1f hist_normalized = counts/static_cast<float>(N);
+
+    // check histogram is near uniform
     cv::Mat m, s;
-    cv::meanStdDev(counts, m, s);
-   std::cout<<counts<<std::endl;
-   std::cout<<m<<std::endl;
-   std::cout<<s<<std::endl;
+    cv::meanStdDev(hist_normalized, m, s);
+    EXPECT_MAT_NEAR(m, cv::Mat1d(1, 1, 1.f/static_cast<double>(NB_VARIATIONS)), 1e-5);
+    EXPECT_MAT_NEAR(s, cv::Mat1d::zeros(1, 1), 1e-2);
 }
 
 TEST_F(SynthBarsTest, DISABLED_Display)
