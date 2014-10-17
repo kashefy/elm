@@ -15,9 +15,10 @@ public:
 
     /**
      * @brief Get next synthesized data point
-     * @return synthesized data
+     * @param[out] feature
+     * @param[out] label
      */
-    virtual cv::Mat Next() = 0;
+    virtual void Next(cv::Mat &feature, cv::Mat &label) = 0;
 
 protected:
     base_Synth();
@@ -41,9 +42,10 @@ public:
 
     /**
      * @brief Next oriented bar
-     * @return oriented bar image
+     * @param[out] oriented bar image
+     * @param[out] bar angle in degrees (0 for vertical)
      */
-    cv::Mat Next();
+    virtual void Next(cv::Mat &feature, cv::Mat &label);
 
     /**
      * @brief Calculate angle from index integer
@@ -54,7 +56,7 @@ public:
 private:
     int rows_;      ///< no. of rows in bar image
     int cols_;      ///< no. of columns in bar image
-    int n_;         ///< no. of orientation variations
+    int nb_variations_;         ///< no. of orientation variations
     float delta_;   ///< no. of orientation variations
 };
 

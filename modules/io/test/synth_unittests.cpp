@@ -26,19 +26,32 @@ TEST_F(SynthBarsTest, Reset)
     for(int i=1; i<6; i++) {
 
         to_.Reset(3, 3, i);
+        float angle = 0.f;
+        float delta = static_cast<float>(180.f/i);
         for(int j=0; j<100; j++) {
 
-            EXPECT_FLOAT_EQ(to_.IndexToDeg(j), static_cast<float>(j*180.f/i));
+            EXPECT_FLOAT_EQ(to_.IndexToDeg(j), static_cast<float>(angle));
+            angle += delta;
+            if(angle >= 180.f) { angle = 0.f; }
         }
     }
 }
 
 TEST_F(SynthBarsTest, IndexToDegrees)
 {
-    for(int i=0; i<100; i++) {
+    float angle = 0.f;
+    float delta = static_cast<float>(180.f/6.f);
+    for(int i=0; i<70; i++) {
 
-        EXPECT_FLOAT_EQ(to_.IndexToDeg(i), static_cast<float>(i*180.f/6.f));
+        EXPECT_FLOAT_EQ(to_.IndexToDeg(i), static_cast<float>(angle));
+
+        angle += delta;
+        if(angle >= 180.f) { angle = 0.f; }
     }
+
+    EXPECT_NE(to_.IndexToDeg(0), to_.IndexToDeg(1)) << "No variation.";
+    EXPECT_NE(to_.IndexToDeg(0), to_.IndexToDeg(5)) << "No variation.";
+    EXPECT_FLOAT_EQ(to_.IndexToDeg(0), to_.IndexToDeg(6)) << "0 should equal 180";
 }
 
 TEST_F(SynthBarsTest, Next)
@@ -50,12 +63,53 @@ TEST_F(SynthBarsTest, Next)
     to_.Reset(ROWS, COLS, NB_VARIATIONS);
     for(int i=0; i<N; i++) {
 
-        cv::Mat img = to_.Next();
+        cv::Mat img, label;
+        to_.Next(img, label);
+
         EXPECT_MAT_DIMS_EQ(img, cv::Mat1b(ROWS, COLS));
+        EXPECT_MAT_TYPE(img, CV_8U);
         EXPECT_EQ(img.at<uchar>(ROWS/2, COLS/2), static_cast<uchar>(255));
-        //cv::imshow("x", img);
-        //cv::waitKey();
+
+        EXPECT_MAT_DIMS_EQ(label, cv::Mat1f(1, 1));
+        EXPECT_MAT_TYPE(label, CV_32F);
+        EXPECT_IN_LCLOSED_ROPEN(label.at<float>(0), 0.f, 180.f);
     }
+}
+
+/**
+ * @brief test that bar orientations are unifromly distributed
+ */
+TEST_F(SynthBarsTest, DISABLED_Uniform)
+{
+    const int N=1e3;
+    const int ROWS=100;
+    const int COLS=100;
+    const int NB_VARIATIONS=6;
+    to_.Reset(ROWS, COLS, NB_VARIATIONS);
+
+    cv::Mat1i counts = cv::Mat1i::zeros(1, NB_VARIATIONS);
+
+    for(int i=0; i<N; i++) {
+
+        cv::Mat img, label;
+        to_.Next(img, label);
+
+        float angle = label.at<float>(0);
+
+        EXPECT_IN_CLOSED(angle, 0, 180-1);
+
+        int bin = static_cast<int>(angle/180.f*NB_VARIATIONS);
+
+        EXPECT_LT(bin, NB_VARIATIONS);
+
+        counts(bin)++;
+    }
+
+    cv::Mat m, s;
+    cv::meanStdDev(counts, m, s);
+   std::cout<<counts<<std::endl;
+   std::cout<<m<<std::endl;
+   std::cout<<s<<std::endl;
 }
 
 TEST_F(SynthBarsTest, DISABLED_Display)
@@ -63,7 +117,8 @@ TEST_F(SynthBarsTest, DISABLED_Display)
     to_.Reset(100, 100, 6);
     for(int i=0; i<10; i++) {
 
-        cv::Mat img = to_.Next();
+        cv::Mat img, label;
+        to_.Next(img, label);
         cv::imshow(FullTestName(test_info_), img);
         cv::waitKey();
     }
