@@ -12,6 +12,12 @@ AssertionResult InClosed(float x, float a, float b) {
     else { return AssertionFailure() << a << "<=" << x << "<=" << b << " Failed."; }
 }
 
+AssertionResult InLClosedROpen(float x, float a, float b) {
+
+    if(IntervalLClosedROpen(a, b).In(x)) { return AssertionSuccess(); }
+    else { return AssertionFailure() << a << "<=" << x << "<" << b << " Failed."; }
+}
+
 const char* FullTestName(const TestInfo *test_info)
 {
     string s1(test_info->test_case_name());

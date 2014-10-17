@@ -45,4 +45,21 @@ public:
     bool In(float x) const;
 };
 
+/**
+ * @brief Left-Closed Right-Open interval
+ * \see base_Interval
+ */
+class IntervalLClosedROpen : public base_Interval
+{
+public:
+    IntervalLClosedROpen(float a, float b);
+
+    /**
+     * @brief x in [a, b)?
+     * @param x value to check
+     * @return true on yes
+     */
+    bool In(float x) const;
+};
+
 #endif // SEM_CORE_INTERVAL_H_
