@@ -36,6 +36,14 @@ TEST(LClosedROpenIntervalAssertionTest, TestAssertion) {
     EXPECT_IN_LCLOSED_ROPEN(0, 0, 1);
 }
 
+TEST(IntervalAssertionTest, ClosedVsOpen)
+{
+    EXPECT_FALSE( InClosed(0, 1, 3) || InLClosedROpen(0, 1, 3) );
+    EXPECT_TRUE ( InClosed(1, 1, 3) || InLClosedROpen(1, 1, 3) );
+    EXPECT_TRUE ( InClosed(3, 1, 3) && !InLClosedROpen(3, 1, 3) );
+    EXPECT_FALSE( InClosed(4, 1, 3) || InLClosedROpen(4, 1, 3) );
+}
+
 class DummyTest : public ::testing::Test
 {
 };
