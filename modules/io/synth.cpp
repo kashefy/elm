@@ -47,7 +47,7 @@ void SynthBars::Next(Mat &feature, Mat &label)
     b += centre;
 
     feature = Mat1b::zeros(rows_, cols_);
-    line(feature, a, b, Scalar_<uchar>(255), 5, LINE_8);
+    line(feature, a, b, Scalar_<uchar>(255), 3, LINE_8);
 
     label = abs(label); // keep in [0, 180) range
 }
