@@ -29,3 +29,6 @@
 
 # User files
 *.user
+
+# IDE files
+*.autosave
