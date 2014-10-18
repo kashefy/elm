@@ -17,7 +17,7 @@ namespace sem {
  * @param ps phase offset in radians
  * @return kernel in 32-bit floats
  */
-cv::Mat1f GaborKernel(int radius, float sigma, float theta, float lambd, float gamma, float ps);
+cv::Mat1f GaborKernel(int radius, float sigma, float theta_rad, float lambd, float gamma, float ps);
 
 
 } // namespace sem
