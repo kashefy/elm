@@ -41,22 +41,17 @@ void SynthBars::Next(Mat &feature, Mat &label)
 
 void SynthBars::Draw(float angle_deg, Mat &img) const
 {
-    Mat1f label = Mat1f(1, 1, -angle_deg);
-    Mat1f mag(1, 1, rows_+cols_), x, y;
+    Mat1f label = Mat1f(2, 1, -angle_deg);
+    Mat1f mag(2, 1, rows_+cols_), x, y;
 
     polarToCart(mag, label, x, y, true);
 
-    Point2i centre(cols_/2, rows_/2);
-    Point2i a(x(0), y(0));
+    Point2i centre(cols_/2, rows_/2),
+            a(x(0), y(0)), b(x(1), y(1));
     a += centre;
 
-    polarToCart(-mag, label, x, y, true);
-
-    Point2i b(x(0), y(0));
-    b += centre;
-
     img = Mat1b::zeros(rows_, cols_);
-    line(img, a, b, Scalar_<uchar>(255), 3, LINE_8);
+    line(img, a, centre-b, Scalar_<uchar>(255), 3, LINE_8);
 }
 
 float SynthBars::IndexToDeg(unsigned int index) const
