@@ -28,16 +28,25 @@ void SynthBars::Reset(int rows, int cols, int nb_variations)
     nb_variations_ = nb_variations;
     delta_ = 180.f/static_cast<float>(nb_variations_);
 }
-#include <iostream>
+
 void SynthBars::Next(Mat &feature, Mat &label)
 {
-    Point2i centre(cols_/2, rows_/2);
     unsigned int index = randu<unsigned int>()%nb_variations_;
-    label = Mat1f(1, 1, -IndexToDeg(index));
+    float angle = IndexToDeg(index);
+
+    Draw(angle, feature);
+
+    label = Mat1f(1, 1, angle);
+}
+
+void SynthBars::Draw(float angle_deg, Mat &img) const
+{
+    Mat1f label = Mat1f(1, 1, -angle_deg);
     Mat1f mag(1, 1, rows_+cols_), x, y;
 
     polarToCart(mag, label, x, y, true);
 
+    Point2i centre(cols_/2, rows_/2);
     Point2i a(x(0), y(0));
     a += centre;
 
@@ -46,10 +55,8 @@ void SynthBars::Next(Mat &feature, Mat &label)
     Point2i b(x(0), y(0));
     b += centre;
 
-    feature = Mat1b::zeros(rows_, cols_);
-    line(feature, a, b, Scalar_<uchar>(255), 3, LINE_8);
-
-    label = abs(label); // keep in [0, 180) range
+    img = Mat1b::zeros(rows_, cols_);
+    line(img, a, b, Scalar_<uchar>(255), 3, LINE_8);
 }
 
 float SynthBars::IndexToDeg(unsigned int index) const
