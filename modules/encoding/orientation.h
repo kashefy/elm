@@ -11,7 +11,7 @@ namespace sem {
  *
  * @param kernel radius, yields kernel of size (r*2+1, r*2+1)
  * @param sigma Std dev of gaussian envelope
- * @param theta orientation in radians
+ * @param theta orientation in radians (0 rad = vertical, pi/2 = vertical)
  * @param lambd wavelength of sinusoid
  * @param gamma spatial aspect ratio
  * @param ps phase offset in radians

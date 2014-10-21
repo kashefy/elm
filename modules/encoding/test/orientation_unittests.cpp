@@ -5,6 +5,7 @@
 
 #include "core/exception.h"
 #include "io/synth.h"
+#include "io/readmnist.h"
 #include "ts/ts.h"
 
 using namespace cv;
@@ -38,11 +39,11 @@ TEST_F(GaborTest, KernelMat)
     EXPECT_MAT_TYPE(kernel, CV_32F);
 }
 
-TEST_F(GaborTest, DISABLED_Kernel)
+TEST_F(GaborTest, Kernel)
 {
     const int RADIUS=9;
-    const float sigma = 10;//3;
-    //const float theta = 90.f;
+    const float sigma = 3;
+
     const float theta = 90.f * CV_PI / 180.0f;
     const float _lambda = 10;//CV_PI;
     const float gamma = 0.02;//10;
@@ -61,8 +62,22 @@ TEST_F(GaborTest, DISABLED_Kernel)
     Mat img, in, label;
     x.Next(img, label);
     img.convertTo(in, CV_32F, 1./255.);
+
+    ReadMNISTImages yi;
+    yi.ReadHeader("C:\\Users\\woodstock\\dev\\data\\MNIST\\t10k-images.idx3-ubyte");
+    ReadMNISTLabels yl;
+    yl.ReadHeader("C:\\Users\\woodstock\\dev\\data\\MNIST\\t10k-labels.idx1-ubyte");
+
     //std::cout<<"i"<<in<<std::endl;
-    //std::cout<<label<<std::endl;
+
+    img = yi.Next();
+    in = img;
+    //std::cout<<img<<std::endl;
+    label = yl.Next();
+    std::cout<<label<<std::endl;
+
+    imshow("img", img);
+
     Mat response;
     filter2D(in, response, -1, kernel);
 
