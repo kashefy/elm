@@ -4,6 +4,7 @@
 #include <opencv2/imgproc.hpp>
 
 #include "core/exception.h"
+#include "core/mat_utils.h"
 #include "io/synth.h"
 #include "io/readmnist.h"
 #include "ts/ts.h"
@@ -39,100 +40,98 @@ TEST_F(GaborTest, KernelMat)
     EXPECT_MAT_TYPE(kernel, CV_32F);
 }
 
-TEST_F(GaborTest, Kernel)
+TEST_F(GaborTest, KernelRotated)
 {
     const int RADIUS=9;
     const float sigma = 3;
-
-    const float theta = 90.f * CV_PI / 180.0f;
     const float _lambda = 10;//CV_PI;
     const float gamma = 0.02;//10;
     const float ps = 0;//CV_PI*0.5;
 
+    for(float angle=0.f; angle<=360.f; angle+=45.f) {
 
-    Mat kernel = GaborKernel(RADIUS, sigma, theta, _lambda, gamma, ps);
-    //Mat kernel = GaborKernel(RADIUS, 3, CV_PI/2.0, CV_PI, 10.0, CV_PI*0.5);
+        Mat kernel0 = GaborKernel(RADIUS, sigma, angle*CV_PI/180.0f, _lambda, gamma, ps);
+        Mat kernel90 = GaborKernel(RADIUS, sigma, (angle+90)*CV_PI/180.0f, _lambda, gamma, ps);
+        Mat kernel180 = GaborKernel(RADIUS, sigma, (angle+180)*CV_PI/180.0f, _lambda, gamma, ps);
 
-    std::cout<<"k"<<kernel<<std::endl;
+        EXPECT_MAT_NEAR(kernel0, kernel180, 1e-7);
 
-    kernel /= sum(kernel)(0);
+        flip(kernel90.t(), kernel90, 0);
 
-    SynthBars x;
-    x.Reset(28, 28, 2);
-    Mat img, in, label;
-    x.Next(img, label);
-    img.convertTo(in, CV_32F, 1./255.);
+        EXPECT_MAT_NEAR(kernel0, kernel90, 1e-7);
+    }
+}
 
-    ReadMNISTImages yi;
-    yi.ReadHeader("C:\\Users\\woodstock\\dev\\data\\MNIST\\t10k-images.idx3-ubyte");
-    ReadMNISTLabels yl;
-    yl.ReadHeader("C:\\Users\\woodstock\\dev\\data\\MNIST\\t10k-labels.idx1-ubyte");
+TEST_F(GaborTest, Response)
+{
+    const int RADIUS=9;
+    const float sigma = 3;
+    const float _lambda = 10;//CV_PI;
+    const float gamma = 0.02;//10;
+    const float ps = 0;//CV_PI*0.5;
 
-    //std::cout<<"i"<<in<<std::endl;
+    for(float angle=0.f; angle<=180.f; angle+=45.f) {
 
-    img = yi.Next();
-    in = img;
-    //std::cout<<img<<std::endl;
-    label = yl.Next();
-    std::cout<<label<<std::endl;
+        Mat kernel = GaborKernel(RADIUS, sigma, angle*CV_PI/180.0f, _lambda, gamma, ps);
 
-    imshow("img", img);
+        SynthBars bars;
+        bars.Reset(28, 28, 1);
 
-    Mat response;
-    filter2D(in, response, -1, kernel);
+        Mat img, response;
+        bars.Draw(angle, img);
+        img.convertTo(img, CV_32F, 1./255.);
+        filter2D(img, response, -1, kernel);
 
-    std::cout<<"r"<<response<<std::endl;
+        EXPECT_MAT_DIMS_EQ(img, response);
+        EXPECT_MAT_TYPE(response, CV_32F);
+        EXPECT_EQ(img.channels(), response.channels());
 
-    int min_idx[2] = {-1, -1};
-    int max_idx[2] = {-1, -1};
-    double min_val, max_val;
-    minMaxIdx(response, &min_val, &max_val, min_idx, max_idx);
+        // check response has a line through the center
+        if(angle == 0 || angle == 180) {
 
-    response -= min_val;
+            int mid = response.rows/2;
+            EXPECT_GT(sum(response.rowRange(mid-2, mid+2))(0),
+                      sum(response.rowRange(0, 4))(0));
+            EXPECT_GT(sum(response.rowRange(mid-2, mid+2))(0),
+                      sum(response.rowRange(response.rows-4, response.rows))(0));
+        }
+        else if(angle == 90) {
 
-    minMaxIdx(response, &min_val, &max_val, min_idx, max_idx);
+            int mid = response.cols/2;
+            EXPECT_GT(sum(response.colRange(mid-2, mid+2))(0),
+                      sum(response.colRange(0, 4))(0));
+            EXPECT_GT(sum(response.colRange(mid-2, mid+2))(0),
+                      sum(response.colRange(response.cols-4, response.cols))(0));
+        }
 
-    response /= max_val;
+        // check response of bar perpendicular to kernel orientation
+        Mat img_orth, response_orth;
+        bars.Draw(angle, img_orth);
+        img.convertTo(img_orth, CV_32F, 1./255.);
+        filter2D(img_orth, response_orth, -1, kernel);
 
-    minMaxIdx(response, &min_val, &max_val, min_idx, max_idx);
-    std::cout<<"min "<<min_val<<std::endl;
-    std::cout<<"max "<<max_val<<std::endl;
+        EXPECT_GT(sum(response)(0), sum(response_orth)(0));
+    }
+}
 
-    Mat ru;
-    response.convertTo(ru, CV_8UC1, 255.);
-    imshow("ru", ru);
-    waitKey();
+TEST_F(GaborTest, DISABLED_DisplayKernel)
+{
+    const int RADIUS=9;
+    const float sigma = 3;
+    const float _lambda = 10;//CV_PI;
+    const float gamma = 0.02;//10;
+    const float ps = 0;//CV_PI*0.5;
 
-    return;
-//std::cout<<kernel<<std::endl;
+    for(float angle=0.f; angle<=360.f; angle+=45.f) {
 
-    Mat viz, m, s;
-    cv::meanStdDev(kernel, m, s);
-    //std::cout<<m<<std::endl;
-    //kernel /= m;
-    //kernel *= 255/4;
+        const float theta = angle * CV_PI / 180.0f;
+        Mat kernel = GaborKernel(RADIUS, sigma, theta, _lambda, gamma, ps);
 
-    kernel -= min_val;
-
-    minMaxIdx(kernel, &min_val, &max_val, min_idx, max_idx);
-    kernel /= cv::sum(kernel)(0);
-
-    minMaxIdx(kernel, &min_val, &max_val, min_idx, max_idx);
-    kernel /= max_val;
-    kernel *= 255;
-
-    minMaxIdx(kernel, &min_val, &max_val, min_idx, max_idx);
-
-    std::cout<<"min "<<min_val<<std::endl;
-    std::cout<<"max "<<max_val<<std::endl;
-
-
-    cv::meanStdDev(kernel, m, s);
-    std::cout<<m<<std::endl;
-
-    kernel.convertTo(viz, CV_8U);
-
-    imshow("x", viz(Rect(280, 280, 40, 40 )));
-    waitKey();
+        std::stringstream s;
+        s << "angle="<<angle;
+        imshow(s.str().c_str(), ConvertTo8U(kernel));
+        std::cout<<s.str()<<kernel<<std::endl;
+        waitKey(0.5);
+    }
 }
 
