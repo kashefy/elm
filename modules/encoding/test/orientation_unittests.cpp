@@ -3,6 +3,7 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include "core/defs.h"
 #include "core/exception.h"
 #include "core/mat_utils.h"
 #include "io/synth.h"
@@ -117,15 +118,15 @@ TEST_F(GaborTest, Response)
 TEST_F(GaborTest, DISABLED_DisplayKernel)
 {
     const int RADIUS=9;
-    const float sigma = 3;
-    const float _lambda = 10;//CV_PI;
-    const float gamma = 0.02;//10;
-    const float ps = 0;//CV_PI*0.5;
+    const float SIGMA = 3;
+    const float _LAMBDA = 10;   //CV_PI;
+    const float GAMMA = 0.02;   //10;
+    const float PS = 0;         //CV_PI*0.5;
 
     for(float angle=0.f; angle<=360.f; angle+=45.f) {
 
         const float theta = angle * CV_PI / 180.0f;
-        Mat kernel = GaborKernel(RADIUS, sigma, theta, _lambda, gamma, ps);
+        Mat kernel = GaborKernel(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
 
         std::stringstream s;
         s << "angle="<<angle;
@@ -134,4 +135,34 @@ TEST_F(GaborTest, DISABLED_DisplayKernel)
         waitKey(0.5);
     }
 }
+
+TEST_F(GaborTest, FilterBankVector)
+{
+    const int N=9;
+    const int RADIUS=9;
+    const float SIGMA = 3;
+    const float _LAMBDA = 10;   //CV_PI;
+    const float GAMMA = 0.02;   //10;
+    const float PS = 0;         //CV_PI*0.5;
+
+    float angle=-SEM_PI2;
+    VecF theta;
+
+    for(int i=0; i<N; i++) {
+
+        VecMat1f filter_bank = GaborFilterBank(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
+
+        EXPECT_EQ(filter_bank.size(), i);
+
+        for(int j=0; j<i; j++) {
+
+            EXPECT_MAT_DIMS_EQ(filter_bank[j], Mat1f(RADIUS*2+1, RADIUS*2+1));
+            EXPECT_MAT_TYPE(filter_bank[j], CV_32F);
+        }
+
+        theta.push_back(angle);
+        angle += SEM_PI2;
+    }
+}
+
 
