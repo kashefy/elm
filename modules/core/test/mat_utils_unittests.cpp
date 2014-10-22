@@ -8,6 +8,83 @@ using namespace std;
 using namespace cv;
 using namespace sem;
 
+TEST(MatUtilsTest, ConvertTo8U_zeros)
+{
+    const Size2i SIZE(3, 3);
+    Mat src = Mat1i::zeros(SIZE);
+    EXPECT_MAT_EQ(Mat_<uchar>::zeros(SIZE), ConvertTo8U(src));
+    src = Mat1f::zeros(SIZE);
+    EXPECT_MAT_EQ(Mat_<uchar>::zeros(SIZE), ConvertTo8U(src));
+}
+
+/**
+ * @brief Since we cannot distinguish min and max values
+ * An input of ones behaves the same as input of zeros
+ */
+TEST(MatUtilsTest, ConvertTo8U_ones)
+{
+    const Size2i SIZE(3, 3);
+    Mat src = Mat1i::ones(SIZE);
+    EXPECT_MAT_EQ(Mat_<uchar>::zeros(SIZE), ConvertTo8U(src));
+    src = Mat1f::ones(SIZE);
+    EXPECT_MAT_EQ(Mat_<uchar>::zeros(SIZE), ConvertTo8U(src));
+}
+
+/**
+ * @brief Test conversion+scaling to 8U mats
+ */
+TEST(MatUtilsTest, ConvertTo8U_int)
+{
+    Mat1i src(3, 3);
+    const int N=static_cast<int>(src.total());
+    for(int i=0; i<N; i++) {
+
+        // large numbers lead to overflow errors and are difficult to assert
+        src(i) = randu<int>() % 255;
+    }
+
+    int src_max_idx[2] = {-1, -1};
+    double src_min_val, src_max_val;
+    minMaxIdx(src, &src_min_val, 0, 0, src_max_idx);
+    src_max_val = Mat1i(src-src_min_val)(src_max_idx[0], src_max_idx[1]);
+
+    cv::Mat result = ConvertTo8U(src);
+
+    EXPECT_MAT_DIMS_EQ(src, result) << "Dimensions changed";
+    EXPECT_MAT_TYPE(result, CV_8U) << "Not unsigned chars";
+    EXPECT_EQ(src.channels(), result.channels()) << "No. of channels changed";
+
+    Mat1f result_f;
+    result.convertTo(result_f, CV_32F, src_max_val/255., src_min_val);
+
+    EXPECT_FLOAT_EQ(sum(src)(0), static_cast<int>(sum(result_f)(0)));
+}
+
+TEST(MatUtilsTest, ConvertTo8U_float)
+{
+    Mat1f src(3, 3);
+
+    // large numbers lead to overflow and are difficult to assert
+    randn(src, 0., 255.);
+    src.setTo(0.f, abs(src) > 255);
+
+    int src_max_idx[2] = {-1, -1};
+    double src_min_val, src_max_val;
+    minMaxIdx(src, &src_min_val, 0, 0, src_max_idx);
+    src_max_val = Mat1f(src-src_min_val)(src_max_idx[0], src_max_idx[1]);
+
+    cv::Mat result = ConvertTo8U(src);
+
+    EXPECT_MAT_DIMS_EQ(src, result) << "Dimensions changed";
+    EXPECT_MAT_TYPE(result, CV_8U) << "Not unsigned chars";
+    EXPECT_EQ(src.channels(), result.channels()) << "No. of channels changed";
+
+    Mat1f result_f;
+    result.convertTo(result_f, CV_32F, src_max_val/255., src_min_val);
+
+    EXPECT_NEAR(sum(src)(0), sum(result_f)(0), src_max_val/10.); // allow for 10% error
+}
+
 /**
  * @brief test calculation of cumulative sum
  */
