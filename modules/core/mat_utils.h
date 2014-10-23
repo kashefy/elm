@@ -3,7 +3,9 @@
 
 #include <string>
 #include "core/typedefs.h"
+#include "core/exception.h"
 
+#include <iostream>
 namespace sem {
 
 /**
@@ -31,6 +33,54 @@ void CumSum(const cv::Mat1f &src, cv::Mat1f &dst);
  * @return type as string
  */
 std::string MatTypeToString(const cv::Mat& m);
+
+
+/**
+ * @brief Create Mat object (row vector) and fill with range
+ * @param start value
+ * @param stop value (exclusive)
+ * @param step value
+ * @return template
+ */
+template <class T>
+cv::Mat_<T> ARange(T start, T stop, T step)
+{
+    double diff = static_cast<double>(stop)-static_cast<double>(start);
+
+    if((diff > 0 && step < 0) || (diff < 0 && step > 0)) {
+
+        SEM_THROW_VALUE_ERROR("step incompatible with start and stop.");
+    }
+
+    int cols;
+    if(step == 0) {
+
+        cols = 0;
+    }
+    else {
+
+        // Need full integer columns
+        double tmp = (diff < 0)? abs(diff) : diff;
+        tmp = (tmp+1)/fabs(static_cast<double>(step));
+        cols = static_cast<int>(tmp);
+    }
+
+    cv::Mat_<T> m(1, cols);
+    T value = start;
+    int count = 0;
+    bool done = (step > 0)? value >= stop : value <= stop;
+    while(!done && count < cols) {
+
+        m(count++) = value;
+        value += step;
+        done = (step > 0)? value >= stop : value <= stop;
+    }
+
+    // exclude stop value
+    if(count < cols) { m = m.colRange(0, count); }
+
+    return m;
+}
 
 } // sem namespace
 
