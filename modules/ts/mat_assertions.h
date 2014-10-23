@@ -13,7 +13,15 @@
 
 std::string MatTypeFailureMessage(const cv::Mat& a, int mat_type);
 
+/**
+  * Check if dimensions match
+  * Note:
+  *     EqualDims(Mat(), Size2i(0, 0)) yields true
+  *     EqualDims(Mat(), Mat()) yields true
+  *     EqualDims(Mat(), Mat().size()) yields true
+  */
 ::testing::AssertionResult EqualDims(const cv::Mat& a, const cv::Mat& b);
+::testing::AssertionResult EqualDims(const cv::Mat& a, const cv::Size2i& s);
 #define EXPECT_MAT_DIMS_EQ(a, b) EXPECT_TRUE( EqualDims(a, b) )
 
 std::string MatFailureMessageNonZero(const cv::Mat& a, const cv::Mat& b, const cv::Mat& cmp);

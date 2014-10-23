@@ -10,7 +10,7 @@ This implementation is work by Youssef Kashef. It extends the original SEM with 
 
 ## Milestones ##
 
-1. Matlab implementation by Michael Pfeiffer and authors of 2010 SEM paper.
+1. Matlab implementation by Michael Pfeiffer and authors of 2010 SEM paper (not included).
 2. Java implementation + Evaluation in Matlab
 3. SEM model extended with scale and translation invariance
 4. C++ implementation and code refactoring **in progress**
@@ -42,7 +42,6 @@ The error message looks something like
 
 Resolve by adding -pthread or -lpthread to the linker. You can do so by reconifuring CMake and adding the option:
 -DCMAKE_EXE_LINKER_FLAGS="-pthread"
-
 
 ### Contribution guidelines ###
 

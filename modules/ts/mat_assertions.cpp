@@ -27,12 +27,17 @@ string MatTypeFailureMessage(const Mat& a, int mat_type) {
 
 AssertionResult EqualDims(const Mat &a, const Mat &b) {
 
-    if(a.rows != b.rows) return AssertionFailure() << "No. of rows do not match (" <<
+    return EqualDims(a, b.size());
+}
+
+AssertionResult EqualDims(const Mat &a, const Size2i &s) {
+
+    if(a.rows != s.height) return AssertionFailure() << "No. of rows do not match (" <<
                                                       a.rows << ") (" <<
-                                                      b.rows << ")";
-    if(a.cols != b.cols) return AssertionFailure() << "No. of columns do not match (" <<
+                                                      s.height << ")";
+    if(a.cols != s.width) return AssertionFailure() << "No. of columns do not match (" <<
                                                       a.cols << ") (" <<
-                                                      b.cols << ")";
+                                                      s.width << ")";
     return AssertionSuccess();
 }
 
