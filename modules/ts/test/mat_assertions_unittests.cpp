@@ -24,6 +24,8 @@ TEST(MatAssertionsTest, Mat1fEq) {
     EXPECT_EQ(a.total(), R*C) << "No. of elements do not match.";
     EXPECT_TRUE( EqualDims(a, b) );
     EXPECT_MAT_DIMS_EQ(a, b);
+    EXPECT_MAT_DIMS_EQ(a, b.size());
+    EXPECT_MAT_DIMS_EQ(a, Size2i(C, R));
 
     for(int r=0; r<R; r++) {
         for(int c=0; c<C; c++) {
@@ -47,6 +49,8 @@ TEST(MatAssertionsTest, Mat1fNotEq) {
     Mat b = Mat::ones(R, C, CV_32FC1);
 
     EXPECT_MAT_DIMS_EQ(a, b);
+    EXPECT_MAT_DIMS_EQ(a, b.size());
+    EXPECT_MAT_DIMS_EQ(a, Size2i(C, R));
     EXPECT_FALSE( Equal(a, b) );
 }
 
@@ -63,6 +67,8 @@ TEST(MatAssertionsTest, Mat1fNotEqSingleEl) {
 
             Mat b = a.clone();
             EXPECT_MAT_DIMS_EQ(a, b);
+            EXPECT_MAT_DIMS_EQ(a, b.size());
+            EXPECT_MAT_DIMS_EQ(a, Size2i(C, R));
             EXPECT_MAT_EQ(a, b);
             b.at<float>(r, c) += 123;
             EXPECT_FALSE( Equal(a, b) );
@@ -83,15 +89,41 @@ TEST(MatAssertionsTest, Mat1fNotEqDims) {
 }
 
 /**
+ * @brief repeat Mat1fNotEqDims test with cv::Size overload
+ */
+TEST(MatAssertionsTest, Mat1fNotEqDims_size) {
+
+    Mat a = Mat::zeros(3, 2, CV_32FC1);
+    Size2i s(3, 2);
+    Mat b = Mat::ones(s, CV_32FC1);
+
+    EXPECT_FALSE( EqualDims(a, s) );
+    EXPECT_FALSE( EqualDims(a, b.size()) );
+    EXPECT_FALSE( Equal(a, b) );
+}
+
+/**
  * @brief test OpenCV Mat Assertions with 2 Mats of float (non-equal dims, equal elem. values)
  */
 TEST(MatAssertionsTest, Mat1fNotEqDimsAllZeros) {
 
     Mat a = Mat::zeros(3, 2, CV_32FC1);
-    Mat b = Mat::zeros(2, 3, CV_32FC1);
 
-    EXPECT_FALSE( EqualDims(a, b) );
-    EXPECT_FALSE( Equal(a, b) );
+    EXPECT_FALSE( EqualDims(a, a.t()) );
+    EXPECT_FALSE( Equal(a, a.t()) );
+}
+
+
+/**
+ * @brief repeat Mat1fNotEqDimsAllZeros test with cv::Size overload
+ */
+TEST(MatAssertionsTest, Mat1fNotEqDimsAllZeros_size) {
+
+    Mat a = Mat::zeros(3, 2, CV_32FC1);
+
+    EXPECT_FALSE( EqualDims(a, Size2i(3, 2)) );
+    EXPECT_FALSE( EqualDims(a, a.t().size()) );
+    EXPECT_FALSE( Equal(a, a.t()) );
 }
 
 /**

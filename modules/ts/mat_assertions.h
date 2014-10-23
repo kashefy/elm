@@ -14,6 +14,7 @@
 std::string MatTypeFailureMessage(const cv::Mat& a, int mat_type);
 
 ::testing::AssertionResult EqualDims(const cv::Mat& a, const cv::Mat& b);
+::testing::AssertionResult EqualDims(const cv::Mat& a, const cv::Size2i& s);
 #define EXPECT_MAT_DIMS_EQ(a, b) EXPECT_TRUE( EqualDims(a, b) )
 
 std::string MatFailureMessageNonZero(const cv::Mat& a, const cv::Mat& b, const cv::Mat& cmp);
