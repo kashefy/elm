@@ -176,8 +176,8 @@ TEST_F(GaborTest, FilterBankKernels)
     const float THETA_STOP=CV_PI;
     const float THETA_STEP=30.*CV_PI/180.;
     Mat1f theta_range = ARange<float>(0.f, THETA_STOP, THETA_STEP);
-    std::cout<<theta_range<<std::endl;
 
+    // Mat1f to VecF
     const float* p = theta_range.ptr<float>(0);
     VecF theta(p, p+theta_range.cols);
 
@@ -193,6 +193,12 @@ TEST_F(GaborTest, FilterBankKernels)
         i++;
         angle += THETA_STEP;
     }
+
+    // test orthogonal kernels
+    EXPECT_FALSE( Equal(filter_bank[0], filter_bank[3]) );
+    Mat1f kernel90 = filter_bank[0];
+    flip(kernel90.t(), kernel90, 0);
+    EXPECT_MAT_EQ( kernel90, filter_bank[0] ) << "Not identical after 90 deg rotation";
 }
 
 
