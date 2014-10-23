@@ -9,6 +9,18 @@
 namespace sem {
 
 /**
+ * @brief Converts matrix to 8U and scales elements
+ * so that min=0 and max=255.
+ * If all input elements are identical, yield matrix of zeros
+ *
+ * Useful for preparing matrix to use with highgui's cv::imshow()
+ *
+ * @param src
+ * @return Mat_<uchar>
+ */
+cv::Mat_<unsigned char> ConvertTo8U(const cv::Mat &src);
+
+/**
  * @brief Cumulative sum
  * @param src matrix
  * @param dst matrix
