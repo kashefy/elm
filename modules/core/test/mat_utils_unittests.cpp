@@ -153,42 +153,70 @@ TEST(MatARangeTest, Invalid)
 
 TEST(MatARangeTest, Increasing)
 {
-//    {
-//        Mat1i x = ARange(1000, 1010, 1);
+    { // integers
+        Mat1i x = ARange(1000, 1010, 1);
 
-//        EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
-//        EXPECT_MAT_DIMS_EQ(x, Mat(1, 9, CV_32SC1));
+        EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
+        EXPECT_MAT_DIMS_EQ(x, Mat(1, 10, CV_32SC1));
+        EXPECT_MAT_TYPE(x, CV_32S);
 
-//        for(int i=0; i<static_cast<int>(x.total()); i++) {
-//            EXPECT_EQ(x(i), 1000+i);
-//        }
-//    }
+        for(int i=0; i<static_cast<int>(x.total()); i++) {
 
-    {
+            EXPECT_EQ(x(i), 1000+i);
+        }
+    }
+
+    { // uchar
         Mat x = ARange<unsigned char>(0, 5, 2);
 
-        std::cout<<x<<std::endl;
         EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
         EXPECT_MAT_DIMS_EQ(x, Mat(1, 3, CV_32SC1));
-
+        EXPECT_MAT_TYPE(x, CV_8U);
 
         for(int i=0, j=0; i<static_cast<int>(x.total()); i++, j+=2) {
             EXPECT_EQ(x.at<unsigned char>(i), static_cast<unsigned char>(j));
         }
     }
 
-//    {
-//        Mat x = ARange<float>(-1.f, 1.f, 0.5f);
+    { // floats
+        Mat x = ARange<float>(-1.f, 1.f, 0.5f);
+        EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
+        EXPECT_MAT_DIMS_EQ(x, Size(4, 1));
 
-//        EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
-//        EXPECT_MAT_DIMS_EQ(x, Mat(1, 5, CV_32SC1));
+        float j = -1.f;
+        for(int i=0; i<static_cast<int>(x.total()); i++) {
+            EXPECT_FLOAT_EQ(x.at<float>(i), j);
+            j += 0.5f;
+        }
+    }
+}
 
-//        float j = -1.f;
-//        for(int i=0; i<static_cast<int>(x.total()); i++) {
-//            EXPECT_FLOAT_EQ(x.at<float>(i), j);
-//            j += 0.5f;
-//        }
-//    }
+TEST(MatARangeTest, Decreasing)
+{
+    { // integers
+        Mat1i x = ARange(1010, 1000, -1);
+
+        EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
+        EXPECT_MAT_DIMS_EQ(x, Mat(1, 10, CV_32SC1));
+        EXPECT_MAT_TYPE(x, CV_32S);
+
+        for(int i=0; i<static_cast<int>(x.total()); i++) {
+
+            EXPECT_EQ(x(i), 1010-i);
+        }
+    }
+
+    { // floats
+        Mat x = ARange<float>(1.f, -1.f, -0.5f);
+        EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
+        EXPECT_MAT_DIMS_EQ(x, Size(4, 1));
+
+        float j = 1.f;
+        for(int i=0; i<static_cast<int>(x.total()); i++) {
+            EXPECT_FLOAT_EQ(x.at<float>(i), j);
+            j -= 0.5f;
+        }
+    }
 }
 
 

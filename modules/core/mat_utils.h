@@ -33,16 +33,14 @@ std::string MatTypeToString(const cv::Mat& m);
 template <class T>
 cv::Mat_<T> ARange(T start, T stop, T step)
 {
-    int cols = static_cast<int>(stop)-static_cast<int>(start);
+    double diff = static_cast<double>(stop)-static_cast<double>(start);
 
-    std::cout<<"c"<<cols<<std::endl;
-
-    if((cols > 0 && step < 0) || (cols < 0 && step > 0)) {
+    if((diff > 0 && step < 0) || (diff < 0 && step > 0)) {
 
         SEM_THROW_VALUE_ERROR("step incompatible with start and stop.");
     }
-    else if(cols < 0) { cols = abs(cols); }
 
+    int cols;
     if(step == 0) {
 
         cols = 0;
@@ -50,19 +48,24 @@ cv::Mat_<T> ARange(T start, T stop, T step)
     else {
 
         // Need full integer columns
-        float tmp = cols/static_cast<float>(step);
-        std::cout<<"t "<<tmp<<std::endl;
+        double tmp = (diff < 0)? abs(diff) : diff;
+        tmp = (tmp+1)/fabs(static_cast<double>(step));
         cols = static_cast<int>(tmp);
-        if(cols > 0 && cols == tmp) cols--; // exclude stop
     }
 
     cv::Mat_<T> m(1, cols);
     T value = start;
-    for(int i=0; i<cols; i++) {
+    int count = 0;
+    bool done = (step > 0)? value >= stop : value <= stop;
+    while(!done && count < cols) {
 
-        m(i) = value;
+        m(count++) = value;
         value += step;
+        done = (step > 0)? value >= stop : value <= stop;
     }
+
+    // exclude stop value
+    if(count < cols) { m = m.colRange(0, count); }
 
     return m;
 }
