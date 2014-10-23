@@ -13,19 +13,20 @@ set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules)
 set(${ROOT_PROJECT}_LIBS "")
 set(${ROOT_PROJECT}_MODULES "")
 
-
 # ----------------------------------------------------------------------------
 # Set default behavior
 # ----------------------------------------------------------------------------
 set(BUILD_TESTS ON CACHE BOOL "Whether to build test projects.")
+set(FORCE_IN_SOURCE OFF CACHE BOOL "Whether to force allow in-source builds.")
 
 include(cmake/FileSystemUtils.cmake)
+include(cmake/ListUtils.cmake)
+include(cmake/MessageUtils.cmake)
 
 # ----------------------------------------------------------------------------
 # Set global CMake variables
 # ----------------------------------------------------------------------------
-# Print all warnings
-# With C++11 support
+# Print all warnings and enable C++11 support
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
 set(CMAKE_VERBOSE ON CACHE BOOL "Verbose mode")
 
@@ -45,9 +46,18 @@ endif(NOT ARCHIVE_INSTALL_DIRECTORY)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE PATH "Output directory for libraries")
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE PATH "Output directory for applications")
 
+# Prevent in-source builds
+get_filename_component(PATH_A ${CMAKE_SOURCE_DIR} REALPATH)
+get_filename_component(PATH_B ${CMAKE_BINARY_DIR} REALPATH)
+if(${FORCE_IN_SOURCE} AND (${PATH_A} STREQUAL ${PATH_B}))
+    message(FATAL_ERROR "In-source builds not permitted pass FORCE_IN_SOURCE=ON to override.")
+endif()
+
 # ----------------------------------------------------------------------------
 # LOCATE DEPENDENCIES: GTest, OpenCV, Boost
 # ----------------------------------------------------------------------------
+
+status("Resolve Dependencies:")
 
 # ----------------------------------------------------------------------------
 # GTest package
@@ -63,7 +73,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE PATH "Output directory 
 # ----------------------------------------------------------------------------
 
 if(BUILD_TESTS)
-    message(STATUS "GTEST_ROOT=${GTEST_ROOT}")
+    status("GTEST_ROOT=${GTEST_ROOT}")
     find_package(GTest REQUIRED)
     if(GTEST_FOUND)
         list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${GTEST_INCLUDE_DIRS})
@@ -91,7 +101,7 @@ endif(BUILD_TESTS)
 # Force the user to tell us which OpenCV they want (otherwise find_package can find the wrong one, cache it and changes to OpenCV_DIR are ignored)
 
 if(DEFINED OpenCV_DIR)
-    find_package(OpenCV REQUIRED core PATHS ${OpenCV_DIR})
+    find_package(OpenCV REQUIRED core highgui imgproc PATHS ${OpenCV_DIR})
     if(OpenCV_FOUND)
         list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${OpenCV_INCLUDE_DIRS})
         list(APPEND ${ROOT_PROJECT}_LIBS ${OpenCV_LIBS})
@@ -125,7 +135,7 @@ set(BOOST_MIN_VERSION "1.56.0" CACHE STRING "Minimum version of boost to link ag
 
 # Don't forget to include 'system'
 set(BOOST_COMPONENTS system filesystem serialization)
-
+status("")
 find_package(Boost ${BOOST_MIN_VERSION} REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 if(Boost_FOUND)
     list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
@@ -145,9 +155,13 @@ add_subdirectory(samples)
 # ----------------------------------------------------------------------------
 # Test Projects
 # ----------------------------------------------------------------------------
+
+status("")
+status("Configure test projects:")
+
 if(BUILD_TESTS)
 
-    message(STATUS "Configure unittest project")
+    status("    Configure unittest project")
     include(cmake/BuildTests.cmake)
     build_tests("run_unittests" "*unittest*")
     add_definitions(-D__WITH_GTEST) # Useful in case test class needs to be friend of class under test
@@ -156,8 +170,48 @@ if(BUILD_TESTS)
     if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
 
         status("Copying test-data")
-        file(COPY ${CMAKE_SOURCE_DIR}/testdata DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+        file(COPY ${CMAKE_SOURCE_DIR}/test-data DESTINATION ${EXECUTABLE_OUTPUT_PATH})
 
     endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
 
 endif(BUILD_TESTS)
+
+
+# ----------------------------------------------------------------------------
+# Done configuring the build.
+# Let's print some summary info
+# ----------------------------------------------------------------------------
+
+status("")
+
+status("Build:")
+set(MODULE_NAMES ${${ROOT_PROJECT}_MODULES})
+strip_lib_prefix(MODULE_NAMES ${MODULE_NAMES})
+status("    modules:  "      ${MODULE_NAMES})
+status("    unit-tests:  "   BUILD_TESTS THEN YES ELSE NO)
+
+status("")
+
+status("Dependencies:")
+status("")
+status("    GTest:    "   GTEST_FOUND THEN ${GTEST_ROOT} ELSE NO)
+status("")
+status("    OpenCV:    "   OpenCV_FOUND THEN "${OpenCV_VERSION_MAJOR}.${OpenCV_VERSION_MINOR}.${OpenCV_VERSION_PATCH} (${OpenCV_VERSION})" ELSE NO)
+status("        lib Dir.:  "   OpenCV_FOUND THEN "${OpenCV_DIR}/lib" ELSE "-")
+set(OpenCV_MODULES ${OpenCV_LIBS})
+convert_to_lib_name(OpenCV_MODULES ${OpenCV_MODULES})
+status("        modules :  "      OpenCV_FOUND THEN ${OpenCV_MODULES} ELSE "-")
+status("")
+status("    Boost:    "   Boost_FOUND THEN "${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION} (${Boost_VERSION})"  ELSE NO)
+status("        lib Dir.:  "   Boost_FOUND THEN "${BOOST_ROOT}/lib" ELSE "-")
+set(Boost_LIB_NAMES ${Boost_LIBRARIES})
+convert_to_lib_name(Boost_LIB_NAMES ${Boost_LIB_NAMES})
+status("        components :  "      Boost_FOUND THEN ${Boost_LIB_NAMES} ELSE "-")
+
+status("")
+
+status("paths:")
+status("    install prefix:\t${CMAKE_INSTALL_PREFIX}")
+status("    test-data     :\t${EXECUTABLE_OUTPUT_PATH}/test-data")
+
+status("")

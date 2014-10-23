@@ -31,8 +31,8 @@ FUNCTION(build_tests test_project filter)
 
         else(BUILD_python)
 
-            add_dependencies (${test_project} ${${ROOT_PROJECT}_MODULES})
-            target_link_libraries (${test_project} ${${ROOT_PROJECT}_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} ts ${${ROOT_PROJECT}_MODULES})
+            add_dependencies(${test_project} ${${ROOT_PROJECT}_MODULES})
+            target_link_libraries(${test_project} ${${ROOT_PROJECT}_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} ts ${${ROOT_PROJECT}_MODULES})
 
         endif (BUILD_python)
 
