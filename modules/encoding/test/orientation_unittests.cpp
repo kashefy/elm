@@ -156,12 +156,42 @@ TEST_F(GaborTest, FilterBankVector)
 
         for(int j=0; j<i; j++) {
 
-            EXPECT_MAT_DIMS_EQ(filter_bank[j], Mat1f(RADIUS*2+1, RADIUS*2+1));
+            EXPECT_MAT_DIMS_EQ(filter_bank[j], Size(RADIUS*2+1, RADIUS*2+1));
             EXPECT_MAT_TYPE(filter_bank[j], CV_32F);
         }
 
         theta.push_back(angle);
         angle += SEM_PI2;
+    }
+}
+
+TEST_F(GaborTest, FilterBankKernels)
+{
+    const int RADIUS=9;
+    const float SIGMA = 3;
+    const float _LAMBDA = 10;   //CV_PI;
+    const float GAMMA = 0.02;   //10;
+    const float PS = 0;         //CV_PI*0.5;
+
+    const float THETA_STOP=CV_PI;
+    const float THETA_STEP=30.*CV_PI/180.;
+    Mat1f theta_range = ARange<float>(0.f, THETA_STOP, THETA_STEP);
+    std::cout<<theta_range<<std::endl;
+
+    const float* p = theta_range.ptr<float>(0);
+    VecF theta(p, p+theta_range.cols);
+
+    VecMat1f filter_bank = GaborFilterBank(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
+    EXPECT_EQ(filter_bank.size(), theta_range.total());
+
+    float angle=0.f;
+    int i=0;
+    while(angle < THETA_STOP) {
+
+        Mat1f kernel = GaborKernel(RADIUS, SIGMA, angle, _LAMBDA, GAMMA, PS);
+        EXPECT_MAT_EQ(filter_bank[i], kernel);
+        i++;
+        angle += THETA_STEP;
     }
 }
 
