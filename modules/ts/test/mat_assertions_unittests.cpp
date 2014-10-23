@@ -127,6 +127,16 @@ TEST(MatAssertionsTest, Mat1fNotEqDimsAllZeros_size) {
 }
 
 /**
+ * @brief test EqualDims with empty matrix
+ */
+TEST(MatAssertionsTest, MatEqDimsEmpty) {
+
+    EXPECT_TRUE( EqualDims(Mat(), Size2i(0, 0)) );
+    EXPECT_TRUE( EqualDims(Mat(), Mat()) );
+    EXPECT_TRUE( EqualDims(Mat(), Mat().size()) );
+}
+
+/**
  * @brief test failure message
  */
 TEST(MatAssertionsTest, FailureMessage)
