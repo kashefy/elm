@@ -48,6 +48,13 @@ public:
     virtual void Next(cv::Mat &feature, cv::Mat &label);
 
     /**
+     * @brief Draw oriented bar image
+     * @param angle_deg[in] angle in degrees
+     * @param[out] image with oriented bar
+     */
+    virtual void Draw(float angle_deg, cv::Mat &img) const;
+
+    /**
      * @brief Calculate angle from index integer
      * @return angle [deg]
      */

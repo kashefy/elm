@@ -5,6 +5,24 @@
 using namespace std;
 using namespace cv;
 
+Mat_<uchar> sem::ConvertTo8U(const Mat &src)
+{
+    double min_val, max_val;
+    int max_idx[2] = {-1, -1};
+    minMaxIdx(src, &min_val, 0, 0, max_idx);
+
+    cv::Mat_<double> tmp = src-min_val;
+
+    max_val = tmp(max_idx[0], max_idx[1]);
+    if(max_val != 0) {
+        tmp /= max_val;
+    }
+
+    Mat_<uchar> dst;
+    tmp.convertTo(dst, CV_MAKETYPE(CV_8U, src.channels()), 255.);
+    return dst;
+}
+
 void sem::CumSum(const Mat1f &src, Mat1f &dst)
 {
     if(dst.total() < src.total() && src.total() > 0) {
