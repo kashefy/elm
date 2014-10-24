@@ -67,7 +67,7 @@ public:
     virtual cv::Mat1f PopCode();
 
 protected:
-    cv::Mat1f state_;            ///< internal state
+    VecMat1f state_;            ///< internal state
     VecMat1f response_distr_;    ///< response distribution
 };
 

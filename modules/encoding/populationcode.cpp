@@ -34,18 +34,57 @@ SoftMaxPopulationCode::SoftMaxPopulationCode()
 {
 }
 
-void SoftMaxPopulationCode::State(const cv::Mat1f &in, const VecMat1f &kernels)
+void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
 {
-    const int NB_KERNELS = static_cast<int>(kernels.size());
-    VecMat1f r;
-    r.reserve(NB_KERNELS);
-    for(int k=0; k<NB_KERNELS; k++) {
+    VecMat1f fb_response;
+    fb_response.reserve(kernels.size());
+    float norm_factor;  // normalization factor across individual responses
 
-        cv::filter2D(in, r[k], 0, kernels[k]);
+    for(VecMat1f::const_iterator itr=kernels.begin();
+        itr != kernels.end();
+        itr++) {
+
+        Mat1f r;
+        cv::filter2D(in, r, 0, *itr);
+        fb_response.push_back(r);
+
+        double min_val, max_val;
+        cv::minMaxIdx(r, &min_val, &max_val);
+        if(norm_factor <= max_val) {
+
+            norm_factor = max_val;
+        }
+    }
+
+    // normalize individual responses by global factor
+    if(norm_factor != 0) {
+
+        for(VecMat1f::iterator itr=fb_response.begin();
+            itr != fb_response.end();
+            itr++) {
+
+            (*itr) /= norm_factor;
+        }
+    }
+
+    state_.clear();
+    state_.reserve(in.total());
+    const int NB_KERNELS=static_cast<int>(kernels.size());
+    for(size_t i=0; i<in.total(); i++) {
+
+        Mat1f node_state(1, NB_KERNELS);
+        int k=0;
+        for(VecMat1f::const_iterator itr=fb_response.begin();
+            itr != fb_response.end();
+            itr++, k++) {
+
+            node_state(k) = (*itr)(k);
+        }
+        state_.push_back(node_state);
     }
 }
 
-cv::Mat1f SoftMaxPopulationCode::PopCode()
+Mat1f SoftMaxPopulationCode::PopCode()
 {
     return Mat1f();
 }
