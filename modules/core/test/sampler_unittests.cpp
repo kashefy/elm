@@ -39,7 +39,7 @@ TEST(Sampler1DTest, Uniform) {
 
 TEST(Sampler1DTest, Gaussian) {
 
-    const int SIZE = 10, N=2000;
+    const int SIZE = 10, N=2e3;
     const float MEAN = 5.f, STD_DEV = 2.f;
 
     // generate gaussian pdf
@@ -70,7 +70,7 @@ TEST(Sampler1DTest, Gaussian) {
 
     EXPECT_EQ(sum(hist)(0), N);
     Mat1f hist_normalized = hist/static_cast<float>(N)*SIZE;
-    EXPECT_MAT_NEAR(hist_normalized, pdf, 0.2f);
+    EXPECT_MAT_NEAR(hist_normalized, pdf, 0.3f);
 }
 
 TEST(Sampler2DTest, Uniform) {
