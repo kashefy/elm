@@ -1,6 +1,6 @@
 #include "neuron/wtapoisson.h"
 
-#include "core/distributionsampler.h"
+#include "core/sampler.h"
 
 using namespace std;
 using namespace cv;
@@ -29,7 +29,7 @@ Mat WTAPoisson::Compete(vector<shared_ptr<base_Learner> > &learners)
         // Distribution of learner states
         Mat1f soft_max = LearnerStateDistr(learners);
 
-        DistributionSampler1D sampler;
+        Sampler1D sampler;
         sampler.pdf(soft_max);
 
         winners(sampler.Sample()) = 1;

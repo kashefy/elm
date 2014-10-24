@@ -1,4 +1,4 @@
-#include "core/distributionsampler.h"
+#include "core/sampler.h"
 
 #include <opencv2/imgproc.hpp>
 
@@ -15,7 +15,7 @@ TEST(DistrSampler1D, Uniform) {
     const float MEAN = 1.f/static_cast<float>(SIZE);
     Mat1f pdf_uniform = Mat1f::ones(1, SIZE)*MEAN;
 
-    DistributionSampler1D to; // test object
+    Sampler1D to; // test object
     to.pdf(pdf_uniform);
 
     Mat1f hist = Mat1f::zeros(1, SIZE);
@@ -55,7 +55,7 @@ TEST(DistrSampler1D, Gaussian) {
         }
     }
 
-    DistributionSampler1D to; // test object
+    Sampler1D to; // test object
     Mat pdf = Mat(1,10, CV_32FC1, pdf_values)/static_cast<float>(N)*SIZE;
     to.pdf(pdf);
 
@@ -79,7 +79,7 @@ TEST(DistrSampler2D, Uniform) {
     const float MEAN = 1.f/static_cast<float>(ROWS*COLS);
     Mat1f pdf_uniform = Mat1f::ones(ROWS, COLS)*MEAN;
 
-    DistributionSampler2D to; // test object
+    Sampler2D to; // test object
     to.pdf(pdf_uniform);
 
     Mat1f hist = Mat1f::zeros(ROWS, COLS);
@@ -206,7 +206,7 @@ TEST(ExponentialPDFTest, Sample)
     }
 
     // add generated pdf to a sampler and draw samples from it
-    DistributionSampler1D to; // test object
+    Sampler1D to; // test object
     to.pdf(pdf);
 
     // generate a histogram from sampled values

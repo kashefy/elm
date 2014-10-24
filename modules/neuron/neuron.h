@@ -1,7 +1,7 @@
 #ifndef SEM_MODULES_NEURON_H_
 #define SEM_MODULES_NEURON_H_
 
-#include "core/distributionsampler.h"
+#include "core/sampler.h"
 
 /**
  * @brief Class for trivial spiking neuron.
