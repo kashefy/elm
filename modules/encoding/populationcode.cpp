@@ -41,11 +41,11 @@ void SoftMaxPopulationCode::State(const cv::Mat1f &in, const VecMat1f &kernels)
     r.reserve(NB_KERNELS);
     for(int k=0; k<NB_KERNELS; k++) {
 
-        cv::filter2D(in, r[i], 0, kernels[i]);
+        cv::filter2D(in, r[k], 0, kernels[k]);
     }
 }
 
 cv::Mat1f SoftMaxPopulationCode::PopCode()
 {
-
+    return Mat1f();
 }
