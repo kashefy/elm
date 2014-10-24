@@ -68,7 +68,8 @@ public:
 
 protected:
     VecMat1f state_;            ///< internal state
-    VecMat1f response_distr_;    ///< response distribution
+    VecMat1f response_distr_;   ///< response distribution
+    int fan_out_;               ///< dimensions of state per node (e.g. no. of kernels)
 };
 
 #endif // SEM_ENCODING_POPULATIONCODE_H_

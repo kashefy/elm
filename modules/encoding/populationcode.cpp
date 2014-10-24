@@ -3,6 +3,8 @@
 #include <opencv2/features2d.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include <core/sampler.h>
+
 using cv::Mat1f;
 
 base_PopulationCode::base_PopulationCode()
@@ -40,12 +42,13 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
     fb_response.reserve(kernels.size());
     float norm_factor;  // normalization factor across individual responses
 
-    for(VecMat1f::const_iterator itr=kernels.begin();
+    for(VecMat1fCIter itr=kernels.begin();
         itr != kernels.end();
         itr++) {
 
         Mat1f r;
-        cv::filter2D(in, r, 0, *itr);
+        cv::filter2D(in, r, -1, *itr);
+        cv::pow(r, 2., r);
         fb_response.push_back(r);
 
         double min_val, max_val;
@@ -59,7 +62,7 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
     // normalize individual responses by global factor
     if(norm_factor != 0) {
 
-        for(VecMat1f::iterator itr=fb_response.begin();
+        for(VecMat1fIter itr=fb_response.begin();
             itr != fb_response.end();
             itr++) {
 
@@ -69,16 +72,18 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
 
     state_.clear();
     state_.reserve(in.total());
-    const int NB_KERNELS=static_cast<int>(kernels.size());
+    fan_out_ = static_cast<int>(kernels.size());
     for(size_t i=0; i<in.total(); i++) {
 
-        Mat1f node_state(1, NB_KERNELS);
+        int r = i / in.cols;
+        int c = i % in.cols;
+        Mat1f node_state(1, fan_out_);
         int k=0;
-        for(VecMat1f::const_iterator itr=fb_response.begin();
+        for(VecMat1fCIter itr=fb_response.begin();
             itr != fb_response.end();
             itr++, k++) {
 
-            node_state(k) = (*itr)(k);
+            node_state(0, k) = (*itr)(r, c);
         }
         state_.push_back(node_state);
     }
@@ -86,5 +91,19 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
 
 Mat1f SoftMaxPopulationCode::PopCode()
 {
-    return Mat1f();
+    Mat1f pop_code = Mat1f::zeros(1, fan_out_*static_cast<int>(state_.size()));
+
+    int col = 0;
+    for(VecMat1fCIter itr=state_.begin(); itr != state_.end(); itr++, col+=fan_out_) {
+
+        Sampler1D sampler;
+        // no sampling for all-zero response
+        if(cv::sum(*itr)(0) > 0.f) {
+
+            sampler.pdf(*itr);
+            pop_code(col+sampler.Sample()) = 1.f;
+        }
+    }
+
+    return pop_code;
 }
