@@ -9,7 +9,7 @@ using namespace cv;
 
 namespace {
 
-TEST(DistrSampler1D, Uniform) {
+TEST(Sampler1DTest, Uniform) {
 
     const int SIZE = 10, N = 1e4;
     const float MEAN = 1.f/static_cast<float>(SIZE);
@@ -37,7 +37,7 @@ TEST(DistrSampler1D, Uniform) {
     EXPECT_NEAR(s.at<double>(0, 0), 0., 0.1);
 }
 
-TEST(DistrSampler1D, Gaussian) {
+TEST(Sampler1DTest, Gaussian) {
 
     const int SIZE = 10, N=2000;
     const float MEAN = 5.f, STD_DEV = 2.f;
@@ -73,7 +73,7 @@ TEST(DistrSampler1D, Gaussian) {
     EXPECT_MAT_NEAR(hist_normalized, pdf, 0.2f);
 }
 
-TEST(DistrSampler2D, Uniform) {
+TEST(Sampler2DTest, Uniform) {
 
     const int ROWS = 7, COLS = 10, N = 2e4;
     const float MEAN = 1.f/static_cast<float>(ROWS*COLS);
