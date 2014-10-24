@@ -47,7 +47,7 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
         itr++) {
 
         Mat1f r;
-        cv::filter2D(in, r, -1, *itr);
+        cv::filter2D(in, r, -1, *itr, cv::Point(-1, -1), 0, cv::BORDER_REPLICATE);
         cv::pow(r, 2., r);
         fb_response.push_back(r);
 
