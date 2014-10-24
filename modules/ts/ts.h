@@ -1,5 +1,5 @@
-#ifndef SEM_MODULES_TS_H_
-#define SEM_MODULES_TS_H_
+#ifndef SEM_TS_H_
+#define SEM_TS_H_
 
 #include "gtest/gtest.h"
 
@@ -20,4 +20,4 @@
 
 const char* FullTestName(const ::testing::TestInfo *test_info);
 
-#endif // SEM_MODULES_TS_H_
+#endif // SEM_TS_H_

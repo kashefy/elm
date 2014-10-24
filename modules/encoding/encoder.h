@@ -13,8 +13,6 @@ class base_Encoder
 public:
     virtual ~base_Encoder() {}
 
-    //virtual void PopCode()
-
 protected:
     base_Encoder();
 

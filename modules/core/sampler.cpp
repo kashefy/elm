@@ -1,32 +1,32 @@
-#include "core/distributionsampler.h"
+#include "core/sampler.h"
 
 #include "core/mat_utils.h"
 
 using namespace cv;
 
-cv::RNG base_DistributionSampler::rng_(0xFFFFFFFF);
+cv::RNG base_Sampler::rng_(0xFFFFFFFF);
 
-void base_DistributionSampler::pdf(const Mat1f &pdf) {
+void base_Sampler::pdf(const Mat1f &pdf) {
 
     pdf_ = pdf/sum(pdf)(0);
     sem::CumSum(pdf_, pdf_);
 }
 
-Mat1f base_DistributionSampler::pdf() const
+Mat1f base_Sampler::pdf() const
 {
     return pdf_;
 }
 
-base_DistributionSampler::base_DistributionSampler()
+base_Sampler::base_Sampler()
 {
 }
 
-DistributionSampler1D::DistributionSampler1D()
-    : base_DistributionSampler()
+Sampler1D::Sampler1D()
+    : base_Sampler()
 {
 }
 
-int DistributionSampler1D::Sample() const {
+int Sampler1D::Sample() const {
 
     const float RANDOM = float(rng_);
     int i = 0;
@@ -37,19 +37,19 @@ int DistributionSampler1D::Sample() const {
 }
 
 PoissonProcess::PoissonProcess(float frequency, float delta_t_msec)
-    : DistributionSampler1D()
+    : Sampler1D()
 {
     Mat1f firing_prob(1, 1);
     firing_prob(0, 0) = frequency*delta_t_msec/1000.f;
     pdf_ = 1.f-firing_prob;
 }
 
-DistributionSampler2D::DistributionSampler2D()
-    : base_DistributionSampler()
+Sampler2D::Sampler2D()
+    : base_Sampler()
 {
 }
 
-Point2i DistributionSampler2D::Sample() const {
+Point2i Sampler2D::Sample() const {
 
     const float RANDOM = float(rng_);
     int i = 0;

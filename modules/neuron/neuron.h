@@ -1,7 +1,7 @@
-#ifndef SEM_MODULES_NEURON_H_
-#define SEM_MODULES_NEURON_H_
+#ifndef SEM_NEURON_H_
+#define SEM_NEURON_H_
 
-#include "core/distributionsampler.h"
+#include "core/sampler.h"
 
 /**
  * @brief Class for trivial spiking neuron.
@@ -36,4 +36,4 @@ private:
     cv::RNG rng_;           ///< random number generator to use in poisson process
 };
 
-#endif // SEM_MODULES_NEURON_H_
+#endif // SEM_NEURON_H_

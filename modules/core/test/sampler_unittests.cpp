@@ -1,4 +1,4 @@
-#include "core/distributionsampler.h"
+#include "core/sampler.h"
 
 #include <opencv2/imgproc.hpp>
 
@@ -9,13 +9,13 @@ using namespace cv;
 
 namespace {
 
-TEST(DistrSampler1D, Uniform) {
+TEST(Sampler1DTest, Uniform) {
 
     const int SIZE = 10, N = 1e4;
     const float MEAN = 1.f/static_cast<float>(SIZE);
     Mat1f pdf_uniform = Mat1f::ones(1, SIZE)*MEAN;
 
-    DistributionSampler1D to; // test object
+    Sampler1D to; // test object
     to.pdf(pdf_uniform);
 
     Mat1f hist = Mat1f::zeros(1, SIZE);
@@ -37,9 +37,9 @@ TEST(DistrSampler1D, Uniform) {
     EXPECT_NEAR(s.at<double>(0, 0), 0., 0.1);
 }
 
-TEST(DistrSampler1D, Gaussian) {
+TEST(Sampler1DTest, Gaussian) {
 
-    const int SIZE = 10, N=2000;
+    const int SIZE = 10, N=2e3;
     const float MEAN = 5.f, STD_DEV = 2.f;
 
     // generate gaussian pdf
@@ -55,7 +55,7 @@ TEST(DistrSampler1D, Gaussian) {
         }
     }
 
-    DistributionSampler1D to; // test object
+    Sampler1D to; // test object
     Mat pdf = Mat(1,10, CV_32FC1, pdf_values)/static_cast<float>(N)*SIZE;
     to.pdf(pdf);
 
@@ -70,16 +70,16 @@ TEST(DistrSampler1D, Gaussian) {
 
     EXPECT_EQ(sum(hist)(0), N);
     Mat1f hist_normalized = hist/static_cast<float>(N)*SIZE;
-    EXPECT_MAT_NEAR(hist_normalized, pdf, 0.2f);
+    EXPECT_MAT_NEAR(hist_normalized, pdf, 0.3f);
 }
 
-TEST(DistrSampler2D, Uniform) {
+TEST(Sampler2DTest, Uniform) {
 
     const int ROWS = 7, COLS = 10, N = 2e4;
     const float MEAN = 1.f/static_cast<float>(ROWS*COLS);
     Mat1f pdf_uniform = Mat1f::ones(ROWS, COLS)*MEAN;
 
-    DistributionSampler2D to; // test object
+    Sampler2D to; // test object
     to.pdf(pdf_uniform);
 
     Mat1f hist = Mat1f::zeros(ROWS, COLS);
@@ -206,7 +206,7 @@ TEST(ExponentialPDFTest, Sample)
     }
 
     // add generated pdf to a sampler and draw samples from it
-    DistributionSampler1D to; // test object
+    Sampler1D to; // test object
     to.pdf(pdf);
 
     // generate a histogram from sampled values

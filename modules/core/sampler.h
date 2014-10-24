@@ -1,12 +1,15 @@
-#ifndef SEM_CORE_DISTRIBUTIONSAMPLER_H_
-#define SEM_CORE_DISTRIBUTIONSAMPLER_H_
+#ifndef SEM_CORE_SAMPLER_H_
+#define SEM_CORE_SAMPLER_H_
 
 #include <core/typedefs.h>
 
-class base_DistributionSampler
+/**
+ * @brief base class for sampling from a distribution
+ */
+class base_Sampler
 {
 public:
-    virtual ~base_DistributionSampler() {}
+    virtual ~base_Sampler() {}
 
     /**
      * @brief set probability density function.
@@ -22,19 +25,19 @@ public:
     cv::Mat1f pdf() const;
 
 protected:
-    base_DistributionSampler();
+    base_Sampler();
 
     static cv::RNG rng_;        ///< random number generator
     cv::Mat1f pdf_;                  ///< probability density function
 };
 
 /**
- * @brief The DistributionSampler from 1D PDF
+ * @brief class for sampling from 1D PDF
  */
-class DistributionSampler1D : public base_DistributionSampler
+class Sampler1D : public base_Sampler
 {
 public:
-    DistributionSampler1D();
+    Sampler1D();
 
     /**
      * @brief Sample from 1D pdf
@@ -46,7 +49,7 @@ public:
 /**
  * @brief Class for simulating f-Hz Poisson process
  */
-class PoissonProcess : public DistributionSampler1D
+class PoissonProcess : public Sampler1D
 {
 public:
     /**
@@ -58,12 +61,12 @@ public:
 };
 
 /**
- * @brief The DistributionSampler from two-dimensional PDF
+ * @brief class for sampling from two-dimensional PDF
  */
-class DistributionSampler2D : public base_DistributionSampler
+class Sampler2D : public base_Sampler
 {
 public:
-    DistributionSampler2D();
+    Sampler2D();
 
     /**
      * @brief Sample from two-dimensional distribution
@@ -77,4 +80,4 @@ namespace sem
 float randexp(float lambda);
 }
 
-#endif // SEM_CORE_DISTRIBUTIONSAMPLER_H_
+#endif // SEM_CORE_SAMPLER_H_

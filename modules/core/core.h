@@ -1,5 +1,5 @@
-#ifndef SEM_MODULES_CORE_H_
-#define SEM_MODULES_CORE_H_
+#ifndef SEM_CORE_H_
+#define SEM_CORE_H_
 
 #ifndef SEM_VERSION
 #define SEM_VERSION "Development"
@@ -11,4 +11,4 @@ const char* GetVersion();
 
 }
 
-#endif // SEM_MODULES_CORE_H_
+#endif // SEM_CORE_H_
