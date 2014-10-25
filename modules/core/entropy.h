@@ -7,10 +7,11 @@ namespace sem {
 
 /**
  * @brief Compute the normalized conditional entropy of a probability distribution
- * @param pdf
- * @return normalized cond. entropy
+ *
+ * @param pdf as matrix of vector of floats
+ * @return normalized cond. entropy. Returns 0 on empty input.
  */
-float CondEntropy(const cv::Mat1f &pdf);
+float CondEntropy(cv::InputArray &pdf);
 
 } // namespace sem
 
