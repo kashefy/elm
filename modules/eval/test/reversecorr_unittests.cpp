@@ -19,6 +19,7 @@ protected:
 TEST_F(STATest, EmptyInput)
 {
     EXPECT_THROW(to_.Add(Mat()), ExceptionBadDims);
+    EXPECT_THROW(to_.Add(std::vector<float>()), ExceptionBadDims);
 }
 
 TEST_F(STATest, NothingAdded)
@@ -46,6 +47,42 @@ TEST_F(STATest, SpikeTriggeredAvg)
         in(0) = 0;
         in(1) = i%2==0? 1 : 0;
         in(2) = 1;
+        to_.Add(in);
+    }
+
+    float data[3] = {0.f, 0.5f, 1.f};
+    Mat1f expected_sta(1, 3, data);
+    EXPECT_MAT_EQ(to_.Compute(), expected_sta);
+    EXPECT_MAT_EQ(to_.Compute(), expected_sta);
+}
+
+TEST_F(STATest, SpikeTriggeredAvg_int)
+{
+    const int N=100;
+    for(int i=0; i<N; i++) {
+
+        Mat1i in(1, 3);
+        in(0) = 0;
+        in(1) = i%2==0? 1 : 0;
+        in(2) = 1;
+        to_.Add(in);
+    }
+
+    float data[3] = {0.f, 0.5f, 1.f};
+    Mat1f expected_sta(1, 3, data);
+    EXPECT_MAT_EQ(to_.Compute(), expected_sta);
+    EXPECT_MAT_EQ(to_.Compute(), expected_sta);
+}
+
+TEST_F(STATest, SpikeTriggeredAvg_vecf)
+{
+    const int N=100;
+    for(int i=0; i<N; i++) {
+
+        std::vector<float> in;
+        in.push_back(0);
+        in.push_back(i%2==0? 1 : 0);
+        in.push_back(1);
         to_.Add(in);
     }
 
