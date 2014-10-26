@@ -175,7 +175,7 @@ TEST_F(GaborTest, FilterBankKernels)
 
     const float THETA_STOP=CV_PI;
     const float THETA_STEP=30.*CV_PI/180.;
-    Mat1f theta_range = ARange<float>(0.f, THETA_STOP, THETA_STEP);
+    Mat1f theta_range = ARange_<float>(0.f, THETA_STOP, THETA_STEP);
 
     // Mat1f to VecF
     const float* p = theta_range.ptr<float>(0);
