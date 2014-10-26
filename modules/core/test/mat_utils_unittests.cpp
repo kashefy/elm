@@ -216,22 +216,22 @@ TEST(MatUtilsTest, TypeToStringChannels)
 
 TEST(MatARangeTest, Empty)
 {
-    EXPECT_TRUE(ARange(0, 0, 0).empty());
-    EXPECT_TRUE(ARange(1, 3, 0).empty());
-    EXPECT_TRUE(ARange(10, 3, 0).empty());
-    EXPECT_TRUE(ARange(10, 30, 50).empty());
+    EXPECT_TRUE(ARange_(0, 0, 0).empty());
+    EXPECT_TRUE(ARange_(1, 3, 0).empty());
+    EXPECT_TRUE(ARange_(10, 3, 0).empty());
+    EXPECT_TRUE(ARange_(10, 30, 50).empty());
 }
 
 TEST(MatARangeTest, Invalid)
 {
-    EXPECT_THROW(ARange(1, 3, -1), ExceptionValueError);
-    EXPECT_THROW(ARange(1, -3, 1), ExceptionValueError);
+    EXPECT_THROW(ARange_(1, 3, -1), ExceptionValueError);
+    EXPECT_THROW(ARange_(1, -3, 1), ExceptionValueError);
 }
 
 TEST(MatARangeTest, Increasing)
 {
     { // integers
-        Mat1i x = ARange(1000, 1010, 1);
+        Mat1i x = ARange_(1000, 1010, 1);
 
         EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
         EXPECT_MAT_DIMS_EQ(x, Mat(1, 10, CV_32SC1));
@@ -244,7 +244,7 @@ TEST(MatARangeTest, Increasing)
     }
 
     { // uchar
-        Mat x = ARange<unsigned char>(0, 5, 2);
+        Mat x = ARange_<unsigned char>(0, 5, 2);
 
         EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
         EXPECT_MAT_DIMS_EQ(x, Mat(1, 3, CV_32SC1));
@@ -256,7 +256,7 @@ TEST(MatARangeTest, Increasing)
     }
 
     { // floats
-        Mat x = ARange<float>(-1.f, 1.f, 0.5f);
+        Mat x = ARange_<float>(-1.f, 1.f, 0.5f);
         EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
         EXPECT_MAT_DIMS_EQ(x, Size(4, 1));
 
@@ -271,7 +271,7 @@ TEST(MatARangeTest, Increasing)
 TEST(MatARangeTest, Decreasing)
 {
     { // integers
-        Mat1i x = ARange(1010, 1000, -1);
+        Mat1i x = ARange_(1010, 1000, -1);
 
         EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
         EXPECT_MAT_DIMS_EQ(x, Mat(1, 10, CV_32SC1));
@@ -284,7 +284,7 @@ TEST(MatARangeTest, Decreasing)
     }
 
     { // floats
-        Mat x = ARange<float>(1.f, -1.f, -0.5f);
+        Mat x = ARange_<float>(1.f, -1.f, -0.5f);
         EXPECT_EQ(x.rows, 1) << "Expecting row vector.";
         EXPECT_MAT_DIMS_EQ(x, Size(4, 1));
 

@@ -43,7 +43,7 @@ std::string MatTypeToString(const cv::Mat& m);
  * @return template
  */
 template <class T>
-cv::Mat_<T> ARange(T start, T stop, T step)
+cv::Mat_<T> ARange_(T start, T stop, T step)
 {
     double diff = static_cast<double>(stop)-static_cast<double>(start);
 
