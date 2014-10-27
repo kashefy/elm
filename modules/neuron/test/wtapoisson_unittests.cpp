@@ -1,5 +1,6 @@
 #include "neuron/wtapoisson.h"
 
+#include "core/exception.h"
 #include "neuron/zneuron.h"
 #include "ts/ts.h"
 
@@ -123,6 +124,11 @@ TEST_F(WTAPoissonTest, LearnerStateDistr)
 
     EXPECT_MAT_EQ(Mat1i(1, 2, min_idx1), Mat1i(1, 2, min_idx2));
     EXPECT_MAT_EQ(Mat1i(1, 2, max_idx1), Mat1i(1, 2, max_idx2));
+}
+
+TEST_F(WTAPoissonTest, NoLearners)
+{
+    EXPECT_THROW(to_.LearnerStateDistr(vector<shared_ptr<base_Learner> >()), ExceptionBadDims);
 }
 
 

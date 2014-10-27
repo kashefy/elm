@@ -27,8 +27,11 @@ protected:
 
 TEST_F(MutexPopulationCodeTest, PopCode_dims) {
 
-    Mat1f pc = to_.PopCode();
-    EXPECT_MAT_DIMS_EQ( pc, Mat1f(in_.rows*2, 1) );
+    EXPECT_MAT_DIMS_EQ(to_.PopCode(), cv::Size2i(in_.cols*2, in_.rows));
+
+    in_ = Mat1f::ones(3, 2);
+    to_.State(in_);
+    EXPECT_MAT_DIMS_EQ(to_.PopCode(), cv::Size2i(in_.cols*2, in_.rows));
 }
 
 TEST_F(MutexPopulationCodeTest, PopCode_ones) {

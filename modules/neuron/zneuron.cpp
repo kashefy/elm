@@ -107,3 +107,8 @@ Mat1f ZNeuron::Bias() const
     return Mat1f(1, 1, bias_);
 }
 
+void ZNeuron::Clear()
+{
+    history_.Reset();
+}
+

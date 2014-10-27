@@ -1,8 +1,8 @@
 #include "neuron/zneuron.h"
 
-#include "ts/ts.h"
-
 #include <vector>
+
+#include "ts/ts.h"
 
 using namespace cv;
 
@@ -189,6 +189,15 @@ TEST_F(ZNeuronTest, Learn)
         weights_prev = to_.Weights().clone();
         bias_prev = to_.Bias()(0);
     }
+}
+
+/**
+ * @brief Test clearing of state/history
+ * TODO: Write a better test for this. May need exposing learning rates.
+ */
+TEST_F(ZNeuronTest, Clear)
+{
+    EXPECT_NO_THROW(to_.Clear());
 }
 
 } // namespace
