@@ -18,8 +18,8 @@ MutexPopulationCode::MutexPopulationCode()
 
 void MutexPopulationCode::State(const Mat1f& in, const VecMat1f& kernels)
 {
-    state_ = Mat1f::zeros(in.rows*2, 1);
-    for(int i=0, j=0; i < in.rows; i++, j+=2) {
+    state_ = Mat1f::zeros(in.rows, in.cols*2);
+    for(int i=0, j=0; i < static_cast<int>(in.total()); i++, j+=2) {
 
         int k = (in(i) < 0.5f) ? 0 : 1;
         state_(j+k) = 1.f;

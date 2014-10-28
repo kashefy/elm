@@ -50,10 +50,15 @@ public:
      */
     cv::Mat1f Bias() const;
 
+    /**
+     * @brief Clear spiking history
+     */
+    void Clear();
+
 protected:
 
     float bias_;                ///< bias term
-    cv::Mat1f weights_;              ///< Neuron weights, excluding bias term, log scale
+    cv::Mat1f weights_;         ///< Neuron weights, excluding bias term, log scale
     SpikingHistory history_;    ///< spiking input history
     float u_;                   ///< membrane potential
 };

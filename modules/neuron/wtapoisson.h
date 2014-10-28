@@ -19,6 +19,12 @@ public:
 
     virtual cv::Mat Compete(std::vector<std::shared_ptr<base_Learner> > &learners);
 
+    /**
+     * @brief Compute distribution for learner states
+     * @param learners
+     * @return state distribution
+     * @throws ExceptionBadDims on empty input
+     */
     cv::Mat LearnerStateDistr(const std::vector<std::shared_ptr<base_Learner> > &learners) const;
 
 protected:
