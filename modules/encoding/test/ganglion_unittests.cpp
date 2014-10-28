@@ -1,10 +1,11 @@
 #include "encoding/ganglion.h"
 
+#include <opencv2/imgproc.hpp>
+
 #include "core/exception.h"
 #include "ts/ts.h"
 
-using cv::Mat1f;
-using cv::Size2i;
+using namespace cv;
 
 class DiffOfGaussians2dSqTest : public ::testing::Test
 {
@@ -29,8 +30,23 @@ TEST_F(DiffOfGaussians2dSqTest, InvalidInit)
 
 TEST_F(DiffOfGaussians2dSqTest, KernelProperties)
 {
-    EXPECT_MAT_DIMS_EQ(to_.Kernel(), Size2i(radius_*2+1, radius_*2+1));
-    EXPECT_MAT_TYPE(to_.Kernel(), CV_32F);
+    Mat kernel = to_.Kernel();
+
+    EXPECT_EQ(1, kernel.rows % 2) << "No. of rows must be odd";
+    EXPECT_EQ(1, kernel.cols % 2) << "No. of columns must be odd";
+    EXPECT_MAT_DIMS_EQ(kernel, Size2i(radius_*2+1, radius_*2+1));
+    EXPECT_MAT_TYPE(kernel, CV_32F);
+
+    EXPECT_MAT_EQ(kernel, kernel.t());
+}
+
+TEST_F(DiffOfGaussians2dSqTest, Kernel)
+{
+    Mat kernel = to_.Kernel();
+    Mat mid_row = kernel.row(radius_);
+    Mat mid_col = kernel.row(radius_);
+
+
 }
 
 TEST_F(DiffOfGaussians2dSqTest, OnOff)

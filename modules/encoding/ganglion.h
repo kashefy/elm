@@ -49,7 +49,10 @@ public:
     virtual cv::Mat1f Kernel() const;
 
 protected:
-    cv::Mat1f kernel_1d_;  ///< Diff. of Gaussians kernel
+    float sigma_center_;
+    float sigma_surround_;
+    bool is_center_on_;
+    int size_;
 };
 
 #endif // SEM_ENCODING_GANGLION_H_
