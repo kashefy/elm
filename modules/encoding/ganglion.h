@@ -13,11 +13,10 @@ public:
 
     /**
      * @brief Initialize ganglion cell model
-     * @param sigma_c sigma center
-     * @param sigma_s sigma surround
+     * @param spatial scale
      * @param center_on true: On center - Off surround
      */
-    virtual void Init(int radius, float sigma_c, float sigma_s, bool center_on) = 0;
+    virtual void Init(int radius, float scale, bool center_on) = 0;
 
     /**
      * @brief Compute model's response to input
@@ -39,7 +38,7 @@ class DiffOfGaussians2dSq : public base_Ganglion
 public:
     DiffOfGaussians2dSq();
 
-    void Init(int radius, float sigma_c, float sigma_s, bool center_on);
+    void Init(int radius, float scale, bool center_on);
 
     virtual cv::Mat1f Compute(cv::InputArray in);
 
@@ -50,7 +49,7 @@ public:
     virtual cv::Mat1f Kernel() const;
 
 protected:
-    cv::Mat1f kernel_;  ///< Diff. of Gaussians kernel
+    cv::Mat1f kernel_1d_;  ///< Diff. of Gaussians kernel
 };
 
 #endif // SEM_ENCODING_GANGLION_H_
