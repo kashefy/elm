@@ -1,8 +1,7 @@
 #include "encoding/ganglion.h"
 
-#include <opencv2/imgproc.hpp>
-
 #include "core/exception.h"
+#include "io/synth.h"
 #include "ts/ts.h"
 
 using namespace cv;
@@ -77,5 +76,37 @@ TEST_F(DiffOfGaussians2dSqTest, OnOff)
     to2.Init(radius_, scale_, false);
     EXPECT_MAT_EQ(to_.Kernel(), -to2.Kernel());
 }
+
+TEST_F(DiffOfGaussians2dSqTest, Compute_impulse)
+{
+    Size2i size(radius_*2+1, radius_*2+1);
+    Mat1f impulse = Mat1f::zeros(size);
+    impulse(size.height/2, size.width/2) = 1.f;
+    EXPECT_MAT_EQ(to_.Kernel(), to_.Compute(impulse));
+}
+
+TEST_F(DiffOfGaussians2dSqTest, Compute_zero)
+{
+    Size2i size(radius_*2+1, radius_*2+1);
+    EXPECT_MAT_EQ(Mat1f::zeros(size), to_.Compute(Mat1f::zeros(size)));
+}
+
+TEST_F(DiffOfGaussians2dSqTest, Compute_ones)
+{
+    Size2i size(radius_*2+1, radius_*2+1);
+    EXPECT_EQ(countNonZero(to_.Compute(Mat1f::ones(size)) > 1e-7), 0);
+}
+
+TEST_F(DiffOfGaussians2dSqTest, Compute_bar)
+{
+    SynthBars b;
+    b.Reset(radius_*2+1, radius_*2+1, 1);
+    Mat img;
+    b.Draw(90.f, img);
+    img.convertTo(img, CV_32F, 1./255.);
+
+    EXPECT_MAT_NEAR(to_.Compute(img), to_.Compute(img.t()).t(), 1e-6);
+}
+
 
 
