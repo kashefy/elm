@@ -163,7 +163,7 @@ private:
 
     vector<std::shared_ptr<base_Learner> > layer_z_;
 
-    int nb_learners_;   ///< no. of learners (e.g. ZNeuron)
+    size_t nb_learners_;   ///< no. of learners (e.g. ZNeuron)
 
 };
 
