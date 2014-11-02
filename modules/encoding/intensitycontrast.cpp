@@ -28,5 +28,10 @@ void RetGang::Compute(cv::InputArray stimulus)
 
 Mat RetGang::Response()
 {
+    Mat1f state_rectified = state_.clone();
+    state_rectified
+    = state_ > 0;
+    Mat neg = state_ <= 0;
+
     return state_;
 }
