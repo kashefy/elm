@@ -77,7 +77,7 @@ TEST_F(WTAPoissonTest, NeverFire)
 
 TEST_F(WTAPoissonTest, FiringRate)
 {
-    const int N=1e3;
+    const int N=1e4;
     for(float f=20.f; f<=80.f; f+=20.f) {
 
         WTAPoisson to(f, delta_t_msec_);
