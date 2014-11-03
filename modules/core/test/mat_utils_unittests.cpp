@@ -33,31 +33,24 @@ TEST(MatUtilsTest, ConvertTo8U_ones)
 /**
  * @brief Test conversion+scaling to 8U mats
  */
-TEST(MatUtilsTest, ConvertTo8U_int)
+TEST(MatUtilsTest, ConvertTo8U_uint)
 {
     Mat1i src(3, 3);
-    const int N=static_cast<int>(src.total());
-    for(int i=0; i<N; i++) {
+    Mat1b expected(src.size());
+    for(size_t i=0; i<src.total(); i++) {
 
         // large numbers lead to overflow errors and are difficult to assert
-        src(i) = randu<int>() % 255;
+        uint v = randu<uint>() % 255;
+        src(i) = v;
+        expected(i) = static_cast<uchar>(v);
     }
 
-    int src_max_idx[2] = {-1, -1};
-    double src_min_val, src_max_val;
-    minMaxIdx(src, &src_min_val, 0, 0, src_max_idx);
-    src_max_val = Mat1i(src-src_min_val)(src_max_idx[0], src_max_idx[1]);
-
-    cv::Mat result = ConvertTo8U(src);
+    Mat result = ConvertTo8U(src);
 
     EXPECT_MAT_DIMS_EQ(src, result) << "Dimensions changed";
     EXPECT_MAT_TYPE(result, CV_8U) << "Not unsigned chars";
     EXPECT_EQ(src.channels(), result.channels()) << "No. of channels changed";
-
-    Mat1f result_f;
-    result.convertTo(result_f, CV_32F, src_max_val/255., src_min_val);
-
-    EXPECT_FLOAT_EQ(sum(src)(0), static_cast<int>(sum(result_f)(0)));
+    EXPECT_FLOAT_EQ(sum(src)(0), static_cast<int>(sum(result)(0)));
 }
 
 TEST(MatUtilsTest, ConvertTo8U_float)
