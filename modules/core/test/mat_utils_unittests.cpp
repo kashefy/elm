@@ -36,13 +36,12 @@ TEST(MatUtilsTest, ConvertTo8U_ones)
 TEST(MatUtilsTest, ConvertTo8U_uint)
 {
     Mat1i src(3, 3);
-    Mat1b expected(src.size());
-    for(size_t i=0; i<src.total(); i++) {
+    src(0) = 0;
+    src(1) = 255;
+    for(size_t i=2; i<src.total(); i++) {
 
         // large numbers lead to overflow errors and are difficult to assert
-        uint v = randu<uint>() % 255;
-        src(i) = v;
-        expected(i) = static_cast<uchar>(v);
+        src(i) = randu<uint>() % 256;
     }
 
     Mat result = ConvertTo8U(src);
@@ -51,6 +50,7 @@ TEST(MatUtilsTest, ConvertTo8U_uint)
     EXPECT_MAT_TYPE(result, CV_8U) << "Not unsigned chars";
     EXPECT_EQ(src.channels(), result.channels()) << "No. of channels changed";
     EXPECT_FLOAT_EQ(sum(src)(0), static_cast<int>(sum(result)(0)));
+    EXPECT_MAT_EQ(src, result);
 }
 
 TEST(MatUtilsTest, ConvertTo8U_float)
