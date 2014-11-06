@@ -36,7 +36,6 @@ public:
 
 protected:
     base_IntensityContrast();
-
 };
 
 /**
@@ -52,6 +51,8 @@ public:
     void Compute(cv::InputArray stimulus);
 
     cv::Mat Response();
+
+    virtual cv::Mat State() const;
 
 private:
 

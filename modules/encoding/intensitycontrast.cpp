@@ -1,5 +1,7 @@
 #include "encoding/intensitycontrast.h"
 
+#include "core/zerocrossings.h"
+
 using namespace cv;
 
 base_IntensityContrast::~base_IntensityContrast()
@@ -21,17 +23,20 @@ void RetGang::Init(int radius, float scale)
     rg_->Init(radius, scale, true);
 }
 
-void RetGang::Compute(cv::InputArray stimulus)
+void RetGang::Compute(InputArray stimulus)
 {
     state_ = rg_->Compute(stimulus);
 }
 
 Mat RetGang::Response()
 {
-    Mat1f state_rectified = state_.clone();
-    state_rectified
-    = state_ > 0;
-    Mat neg = state_ <= 0;
+    ZeroCrossingsDiff zc;
+    Mat1f r;
+    zc(state_, r);
+    return r;
+}
 
+Mat RetGang::State() const
+{
     return state_;
 }
