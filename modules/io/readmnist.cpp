@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream>
+
 #include "core/exception.h"
 #include "io/binary.h"
 
@@ -126,5 +127,46 @@ cv::Mat ReadMNISTImages::Next()
     nb_items_--;
 
     return img;
+}
+
+ReadMNISTImagesTransl::ReadMNISTImagesTransl()
+    : ReadMNISTImages(),
+      scene_dims_(-1, -1)
+{
+}
+
+bool ReadMNISTImagesTransl::IsSceneDimsSet() const
+{
+    return scene_dims_.area() >= 0;
+}
+
+int ReadMNISTImagesTransl::ReadHeader(const string &path)
+{
+    int nb_items = ReadMNISTImages::ReadHeader(path);
+    if(!IsSceneDimsSet()) {
+
+        SceneDims(rows_, cols_);
+    }
+    else if(rows_*cols_ > scene_dims_.area()) {
+
+        stringstream s;
+        s << "Scene dims too small. Need min of ";
+        s << "w(" << cols_ << ") h(" << rows_ << ")";
+        SEM_THROW_BAD_DIMS(s.str());
+    }
+    return nb_items;
+}
+
+void ReadMNISTImagesTransl::SceneDims(int rows, int cols)
+{
+    if(rows > 0 || cols > 0) {
+
+        scene_dims_ = cv::Size2i(cols, rows);
+    }
+    else {
+        stringstream s;
+        s << "Scene dims must be > 0. (" << rows << " rows, " << cols << " cols)";
+        SEM_THROW_BAD_DIMS(s.str());
+    }
 }
 

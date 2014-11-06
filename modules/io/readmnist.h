@@ -84,4 +84,35 @@ protected:
     int cols_;   ///< no. of columns per image
 };
 
+class ReadMNISTImagesTransl : public ReadMNISTImages
+{
+public:
+    static const int MAGIC_NUMBER = 2051; ///< used to validate file integrity, see MNIST site
+
+    ReadMNISTImagesTransl();
+
+    virtual int ReadHeader(const std::string &path);
+
+    //virtual cv::Mat Next();
+
+    /**
+     * @brief Set larger scene dimensions
+     * @param rows
+     * @param cols
+     */
+    virtual void SceneDims(int rows, int cols);
+
+    /**
+     * @brief Get location of most recently loaded object image
+     * @return Rect around most recently loaded object image
+     */
+    //virtual cv::Rect2i Location() const;
+
+protected:
+
+    virtual bool IsSceneDimsSet() const;
+
+    cv::Size2i scene_dims_;   ///< scene dimensions
+};
+
 #endif // SEM_IO_READMNIST_H_

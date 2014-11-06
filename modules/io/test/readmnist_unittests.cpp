@@ -201,7 +201,6 @@ protected:
     }
 };
 
-
 TEST_F(ReadMNISTImagesTest, WrongPath)
 {
     EXPECT_THROW(ReadMNISTImages().ReadHeader("foo.bar"), ExceptionFileIOError);
@@ -248,3 +247,31 @@ TEST_F(ReadMNISTImagesTest, Invalid)
     writer.Save(to.MagicNumber()+5);
     EXPECT_THROW(to.ReadHeader(p.string().c_str()), ExceptionFileIOError);
 }
+
+class ReadMNISTImagesTranslTest : public ReadMNISTImagesTest
+{
+protected:
+    ReadMNISTImagesTransl to_; ///< test object
+};
+
+
+TEST_F(ReadMNISTImagesTranslTest, WrongPath)
+{
+    EXPECT_THROW(ReadMNISTImagesTransl().ReadHeader("foo.bar"), ExceptionFileIOError);
+}
+
+TEST_F(ReadMNISTImagesTranslTest, ReadHeader)
+{
+    const int N = FakeMNISTImagesWriter::NB_ITEMS;
+    EXPECT_EQ(N, ReadMNISTImagesTransl().ReadHeader(test_data_path_.string().c_str()));
+}
+
+TEST_F(ReadMNISTImagesTranslTest, Invalid)
+{
+    bfs::path p = test_data_dir_/"fake_images_data_wrong_magic.tmp";
+    FakeMNISTImagesWriter writer(p);
+    ReadMNISTImagesTransl to;
+    writer.Save(to.MagicNumber()+5);
+    EXPECT_THROW(to.ReadHeader(p.string().c_str()), ExceptionFileIOError);
+}
+
