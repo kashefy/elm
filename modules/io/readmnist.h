@@ -93,7 +93,7 @@ public:
 
     virtual int ReadHeader(const std::string &path);
 
-    //virtual cv::Mat Next();
+    virtual cv::Mat Next();
 
     /**
      * @brief Set larger scene dimensions
@@ -106,13 +106,15 @@ public:
      * @brief Get location of most recently loaded object image
      * @return Rect around most recently loaded object image
      */
-    //virtual cv::Rect2i Location() const;
+    virtual cv::Rect2i Location() const;
 
 protected:
 
     virtual bool IsSceneDimsSet() const;
 
     cv::Size2i scene_dims_;   ///< scene dimensions
+
+    cv::Point2i current_loc_;    ///< top-left of most recent location
 };
 
 #endif // SEM_IO_READMNIST_H_

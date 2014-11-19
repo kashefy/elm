@@ -48,8 +48,8 @@ protected:
 
     virtual void SaveHeader(int magic_number)
     {
-        if(out_.is_open())
-        {
+        if(out_.is_open()) {
+
             out_.close();
         }
         out_.open(path_.string().c_str(), ios::out | ios::binary);
@@ -174,7 +174,7 @@ public:
         WriteInt(COLS);
     }
 
-    void SaveItems()
+    virtual void SaveItems()
     {
         for(int i=0; i<NB_ITEMS; i++) {
 
@@ -254,10 +254,35 @@ protected:
     ReadMNISTImagesTransl to_; ///< test object
 };
 
+//class FakeMNISTImagesTranslWriter : public FakeMNISTImagesWriter
+//{
+//public:
+//    FakeMNISTImagesTranslWriter(const bfs::path& p)
+//        : FakeMNISTImagesWriter(p)
+//    {
+//        ;
+//    }
+
+//    virtual void SaveItems()
+//    {
+
+//    }
+//};
+
 
 TEST_F(ReadMNISTImagesTranslTest, WrongPath)
 {
     EXPECT_THROW(ReadMNISTImagesTransl().ReadHeader("foo.bar"), ExceptionFileIOError);
+}
+
+TEST_F(ReadMNISTImagesTranslTest, SceneDims)
+{
+    EXPECT_THROW(ReadMNISTImagesTransl().SceneDims(1, 0), ExceptionBadDims);
+    EXPECT_THROW(ReadMNISTImagesTransl().SceneDims(0, 1), ExceptionBadDims);
+    EXPECT_THROW(ReadMNISTImagesTransl().SceneDims(-1, 1), ExceptionBadDims);
+    EXPECT_THROW(ReadMNISTImagesTransl().SceneDims(1, -1), ExceptionBadDims);
+    EXPECT_THROW(ReadMNISTImagesTransl().SceneDims(-1, -1), ExceptionBadDims);
+    EXPECT_NO_THROW(ReadMNISTImagesTransl().SceneDims(1, 1));
 }
 
 TEST_F(ReadMNISTImagesTranslTest, ReadHeader)
@@ -275,3 +300,54 @@ TEST_F(ReadMNISTImagesTranslTest, Invalid)
     EXPECT_THROW(to.ReadHeader(p.string().c_str()), ExceptionFileIOError);
 }
 
+TEST_F(ReadMNISTImagesTranslTest, EndOfFile)
+{
+    ReadMNISTImagesTransl to;
+    to.SceneDims(20, 10);
+    const int N = to.ReadHeader(test_data_path_.string().c_str());
+    ASSERT_GT(N, 0);
+
+    for(int i=0; i<N*2; i++) {
+
+        if(i<N) {
+
+            EXPECT_FALSE(to.IS_EOF());
+            to.Next();
+            if(i<N-1) { EXPECT_FALSE(to.IS_EOF()); }
+            else { EXPECT_TRUE(to.IS_EOF()); }
+        }
+        else { EXPECT_TRUE(to.IS_EOF()); }
+    }
+}
+
+TEST_F(ReadMNISTImagesTranslTest, NextAndLocation)
+{
+    ReadMNISTImagesTransl to;
+    to.SceneDims(20, 10);
+    const int N = to.ReadHeader(test_data_path_.string().c_str());
+    ASSERT_GT(N, 0);
+    const int ROWS = FakeMNISTImagesWriter::ROWS;
+    const int COLS = FakeMNISTImagesWriter::COLS;
+
+    for(int i=0; i<N*2; i++) {
+
+        if(i<N) {
+
+            EXPECT_FALSE(to.IS_EOF());
+            cv::Mat scene_img = to.Next();
+            EXPECT_MAT_DIMS_EQ(scene_img, cv::Size2i(10, 20));
+
+            cv::Rect2i loc = to.Location();
+
+            EXPECT_EQ(loc.width, COLS);
+            EXPECT_EQ(loc.height, ROWS);
+            cv::Rect scene_window(cv::Point2i(0, 0), scene_img.size());
+            EXPECT_TRUE(scene_window.contains(loc.tl())) << "TL outside scene window." ;
+            EXPECT_TRUE(scene_window.contains(loc.br())) << "BR outside scene window.";
+
+            if(i<N-1) { EXPECT_FALSE(to.IS_EOF()); }
+            else { EXPECT_TRUE(to.IS_EOF()); }
+        }
+        else { EXPECT_TRUE(to.IS_EOF()); }
+    }
+}

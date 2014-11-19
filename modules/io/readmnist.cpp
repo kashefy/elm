@@ -137,7 +137,7 @@ ReadMNISTImagesTransl::ReadMNISTImagesTransl()
 
 bool ReadMNISTImagesTransl::IsSceneDimsSet() const
 {
-    return scene_dims_.area() >= 0;
+    return scene_dims_.width > 0 && scene_dims_.height > 0;
 }
 
 int ReadMNISTImagesTransl::ReadHeader(const string &path)
@@ -157,9 +157,21 @@ int ReadMNISTImagesTransl::ReadHeader(const string &path)
     return nb_items;
 }
 
+cv::Mat ReadMNISTImagesTransl::Next()
+{
+    cv::Mat mnist_img = ReadMNISTImages::Next();
+    cv::Mat scene = cv::Mat::zeros(scene_dims_, mnist_img.type());
+
+    current_loc_.x = cv::randu<uint>() % (scene_dims_.width-mnist_img.cols);
+    current_loc_.y = cv::randu<uint>() % (scene_dims_.height-mnist_img.rows);
+
+    mnist_img.copyTo(scene(cv::Rect2i(current_loc_, mnist_img.size())));
+    return scene;
+}
+
 void ReadMNISTImagesTransl::SceneDims(int rows, int cols)
 {
-    if(rows > 0 || cols > 0) {
+    if(rows > 0 && cols > 0) {
 
         scene_dims_ = cv::Size2i(cols, rows);
     }
@@ -169,4 +181,11 @@ void ReadMNISTImagesTransl::SceneDims(int rows, int cols)
         SEM_THROW_BAD_DIMS(s.str());
     }
 }
+
+cv::Rect2i ReadMNISTImagesTransl::Location() const
+{
+    return cv::Rect2i(current_loc_, cv::Size2i(cols_, rows_));
+}
+
+
 
