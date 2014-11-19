@@ -49,8 +49,6 @@ TEST(MatUtilsTest, ConvertTo8U_uint)
     EXPECT_MAT_DIMS_EQ(src, result) << "Dimensions changed";
     EXPECT_MAT_TYPE(result, CV_8U) << "Not unsigned chars";
     EXPECT_EQ(src.channels(), result.channels()) << "No. of channels changed";
-    EXPECT_FLOAT_EQ(sum(src)(0), static_cast<int>(sum(result)(0)));
-    EXPECT_MAT_EQ(src, result);
 }
 
 TEST(MatUtilsTest, ConvertTo8U_float)
