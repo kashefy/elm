@@ -9,6 +9,7 @@
 #define SEM_THROW_NOT_IMPLEMENTED_WMSG(msg) throw ExceptionNotImpl(msg)
 #define SEM_THROW_FILEIO_ERROR(msg) throw ExceptionFileIOError(msg)
 #define SEM_THROW_VALUE_ERROR(msg) throw ExceptionValueError(msg)
+#define SEM_THROW_KEY_ERROR(msg) throw ExceptionKeyError(msg)
 
 class Exception : public cv::Exception
 {
@@ -39,6 +40,12 @@ class ExceptionValueError : public Exception
 {
 public:
     ExceptionValueError(const std::string &msg);
+};
+
+class ExceptionKeyError : public Exception
+{
+public:
+    ExceptionKeyError(const std::string &msg);
 };
 
 #endif // SEM_CORE_EXCEPTION_H_

@@ -34,3 +34,9 @@ ExceptionValueError::ExceptionValueError(const std::string &msg)
                 CV_Func, __FILE__, __LINE__ )
 {
 }
+
+ExceptionKeyError::ExceptionKeyError(const std::string &msg)
+    : Exception(CV_StsBadArg, String(msg),
+                CV_Func, __FILE__, __LINE__ )
+{
+}
