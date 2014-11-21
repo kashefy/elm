@@ -12,6 +12,7 @@ TEST(ExceptionTest, Throw)
     EXPECT_THROW(SEM_THROW_NOT_IMPLEMENTED, ExceptionNotImpl);
     EXPECT_THROW(SEM_THROW_FILEIO_ERROR("Could not open foo.bar"), ExceptionFileIOError);
     EXPECT_THROW(SEM_THROW_VALUE_ERROR("Bad value"), ExceptionValueError);
+    EXPECT_THROW(SEM_THROW_KEY_ERROR("Bad key"), ExceptionKeyError);
 }
 
 TEST(ExceptionTest, NotImplementedMsg)
