@@ -1,8 +1,10 @@
 #include "core/layerconfig.h"
 
 #include "core/exception.h"
+#include "core/stl.h"
 
 using namespace std;
+using namespace sem;
 
 LayerConfig::LayerConfig()
 {
@@ -26,7 +28,7 @@ void LayerConfig::Params(const PTree &params)
 string LayerConfig::Input(const string &key) const
 {
     string name;
-    if(!Find(inputs_, key, name)) {
+    if(!Find<string>(inputs_, key, name)) {
 
         SEM_THROW_KEY_ERROR("No name found for input key \'" + key + "\'");
     }
@@ -36,7 +38,7 @@ string LayerConfig::Input(const string &key) const
 string LayerConfig::Output(const string &key) const
 {
     string name;
-    if(!Find(outputs_, key, name)) {
+    if(!Find<string>(outputs_, key, name)) {
 
         SEM_THROW_KEY_ERROR("No name found for input key \'" + key + "\'");
     }
@@ -46,15 +48,4 @@ string LayerConfig::Output(const string &key) const
 PTree LayerConfig::Params() const
 {
     return params_;
-}
-
-bool LayerConfig::Find(const MapSS &map, const string &key, string &name) const
-{
-    MapSS::const_iterator itr = map.find(key);
-    bool found = itr != map.end();
-    if(found) {
-
-        name = itr->second;
-    }
-    return found;
 }

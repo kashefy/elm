@@ -62,16 +62,6 @@ public:
     PTree Params() const;
 
 private:
-
-    /**
-     * @brief Find key in map and provide corresponding feature name if existent.
-     * @param[in] map to search
-     * @param[in] key to search for
-     * @param[out] name
-     * @return true if found
-     */
-    bool Find(const MapSS &map, const std::string &key, std::string& name) const;
-
     MapSS inputs_;
     MapSS outputs_;
     PTree params_;

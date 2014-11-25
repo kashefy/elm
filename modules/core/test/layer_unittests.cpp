@@ -13,11 +13,11 @@ class ChildLayer : public base_Layer
 public:
     virtual void Reset() {}
 
-    virtual void Stimulus() {}
+    virtual void Stimulus(const Signal &signal) {}
 
     virtual void Apply() {}
 
-    virtual void Response() {}
+    virtual void Response(Signal &signal) {}
 
     ChildLayer() {}
 };
