@@ -5,6 +5,8 @@
 
 #include "core/layerconfig.h"
 
+class Signal;
+
 /**
  * @brief The Layer base class
  */
@@ -27,7 +29,7 @@ public:
     /**
      * @brief Set stimulus
      */
-    virtual void Stimulus() = 0;
+    virtual void Stimulus(const Signal &signal) = 0;
 
     /**
      * @brief Apply layer computations
@@ -37,7 +39,7 @@ public:
     /**
      * @brief Get layer response
      */
-    virtual void Response() = 0;
+    virtual void Response(Signal &signal) = 0;
 
 protected:
     base_Layer();
