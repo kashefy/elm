@@ -2,6 +2,8 @@
 
 using namespace cv;
 
+namespace {
+
 class DummyTest : public ::testing::Test
 {
 };
