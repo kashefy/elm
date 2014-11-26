@@ -1,3 +1,5 @@
+/**@file OpenCV Mat Assertions
+  */
 #ifndef SEM_TS_MAT_ASSERTIONS_H_
 #define SEM_TS_MAT_ASSERTIONS_H_
 
@@ -5,8 +7,6 @@
 
 #include <string>
 #include <opencv2/core.hpp>
-
-// OpenCV Mat Assertions
 
 ::testing::AssertionResult IsType(const cv::Mat& a, int mat_type);
 #define EXPECT_MAT_TYPE(a, mat_type) EXPECT_TRUE( IsType(a, mat_type) )
