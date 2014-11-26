@@ -41,3 +41,5 @@ TEST(IntervalAssertionTest, ClosedVsOpen)
     EXPECT_TRUE ( InClosed(3, 1, 3) && !InLClosedROpen(3, 1, 3) );
     EXPECT_FALSE( InClosed(4, 1, 3) || InLClosedROpen(4, 1, 3) );
 }
+
+} // anonymous namespace
