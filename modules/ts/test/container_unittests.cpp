@@ -36,4 +36,11 @@ TEST(Container, Empty) {
     EXPECT_EMPTY( s );
 }
 
+TEST(Container, Size) {
+
+    EXPECT_SIZE(4, vector<int>(4, 1));
+    EXPECT_SIZE(5, vector<string>(5, "foo"));
+    EXPECT_SIZE(0, vector<string>());
+}
+
 } // anonymous namespace
