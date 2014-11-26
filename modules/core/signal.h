@@ -2,8 +2,7 @@
 #define SEM_CORE_SIGNAL_H_
 
 #include <map>
-#include <string>
-#include <vector>
+#include "core/typedefs.h"
 
 #include <opencv2/core.hpp>
 
@@ -13,8 +12,6 @@
 class Signal
 {
 public:
-    typedef std::vector<cv::Mat> VecMat;
-
     ~Signal();
 
     Signal();
@@ -29,8 +26,21 @@ public:
     /**
      * @brief Check if a signal exists under a given name
      * @param name/key
+     * @return true if found
      */
-    void Exists(std::string names) const;
+    bool Exists(const std::string &name) const;
+
+    /**
+     * @brief Get a list of all available feature names
+     * @return list of available feature names
+     */
+    VecS FeatureNames() const;
+
+    /** Get features under a given name
+     * @param name
+     * @return vector of features found under key
+     */
+    VecMat operator [](const std::string &name) const;
 
 protected:
     std::map<std::string, VecMat> signals_; ///< encapuslated signals
