@@ -45,4 +45,18 @@ VecS Signal::FeatureNames() const
     return feature_names;
 }
 
+VecMat Signal::operator [](const string &name) const
+{
+    map<string, VecMat >::const_iterator itr = signals_.find(name);
+    if(itr != signals_.end()) { // found
+
+        return itr->second;
+    }
+    else {
+        stringstream s;
+        s << "Feature \'" << name << "\' does not exist.";
+        SEM_THROW_KEY_ERROR(s.str());
+    }
+}
+
 
