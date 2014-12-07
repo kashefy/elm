@@ -4,6 +4,7 @@
 #define SEM_CORE_STL_H_
 
 #include <map>
+#include <string>
 
 namespace sem {
 
