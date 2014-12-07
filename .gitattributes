@@ -68,6 +68,7 @@ CMakeLists.txt  text whitespace=tabwidth=2
 
 *.xml                      -text whitespace=cr-at-eol
 *.yml                      -text whitespace=cr-at-eol
+*.yaml                     -text whitespace=cr-at-eol
 .project                   -text whitespace=cr-at-eol merge=union
 .classpath                 -text whitespace=cr-at-eol merge=union
 .cproject                  -text whitespace=cr-at-eol merge=union
