@@ -22,6 +22,6 @@ template <class T>
 }
 #define EXPECT_EMPTY(x) EXPECT_TRUE( Empty(x) )
 
-#define EXPECT_SIZE(a, x) EXPECT_EQ(a, x.size())
+#define EXPECT_SIZE(a, x) EXPECT_EQ(size_t(a), x.size())
 
 #endif // SEM_TS_CONTAINER_H_

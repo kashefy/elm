@@ -21,10 +21,10 @@ TEST(Container, Empty) {
     s.push_back("foo");
     s.push_back("bar");
 
-    EXPECT_EQ( 1, i.size() );
+    EXPECT_EQ( size_t(1), i.size() );
     EXPECT_FALSE( Empty(i) );
 
-    EXPECT_EQ( 2, s.size() );
+    EXPECT_EQ( size_t(2), s.size() );
     EXPECT_FALSE( Empty(s) );
 
     i.pop_back();

@@ -100,7 +100,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_dims)
     in_ = Mat1f::zeros(SIZE_, SIZE_);
     to_.State(in_, kernels_);
     cv::Mat pop_code = to_.PopCode();
-    EXPECT_GT(in_.total()*NB_KERNELS_, 0);
+    EXPECT_GT(static_cast<int>(in_.total())*NB_KERNELS_, 0);
     EXPECT_MAT_DIMS_EQ(pop_code, cv::Size(in_.total()*NB_KERNELS_, 1));
     EXPECT_MAT_TYPE(pop_code, CV_32F);
 }

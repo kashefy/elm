@@ -39,7 +39,7 @@ TEST_F(SignalTest, FeatureNames)
     EXPECT_EMPTY(Signal().FeatureNames()) << "Signal should initially be empty";
 
     VecS feature_names = to_.FeatureNames();
-    EXPECT_EQ(2, feature_names.size());
+    EXPECT_EQ(size_t(2), feature_names.size());
 
     // linear search to see if feature names were added
     for(uint i=0; i<in_.size(); i++) {

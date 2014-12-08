@@ -21,7 +21,7 @@ TEST(MatAssertionsTest, Mat1fEq) {
     EXPECT_EQ(a.rows, b.rows) << "No. of rows do not match.";
     EXPECT_EQ(a.cols, b.cols) << "No. of columns do not match.";
     EXPECT_EQ(a.total(), b.total()) << "No. of elements do not match.";
-    EXPECT_EQ(a.total(), R*C) << "No. of elements do not match.";
+    EXPECT_EQ(static_cast<int>(a.total()), R*C) << "No. of elements do not match.";
     EXPECT_TRUE( EqualDims(a, b) );
     EXPECT_MAT_DIMS_EQ(a, b);
     EXPECT_MAT_DIMS_EQ(a, b.size());
@@ -145,7 +145,7 @@ TEST(MatAssertionsTest, FailureMessage)
     Mat b = Mat::ones(3, 2, CV_32FC1);
     Mat cmp_out;
     compare(a, b, cmp_out, CMP_NE);
-    EXPECT_GT( MatFailureMessageNonZero(a, b, cmp_out).size(), 0) << "Failure message is empty";
+    EXPECT_FALSE( MatFailureMessageNonZero(a, b, cmp_out).empty() ) << "Failure message is empty";
 }
 
 /**
@@ -154,9 +154,9 @@ TEST(MatAssertionsTest, FailureMessage)
 TEST(MatTypeAssertionsTest, FailureMessage)
 {
     Mat matf = Mat::zeros(3, 2, CV_32FC1);
-    EXPECT_GT( MatTypeFailureMessage(matf, CV_32S).size(), 0 ) << "Failure message is empty";
-    EXPECT_GT( MatTypeFailureMessage(matf, CV_8UC1).size(), 0 ) << "Failure message is empty";
-    EXPECT_GT( MatTypeFailureMessage(matf, CV_16SC2).size(), 0 ) << "Failure message is empty";
+    EXPECT_FALSE( MatTypeFailureMessage(matf, CV_32S).empty() ) << "Failure message is empty";
+    EXPECT_FALSE( MatTypeFailureMessage(matf, CV_8UC1).empty() ) << "Failure message is empty";
+    EXPECT_FALSE( MatTypeFailureMessage(matf, CV_16SC2).empty() ) << "Failure message is empty";
 }
 
 /**

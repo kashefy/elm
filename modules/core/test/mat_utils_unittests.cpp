@@ -150,7 +150,7 @@ TEST(MatUtilsTest, CumSum_empty) {
     Mat1f in = Mat1f::zeros(0, 0);
     Mat1f out;
     sem::CumSum(in, out);
-    EXPECT_EQ(out.total(), 0);
+    EXPECT_EQ(out.total(), size_t(0));
 }
 
 /**
@@ -160,28 +160,28 @@ TEST(MatUtilsTest, TypeToString)
 {
     Mat a;
     a = Mat(1, 1, CV_32FC1);
-    EXPECT_GT(MatTypeToString(a).size(), 0);
+    EXPECT_GT(MatTypeToString(a).size(), size_t(0));
     EXPECT_EQ(MatTypeToString(a), "CV_32F");
 
-    EXPECT_GT(MatTypeToString(a).size(), 0);
+    EXPECT_GT(MatTypeToString(a).size(), size_t(0));
     EXPECT_EQ(MatTypeToString(a), MatTypeToString(Mat(1, 1, CV_32FC2)));
 
     a = Mat(1, 1, CV_32SC1);
-    EXPECT_GT(MatTypeToString(a).size(), 0);
+    EXPECT_GT(MatTypeToString(a).size(), size_t(0));
     EXPECT_EQ(MatTypeToString(a), MatTypeToString(Mat(1, 1, CV_32SC2)));
 }
 
 TEST(MatUtilsTest, TemplateTypeToString)
 {
     Mat1f a(1, 1);
-    EXPECT_GT(MatTypeToString(a).size(), 0);
+    EXPECT_FALSE(MatTypeToString(a).empty());
     EXPECT_EQ(MatTypeToString(a), "CV_32F");
 
-    EXPECT_GT(MatTypeToString(a).size(), 0);
+    EXPECT_FALSE(MatTypeToString(a).empty());
     EXPECT_EQ(MatTypeToString(a), MatTypeToString(Mat(1, 1, CV_32FC2)));
 
     Mat1i b(1, 1);
-    EXPECT_GT(MatTypeToString(b).size(), 0);
+    EXPECT_FALSE(MatTypeToString(b).empty());
     EXPECT_EQ(MatTypeToString(b), "CV_32S");
     EXPECT_EQ(MatTypeToString(b), MatTypeToString(Mat(1, 1, CV_32SC2)));
 }

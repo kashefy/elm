@@ -138,7 +138,7 @@ TEST_F(GaborTest, DISABLED_DisplayKernel)
 
 TEST_F(GaborTest, FilterBankVector)
 {
-    const int N=9;
+    const size_t N=9;
     const int RADIUS=9;
     const float SIGMA = 3;
     const float _LAMBDA = 10;   //CV_PI;
@@ -148,13 +148,13 @@ TEST_F(GaborTest, FilterBankVector)
     float angle=-SEM_PI2;
     VecF theta;
 
-    for(int i=0; i<N; i++) {
+    for(size_t i=0; i<N; i++) {
 
         VecMat1f filter_bank = GaborFilterBank(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
 
         EXPECT_EQ(filter_bank.size(), i);
 
-        for(int j=0; j<i; j++) {
+        for(size_t j=0; j<i; j++) {
 
             EXPECT_MAT_DIMS_EQ(filter_bank[j], Size(RADIUS*2+1, RADIUS*2+1));
             EXPECT_MAT_TYPE(filter_bank[j], CV_32F);
