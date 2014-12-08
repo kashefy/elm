@@ -13,7 +13,6 @@ protected:
     {
         radius_ = 13;
         scale_ = 1.f;
-        to_ = RetGang();
         to_.Init(radius_, scale_);
     }
 

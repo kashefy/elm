@@ -39,7 +39,7 @@ protected:
 };
 
 /**
- * @brief Implement intensity constrast measure using model retinal ganglion cells
+ * @brief Implement intensity constrast measure using a model of retinal ganglion cells
  */
 class RetGang : public base_IntensityContrast
 {

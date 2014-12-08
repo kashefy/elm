@@ -21,6 +21,7 @@ void RetGang::Init(int radius, float scale)
 {
     rg_.reset(new DiffOfGaussians2dSq());
     rg_->Init(radius, scale, true);
+    state_ = Mat1f();
 }
 
 void RetGang::Compute(InputArray stimulus)
