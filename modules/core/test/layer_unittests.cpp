@@ -5,10 +5,16 @@
 #include <memory>
 
 #include "core/exception.h"
+#include "core/layerconfig.h"
+#include "core/signal.h"
 
+using namespace std;
 using std::unique_ptr;
+using namespace cv;
 
-class ChildLayer : public base_Layer
+/** class for deriving from base Layer for test purposes
+  */
+class DummyChildLayer : public base_Layer
 {
 public:
     virtual void Reset() {}
@@ -21,7 +27,7 @@ public:
 
     virtual void Response(Signal &signal) {}
 
-    ChildLayer() {}
+    DummyChildLayer() {}
 };
 
 class LayerTest : public ::testing::Test
@@ -29,7 +35,7 @@ class LayerTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        to_.reset(new ChildLayer());
+        to_.reset(new DummyChildLayer());
     }
 
     unique_ptr<base_Layer> to_; ///< test object
