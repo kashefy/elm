@@ -16,15 +16,24 @@ public:
     virtual ~base_Layer();
 
     /**
-     * @brief Reset the state of the layer
+     * @brief Reset the state of the layer.
      */
     virtual void Reset() = 0;
 
     /**
-     * @brief Reset the state of the layer with new configurations
+     * @brief Reset the state of the layer with new configurations.
+     * This is a hard reset.
+     * For a soft reset \see Reconfigure
      * @param config
      */
     virtual void Reset(const LayerConfig& config);
+
+    /**
+      * @brief Reconfigure the layer without modifying its state
+      * \todo Keep this?
+      * @param new configuration
+      */
+    virtual void Reconfigure(const LayerConfig& config) = 0;
 
     /**
      * @brief Set stimulus
@@ -32,7 +41,7 @@ public:
     virtual void Stimulus(const Signal &signal) = 0;
 
     /**
-     * @brief Apply layer computations
+     * @brief Apply layer computations to most recent stimuli
      */
     virtual void Apply() = 0;
 
@@ -45,7 +54,7 @@ protected:
     base_Layer();
 
     /**
-     * @brief Construct a lyer with given configurations
+     * @brief Construct a layer with given configurations
      * @param config
      */
     base_Layer(const LayerConfig& config);

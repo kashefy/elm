@@ -13,6 +13,8 @@ class ChildLayer : public base_Layer
 public:
     virtual void Reset() {}
 
+    virtual void Reconfigure(const LayerConfig &config) {}
+
     virtual void Stimulus(const Signal &signal) {}
 
     virtual void Apply() {}
