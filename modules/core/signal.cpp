@@ -59,4 +59,26 @@ VecMat Signal::operator [](const string &name) const
     }
 }
 
+Mat Signal::MostRecent(const string &name) const
+{
+    map<string, VecMat >::const_iterator itr = signals_.find(name);
+    if(itr != signals_.end()) { // found
+
+        size_t len = itr->second.size();
+        if(len > 0) {
+
+            return itr->second[len-1];
+        }
+        else {
+            stringstream s;
+            s << "Feature \'" << name << "\' is empty.";
+            SEM_THROW_BAD_DIMS(s.str());
+        }
+    }
+    else {
+        stringstream s;
+        s << "Feature \'" << name << "\' does not exist.";
+        SEM_THROW_KEY_ERROR(s.str());
+    }
+}
 

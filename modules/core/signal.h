@@ -42,6 +42,12 @@ public:
      */
     VecMat operator [](const std::string &name) const;
 
+    /** Get most recent feature under a given name
+      * @param name
+      * @return most recent feature found under key
+      */
+    cv::Mat MostRecent(const std::string& name) const;
+
 protected:
     std::map<std::string, VecMat> signals_; ///< encapuslated signals
 };
