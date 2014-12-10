@@ -55,3 +55,11 @@ string sem::MatTypeToString(const cv::Mat& m)
     }
     return type_name;
 }
+
+Mat1i sem::Point2Mat(const Point2i &p)
+{
+    Mat1i m(1, 2);
+    m(0) = p.x;
+    m(1) = p.y;
+    return m;
+}

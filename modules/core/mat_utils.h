@@ -34,6 +34,12 @@ void CumSum(const cv::Mat1f &src, cv::Mat1f &dst);
  */
 std::string MatTypeToString(const cv::Mat& m);
 
+/**
+  * @brief Convert 2d point of integers to single channel Mat of integers
+  * @param 2d point of integers
+  * @return single channel row-matrix of integers [x, y]
+  */
+cv::Mat1i Point2Mat(const cv::Point2i& p);
 
 /**
  * @brief Create Mat object (row vector) and fill with range

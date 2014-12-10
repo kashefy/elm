@@ -287,5 +287,19 @@ TEST(MatARangeTest, Decreasing)
     }
 }
 
+TEST(Point2MatTest, Point2Mat)
+{
+    const int N=10;
+    for(int i=0; i<N; i++) {
+
+        int x = randu<int>();
+        int y = randu<int>();
+        Mat m = Point2Mat(Point2i(x, y));
+        EXPECT_MAT_DIMS_EQ(m, Size2i(2, 1)) << "not a row matrix with 2 columns";
+        EXPECT_EQ(x, m.at<int>(0)) << "Unexpected value for x coordinate";
+        EXPECT_EQ(y, m.at<int>(1)) << "Unexpected value for y coordinate";
+    }
+}
+
 
 
