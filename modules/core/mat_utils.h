@@ -42,6 +42,15 @@ std::string MatTypeToString(const cv::Mat& m);
 cv::Mat1i Point2Mat(const cv::Point2i& p);
 
 /**
+  * @brief Calculate neighborhood variance
+  * @param[in] source matrix
+  * @param[in] neighborhood radius
+  * @param[out] matrix with neighborhood mean around each element
+  * @param[out] matrix with neighborhood variance around each element
+  */
+void NeighMeanVar(const cv::Mat1f& m, int radius, cv::Mat1f &neigh_mean, cv::Mat1f &neigh_var);
+
+/**
  * @brief Create Mat object (row vector) and fill with range
  * @param start value
  * @param stop value (exclusive)
