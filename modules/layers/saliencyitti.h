@@ -2,6 +2,7 @@
 #define SEM_LAYERS_SALIENCYITTI_H_
 
 #include "core/base_Layer.h"
+#include "core/sampler.h"
 #include "encoding/intensitycontrast.h"
 #include "encoding/orientation.h"
 #include "encoding/populationcode.h"
@@ -31,8 +32,6 @@ public:
     virtual void Response(Signal &signal);
 
 protected:
-    virtual cv::Mat Saliency() const;
-
     std::string name_scene_;        ///< name of scene in signal
     std::string name_saliency_;     ///< name of saliency map in signal
     std::string name_salient_loc_;  ///< name of salient loc in signal
@@ -41,12 +40,13 @@ protected:
 
     cv::Mat1f saliency_;            ///< saliency map of most recent stimulus
     cv::Mat1f stimulus_;            ///< single channel/grayscale stimulus
-    cv::Point2i loc_;               ///< location of most recently attended region
 
     VecMat1f kernels_orient_;               ///< orientation-sensitive kernels (V1 simple cells)
     SoftMaxPopulationCode pop_code_orient_; ///< population coding for orientations
 
     cv::Mat1f theta_range_;         ///< supported orientation angles
+
+    Sampler2D saliency_sampler_;    ///< Sample salient locations
 };
 
 #endif // SEM_LAYERS_SALIENCYITTI_H_

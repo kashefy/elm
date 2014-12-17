@@ -1,6 +1,7 @@
 #include "layers/saliencyitti.h"
 
 #include <iostream>
+#include <opencv2/imgproc.hpp>
 
 #include "core/signal.h"
 #include "core/mat_utils.h"
@@ -30,7 +31,6 @@ void SaliencyItti::Reset()
 {
     saliency_ = Mat1f();
     stimulus_ = Mat1f();
-    loc_.x = loc_.y = -1;
 
     const int RADIUS = 9;
     const float SIGMA = 3;
@@ -45,6 +45,8 @@ void SaliencyItti::Reset()
     VecF theta(p, p+theta_range_.cols);
 
     kernels_orient_ = GaborFilterBank(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
+
+    intensity_constrast_.Init(RADIUS, 1.f);
 }
 
 void SaliencyItti::Reconfigure(const LayerConfig &config)
@@ -58,12 +60,6 @@ void SaliencyItti::Stimulus(const Signal &signal)
 {
     stimulus_ = signal.MostRecent(name_scene_);
     pop_code_orient_.State(stimulus_, kernels_orient_);
-}
-
-Mat SaliencyItti::Saliency() const
-{
-
-    return Mat();
 }
 
 void SaliencyItti::Apply()
@@ -86,11 +82,26 @@ void SaliencyItti::Apply()
     // subtraction should work with even as well as odd sizes.
     orientation_index -= kernels_orient_.size()/2;
 
-    cout<<orientation_index<<endl;
+    Mat1f orientation_conspicuity, tmp;
+    NeighMeanVar(orientation_index, 3, tmp, orientation_conspicuity);
+    normalize(orientation_conspicuity, orientation_conspicuity, 0.f, 255.f, NORM_MINMAX, -1, noArray());
+
+    intensity_constrast_.Compute(stimulus_);
+    Mat intensity_constrast_norm = intensity_constrast_.Response();
+    normalize(intensity_constrast_norm, intensity_constrast_norm, 0.f, 255.f, NORM_MINMAX, -1, noArray());
+
+    add(1.f*intensity_constrast_norm, 0*orientation_conspicuity, saliency_, noArray());
+
+    // generate 2d distribution from saliency map for later sampling of salient locations
+    saliency_sampler_.pdf(saliency_);
 }
 
 void SaliencyItti::Response(Signal &signal)
 {
     signal.Append(name_saliency_, saliency_);
 
+    Point2i loc = saliency_sampler_.Sample();
+    Mat1i loc_mat = Point2Mat(loc);
+
+    signal.Append(name_salient_loc_, loc_mat);
 }
