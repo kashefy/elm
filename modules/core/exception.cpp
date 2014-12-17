@@ -3,6 +3,7 @@
 #include <opencv2/core/types_c.h>
 
 using cv::String;
+using namespace sem;
 
 Exception::Exception(int _code, const std::string &msg,
                      const std::string &_func, const std::string &_file, int _line)

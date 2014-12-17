@@ -9,6 +9,7 @@
 
 using namespace std;
 namespace bfs=boost::filesystem; // use alias
+using namespace sem;
 
 class FakeMNISTLabelsWriter {
 

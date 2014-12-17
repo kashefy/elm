@@ -11,6 +11,7 @@
 using namespace std;
 using std::unique_ptr;
 using namespace cv;
+using namespace sem;
 
 /** class for deriving from base Layer for test purposes
   */

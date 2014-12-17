@@ -6,6 +6,7 @@
 
 using namespace std;
 using namespace cv;
+using namespace sem;
 
 class WTAPoissonTest : public testing::Test
 {

@@ -5,6 +5,7 @@
 #include <opencv2/core.hpp>
 
 using namespace std;
+using namespace sem;
 
 TEST(ExceptionTest, Throw)
 {
