@@ -75,7 +75,7 @@ protected:
         const float* p = theta_range.ptr<float>(0);
         VecF theta(p, p+theta_range.cols);
 
-        kernels_ = GaborFilterBank(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
+        kernels_ = GaborFilterBank::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
         NB_KERNELS_ = static_cast<int>(kernels_.size());
     }
 

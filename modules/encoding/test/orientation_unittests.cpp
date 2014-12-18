@@ -13,35 +13,26 @@
 using namespace cv;
 using namespace sem;
 
-class GaborTest : public ::testing::Test
+TEST(GaborKernelTest, KernelSize)
 {
-protected:
-    virtual void SetUp()
-    {
-
-    }
-};
-
-TEST_F(GaborTest, KernelSize)
-{
-    EXPECT_THROW(GaborKernel(-10, 1., 0., 1., 1., 0.), ExceptionValueError);
-    EXPECT_THROW(GaborKernel(0, 1., 0., 1., 1., 0.), ExceptionValueError);
+    EXPECT_THROW(GaborFilterBank::CreateKernel(-10, 1., 0., 1., 1., 0.), ExceptionValueError);
+    EXPECT_THROW(GaborFilterBank::CreateKernel(0, 1., 0., 1., 1., 0.), ExceptionValueError);
 
     for(int radius=1; radius<10; radius+=3) {
 
-        Mat kernel = GaborKernel(radius, 1., 0., 1., 1., 0.);
+        Mat kernel = GaborFilterBank::CreateKernel(radius, 1., 0., 1., 1., 0.);
         EXPECT_MAT_DIMS_EQ(kernel, Mat(radius*2+1, radius*2+1, CV_32F));
         EXPECT_EQ(kernel.rows, kernel.cols) << "kernel not a square.";
     }
 }
 
-TEST_F(GaborTest, KernelMat)
+TEST(GaborKernelTest, KernelMat)
 {
-    Mat kernel = GaborKernel(3, 1., 0., 1., 1., 0.);
+    Mat kernel = GaborFilterBank::CreateKernel(3, 1., 0., 1., 1., 0.);
     EXPECT_MAT_TYPE(kernel, CV_32F);
 }
 
-TEST_F(GaborTest, KernelRotated)
+TEST(GaborKernelTest, KernelRotated)
 {
     const int RADIUS=9;
     const float sigma = 3;
@@ -51,9 +42,9 @@ TEST_F(GaborTest, KernelRotated)
 
     for(float angle=0.f; angle<=360.f; angle+=45.f) {
 
-        Mat kernel0 = GaborKernel(RADIUS, sigma, angle*CV_PI/180.0f, _lambda, gamma, ps);
-        Mat kernel90 = GaborKernel(RADIUS, sigma, (angle+90)*CV_PI/180.0f, _lambda, gamma, ps);
-        Mat kernel180 = GaborKernel(RADIUS, sigma, (angle+180)*CV_PI/180.0f, _lambda, gamma, ps);
+        Mat kernel0 = GaborFilterBank::CreateKernel(RADIUS, sigma, angle*CV_PI/180.0f, _lambda, gamma, ps);
+        Mat kernel90 = GaborFilterBank::CreateKernel(RADIUS, sigma, (angle+90)*CV_PI/180.0f, _lambda, gamma, ps);
+        Mat kernel180 = GaborFilterBank::CreateKernel(RADIUS, sigma, (angle+180)*CV_PI/180.0f, _lambda, gamma, ps);
 
         EXPECT_MAT_NEAR(kernel0, kernel180, 1e-7);
 
@@ -63,7 +54,7 @@ TEST_F(GaborTest, KernelRotated)
     }
 }
 
-TEST_F(GaborTest, Response)
+TEST(GaborKernelTest, Response)
 {
     const int RADIUS=9;
     const float sigma = 3;
@@ -73,7 +64,7 @@ TEST_F(GaborTest, Response)
 
     for(float angle=0.f; angle<=180.f; angle+=45.f) {
 
-        Mat kernel = GaborKernel(RADIUS, sigma, angle*CV_PI/180.0f, _lambda, gamma, ps);
+        Mat kernel = GaborFilterBank::CreateKernel(RADIUS, sigma, angle*CV_PI/180.0f, _lambda, gamma, ps);
 
         SynthBars bars;
         bars.Reset(28, 28, 1);
@@ -115,7 +106,7 @@ TEST_F(GaborTest, Response)
     }
 }
 
-TEST_F(GaborTest, DISABLED_DisplayKernel)
+TEST(GaborKernelTest, DISABLED_DisplayKernel)
 {
     const int RADIUS=9;
     const float SIGMA = 3;
@@ -126,7 +117,7 @@ TEST_F(GaborTest, DISABLED_DisplayKernel)
     for(float angle=0.f; angle<=360.f; angle+=45.f) {
 
         const float theta = angle * CV_PI / 180.0f;
-        Mat kernel = GaborKernel(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
+        Mat kernel = GaborFilterBank::CreateKernel(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
 
         std::stringstream s;
         s << "angle="<<angle;
@@ -136,7 +127,7 @@ TEST_F(GaborTest, DISABLED_DisplayKernel)
     }
 }
 
-TEST_F(GaborTest, FilterBankVector)
+TEST(GaborKernelTest, FilterBankVector)
 {
     const size_t N=9;
     const int RADIUS=9;
@@ -150,7 +141,7 @@ TEST_F(GaborTest, FilterBankVector)
 
     for(size_t i=0; i<N; i++) {
 
-        VecMat1f filter_bank = GaborFilterBank(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
+        VecMat1f filter_bank = GaborFilterBank::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
 
         EXPECT_EQ(filter_bank.size(), i);
 
@@ -165,7 +156,7 @@ TEST_F(GaborTest, FilterBankVector)
     }
 }
 
-TEST_F(GaborTest, FilterBankKernels)
+TEST(GaborKernelTest, FilterBankKernels)
 {
     const int RADIUS=9;
     const float SIGMA = 3;
@@ -181,14 +172,14 @@ TEST_F(GaborTest, FilterBankKernels)
     const float* p = theta_range.ptr<float>(0);
     VecF theta(p, p+theta_range.cols);
 
-    VecMat1f filter_bank = GaborFilterBank(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
+    VecMat1f filter_bank = GaborFilterBank::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
     EXPECT_EQ(filter_bank.size(), theta_range.total());
 
     float angle=0.f;
     int i=0;
     while(angle < THETA_STOP) {
 
-        Mat1f kernel = GaborKernel(RADIUS, SIGMA, angle, _LAMBDA, GAMMA, PS);
+        Mat1f kernel = GaborFilterBank::CreateKernel(RADIUS, SIGMA, angle, _LAMBDA, GAMMA, PS);
         EXPECT_MAT_EQ(filter_bank[i], kernel);
         i++;
         angle += THETA_STEP;
@@ -201,4 +192,15 @@ TEST_F(GaborTest, FilterBankKernels)
     EXPECT_MAT_EQ( kernel90, filter_bank[0] ) << "Not identical after 90 deg rotation";
 }
 
+/**
+ * @brief Test gabor filter banks
+ */
+class GaborFilterBankTest : public ::testing::Test
+{
+protected:
+    virtual void SetUp()
+    {
+
+    }
+};
 

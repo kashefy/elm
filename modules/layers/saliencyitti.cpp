@@ -44,7 +44,7 @@ void SaliencyItti::Reset()
     const float* p = theta_range_.ptr<float>(0);
     VecF theta(p, p+theta_range_.cols);
 
-    kernels_orient_ = GaborFilterBank(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
+    kernels_orient_ = GaborFilterBank::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
 
     intensity_constrast_.Init(RADIUS, 1.f);
 }
