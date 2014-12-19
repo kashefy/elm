@@ -1,8 +1,10 @@
 #include "core/sampler.h"
 
+#include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
 #include "core/area.h"
+#include "io/synth.h"
 #include "ts/ts.h"
 
 using namespace cv;
