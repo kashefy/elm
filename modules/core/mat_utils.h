@@ -58,6 +58,16 @@ void NeighMeanVar(const cv::Mat1f& m, int radius, cv::Mat1f &neigh_mean, cv::Mat
                   int border_type=cv::BORDER_REPLICATE, const cv::Scalar &value=cv::Scalar());
 
 /**
+ * @brief Get all element values at a position across different matrices
+ * @param vector of matrices
+ * @param row
+ * @param col
+ * @return row matrix with extracted elements
+ * @throws ExceptionBadDims for positions that cannot be accessed.
+ */
+cv::Mat1f ElementsAt(const VecMat1f &v, int row, int col);
+
+/**
  * @brief Create Mat object (row vector) and fill with range
  * @param start value
  * @param stop value (exclusive)

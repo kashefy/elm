@@ -554,4 +554,71 @@ TEST(NeighMeanVarTest, ZeroPadding)
             << "Unexpected variance values in the central area.";
 }
 
+TEST(ElementsAtLoc, EmptyVector)
+{
+    EXPECT_NO_THROW(ElementsAt(VecMat1f(), 0, 0));
+    EXPECT_EMPTY(ElementsAt(VecMat1f(), 0, 0));
 
+    EXPECT_NO_THROW(ElementsAt(VecMat1f(), 999, 999));
+    EXPECT_EMPTY(ElementsAt(VecMat1f(), 999, 999));
+
+    EXPECT_NO_THROW(ElementsAt(VecMat1f(), 999, 0));
+    EXPECT_EMPTY(ElementsAt(VecMat1f(), 999, 0));
+
+    EXPECT_NO_THROW(ElementsAt(VecMat1f(), 0, 999));
+    EXPECT_EMPTY(ElementsAt(VecMat1f(), 0, 999));
+}
+
+TEST(ElementsAt, ElementsAt)
+{
+    const int SIZE=10;
+    const int ROWS=3;
+    const int COLS=4;
+    VecMat1f data;
+    for(int i=0; i<SIZE; i++) {
+
+        Mat1f tmp(ROWS, COLS);
+        randn(tmp, 0., 1.);
+        data.push_back(tmp);
+    }
+
+    for(int r=0; r<ROWS; r++) {
+        for(int c=0; c<COLS; c++) {
+
+            Mat1f elements_expected(1, static_cast<int>(data.size()));
+            int k=0;
+            for(VecMat1fCIter itr=data.begin();
+                itr != data.end();
+                itr++, k++) {
+
+                elements_expected(k) = (*itr)(r, c);
+            }
+            Mat1f elements_actual = sem::ElementsAt(data, r, c);
+
+            EXPECT_MAT_DIMS_EQ(elements_actual, Size(static_cast<int>(data.size()), 1)) << "Expecting a row matrix";
+            EXPECT_MAT_EQ(elements_expected, elements_actual) << "Unexpected element values";
+        }
+    }
+}
+
+TEST(ElementsAt, Invalid)
+{
+    const int SIZE=2;
+    const int ROWS=3;
+    const int COLS=4;
+    VecMat1f data;
+    for(int i=0; i<SIZE; i++) {
+
+        Mat1f tmp(ROWS, COLS);
+        randn(tmp, 0., 1.);
+        data.push_back(tmp);
+    }
+
+    EXPECT_NO_THROW(ElementsAt(data, 0, 0));
+    EXPECT_THROW(ElementsAt(data, -1, 0), ExceptionBadDims);
+    EXPECT_THROW(ElementsAt(data, 0, -1), ExceptionBadDims);
+    EXPECT_THROW(ElementsAt(data, -1, 0), ExceptionBadDims);
+    EXPECT_THROW(ElementsAt(data, -1, -1), ExceptionBadDims);
+    EXPECT_THROW(ElementsAt(data, ROWS, 0), ExceptionBadDims);
+    EXPECT_THROW(ElementsAt(data, 0, COLS), ExceptionBadDims);
+}
