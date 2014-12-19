@@ -32,4 +32,11 @@ std::string MatFailureMessageNonZero(const cv::Mat& a, const cv::Mat& b, const c
 ::testing::AssertionResult Near(const cv::Mat& a, const cv::Mat& b, float tolerance);
 #define EXPECT_MAT_NEAR(a, b, t) EXPECT_TRUE( Near(a, b, t) )
 
+/**
+  Assert that matrix is empty
+  */
+::testing::AssertionResult Empty(const cv::Mat &mat);
+// EXPECT_EMPTY macro already defined in ts/contrainer.h
+// Should we use define guard?
+
 #endif // SEM_TS_MAT_ASSERTIONS_H_

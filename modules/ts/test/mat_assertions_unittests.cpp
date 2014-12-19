@@ -202,5 +202,39 @@ TEST(MatTypeAssertionsTest, TypeChannels)
     }
 }
 
+TEST(MatAssertionsTest, Empty) {
+
+    Mat1i i;
+    Mat1b b;
+    Mat1f f;
+    Mat m;
+    EXPECT_TRUE( Empty(i) );
+    EXPECT_TRUE( Empty(b) );
+    EXPECT_TRUE( Empty(f) );
+    EXPECT_TRUE( Empty(m) );
+
+    // test macro
+    EXPECT_EMPTY( i );
+    EXPECT_EMPTY( b );
+    EXPECT_EMPTY( f );
+    EXPECT_EMPTY( m );
+
+    i.push_back(123);
+    b.push_back(Scalar_<uchar>(255));
+    b.push_back(Scalar_<uchar>(0));
+
+    EXPECT_EQ( size_t(1), i.total() );
+    EXPECT_FALSE( Empty(i) );
+
+    EXPECT_EQ( size_t(2), b.total() );
+    EXPECT_FALSE( Empty(b) );
+
+    i.pop_back();
+    EXPECT_TRUE( Empty(i) );
+    EXPECT_EMPTY( i );
+
+    EXPECT_FALSE( Empty(Mat1f::zeros(1, 1)) );
+}
+
 } // namespace
 
