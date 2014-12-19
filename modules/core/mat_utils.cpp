@@ -118,8 +118,8 @@ Mat1f sem::ElementsAt(const VecMat1f &v, int r, int c)
         if(r < 0 || r >= (*itr).rows || c< 0 || c >= (*itr).cols) {
 
             stringstream s;
-            s << "Cannot access element at (" << r << c << "," << ") in v[" << k << "]"
-              << "with dims (" << (*itr).rows << "," << (*itr).cols <<")";
+            s << "Cannot access element at (" << r << "," << c << ") in v[" << k << "]"
+              << " with dims (" << (*itr).rows << "," << (*itr).cols <<")";
             SEM_THROW_BAD_DIMS(s.str());
         }
         else {
