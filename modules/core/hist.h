@@ -18,7 +18,7 @@ public:
     /**
      * @brief Reconfigure
      * @param histogram size (e.g. no. of bins)
-     * @param range
+     * @param range (left-closed, right-open interval)
      * @param uniformity of bins, if true, keep equally sized bins
      * @param if false, clear histograms first, otherwise accumulate from previous input
      */
@@ -28,9 +28,11 @@ public:
      * @brief Compute histogram from most recent input
      * @param input
      * @param mask for excluding input elements from histogram calculation (zeros indicating elements to be ignored), default is to use all input elements.
-     * @return histogram as row matrix
+     * @return histogram as row matrix of floats
+     * @throws ExceptionTypeError for input with unsupported type
+     * @throws ExceptionBadDims for multi-channel input until fully supported.
      */
-    virtual cv::Mat Compute(const cv::Mat &in, cv::InputArray mask=cv::noArray());
+    virtual cv::Mat1f Compute(const cv::Mat &in, cv::InputArray mask=cv::noArray());
 
 protected:
 
@@ -39,7 +41,7 @@ protected:
     bool do_uniform_;               ///< uniformity of bins, if true, keep equally sized bins
     bool do_accumulate_;            ///< if false, clear histograms first, otherwise accumulate from previous input
 
-    cv::Mat hist_;                  ///< computed histogram
+    cv::Mat1f hist_;                  ///< computed histogram
 };
 
 #endif // SEM_CORE_HIST_H_
