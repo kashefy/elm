@@ -62,6 +62,8 @@ void SaliencyItti::Stimulus(const Signal &signal)
     pop_code_orient_.State(stimulus_, kernels_orient_);
 }
 
+//TODO: clip away low response elements
+//TODO: weigh by entropy to clip away uniform response regions
 void SaliencyItti::Apply()
 {
     Mat orientation_spikes = pop_code_orient_.PopCode();
@@ -85,7 +87,8 @@ void SaliencyItti::Apply()
     NeighMeanVar(orientation_index, 3, tmp, orientation_conspicuity);
     normalize(orientation_conspicuity, orientation_conspicuity, 0.f, 255.f, NORM_MINMAX, -1, noArray());
 
-    //this->pop_code_orient_.State();
+    //TODO: clip away low response elements
+    //TODO: weigh by entropy to clip away uniform response regions
 
     intensity_constrast_.Compute(stimulus_);
     Mat intensity_constrast_norm = intensity_constrast_.Response();
