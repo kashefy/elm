@@ -74,7 +74,6 @@ void SaliencyItti::Apply()
     for(size_t i=0, j=0; i<stimulus_.total(); i++, j+=j_step) {
 
         minMaxIdx(orientation_spikes.colRange(j, j+j_step), &min_val, 0, 0, max_idx);
-        cout<<i<<" "<<orientation_spikes.colRange(j, j+j_step)<<" "<<max_idx[1]<<endl;
         orientation_index(i) = max_idx[1];
     }
 
