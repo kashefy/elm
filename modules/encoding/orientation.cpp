@@ -64,3 +64,13 @@ VecMat1f GaborFilterBank::CreateKernels(int radius,
     }
     return filter_bank;
 }
+
+VecMat1f GaborFilterBank::Kernels() const
+{
+    return kernels_;
+}
+
+void GaborFilterBank::Rectify(Mat1f &response)
+{
+    pow(response, 2., response);
+}

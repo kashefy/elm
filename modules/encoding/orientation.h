@@ -54,7 +54,14 @@ public:
                                   float gamma,
                                   float ps);
 
+    VecMat1f Kernels() const;
+
 protected:
+    /**
+     * @brief Rectify response to individual kernels by squaring the response
+     * @param response squared in place
+     */
+    void Rectify(cv::Mat1f &response);
 
 }; // GaborFilterBank
 

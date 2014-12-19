@@ -38,13 +38,27 @@ public:
      * @param column
      * @return element response row matrix no. of cols==filter bank fan-out (e.g. no. of kernels)
      */
-    virtual cv::Mat1f ElementResponse(int row, int col);
+    virtual cv::Mat1f ElementResponse(int r, int c) const;
+
+    /**
+     * @brief Get underlying kernels
+     * Mostly meant for testing purposes because it can involve a heavy copy of matrices.
+     * @return vector of kernels
+     */
+    virtual VecMat1f Kernels() const = 0;
 
 protected:
     /**
      * @brief Empty default constructor, only accessible by child classes
      */
     base_FilterBank();
+
+    /**
+     * @brief Called by Compute for rectifying response from individual kernels
+     * (e.g. square response). Default is to do nothing and leave response as is.
+     * @param response modified in-place
+     */
+    virtual void Rectify(cv::Mat1f &response);
 
     VecMat1f kernels_;  ///< individual kernels
     VecMat1f response_; ///< response per kernel for most recent input
