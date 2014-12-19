@@ -41,3 +41,9 @@ ExceptionKeyError::ExceptionKeyError(const std::string &msg)
                 CV_Func, __FILE__, __LINE__ )
 {
 }
+
+ExceptionTypeError::ExceptionTypeError(const std::string &msg)
+    : Exception(CV_StsUnsupportedFormat, String(msg),
+                CV_Func, __FILE__, __LINE__ )
+{
+}
