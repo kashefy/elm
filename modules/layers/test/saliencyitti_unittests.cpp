@@ -112,10 +112,10 @@ TEST_F(SaliencyIttiTest, Apply)
         sampled_saliency(loc_mat(1), loc_mat(0))++;
     }
 
-    imshow("sal", sem::ConvertTo8U(signal.MostRecent(NAME_SALIENCY_)));
-    imshow("sam", sem::ConvertTo8U(sampled_saliency));
+    //imshow("sal", sem::ConvertTo8U(signal.MostRecent(NAME_SALIENCY_)));
+    //imshow("sam", sem::ConvertTo8U(sampled_saliency));
 
-    waitKey();
+    //waitKey();
 }
 
 TEST_F(SaliencyIttiTest, DISABLED_DisplayApplyMNIST)

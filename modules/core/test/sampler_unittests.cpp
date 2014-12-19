@@ -1,8 +1,10 @@
 #include "core/sampler.h"
 
+#include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
 #include "core/area.h"
+#include "io/synth.h"
 #include "ts/ts.h"
 
 using namespace cv;
@@ -245,7 +247,7 @@ TEST(ExponentialPDFTest, Sample)
 TEST(ExponentialPDFTest, Lambda)
 {
     const float PDF_END=5.;   // last x element in pdf function
-    const int SIZE=10, N=2000;  // no. of bins, no. of samples to draw
+    const int SIZE=10, N=3e3;  // no. of bins, no. of samples to draw
     const float PDF_SCALE_FACTOR=static_cast<float>(SIZE)/PDF_END;
 
     // generate a histogram from sampled values

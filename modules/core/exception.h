@@ -10,6 +10,7 @@
 #define SEM_THROW_FILEIO_ERROR(msg) throw sem::ExceptionFileIOError(msg)
 #define SEM_THROW_VALUE_ERROR(msg) throw sem::ExceptionValueError(msg)
 #define SEM_THROW_KEY_ERROR(msg) throw sem::ExceptionKeyError(msg)
+#define SEM_THROW_TYPE_ERROR(msg) throw sem::ExceptionTypeError(msg)
 
 namespace sem {
 
@@ -48,6 +49,12 @@ class ExceptionKeyError : public Exception
 {
 public:
     ExceptionKeyError(const std::string &msg);
+};
+
+class ExceptionTypeError : public Exception
+{
+public:
+    ExceptionTypeError(const std::string &msg);
 };
 
 } // namespace sem

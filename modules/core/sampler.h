@@ -77,7 +77,14 @@ public:
 
 namespace sem
 {
+
+/**
+ * @brief Draw sample from exponential distribution
+ * @param lambda
+ * @return sample drawn from exponential distribution
+ */
 float randexp(float lambda);
+
 }
 
 #endif // SEM_CORE_SAMPLER_H_

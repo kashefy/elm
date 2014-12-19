@@ -7,6 +7,8 @@
 
 #include <vector>
 
+#include <opencv2/core.hpp>
+
 /**
   Assert that container is empty
   */

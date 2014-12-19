@@ -98,3 +98,13 @@ AssertionResult Near(const Mat& a, const Mat& b, float tolerance) {
     if(n == 0) { return AssertionSuccess(); }
     else { return AssertionFailure() << MatFailureMessageNonZero(a, b, cmp_out); }
 }
+
+AssertionResult Empty(const Mat &mat)
+{
+    if(mat.empty()) { return AssertionSuccess(); }
+    else {
+        return AssertionFailure()
+                << "Mat is not empty and contains"
+                << mat.total() << " elements.";
+    }
+}

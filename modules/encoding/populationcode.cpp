@@ -3,7 +3,8 @@
 #include <opencv2/features2d.hpp>
 #include <opencv2/imgproc.hpp>
 
-#include <core/sampler.h>
+#include "core/sampler.h"
+#include "encoding/base_filterbank.h"
 
 using cv::Mat1f;
 
@@ -38,8 +39,8 @@ SoftMaxPopulationCode::SoftMaxPopulationCode()
 
 void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
 {
-    VecMat1f fb_response;
-    fb_response.reserve(kernels.size());
+    VecMat1f kernel_response;
+    kernel_response.reserve(kernels.size());
     float norm_factor;  // normalization factor across individual responses
 
     for(VecMat1fCIter itr=kernels.begin();
@@ -49,7 +50,7 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
         Mat1f r;
         cv::filter2D(in, r, -1, *itr, cv::Point(-1, -1), 0, cv::BORDER_REPLICATE);
         cv::pow(r, 2., r);
-        fb_response.push_back(r);
+        kernel_response.push_back(r);
 
         double min_val, max_val;
         cv::minMaxIdx(r, &min_val, &max_val);
@@ -62,8 +63,8 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
     // normalize individual responses by global factor
     if(norm_factor != 0) {
 
-        for(VecMat1fIter itr=fb_response.begin();
-            itr != fb_response.end();
+        for(VecMat1fIter itr=kernel_response.begin();
+            itr != kernel_response.end();
             itr++) {
 
             (*itr) /= norm_factor;
@@ -79,13 +80,68 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
         int c = i % in.cols;
         Mat1f node_state(1, fan_out_);
         int k=0;
-        for(VecMat1fCIter itr=fb_response.begin();
-            itr != fb_response.end();
+        for(VecMat1fCIter itr=kernel_response.begin();
+            itr != kernel_response.end();
             itr++, k++) {
 
             node_state(0, k) = (*itr)(r, c);
         }
         state_.push_back(node_state);
+    }
+}
+
+void SoftMaxPopulationCode::State(const Mat1f &in, const std::unique_ptr<base_FilterBank> &filter_bank)
+{
+    VecMat1f kernel_response = filter_bank->Compute(in);
+
+    Normalize(kernel_response);
+
+    state_.clear();
+    state_.reserve(in.total());
+    fan_out_ = static_cast<int>(kernel_response.size());
+
+    for(size_t i=0; i<in.total(); i++) {
+
+        int r = i / in.cols;
+        int c = i % in.cols;
+        Mat1f node_state(1, fan_out_);
+        int k=0;
+        for(VecMat1fCIter itr=kernel_response.begin();
+            itr != kernel_response.end();
+            itr++, k++) {
+
+            node_state(0, k) = (*itr)(r, c);
+        }
+
+        state_.push_back(node_state);
+    }
+}
+
+void SoftMaxPopulationCode::Normalize(VecMat1f &response) const
+{
+    // normalization factor across individual responses
+    float norm_factor;
+    for(VecMat1fCIter itr=response.begin();
+        itr != response.end();
+        itr++) {
+
+        double min_val, max_val;
+        cv::minMaxIdx(*itr, &min_val, &max_val);
+        if(norm_factor <= max_val) {
+
+            norm_factor = max_val;
+        }
+    }
+
+    // normalize individual responses by global factor
+    if(norm_factor != 0) {
+
+        for(VecMat1fIter itr=response.begin();
+            itr != response.end();
+            itr++) {
+
+            (*itr) /= norm_factor;
+        }
     }
 }
 

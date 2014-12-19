@@ -106,3 +106,26 @@ void sem::NeighMeanVar(const Mat1f &m, int radius, Mat1f &neigh_mean, Mat1f &nei
         multiply(neigh_var, neigh_var, neigh_var);
     }
 }
+
+Mat1f sem::ElementsAt(const VecMat1f &v, int r, int c)
+{
+    Mat1f values(1, static_cast<int>(v.size()));
+    int k=0;
+    for(VecMat1fCIter itr=v.begin();
+        itr != v.end();
+        itr++, k++) {
+
+        if(r < 0 || r >= (*itr).rows || c< 0 || c >= (*itr).cols) {
+
+            stringstream s;
+            s << "Cannot access element at (" << r << "," << c << ") in v[" << k << "]"
+              << " with dims (" << (*itr).rows << "," << (*itr).cols <<")";
+            SEM_THROW_BAD_DIMS(s.str());
+        }
+        else {
+            values(k) = (*itr)(r, c);
+        }
+    }
+
+    return values;
+}
