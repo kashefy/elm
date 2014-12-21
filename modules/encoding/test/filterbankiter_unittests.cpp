@@ -2,10 +2,6 @@
 
 #include "ts/ts.h"
 
-#include <iostream>
-
 using namespace std;
 
-TEST(IterTest, test)
-{
-}
+//TODO: define dummy derived class for unit testing abstract class
