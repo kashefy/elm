@@ -41,3 +41,8 @@ Mat1f base_FilterBank::ElementResponse(int r, int c) const
 {
     return sem::ElementsAt(response_, r, c);
 }
+
+size_t base_FilterBank::size() const
+{
+    return Kernels().size();
+}

@@ -47,6 +47,12 @@ public:
      */
     virtual VecMat1f Kernels() const = 0;
 
+    /**
+     * @brief size of the filter bank (e.g. no. of kernels)
+     * @return size of the filter bank
+     */
+    virtual size_t size() const;
+
 protected:
     /**
      * @brief Empty default constructor, only accessible by child classes
