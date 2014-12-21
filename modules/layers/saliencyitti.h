@@ -1,6 +1,8 @@
 #ifndef SEM_LAYERS_SALIENCYITTI_H_
 #define SEM_LAYERS_SALIENCYITTI_H_
 
+#include <memory>
+
 #include "core/base_Layer.h"
 #include "core/sampler.h"
 #include "encoding/intensitycontrast.h"
@@ -41,7 +43,7 @@ protected:
     cv::Mat1f saliency_;            ///< saliency map of most recent stimulus
     cv::Mat1f stimulus_;            ///< single channel/grayscale stimulus
 
-    VecMat1f kernels_orient_;               ///< orientation-sensitive kernels (V1 simple cells)
+    std::unique_ptr<base_FilterBank> gabors_;   ///< filter bank of orientation-sensitive gabor kernels (V1 simple cells)
     SoftMaxPopulationCode pop_code_orient_; ///< population coding for orientations
 
     cv::Mat1f theta_range_;         ///< supported orientation angles

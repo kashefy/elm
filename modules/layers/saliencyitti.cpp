@@ -44,33 +44,32 @@ void SaliencyItti::Reset()
     const float* p = theta_range_.ptr<float>(0);
     VecF theta(p, p+theta_range_.cols);
 
-    kernels_orient_ = GaborFilterBank::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
+    gabors_.reset(new GaborFilterBank());
+    dynamic_cast<GaborFilterBank*>(gabors_.get())->Reset(RADIUS, SIGMA, theta, _LAMBDA, GAMMA, PS);
 
     intensity_constrast_.Init(RADIUS, 1.f);
 }
 
 void SaliencyItti::Reconfigure(const LayerConfig &config)
 {
-    name_scene_ = config.Input(KEY_INPUT_SCENE);
-    name_saliency_ = config.Output(KEY_OUTPUT_SALIENCY);
+    name_scene_     = config.Input(KEY_INPUT_SCENE);
+    name_saliency_  = config.Output(KEY_OUTPUT_SALIENCY);
     name_salient_loc_ = config.Output(KEY_OUTPUT_SALIENT_LOC);
 }
 
 void SaliencyItti::Stimulus(const Signal &signal)
 {
     stimulus_ = signal.MostRecent(name_scene_);
-    pop_code_orient_.State(stimulus_, kernels_orient_);
+    pop_code_orient_.State(stimulus_, gabors_);
 }
 
-//TODO: clip away low response elements
-//TODO: weigh by entropy to clip away uniform response regions
 void SaliencyItti::Apply()
 {
     Mat orientation_spikes = pop_code_orient_.PopCode();
     Mat1i orientation_index(stimulus_.size());
 
     // assing orientation to each stimulus pixel
-    size_t j_step = kernels_orient_.size();
+    size_t j_step = gabors_->size();
     double min_val;
     int max_idx[2];
     for(size_t i=0, j=0; i<stimulus_.total(); i++, j+=j_step) {
@@ -81,7 +80,7 @@ void SaliencyItti::Apply()
 
     // shift indices to be zero-centered.
     // subtraction should work with even as well as odd sizes.
-    orientation_index -= kernels_orient_.size()/2;
+    orientation_index -= gabors_->size()/2;
 
     Mat1f orientation_conspicuity, tmp;
     NeighMeanVar(orientation_index, 3, tmp, orientation_conspicuity);
