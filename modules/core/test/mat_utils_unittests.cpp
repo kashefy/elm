@@ -622,3 +622,68 @@ TEST(ElementsAt, Invalid)
     EXPECT_THROW(ElementsAt(data, ROWS, 0), ExceptionBadDims);
     EXPECT_THROW(ElementsAt(data, 0, COLS), ExceptionBadDims);
 }
+
+/**
+ * @brief test reshape routine with empty input
+ */
+TEST(ReshapeVecMatTest, Empty)
+{
+    // empty vector
+    EXPECT_EMPTY(Reshape(VecMat1f())) << "Empty input yielded non-empty output. That's odd.";
+
+    // vector filled with empty matrices
+    for(int i=1; i<10; i++) {
+
+        EXPECT_EMPTY(Reshape(VecMat1f(i, Mat1f())));
+    }
+}
+
+/**
+ * @brief test dimensions of reshaped input
+ */
+TEST(ReshapeVecMatTest, Dims)
+{
+    for(int i=1; i<=10; i++) {
+
+        for(int r=1; r<7; r++) {
+
+            for(int c=1; c<7; c++) {
+
+                EXPECT_MAT_DIMS_EQ(Reshape(VecMat1f(i, Mat1f::zeros(r, c))), Size(i, r*c))
+                        << "Unexpected dims returend from reshappign vector of matrices";
+            }
+        }
+    }
+}
+
+/**
+ * @brief test values after reshape
+ */
+TEST(ReshapeVecMatTest, Values)
+{
+    const int N=10; ///< no. of matrices in vector
+    const int ROWS=3;
+    const int COLS=4;
+    VecMat1f in;
+    for(int i=0; i<N; i++) {
+
+        Mat1f m(ROWS, COLS);
+        randn(m, 0, 100);
+        in.push_back(m);
+    }
+
+    Mat1f result = Reshape(in);
+
+    // inspect result
+    for(int i=0; i<N; i++) {
+
+        for(int r=0; r<ROWS; r++) {
+
+            for(int c=0; c<COLS; c++) {
+
+                EXPECT_FLOAT_EQ(in[i](r, c), result(r*COLS+c, i))
+                        << "Value mismatch between initial input and reshaped output";
+            }
+        }
+    }
+}
