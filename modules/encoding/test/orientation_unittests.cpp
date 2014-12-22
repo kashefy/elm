@@ -274,6 +274,15 @@ TEST_F(GaborFilterBankTest, Compute)
 
             VecMat1f response_actual = to_.Compute(stimulus);
 
+            VecMat1f response_get = to_.Response();
+
+            ASSERT_GT(response_get.size(), size_t(0)) << "Response vector needs to contains at least one matrix.";
+            EXPECT_SIZE(to_.size(), response_get);
+            for(size_t i=0; i<to_.size(); i++) {
+
+                EXPECT_MAT_EQ(response_actual[i], response_get[i]) << "Response mismatch at "<< i <<", although same source for both.";
+            }
+
             EXPECT_EQ(kernels.size(), response_actual.size()) << "response size does not match no. of kernels.";
 
             // get index of largest response through linear search
