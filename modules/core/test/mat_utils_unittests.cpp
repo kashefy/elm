@@ -687,3 +687,73 @@ TEST(ReshapeVecMatTest, Values)
         }
     }
 }
+
+TEST(Mat_ToVec_Test, Empty)
+{
+    EXPECT_EMPTY(Mat_ToVec_<float>(Mat1f()));
+    EXPECT_EMPTY(Mat_ToVec_<float>(Mat1i()));
+    EXPECT_EMPTY(Mat_ToVec_<float>(Mat1b()));
+}
+
+/**
+ * @brief test conversion to vector with two-dimensional matrix as input
+ */
+TEST(Mat_ToVec_Test, TwoDimensional_Landscape)
+{
+    const int ROWS=3;
+    const int COLS=4;
+    Mat1f in(ROWS, COLS);
+    randn(in, 0, 100);
+    VecF out = Mat_ToVec_(in);
+    EXPECT_SIZE(in.total(), out) << "Not all elements acccounted for";
+
+    // check values
+    for(int r=0; r<ROWS; r++) {
+
+        for(int c=0; c<COLS; c++) {
+
+            EXPECT_FLOAT_EQ(in(r, c), out[r*COLS+c]) << "value mismatch";
+        }
+    }
+}
+
+TEST(Mat_ToVec_Test, TwoDimensional_Portrait)
+{
+    const int ROWS=4;
+    const int COLS=3;
+    Mat1f in(ROWS, COLS);
+    randn(in, 0, 100);
+    VecF out = Mat_ToVec_(in);
+    EXPECT_SIZE(in.total(), out) << "Not all elements acccounted for";
+
+    // check values
+    for(int r=0; r<ROWS; r++) {
+
+        for(int c=0; c<COLS; c++) {
+
+            EXPECT_FLOAT_EQ(in(r, c), out[r*COLS+c]) << "value mismatch";
+        }
+    }
+}
+
+/**
+ * @brief test conversion with one-dimensional matrix
+ */
+TEST(Mat_ToVec_Test, OneDimensional)
+{
+    const int SIZE=5;
+    Mat1i in(SIZE, 1);
+    randn(in, 0, 100);
+
+    ASSERT_GT(SIZE, 0) << "This test needs zero-sized input";
+
+    std::vector<int> out = Mat_ToVec_<int>(in);
+    EXPECT_SIZE(SIZE, out) << "Not all elements acccounted for";
+    EXPECT_SIZE(SIZE, Mat_ToVec_<int>(in.t())) << "Not all elements acccounted for";
+
+    // check values
+    for(int i=0; i<SIZE; i++) {
+
+        EXPECT_EQ(in(i), out[i]) << "Value mismatch at i=" << i;
+    }
+}
