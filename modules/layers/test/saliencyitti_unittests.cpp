@@ -1,13 +1,12 @@
 #include "layers/saliencyitti.h"
 
+#include <opencv2/highgui.hpp>
+
+#include "core/mat_utils.h"
 #include "core/signal.h"
 #include "io/synth.h"
 #include "io/readmnist.h"
 #include "ts/ts.h"
-
-
-#include <opencv2/highgui.hpp>
-#include "core/mat_utils.h"
 
 using namespace cv;
 using namespace std;
@@ -112,10 +111,9 @@ TEST_F(SaliencyIttiTest, Apply)
         sampled_saliency(loc_mat(1), loc_mat(0))++;
     }
 
-    //imshow("sal", sem::ConvertTo8U(signal.MostRecent(NAME_SALIENCY_)));
-    //imshow("sam", sem::ConvertTo8U(sampled_saliency));
-
-    //waitKey();
+//    imshow("sal", sem::ConvertTo8U(signal.MostRecent(NAME_SALIENCY_)));
+//    imshow("sam", sem::ConvertTo8U(sampled_saliency));
+//    waitKey();
 }
 
 TEST_F(SaliencyIttiTest, DISABLED_DisplayApplyMNIST)
@@ -139,5 +137,5 @@ TEST_F(SaliencyIttiTest, DISABLED_DisplayApplyMNIST)
     Mat1i loc_mat = signal.MostRecent(NAME_LOC_);
     cout<<loc_mat<<endl;
 
-    cv::waitKey();
+    waitKey();
 }

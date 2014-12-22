@@ -6,6 +6,7 @@
 #include "core/exception.h"
 
 #include <iostream>
+
 namespace sem {
 
 /**
@@ -64,8 +65,37 @@ void NeighMeanVar(const cv::Mat1f& m, int radius, cv::Mat1f &neigh_mean, cv::Mat
  * @param col
  * @return row matrix with extracted elements
  * @throws ExceptionBadDims for positions that cannot be accessed.
+ * @todo validate equally sized matrices inside vector or define protocol
+ * current behavior, rely on dims of first vector entry
  */
 cv::Mat1f ElementsAt(const VecMat1f &v, int row, int col);
+
+/**
+ * @brief Reshape vector of mat to single mat with row per element and col per vector element/block/kernel.
+ * Only applicable to vector of equally sized matrices.
+ * @param input vector of matrices
+ * @return single matrix, row per matrix element and cols=vector size, all dims are non-zero
+ * @todo enforce validation of same-dim matrix elements or define clear protocol, current behavior: rely on dims of first vector entry
+ */
+cv::Mat1f Reshape(const VecMat1f &v);
+
+/**
+ * @brief Function for converting a Mat_ object into a vector of same type
+ * The mat is flattened beforehand.
+ * Involves copying elements
+ * May only work with matrices of POD (e.g. int, float, uchar,...)
+ * @param matrix
+ * @return resulting vector with flattened matrix data
+ */
+template <typename T>
+std::vector<T> Mat_ToVec_(const cv::Mat_<T> &m) {
+
+    // syntax learned from posts here:
+    // http://stackoverflow.com/questions/610245/where-and-why-do-i-have-to-put-the-template-and-typename-keywords
+    const T* p = m.template ptr<T>(0);
+    std::vector<T> v(p, p+m.total());
+    return v;
+}
 
 /**
  * @brief Create Mat object (row vector) and fill with range

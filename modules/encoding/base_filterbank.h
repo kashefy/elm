@@ -47,6 +47,19 @@ public:
      */
     virtual VecMat1f Kernels() const = 0;
 
+    /**
+     * @brief Get response to most recent stimulus
+     * May involve heavy copy operations.
+     * @return vector of response matrices
+     */
+    virtual VecMat1f Response() const;
+
+    /**
+     * @brief size of the filter bank (e.g. no. of kernels)
+     * @return size of the filter bank
+     */
+    virtual size_t size() const;
+
 protected:
     /**
      * @brief Empty default constructor, only accessible by child classes

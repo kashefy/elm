@@ -213,6 +213,7 @@ TEST_F(GaborFilterBankTest, ResetKernels)
             VecMat1f actual_kernels = to_.Kernels();
 
             // check no. of kernels
+            ASSERT_GT(theta_range.total(), size_t(0)) << "Revise test to be more effective. Need size > 0.";
             EXPECT_EQ(expected_kernels.size(), actual_kernels.size()) << "wrong no. of kernels";
             EXPECT_EQ(theta_range.total(), actual_kernels.size()) << "wrong no. of kernels";
 
@@ -222,6 +223,28 @@ TEST_F(GaborFilterBankTest, ResetKernels)
                 EXPECT_MAT_EQ(expected_kernels[k], actual_kernels[k]) << "Kernel mismatch";
             }
         }
+    }
+}
+
+/**
+ * @brief test size() getter method, should match no. of kernels
+ */
+TEST_F(GaborFilterBankTest, SizeGetter)
+{
+    for(float delta=30; delta<=90; delta+=30) {
+
+        const float THETA_STOP=CV_PI;
+        const float THETA_STEP=delta*CV_PI/180.f;
+        Mat1f theta_range = ARange_<float>(0.f, THETA_STOP, THETA_STEP);
+
+        to_.Reset(RADIUS, SIGMA, theta_range, _LAMBDA, _GAMMA, PS);
+
+        VecMat1f actual_kernels = to_.Kernels();
+
+        ASSERT_GT(theta_range.total(), size_t(0)) << "Revise test to be more effective. Need size > 0.";
+        EXPECT_EQ(theta_range.total(), actual_kernels.size()) << "wrong no. of kernels";
+        EXPECT_EQ(theta_range.total(), to_.size()) << "incorrect filter bank size";
+        EXPECT_EQ(actual_kernels.size(), to_.size()) << "size of this filter bank does not match no. kernels.";
     }
 }
 
@@ -250,6 +273,15 @@ TEST_F(GaborFilterBankTest, Compute)
             img.convertTo(stimulus, CV_32FC1, 1./255.);
 
             VecMat1f response_actual = to_.Compute(stimulus);
+
+            VecMat1f response_get = to_.Response();
+
+            ASSERT_GT(response_get.size(), size_t(0)) << "Response vector needs to contains at least one matrix.";
+            EXPECT_SIZE(to_.size(), response_get);
+            for(size_t i=0; i<to_.size(); i++) {
+
+                EXPECT_MAT_EQ(response_actual[i], response_get[i]) << "Response mismatch at "<< i <<", although same source for both.";
+            }
 
             EXPECT_EQ(kernels.size(), response_actual.size()) << "response size does not match no. of kernels.";
 

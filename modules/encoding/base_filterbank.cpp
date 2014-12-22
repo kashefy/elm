@@ -32,6 +32,11 @@ VecMat1f base_FilterBank::Compute(Mat1f stimulus)
     return response_;
 }
 
+VecMat1f base_FilterBank::Response() const
+{
+    return response_;
+}
+
 void base_FilterBank::Rectify(Mat1f &response)
 {
 // default is to do nothing and leave response as is
@@ -40,4 +45,9 @@ void base_FilterBank::Rectify(Mat1f &response)
 Mat1f base_FilterBank::ElementResponse(int r, int c) const
 {
     return sem::ElementsAt(response_, r, c);
+}
+
+size_t base_FilterBank::size() const
+{
+    return Kernels().size();
 }
