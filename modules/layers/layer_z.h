@@ -22,32 +22,32 @@ public:
     static const std::string KEY_OUTPUT_SPIKES;       ///< key to output spikes
     static const std::string KEY_OUTPUT_MEMBRANE_POT; ///< key to neuron membrane potentials
 
-    // Parmater keys
+    // Parmater keys, parameters with defaults are optional
     static const std::string PARAM_NB_AFFERENTS;      ///< no. of afferent inputs
     static const std::string PARAM_NB_OUTPUT_NODES;   ///< gabor envelope sigma
     static const std::string PARAM_LEN_HISTORY;       ///< length of spiking histry to maintain
     static const std::string PARAM_DELTA_T;           ///< spike time resolution [milliseconds]
     static const std::string PARAM_WTA_FREQ;          ///< WTA's  spiking frequency [Hz]
 
-    // defaults
-    static const int DEFAULT_LEN_HISTORY = 5;         ///< not a time unit, @todo change to time unit
-    static const float DEFAULT_DELTA_T;  //= 1000.f;
-    static const float DEFAULT_WTA_FREQ; //= 1.f; // 1 Hz
+    // defaults, parameters with defaults are optional
+    static const int DEFAULT_LEN_HISTORY;             ///< 5, not a time unit, @todo change to time unit
+    static const float DEFAULT_DELTA_T;               ///< = 1000.f;
+    static const float DEFAULT_WTA_FREQ;              ///< = 1.f; // 1 Hz
 
     ~LayerZ();
 
     LayerZ();
 
     /**
-     * @brief Configurable constructor
+     * @brief Configurable constructor, set parameters and IO
      * @param config
      */
     LayerZ(const LayerConfig& config);
 
     /**
-     * @brief Reset layer state, for soft reset @see Reconfigure();
+     * @brief Clear layer state
      */
-    void Reset();
+    void Clear();
 
     /**
      * @brief Reset and override layer configuration
@@ -60,6 +60,12 @@ public:
      * @param config
      */
     void Reconfigure(const LayerConfig &config);
+
+    /**
+      * @brief Set layer input output keys
+      * @param new I/O configuration
+      */
+    virtual void IO(const LayerIO& config);
 
     /**
      * @brief Set stimulus
@@ -92,7 +98,6 @@ protected:
     std::string name_output_mem_pot_;   ///< destination of membrane potential in signal object
 
     int nb_afferents_;                  ///< number of afferents to this layer
-    int nb_outputs_;                    ///< number of nodes in output layer
 
     cv::Mat1f input_spikes_;            ///< stimulus
 
