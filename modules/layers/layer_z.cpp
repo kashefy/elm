@@ -113,15 +113,21 @@ void LayerZ::IONames(const LayerIONames &config)
 
 void LayerZ::Stimulus(const Signal &signal)
 {
-    input_spikes_ = signal.MostRecent(name_input_spikes_);
+    spikes_in_ = signal.MostRecent(name_input_spikes_);
 }
 
 void LayerZ::Apply()
 {
+    // compute membrane potential for each neuron
+    u_ = Mat1f(1  , static_cast<int>(z_.size()));
+    int i=0;
     for(VecZ::iterator itr=z_.begin(); itr != z_.end(); ++itr) {
 
-        (*itr).Predict(input_spikes_);
+        u_(i++) = (*itr).Predict(spikes_in_).at<float>(0);
     }
+
+    // let them compete
+    spikes_out_ = wta_.Compete(z_);
 }
 
 void LayerZ::Learn()
@@ -131,5 +137,11 @@ void LayerZ::Learn()
 
 void LayerZ::Response(Signal &signal)
 {
+    signal.Append(name_output_spikes_, spikes_out_);
 
+    // optional output
+    if(name_output_mem_pot_) {
+
+        signal.Append(name_output_mem_pot_.get(), u_);
+    }
 }

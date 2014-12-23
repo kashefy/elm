@@ -99,7 +99,9 @@ protected:
 
     int nb_afferents_;                  ///< number of afferents to this layer
 
-    cv::Mat1f input_spikes_;            ///< stimulus
+    cv::Mat1f spikes_in_;            ///< stimulus
+    cv::Mat1f u_;                       ///< membrane potential from most recent stimuli
+    cv::Mat1f spikes_out_;                       ///< output spikes from most recent stimuli
 
     VecZ z_;                            ///< z neurons that learn using STDP
     WTAPoisson wta_;                    ///< winner-take-all to govern Z neuron spiking

@@ -2,7 +2,9 @@
 
 #include "core/exception.h"
 #include "core/ptree_utils.h"
+#include "core/signal.h"
 #include "ts/ts.h"
+#include "ts/fakeevidence.h"
 
 using namespace std;
 using namespace cv;
@@ -53,8 +55,6 @@ protected:
 class LayerZInitTest : public LayerZTestBase<testing::Test >
 {
 protected:
-    // members
-    LayerZ to_;  ///< test object
 };
 
 /**
@@ -113,3 +113,50 @@ TEST_P(LayerZParamsTest, InvalidParams)
     config_.Params(params_);
     EXPECT_THROW(LayerZ().Reset(config_), ExceptionValueError);
 }
+
+/**
+ * @brief class for covering layer z methods assuming proper initialization, the live methods
+ */
+class LayerZTest : public LayerZTestBase<testing::Test >
+{
+protected:
+    virtual void SetUp()
+    {
+        LayerZTestBase::SetUp();
+        to_.Reset(config_);
+        to_.IONames(config_);
+
+        FakeEvidence stimuli(nb_afferents_);
+        signal_.Append(NAME_INPUT_SPIKES, stimuli.next(0));
+    }
+
+    // members
+    LayerZ to_;     ///< test object
+    Signal signal_;
+}
+
+TEST_F(LayerZTest, ResponseDims)
+{
+    const int N=10;
+    const nb_output_nodes = config_.Params().get(LayerZ::PARAM_NB_OUTPUT_NODES);
+    for(int i=0; i<N; i++) {
+
+        to_.Stimulus(signal_);
+        to_.Apply();
+        to_.Response(signal_);
+
+        // check membrane potential
+        Mat u = signal_.MostRecent(NAME_OUTPUT_MEM_POT);
+        EXPECT_MAT_DIMS_EQ(u, Size(nb_output_nodes, 1)) << "Expecting scalar result from Predict method";
+        EXPECT_MAT_TYPE(u, CV_32F) << "Unexpected Mat type";
+        EXPECT_EQ(1, u.channels()) << "Expecting single-channel matrix";
+        EXPECT_LT(u.at<float>(0), 0);
+
+        // check output spikes
+        Mat spikes = signal_.MostRecent(NAME_OUTPUT_SPIKES);
+        EXPECT_MAT_DIMS_EQ(spikes, Size(nb_output_nodes, 1)) << "Expecting scalar result from Predict method";
+        EXPECT_MAT_TYPE(spikes, CV_32F) << "Unexpected Mat type";
+        EXPECT_EQ(1, spikes.channels()) << "Expecting single-channel matrix";
+    }
+}
+
