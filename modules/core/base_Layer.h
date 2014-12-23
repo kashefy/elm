@@ -9,6 +9,7 @@ class Signal;
 
 /**
  * @brief The Layer base class
+ * Overloaded constructor calls overloaded Reset() so you can implement Reset(config) directly.
  */
 class base_Layer
 {
@@ -30,7 +31,7 @@ public:
 
     /**
       * @brief Reconfigure the layer without modifying its state
-      * \todo Keep this?
+      * @todo Keep this?
       * @param new configuration
       */
     virtual void Reconfigure(const LayerConfig& config) = 0;
@@ -54,7 +55,7 @@ protected:
     base_Layer();
 
     /**
-     * @brief Construct a layer with given configurations
+     * @brief Construct a layer with given configurations, calls Reset(config)
      * @param config
      */
     base_Layer(const LayerConfig& config);
@@ -62,6 +63,7 @@ protected:
 
 /**
  * @brief class for defining interfaces of an abstract layer that can learn
+ * Overloaded constructor calls overloaded Reset() so you can implement Reset(config) directly.
  */
 class base_LearningLayer : public base_Layer
 {
@@ -104,7 +106,7 @@ protected:
     base_LearningLayer();
 
     /**
-     * @brief Construct a layer with given configurations
+     * @brief Construct a layer with given configurations, calls Reset(config)
      * @param config
      */
     base_LearningLayer(const LayerConfig& config);
