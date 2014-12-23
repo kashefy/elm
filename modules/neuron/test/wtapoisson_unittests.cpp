@@ -27,7 +27,7 @@ protected:
         for(int i=0; i<nb_learners; i++) {
 
             shared_ptr<ZNeuron> p(new ZNeuron);
-            p->init(1, 1);
+            p->Init(1, 1);
             p->Predict(Mat1i::ones(1, 1) > 0);
             learners_.push_back(p);
         }

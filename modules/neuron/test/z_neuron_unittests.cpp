@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "ts/ts.h"
+#include "ts/fakeevidence.h"
 
 using namespace cv;
 
@@ -20,38 +21,6 @@ protected:
     }
 
     ZNeuron to_;        ///< test object
-    int nb_features_;
-};
-
-/**
- * @brief Class or generating fake evidence/feature vectors
- */
-class FakeEvidence
-{
-public:
-    FakeEvidence(int nb_features)
-        : nb_features_(nb_features)
-    {}
-
-    /**
-     * @brief get next fake feature vector
-     *
-     * if state is even then [0, 1, 0, ...]
-     * else if state is odd then [1, 0, 1, ...]
-     *
-     * @param state to see vector generation
-     * @return feature vector
-     */
-    Mat next(int state) {
-
-        Mat1i f = Mat1i::zeros(1, nb_features_);
-        for(int i=state % 2; i<nb_features_; i+=2) {
-
-            f(i)++;
-        }
-        return f;
-    }
-
     int nb_features_;
 };
 
