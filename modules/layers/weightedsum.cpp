@@ -13,7 +13,7 @@ const std::string WeightedSum::PARAM_B              = "b";
 const std::string WeightedSum::KEY_INPUT_STIMULUS   = "in";
 const std::string WeightedSum::KEY_OUTPUT_RESPONSE  =  "out";
 
-void WeightedSum::Reset()
+void WeightedSum::Clear()
 {
     stimulus_ = Mat1f();
     response_ = Mat1f();
@@ -25,8 +25,10 @@ void WeightedSum::Reconfigure(const LayerConfig &config)
     PTree params = config.Params();
     a_ = params.get<float>(PARAM_A);
     b_ = params.get<float>(PARAM_B);
+}
 
-    // IO
+void WeightedSum::IO(const LayerIO &config)
+{
     name_stimulus_ = config.Input(KEY_INPUT_STIMULUS);
     name_response_ = config.Output(KEY_OUTPUT_RESPONSE);
 }
@@ -60,12 +62,15 @@ void WeightedSum::Response(Signal &signal)
 }
 
 WeightedSum::WeightedSum()
+    : base_Layer()
 {
-    Reset();
+    Clear();
 }
 
 WeightedSum::WeightedSum(const LayerConfig& config)
+    : base_Layer(config)
 {
-    Reset();
+    Clear();
     Reconfigure(config);
+    IO(config);
 }

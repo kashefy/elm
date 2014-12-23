@@ -11,14 +11,12 @@ typedef boost::property_tree::ptree PTree;
 typedef std::vector<std::string> VecS;
 typedef std::map<std::string, std::string> MapSS;
 
-class LayerConfig
+/**
+ * @brief class for encapsulating layer IO keys
+ */
+class LayerIO
 {
 public:
-    /**
-     * @brief Default Constructor
-     */
-    LayerConfig();
-
     /**
      * @brief Set input pair. Overwrite if key exists.
      * @param key of feature required by layer
@@ -32,12 +30,6 @@ public:
      * @param name und which the feature exists
      */
     void Output(const std::string &key, const std::string &name);
-
-    /**
-     * @brief Set layer parameters
-     * @param params
-     */
-    void Params(const PTree &params);
 
     /**
      * @brief Get name to input feature key
@@ -55,6 +47,25 @@ public:
      */
     std::string Output(const std::string &key) const;
 
+private:
+    MapSS inputs_;
+    MapSS outputs_;
+};
+
+class LayerConfig : public LayerIO
+{
+public:
+    /**
+     * @brief Default Constructor
+     */
+    LayerConfig();
+
+    /**
+     * @brief Set layer parameters
+     * @param params
+     */
+    void Params(const PTree &params);
+
     /**
      * @brief Get parameters
      * @return layer parameters
@@ -62,8 +73,6 @@ public:
     PTree Params() const;
 
 private:
-    MapSS inputs_;
-    MapSS outputs_;
     PTree params_;
 };
 

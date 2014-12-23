@@ -19,7 +19,7 @@ public:
     /**
      * @brief Reset the state of the layer.
      */
-    virtual void Reset() = 0;
+    virtual void Clear() = 0;
 
     /**
      * @brief Reset the state of the layer with new configurations.
@@ -35,6 +35,12 @@ public:
       * @param new configuration
       */
     virtual void Reconfigure(const LayerConfig& config) = 0;
+
+    /**
+      * @brief Set layer input output keys
+      * @param new I/O configuration
+      */
+    virtual void IO(const LayerIO& config) = 0;
 
     /**
      * @brief Set stimulus
@@ -70,37 +76,37 @@ class base_LearningLayer : public base_Layer
 public:
     virtual ~base_LearningLayer();
 
-    /**
-     * @brief Reset the state of the layer.
-     */
-    virtual void Reset() = 0;
+//    /**
+//     * @brief Reset the state of the layer.
+//     */
+//    virtual void Clear() = 0;
 
-    /**
-      * @brief Reconfigure the layer without modifying its state
-      * \todo Keep this?
-      * @param new configuration
-      */
-    virtual void Reconfigure(const LayerConfig& config) = 0;
+//    /**
+//      * @brief Reconfigure the layer without modifying its state
+//      * \todo Keep this?
+//      * @param new configuration
+//      */
+//    virtual void Reconfigure(const LayerConfig& config) = 0;
 
-    /**
-     * @brief Set stimulus
-     */
-    virtual void Stimulus(const Signal &signal) = 0;
+//    /**
+//     * @brief Set stimulus
+//     */
+//    virtual void Stimulus(const Signal &signal) = 0;
 
-    /**
-     * @brief Apply layer computations to most recent stimuli
-     */
-    virtual void Apply() = 0;
+//    /**
+//     * @brief Apply layer computations to most recent stimuli
+//     */
+//    virtual void Apply() = 0;
 
-    /**
-     * @brief Learn from most recent stimuli
-     */
-    virtual void Learn() = 0;
+//    /**
+//     * @brief Get layer response
+//     */
+//    virtual void Response(Signal &signal) = 0;
 
-    /**
-     * @brief Get layer response
-     */
-    virtual void Response(Signal &signal) = 0;
+        /**
+         * @brief Learn from most recent stimuli
+         */
+        virtual void Learn() = 0;
 
 protected:
     base_LearningLayer();

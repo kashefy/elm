@@ -62,7 +62,6 @@ protected:
     virtual void SetUp()
     {
         // Setup layer
-        to_.Reset();
 
         LayerConfig config;
         // params
@@ -74,7 +73,8 @@ protected:
         config.Output(SaliencyItti::KEY_OUTPUT_SALIENCY, NAME_SALIENCY_);
         config.Output(SaliencyItti::KEY_OUTPUT_SALIENT_LOC, NAME_LOC_);
 
-        to_.Reconfigure(config);
+        to_.Reset(config);
+        to_.IO(config);
     }
 
     SaliencyItti to_;   ///< test object

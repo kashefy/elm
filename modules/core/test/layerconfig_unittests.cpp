@@ -6,6 +6,51 @@
 using namespace std;
 using namespace sem;
 
+class LayerIOTest : public testing::Test
+{
+protected:
+    virtual void SetUp()
+    {
+        to_ = LayerIO();
+    }
+
+    LayerIO to_; ///< test object
+};
+
+TEST_F(LayerIOTest, Input) {
+
+    to_.Input("k1", "n1");
+    to_.Input("k2", "n2");
+    to_.Input("k2", "n22");
+
+    EXPECT_EQ("n1", to_.Input("k1"));
+    EXPECT_EQ("n22", to_.Input("k2"));
+}
+
+TEST_F(LayerIOTest, Input_WrongKey) {
+
+    EXPECT_THROW(to_.Input("k1"), ExceptionKeyError);
+    to_.Input("k1", "n1");
+    EXPECT_EQ("n1", to_.Input("k1"));
+}
+
+TEST_F(LayerIOTest, Output) {
+
+    to_.Output("k1", "n1");
+    to_.Output("k2", "n2");
+    to_.Output("k2", "n22");
+
+    EXPECT_EQ("n1", to_.Output("k1"));
+    EXPECT_EQ("n22", to_.Output("k2"));
+}
+
+TEST_F(LayerIOTest, Output_WrongKey) {
+
+    EXPECT_THROW(to_.Output("k1"), ExceptionKeyError);
+    to_.Output("k1", "n1");
+    EXPECT_EQ("n1", to_.Output("k1"));
+}
+
 class LayerConfigTest : public testing::Test
 {
 protected:

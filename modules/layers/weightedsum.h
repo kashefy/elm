@@ -10,9 +10,11 @@
 class WeightedSum : public base_Layer
 {
 public:
-    virtual void Reset();
+    virtual void Clear();
 
     virtual void Reconfigure(const LayerConfig &config);
+
+    virtual void IO(const LayerIO &config);
 
     virtual void Stimulus(const Signal &signal);
 

@@ -6,26 +6,17 @@
 using namespace std;
 using namespace sem;
 
-LayerConfig::LayerConfig()
-{
-}
-
-void LayerConfig::Input(const string &key, const string &name)
+void LayerIO::Input(const string &key, const string &name)
 {
    inputs_[key] = name;
 }
 
-void LayerConfig::Output(const string &key, const string &name)
+void LayerIO::Output(const string &key, const string &name)
 {
     outputs_[key] = name;
 }
 
-void LayerConfig::Params(const PTree &params)
-{
-    params_ = params;
-}
-
-string LayerConfig::Input(const string &key) const
+string LayerIO::Input(const string &key) const
 {
     string name;
     if(!Find<string>(inputs_, key, name)) {
@@ -35,7 +26,7 @@ string LayerConfig::Input(const string &key) const
     return name;
 }
 
-string LayerConfig::Output(const string &key) const
+string LayerIO::Output(const string &key) const
 {
     string name;
     if(!Find<string>(outputs_, key, name)) {
@@ -43,6 +34,16 @@ string LayerConfig::Output(const string &key) const
         SEM_THROW_KEY_ERROR("No name found for input key \'" + key + "\'");
     }
     return name;
+}
+
+LayerConfig::LayerConfig()
+    : LayerIO()
+{
+}
+
+void LayerConfig::Params(const PTree &params)
+{
+    params_ = params;
 }
 
 PTree LayerConfig::Params() const
