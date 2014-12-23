@@ -16,7 +16,7 @@ protected:
     {
         nb_features_ = 50;
         to_ = ZNeuron();
-        to_.init(nb_features_, 3);
+        to_.Init(nb_features_, 3);
     }
 
     ZNeuron to_;        ///< test object

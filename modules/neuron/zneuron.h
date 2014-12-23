@@ -21,7 +21,7 @@ public:
      * @param number of features
      * @param spiking input history length
      */
-    void init(int nb_features, int len_history);
+    void Init(int nb_features, int len_history);
 
     void Learn(const cv::Mat &target);
 
