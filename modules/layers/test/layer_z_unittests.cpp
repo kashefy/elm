@@ -129,23 +129,22 @@ TEST_F(LayerZInitTest, InvalidParams)
     }
 }
 
-TEST_F(LayerZInitTest, IO)
+TEST_F(LayerZInitTest, IONames)
 {
-    // remove key to output nodes
     LayerConfig cfg;
     cfg.Params(config_.Params());
     {
         LayerZ to;
-        EXPECT_THROW(to.IO(cfg), std::exception);
+        EXPECT_THROW(to.IONames(cfg), std::exception);
     }
     {
         cfg.Input(LayerZ::KEY_INPUT_SPIKES, NAME_INPUT_SPIKES);
         LayerZ to;
-        EXPECT_THROW(to.IO(cfg), std::exception) << "still missing required output spikes";
+        EXPECT_THROW(to.IONames(cfg), std::exception) << "still missing required output spikes";
     }
     {
         cfg.Output(LayerZ::KEY_OUTPUT_SPIKES, NAME_OUTPUT_SPIKES);
         LayerZ to;
-        EXPECT_NO_THROW(to.IO(cfg)) << "all required IO names present";
+        EXPECT_NO_THROW(to.IONames(cfg)) << "all required IO names present";
     }
 }

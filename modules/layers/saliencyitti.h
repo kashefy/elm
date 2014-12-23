@@ -47,7 +47,7 @@ public:
 
     virtual void Reconfigure(const LayerConfig &config);
 
-    virtual void IO(const LayerIO &config);
+    virtual void IONames(const LayerIONames &config);
 
     virtual void Stimulus(const Signal &signal);
 

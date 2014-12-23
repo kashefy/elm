@@ -27,7 +27,7 @@ void WeightedSum::Reconfigure(const LayerConfig &config)
     b_ = params.get<float>(PARAM_B);
 }
 
-void WeightedSum::IO(const LayerIO &config)
+void WeightedSum::IONames(const LayerIONames &config)
 {
     name_stimulus_ = config.Input(KEY_INPUT_STIMULUS);
     name_response_ = config.Output(KEY_OUTPUT_RESPONSE);
@@ -72,5 +72,5 @@ WeightedSum::WeightedSum(const LayerConfig& config)
 {
     Clear();
     Reconfigure(config);
-    IO(config);
+    IONames(config);
 }

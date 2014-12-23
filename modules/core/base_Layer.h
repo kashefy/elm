@@ -40,7 +40,7 @@ public:
       * @brief Set layer input output keys
       * @param new I/O configuration
       */
-    virtual void IO(const LayerIO& config) = 0;
+    virtual void IONames(const LayerIONames& config) = 0;
 
     /**
      * @brief Set stimulus

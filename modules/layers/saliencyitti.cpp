@@ -76,7 +76,7 @@ void SaliencyItti::Reconfigure(const LayerConfig &config)
     Reset(config);
 }
 
-void SaliencyItti::IO(const LayerIO &config)
+void SaliencyItti::IONames(const LayerIONames &config)
 {
     name_scene_     = config.Input(KEY_INPUT_SCENE);
     name_saliency_  = config.Output(KEY_OUTPUT_SALIENCY);

@@ -13,20 +13,20 @@ typedef std::vector<std::string> VecS;
 typedef std::map<std::string, std::string> MapSS;
 
 /**
- * @brief class for encapsulating layer IO keys
+ * @brief class for encapsulating layer IO key-name pairs
  */
-class LayerIO
+class LayerIONames
 {
 public:
     /**
-     * @brief Set input pair. Overwrite if key exists.
+     * @brief Set input key-name-pair. Overwrite if key exists.
      * @param key of feature required by layer
      * @param name und which the feature exists
      */
     void Input(const std::string &key, const std::string &name);
 
     /**
-     * @brief Set output pair. Overwrite if key exists.
+     * @brief Set output key-name-pair. Overwrite if key exists.
      * @param key of feature required by layer
      * @param name und which the feature exists
      */
@@ -67,7 +67,7 @@ private:
     MapSS outputs_;
 };
 
-class LayerConfig : public LayerIO
+class LayerConfig : public LayerIONames
 {
 public:
     /**

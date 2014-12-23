@@ -6,17 +6,17 @@
 using namespace std;
 using namespace sem;
 
-void LayerIO::Input(const string &key, const string &name)
+void LayerIONames::Input(const string &key, const string &name)
 {
    inputs_[key] = name;
 }
 
-void LayerIO::Output(const string &key, const string &name)
+void LayerIONames::Output(const string &key, const string &name)
 {
     outputs_[key] = name;
 }
 
-string LayerIO::Input(const string &key) const
+string LayerIONames::Input(const string &key) const
 {
     string name;
     if(!Find<string>(inputs_, key, name)) {
@@ -26,14 +26,14 @@ string LayerIO::Input(const string &key) const
     return name;
 }
 
-OptS LayerIO::InputOpt(const string &key) const
+OptS LayerIONames::InputOpt(const string &key) const
 {
     OptS o;
     string name;
     return Find<string>(outputs_, key, name)? name : o;
 }
 
-string LayerIO::Output(const string &key) const
+string LayerIONames::Output(const string &key) const
 {
     string name;
     if(!Find<string>(outputs_, key, name)) {
@@ -43,7 +43,7 @@ string LayerIO::Output(const string &key) const
     return name;
 }
 
-OptS LayerIO::OutputOpt(const string &key) const
+OptS LayerIONames::OutputOpt(const string &key) const
 {
     OptS o;
     string name;
@@ -52,7 +52,7 @@ OptS LayerIO::OutputOpt(const string &key) const
 
 
 LayerConfig::LayerConfig()
-    : LayerIO()
+    : LayerIONames()
 {
 }
 

@@ -11,10 +11,10 @@ class LayerIOTest : public testing::Test
 protected:
     virtual void SetUp()
     {
-        to_ = LayerIO();
+        to_ = LayerIONames();
     }
 
-    LayerIO to_; ///< test object
+    LayerIONames to_; ///< test object
 };
 
 TEST_F(LayerIOTest, Input) {

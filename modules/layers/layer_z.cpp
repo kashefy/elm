@@ -37,7 +37,7 @@ LayerZ::LayerZ(const LayerConfig &config)
       wta_(DEFAULT_WTA_FREQ, DEFAULT_DELTA_T) // will get overriden anyway
 {
     Reset(config);
-    IO(config);
+    IONames(config);
 }
 
 void LayerZ::Clear()
@@ -104,7 +104,7 @@ void LayerZ::Reconfigure(const LayerConfig &config)
     SEM_THROW_NOT_IMPLEMENTED;
 }
 
-void LayerZ::IO(const LayerIO &config)
+void LayerZ::IONames(const LayerIONames &config)
 {
     name_input_spikes_   = config.Input(KEY_INPUT_SPIKES);
     name_output_spikes_  = config.Output(KEY_OUTPUT_SPIKES);
