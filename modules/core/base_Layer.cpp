@@ -12,7 +12,8 @@ base_Layer::base_Layer()
 
 base_Layer::base_Layer(const LayerConfig &config)
 {
-    Reset(config);
+    // this call belongs in child constructor
+    // Reset(config);
 }
 
 void base_Layer::Reset(const LayerConfig &config)
