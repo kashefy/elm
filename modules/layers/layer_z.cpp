@@ -108,7 +108,7 @@ void LayerZ::IO(const LayerIO &config)
 {
     name_input_spikes_   = config.Input(KEY_INPUT_SPIKES);
     name_output_spikes_  = config.Output(KEY_OUTPUT_SPIKES);
-    name_output_mem_pot_ = config.Output(KEY_OUTPUT_MEMBRANE_POT);
+    name_output_mem_pot_ = config.OutputOpt(KEY_OUTPUT_MEMBRANE_POT);
 }
 
 void LayerZ::Stimulus(const Signal &signal)

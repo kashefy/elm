@@ -95,7 +95,7 @@ protected:
 
     std::string name_input_spikes_;     ///< name of input spikes in signal object
     std::string name_output_spikes_;    ///< destination of output spikes in signal object
-    std::string name_output_mem_pot_;   ///< destination of membrane potential in signal object
+    OptS name_output_mem_pot_;          ///< optional destination of membrane potential in signal object
 
     int nb_afferents_;                  ///< number of afferents to this layer
 

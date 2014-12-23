@@ -9,9 +9,9 @@ using namespace cv;
 using namespace sem;
 
 /**
- * @brief class for testing layer Z, the main, SEM learning algorithm
+ * @brief class for testing layer Z initialization, the main, SEM learning algorithm
  */
-class LayerZTest : public ::testing::Test
+class LayerZInitTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
@@ -27,8 +27,6 @@ protected:
 
         config_.Output(LayerZ::KEY_OUTPUT_SPIKES, NAME_OUTPUT_SPIKES);
         config_.Output(LayerZ::KEY_OUTPUT_MEMBRANE_POT, NAME_OUTPUT_MEM_POT);
-
-        to_ = LayerZ(config_);
     }
 
     // members
@@ -42,14 +40,14 @@ protected:
     static const string NAME_OUTPUT_MEM_POT;    ///< membrane potential
 };
 // initialize static members
-const string LayerZTest::NAME_INPUT_SPIKES  = "in";
-const string LayerZTest::NAME_OUTPUT_SPIKES = "out";
-const string LayerZTest::NAME_OUTPUT_MEM_POT = "mem_pot";
+const string LayerZInitTest::NAME_INPUT_SPIKES  = "in";
+const string LayerZInitTest::NAME_OUTPUT_SPIKES = "out";
+const string LayerZInitTest::NAME_OUTPUT_MEM_POT = "mem_pot";
 
 /**
  * @brief test validation of missing params
  */
-TEST_F(LayerZTest, MissingParams)
+TEST_F(LayerZInitTest, MissingParams)
 {
     // remove key to output nodes
     PTree params = config_.Params();
@@ -63,7 +61,7 @@ TEST_F(LayerZTest, MissingParams)
 /**
  * @brief test parameter validation
  */
-TEST_F(LayerZTest, InvalidParams)
+TEST_F(LayerZInitTest, InvalidParams)
 {
     {
         PTree params = config_.Params();
@@ -128,5 +126,26 @@ TEST_F(LayerZTest, InvalidParams)
 
         LayerZ to;
         EXPECT_THROW(to.Reset(config_), ExceptionValueError);
+    }
+}
+
+TEST_F(LayerZInitTest, IO)
+{
+    // remove key to output nodes
+    LayerConfig cfg;
+    cfg.Params(config_.Params());
+    {
+        LayerZ to;
+        EXPECT_THROW(to.IO(cfg), std::exception);
+    }
+    {
+        cfg.Input(LayerZ::KEY_INPUT_SPIKES, NAME_INPUT_SPIKES);
+        LayerZ to;
+        EXPECT_THROW(to.IO(cfg), std::exception) << "still missing required output spikes";
+    }
+    {
+        cfg.Output(LayerZ::KEY_OUTPUT_SPIKES, NAME_OUTPUT_SPIKES);
+        LayerZ to;
+        EXPECT_NO_THROW(to.IO(cfg)) << "all required IO names present";
     }
 }
