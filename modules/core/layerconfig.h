@@ -8,6 +8,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 typedef boost::property_tree::ptree PTree;
+typedef boost::optional<std::string> OptS;
 typedef std::vector<std::string> VecS;
 typedef std::map<std::string, std::string> MapSS;
 
@@ -40,12 +41,26 @@ public:
     std::string Input(const std::string &key) const;
 
     /**
-     * @brief Get name to output feature  key
+     * @brief Get name to optional input feature key
+     * @param input feature key
+     * @return name if exists, check existence using bool() and retrieve content via .get()
+     */
+    OptS InputOpt(const std::string &key) const;
+
+    /**
+     * @brief Get name to output feature key
      * @param output feature key
-     * @return
+     * @return name
      * @throw Key Error if key does not exist.
      */
     std::string Output(const std::string &key) const;
+
+    /**
+     * @brief Get name to optional output feature key
+     * @param output feature key
+     * @return name if exists, check existence using bool() and retrieve content via .get()
+     */
+    OptS OutputOpt(const std::string &key) const;
 
 private:
     MapSS inputs_;

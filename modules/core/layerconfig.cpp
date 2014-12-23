@@ -26,6 +26,13 @@ string LayerIO::Input(const string &key) const
     return name;
 }
 
+OptS LayerIO::InputOpt(const string &key) const
+{
+    OptS o;
+    string name;
+    return Find<string>(outputs_, key, name)? name : o;
+}
+
 string LayerIO::Output(const string &key) const
 {
     string name;
@@ -35,6 +42,14 @@ string LayerIO::Output(const string &key) const
     }
     return name;
 }
+
+OptS LayerIO::OutputOpt(const string &key) const
+{
+    OptS o;
+    string name;
+    return Find<string>(outputs_, key, name)? name : o;
+}
+
 
 LayerConfig::LayerConfig()
     : LayerIO()

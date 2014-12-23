@@ -25,6 +25,8 @@ TEST_F(LayerIOTest, Input) {
 
     EXPECT_EQ("n1", to_.Input("k1"));
     EXPECT_EQ("n22", to_.Input("k2"));
+    EXPECT_THROW(to_.Output("k1"), ExceptionKeyError) << "Output mixing with input";
+    EXPECT_THROW(to_.Output("k2"), ExceptionKeyError) << "Output mixing with input";
 }
 
 TEST_F(LayerIOTest, Input_WrongKey) {
@@ -32,6 +34,17 @@ TEST_F(LayerIOTest, Input_WrongKey) {
     EXPECT_THROW(to_.Input("k1"), ExceptionKeyError);
     to_.Input("k1", "n1");
     EXPECT_EQ("n1", to_.Input("k1"));
+}
+
+TEST_F(LayerIOTest, InputOpt) {
+
+    EXPECT_THROW(to_.Input("k1"), ExceptionKeyError);
+    to_.Output("k1", "n1");
+    EXPECT_TRUE(to_.InputOpt("k1") != 0);
+    EXPECT_EQ("n1", to_.InputOpt("k1").get());
+
+    EXPECT_THROW(to_.Input("k2"), ExceptionKeyError);
+    EXPECT_FALSE(to_.InputOpt("k2"));
 }
 
 TEST_F(LayerIOTest, Output) {
@@ -42,6 +55,8 @@ TEST_F(LayerIOTest, Output) {
 
     EXPECT_EQ("n1", to_.Output("k1"));
     EXPECT_EQ("n22", to_.Output("k2"));
+    EXPECT_THROW(to_.Input("k1"), ExceptionKeyError) << "Output mixing with input";
+    EXPECT_THROW(to_.Input("k2"), ExceptionKeyError) << "Output mixing with input";
 }
 
 TEST_F(LayerIOTest, Output_WrongKey) {
@@ -49,6 +64,17 @@ TEST_F(LayerIOTest, Output_WrongKey) {
     EXPECT_THROW(to_.Output("k1"), ExceptionKeyError);
     to_.Output("k1", "n1");
     EXPECT_EQ("n1", to_.Output("k1"));
+}
+
+TEST_F(LayerIOTest, OutputOpt) {
+
+    EXPECT_THROW(to_.Output("k1"), ExceptionKeyError);
+    to_.Output("k1", "n1");
+    EXPECT_TRUE(to_.OutputOpt("k1") != 0);
+    EXPECT_EQ("n1", to_.OutputOpt("k1").get());
+
+    EXPECT_THROW(to_.Output("k2"), ExceptionKeyError);
+    EXPECT_FALSE(to_.OutputOpt("k2"));
 }
 
 class LayerConfigTest : public testing::Test
