@@ -156,7 +156,7 @@ private:
         for(size_t i=0; i<nb_learners_; i++) {
 
             shared_ptr<ZNeuron> p(new ZNeuron);
-            p->init(nb_features, history_length);
+            p->Init(nb_features, history_length);
             layer_z_.push_back(p);
         }
     }
