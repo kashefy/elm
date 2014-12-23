@@ -61,7 +61,8 @@ protected:
     base_Layer();
 
     /**
-     * @brief Construct a layer with given configurations, calls Reset(config)
+     * @brief Construct and fully configure a layer (parameters and IO)
+     * Derived class shoudl call Reset(config) and IO(config) from here.
      * @param config
      */
     base_Layer(const LayerConfig& config);
@@ -76,43 +77,17 @@ class base_LearningLayer : public base_Layer
 public:
     virtual ~base_LearningLayer();
 
-//    /**
-//     * @brief Reset the state of the layer.
-//     */
-//    virtual void Clear() = 0;
-
-//    /**
-//      * @brief Reconfigure the layer without modifying its state
-//      * \todo Keep this?
-//      * @param new configuration
-//      */
-//    virtual void Reconfigure(const LayerConfig& config) = 0;
-
-//    /**
-//     * @brief Set stimulus
-//     */
-//    virtual void Stimulus(const Signal &signal) = 0;
-
-//    /**
-//     * @brief Apply layer computations to most recent stimuli
-//     */
-//    virtual void Apply() = 0;
-
-//    /**
-//     * @brief Get layer response
-//     */
-//    virtual void Response(Signal &signal) = 0;
-
-        /**
-         * @brief Learn from most recent stimuli
-         */
-        virtual void Learn() = 0;
+    /**
+     * @brief Learn from most recent stimuli
+     */
+    virtual void Learn() = 0;
 
 protected:
     base_LearningLayer();
 
     /**
-     * @brief Construct a layer with given configurations, calls Reset(config)
+     * @brief Construct and fully configure a layer (parameters and IO)
+     * Derived class shoudl call Reset(config) and IO(config) from here.
      * @param config
      */
     base_LearningLayer(const LayerConfig& config);
