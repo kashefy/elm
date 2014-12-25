@@ -1,3 +1,13 @@
+/** @file testing layer z class
+ * Test coverage will be distributed into the following:
+ * test layer initialization using fixutres
+ * test layer parameter validation using value-parameterized tests
+ * test layer application with fake input data using fixtures
+ *
+ * in order to define a common base test class and utilize different
+ * gtest test fixutres as well as value-parameterization we'll define
+ * the a bast class for testing in the form of a mixin.
+ */
 #include "layers/layer_z.h"
 
 #include "core/exception.h"
@@ -93,7 +103,10 @@ class LayerZParamsTest : public LayerZTestBase<testing::TestWithParam<TParamPair
 protected:
 };
 
-// if you're using QTCreator, don't mind the ..._EvalGenerator_ warning at the bottom
+/**
+ * @brief use macro for instantiating value-parameterized test
+ * if you're using QTCreator, don't mind the ..._EvalGenerator_ warning at the bottom
+ */
 INSTANTIATE_TEST_CASE_P(TestWithParams,
                         LayerZParamsTest,
                         testing::Values(TParamPairSF(LayerZ::PARAM_DELTA_T, -1.f),
