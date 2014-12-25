@@ -236,5 +236,29 @@ TEST(MatAssertionsTest, Empty) {
     EXPECT_FALSE( Empty(Mat1f::zeros(1, 1)) );
 }
 
+TEST(MatAssertionsTest, LT)
+{
+    EXPECT_FALSE( LT(Mat1f(3, 1, 0.f), -1.f) );
+    EXPECT_FALSE( LT(Mat1f(3, 1, 0.f), 0.f) );
+    EXPECT_TRUE( LT(Mat1f(3, 1, 0.f), 1.f) );
+    EXPECT_FALSE( LT<float>(Mat1f::zeros(3, 1), -1.f) ); // need to specify type because ::zeros returns MatExpr
+    EXPECT_FALSE( LT<float>(Mat1f::zeros(3, 1), 0.f) );
+    EXPECT_TRUE( LT<float>(Mat1f::zeros(3, 1), 1.f) );
+    EXPECT_MAT_LT(Mat1f(3, 1, 0.f), 1.f);
+
+    EXPECT_FALSE( LT(Mat1i(3, 1, 0), -1) );
+    EXPECT_FALSE( LT(Mat1i(3, 1, 0), 0) );
+    EXPECT_TRUE( LT(Mat1i(3, 1, 0), 1) );
+    EXPECT_FALSE( LT<int>(Mat1i::zeros(3, 1), -1) );
+    EXPECT_FALSE( LT<int>(Mat1i::zeros(3, 1), 0) );
+    EXPECT_TRUE( LT<int>(Mat1i::zeros(3, 1), 1) );
+    EXPECT_MAT_LT( Mat1i(3, 1, 0), 1);
+
+    EXPECT_FALSE( LT<uchar>(Mat1b::zeros(3, 1), 0) );
+    EXPECT_FALSE( LT<uchar>(Mat1b(3, 1, static_cast<uchar>(101)), static_cast<uchar>(100)) );
+    EXPECT_TRUE( LT<uchar>(Mat1b(3, 1, static_cast<uchar>(100)), static_cast<uchar>(255)) );
+    EXPECT_MAT_LT(Mat1b(3, 1, static_cast<uchar>(100)), static_cast<uchar>(255));
+}
+
 } // namespace
 
