@@ -129,6 +129,20 @@ AssertionResult Near(const Mat& a, const Mat& b, float tolerance) {
     else { return AssertionFailure() << MatFailureMessageNonZero(a, b, cmp_out); }
 }
 
+AssertionResult LT(const Mat& a, const Mat& b) {
+
+    AssertionResult equal_dims = EqualDims(a, b);
+    if(equal_dims != AssertionSuccess()) { return equal_dims; }
+
+    Mat cmp_out;
+    compare(a, b, cmp_out, CMP_GE);
+    int n = countNonZero(cmp_out);
+    if(n == 0) { return AssertionSuccess(); }
+    else {
+        return AssertionFailure() << MatFailureMessageNonZero(a, b, cmp_out);
+    }
+}
+
 AssertionResult Empty(const Mat &mat)
 {
     if(mat.empty()) { return AssertionSuccess(); }

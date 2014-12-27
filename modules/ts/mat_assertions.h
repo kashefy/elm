@@ -51,20 +51,34 @@ std::string MatFailureMessageNonZero(const cv::Mat& a, const cv::Mat& cmp);
 
 /**
  * @brief Assert all matrix elements are less than given value
- * @param input matrix
+ * @param input matrix, assertion will always fail if empty
  * @param value to compare against
  * @return assertion result
  */
 template <typename T>
 ::testing::AssertionResult LT(const cv::Mat_<T>& m, const T &v)
 {
-    cv::Mat cmp_out = m >= v;
-    int n = countNonZero(cmp_out);
-    if(n == 0) { return ::testing::AssertionSuccess(); }
+    if(m.empty()) {
+         return ::testing::AssertionFailure() << "Matrix operand is empty";
+    }
     else {
-        return ::testing::AssertionFailure() << MatFailureMessageNonZero(m, cmp_out);
+
+        cv::Mat cmp_out = m >= v;
+        int n = countNonZero(cmp_out);
+        if(n == 0) { return ::testing::AssertionSuccess(); }
+        else {
+            return ::testing::AssertionFailure() << MatFailureMessageNonZero(m, cmp_out);
+        }
     }
 }
+
+/**
+ * @brief Per-element assertion that a(i) < b(i)
+ * @param first matrix
+ * @param second matrix
+ * @return assertion result
+ */
+::testing::AssertionResult LT(const cv::Mat &a, const cv::Mat &b);
 #define EXPECT_MAT_LT(m, v) EXPECT_TRUE( LT(m, v) )
 
 /**
