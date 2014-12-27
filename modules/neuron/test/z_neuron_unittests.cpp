@@ -107,7 +107,7 @@ TEST_F(ZNeuronTest, WeightsCopied)
     EXPECT_MAT_EQ(w_clone, to_.Weights());
 }
 
-TEST_F(ZNeuronTest, LearnNoFire)
+TEST_F(ZNeuronTest, Learn_NoFire)
 {
     const Mat1f initial_weights = to_.Weights().clone();
     for(int i=0; i<50; i++) {
@@ -122,7 +122,7 @@ TEST_F(ZNeuronTest, LearnNoFire)
     }
 }
 
-TEST_F(ZNeuronTest, LearnAlwaysFire)
+TEST_F(ZNeuronTest, Learn_AlwaysFire)
 {
     const Mat1f initial_weights = to_.Weights().clone();
     for(int i=0; i<50; i++) {

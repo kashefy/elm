@@ -21,9 +21,11 @@ using namespace cv;
 using namespace sem;
 
 // name of keys in signal
-const string NAME_INPUT_SPIKES  = "in";          ///< no. of afferent spikes
-const string NAME_OUTPUT_SPIKES = "out";         ///< no. of output spikes/size of output layer
-const string NAME_OUTPUT_MEM_POT = "mem_pot";    ///< membrane potential
+const string NAME_INPUT_SPIKES   = "in";        ///< no. of afferent spikes
+const string NAME_OUTPUT_SPIKES  = "out";       ///< no. of output spikes/size of output layer
+const string NAME_OUTPUT_MEM_POT = "mem_pot";   ///< membrane potential
+const string NAME_OUTPUT_WEIGHTS = "weights";   ///< neuron weights
+const string NAME_OUTPUT_BIAS = "bias";         ///< neuron weights
 
 /**
  * @brief mixin for testing layer Z, the main, SEM learning algorithm
@@ -89,7 +91,7 @@ TEST_F(LayerZInitTest, IONames)
     EXPECT_THROW(LayerZ().IONames(cfg), std::exception) << "still missing required output spikes";
 
     cfg.Output(LayerZ::KEY_OUTPUT_SPIKES, NAME_OUTPUT_SPIKES);
-    EXPECT_NO_THROW(LayerZ().IONames(cfg)) << "all required IO names present";
+    EXPECT_NO_THROW(LayerZ().IONames(cfg)) << "Are all required IO names present?";
 }
 
 typedef std::pair<std::string, float > TParamPairSF; /// convinience typdef to use as test params below
@@ -146,12 +148,12 @@ protected:
     // members
     LayerZ to_;     ///< test object
     Signal signal_;
-}
+};
 
 TEST_F(LayerZTest, ResponseDims)
 {
     const int N=10;
-    const nb_output_nodes = config_.Params().get(LayerZ::PARAM_NB_OUTPUT_NODES);
+    const int nb_output_nodes = config_.Params().get<int>(LayerZ::PARAM_NB_OUTPUT_NODES);
     for(int i=0; i<N; i++) {
 
         to_.Stimulus(signal_);
@@ -173,3 +175,372 @@ TEST_F(LayerZTest, ResponseDims)
     }
 }
 
+TEST_F(LayerZTest, Clear)
+{
+    EXPECT_NO_THROW(to_.Clear());
+}
+
+/**
+ * @brief Test layer's output is stateless and static when it's not learning anything.
+ */
+TEST_F(LayerZTest, StatelessMemPot)
+{
+    const int N=50;
+    to_.Stimulus(signal_);
+
+    Mat u_initial;
+    for(int i=0; i<N; i++) {
+
+        to_.Apply();
+        to_.Response(signal_);
+
+        Mat u = signal_.MostRecent(NAME_OUTPUT_MEM_POT);
+
+        if(i == 0) {
+
+            u.copyTo(u_initial);
+        }
+        else {
+
+            EXPECT_MAT_EQ(u, u_initial) << "\'u\' response is not static.";
+        }
+    }
+}
+
+/**
+ * @brief test adding request to optional output of membrane potentials
+ */
+TEST_F(LayerZTest, OptionalOutput)
+{
+    LayerConfig cfg;
+    cfg.Params(config_.Params());
+    cfg.Input(LayerZ::KEY_INPUT_SPIKES, NAME_INPUT_SPIKES);
+    cfg.Output(LayerZ::KEY_OUTPUT_SPIKES, NAME_OUTPUT_SPIKES);
+
+    LayerZ to;
+    to.Reset(cfg);
+    EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
+
+    to.Stimulus(signal_);
+    to.Apply();
+    {
+        Signal signal_new;
+        to.Response(signal_new);
+        EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_MEM_POT));
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_WEIGHTS));
+    }
+
+    cfg.Output(LayerZ::KEY_OUTPUT_MEMBRANE_POT, NAME_OUTPUT_MEM_POT);
+    EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
+    to.Apply();
+    {
+        Signal signal_new;
+        to.Response(signal_new);
+        EXPECT_TRUE(signal_new.Exists(NAME_OUTPUT_MEM_POT));
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_WEIGHTS));
+    }
+
+    cfg.Output(LayerZ::KEY_OUTPUT_WEIGHTS, NAME_OUTPUT_WEIGHTS);
+    EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
+    to.Apply();
+    {
+        Signal signal_new;
+        to.Response(signal_new);
+        EXPECT_TRUE(signal_new.Exists(NAME_OUTPUT_MEM_POT));
+        EXPECT_TRUE(signal_new.Exists(NAME_OUTPUT_WEIGHTS));
+    }
+}
+
+/**
+ * @brief Test layer's stimulus validation
+ */
+TEST_F(LayerZTest, Stimulus)
+{
+    signal_.Append(NAME_INPUT_SPIKES, Mat1f());
+    EXPECT_THROW(to_.Stimulus(signal_), ExceptionBadDims);
+
+    for(int r=0; r<=nb_afferents_*2; r++) {
+
+        for(int c=0; c<=nb_afferents_*2; c++) {
+
+            signal_.Append(NAME_INPUT_SPIKES, Mat1f::zeros(r, c));
+
+            if(r*c==nb_afferents_) {
+
+                EXPECT_NO_THROW(to_.Stimulus(signal_));
+            }
+            else {
+
+                EXPECT_THROW(to_.Stimulus(signal_), ExceptionBadDims);
+            }
+        }
+    }
+}
+
+TEST_F(LayerZTest, Apply)
+{
+    Mat1f spikes(1, nb_afferents_);
+    randn(spikes, 0.f, 1.f);
+    signal_.Append(NAME_INPUT_SPIKES, spikes);
+    to_.Stimulus(signal_);
+    to_.Apply();
+    EXPECT_FALSE(signal_.Exists(NAME_OUTPUT_SPIKES));
+    to_.Response(signal_);
+    EXPECT_TRUE(signal_.Exists(NAME_OUTPUT_SPIKES));
+}
+
+/**
+ * @brief class for covering layer z neuron learning, weights and bias
+ */
+class LayerZLearnTest : public LayerZTest
+{
+protected:
+    virtual void SetUp()
+    {
+        LayerZTest::SetUp();
+
+        // add request to optional output of neuron weights
+        config_.Output(LayerZ::KEY_OUTPUT_WEIGHTS, NAME_OUTPUT_WEIGHTS);
+        config_.Output(LayerZ::KEY_OUTPUT_BIAS, NAME_OUTPUT_BIAS);
+        to_.Reset(config_);
+        to_.IONames(config_);
+    }
+};
+
+/**
+ * @brief test adding request to optional output of neuron weights
+ */
+TEST_F(LayerZLearnTest, OptionalWeightOutput)
+{
+    LayerConfig cfg;
+    cfg.Params(config_.Params());
+    cfg.Input(LayerZ::KEY_INPUT_SPIKES, NAME_INPUT_SPIKES);
+    cfg.Output(LayerZ::KEY_OUTPUT_SPIKES, NAME_OUTPUT_SPIKES);
+
+    LayerZ to;
+    to.Reset(cfg);
+    EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
+
+    to.Stimulus(signal_);
+    to.Apply();
+    {
+        Signal signal_new;
+        to.Response(signal_new);
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_MEM_POT));
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_WEIGHTS));
+    }
+
+    cfg.Output(LayerZ::KEY_OUTPUT_WEIGHTS, NAME_OUTPUT_WEIGHTS);
+    EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
+    to.Apply();
+    {
+        Signal signal_new;
+        to.Response(signal_new);
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_MEM_POT));
+        EXPECT_TRUE(signal_new.Exists(NAME_OUTPUT_WEIGHTS));
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_BIAS));
+    }
+
+    EXPECT_NO_THROW(to.IONames(config_)) << "Are all required IO names present?";
+    to.Apply();
+    {
+        Signal signal_new;
+        to.Response(signal_new);
+        EXPECT_TRUE(signal_new.Exists(NAME_OUTPUT_MEM_POT));
+        EXPECT_TRUE(signal_new.Exists(NAME_OUTPUT_WEIGHTS));
+    }
+}
+
+/**
+ * @brief test adding request to optional output of neuron weights
+ */
+TEST_F(LayerZLearnTest, OptionalBiasOutput)
+{
+    LayerConfig cfg;
+    cfg.Params(config_.Params());
+    cfg.Input(LayerZ::KEY_INPUT_SPIKES, NAME_INPUT_SPIKES);
+    cfg.Output(LayerZ::KEY_OUTPUT_SPIKES, NAME_OUTPUT_SPIKES);
+
+    LayerZ to;
+    to.Reset(cfg);
+    EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
+
+    to.Stimulus(signal_);
+    to.Apply();
+    {
+        Signal signal_new;
+        to.Response(signal_new);
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_MEM_POT));
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_WEIGHTS));
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_BIAS));
+    }
+
+    cfg.Output(LayerZ::KEY_OUTPUT_WEIGHTS, NAME_OUTPUT_BIAS);
+    EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
+    to.Apply();
+    {
+        Signal signal_new;
+        to.Response(signal_new);
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_MEM_POT));
+        EXPECT_FALSE(signal_new.Exists(NAME_OUTPUT_WEIGHTS));
+        EXPECT_TRUE(signal_new.Exists(NAME_OUTPUT_BIAS));
+    }
+
+    EXPECT_NO_THROW(to.IONames(config_)) << "Are all required IO names present?";
+    to.Apply();
+    {
+        Signal signal_new;
+        to.Response(signal_new);
+        EXPECT_TRUE(signal_new.Exists(NAME_OUTPUT_MEM_POT));
+        EXPECT_TRUE(signal_new.Exists(NAME_OUTPUT_WEIGHTS));
+        EXPECT_TRUE(signal_new.Exists(NAME_OUTPUT_BIAS));
+    }
+}
+
+/**
+ * @brief test we have access to weights before applying anything
+ */
+TEST_F(LayerZLearnTest, InitialWeights)
+{
+    const int nb_output_nodes = config_.Params().get<int>(LayerZ::PARAM_NB_OUTPUT_NODES);
+    LayerZ to;
+    to.Reset(config_);
+    to.IONames(config_);
+    to.Response(signal_);
+    const Mat1f initial_weights = signal_.MostRecent(NAME_OUTPUT_WEIGHTS);
+    EXPECT_MAT_DIMS_EQ(initial_weights, Size2i(nb_afferents_, nb_output_nodes));
+}
+
+/**
+ * @brief test underlying neuron bias dimensions
+ */
+TEST_F(LayerZLearnTest, BiasDims)
+{
+    const int nb_output_nodes = config_.Params().get<int>(LayerZ::PARAM_NB_OUTPUT_NODES);
+    LayerZ to;
+    to.Reset(config_);
+    to.IONames(config_);
+    to.Response(signal_);
+    const Mat1f initial_bias = signal_.MostRecent(NAME_OUTPUT_BIAS);
+    EXPECT_MAT_DIMS_EQ(initial_bias, Size2i(nb_output_nodes, 1));
+}
+
+/**
+ * @brief Extracting weights from the layer is not always a deep copy.
+ * Which is ok, because we don't want this to take up too much memory.
+ * But we need to be aware of where the shallow and deep copying occurs.
+ *
+ * This test demonstrates that we're referencing the same memory block as the layer, a save on memory,
+ * however, we need to be careful not to interfere with this sturucture.
+ * Given that the weights, are probably going to be used for evaluations and visualizations rather than
+ * downstream computation, this is acceptable
+ */
+TEST_F(LayerZLearnTest, WeightsNotCopied)
+{
+    to_.Stimulus(signal_);
+    to_.Apply();
+    to_.Response(signal_);
+    Mat1f w0;
+
+    // get from signal
+    Mat1f w1 = signal_.MostRecent(NAME_OUTPUT_WEIGHTS);
+    w1.copyTo(w0); // back up, deep-copy
+
+    // get form signal one more time
+    // any modification on w2 will reflect on w1, because we're only copying
+    // the matrix header inside this signal object
+    Mat1f w2 = signal_.MostRecent(NAME_OUTPUT_WEIGHTS);
+
+    // update signal with layer response and get it a third time
+    // any modification on w3 will reflect on w2 and w1, because we're effectivly
+    // only copying the header of the matrix that lives inside the header
+    // This means we're referencing the same memory block as the layer, a save on memory,
+    // however, we need to be careful not to interfere with this sturucture.
+    // Given that the weights, are probably going to be used for evaluations and visualizations rather than
+    // downstream computation, this is acceptable
+    to_.Response(signal_);
+    Mat1f w3 = signal_.MostRecent(NAME_OUTPUT_WEIGHTS);
+
+    // add increments to the different weight copies
+    w1 += 1.f;
+    w2 += 2.f;
+    w3 += 3.f;
+
+    // check which objects are just references of each other
+    // we have to use the NEAR asssertion with low tolerance due to float precision errors
+    EXPECT_MAT_NEAR(w0+3.f, w1, 1e-5);
+    EXPECT_MAT_NEAR(w0+3.f, w2, 1e-5);
+    EXPECT_MAT_NEAR(w1, w2, 1e-7) << "w1 and w2 point to the same underlying data";
+    EXPECT_MAT_NEAR(w0+3.f, w3, 1e-5);
+}
+
+/**
+ * @brief Test layer's weights are static when it's not learning anything.
+ */
+TEST_F(LayerZLearnTest, Static)
+{
+    const int N=50;
+    to_.Stimulus(signal_);
+
+    Mat w_initial;
+    for(int i=0; i<N; i++) {
+
+        to_.Apply();
+        to_.Response(signal_);
+        Mat w = signal_.MostRecent(NAME_OUTPUT_WEIGHTS);
+
+        if(i == 0) {
+
+            w.copyTo(w_initial);
+        }
+        else {
+
+            EXPECT_MAT_EQ(w, w_initial) << "\'u\' weights are not static inspite of no learning taking place.";
+        }
+    }
+}
+
+/**
+ * @brief Apply learning algorithm while disabling any spiking
+ * We expect the weights to remain unchanged and the bias to decrease
+ */
+TEST_F(LayerZLearnTest, Learn_NoFire)
+{
+    PTree params = config_.Params();
+    params.put(LayerZ::PARAM_WTA_FREQ, 0.f);
+    config_.Params(params);
+    to_.Reset(config_);
+    to_.IONames(config_);
+
+    to_.Response(signal_);
+    const Mat1f initial_weights = signal_.MostRecent(NAME_OUTPUT_WEIGHTS).clone();
+
+    for(int i=0; i<50; i++) {
+
+        signal_.Append(NAME_INPUT_SPIKES, Mat1f::ones(1, nb_afferents_));
+
+        Mat1f bias_prev = signal_.MostRecent(NAME_OUTPUT_BIAS).clone();
+
+        to_.Stimulus(signal_);
+        to_.Apply();
+        to_.Learn();
+        to_.Response(signal_);
+        Mat1f weights = signal_.MostRecent(NAME_OUTPUT_WEIGHTS).clone();
+        Mat1f bias = signal_.MostRecent(NAME_OUTPUT_BIAS).clone();
+
+        EXPECT_MAT_EQ(initial_weights, weights) << "weights changed inspite of disabling spiking";
+
+        EXPECT_MAT_DIMS_EQ(bias_prev, bias) << "bias dimensions changed";
+
+        //EXPECT_MAT_LT(bias, bias_prev) << "Bias not decaying";
+    }
+}
+
+/**
+ * @brief TEST_F
+ * @todo implement
+ */
+TEST_F(LayerZLearnTest, Learn)
+{
+}
