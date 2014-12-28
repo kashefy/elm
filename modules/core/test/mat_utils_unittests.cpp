@@ -757,3 +757,153 @@ TEST(Mat_ToVec_Test, OneDimensional)
         EXPECT_EQ(in(i), out[i]) << "Value mismatch at i=" << i;
     }
 }
+
+
+/**
+ * @brief A setup for repeating tests with different types of mat objects (int, float, uchar)
+ */
+template <class T>
+class MatPODTypesTest : public testing::Test
+{
+};
+
+/**
+ * @brief the struct below enables defining values to be used inside the tests
+ * These values are set below once per type.
+ */
+template<class T>
+struct V_
+{
+    static std::vector<T> values;
+};
+
+TYPED_TEST_CASE_P(MatPODTypesTest);
+
+/**
+ * @brief test finding elements in empty matrices
+ */
+TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Empty) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+    for(size_t i=0; i<v.size(); i++) {
+
+        EXPECT_FALSE( find_first_of(MatTP::zeros(1, 0), v[i]) );
+        EXPECT_FALSE( find_first_of(MatTP::zeros(0, 1), v[i]) );
+        EXPECT_FALSE( find_first_of(MatTP(), v[i]) );
+    }
+}
+
+/**
+ * @brief We don't expect to find anything.
+ * This test assumes that values[4] is within range and its value is unique.
+ * Matrix is reshaped and transposed.
+ */
+TYPED_TEST_P(MatPODTypesTest, FindFirstOf_NotFound) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+
+    MatTP v_mat(1, static_cast<int>(v.size()));
+    for(size_t i=0; i<v.size(); i++) v_mat(i) = v[i];
+
+    TypeParam target = v[4];
+    v_mat(4) = v[0];
+    for(size_t i=0; i<v.size(); i++) {
+
+        EXPECT_FALSE( find_first_of(v_mat.reshape(1, 1), target) );
+        EXPECT_FALSE( find_first_of(v_mat.reshape(1, 2), target) );
+        EXPECT_FALSE( find_first_of(v_mat.t(), target) );
+    }
+}
+
+/**
+ * @brief We expect to find something.
+ * Matrix is reshaped and transposed.
+ */
+TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Found) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+
+    MatTP v_mat(1, static_cast<int>(v.size()));
+    for(size_t i=0; i<v.size(); i++) v_mat(i) = v[i];
+
+    int index;
+    for(size_t i=0; i<v.size(); i++) {
+
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 1), v[i]) );
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 2), v[i]) );
+        EXPECT_TRUE( find_first_of(v_mat.t(), v[i]) );
+
+        index = -1;
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 1), v[i], index) );
+        EXPECT_EQ(static_cast<int>(i), index);
+
+        index = -1;
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 2), v[i], index) );
+        EXPECT_EQ(static_cast<int>(i), index);
+
+        index = -1;
+        EXPECT_TRUE( find_first_of(v_mat.t(), v[i], index) );
+        EXPECT_EQ(static_cast<int>(i), index);
+    }
+}
+
+/**
+ * @brief One value is duplicated and placed into previous index
+ * Matrix is reshaped and transposed.
+ */
+TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Duplicate) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+
+    MatTP v_mat(1, static_cast<int>(v.size()));
+    for(size_t i=0; i<v.size(); i++) v_mat(i) = v[i];
+
+    int index_actual = -2;
+    for(size_t i=1; i<v.size(); i++) {
+
+        // make a mat copy of the vector
+        MatTP v_mat(1, static_cast<int>(v.size()));
+        for(size_t i=0; i<v.size(); i++) v_mat(i) = v[i];
+
+        int index_expected = abs(randu<int>() % static_cast<int>(i));
+        v_mat(index_expected) = v[i]; // duplicate somewhere before
+
+        index_actual = -1;
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 1), v[i], index_actual) );
+        EXPECT_EQ(index_expected, index_actual);
+
+        index_actual = -1;
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 2), v[i], index_actual) );
+        EXPECT_EQ(index_expected, index_actual);
+
+        index_actual = -1;
+        EXPECT_TRUE( find_first_of(v_mat.t(), v[i], index_actual) );
+        EXPECT_EQ(index_expected, index_actual);
+    }
+
+    // sanity check that we actually iterated throug the loop
+    ASSERT_GE(index_actual, 0) << "Test didn't really do anything.";
+}
+
+/* Write additional type+value parameterized tests here.
+ * Acquaint yourself with the values passed to along with each type.
+ */
+
+// Register test names
+REGISTER_TYPED_TEST_CASE_P(MatPODTypesTest,
+                           FindFirstOf_Empty,
+                           FindFirstOf_NotFound,
+                           FindFirstOf_Found,
+                           FindFirstOf_Duplicate); ///< register additional typed_test_p (i.e. unit test) routines here
+
+///< Register values to work with inside tests, note how they're used inside the tests
+template<> std::vector<float> V_<float>::values{-1.f, 0.f, 1.f, 100.f, 101.f, 200.f};
+template<> std::vector<int> V_<int>::values{-1, 0, 1, 100, 101, 200};
+template<> std::vector<uchar> V_<uchar>::values{255, 0, 1, 100, 101, 200};
+
+typedef testing::Types<float, int, uchar> PODTypes;  ///< // lists the usual suspects of matrices
+INSTANTIATE_TYPED_TEST_CASE_P(MatUtilsPODTypesTest, MatPODTypesTest, PODTypes);

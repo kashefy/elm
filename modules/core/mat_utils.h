@@ -98,6 +98,33 @@ std::vector<T> Mat_ToVec_(const cv::Mat_<T> &m) {
 }
 
 /**
+ * @brief get first index of element with a specific value in matrix
+ * Inspired by this Stack Overflow post: @see http://stackoverflow.com/questions/25835587/find-element-in-opencv-mat-efficiently
+ *
+ * @param[in] matrix to search in
+ * @param[in] value to search for
+ * @param[out] first index containing this value, only meaningful if found
+ * @return true if sucessfully found
+ */
+static int _NA=-1;   ///< not applicable
+template <class T>
+bool find_first_of(const cv::Mat &m, const T &value, int &index=_NA) {
+
+    for(int r=0; r < m.rows; r++) {
+
+        const T* row = m.ptr<T>(r);
+        const T* result = std::find(row, row + m.cols, value);
+        if(result != row + m.cols) {
+
+            index = static_cast<int>(result - m.ptr<T>(0));
+            return true;
+        }
+    }
+    index = -1;
+    return false;
+}
+
+/**
  * @brief Create Mat object (row vector) and fill with range
  * @param start value
  * @param stop value (exclusive)
