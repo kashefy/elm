@@ -269,13 +269,6 @@ class MatPODTypesTest : public testing::Test
 };
 
 template<class T>
-struct foo_test : public ::testing::Test
-{
-    static std::vector<T> values;
-};
-
-
-template<class T>
 struct V_
 {
     static std::vector<T> values;
@@ -388,7 +381,7 @@ template<> std::vector<int> V_<int>::values{-1, 0, 1, 100, 101};
 template<> std::vector<uchar> V_<uchar>::values{0, 0, 1, 100, 101};
 
 typedef testing::Types<float, int, uchar> PODTypes;  ///< // lists the usual suspects of matrices
-INSTANTIATE_TYPED_TEST_CASE_P(OneAndTwo, MatPODTypesTest, PODTypes);
+INSTANTIATE_TYPED_TEST_CASE_P(MatAssertionsPODTypesTest, MatPODTypesTest, PODTypes);
 
 } // namespace
 
