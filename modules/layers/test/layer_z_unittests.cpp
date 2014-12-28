@@ -11,6 +11,7 @@
 #include "layers/layer_z.h"
 
 #include "core/exception.h"
+#include "core/mat_utils.h"
 #include "core/ptree_utils.h"
 #include "core/signal.h"
 #include "ts/ts.h"
@@ -25,7 +26,7 @@ const string NAME_INPUT_SPIKES   = "in";        ///< no. of afferent spikes
 const string NAME_OUTPUT_SPIKES  = "out";       ///< no. of output spikes/size of output layer
 const string NAME_OUTPUT_MEM_POT = "mem_pot";   ///< membrane potential
 const string NAME_OUTPUT_WEIGHTS = "weights";   ///< neuron weights
-const string NAME_OUTPUT_BIAS = "bias";         ///< neuron weights
+const string NAME_OUTPUT_BIAS    = "bias";         ///< neuron weights
 
 /**
  * @brief mixin for testing layer Z, the main, SEM learning algorithm
@@ -532,15 +533,60 @@ TEST_F(LayerZLearnTest, Learn_NoFire)
         EXPECT_MAT_EQ(initial_weights, weights) << "weights changed inspite of disabling spiking";
 
         EXPECT_MAT_DIMS_EQ(bias_prev, bias) << "bias dimensions changed";
-
-        //EXPECT_MAT_LT(bias, bias_prev) << "Bias not decaying";
+        EXPECT_MAT_LT(bias, bias_prev) << "Bias not decaying";
     }
 }
 
 /**
- * @brief TEST_F
- * @todo implement
+ * @brief Test learning with afferent input that spikes in alternating fashion
+ * if i spikes i+1 does not spike and vice versa
+ * Then check impact of learning on weights
+ * This test requires the WTA circuit's firing rate to be adequately high.
+ * It should spike at least once during the test's iterations.
  */
 TEST_F(LayerZLearnTest, Learn)
 {
+    FakeEvidence stimuli(nb_afferents_); // afferents alternate in spiking
+
+    bool checked = false;
+
+    for(int i=0; i<50; i++) {
+
+        to_.Response(signal_);
+        Mat1f bias_prev = signal_.MostRecent(NAME_OUTPUT_BIAS).clone();
+        Mat1f weights_prev = signal_.MostRecent(NAME_OUTPUT_WEIGHTS).clone();
+
+        signal_.Append(NAME_INPUT_SPIKES, stimuli.next(0));
+        to_.Stimulus(signal_);
+        to_.Apply();
+        to_.Learn();
+        to_.Response(signal_);
+
+        Mat1f weights = signal_.MostRecent(NAME_OUTPUT_WEIGHTS).clone();
+        Mat1f bias = signal_.MostRecent(NAME_OUTPUT_BIAS).clone();
+
+        // who spiked?
+        Mat spikes_out = signal_.MostRecent(NAME_OUTPUT_SPIKES);
+        int spiking_neuron_index;
+
+        // Spiking in the WTA circuit is probabilistic, so we want to go through the checks at least once.
+        if( sem::find_first_of(spikes_out > 0, static_cast<uchar>(255), spiking_neuron_index) ) {
+
+            ASSERT_GE( spiking_neuron_index, 0 );
+
+            EXPECT_FALSE( Equal(weights_prev.row(spiking_neuron_index), weights.row(spiking_neuron_index)) );
+
+            for(int i=0; i<weights_prev.cols; i+=2) {
+
+                EXPECT_GT(weights_prev(spiking_neuron_index, i+1), weights(spiking_neuron_index, i+1)) << "Weight for non-spiking input potentiating.";
+                EXPECT_LT(weights_prev(spiking_neuron_index, i), weights(spiking_neuron_index, i)) << "Weight for spiking input decaying.";
+            }
+            EXPECT_LT(bias_prev(spiking_neuron_index), bias(spiking_neuron_index)) << "Bias not increasing for spiking neuron.";
+
+            checked = true;
+        }
+    }
+
+    // sanity check that we performed the assertions.
+    ASSERT_TRUE(checked) << "Assertions were not performed, the WTA circuits never spiked.";
 }
