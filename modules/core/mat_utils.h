@@ -104,11 +104,20 @@ std::vector<T> Mat_ToVec_(const cv::Mat_<T> &m) {
  * @param[in] matrix to search in
  * @param[in] value to search for
  * @param[out] first index containing this value, only meaningful if found
- * @return true if sucessfully found
+ * @return true if sucessfully found, always flase for empty input.
+ *
+ * @throws ExceptionBadDims if no. of channels != 1, ExceptionTypeError for non-continuous matrix input.
  */
 static int _NA=-1;   ///< not applicable
 template <class T>
-bool find_first_of(const cv::Mat &m, const T &value, int &index=_NA) {
+bool find_first_of(const cv::Mat &m, const T &value, int &index=_NA)
+{
+    if(!m.empty()) {
+
+        if(m.channels() != 1) { SEM_THROW_BAD_DIMS("Only single-channel matrices supported for now."); }
+        if(!m.isContinuous()) { SEM_THROW_TYPE_ERROR("Only continuous matrices supported for now."); }
+    }
+    else if(m.channels() > 1) { SEM_THROW_BAD_DIMS("Only single-channel matrices supported for now."); }
 
     for(int r=0; r < m.rows; r++) {
 
