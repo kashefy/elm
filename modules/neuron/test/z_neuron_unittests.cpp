@@ -151,7 +151,7 @@ TEST_F(ZNeuronTest, Learn)
         for(int j=0; j<weights_prev.cols; j+=2) {
 
             EXPECT_GT(weights_prev(j+1), to_.Weights()(j+1)) << "Weight for non-spiking input potentiating.";
-            EXPECT_LT(weights_prev(j), to_.Weights()(j)) << "Weight for spiking input decaying.";;
+            EXPECT_LT(weights_prev(j), to_.Weights()(j)) << "Weight for spiking input decaying.";
         }
         EXPECT_LT(bias_prev, to_.Bias()(0)) << "Bias not increasing";
 
