@@ -9,6 +9,7 @@
 
 /**
  * @brief class for implementing layer related factory methods
+ * Such as instantiation and sequencing of multiple layer applications (e.g. pipeline)
  */
 class LayerFactory
 {
