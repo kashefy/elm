@@ -1,6 +1,10 @@
 #ifndef SEM_LAYERS_WEIGHTEDSUM_H_
 #define SEM_LAYERS_WEIGHTEDSUM_H_
 
+#include <string>
+
+#include <opencv2/core.hpp>
+
 #include "core/base_Layer.h"
 
 /** class to implement base layer methods

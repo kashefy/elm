@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "core/base_Layer.h"
+#include "core/layerconfig.h"   ///< OptS member definition
 #include "neuron/zneuron.h"
 #include "neuron/wtapoisson.h"
 

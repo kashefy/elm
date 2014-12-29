@@ -1,6 +1,7 @@
 #include "layers/weightedsum.h"
 
 #include "core/exception.h"
+#include "core/layerconfig.h"
 #include "core/signal.h"
 
 using namespace std;

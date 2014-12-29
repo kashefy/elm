@@ -1,10 +1,9 @@
 #include "layers/saliencyitti.h"
 
-#include <iostream>
-
 #include <opencv2/imgproc.hpp>
 
 #include "core/defs.h"
+#include "core/layerconfig.h"
 #include "core/mat_utils.h"
 #include "core/percentile.h"
 #include "core/signal.h"
