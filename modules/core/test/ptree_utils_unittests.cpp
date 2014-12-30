@@ -1,6 +1,7 @@
 #include "core/ptree_utils.h"
 
 #include "core/exception.h"
+#include "core/typedefs.h"
 #include "ts/ts.h"
 
 using namespace std;
@@ -52,6 +53,48 @@ TEST_F(PTreeUtilsPrintTest, Empty) {
     EXPECT_EQ("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n", s.str());
 }
 
+/**
+ * @brief test class around routine for finding keys outside of a required set of keys
+ */
+class PTreeUtilsUnusedKeysTest : public PTreeUtilsPrintTest
+{
+};
+
+TEST_F(PTreeUtilsUnusedKeysTest, Empty_PTree) {
+
+    VecS used(1, "wrong"), unused;
+    UnusedNodes(ptree(), used, unused);
+    EXPECT_EMPTY(unused);
+}
+
+TEST_F(PTreeUtilsUnusedKeysTest, Empty_UsedKeys) {
+
+    VecS used, unused;
+    UnusedNodes(pt_, used, unused);
+
+    EXPECT_EQ(VecS({"k1", "k2", "k4"}), unused) << "Not all keys accounted for.";
+}
+
+TEST_F(PTreeUtilsUnusedKeysTest, Empty_PTreeAndUsedKeys) {
+
+    VecS used, unused;
+    UnusedNodes(ptree(), used, unused);
+    EXPECT_EQ(VecS(), unused);
+}
+
+TEST_F(PTreeUtilsUnusedKeysTest, UnusedKeys) {
+
+    VecS used(1, "k1"), unused;
+    UnusedNodes(pt_, used, unused);
+    EXPECT_EQ(VecS({"k2", "k4"}), unused) << "Unexpected set of unused keys";
+}
+
+TEST_F(PTreeUtilsUnusedKeysTest, AllUsedKeys) {
+
+    VecS used({"k1", "k4", "k2"}), unused;
+    UnusedNodes(pt_, used, unused);
+    EXPECT_EQ(VecS(), unused) << "Unexpected set of unused keys";
+}
 
 /**
  * @brief A setup for repeating tests with different types of PTree nodes (int, float, uchar)

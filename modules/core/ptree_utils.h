@@ -4,6 +4,7 @@
 #define SEM_CORE_PTREE_UTILS_H_
 
 #include <iostream>
+#include <vector>
 
 #include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -37,6 +38,8 @@ void push_back_child(const PTree &p, const std::string &key, std::vector<T> &v)
         v.push_back(node.second.get_value<T>());
     }
 }
+
+bool UnusedNodes(const PTree &p, const std::vector<std::string> &keys_used, std::vector<std::string> &keys_unused);
 
 }
 
