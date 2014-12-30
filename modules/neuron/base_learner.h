@@ -1,7 +1,7 @@
 #ifndef SEM_NEURON_BASE_LEARNER_H_
 #define SEM_NEURON_BASE_LEARNER_H_
 
-#include "core/typedefs.h"
+#include <opencv2/core.hpp>
 
 /**
  * @brief Define interface for learning neurons
@@ -9,7 +9,7 @@
 class base_Learner
 {
 public:
-    virtual ~base_Learner() {}
+    virtual ~base_Learner();
 
     /**
      * @brief learn from most provided state and/or prediction
@@ -29,6 +29,11 @@ public:
      * @return learner's state from most recent prediction
      */
     virtual cv::Mat State() const = 0;
+
+    /**
+     * @brief Clear state of learner
+     */
+    virtual void Clear() = 0;
 
 protected:
     base_Learner();

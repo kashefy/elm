@@ -7,6 +7,7 @@
 #include <opencv2/highgui.hpp>
 
 using namespace std;
+using namespace sem;
 
 class SynthBarsTest : public testing::Test
 {

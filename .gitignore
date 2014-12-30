@@ -32,3 +32,6 @@
 
 # IDE files
 *.autosave
+
+# Generated documentation
+docs/

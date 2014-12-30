@@ -60,7 +60,7 @@ public:
      */
     float IndexToDeg(unsigned int index) const;
 
-private:
+protected:
     int rows_;      ///< no. of rows in bar image
     int cols_;      ///< no. of columns in bar image
     int nb_variations_;         ///< no. of orientation variations

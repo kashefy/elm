@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "ts/ts.h"
+#include "ts/fakeevidence.h"
 
 using namespace cv;
 
@@ -16,42 +17,10 @@ protected:
     {
         nb_features_ = 50;
         to_ = ZNeuron();
-        to_.init(nb_features_, 3);
+        to_.Init(nb_features_, 3);
     }
 
     ZNeuron to_;        ///< test object
-    int nb_features_;
-};
-
-/**
- * @brief Class or generating fake evidence/feature vectors
- */
-class FakeEvidence
-{
-public:
-    FakeEvidence(int nb_features)
-        : nb_features_(nb_features)
-    {}
-
-    /**
-     * @brief get next fake feature vector
-     *
-     * if state is even then [0, 1, 0, ...]
-     * else if state is odd then [1, 0, 1, ...]
-     *
-     * @param state to see vector generation
-     * @return feature vector
-     */
-    Mat next(int state) {
-
-        Mat1i f = Mat1i::zeros(1, nb_features_);
-        for(int i=state % 2; i<nb_features_; i+=2) {
-
-            f(i)++;
-        }
-        return f;
-    }
-
     int nb_features_;
 };
 
@@ -138,7 +107,7 @@ TEST_F(ZNeuronTest, WeightsCopied)
     EXPECT_MAT_EQ(w_clone, to_.Weights());
 }
 
-TEST_F(ZNeuronTest, LearnNoFire)
+TEST_F(ZNeuronTest, Learn_NoFire)
 {
     const Mat1f initial_weights = to_.Weights().clone();
     for(int i=0; i<50; i++) {
@@ -153,7 +122,7 @@ TEST_F(ZNeuronTest, LearnNoFire)
     }
 }
 
-TEST_F(ZNeuronTest, LearnAlwaysFire)
+TEST_F(ZNeuronTest, Learn_AlwaysFire)
 {
     const Mat1f initial_weights = to_.Weights().clone();
     for(int i=0; i<50; i++) {
@@ -182,7 +151,7 @@ TEST_F(ZNeuronTest, Learn)
         for(int j=0; j<weights_prev.cols; j+=2) {
 
             EXPECT_GT(weights_prev(j+1), to_.Weights()(j+1)) << "Weight for non-spiking input potentiating.";
-            EXPECT_LT(weights_prev(j), to_.Weights()(j)) << "Weight for spiking input decaying.";;
+            EXPECT_LT(weights_prev(j), to_.Weights()(j)) << "Weight for spiking input decaying.";
         }
         EXPECT_LT(bias_prev, to_.Bias()(0)) << "Bias not increasing";
 

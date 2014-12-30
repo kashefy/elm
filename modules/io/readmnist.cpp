@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream>
+
 #include "core/exception.h"
 #include "io/binary.h"
 
@@ -127,4 +128,64 @@ cv::Mat ReadMNISTImages::Next()
 
     return img;
 }
+
+ReadMNISTImagesTransl::ReadMNISTImagesTransl()
+    : ReadMNISTImages(),
+      scene_dims_(-1, -1)
+{
+}
+
+bool ReadMNISTImagesTransl::IsSceneDimsSet() const
+{
+    return scene_dims_.width > 0 && scene_dims_.height > 0;
+}
+
+int ReadMNISTImagesTransl::ReadHeader(const string &path)
+{
+    int nb_items = ReadMNISTImages::ReadHeader(path);
+    if(!IsSceneDimsSet()) {
+
+        SceneDims(rows_, cols_);
+    }
+    else if(rows_*cols_ > scene_dims_.area()) {
+
+        stringstream s;
+        s << "Scene dims too small. Need min of ";
+        s << "w(" << cols_ << ") h(" << rows_ << ")";
+        SEM_THROW_BAD_DIMS(s.str());
+    }
+    return nb_items;
+}
+
+cv::Mat ReadMNISTImagesTransl::Next()
+{
+    cv::Mat mnist_img = ReadMNISTImages::Next();
+    cv::Mat scene = cv::Mat::zeros(scene_dims_, mnist_img.type());
+
+    current_loc_.x = cv::randu<uint>() % (scene_dims_.width-mnist_img.cols);
+    current_loc_.y = cv::randu<uint>() % (scene_dims_.height-mnist_img.rows);
+
+    mnist_img.copyTo(scene(cv::Rect2i(current_loc_, mnist_img.size())));
+    return scene;
+}
+
+void ReadMNISTImagesTransl::SceneDims(int rows, int cols)
+{
+    if(rows > 0 && cols > 0) {
+
+        scene_dims_ = cv::Size2i(cols, rows);
+    }
+    else {
+        stringstream s;
+        s << "Scene dims must be > 0. (" << rows << " rows, " << cols << " cols)";
+        SEM_THROW_BAD_DIMS(s.str());
+    }
+}
+
+cv::Rect2i ReadMNISTImagesTransl::Location() const
+{
+    return cv::Rect2i(current_loc_, cv::Size2i(cols_, rows_));
+}
+
+
 

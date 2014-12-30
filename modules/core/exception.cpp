@@ -3,6 +3,7 @@
 #include <opencv2/core/types_c.h>
 
 using cv::String;
+using namespace sem;
 
 Exception::Exception(int _code, const std::string &msg,
                      const std::string &_func, const std::string &_file, int _line)
@@ -31,6 +32,18 @@ ExceptionFileIOError::ExceptionFileIOError(const std::string &msg)
 
 ExceptionValueError::ExceptionValueError(const std::string &msg)
     : Exception(CV_StsBadArg, String(msg),
+                CV_Func, __FILE__, __LINE__ )
+{
+}
+
+ExceptionKeyError::ExceptionKeyError(const std::string &msg)
+    : Exception(CV_StsBadArg, String(msg),
+                CV_Func, __FILE__, __LINE__ )
+{
+}
+
+ExceptionTypeError::ExceptionTypeError(const std::string &msg)
+    : Exception(CV_StsUnsupportedFormat, String(msg),
                 CV_Func, __FILE__, __LINE__ )
 {
 }

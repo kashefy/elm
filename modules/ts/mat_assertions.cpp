@@ -71,6 +71,36 @@ string MatFailureMessageNonZero(const Mat& a, const Mat& b, const Mat& cmp) {
     return failure_msg.str();
 }
 
+string MatFailureMessageNonZero(const Mat& a, const Mat& cmp) {
+
+    stringstream failure_msg;
+    for(int r=0; r<cmp.rows; r++) {
+
+        for(int c=0; c<cmp.cols; c++) {
+
+            if( cmp.at<uchar>(r, c) != 0 ) {
+
+                failure_msg << "at (" << r << "," << c <<") ";
+
+                uchar depth = a.type() & CV_MAT_DEPTH_MASK;
+
+                switch ( depth ) {
+                  case CV_8U:   failure_msg << "(" << a.at<uchar>(r, c)     << ")"; break;
+                  case CV_8S:   failure_msg << "(" << a.at<char>(r, c)      << ")"; break;
+                  case CV_16U:  failure_msg << "(" << a.at<uint16_t>(r, c)  << ")"; break;
+                  case CV_16S:  failure_msg << "(" << a.at<int16_t>(r, c)   << ")"; break;
+                  case CV_32S:  failure_msg << "(" << a.at<int32_t>(r, c)   << ")"; break;
+                  case CV_32F:  failure_msg << "(" << a.at<float>(r, c)     << ")"; break;
+                  case CV_64F:  failure_msg << "(" << a.at<double>(r, c)    << ")"; break;
+                  default: break;
+                }
+                failure_msg << std::endl;
+            }
+        }
+    }
+    return failure_msg.str();
+}
+
 AssertionResult Equal(const Mat& a, const Mat& b) {
 
     AssertionResult equal_dims = EqualDims(a, b);
@@ -97,4 +127,28 @@ AssertionResult Near(const Mat& a, const Mat& b, float tolerance) {
     int n = countNonZero(cmp_out);
     if(n == 0) { return AssertionSuccess(); }
     else { return AssertionFailure() << MatFailureMessageNonZero(a, b, cmp_out); }
+}
+
+AssertionResult LT(const Mat& a, const Mat& b) {
+
+    AssertionResult equal_dims = EqualDims(a, b);
+    if(equal_dims != AssertionSuccess()) { return equal_dims; }
+
+    Mat cmp_out;
+    compare(a, b, cmp_out, CMP_GE);
+    int n = countNonZero(cmp_out);
+    if(n == 0) { return AssertionSuccess(); }
+    else {
+        return AssertionFailure() << MatFailureMessageNonZero(a, b, cmp_out);
+    }
+}
+
+AssertionResult Empty(const Mat &mat)
+{
+    if(mat.empty()) { return AssertionSuccess(); }
+    else {
+        return AssertionFailure()
+                << "Mat is not empty and contains"
+                << mat.total() << " elements.";
+    }
 }

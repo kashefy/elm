@@ -8,6 +8,6 @@ using namespace sem;
 
 TEST(CoreTest, GetVersion) {
 
-    EXPECT_GT(string(GetVersion()).size(), 0);
+    EXPECT_GT(string(GetVersion()).size(), size_t(0));
 }
 

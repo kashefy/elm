@@ -6,6 +6,7 @@
 #include "core/exception.h"
 
 #include <iostream>
+
 namespace sem {
 
 /**
@@ -34,6 +35,107 @@ void CumSum(const cv::Mat1f &src, cv::Mat1f &dst);
  */
 std::string MatTypeToString(const cv::Mat& m);
 
+/**
+  * @brief Convert 2d point of integers to single channel Mat of integers
+  * @param 2d point of integers
+  * @return single channel row-matrix of integers [x, y]
+  */
+cv::Mat1i Point2Mat(const cv::Point2i& p);
+
+/**
+  * @brief Calculate neighborhood variance
+  *
+  * Border elements are zero-padded
+  * \see http://docs.opencv.org/doc/tutorials/imgproc/imgtrans/copyMakeBorder/copyMakeBorder.html
+  *
+  * @param[in] source matrix
+  * @param[in] neighborhood radius
+  * @param[out] matrix with neighborhood mean around each element
+  * @param[out] matrix with neighborhood variance around each element
+  * @param[in] border type - \see OpenCV's copyMakeBorder() or borderInterpolate() for details.
+  * @param[in] value - Border value if border type==BORDER_CONSTANT
+  */
+void NeighMeanVar(const cv::Mat1f& m, int radius, cv::Mat1f &neigh_mean, cv::Mat1f &neigh_var,
+                  int border_type=cv::BORDER_REPLICATE, const cv::Scalar &value=cv::Scalar());
+
+/**
+ * @brief Get all element values at a position across different matrices
+ * @param vector of matrices
+ * @param row
+ * @param col
+ * @return row matrix with extracted elements
+ * @throws ExceptionBadDims for positions that cannot be accessed.
+ * @todo validate equally sized matrices inside vector or define protocol
+ * current behavior, rely on dims of first vector entry
+ */
+cv::Mat1f ElementsAt(const VecMat1f &v, int row, int col);
+
+/**
+ * @brief Reshape vector of mat to single mat with row per element and col per vector element/block/kernel.
+ * Only applicable to vector of equally sized matrices.
+ * @param input vector of matrices
+ * @return single matrix, row per matrix element and cols=vector size, all dims are non-zero
+ * @todo enforce validation of same-dim matrix elements or define clear protocol, current behavior: rely on dims of first vector entry
+ */
+cv::Mat1f Reshape(const VecMat1f &v);
+
+/**
+ * @brief Function for converting a Mat_ object into a vector of same type
+ * The mat is flattened beforehand.
+ * Involves copying elements
+ * May only work with matrices of POD (e.g. int, float, uchar,...)
+ * Works with N-dimensional matrices
+ *
+ * @param matrix
+ * @return resulting vector with flattened matrix data
+ * @throws ExceptionTypeError on non-continuous matrix input
+ */
+template <typename T>
+std::vector<T> Mat_ToVec_(const cv::Mat_<T> &m) {
+
+    if(!m.isContinuous()) { SEM_THROW_TYPE_ERROR("Only conitnuous matrices suppored."); }
+    // syntax learned from posts here:
+    // http://stackoverflow.com/questions/610245/where-and-why-do-i-have-to-put-the-template-and-typename-keywords
+    const T* p = m.template ptr<T>(0);
+    std::vector<T> v(p, p+m.total());
+    return v;
+}
+
+/**
+ * @brief get first index of element with a specific value in matrix
+ * Inspired by this Stack Overflow post: @see http://stackoverflow.com/questions/25835587/find-element-in-opencv-mat-efficiently
+ *
+ * @param[in] matrix to search in
+ * @param[in] value to search for
+ * @param[out] first index containing this value, only meaningful if found
+ * @return true if sucessfully found, always flase for empty input.
+ *
+ * @throws ExceptionBadDims if no. of channels != 1, ExceptionTypeError for non-continuous matrix input.
+ */
+static int _NA=-1;   ///< not applicable
+template <class T>
+bool find_first_of(const cv::Mat &m, const T &value, int &index=_NA)
+{
+    if(!m.empty()) {
+
+        if(m.channels() != 1) { SEM_THROW_BAD_DIMS("Only single-channel matrices supported for now."); }
+        if(!m.isContinuous()) { SEM_THROW_TYPE_ERROR("Only continuous matrices supported for now."); }
+    }
+    else if(m.channels() > 1) { SEM_THROW_BAD_DIMS("Only single-channel matrices supported for now."); }
+
+    for(int r=0; r < m.rows; r++) {
+
+        const T* row = m.ptr<T>(r);
+        const T* result = std::find(row, row + m.cols, value);
+        if(result != row + m.cols) {
+
+            index = static_cast<int>(result - m.ptr<T>(0));
+            return true;
+        }
+    }
+    index = -1;
+    return false;
+}
 
 /**
  * @brief Create Mat object (row vector) and fill with range
