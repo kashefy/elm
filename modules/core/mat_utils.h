@@ -84,12 +84,16 @@ cv::Mat1f Reshape(const VecMat1f &v);
  * The mat is flattened beforehand.
  * Involves copying elements
  * May only work with matrices of POD (e.g. int, float, uchar,...)
+ * Works with N-dimensional matrices
+ *
  * @param matrix
  * @return resulting vector with flattened matrix data
+ * @throws ExceptionTypeError on non-continuous matrix input
  */
 template <typename T>
 std::vector<T> Mat_ToVec_(const cv::Mat_<T> &m) {
 
+    if(!m.isContinuous()) { SEM_THROW_TYPE_ERROR("Only conitnuous matrices suppored."); }
     // syntax learned from posts here:
     // http://stackoverflow.com/questions/610245/where-and-why-do-i-have-to-put-the-template-and-typename-keywords
     const T* p = m.template ptr<T>(0);
