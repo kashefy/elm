@@ -18,9 +18,11 @@ using namespace sem;
 class DummyChildLayer : public base_Layer
 {
 public:
-    virtual void Reset() {}
+    virtual void Clear() {}
 
     virtual void Reconfigure(const LayerConfig &config) {}
+
+    virtual void IONames(const LayerIONames &config) {}
 
     virtual void Stimulus(const Signal &signal) {}
 

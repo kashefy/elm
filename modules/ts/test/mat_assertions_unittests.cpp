@@ -236,5 +236,152 @@ TEST(MatAssertionsTest, Empty) {
     EXPECT_FALSE( Empty(Mat1f::zeros(1, 1)) );
 }
 
+TEST(MatAssertionsTest, LT)
+{
+    EXPECT_FALSE( LT(Mat1f(3, 1, 0.f), -1.f) );
+    EXPECT_FALSE( LT(Mat1f(3, 1, 0.f), 0.f) );
+    EXPECT_TRUE( LT(Mat1f(3, 1, 0.f), 1.f) );
+    EXPECT_FALSE( LT<float>(Mat1f::zeros(3, 1), -1.f) );
+    EXPECT_FALSE( LT<float>(Mat1f::zeros(3, 1), 0.f) );
+    EXPECT_TRUE( LT<float>(Mat1f::zeros(3, 1), 1.f) );
+    EXPECT_MAT_LT(Mat1f(3, 1, 0.f), 1.f);
+
+    EXPECT_FALSE( LT(Mat1i(3, 1, 0), -1) );
+    EXPECT_FALSE( LT(Mat1i(3, 1, 0), 0) );
+    EXPECT_TRUE( LT(Mat1i(3, 1, 0), 1) );
+    EXPECT_FALSE( LT<int>(Mat1i::zeros(3, 1), -1) );
+    EXPECT_FALSE( LT<int>(Mat1i::zeros(3, 1), 0) );
+    EXPECT_TRUE( LT<int>(Mat1i::zeros(3, 1), 1) );
+    EXPECT_MAT_LT( Mat1i(3, 1, 0), 1);
+
+    EXPECT_FALSE( LT<uchar>(Mat1b::zeros(3, 1), 0) );
+    EXPECT_FALSE( LT<uchar>(Mat1b(3, 1, static_cast<uchar>(101)), static_cast<uchar>(100)) );
+    EXPECT_TRUE( LT<uchar>(Mat1b(3, 1, static_cast<uchar>(100)), static_cast<uchar>(255)) );
+    EXPECT_MAT_LT(Mat1b(3, 1, static_cast<uchar>(100)), static_cast<uchar>(255));
+}
+
+/**
+ * @brief repeat tests with different types of mat objects (int, float, uchar)
+ */
+template <class T>
+class MatPODTypesTest : public testing::Test
+{
+};
+
+template<class T>
+struct V_
+{
+    static std::vector<T> values;
+};
+
+TYPED_TEST_CASE_P(MatPODTypesTest);
+
+TYPED_TEST_P(MatPODTypesTest, TestLT_Empty) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+    EXPECT_FALSE( LT<TypeParam>(MatTP::zeros(1, 0), v[1]) );
+    EXPECT_FALSE( LT<TypeParam>(MatTP::zeros(0, 1), v[1]) );
+    EXPECT_FALSE( LT<TypeParam>(MatTP(), v[1]) );
+}
+
+/**
+ * @brief Compare matrix against scalar value
+ */
+TYPED_TEST_P(MatPODTypesTest, TestLT_Value) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+
+    // It is necessary spell out the type when calling LT() and passing it a MatExpr (e.g. Mat1f::zeros().
+    // Otherwise, the compiler cannot detect the template type and refuse to build.
+    EXPECT_FALSE( LT<TypeParam>(MatTP::zeros(1, 1), v[1]) );
+    EXPECT_FALSE( LT<TypeParam>(MatTP::zeros(3, 1), v[1]) );
+    EXPECT_FALSE( LT<TypeParam>(MatTP(3, 1, v[4]), v[3]) );
+
+    EXPECT_FALSE( LT<TypeParam>(MatTP::zeros(1, 1), v[1]) );
+    EXPECT_FALSE( LT<TypeParam>(MatTP::zeros(1, 3), v[1]) );
+    EXPECT_FALSE( LT<TypeParam>(MatTP(1, 3, v[4]), v[3]) );
+
+    EXPECT_FALSE( LT<TypeParam>(MatTP::zeros(5, 3), v[1]) );
+    EXPECT_FALSE( LT<TypeParam>(MatTP(5, 3, v[4]), v[3]) );
+
+    EXPECT_TRUE( LT<TypeParam>(MatTP(1, 1, v[3]), v[4] ) );
+    EXPECT_TRUE( LT<TypeParam>(MatTP(3, 5, v[3]), v[4] ) );
+    EXPECT_TRUE( LT<TypeParam>(MatTP(3, 2, v[3]), v[4] ) );
+    EXPECT_TRUE( LT<TypeParam>(MatTP(1, 3, v[3]), v[4] ) );
+    EXPECT_TRUE( LT<TypeParam>(MatTP(3, 1, v[3]), v[4] ) );
+    EXPECT_MAT_LT(MatTP(3, 1, v[3]), v[4]); // call the macro
+}
+
+/**
+ * @brief Comapre single-valued matrices
+ */
+TYPED_TEST_P(MatPODTypesTest, TestLT_MatConstValue) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+
+    EXPECT_FALSE( LT(MatTP::zeros(1, 1), MatTP::zeros(1, 1)) );
+    EXPECT_FALSE( LT(MatTP::zeros(3, 1), MatTP::zeros(3, 1)) );
+    EXPECT_FALSE( LT(MatTP(3, 1, v[4]), MatTP(3, 1, v[3])) );
+
+    EXPECT_FALSE( LT(MatTP(3, 1, v[3]), MatTP(1, 3, v[4])) ) << "Dimensions must match";
+
+    EXPECT_TRUE( LT(MatTP(3, 1, v[3]), MatTP(3, 1, v[4])) );
+    EXPECT_TRUE( LT(MatTP(1, 3, v[3]), MatTP(1, 3, v[4])) );
+    EXPECT_MAT_LT(MatTP(3, 3, v[3]), MatTP(3, 3, v[4])); // call the macro
+}
+
+/**
+ * @brief Fill matrices with different values and verify '<' comparison
+ */
+TYPED_TEST_P(MatPODTypesTest, TestLT_MatMixedValues) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+
+    MatTP a(2, 1), b(2, 1);
+    for(int i=0; i<2; i++) { // transpose after first iteration
+
+        a(0) = v[1];
+        a(1) = v[2];
+
+        b(0) = v[3];
+        b(1) = v[4];
+
+
+        EXPECT_FALSE( LT(b, a) );
+        EXPECT_TRUE( LT(a, b) );
+        EXPECT_MAT_LT(a, b); // call the macro
+
+        b(0) = a(0);
+        EXPECT_FALSE( LT(a, b) );
+
+        // transpose both matrices and redo the checks
+        a = a.t();
+        b = b.t();
+    }
+}
+
+/* Write additional type+value parameterized tests here.
+ * Acquaint yourself with the values passed to along with each type.
+ */
+
+// Register test names
+REGISTER_TYPED_TEST_CASE_P(MatPODTypesTest,
+                           TestLT_Empty,
+                           TestLT_Value,
+                           TestLT_MatConstValue,
+                           TestLT_MatMixedValues); ///< register additional typed_test_p (i.e. unit test) routines here
+
+// Register values to work with inside tests, note how they're used inside the tests
+template<> std::vector<float> V_<float>::values{-1.f, 0.f, 1.f, 100.f, 101.f};
+template<> std::vector<int> V_<int>::values{-1, 0, 1, 100, 101};
+template<> std::vector<uchar> V_<uchar>::values{0, 0, 1, 100, 101};
+
+typedef testing::Types<float, int, uchar> PODTypes;  ///< // lists the usual suspects of matrices
+INSTANTIATE_TYPED_TEST_CASE_P(MatAssertionsPODTypesTest, MatPODTypesTest, PODTypes);
+
 } // namespace
 

@@ -5,9 +5,12 @@
 #include <opencv2/highgui.hpp>
 
 #include "core/core.h"
+#include "core/signal.h"
 #include "core/mat_utils.h"
 #include "encoding/populationcode.h"
 #include "io/readmnist.h"
+#include "layers/layerfactory.h"
+#include "layers/layer_z.h"
 #include "neuron/wtapoisson.h"
 #include "neuron/neuron.h"
 #include "neuron/zneuron.h"
@@ -16,20 +19,25 @@ using namespace cv;
 using namespace std;
 namespace bfs=boost::filesystem;
 
+const std::string NAME_SPIKES_Y  = "y";
+const std::string NAME_SPIKES_Z  = "z";
+const std::string NAME_WEIGHTS_Z = "w";
+
 class Simulation
 {
 public:
     Simulation()
         : nb_learners_(40)
     {
-
     }
 
     void Learn()
     {
         ReadMNISTImages r;
         //bfs::path p("C:\\Users\\woodstock\\dev\\data\\MNIST\\train-images.idx3-ubyte");
-        bfs::path p("C:\\Users\\woodstock\\dev\\data\\MNIST\\t10k-images.idx3-ubyte");
+        //bfs::path p("C:\\Users\\woodstock\\dev\\data\\MNIST\\t10k-images.idx3-ubyte");
+        //bfs::path p("/media/206CDC456CDC177E/Users/woodstock/dev/data/MNIST/train-images.idx3-ubyte");
+        bfs::path p("/media/206CDC456CDC177E/Users/woodstock/dev/data/MNIST/t10k-images.idx3-ubyte");
         r.ReadHeader(p.string().c_str());
 
         MutexPopulationCode pop_code;
@@ -64,30 +72,23 @@ public:
                     first_pass = false;
                 }
 
-                Mat1f u(1, layer_z_.size());
-                for(size_t i=0; i<layer_z_.size(); i++) {
+                Signal signal;
+                signal.Append(NAME_SPIKES_Y, spikes_y);
 
-                    u(i) = layer_z_[i]->Predict(spikes_y).at<float>(0);
-                }
-
-                Mat1i spikes_z = wta_z.Compete(layer_z_);
-                for(size_t i=0; i<layer_z_.size(); i++) {
-
-                    layer_z_[i]->Learn(spikes_z.col(i));
-                }
+                z_.Stimulus(signal);
+                z_.Apply();
+                z_.Learn();
             }
 
-            for(size_t i=0; i<layer_z_.size(); i++) {
-
-                static_pointer_cast<ZNeuron>(layer_z_[i])->Clear();
-            }
+            z_.Clear();
         }
     }
 
     void Test()
     {
         ReadMNISTImages r;
-        bfs::path p("C:\\Users\\woodstock\\dev\\data\\MNIST\\t10k-images.idx3-ubyte");
+        //bfs::path p("C:\\Users\\woodstock\\dev\\data\\MNIST\\t10k-images.idx3-ubyte");
+        bfs::path p("/media/206CDC456CDC177E/Users/woodstock/dev/data/MNIST/t10k-images.idx3-ubyte");
         r.ReadHeader(p.string().c_str());
 
         MutexPopulationCode pop_code;
@@ -113,23 +114,23 @@ public:
                 spikes_y(i) = neuron_y.State(pc(i));
             }
 
-            Mat1f u(1  , layer_z_.size());
-            for(size_t i=0; i<layer_z_.size(); i++) {
+            Signal signal;
+            signal.Append(NAME_SPIKES_Y, spikes_y);
 
-                u(i) = layer_z_[i]->Predict(spikes_y).at<float>(0);
-            }
-
-            //Mat1f spikes_z = wta_z.Compete(layer_z_);
-            //waitKey();
+            z_.Stimulus(signal);
+            z_.Apply();
         }
     }
 
     void Eval()
     {
-        for(size_t i=0; i<layer_z_.size(); i++) {
+        Signal signal;
+        z_.Response(signal);
+        Mat1f weights = signal.MostRecent(NAME_WEIGHTS_Z);
 
-            Mat1f w = static_pointer_cast<ZNeuron>(layer_z_[i])->Weights();
+        for(size_t i=0; i<nb_learners_; i++) {
 
+            Mat1f w = weights.row(i);
             exp(w, w);
 
             Mat1f w_on(w.rows, w.cols/2);
@@ -153,16 +154,22 @@ private:
 
     void InitLearners(int nb_features, int history_length)
     {
-        for(size_t i=0; i<nb_learners_; i++) {
+        PTree params;
+        params.put(LayerZ::PARAM_NB_AFFERENTS, nb_features);
+        params.put(LayerZ::PARAM_LEN_HISTORY, history_length);
+        params.put(LayerZ::PARAM_NB_OUTPUT_NODES, nb_learners_);
+        LayerConfig config;
+        config.Params(params);
 
-            shared_ptr<ZNeuron> p(new ZNeuron);
-            p->init(nb_features, history_length);
-            layer_z_.push_back(p);
-        }
+        config.Input(LayerZ::KEY_INPUT_SPIKES, "y");
+        config.Output(LayerZ::KEY_OUTPUT_SPIKES, "z");
+        config.Output(LayerZ::KEY_OUTPUT_WEIGHTS, "w");
+
+        z_.Reset(config);
+        z_.IONames(config);
     }
 
-    vector<std::shared_ptr<base_Learner> > layer_z_;
-
+    LayerZ z_;
     size_t nb_learners_;   ///< no. of learners (e.g. ZNeuron)
 
 };

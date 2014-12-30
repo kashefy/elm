@@ -84,17 +84,57 @@ cv::Mat1f Reshape(const VecMat1f &v);
  * The mat is flattened beforehand.
  * Involves copying elements
  * May only work with matrices of POD (e.g. int, float, uchar,...)
+ * Works with N-dimensional matrices
+ *
  * @param matrix
  * @return resulting vector with flattened matrix data
+ * @throws ExceptionTypeError on non-continuous matrix input
  */
 template <typename T>
 std::vector<T> Mat_ToVec_(const cv::Mat_<T> &m) {
 
+    if(!m.isContinuous()) { SEM_THROW_TYPE_ERROR("Only conitnuous matrices suppored."); }
     // syntax learned from posts here:
     // http://stackoverflow.com/questions/610245/where-and-why-do-i-have-to-put-the-template-and-typename-keywords
     const T* p = m.template ptr<T>(0);
     std::vector<T> v(p, p+m.total());
     return v;
+}
+
+/**
+ * @brief get first index of element with a specific value in matrix
+ * Inspired by this Stack Overflow post: @see http://stackoverflow.com/questions/25835587/find-element-in-opencv-mat-efficiently
+ *
+ * @param[in] matrix to search in
+ * @param[in] value to search for
+ * @param[out] first index containing this value, only meaningful if found
+ * @return true if sucessfully found, always flase for empty input.
+ *
+ * @throws ExceptionBadDims if no. of channels != 1, ExceptionTypeError for non-continuous matrix input.
+ */
+static int _NA=-1;   ///< not applicable
+template <class T>
+bool find_first_of(const cv::Mat &m, const T &value, int &index=_NA)
+{
+    if(!m.empty()) {
+
+        if(m.channels() != 1) { SEM_THROW_BAD_DIMS("Only single-channel matrices supported for now."); }
+        if(!m.isContinuous()) { SEM_THROW_TYPE_ERROR("Only continuous matrices supported for now."); }
+    }
+    else if(m.channels() > 1) { SEM_THROW_BAD_DIMS("Only single-channel matrices supported for now."); }
+
+    for(int r=0; r < m.rows; r++) {
+
+        const T* row = m.ptr<T>(r);
+        const T* result = std::find(row, row + m.cols, value);
+        if(result != row + m.cols) {
+
+            index = static_cast<int>(result - m.ptr<T>(0));
+            return true;
+        }
+    }
+    index = -1;
+    return false;
 }
 
 /**

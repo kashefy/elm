@@ -2,6 +2,7 @@
 
 #include <opencv2/highgui.hpp>
 
+#include "core/layerconfig.h"
 #include "core/mat_utils.h"
 #include "core/signal.h"
 #include "io/synth.h"
@@ -62,7 +63,6 @@ protected:
     virtual void SetUp()
     {
         // Setup layer
-        to_.Reset();
 
         LayerConfig config;
         // params
@@ -74,7 +74,8 @@ protected:
         config.Output(SaliencyItti::KEY_OUTPUT_SALIENCY, NAME_SALIENCY_);
         config.Output(SaliencyItti::KEY_OUTPUT_SALIENT_LOC, NAME_LOC_);
 
-        to_.Reconfigure(config);
+        to_.Reset(config);
+        to_.IONames(config);
     }
 
     SaliencyItti to_;   ///< test object

@@ -1,10 +1,10 @@
 #include "core/exception.h"
 
-#include "gtest/gtest.h"
 #include <string>
+
+#include "gtest/gtest.h"
 #include <opencv2/core.hpp>
 
-using namespace std;
 using namespace sem;
 
 TEST(ExceptionTest, Throw)

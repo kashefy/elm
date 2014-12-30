@@ -36,6 +36,7 @@ protected:
         config_.Input(WeightedSum::KEY_INPUT_STIMULUS, NAME_STIMULUS);
         config_.Output(WeightedSum::KEY_OUTPUT_RESPONSE, NAME_RESPONSE);
 
+        to_.reset(new WeightedSum(config_));
     }
 
     unique_ptr<base_Layer> to_; ///< test object
@@ -51,8 +52,6 @@ TEST_F(WeightedSumTest, Reset)
 
 TEST_F(WeightedSumTest, Apply)
 {
-    to_.reset(new WeightedSum(config_));
-
     Signal signal;
     // feed input into signal object
     EXPECT_FALSE(signal.Exists(NAME_STIMULUS));

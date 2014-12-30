@@ -9,7 +9,7 @@ ZNeuron::ZNeuron()
 {
 }
 
-void ZNeuron::init(int nb_features, int len_history)
+void ZNeuron::Init(int nb_features, int len_history)
 {
     weights_ = Mat1f(1, nb_features);
 

@@ -1,10 +1,9 @@
 #include "layers/saliencyitti.h"
 
-#include <iostream>
-
 #include <opencv2/imgproc.hpp>
 
 #include "core/defs.h"
+#include "core/layerconfig.h"
 #include "core/mat_utils.h"
 #include "core/percentile.h"
 #include "core/signal.h"
@@ -32,15 +31,27 @@ SaliencyItti::~SaliencyItti()
 }
 
 SaliencyItti::SaliencyItti()
+    : base_Layer()
 {
-    Reset();
+    Clear();
 }
 
-void SaliencyItti::Reset()
+SaliencyItti::SaliencyItti(const LayerConfig &config)
+    : base_Layer(config)
+{
+    Reset(config);
+}
+
+void SaliencyItti::Clear()
 {
     saliency_ = Mat1f();
     stimulus_ = Mat1f();
 
+    percentile_orientation_response_ = DEFAULT_ORIENT_RESPONSE_PERCENTILE;
+}
+
+void SaliencyItti::Reset(const LayerConfig &config)
+{
     // orientation conspicuity
     theta_range_ = ARange_<float>(0.f, CV_PI, 90.*CV_PI/180.);
     VecF theta = Mat_ToVec_<float>(theta_range_);
@@ -60,6 +71,11 @@ void SaliencyItti::Reset()
 }
 
 void SaliencyItti::Reconfigure(const LayerConfig &config)
+{
+    Reset(config);
+}
+
+void SaliencyItti::IONames(const LayerIONames &config)
 {
     name_scene_     = config.Input(KEY_INPUT_SCENE);
     name_saliency_  = config.Output(KEY_OUTPUT_SALIENCY);

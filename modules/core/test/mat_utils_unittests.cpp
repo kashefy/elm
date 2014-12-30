@@ -8,6 +8,50 @@ using namespace std;
 using namespace cv;
 using namespace sem;
 
+TEST(MatUtilsTest, Dummy)
+{
+    Mat3i m(3, 4);
+    randn(m, 0, 100);
+    //cout<<m<<endl;
+
+
+    const int* p = m.ptr<int>(0);
+    std::vector<int> v(p, p+m.total());
+
+    const int ROWS=2, COLS=3, PLANES=4;
+    int d[3] = {ROWS, COLS, PLANES};
+    Mat m3 = Mat(3, d, CV_32SC1);
+
+    randn(m3, 0, 100);
+
+    const int* p3 = m3.ptr<int>(0);
+    std::vector<int> flat0(p3, p3+m3.total());
+
+    for(int r=0; r<ROWS; r++) {
+        for(int c=0; c<COLS; c++) {
+            for(int p=0; p<PLANES; p++) {
+                cout<<m3.at<int>(r, c, p)<<",";
+            }
+        }
+    }
+    cout<<endl;
+
+    Mat m2(ROWS, COLS*PLANES, CV_32SC1, m3.data);
+    Mat m2xPlanes = m2.reshape(PLANES);
+    std::vector<cv::Mat> planes;
+    cv::split(m2xPlanes, planes);
+
+    std::vector<int> flat;
+    for(size_t i=0; i<planes.size(); i++) {
+        Mat plane_i = planes[i];
+        const int* plane_i_ptr = plane_i.ptr<int>(0);
+        flat.insert(flat.end(), plane_i_ptr, plane_i_ptr+plane_i.total());
+    }
+
+    int x = 0;
+    x++;
+}
+
 TEST(MatUtilsTest, ConvertTo8U_zeros)
 {
     const Size2i SIZE(3, 3);
@@ -693,6 +737,13 @@ TEST(Mat_ToVec_Test, Empty)
     EXPECT_EMPTY(Mat_ToVec_<float>(Mat1f()));
     EXPECT_EMPTY(Mat_ToVec_<float>(Mat1i()));
     EXPECT_EMPTY(Mat_ToVec_<float>(Mat1b()));
+    EXPECT_EMPTY(Mat_ToVec_<float>(Mat()));
+}
+
+TEST(Mat_ToVec_Test, Invalid)
+{
+    EXPECT_THROW(Mat_ToVec_<float>(Mat1f::zeros(3, 4).col(0)), ExceptionTypeError);
+    EXPECT_THROW(Mat_ToVec_<float>(Mat1f(3, 4, 11.f).colRange(0, 2)), ExceptionTypeError);
 }
 
 /**
@@ -704,7 +755,7 @@ TEST(Mat_ToVec_Test, TwoDimensional_Landscape)
     const int COLS=4;
     Mat1f in(ROWS, COLS);
     randn(in, 0, 100);
-    VecF out = Mat_ToVec_(in);
+    VecF out = Mat_ToVec_<float>(in);
     EXPECT_SIZE(in.total(), out) << "Not all elements acccounted for";
 
     // check values
@@ -757,3 +808,386 @@ TEST(Mat_ToVec_Test, OneDimensional)
         EXPECT_EQ(in(i), out[i]) << "Value mismatch at i=" << i;
     }
 }
+
+
+/**
+ * @brief A setup for repeating tests with different types of mat objects (int, float, uchar)
+ */
+template <class T>
+class MatPODTypesTest : public testing::Test
+{
+};
+
+/**
+ * @brief the struct below enables defining values to be used inside the tests
+ * These values are set below once per type.
+ */
+template<class T>
+struct V_
+{
+    static std::vector<T> values;
+};
+
+/**
+ * @brief this struct translates a fixed POD type into OpenCV's runtime type id
+ * These values are set below once per type.
+ */
+template<class T>
+struct MatDepth_
+{
+    static const int depth;
+};
+
+TYPED_TEST_CASE_P(MatPODTypesTest);
+
+/**
+ * @brief pass invalid input and check exception thrown
+ * Multi-channels matrices not supported.
+ */
+TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Invalid_MultiChannel) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::zeros(1, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::ones(1, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::zeros(10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::ones(10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >(10, 1, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >(1, 10, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >(1, 10, v[0]), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >(3, 4, v[0]), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >(4, 3, v[0]), v[0]), ExceptionBadDims );
+
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::zeros(1, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::ones(1, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::zeros(10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::ones(10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >(10, 1, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >(1, 10, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >(1, 10, v[0]), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >(3, 4, v[0]), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >(4, 3, v[0]), v[0]), ExceptionBadDims );
+
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::zeros(1, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::ones(1, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::zeros(10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::ones(10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >(10, 1, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >(1, 10, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >(1, 10, v[0]), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >(3, 4, v[0]), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >(4, 3, v[0]), v[0]), ExceptionBadDims );
+}
+
+/**
+ * @brief pass invalid empty input and check exception thrown
+ * Multi-channels matrices not supported.
+ */
+TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Invalid_MultiChannelEmpty) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+
+    // effectively single-channel
+    EXPECT_NO_THROW( find_first_of(Mat_<Vec<TypeParam, 1> >(), v[0]) );
+
+    EXPECT_NO_THROW( find_first_of(Mat_<Vec<TypeParam, 1> >::zeros(0, 0), v[0]) );
+    EXPECT_NO_THROW( find_first_of(Mat_<Vec<TypeParam, 1> >::zeros(1, 0), v[0]) );
+    EXPECT_NO_THROW( find_first_of(Mat_<Vec<TypeParam, 1> >::zeros(0, 1), v[0]) );
+
+    EXPECT_NO_THROW( find_first_of(Mat_<Vec<TypeParam, 1> >::ones(0, 0), v[0]) );
+    EXPECT_NO_THROW( find_first_of(Mat_<Vec<TypeParam, 1> >::ones(1, 0), v[0]) );
+    EXPECT_NO_THROW( find_first_of(Mat_<Vec<TypeParam, 1> >::ones(0, 1), v[0]) );
+
+    // 2 channels
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >(), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::zeros(0, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::zeros(1, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::zeros(0, 1), v[0]), ExceptionBadDims );
+
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::ones(0, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::ones(1, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::ones(0, 1), v[0]), ExceptionBadDims );
+
+    // 3 channels
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >(), v[0]), ExceptionBadDims );
+
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::zeros(0, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::zeros(1, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::zeros(0, 1), v[0]), ExceptionBadDims );
+
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::ones(0, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::ones(1, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::ones(0, 1), v[0]), ExceptionBadDims );
+
+    // 4 channels
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >(), v[0]), ExceptionBadDims );
+
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::zeros(0, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::zeros(1, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::zeros(0, 1), v[0]), ExceptionBadDims );
+
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::ones(0, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::ones(1, 0), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::ones(0, 1), v[0]), ExceptionBadDims );
+}
+
+/**
+ * @brief pass invalid input and check exception thrown
+ * Only continuous matrices supported for now.
+ */
+TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Invalid_NonContinuous) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+
+    // copy vector of values into matrix object
+    MatTP v_mat(1, static_cast<int>(v.size()));
+    for(size_t i=0; i<v.size(); i++) v_mat(i) = v[i];
+    v_mat = v_mat.reshape(1, 2);
+
+    /* provoke non-continuous input by taking out column ranges
+     */
+    // col() yielding single columns
+    for(int c=0; c<v_mat.cols; c++) {
+
+        EXPECT_THROW( find_first_of(v_mat.col(c), v[0]), ExceptionTypeError );
+        EXPECT_THROW( find_first_of(v_mat.col(c), v[0]), ExceptionTypeError );
+    }
+
+    // colRange()
+    for(int c=1; c<v_mat.cols-1; c++) {
+
+        EXPECT_THROW( find_first_of(v_mat.colRange(c, v_mat.cols), v[0]), ExceptionTypeError );
+    }
+
+    for(int c=1; c<v_mat.cols; c++) {
+
+        EXPECT_THROW( find_first_of(v_mat.colRange(0, c), v[0]), ExceptionTypeError );
+    }
+
+    // Scenarios where we don't expect failures
+    for(size_t i=0; i<v.size(); i++) {
+
+        // colRange() that spans all cols should pass as continuous
+        EXPECT_NO_THROW( find_first_of(v_mat.colRange(0, v_mat.cols), v[i]) ) << "Spanning all columns enables matrix continuity.";
+        int index;
+        EXPECT_TRUE( find_first_of(v_mat.colRange(0, v_mat.cols), v[i], index) );
+        EXPECT_EQ(static_cast<int>(i), index);
+
+        /* Now we'll take out row ranges, all should pass as continuous
+         */
+        // row() yielding single rows
+        for(int r=0; r<v_mat.rows; r++) {
+
+            EXPECT_NO_THROW( find_first_of(v_mat.row(r), v[i]) );
+            EXPECT_NO_THROW( find_first_of(v_mat.row(r), v[i]) );
+        }
+
+        // rowRange()
+        for(int r=1; r<v_mat.rows; r++) {
+
+            EXPECT_NO_THROW( find_first_of(v_mat.rowRange(0, r), v[i]) );
+        }
+
+        for(int r=0; r<v_mat.rows-1; r++) {
+
+            EXPECT_NO_THROW( find_first_of(v_mat.rowRange(r, v_mat.rows), v[i]) );
+        }
+    }
+}
+
+/**
+ * @brief test finding elements in empty matrices
+ */
+TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Empty) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+    for(size_t i=0; i<v.size(); i++) {
+
+        EXPECT_FALSE( find_first_of(MatTP::zeros(1, 0), v[i]) );
+        EXPECT_FALSE( find_first_of(MatTP::zeros(0, 1), v[i]) );
+        EXPECT_FALSE( find_first_of(MatTP(), v[i]) );
+    }
+}
+
+/**
+ * @brief We don't expect to find anything.
+ * This test assumes that values[4] is within range and its value is unique.
+ * Matrix is reshaped and transposed.
+ */
+TYPED_TEST_P(MatPODTypesTest, FindFirstOf_NotFound) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+
+    MatTP v_mat(1, static_cast<int>(v.size()));
+    for(size_t i=0; i<v.size(); i++) v_mat(i) = v[i];
+
+    TypeParam target = v[4];
+    v_mat(4) = v[0];
+    for(size_t i=0; i<v.size(); i++) {
+
+        EXPECT_FALSE( find_first_of(v_mat.reshape(1, 1), target) );
+        EXPECT_FALSE( find_first_of(v_mat.reshape(1, 2), target) );
+        EXPECT_FALSE( find_first_of(v_mat.t(), target) );
+    }
+}
+
+/**
+ * @brief We expect to find something.
+ * Matrix is reshaped and transposed.
+ */
+TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Found) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+
+    MatTP v_mat(1, static_cast<int>(v.size()));
+    for(size_t i=0; i<v.size(); i++) v_mat(i) = v[i];
+
+    int index;
+    for(size_t i=0; i<v.size(); i++) {
+
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 1), v[i]) );
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 2), v[i]) );
+        EXPECT_TRUE( find_first_of(v_mat.t(), v[i]) );
+
+        index = -1;
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 1), v[i], index) );
+        EXPECT_EQ(static_cast<int>(i), index);
+
+        index = -1;
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 2), v[i], index) );
+        EXPECT_EQ(static_cast<int>(i), index);
+
+        index = -1;
+        EXPECT_TRUE( find_first_of(v_mat.t(), v[i], index) );
+        EXPECT_EQ(static_cast<int>(i), index);
+    }
+}
+
+/**
+ * @brief One value is duplicated and placed into previous index
+ * Matrix is reshaped and transposed.
+ */
+TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Duplicate) {
+
+    std::vector<TypeParam> v = V_<TypeParam>::values;
+    typedef Mat_<TypeParam> MatTP;
+
+    MatTP v_mat(1, static_cast<int>(v.size()));
+    for(size_t i=0; i<v.size(); i++) v_mat(i) = v[i];
+
+    int index_actual = -2;
+    for(size_t i=1; i<v.size(); i++) {
+
+        // make a mat copy of the vector
+        MatTP v_mat(1, static_cast<int>(v.size()));
+        for(size_t i=0; i<v.size(); i++) v_mat(i) = v[i];
+
+        int index_expected = abs(randu<int>() % static_cast<int>(i));
+        v_mat(index_expected) = v[i]; // duplicate somewhere before
+
+        index_actual = -1;
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 1), v[i], index_actual) );
+        EXPECT_EQ(index_expected, index_actual);
+
+        index_actual = -1;
+        EXPECT_TRUE( find_first_of(v_mat.reshape(1, 2), v[i], index_actual) );
+        EXPECT_EQ(index_expected, index_actual);
+
+        index_actual = -1;
+        EXPECT_TRUE( find_first_of(v_mat.t(), v[i], index_actual) );
+        EXPECT_EQ(index_expected, index_actual);
+    }
+
+    // sanity check that we actually iterated throug the loop
+    ASSERT_GE(index_actual, 0) << "Test didn't really do anything.";
+}
+
+TYPED_TEST_P(MatPODTypesTest, Mat_ToVec_ThreeDimensional)
+{
+    const int ROWS=2, COLS=3, PLANES=4;
+
+    ASSERT_GT(ROWS*COLS*PLANES, 0) << "Useless test if there aren't any elements.";
+
+    int d[3] = {ROWS, COLS, PLANES};
+    Mat in = Mat(3, d, CV_MAKETYPE(MatDepth_<TypeParam>::depth, 1));
+
+    randn(in, 0, 100);
+    std::vector<TypeParam > out = Mat_ToVec_<TypeParam >(in);
+    EXPECT_EQ(size_t(ROWS*COLS*PLANES), in.total()) << "Not all elements acccounted for.";
+    EXPECT_SIZE(in.total(), out) << "Not all elements acccounted for.";
+
+    // check values
+    int i=0;
+    for(int r=0; r<ROWS; r++) {
+        for(int c=0; c<COLS; c++) {
+            for(int p=0; p<PLANES; p++) {
+
+                EXPECT_TRUE(in.at<TypeParam>(r, c, p) == out[i++])
+                        << "value mismatch at (" << r << "," << c << "," << p << ")";
+            }
+        }
+    }
+}
+
+TYPED_TEST_P(MatPODTypesTest, Mat_ToVec_Invalid_NonContinuous_Mat_)
+{
+    typedef Mat_<TypeParam> MatTP;
+
+    // copy vector of values into matrix object
+    MatTP m(2, 3);
+    randn(m, 0, 100);
+
+    /* provoke non-continuous input by taking out column ranges
+     */
+    // col() yielding single columns
+    for(int c=0; c<m.cols; c++) {
+
+        EXPECT_THROW( Mat_ToVec_(m.col(c)), ExceptionTypeError );
+        EXPECT_THROW( Mat_ToVec_(m.col(c)), ExceptionTypeError );
+    }
+
+    // colRange()
+    for(int c=1; c<m.cols-1; c++) {
+
+        EXPECT_THROW( Mat_ToVec_<TypeParam >(m.colRange(c, m.cols)), ExceptionTypeError );
+    }
+
+    for(int c=1; c<m.cols; c++) {
+
+        EXPECT_THROW( Mat_ToVec_<TypeParam >(m.colRange(0, c)), ExceptionTypeError );
+    }
+}
+
+/* Write additional type+value parameterized tests here.
+ * Acquaint yourself with the values passed to along with each type.
+ */
+
+// Register test names
+REGISTER_TYPED_TEST_CASE_P(MatPODTypesTest,
+                           FindFirstOf_Invalid_NonContinuous,
+                           FindFirstOf_Invalid_MultiChannel,
+                           FindFirstOf_Invalid_MultiChannelEmpty,
+                           FindFirstOf_Empty,
+                           FindFirstOf_NotFound,
+                           FindFirstOf_Found,
+                           FindFirstOf_Duplicate,
+                           Mat_ToVec_ThreeDimensional,
+                           Mat_ToVec_Invalid_NonContinuous_Mat_); ///< register additional typed_test_p (i.e. unit test) routines here
+
+///< Register values to work with inside tests, note how they're used inside the tests
+template<> std::vector<float> V_<float>::values{-1.f, 0.f, 1.f, 100.f, 101.f, 200.f};
+template<> std::vector<int> V_<int>::values{-1, 0, 1, 100, 101, 200};
+template<> std::vector<uchar> V_<uchar>::values{255, 0, 1, 100, 101, 200};
+
+///< Register OpenCV's runtime type ids to work with inside tests
+template<> const int MatDepth_<float>::depth   = CV_32F;
+template<> const int MatDepth_<int>::depth     = CV_32S;
+template<> const int MatDepth_<uchar>::depth   = CV_8U;
+
+typedef testing::Types<float, int, uchar> PODTypes;  ///< // lists the usual suspects of matrices
+INSTANTIATE_TYPED_TEST_CASE_P(MatUtilsPODTypesTest, MatPODTypesTest, PODTypes);

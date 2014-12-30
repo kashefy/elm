@@ -1,6 +1,10 @@
 #ifndef SEM_LAYERS_WEIGHTEDSUM_H_
 #define SEM_LAYERS_WEIGHTEDSUM_H_
 
+#include <string>
+
+#include <opencv2/core.hpp>
+
 #include "core/base_Layer.h"
 
 /** class to implement base layer methods
@@ -10,9 +14,13 @@
 class WeightedSum : public base_Layer
 {
 public:
-    virtual void Reset();
+    virtual void Clear();
 
     virtual void Reconfigure(const LayerConfig &config);
+
+    virtual void Reset(const LayerConfig &config);
+
+    virtual void IONames(const LayerIONames &config);
 
     virtual void Stimulus(const Signal &signal);
 

@@ -39,9 +39,15 @@ public:
 
     SaliencyItti();
 
-    virtual void Reset();
+    SaliencyItti(const LayerConfig &config);
+
+    virtual void Clear();
+
+    virtual void Reset(const LayerConfig &config);
 
     virtual void Reconfigure(const LayerConfig &config);
+
+    virtual void IONames(const LayerIONames &config);
 
     virtual void Stimulus(const Signal &signal);
 
