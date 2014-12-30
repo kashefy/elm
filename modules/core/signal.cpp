@@ -14,6 +14,11 @@ Signal::Signal()
 {
 }
 
+void Signal::Clear()
+{
+    signals_.clear();
+}
+
 void Signal::Append(const string &name, const Mat &feature_data)
 {
     map<string, VecMat >::iterator itr = signals_.find(name);
