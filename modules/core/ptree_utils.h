@@ -4,6 +4,8 @@
 #define SEM_CORE_PTREE_UTILS_H_
 
 #include <iostream>
+
+#include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 namespace sem
@@ -19,6 +21,15 @@ void PrintXML(const PTree &pt,
            std::basic_ostream<
            typename PTree::key_type::value_type
            > &stream=std::cout);
+
+template <class T>
+void push_back_child(const PTree &p, const std::string &key, std::vector<T> &v)
+{
+    BOOST_FOREACH(const PTree::value_type &node, p.get_child(key)) {
+
+        v.push_back(node.second.get_value<T>());
+    }
+}
 
 }
 
