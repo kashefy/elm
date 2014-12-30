@@ -9,6 +9,7 @@
  *  2. Add it to the initialization of g_layerRegistry map.
  */
 #include "layers/layer_z.h"
+#include "encoding/populationcode.h"
 #include "layers/saliencyitti.h"
 #include "layers/weightedsum.h"
 
@@ -23,6 +24,7 @@ typedef Registor_<base_Layer>::Registry LayerRegistry;
 
 LayerRegistry g_layerRegistry = map_list_of
         ADD_TO_LAYER_REGISTRY( LayerZ )
+        ADD_TO_LAYER_REGISTRY( MutexPopulationCode )
         ADD_TO_LAYER_REGISTRY( SaliencyItti )
         ADD_TO_LAYER_REGISTRY( WeightedSum )
         ; ///< <-- add new layer to registry here

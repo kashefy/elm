@@ -15,10 +15,7 @@ class base_FilterBank;
 class base_PopulationCode : public base_Layer
 {
 public:
-    static const std::string PARAM_KERNELS;
-
     static const std::string KEY_INPUT_STIMULUS;
-    static const std::string KEY_OUTPUT_STATE;
     static const std::string KEY_OUTPUT_POP_CODE;
 
     virtual ~base_PopulationCode();
@@ -27,6 +24,8 @@ public:
      * @brief Compute internal state
      * @param in input
      * @param kernels vector of kernels
+     *
+     * @todo Drop kernel parameter, when filter bank becomes a layer
      */
     virtual void State(const cv::Mat1f& in, const VecMat1f& kernels=VecMat1f()) = 0;
 
@@ -50,7 +49,8 @@ public:
     virtual void Stimulus(const Signal &signal);
 
     /**
-     * @brief compute state and population codeApply
+     * @brief compute state and population code
+     * effectivey a call of State() and PopCode() methods
      */
     virtual void Apply();
 
@@ -63,15 +63,13 @@ public:
 protected:
     base_PopulationCode();
 
-    std::string name_stimulus_;
-    OptS name_state_;
-    std::string name_pop_code_;
+    base_PopulationCode(const LayerConfig &config);
 
-    cv::Mat1f stimulus_;
-    cv::Mat state_;
-    cv::Mat1f pop_code_;
+    std::string name_stimulus_; ///< name of stimulus in signal object
+    std::string name_pop_code_; ///< destination name of popuation code in signal
 
-    VecMat1f kernels_;
+    cv::Mat1f stimulus_;    ///< reference to most recent stimuli
+    cv::Mat1f pop_code_;    ///< most recent population code
 };
 
 /**
@@ -82,12 +80,36 @@ class MutexPopulationCode : public base_PopulationCode
 public:
     MutexPopulationCode();
 
+    MutexPopulationCode(const LayerConfig &config);
+
     virtual void State(const cv::Mat1f& in, const VecMat1f& kernels=VecMat1f());
 
     virtual cv::Mat1f PopCode();
+};
+
+/**
+ * @brief a base class for population codes that are stateful
+ */
+class base_StatefulPopulationCode : public base_PopulationCode
+{
+public:
+    static const std::string KEY_OUTPUT_OPT_STATE;  ///< optional output for state due to most recent stimuli
 
 protected:
-    cv::Mat1f state_;    ///< internal state
+    virtual void Clear();
+
+    virtual void IONames(const LayerIONames &config);
+
+    virtual void Response(Signal &signal);
+
+    base_StatefulPopulationCode();
+
+    base_StatefulPopulationCode(const LayerConfig &config);
+
+    // members
+    OptS name_state_;   ///< optional destination name for state in signal object
+
+    cv::Mat1f state_;   ///< internal state due to most recent stimuli
 };
 
 /**

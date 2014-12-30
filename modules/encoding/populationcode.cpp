@@ -11,11 +11,10 @@
 
 using cv::Mat1f;
 
-const std::string base_PopulationCode::PARAM_KERNELS        = "kernels";
+using std::string;
 
-const std::string base_PopulationCode::KEY_INPUT_STIMULUS   = "in";
-const std::string base_PopulationCode::KEY_OUTPUT_POP_CODE  = "pc";
-const std::string base_PopulationCode::KEY_OUTPUT_STATE     = "state";
+const string base_PopulationCode::KEY_INPUT_STIMULUS   = "in";
+const string base_PopulationCode::KEY_OUTPUT_POP_CODE  = "pc";
 
 base_PopulationCode::~base_PopulationCode()
 {
@@ -26,9 +25,13 @@ base_PopulationCode::base_PopulationCode()
 {
 }
 
+base_PopulationCode::base_PopulationCode(const LayerConfig &config)
+    : base_Layer(config)
+{
+}
+
 void base_PopulationCode::Clear()
 {
-    state_ = Mat1f();
     pop_code_ = Mat1f();
 }
 
@@ -39,15 +42,12 @@ void base_PopulationCode::Reconfigure(const LayerConfig &config)
 
 void base_PopulationCode::Reset(const LayerConfig &config)
 {
-    PTree p = config.Params();
-    kernels_.clear();
-
+    Clear();
 }
 
 void base_PopulationCode::IONames(const LayerIONames &config)
 {
     name_stimulus_ = config.Input(KEY_INPUT_STIMULUS);
-    name_state_ = config.OutputOpt(KEY_OUTPUT_STATE);
     name_pop_code_ = config.Output(KEY_OUTPUT_POP_CODE);
 }
 
@@ -58,17 +58,13 @@ void base_PopulationCode::Stimulus(const Signal &signal)
 
 void base_PopulationCode::Apply()
 {
-    State(stimulus_, kernels_);
+    State(stimulus_, VecMat1f());
     pop_code_ = PopCode();
 }
 
 void base_PopulationCode::Response(Signal &signal)
 {
     signal.Append(name_pop_code_, pop_code_);
-
-    if(name_state_) {
-        signal.Append(name_state_.get(), state_);
-    }
 }
 
 MutexPopulationCode::MutexPopulationCode()
@@ -76,19 +72,56 @@ MutexPopulationCode::MutexPopulationCode()
 {
 }
 
+MutexPopulationCode::MutexPopulationCode(const LayerConfig &config)
+    : base_PopulationCode(config)
+{
+}
+
 void MutexPopulationCode::State(const Mat1f& in, const VecMat1f& kernels)
 {
-    state_ = Mat1f::zeros(in.rows, in.cols*2);
+    pop_code_ = Mat1f::zeros(in.rows, in.cols*2);
     for(int i=0, j=0; i < static_cast<int>(in.total()); i++, j+=2) {
 
         int k = (in(i) < 0.5f) ? 0 : 1;
-        state_(j+k) = 1.f;
+        pop_code_(j+k) = 1.f;
     }
 }
 
 Mat1f MutexPopulationCode::PopCode()
 {
-    return state_;
+    return pop_code_;
+}
+
+const string base_StatefulPopulationCode::KEY_OUTPUT_OPT_STATE = "state";
+
+base_StatefulPopulationCode::base_StatefulPopulationCode()
+    : base_PopulationCode()
+{
+}
+
+base_StatefulPopulationCode::base_StatefulPopulationCode(const LayerConfig &config)
+    : base_PopulationCode(config)
+{
+}
+
+void base_StatefulPopulationCode::Clear()
+{
+    base_PopulationCode::Clear();
+    state_ = Mat1f();
+}
+
+void base_StatefulPopulationCode::IONames(const LayerIONames &config)
+{
+    base_PopulationCode::IONames(config);
+    name_state_ = config.OutputOpt(KEY_OUTPUT_OPT_STATE);
+}
+
+void base_StatefulPopulationCode::Response(Signal &signal)
+{
+    base_PopulationCode::Response(signal);
+    if(name_state_) {
+        signal.Append(name_state_.get(), state_);
+    }
 }
 
 SoftMaxPopulationCode::SoftMaxPopulationCode()
