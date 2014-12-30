@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include "core/base_Layer.h"
+#include "core/layerconfig.h"
 #include "core/typedefs.h"
 
 class base_FilterBank;
@@ -10,10 +12,16 @@ class base_FilterBank;
 /**
  * @brief The base class for population codes
  */
-class base_PopulationCode
+class base_PopulationCode : public base_Layer
 {
 public:
-    virtual ~base_PopulationCode() {}
+    static const std::string PARAM_KERNELS;
+
+    static const std::string KEY_INPUT_STIMULUS;
+    static const std::string KEY_OUTPUT_STATE;
+    static const std::string KEY_OUTPUT_POP_CODE;
+
+    virtual ~base_PopulationCode();
 
     /**
      * @brief Compute internal state
@@ -28,8 +36,42 @@ public:
      */
     virtual cv::Mat1f PopCode() = 0;
 
+    /* Layer derived methods:
+     * ---------------------
+     */
+    virtual void Clear();
+
+    virtual void Reconfigure(const LayerConfig &config);
+
+    virtual void Reset(const LayerConfig &config);
+
+    virtual void IONames(const LayerIONames &config);
+
+    virtual void Stimulus(const Signal &signal);
+
+    /**
+     * @brief compute state and population codeApply
+     */
+    virtual void Apply();
+
+    /**
+     * @brief Appends pop code, and state if requested
+     * @param signal populated with response
+     */
+    virtual void Response(Signal &signal);
+
 protected:
     base_PopulationCode();
+
+    std::string name_stimulus_;
+    OptS name_state_;
+    std::string name_pop_code_;
+
+    cv::Mat1f stimulus_;
+    cv::Mat state_;
+    cv::Mat1f pop_code_;
+
+    VecMat1f kernels_;
 };
 
 /**

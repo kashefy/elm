@@ -1,15 +1,74 @@
 #include "encoding/populationcode.h"
 
+#include <boost/foreach.hpp> ///< for iterating through param kernels
+
 #include <opencv2/features2d.hpp>
 #include <opencv2/imgproc.hpp>
 
 #include "core/sampler.h"
+#include "core/signal.h"
 #include "encoding/base_filterbank.h"
 
 using cv::Mat1f;
 
-base_PopulationCode::base_PopulationCode()
+const std::string base_PopulationCode::PARAM_KERNELS        = "kernels";
+
+const std::string base_PopulationCode::KEY_INPUT_STIMULUS   = "in";
+const std::string base_PopulationCode::KEY_OUTPUT_POP_CODE  = "pc";
+const std::string base_PopulationCode::KEY_OUTPUT_STATE     = "state";
+
+base_PopulationCode::~base_PopulationCode()
 {
+}
+
+base_PopulationCode::base_PopulationCode()
+    : base_Layer()
+{
+}
+
+void base_PopulationCode::Clear()
+{
+    state_ = Mat1f();
+    pop_code_ = Mat1f();
+}
+
+void base_PopulationCode::Reconfigure(const LayerConfig &config)
+{
+    SEM_THROW_NOT_IMPLEMENTED;
+}
+
+void base_PopulationCode::Reset(const LayerConfig &config)
+{
+    PTree p = config.Params();
+    kernels_.clear();
+
+}
+
+void base_PopulationCode::IONames(const LayerIONames &config)
+{
+    name_stimulus_ = config.Input(KEY_INPUT_STIMULUS);
+    name_state_ = config.OutputOpt(KEY_OUTPUT_STATE);
+    name_pop_code_ = config.Output(KEY_OUTPUT_POP_CODE);
+}
+
+void base_PopulationCode::Stimulus(const Signal &signal)
+{
+    stimulus_ = signal.MostRecent(name_stimulus_);
+}
+
+void base_PopulationCode::Apply()
+{
+    State(stimulus_, kernels_);
+    pop_code_ = PopCode();
+}
+
+void base_PopulationCode::Response(Signal &signal)
+{
+    signal.Append(name_pop_code_, pop_code_);
+
+    if(name_state_) {
+        signal.Append(name_state_.get(), state_);
+    }
 }
 
 MutexPopulationCode::MutexPopulationCode()
