@@ -1,6 +1,7 @@
 #include "core/ptree_utils.h"
 
-#include "gtest/gtest.h"
+#include "core/exception.h"
+#include "ts/ts.h"
 
 using namespace std;
 using namespace boost::property_tree;
@@ -50,3 +51,113 @@ TEST_F(PTreeUtilsPrintTest, Empty) {
     PrintXML(ptree(), s);
     EXPECT_EQ("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n", s.str());
 }
+
+
+/**
+ * @brief A setup for repeating tests with different types of PTree nodes (int, float, uchar)
+ */
+template <class T>
+class PTreePODTypesTest : public testing::Test
+{
+};
+
+/**
+ * @brief the struct below enables defining values to be used inside the tests
+ * These values are set below once per type.
+ */
+template<class T>
+struct PTreeV_
+{
+    static std::vector<T> values;
+};
+
+TYPED_TEST_CASE_P(PTreePODTypesTest);
+
+/** @brief tests around utility function for extracting multiple nodes into a vector
+ *
+ *  empty in empty out
+ */
+TYPED_TEST_P(PTreePODTypesTest, PTreePushBackChildTest_Empty_RootKey) {
+
+    vector<TypeParam> v_out;
+    push_back_child(PTree(), "", v_out);
+    EXPECT_SIZE(0, v_out);
+}
+
+TYPED_TEST_P(PTreePODTypesTest, PTreePushBackChildTest_Empty_InvalidKey)
+{
+    vector<TypeParam> x;
+    EXPECT_THROW(push_back_child(PTree(), "key", x), boost::property_tree::ptree_bad_path);
+}
+
+TYPED_TEST_P(PTreePODTypesTest, PTreePushBackChildTest_PushBack_Single)
+{
+    std::vector<TypeParam> v = PTreeV_<TypeParam>::values;
+
+    ASSERT_GT(v.size(), size_t(0)) << "this test is useless if vector is empty.";
+
+    for(size_t i=0; i<v.size(); i++) {
+
+        PTree children, child, p;
+        child.put("", v[i]);
+        children.push_back(std::make_pair("", child));
+        p.add_child("key", children);
+
+        vector<TypeParam> x;
+        push_back_child(p, "key", x);
+
+        EXPECT_SIZE(1, x) << "Size mismatch";
+        EXPECT_EQ(v[i], x[0]) << "Value mismatch";
+    }
+}
+
+TYPED_TEST_P(PTreePODTypesTest, PTreePushBackChildTest_PushBack_Multiple)
+{
+    std::vector<TypeParam> v = PTreeV_<TypeParam>::values;
+
+    ASSERT_GT(v.size(), size_t(1)) << "this test is useless if vector contains only one element";
+
+    for(size_t i=1; i<v.size(); i++) {
+
+        PTree children, p;
+
+        for(size_t j=0; j<i; j++) {
+
+            PTree child;
+            child.put("", v[j]);
+            children.push_back(std::make_pair("", child));
+        }
+
+        p.add_child("key", children);
+        vector<TypeParam> x;
+        push_back_child(p, "key", x);
+
+        EXPECT_SIZE(i, x) << "Size mismatch";
+
+        for(size_t j=0; j<i; j++) {
+
+            EXPECT_EQ(v[j], x[j]) << "Value mismatch";
+        }
+    }
+}
+
+/* Write additional type+value parameterized tests here.
+ * Acquaint yourself with the values passed to along with each type.
+ */
+
+// Register test names
+REGISTER_TYPED_TEST_CASE_P(PTreePODTypesTest,
+                           PTreePushBackChildTest_Empty_RootKey,
+                           PTreePushBackChildTest_Empty_InvalidKey,
+                           PTreePushBackChildTest_PushBack_Single,
+                           PTreePushBackChildTest_PushBack_Multiple); ///< register additional typed_test_p (i.e. unit test) routines here
+
+///< Register values to work with inside tests, note how they're used inside the tests
+template<> std::vector<float> PTreeV_<float>::values{-1.f, 0.f, 1.f, 100.f, 101.f, 200.f};
+template<> std::vector<int> PTreeV_<int>::values{-1, 0, 1, 100, 101, 200};
+template<> std::vector<uchar> PTreeV_<uchar>::values{255, 0, 1, 100, 101, 200};
+
+typedef testing::Types<float, int, uchar> PODTypes;  ///< // lists the usual suspects of matrices
+INSTANTIATE_TYPED_TEST_CASE_P(PTreeUtilsPODTypesTest, PTreePODTypesTest, PODTypes);
+
+
