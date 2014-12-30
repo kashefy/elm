@@ -18,7 +18,9 @@ using boost::assign::map_list_of;
 typedef Registor_<base_Layer> LayerRegistor;
 typedef Registor_<base_Layer>::Registry LayerRegistry;
 
-// macros for adding individual instances to registry
+/** Macros for adding individual instances to registry
+ * credit: J.Turcot, T. Senechal, http://stackoverflow.com/questions/138600/initializing-a-static-stdmapint-int-in-c
+ */
 #define ADD_TO_REGISTRY(Registor, NewInstance) (#NewInstance, &Registor::DerivedInstance<NewInstance>)
 #define ADD_TO_LAYER_REGISTRY(NewInstance) ADD_TO_REGISTRY(LayerRegistor, NewInstance)
 

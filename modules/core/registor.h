@@ -9,6 +9,8 @@
 #include "core/stl.h"
 
 /** @brief class for registering derived instantances
+ * Partially inspired by:
+ * http://stackoverflow.com/questions/582331/is-there-a-way-to-instantiate-objects-from-a-string-holding-their-class-name
  */
 template <class TBase>
 class Registor_
