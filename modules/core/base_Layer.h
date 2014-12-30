@@ -1,10 +1,8 @@
 #ifndef SEM_CORE_BASE_LAYER_H_
 #define SEM_CORE_BASE_LAYER_H_
 
-#include <opencv2/core.hpp>
-
-#include "core/layerconfig.h"
-
+class LayerConfig;
+class LayerIONames;
 class Signal;
 
 /**

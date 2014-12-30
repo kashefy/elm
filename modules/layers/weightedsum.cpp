@@ -1,6 +1,7 @@
 #include "layers/weightedsum.h"
 
 #include "core/exception.h"
+#include "core/layerconfig.h"
 #include "core/signal.h"
 
 using namespace std;
@@ -17,6 +18,11 @@ void WeightedSum::Clear()
 {
     stimulus_ = Mat1f();
     response_ = Mat1f();
+}
+
+void WeightedSum::Reset(const LayerConfig &config)
+{
+    Reconfigure(config);
 }
 
 void WeightedSum::Reconfigure(const LayerConfig &config)
