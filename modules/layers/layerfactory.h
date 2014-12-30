@@ -26,6 +26,17 @@ public:
      */
     static std::shared_ptr<base_Layer> CreateLayerPtrShared(const LayerType &type);
 
+    /**
+     * @brief Create smart pointer to an instantiated layer
+     * @param type
+     * @param configuration
+     * @param I/O names
+     * @return pointer to layer instance
+     * @throws ExceptionTypeError on unrecognized layer type
+     */
+    static std::shared_ptr<base_Layer> CreateLayerPtrShared(const LayerType &type,
+                                                            const LayerConfig &config,
+                                                            const LayerIONames &io);
 };
 
 #endif // SEM_LAYERFACTORY_H_

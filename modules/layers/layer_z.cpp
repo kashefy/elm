@@ -3,8 +3,6 @@
 #include "core/exception.h"
 #include "core/signal.h"
 
-#include "layers/layers.h"
-
 using std::shared_ptr;
 using cv::Mat1f;
 

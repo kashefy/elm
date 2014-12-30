@@ -35,3 +35,13 @@ LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateLayerPtrShared(const 
 {
     return LayerRegistor::CreatePtrShared(g_layerRegistry, type);
 }
+
+LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateLayerPtrShared(const LayerType &type,
+                                                                          const LayerConfig &config,
+                                                                          const LayerIONames &io)
+{
+    LayerRegistor::RegisteredTypeSharedPtr ptr = LayerFactory::CreateLayerPtrShared(type);
+    ptr->Reset(config);
+    ptr->IONames(io);
+    return ptr;
+}

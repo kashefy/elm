@@ -20,6 +20,11 @@ void WeightedSum::Clear()
     response_ = Mat1f();
 }
 
+void WeightedSum::Reset(const LayerConfig &config)
+{
+    Reconfigure(config);
+}
+
 void WeightedSum::Reconfigure(const LayerConfig &config)
 {
     // params
