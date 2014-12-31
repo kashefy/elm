@@ -5,7 +5,7 @@
 #  And builds them as part of a single binary for push-button execution
 #  Args:
 #    test_project (string): test project name
-#    filter (string): source file filter to use with CMake's file (GLOB_RECURSE ...)
+#    filter (string): source file filter to use with CMake's file(GLOB_RECURSE ...) routine
 # ----------------------------------------------------------------------------
 
 FUNCTION(build_tests test_project filter)
