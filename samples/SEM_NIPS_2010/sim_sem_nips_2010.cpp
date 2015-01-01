@@ -10,6 +10,7 @@
 #include "encoding/populationcode.h"
 #include "io/readmnist.h"
 #include "layers/layerfactory.h"
+#include "layers/layer_y.h"
 #include "layers/layer_z.h"
 #include "neuron/wtapoisson.h"
 #include "neuron/neuron.h"
@@ -168,6 +169,22 @@ private:
         return LayerFactory::CreateLayerPtrShared("MutexPopulationCode", cfg, cfg);
     }
 
+    shared_ptr<base_Layer> InitLayerY() const
+    {
+        PTree params;
+        params.put(LayerY::PARAM_FREQ, 1000.f);
+        params.put(LayerY::PARAM_DELTA_T_MSEC, 1.f);
+
+        LayerConfig cfg;
+        cfg.Params(params);
+
+        LayerIONames io;
+        io.Input(LayerY::KEY_INPUT_STIMULUS, NAME_POP_CODE);
+        io.Output(LayerY::KEY_OUTPUT_SPIKES, NAME_SPIKES_Y);
+
+        return LayerFactory::CreateLayerPtrShared("LayerY", cfg, io);
+    }
+
     shared_ptr<base_Layer> InitLearners(int nb_features, int history_length) const
     {
         PTree params;
@@ -185,6 +202,7 @@ private:
     }
 
     shared_ptr<base_Layer> pop_code_;
+    shared_ptr<base_Layer> y_;
     shared_ptr<base_Layer> z_;
     size_t nb_learners_;   ///< no. of learners (e.g. ZNeuron)
 
