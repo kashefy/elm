@@ -72,14 +72,9 @@ void LayerY::IONames(const LayerIONames &config)
     name_spikes_ = config.Output(KEY_OUTPUT_SPIKES);
 }
 
-void LayerY::Stimulus(const Signal &signal)
+void LayerY::Activate(const Signal &signal)
 {
-    stimulus_ = signal.MostRecent(name_stimulus_).at<float>(0);
-}
-
-void LayerY::Apply()
-{
-    state_ = State(stimulus_);
+    state_ = State(signal.MostRecent(name_stimulus_).at<float>(0));
 }
 
 void LayerY::Response(Signal &signal)

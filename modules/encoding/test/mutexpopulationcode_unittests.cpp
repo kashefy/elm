@@ -106,8 +106,7 @@ protected:
         MutexPopulationCodeLayerInitTest::SetUp();
         sig_.Append(NAME_STIMULUS, in_);
 
-        to_ptr_->Stimulus(sig_);
-        to_ptr_->Apply();
+        to_ptr_->Activate(sig_);
         to_ptr_->Response(sig_);
     }
 
@@ -125,8 +124,7 @@ TEST_F(MutexPopulationCodeLayerTest, IONames_Wrong) {
 
     in_ = Mat1f::ones(3, 2);
     sig_.Append(NAME_STIMULUS, in_);
-    to_ptr_->Stimulus(sig_);
-    to_ptr_->Apply();
+    to_ptr_->Activate(sig_);
     to_ptr_->Response(sig_);
     to_.State(in_);
 
@@ -139,8 +137,7 @@ TEST_F(MutexPopulationCodeLayerTest, Response_dims) {
 
     in_ = Mat1f::ones(3, 2);
     sig_.Append(NAME_STIMULUS, in_);
-    to_ptr_->Stimulus(sig_);
-    to_ptr_->Apply();
+    to_ptr_->Activate(sig_);
     to_ptr_->Response(sig_);
     to_.State(in_);
 
@@ -161,8 +158,7 @@ TEST_F(MutexPopulationCodeLayerTest, PopCode_zeros) {
     in_ = Mat1f::zeros(in_.rows, in_.cols);
 
     sig_.Append(NAME_STIMULUS, in_);
-    to_ptr_->Stimulus(sig_);
-    to_ptr_->Apply();
+    to_ptr_->Activate(sig_);
     to_ptr_->Response(sig_);
     to_.State(in_);
 

@@ -109,26 +109,22 @@ void LayerZ::IONames(const LayerIONames &config)
     name_output_bias_ = config.OutputOpt(KEY_OUTPUT_BIAS);
 }
 
-void LayerZ::Stimulus(const Signal &signal)
+void LayerZ::Activate(const Signal &signal)
 {
-    spikes_in_ = signal.MostRecent(name_input_spikes_);
-    if(spikes_in_.total() != static_cast<size_t>(nb_afferents_)) {
+    cv::Mat1f spikes_in = signal.MostRecent(name_input_spikes_);
+    if(spikes_in.total() != static_cast<size_t>(nb_afferents_)) {
 
         std::stringstream s;
         s << "Expecting " << nb_afferents_ << " input spikes";
         SEM_THROW_BAD_DIMS(s.str());
     }
-}
 
-#include <iostream>
-void LayerZ::Apply()
-{
     // compute membrane potential for each neuron
     u_ = Mat1f(1, static_cast<int>(z_.size()));
     int i=0;
     for(VecLPtr::iterator itr=z_.begin(); itr != z_.end(); ++itr) {
 
-        u_(i++) = (*itr)->Predict(spikes_in_).at<float>(0);
+        u_(i++) = (*itr)->Predict(spikes_in.reshape(1, 1)).at<float>(0);
     }
 
     // let them compete

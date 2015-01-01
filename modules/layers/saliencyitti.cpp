@@ -45,8 +45,6 @@ SaliencyItti::SaliencyItti(const LayerConfig &config)
 void SaliencyItti::Clear()
 {
     saliency_ = Mat1f();
-    stimulus_ = Mat1f();
-
     percentile_orientation_response_ = DEFAULT_ORIENT_RESPONSE_PERCENTILE;
 }
 
@@ -82,28 +80,25 @@ void SaliencyItti::IONames(const LayerIONames &config)
     name_salient_loc_ = config.Output(KEY_OUTPUT_SALIENT_LOC);
 }
 
-void SaliencyItti::Stimulus(const Signal &signal)
+void SaliencyItti::Activate(const Signal &signal)
 {
-    stimulus_ = signal.MostRecent(name_scene_);
-    pop_code_orient_.State(stimulus_, gabors_);
-}
+    Mat1f stimulus = signal.MostRecent(name_scene_);
+    pop_code_orient_.State(stimulus, gabors_);
 
-void SaliencyItti::Apply()
-{
     Mat orientation_spikes = pop_code_orient_.PopCode();
-    Mat1i orientation_index(stimulus_.size());
+    Mat1i orientation_index(stimulus.size());
 
     Mat1f orientation_response_flat = Reshape(gabors_->Response()).reshape(1, 1);
     float low_orientation_response_percentile = Percentile()
             .CalcPercentile(orientation_response_flat,
                             percentile_orientation_response_);
-    Mat1b mask_low_orientation_response(stimulus_.size());
+    Mat1b mask_low_orientation_response(stimulus.size());
 
     // assing orientation to each stimulus pixel
     size_t j_step = gabors_->size();
     double min_val;
     int max_idx[2];
-    for(size_t i=0, j=0; i<stimulus_.total(); i++, j+=j_step) {
+    for(size_t i=0, j=0; i<stimulus.total(); i++, j+=j_step) {
 
         minMaxIdx(orientation_spikes.colRange(j, j+j_step), &min_val, 0, 0, max_idx);
         orientation_index(i) = max_idx[1];
@@ -125,7 +120,7 @@ void SaliencyItti::Apply()
 
     //TODO: weigh by entropy to clip away uniform response regions, use as feedback signal
 
-    intensity_constrast_.Compute(stimulus_);
+    intensity_constrast_.Compute(stimulus);
     Mat intensity_constrast_norm = intensity_constrast_.Response();
     normalize(intensity_constrast_norm, intensity_constrast_norm, 0.f, 255.f, NORM_MINMAX, -1, noArray());
 

@@ -155,13 +155,12 @@ protected:
     std::shared_ptr<base_Layer> to_;    ///< test object
 };
 
-TEST_F(LayerYTest, Apply)
+TEST_F(LayerYTest, Activate)
 {
     Signal s;
     s.Append(NAME_STIMULUS, cv::Mat1f::zeros(1, 1));
 
-    to_->Stimulus(s);
-    to_->Apply();
+    to_->Activate(s);
 
     EXPECT_FALSE(s.Exists(NAME_SPIKES));
 
@@ -171,7 +170,7 @@ TEST_F(LayerYTest, Apply)
 }
 
 /**
- * @brief test layer application with all zero stimulus
+ * @brief test layer activation with all zero stimulus
  */
 TEST_F(LayerYTest, Zero)
 {
@@ -183,8 +182,7 @@ TEST_F(LayerYTest, Zero)
         Signal s;
         s.Append(NAME_STIMULUS, x.clone());
 
-        to_->Stimulus(s);
-        to_->Apply();
+        to_->Activate(s);
         to_->Response(s);
 
         ASSERT_TRUE(s.Exists(NAME_SPIKES)) << "Response missing";
@@ -207,8 +205,7 @@ TEST_F(LayerYTest, Invalid)
         Signal s;
         s.Append(NAME_STIMULUS, x.col(i));
 
-        to_->Stimulus(s);
-        EXPECT_THROW(to_->Apply(), ExceptionNotImpl);
+        EXPECT_THROW(to_->Activate(s), ExceptionNotImpl);
     }
 }
 
@@ -226,8 +223,7 @@ TEST_F(LayerYTest, Freq_Inf)
         Signal s;
         s.Append(NAME_STIMULUS, st.clone());
 
-        to_->Stimulus(s);
-        to_->Apply();
+        to_->Activate(s);
         to_->Response(s);
 
         EXPECT_MAT_DIMS_EQ(s.MostRecent(NAME_SPIKES), st);
@@ -248,8 +244,7 @@ TEST_F(LayerYTest, Freq_Zero)
         Signal s;
         s.Append(NAME_STIMULUS, st.clone());
 
-        to_->Stimulus(s);
-        to_->Apply();
+        to_->Activate(s);
         to_->Response(s);
 
         EXPECT_MAT_DIMS_EQ(s.MostRecent(NAME_SPIKES), cv::Mat1f::zeros(st.size()));

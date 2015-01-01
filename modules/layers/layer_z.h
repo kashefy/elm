@@ -41,55 +41,23 @@ public:
 
     LayerZ();
 
-    /**
-     * @brief Configurable constructor, set parameters and IO
-     * @param config
-     */
     LayerZ(const LayerConfig& config);
 
-    /**
-     * @brief Clear layer state
-     */
     void Clear();
 
-    /**
-     * @brief Reset and override layer configuration
-     * @param config
-     */
     void Reset(const LayerConfig &config);
 
-    /**
-     * @brief Reconfigure, soft reset
-     * @param config
-     */
     void Reconfigure(const LayerConfig &config);
 
-    /**
-      * @brief Set layer input output keys
-      * @param new I/O configuration
-      */
     virtual void IONames(const LayerIONames& config);
 
-    /**
-     * @brief Set stimulus
-     * @param signal containing stimuli
-     */
-    void Stimulus(const Signal &signal);
+    void Activate(const Signal &signal);
 
     /**
-     * @brief Apply layer to most recent stimuli
-     */
-    void Apply();
-
-    /**
-     * @brief Learn from most recent stimuli
+     * @brief Apply STDP for learning from most recent stimuli
      */
     void Learn();
 
-    /**
-     * @brief Get response due to most recent stimuli application
-     * @param signal for encapsulating response
-     */
     void Response(Signal &signal);
 
 protected:
@@ -110,7 +78,6 @@ protected:
 
     int nb_afferents_;                  ///< number of afferents to this layer
 
-    cv::Mat1f spikes_in_;               ///< stimulus
     cv::Mat1f u_;                       ///< membrane potential from most recent stimuli
     cv::Mat1f spikes_out_;              ///< output spikes from most recent stimuli
 

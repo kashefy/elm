@@ -157,8 +157,7 @@ TEST_F(LayerZTest, ResponseDims)
     const int nb_output_nodes = config_.Params().get<int>(LayerZ::PARAM_NB_OUTPUT_NODES);
     for(int i=0; i<N; i++) {
 
-        to_.Stimulus(signal_);
-        to_.Apply();
+        to_.Activate(signal_);
         to_.Response(signal_);
 
         // check membrane potential
@@ -187,12 +186,11 @@ TEST_F(LayerZTest, Clear)
 TEST_F(LayerZTest, StatelessMemPot)
 {
     const int N=50;
-    to_.Stimulus(signal_);
 
     Mat u_initial;
     for(int i=0; i<N; i++) {
 
-        to_.Apply();
+        to_.Activate(signal_);
         to_.Response(signal_);
 
         Mat u = signal_.MostRecent(NAME_OUTPUT_MEM_POT);
@@ -222,8 +220,7 @@ TEST_F(LayerZTest, OptionalOutput)
     to.Reset(cfg);
     EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
 
-    to.Stimulus(signal_);
-    to.Apply();
+    to.Activate(signal_);
     {
         Signal signal_new;
         to.Response(signal_new);
@@ -234,7 +231,7 @@ TEST_F(LayerZTest, OptionalOutput)
 
     cfg.Output(LayerZ::KEY_OUTPUT_MEMBRANE_POT, NAME_OUTPUT_MEM_POT);
     EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
-    to.Apply();
+    to.Activate(signal_);
     {
         Signal signal_new;
         to.Response(signal_new);
@@ -244,7 +241,7 @@ TEST_F(LayerZTest, OptionalOutput)
 
     cfg.Output(LayerZ::KEY_OUTPUT_WEIGHTS, NAME_OUTPUT_WEIGHTS);
     EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
-    to.Apply();
+    to.Activate(signal_);
     {
         Signal signal_new;
         to.Response(signal_new);
@@ -259,7 +256,7 @@ TEST_F(LayerZTest, OptionalOutput)
 TEST_F(LayerZTest, Stimulus)
 {
     signal_.Append(NAME_INPUT_SPIKES, Mat1f());
-    EXPECT_THROW(to_.Stimulus(signal_), ExceptionBadDims);
+    EXPECT_THROW(to_.Activate(signal_), ExceptionBadDims);
 
     for(int r=0; r<=nb_afferents_*2; r++) {
 
@@ -269,23 +266,22 @@ TEST_F(LayerZTest, Stimulus)
 
             if(r*c==nb_afferents_) {
 
-                EXPECT_NO_THROW(to_.Stimulus(signal_));
+                EXPECT_NO_THROW(to_.Activate(signal_));
             }
             else {
 
-                EXPECT_THROW(to_.Stimulus(signal_), ExceptionBadDims);
+                EXPECT_THROW(to_.Activate(signal_), ExceptionBadDims);
             }
         }
     }
 }
 
-TEST_F(LayerZTest, Apply)
+TEST_F(LayerZTest, Activate)
 {
     Mat1f spikes(1, nb_afferents_);
     randn(spikes, 0.f, 1.f);
     signal_.Append(NAME_INPUT_SPIKES, spikes);
-    to_.Stimulus(signal_);
-    to_.Apply();
+    to_.Activate(signal_);
     EXPECT_FALSE(signal_.Exists(NAME_OUTPUT_SPIKES));
     to_.Response(signal_);
     EXPECT_TRUE(signal_.Exists(NAME_OUTPUT_SPIKES));
@@ -323,8 +319,7 @@ TEST_F(LayerZLearnTest, OptionalWeightOutput)
     to.Reset(cfg);
     EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
 
-    to.Stimulus(signal_);
-    to.Apply();
+    to.Activate(signal_);
     {
         Signal signal_new;
         to.Response(signal_new);
@@ -334,7 +329,7 @@ TEST_F(LayerZLearnTest, OptionalWeightOutput)
 
     cfg.Output(LayerZ::KEY_OUTPUT_WEIGHTS, NAME_OUTPUT_WEIGHTS);
     EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
-    to.Apply();
+    to.Activate(signal_);
     {
         Signal signal_new;
         to.Response(signal_new);
@@ -344,7 +339,7 @@ TEST_F(LayerZLearnTest, OptionalWeightOutput)
     }
 
     EXPECT_NO_THROW(to.IONames(config_)) << "Are all required IO names present?";
-    to.Apply();
+    to.Activate(signal_);
     {
         Signal signal_new;
         to.Response(signal_new);
@@ -367,8 +362,7 @@ TEST_F(LayerZLearnTest, OptionalBiasOutput)
     to.Reset(cfg);
     EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
 
-    to.Stimulus(signal_);
-    to.Apply();
+    to.Activate(signal_);
     {
         Signal signal_new;
         to.Response(signal_new);
@@ -379,7 +373,7 @@ TEST_F(LayerZLearnTest, OptionalBiasOutput)
 
     cfg.Output(LayerZ::KEY_OUTPUT_WEIGHTS, NAME_OUTPUT_BIAS);
     EXPECT_NO_THROW(to.IONames(cfg)) << "Are all required IO names present?";
-    to.Apply();
+    to.Activate(signal_);
     {
         Signal signal_new;
         to.Response(signal_new);
@@ -389,7 +383,7 @@ TEST_F(LayerZLearnTest, OptionalBiasOutput)
     }
 
     EXPECT_NO_THROW(to.IONames(config_)) << "Are all required IO names present?";
-    to.Apply();
+    to.Activate(signal_);
     {
         Signal signal_new;
         to.Response(signal_new);
@@ -439,8 +433,7 @@ TEST_F(LayerZLearnTest, BiasDims)
  */
 TEST_F(LayerZLearnTest, WeightsNotCopied)
 {
-    to_.Stimulus(signal_);
-    to_.Apply();
+    to_.Activate(signal_);
     to_.Response(signal_);
     Mat1f w0;
 
@@ -482,12 +475,11 @@ TEST_F(LayerZLearnTest, WeightsNotCopied)
 TEST_F(LayerZLearnTest, Static)
 {
     const int N=50;
-    to_.Stimulus(signal_);
 
     Mat w_initial;
     for(int i=0; i<N; i++) {
 
-        to_.Apply();
+        to_.Activate(signal_);
         to_.Response(signal_);
         Mat w = signal_.MostRecent(NAME_OUTPUT_WEIGHTS);
 
@@ -523,8 +515,7 @@ TEST_F(LayerZLearnTest, Learn_NoFire)
 
         Mat1f bias_prev = signal_.MostRecent(NAME_OUTPUT_BIAS).clone();
 
-        to_.Stimulus(signal_);
-        to_.Apply();
+        to_.Activate(signal_);
         to_.Learn();
         to_.Response(signal_);
         Mat1f weights = signal_.MostRecent(NAME_OUTPUT_WEIGHTS).clone();
@@ -557,8 +548,8 @@ TEST_F(LayerZLearnTest, Learn)
         Mat1f weights_prev = signal_.MostRecent(NAME_OUTPUT_WEIGHTS).clone();
 
         signal_.Append(NAME_INPUT_SPIKES, stimuli.next(0));
-        to_.Stimulus(signal_);
-        to_.Apply();
+
+        to_.Activate(signal_);
         to_.Learn();
         to_.Response(signal_);
 

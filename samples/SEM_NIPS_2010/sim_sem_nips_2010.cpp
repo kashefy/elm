@@ -54,8 +54,7 @@ public:
 
             sig.Append(NAME_STIMULUS, img);
 
-            pop_code_->Stimulus(sig);
-            pop_code_->Apply();
+            pop_code_->Activate(sig);
             pop_code_->Response(sig);
 
             Mat1f pc = sig.MostRecent(NAME_POP_CODE);
@@ -80,8 +79,7 @@ public:
 
                 sig.Append(NAME_SPIKES_Y, spikes_y);
 
-                z_->Stimulus(sig);
-                z_->Apply();
+                z_->Activate(sig);
                 static_pointer_cast<base_LearningLayer>(z_)->Learn();
             }
 
@@ -106,8 +104,7 @@ public:
             //cv::imshow("i", img);
             sig.Append(NAME_STIMULUS, img);
 
-            pop_code_->Stimulus(sig);
-            pop_code_->Apply();
+            pop_code_->Activate(sig);
             pop_code_->Response(sig);
 
             Mat1f pc = sig.MostRecent(NAME_POP_CODE);
@@ -124,8 +121,7 @@ public:
 
             sig.Append(NAME_SPIKES_Y, spikes_y);
 
-            z_->Stimulus(sig);
-            z_->Apply();
+            z_->Activate(sig);
         }
     }
 

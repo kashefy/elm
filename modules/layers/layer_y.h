@@ -27,9 +27,7 @@ public:
 
     virtual void IONames(const LayerIONames& config);
 
-    virtual void Stimulus(const Signal &signal);
-
-    virtual void Apply();
+    virtual void Activate(const Signal &signal);
 
     virtual void Response(Signal &signal);
 
@@ -37,9 +35,7 @@ protected:
     std::string name_stimulus_;
     std::string name_spikes_;
 
-    float stimulus_;
     int state_;
-
 };
 
 #endif // LAYERY_H

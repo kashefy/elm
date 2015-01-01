@@ -46,13 +46,11 @@ public:
 
     virtual void IONames(const LayerIONames &config);
 
-    virtual void Stimulus(const Signal &signal);
-
     /**
      * @brief compute state and population code
      * effectivey a call of State() and PopCode() methods
      */
-    virtual void Apply();
+    virtual void Activate(const Signal &signal);
 
     /**
      * @brief Appends pop code, and state if requested
@@ -68,7 +66,6 @@ protected:
     std::string name_stimulus_; ///< name of stimulus in signal object
     std::string name_pop_code_; ///< destination name of popuation code in signal
 
-    cv::Mat1f stimulus_;    ///< reference to most recent stimuli
     cv::Mat1f pop_code_;    ///< most recent population code
 };
 

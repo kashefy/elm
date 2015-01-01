@@ -41,14 +41,9 @@ public:
     virtual void IONames(const LayerIONames& config) = 0;
 
     /**
-     * @brief Set stimulus
+     * @brief Activate layer computations to most recent stimuli
      */
-    virtual void Stimulus(const Signal &signal) = 0;
-
-    /**
-     * @brief Apply layer computations to most recent stimuli
-     */
-    virtual void Apply() = 0;
+    virtual void Activate(const Signal &signal) = 0;
 
     /**
      * @brief Get layer response
