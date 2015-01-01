@@ -13,7 +13,7 @@ void SpikingHistory::Advance()
 {
     Mat mask_rows = history_ > 0;
     subtract(history_,
-             Mat1i::ones(history_.rows, history_.cols),
+             Mat1i::ones(history_.size()),
              history_,
              mask_rows);
 }
