@@ -45,9 +45,9 @@ protected:
 const string WeightedSumTest::NAME_STIMULUS = "stimulus";
 const string WeightedSumTest::NAME_RESPONSE = "response";
 
-TEST_F(WeightedSumTest, Reset)
+TEST_F(WeightedSumTest, Reset_EmptyConfig)
 {
-    EXPECT_THROW(to_->Reset(LayerConfig()), ExceptionNotImpl);
+    EXPECT_THROW(to_->Reset(LayerConfig()), boost::property_tree::ptree_bad_path);
 }
 
 TEST_F(WeightedSumTest, Apply)
