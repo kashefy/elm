@@ -19,9 +19,11 @@ using namespace cv;
 using namespace std;
 namespace bfs=boost::filesystem;
 
-const std::string NAME_SPIKES_Y  = "y";
-const std::string NAME_SPIKES_Z  = "z";
-const std::string NAME_WEIGHTS_Z = "w";
+const string NAME_STIMULUS  = "stimulus";
+const string NAME_POP_CODE  = "pc";
+const string NAME_SPIKES_Y  = "y";
+const string NAME_SPIKES_Z  = "z";
+const string NAME_WEIGHTS   = "w";
 
 class Simulation
 {
@@ -29,6 +31,7 @@ public:
     Simulation()
         : nb_learners_(40)
     {
+        pop_code_ = InitPopulationCode();
     }
 
     void Learn()
@@ -40,18 +43,21 @@ public:
         bfs::path p("/media/206CDC456CDC177E/Users/woodstock/dev/data/MNIST/t10k-images.idx3-ubyte");
         r.ReadHeader(p.string().c_str());
 
-        MutexPopulationCode pop_code;
-
-        WTAPoisson wta_z(1.f, 1000.f);
-
-        bool first_pass = true;
+        Signal sig;
 
         while(!r.IS_EOF()) {
 
+            sig.Clear();
+
             Mat img = r.Next();
 
-            pop_code.State(img);
-            Mat1f pc = pop_code.PopCode();
+            sig.Append(NAME_STIMULUS, img);
+
+            pop_code_->Stimulus(sig);
+            pop_code_->Apply();
+            pop_code_->Response(sig);
+
+            Mat1f pc = sig.MostRecent(NAME_POP_CODE);
 
             YNeuron neuron_y;
             neuron_y.init(1.f, 1000.f);
@@ -66,21 +72,19 @@ public:
                     spikes_y(i) = neuron_y.State(pc(i));
                 }
 
-                if(first_pass) {
+                if(!z_) {
 
-                    InitLearners(spikes_y.cols, 10);
-                    first_pass = false;
+                    z_ = InitLearners(spikes_y.cols, 10);
                 }
 
-                Signal signal;
-                signal.Append(NAME_SPIKES_Y, spikes_y);
+                sig.Append(NAME_SPIKES_Y, spikes_y);
 
-                z_.Stimulus(signal);
-                z_.Apply();
-                z_.Learn();
+                z_->Stimulus(sig);
+                z_->Apply();
+                static_pointer_cast<base_LearningLayer>(z_)->Learn();
             }
 
-            z_.Clear();
+            z_->Clear();
         }
     }
 
@@ -91,18 +95,21 @@ public:
         bfs::path p("/media/206CDC456CDC177E/Users/woodstock/dev/data/MNIST/t10k-images.idx3-ubyte");
         r.ReadHeader(p.string().c_str());
 
-        MutexPopulationCode pop_code;
-
-        WTAPoisson wta_z(1.f, 1000.f);
+        Signal sig;
 
         while(!r.IS_EOF()) {
 
+            sig.Clear();
+
             Mat img = r.Next();
             //cv::imshow("i", img);
+            sig.Append(NAME_STIMULUS, img);
 
-            pop_code.State(img);
+            pop_code_->Stimulus(sig);
+            pop_code_->Apply();
+            pop_code_->Response(sig);
 
-            Mat1f pc = pop_code.PopCode();
+            Mat1f pc = sig.MostRecent(NAME_POP_CODE);
 
             YNeuron neuron_y;
             neuron_y.init(1.f, 1000.f);
@@ -114,19 +121,19 @@ public:
                 spikes_y(i) = neuron_y.State(pc(i));
             }
 
-            Signal signal;
-            signal.Append(NAME_SPIKES_Y, spikes_y);
+            sig.Append(NAME_SPIKES_Y, spikes_y);
 
-            z_.Stimulus(signal);
-            z_.Apply();
+            z_->Stimulus(sig);
+            z_->Apply();
         }
     }
 
     void Eval()
     {
         Signal signal;
-        z_.Response(signal);
-        Mat1f weights = signal.MostRecent(NAME_WEIGHTS_Z);
+        z_->Response(signal);
+
+        Mat1f weights = signal.MostRecent(NAME_WEIGHTS);
 
         for(size_t i=0; i<nb_learners_; i++) {
 
@@ -152,24 +159,33 @@ public:
 
 private:
 
-    void InitLearners(int nb_features, int history_length)
+    shared_ptr<base_Layer> InitPopulationCode() const
+    {
+        LayerConfig cfg;
+        cfg.Input(MutexPopulationCode::KEY_INPUT_STIMULUS, NAME_STIMULUS);
+        cfg.Output(MutexPopulationCode::KEY_OUTPUT_POP_CODE, NAME_POP_CODE);
+
+        return LayerFactory::CreateLayerPtrShared("MutexPopulationCode", cfg, cfg);
+    }
+
+    shared_ptr<base_Layer> InitLearners(int nb_features, int history_length) const
     {
         PTree params;
         params.put(LayerZ::PARAM_NB_AFFERENTS, nb_features);
         params.put(LayerZ::PARAM_LEN_HISTORY, history_length);
         params.put(LayerZ::PARAM_NB_OUTPUT_NODES, nb_learners_);
-        LayerConfig config;
-        config.Params(params);
+        LayerConfig cfg;
+        cfg.Params(params);
 
-        config.Input(LayerZ::KEY_INPUT_SPIKES, "y");
-        config.Output(LayerZ::KEY_OUTPUT_SPIKES, "z");
-        config.Output(LayerZ::KEY_OUTPUT_WEIGHTS, "w");
+        cfg.Input(LayerZ::KEY_INPUT_SPIKES, NAME_SPIKES_Y);
+        cfg.Output(LayerZ::KEY_OUTPUT_SPIKES, NAME_SPIKES_Z);
+        cfg.Output(LayerZ::KEY_OUTPUT_WEIGHTS, NAME_WEIGHTS);
 
-        z_.Reset(config);
-        z_.IONames(config);
+        return LayerFactory::CreateLayerPtrShared("LayerZ", cfg, cfg);
     }
 
-    LayerZ z_;
+    shared_ptr<base_Layer> pop_code_;
+    shared_ptr<base_Layer> z_;
     size_t nb_learners_;   ///< no. of learners (e.g. ZNeuron)
 
 };
