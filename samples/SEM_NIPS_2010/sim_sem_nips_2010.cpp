@@ -73,7 +73,7 @@ public:
                 static_pointer_cast<base_LearningLayer>(z_)->Learn();
             }
 
-            z_->Clear();
+            z_->Clear(); // clear before moving on to the next stimulus
         }
     }
 

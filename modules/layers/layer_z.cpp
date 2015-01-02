@@ -1,5 +1,7 @@
 #include "layers/layer_z.h"
 
+#include <iostream>
+
 #include "core/exception.h"
 #include "core/signal.h"
 
@@ -129,13 +131,15 @@ void LayerZ::Activate(const Signal &signal)
 
     // let them compete
     spikes_out_ = wta_.Compete(z_);
+    //std::cout<<spikes_out_<<std::endl;
 }
 
 void LayerZ::Learn()
 {
+    int i=0;
     for(VecLPtr::iterator itr=z_.begin(); itr != z_.end(); ++itr) {
 
-        (*itr)->Learn(spikes_out_);
+        (*itr)->Learn(spikes_out_.col(i++));
     }
 }
 
