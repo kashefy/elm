@@ -61,6 +61,8 @@ protected:
     cv::Mat1f weights_;         ///< Neuron weights, excluding bias term, log scale
     SpikingHistory history_;    ///< spiking input history
     float u_;                   ///< membrane potential
+
+    cv::Range weights_range_;   ///< weights range exluding bias
 };
 
 #endif // SEM_NEURON_ZNEURON_H_

@@ -11,11 +11,7 @@ SpikingHistory::SpikingHistory(int dims, int len)
 
 void SpikingHistory::Advance()
 {
-    Mat mask_rows = history_ > 0;
-    subtract(history_,
-             Mat1i::ones(history_.size()),
-             history_,
-             mask_rows);
+    subtract(history_, 1, history_, history_ > 0);
 }
 
 Mat1i SpikingHistory::History() const

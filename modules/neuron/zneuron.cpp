@@ -32,12 +32,12 @@ void ZNeuron::Learn(const Mat &target)
     double eta;  // learning rate
     const bool has_fired = countNonZero(target) > 0;
 
+    // update w0/bias
     // determine limit factor
     w_old = bias_;
-    eta = 0.01f; // TODO make parameter
+    eta = 0.01f; // TODO make parameter and use adaptive learning rate
     limit_factor = exp( -max(w_old, log(eta)) );
 
-    // update w0
     // bh.w(1,i) = old_w0 + nEta * (C(i) * (1 - exp(old_w0)) - (1-C(i)) * exp(old_w0)) * ...
         // limit_factor;
     // Nessler's (2010) STDP equation (12)
@@ -52,24 +52,29 @@ void ZNeuron::Learn(const Mat &target)
     // update all other weights
     if(has_fired) {
 
-        // TODO: vectorize
-        for(int wi=0; wi<weights_.cols; ++wi) {
+        Mat1f weights_old = weights_;
+        Mat1f _eta(weights_.size(), 0.01f); // TODO: adaptive learing rate per weight
+        Mat1f _eta_log;
+        log(_eta, _eta_log);
+        Mat1f _limit_factor;
+        exp(-cv::max(weights_old, _eta_log), _limit_factor);
 
-            w_old = weights_(wi);
-            //nEta = m_arrLearningRate[wi].getEta(); // TODO: adaptive learing rate per weight
-            limit_factor = exp(-max(w_old, log(eta)));
+        Mat1f _delta_w = _limit_factor.mul(_eta);
 
-            delta_w = eta * limit_factor;
-            delta_w *= history_.Recent(wi)? 1-exp(w_old) : -exp(w_old);
+        Mat1f _exp_w_old;
+        exp(weights_old, _exp_w_old);
 
-            // bh.w(2:(bh.dim+1),i) = old_w + delta .* C(i) .* limit_factor;
-            // bh.w(2:(bh.dim+1),i) = max(bh.w(2:(bh.dim+1),i), -bh.limit);
+        // compute weight deltas according to afferent spiking
+        Mat1f _delta_w_cond = _delta_w.mul(_exp_w_old, -1.);
+        add(_delta_w_cond, _delta_w, _delta_w_cond, history_.Recent()); // mask operation by recenlty spiking afferents
 
-            w = w_old + delta_w;
-            w = max(w, -WEIGHT_LIMIT);
-            weights_(wi) = static_cast<float>(w);
-            //m_arrLearningRate[wi].update(w);         // TODO: adaptive learning rate
-        }
+        // bh.w(2:(bh.dim+1),i) = old_w + delta .* C(i) .* limit_factor;
+        // bh.w(2:(bh.dim+1),i) = max(bh.w(2:(bh.dim+1),i), -bh.limit);
+
+        weights_ = weights_old + _delta_w_cond;
+        weights_.setTo(-WEIGHT_LIMIT, weights_ < -WEIGHT_LIMIT);
+
+        //m_arrLearningRate[wi].update(w);         // TODO: adaptive learning rate
     }// if not fired, no change
 }
 
@@ -83,13 +88,12 @@ Mat ZNeuron::Predict(const Mat &evidence)
     // u = bh.w' * [x];
 
     // Sum subset of weights with spiking evidence
-    Mat1f sub_weights = Mat1f::zeros(1, evidence.cols);
+    Mat1f sub_weights = Mat1f::zeros(1, static_cast<int>(evidence.total()));
     add(sub_weights, weights_, sub_weights, evidence > 0);
 
-    //sub_weights.setTo(weights_, evidence > 0);
     u_ += sum(sub_weights)(0);
 
-    return Mat(1, 1, CV_32FC1, u_);
+    return State();
 }
 
 Mat ZNeuron::State() const
