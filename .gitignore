@@ -35,3 +35,5 @@
 
 # Generated documentation
 docs/
+!docs/*.bib
+!docs/doxygenConf*
