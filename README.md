@@ -49,6 +49,11 @@ Resolve by adding -pthread or -lpthread to the linker. You can do so by reconifu
 * Code review: Create a pull request to start a review. Describe the main contribution of this pull request. The changes in a pull request should be self contained and not pending approval of other pull requests. Purpose of changes should be concise. Pull requests with code styling changes are permitted, 
 * Other guidelines: [Google's C++ Code Style guidelines](http://google-styleguide.googlecode.com/svn/trunk/cppguide.html)
 
+### How do I generate the documentation? ###
+
+cd <source.dir>
+doxygen ./docs/doxygenConf*
+
 ### Who do I talk to? ###
 
 * alias "kashefy"
