@@ -30,7 +30,7 @@ public:
      */
     int State(float state);
 
-private:
+protected:
     PoissonProcess poisson_;
 
     cv::RNG rng_;           ///< random number generator to use in poisson process

@@ -74,11 +74,29 @@ void LayerY::IONames(const LayerIONames &config)
 
 void LayerY::Activate(const Signal &signal)
 {
-    state_ = State(signal.MostRecent(name_stimulus_).at<float>(0));
+    state_ = State(signal.MostRecent(name_stimulus_));
 }
 
 void LayerY::Response(Signal &signal)
 {
-    signal.Append(name_spikes_, cv::Mat1f(1, 1, static_cast<float>(state_)));
+    signal.Append(name_spikes_, state_);
 }
 
+cv::Mat1i LayerY::State(cv::Mat1f state)
+{
+    cv::Mat1i spikes(state.size(), 0);
+    for(size_t i=0; i<state.total(); i++) {
+
+        float state_at_i = state(i);
+        if(state_at_i == 1 || state_at_i == -1) {
+
+            // determine spiking through poisson process
+            spikes(i) = poisson_.Sample();
+        }
+        else if(state_at_i != 0) {
+            SEM_THROW_NOT_IMPLEMENTED_WMSG("Analog state not supported.");
+        }
+    }
+
+    return spikes;
+}

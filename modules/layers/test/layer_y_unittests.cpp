@@ -251,4 +251,48 @@ TEST_F(LayerYTest, Freq_Zero)
     }
 }
 
+/**
+ * @brief Activate layer with empty stimuli
+ */
+TEST_F(LayerYTest, Activate_Empty)
+{
+    cv::Mat1f st;
+    Signal s;
+    s.Append(NAME_STIMULUS, st.clone());
+
+    to_->Activate(s);
+    to_->Response(s);
+
+    EXPECT_TRUE(s.MostRecent(NAME_SPIKES).empty());
+}
+
+TEST_F(LayerYTest, Response_Dims)
+{
+    const int ROWS=7;
+    const int COLS=7;
+
+    Signal s;
+
+    for(int r=1; r<ROWS; r++) {
+
+        for(int c=1; c<COLS; c++) {
+
+            cv::Mat1f st(r, c);
+            randn(st, 0.f, 10.f);
+            st.setTo(0.f, st <= 0.5f);
+            st.setTo(1.f, st > 0.5f);
+
+            s.Append(NAME_STIMULUS, st.clone());
+
+            to_->Activate(s);
+            to_->Response(s);
+
+            EXPECT_MAT_DIMS_EQ(s.MostRecent(NAME_SPIKES), st.size());
+        }
+
+        s.Clear();
+    }
+
+}
+
 } // annonymous namespace

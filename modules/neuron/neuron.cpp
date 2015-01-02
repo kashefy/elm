@@ -20,7 +20,7 @@ int YNeuron::State(float state)
 
         spike = 0; // don't spike
     }
-    else if(state == 1 || state == -1) {
+    else if(state == 1.f || state == -1.f) {
 
         // determine spiking through poisson process
         spike = poisson_.Sample();
