@@ -33,6 +33,7 @@ public:
         : nb_learners_(40)
     {
         pop_code_ = InitPopulationCode();
+        y_ = InitLayerY();
     }
 
     void Learn()
@@ -57,27 +58,16 @@ public:
             pop_code_->Activate(sig);
             pop_code_->Response(sig);
 
-            Mat1f pc = sig.MostRecent(NAME_POP_CODE);
-
-            YNeuron neuron_y;
-            neuron_y.init(1.f, 1000.f);
-
             const int T=20;
             for(int t=0; t<T; t++) {
 
-                Mat1f spikes_y(1, pc.total());
-
-                for(size_t i=0; i<pc.total(); i++) {
-
-                    spikes_y(i) = neuron_y.State(pc(i));
-                }
+                y_->Activate(sig);
+                y_->Response(sig);
 
                 if(!z_) {
 
-                    z_ = InitLearners(spikes_y.cols, 10);
+                    z_ = InitLearners(static_cast<int>(sig.MostRecent(NAME_SPIKES_Y).total()), 10);
                 }
-
-                sig.Append(NAME_SPIKES_Y, spikes_y);
 
                 z_->Activate(sig);
                 static_pointer_cast<base_LearningLayer>(z_)->Learn();
@@ -107,19 +97,8 @@ public:
             pop_code_->Activate(sig);
             pop_code_->Response(sig);
 
-            Mat1f pc = sig.MostRecent(NAME_POP_CODE);
-
-            YNeuron neuron_y;
-            neuron_y.init(1.f, 1000.f);
-
-            Mat1f spikes_y(1, pc.total());
-
-            for(size_t i=0; i<pc.total(); i++) {
-
-                spikes_y(i) = neuron_y.State(pc(i));
-            }
-
-            sig.Append(NAME_SPIKES_Y, spikes_y);
+            y_->Activate(sig);
+            y_->Response(sig);
 
             z_->Activate(sig);
         }
