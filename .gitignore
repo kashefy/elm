@@ -34,6 +34,6 @@
 *.autosave
 
 # Generated documentation
-docs/
+docs/*
 !docs/*.bib
 !docs/doxygenConf*
