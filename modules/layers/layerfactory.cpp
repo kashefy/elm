@@ -8,7 +8,9 @@
  *  1. include its header below
  *  2. Add it to the initialization of g_layerRegistry map.
  */
+#include "layers/layer_y.h"
 #include "layers/layer_z.h"
+#include "encoding/populationcode.h"
 #include "layers/saliencyitti.h"
 #include "layers/weightedsum.h"
 
@@ -17,14 +19,18 @@ using boost::assign::map_list_of;
 typedef Registor_<base_Layer> LayerRegistor;
 typedef Registor_<base_Layer>::Registry LayerRegistry;
 
-// macros for adding individual instances to registry
-#define ADD_TO_REGISTRY(Registor, NewInstance) (#NewInstance, &Registor::DerivedInstance<NewInstance>)
-#define ADD_TO_LAYER_REGISTRY(NewInstance) ADD_TO_REGISTRY(LayerRegistor, NewInstance)
+/** Macros for creating individual registry pair items
+ *  credit: J. Turcot, T. Senechal, http://stackoverflow.com/questions/138600/initializing-a-static-stdmapint-int-in-c
+ */
+#define REGISTRY_PAIR(Registor, NewInstance) (#NewInstance, &Registor::DerivedInstance<NewInstance>)
+#define LAYER_REGISTRY_PAIR(NewInstance) REGISTRY_PAIR(LayerRegistor, NewInstance)
 
 LayerRegistry g_layerRegistry = map_list_of
-        ADD_TO_LAYER_REGISTRY( LayerZ )
-        ADD_TO_LAYER_REGISTRY( SaliencyItti )
-        ADD_TO_LAYER_REGISTRY( WeightedSum )
+        LAYER_REGISTRY_PAIR( LayerY )
+        LAYER_REGISTRY_PAIR( LayerZ )
+        LAYER_REGISTRY_PAIR( MutexPopulationCode )
+        LAYER_REGISTRY_PAIR( SaliencyItti )
+        LAYER_REGISTRY_PAIR( WeightedSum )
         ; ///< <-- add new layer to registry here
 
 LayerFactory::LayerFactory()

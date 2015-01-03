@@ -24,7 +24,7 @@ public:
 
     virtual void IONames(const LayerIONames &config) {}
 
-    virtual void Stimulus(const Signal &signal) {}
+    virtual void Activate(const Signal &signal) {}
 
     virtual void Apply() {}
 

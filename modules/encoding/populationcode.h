@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include "core/base_Layer.h"
+#include "core/layerconfig.h"
 #include "core/typedefs.h"
 
 class base_FilterBank;
@@ -10,15 +12,20 @@ class base_FilterBank;
 /**
  * @brief The base class for population codes
  */
-class base_PopulationCode
+class base_PopulationCode : public base_Layer
 {
 public:
-    virtual ~base_PopulationCode() {}
+    static const std::string KEY_INPUT_STIMULUS;
+    static const std::string KEY_OUTPUT_POP_CODE;
+
+    virtual ~base_PopulationCode();
 
     /**
      * @brief Compute internal state
      * @param in input
      * @param kernels vector of kernels
+     *
+     * @todo Drop kernel parameter, when filter bank becomes a layer
      */
     virtual void State(const cv::Mat1f& in, const VecMat1f& kernels=VecMat1f()) = 0;
 
@@ -28,8 +35,38 @@ public:
      */
     virtual cv::Mat1f PopCode() = 0;
 
+    /* Layer derived methods:
+     * ---------------------
+     */
+    virtual void Clear();
+
+    virtual void Reconfigure(const LayerConfig &config);
+
+    virtual void Reset(const LayerConfig &config);
+
+    virtual void IONames(const LayerIONames &config);
+
+    /**
+     * @brief compute state and population code
+     * effectivey a call of State() and PopCode() methods
+     */
+    virtual void Activate(const Signal &signal);
+
+    /**
+     * @brief Appends pop code, and state if requested
+     * @param signal populated with response
+     */
+    virtual void Response(Signal &signal);
+
 protected:
     base_PopulationCode();
+
+    base_PopulationCode(const LayerConfig &config);
+
+    std::string name_stimulus_; ///< name of stimulus in signal object
+    std::string name_pop_code_; ///< destination name of popuation code in signal
+
+    cv::Mat1f pop_code_;    ///< most recent population code
 };
 
 /**
@@ -40,12 +77,36 @@ class MutexPopulationCode : public base_PopulationCode
 public:
     MutexPopulationCode();
 
+    MutexPopulationCode(const LayerConfig &config);
+
     virtual void State(const cv::Mat1f& in, const VecMat1f& kernels=VecMat1f());
 
     virtual cv::Mat1f PopCode();
+};
+
+/**
+ * @brief a base class for population codes that are stateful
+ */
+class base_StatefulPopulationCode : public base_PopulationCode
+{
+public:
+    static const std::string KEY_OUTPUT_OPT_STATE;  ///< optional output for state due to most recent stimuli
 
 protected:
-    cv::Mat1f state_;    ///< internal state
+    virtual void Clear();
+
+    virtual void IONames(const LayerIONames &config);
+
+    virtual void Response(Signal &signal);
+
+    base_StatefulPopulationCode();
+
+    base_StatefulPopulationCode(const LayerConfig &config);
+
+    // members
+    OptS name_state_;   ///< optional destination name for state in signal object
+
+    cv::Mat1f state_;   ///< internal state due to most recent stimuli
 };
 
 /**

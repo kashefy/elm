@@ -1,6 +1,6 @@
 #include "core/ptree_utils.h"
 
-#include <iostream>
+#include <algorithm>
 
 #include <boost/property_tree/xml_parser.hpp>
 
@@ -17,3 +17,15 @@ void sem::PrintXML(const PTree &pt,
     xml_parser::write_xml(stream, pt);
 }
 
+bool sem::UnusedNodes(const PTree &p, const vector<string> &keys_used, vector<string> &keys_unused)
+{
+    for(PTree::const_iterator itr=p.begin(); itr != p.end(); ++itr) {
+
+        string tmp = (*itr).first;
+        if(find(keys_used.begin(), keys_used.end(), tmp) == keys_used.end()) { // not found
+
+            keys_unused.push_back(tmp);
+        }
+    }
+    return keys_unused.size() > 0;
+}

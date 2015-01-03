@@ -3,57 +3,18 @@
 #include <opencv2/highgui.hpp>
 
 #include "core/mat_utils.h"
+#include "core/layerconfig.h"
+#include "layers/layerfactory.h"
+#include "core/signal.h"
 #include "encoding/orientation.h"
 #include "io/synth.h"
 #include "ts/ts.h"
 
+using std::string;
 using cv::Mat1f;
 using namespace sem;
 
 namespace {
-
-class MutexPopulationCodeTest : public testing::Test
-{
-protected:
-    void virtual SetUp()
-    {
-        in_ = Mat1f::ones(3, 1);
-        to_.State(in_);
-    }
-
-    MutexPopulationCode to_; ///< test object
-    Mat1f in_;
-};
-
-TEST_F(MutexPopulationCodeTest, PopCode_dims) {
-
-    EXPECT_MAT_DIMS_EQ(to_.PopCode(), cv::Size2i(in_.cols*2, in_.rows));
-
-    in_ = Mat1f::ones(3, 2);
-    to_.State(in_);
-    EXPECT_MAT_DIMS_EQ(to_.PopCode(), cv::Size2i(in_.cols*2, in_.rows));
-}
-
-TEST_F(MutexPopulationCodeTest, PopCode_ones) {
-
-    Mat1f pc = to_.PopCode();
-    for(int i=0; i<pc.rows; i++) {
-
-        EXPECT_FLOAT_EQ(pc(i), i%2==0? 0.f : 1.f);
-    }
-}
-
-TEST_F(MutexPopulationCodeTest, PopCode_zeros) {
-
-    in_ = Mat1f::zeros(in_.rows, in_.cols);
-    to_.State(in_);
-    Mat1f pc = to_.PopCode();
-
-    for(int i=0; i<pc.rows; i++) {
-
-        EXPECT_FLOAT_EQ(pc(i), i%2==0? 1.f : 0.f);
-    }
-}
 
 class SoftMaxPopulationCodeTest : public testing::Test
 {

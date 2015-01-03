@@ -69,8 +69,7 @@ TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared_WithConfig)
     EXPECT_FALSE(signal.Exists(NAME_RESPONSE));
 
     // apply signal to layer
-    ptr->Stimulus(signal);
-    ptr->Apply();
+    ptr->Activate(signal);
     ptr->Response(signal);
 
     // check response

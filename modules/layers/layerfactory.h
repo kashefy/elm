@@ -10,6 +10,7 @@
 /**
  * @brief class for implementing layer related factory methods
  * Such as instantiation and sequencing of multiple layer applications (e.g. pipeline)
+ * @todo enable post hoc addition of custom layer instances
  */
 class LayerFactory
 {

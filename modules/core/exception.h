@@ -4,6 +4,8 @@
 #include <string>
 #include <opencv2/core.hpp>
 
+/** Preprocessor macros for throwing types of Exceptions with custom error messages
+ */
 #define SEM_THROW_BAD_DIMS(msg) throw sem::ExceptionBadDims(msg)
 #define SEM_THROW_NOT_IMPLEMENTED throw sem::ExceptionNotImpl("Not implemented yet.")
 #define SEM_THROW_NOT_IMPLEMENTED_WMSG(msg) throw sem::ExceptionNotImpl(msg)

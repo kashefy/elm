@@ -93,7 +93,10 @@ cv::Mat1f Reshape(const VecMat1f &v);
 template <typename T>
 std::vector<T> Mat_ToVec_(const cv::Mat_<T> &m) {
 
-    if(!m.isContinuous()) { SEM_THROW_TYPE_ERROR("Only conitnuous matrices suppored."); }
+    if(!m.empty() && !m.isContinuous()) {
+
+        SEM_THROW_TYPE_ERROR("Only conitnuous matrices supported.");
+    }
     // syntax learned from posts here:
     // http://stackoverflow.com/questions/610245/where-and-why-do-i-have-to-put-the-template-and-typename-keywords
     const T* p = m.template ptr<T>(0);

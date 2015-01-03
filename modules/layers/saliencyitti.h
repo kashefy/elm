@@ -49,9 +49,7 @@ public:
 
     virtual void IONames(const LayerIONames &config);
 
-    virtual void Stimulus(const Signal &signal);
-
-    virtual void Apply();
+    virtual void Activate(const Signal &signal);
 
     virtual void Response(Signal &signal);
 
@@ -63,7 +61,6 @@ protected:
     RetGang intensity_constrast_;   ///< Intensity contrast measure
 
     cv::Mat1f saliency_;            ///< saliency map of most recent stimulus
-    cv::Mat1f stimulus_;            ///< single channel/grayscale stimulus
 
     std::unique_ptr<base_FilterBank> gabors_;   ///< filter bank of orientation-sensitive gabor kernels (V1 simple cells)
     SoftMaxPopulationCode pop_code_orient_; ///< population coding for orientations

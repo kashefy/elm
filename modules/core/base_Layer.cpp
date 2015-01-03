@@ -14,7 +14,7 @@ base_Layer::base_Layer(const LayerConfig &config)
 {
     // these calls belong in child constructor
     // Reset(config);
-    // IO(config);
+    // IONames(config);
 }
 
 void base_Layer::Reset(const LayerConfig &config)

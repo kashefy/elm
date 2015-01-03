@@ -17,6 +17,11 @@ public:
     Signal();
 
     /**
+     * @brief Clear everything
+     */
+    void Clear();
+
+    /**
      * @brief Append signal to an existing key. Will add if it doesn't exist.
      * @param name or key
      * @param feature data to append

@@ -16,7 +16,6 @@ const std::string WeightedSum::KEY_OUTPUT_RESPONSE  =  "out";
 
 void WeightedSum::Clear()
 {
-    stimulus_ = Mat1f();
     response_ = Mat1f();
 }
 
@@ -39,24 +38,21 @@ void WeightedSum::IONames(const LayerIONames &config)
     name_response_ = config.Output(KEY_OUTPUT_RESPONSE);
 }
 
-void WeightedSum::Stimulus(const Signal &signal)
+void WeightedSum::Activate(const Signal &signal)
 {
-    stimulus_ = signal[name_stimulus_][0];
-    if(stimulus_.cols > 2) {
+    Mat1f stimulus = signal[name_stimulus_][0];
+    if(stimulus.cols > 2) {
 
         SEM_THROW_BAD_DIMS("Cannot handle stimulus with > 2 columns.");
     }
-}
 
-void WeightedSum::Apply()
-{
-    response_ = Mat1f(stimulus_.rows, 1);
-    for(int r=0; r<stimulus_.rows; r++) {
+    response_ = Mat1f(stimulus.rows, 1);
+    for(int r=0; r<stimulus.rows; r++) {
 
-        float tmp = a_ * stimulus_(r, 0);
-        if(stimulus_.cols > 1) {
+        float tmp = a_ * stimulus(r, 0);
+        if(stimulus.cols > 1) {
 
-            tmp += b_ * stimulus_(r, 1);
+            tmp += b_ * stimulus(r, 1);
         }
         response_(r) = tmp;
     }

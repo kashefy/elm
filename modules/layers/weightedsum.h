@@ -22,9 +22,7 @@ public:
 
     virtual void IONames(const LayerIONames &config);
 
-    virtual void Stimulus(const Signal &signal);
-
-    virtual void Apply();
+    virtual void Activate(const Signal &signal);
 
     virtual void Response(Signal &signal);
 
@@ -52,7 +50,6 @@ protected:
     std::string name_stimulus_;  ///< cached name of stimulus in signal
     std::string name_response_;  ///< cahced name of repsonse in signal
 
-    cv::Mat1f stimulus_;        ///< most recent stimulus
     cv::Mat1f response_;        ///< most recent response
 };
 

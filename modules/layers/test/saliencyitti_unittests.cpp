@@ -88,7 +88,7 @@ const string SaliencyIttiTest::NAME_SCENE_      = "in";
 const string SaliencyIttiTest::NAME_SALIENCY_   = "saliency";
 const string SaliencyIttiTest::NAME_LOC_        = "loc";
 
-TEST_F(SaliencyIttiTest, Apply)
+TEST_F(SaliencyIttiTest, Activate)
 {
     const int NB_SAMPLES = 1e3;
     const int WIDTH = 56;
@@ -102,8 +102,7 @@ TEST_F(SaliencyIttiTest, Apply)
     img.convertTo(scene, CV_32FC1, 1./255.);
 
     signal.Append(NAME_SCENE_, scene);
-    to_.Stimulus(signal);
-    to_.Apply();
+    to_.Activate(signal);
 
     for(int i=0; i<NB_SAMPLES; i++) {
 
@@ -129,8 +128,7 @@ TEST_F(SaliencyIttiTest, DISABLED_DisplayApplyMNIST)
     img.convertTo(scene, CV_32FC1, 1./255.);
     signal.Append(NAME_SCENE_, scene);
 
-    to_.Stimulus(signal);
-    to_.Apply();
+    to_.Activate(signal);
     to_.Response(signal);
 
     imshow("sal", sem::ConvertTo8U(signal.MostRecent(NAME_SALIENCY_)));

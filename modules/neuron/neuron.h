@@ -4,12 +4,12 @@
 #include "core/sampler.h"
 
 /**
- * @brief Class for trivial spiking neuron.
+ * @brief layer for trivial spiking neuron.
  *
  * Does not learn.
  * Its spiking is controlled by its state and a poisson process
  *
- * TODO: cite SEM paper
+ * \cite Nessler2010
  */
 class YNeuron
 {
@@ -30,7 +30,7 @@ public:
      */
     int State(float state);
 
-private:
+protected:
     PoissonProcess poisson_;
 
     cv::RNG rng_;           ///< random number generator to use in poisson process

@@ -36,12 +36,10 @@ TEST_F(ZNeuronTest, Init)
     // check weights
     Mat1f w = to_.Weights();
     EXPECT_FALSE(w.empty());
-    EXPECT_MAT_DIMS_EQ(w, Mat1f::zeros(1, nb_features_));
+    EXPECT_MAT_DIMS_EQ(w, Size2i(nb_features_, 1));
     EXPECT_MAT_TYPE(w, CV_32F);
 
-    for(int i=0; i<w.cols; i++) {
-        EXPECT_LT(w(i), 0) << "Encountered weight > 0 at i=" << i;
-    }
+    EXPECT_MAT_LT(w, 0.f) << "Encountered weights > 0";
 
     // check weights are not all identical
     Mat m, s;
@@ -100,7 +98,7 @@ TEST_F(ZNeuronTest, PredictStateless)
 TEST_F(ZNeuronTest, WeightsCopied)
 {
     Mat1f w = to_.Weights();
-    const Mat1f w_clone = to_.Weights();
+    const Mat1f w_clone = to_.Weights().clone();
 
     w += 1.f;
 

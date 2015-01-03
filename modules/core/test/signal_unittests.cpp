@@ -35,6 +35,18 @@ TEST_F(SignalTest, Constructor)
     EXPECT_NO_THROW(Signal());
 }
 
+TEST_F(SignalTest, Clear)
+{
+    EXPECT_NO_THROW(Signal().Clear()) << "Redundant but should still work smoothly.";
+
+    ASSERT_FALSE(to_.FeatureNames().empty()) << "Signal should contain something for this test.";
+    EXPECT_NO_THROW(to_.Clear());
+
+    EXPECT_TRUE(to_.FeatureNames().empty());
+
+    EXPECT_NO_THROW(Signal().Clear()) << "Again, redundant but should still work smoothly.";
+}
+
 TEST_F(SignalTest, FeatureNames)
 {
     EXPECT_EMPTY(Signal().FeatureNames()) << "Signal should initially be empty";

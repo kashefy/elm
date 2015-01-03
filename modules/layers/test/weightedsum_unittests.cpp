@@ -42,15 +42,15 @@ protected:
     unique_ptr<base_Layer> to_; ///< test object
     LayerConfig config_;        ///< default config for tests
 };
-const string WeightedSumTest::NAME_STIMULUS = "stimulus";
-const string WeightedSumTest::NAME_RESPONSE = "response";
+const string WeightedSumTest::NAME_STIMULUS = "in";
+const string WeightedSumTest::NAME_RESPONSE = "out";
 
-TEST_F(WeightedSumTest, Reset)
+TEST_F(WeightedSumTest, Reset_EmptyConfig)
 {
-    EXPECT_THROW(to_->Reset(LayerConfig()), ExceptionNotImpl);
+    EXPECT_THROW(to_->Reset(LayerConfig()), boost::property_tree::ptree_bad_path);
 }
 
-TEST_F(WeightedSumTest, Apply)
+TEST_F(WeightedSumTest, Activate)
 {
     Signal signal;
     // feed input into signal object
@@ -60,8 +60,7 @@ TEST_F(WeightedSumTest, Apply)
 
     // compute response
     EXPECT_FALSE(signal.Exists(NAME_RESPONSE));
-    to_->Stimulus(signal);
-    to_->Apply();
+    to_->Activate(signal);
     to_->Response(signal);
     EXPECT_TRUE(signal.Exists(NAME_RESPONSE)) << "Resonse missing";
 

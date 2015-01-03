@@ -33,6 +33,11 @@ public:
     virtual void Reset();
 
     /**
+     * @brief Reset history at a given index
+     */
+    virtual void Reset(int index);
+
+    /**
      * @brief Check if input at given index has fired recently
      * @param index
      * @return true on recent firing
@@ -51,7 +56,21 @@ public:
      */
     virtual void Update(const cv::Mat &spike_mask);
 
+    /**
+     * @brief Obtain reference of a spiking history with a column range of underlying histry
+     * @param start index (inclusive)
+     * @param end index (exclusive)
+     * @return reference to column range of history data
+     * @throws cv::Exception for invalid column ranges (e.g. out of bounds, negative indcies), should we throw our own Exceptions?
+     */
+    virtual SpikingHistory ColRange(int start, int end) const;
+
 protected:
+    /**
+     * @brief Directly overwrite underlying history data
+     * @param new history data
+     */
+    virtual void History(const cv::Mat1i& h);
 
     int len_;        ///< history length
     int dims_;       ///< no. of input dimensions to track
