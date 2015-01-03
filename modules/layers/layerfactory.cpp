@@ -11,6 +11,7 @@
 #include "layers/layer_y.h"
 #include "layers/layer_z.h"
 #include "encoding/populationcode.h"
+#include "layers/attentionwindow.h"
 #include "layers/saliencyitti.h"
 #include "layers/weightedsum.h"
 
@@ -26,6 +27,7 @@ typedef Registor_<base_Layer>::Registry LayerRegistry;
 #define LAYER_REGISTRY_PAIR(NewInstance) REGISTRY_PAIR(LayerRegistor, NewInstance)
 
 LayerRegistry g_layerRegistry = map_list_of
+        LAYER_REGISTRY_PAIR( AttentionWindow )
         LAYER_REGISTRY_PAIR( LayerY )
         LAYER_REGISTRY_PAIR( LayerZ )
         LAYER_REGISTRY_PAIR( MutexPopulationCode )
