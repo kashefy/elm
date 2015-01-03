@@ -43,6 +43,14 @@ std::string MatTypeToString(const cv::Mat& m);
 cv::Mat1i Point2Mat(const cv::Point2i& p);
 
 /**
+ * @brief Convert matrix of integers into a point
+ * @param matrix (only first two elements will be considered)
+ * @return point of matrix' first 2 elements
+ * @throws sem::ExceptionBadDims if matrix contains less than 2 elements
+ */
+cv::Point2i Mat2Point(const cv::Mat1i &m);
+
+/**
   * @brief Calculate neighborhood variance
   *
   * Border elements are zero-padded

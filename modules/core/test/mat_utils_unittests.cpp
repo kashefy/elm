@@ -362,6 +362,55 @@ TEST(Point2MatTest, Point2Mat)
     }
 }
 
+TEST(Mat2PointTest, Mat2Point)
+{
+    const int N=10;
+    for(int i=0; i<N; i++) {
+
+        int x = randu<int>();
+        int y = randu<int>();
+        Mat1i m = Mat1i(1, 2);
+        m(0) = x;
+        m(1) = y;
+
+        // twice to transpose the second time around
+
+        for(int j=0; j<2; j++) {
+
+            Point2i p = Mat2Point(m);
+            EXPECT_EQ(x, p.x) << "Unexpected value for x coordinate";
+            EXPECT_EQ(y, p.y) << "Unexpected value for y coordinate";
+
+            m = m.t();
+        }
+    }
+}
+
+TEST(Mat2PointTest, Mat2Point_redundnantElems)
+{
+    const int N=10;
+    for(int i=0; i<N; i++) {
+
+        Mat1i m = Mat1i(1, 10);
+        randu(m, 0, 100);
+        int x = m(0);
+        int y = m(1);
+
+        // twice to transpose the second time around
+        Point2i p = Mat2Point(m);
+        EXPECT_EQ(x, p.x) << "Unexpected value for x coordinate";
+        EXPECT_EQ(y, p.y) << "Unexpected value for y coordinate";
+    }
+}
+
+TEST(Mat2PointTest, Invalid)
+{
+    EXPECT_THROW(Mat2Point(Mat1i()),        ExceptionBadDims);
+    EXPECT_THROW(Mat2Point(Mat1i(0, 0)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point(Mat1i(1, 0)),        ExceptionBadDims);
+    EXPECT_THROW(Mat2Point(Mat1i(0, 1)),        ExceptionBadDims);
+}
+
 /**
  * @brief test calculation of neighborhood mean and variance with empty input
  */

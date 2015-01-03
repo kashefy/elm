@@ -64,6 +64,14 @@ Mat1i sem::Point2Mat(const Point2i &p)
     return m;
 }
 
+Point2i sem::Mat2Point(const Mat1i &m)
+{
+    if(m.total() < 2) {
+        SEM_THROW_BAD_DIMS("Too few matrix elements for extract x,y coordinates. Must have at least 2 elements");
+    }
+    return Point2i(m(0), m(1));
+}
+
 void sem::NeighMeanVar(const Mat1f &m, int radius, Mat1f &neigh_mean, Mat1f &neigh_var,
                        int border_type, const Scalar &value)
 {
