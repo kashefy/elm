@@ -4,9 +4,9 @@ using namespace cv;
 
 SpikingHistory::SpikingHistory(int dims, int len)
     : len_(len),
-      dims_(dims)
+      dims_(dims),
+      history_(1, dims_, 0)
 {
-    Reset();
 }
 
 void SpikingHistory::Advance()
@@ -21,7 +21,7 @@ Mat1i SpikingHistory::History() const
 
 void SpikingHistory::Reset()
 {
-    history_ = Mat1i::zeros(1, dims_);
+    history_.setTo(0);
 }
 
 void SpikingHistory::Reset(int index)
@@ -42,6 +42,18 @@ cv::Mat SpikingHistory::Recent() const
 void SpikingHistory::Update(const cv::Mat &spike_mask)
 {
     history_.setTo(len_, spike_mask);
+}
+
+SpikingHistory SpikingHistory::ColRange(int start, int end) const
+{
+    SpikingHistory obj(dims_, len_);
+    obj.History(history_.colRange(start, end));
+    return obj;
+}
+
+void SpikingHistory::History(const Mat1i &h)
+{
+    history_ = h;
 }
 
 
