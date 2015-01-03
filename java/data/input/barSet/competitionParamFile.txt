@@ -1,8 +1,0 @@
-m_dt=0.001
-m_inhibitionAmplitude=1600
-m_inhibitionTau=0.005
-m_inhibitonOffset=500
-m_ouTau=0.0027
-m_ouSigma=2500
-m_ouMu=150
-m_maxRateFactor=5.0

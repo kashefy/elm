@@ -1,7 +1,0 @@
-m_learningRateEtaInitVal: 0.11
-m_historyLength: 5
-
-weights:
-    m_bInitRandWeights: true
-    m_scaleRandWeights: 0.01
-    m_nWeightLimit: 5.0
