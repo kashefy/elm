@@ -84,15 +84,14 @@ TEST_F(LayerZInitTest, MissingParams)
 
 TEST_F(LayerZInitTest, IONames)
 {
-    LayerConfig cfg;
-    cfg.Params(config_.Params());
-    EXPECT_THROW(LayerZ().IONames(cfg), std::exception);
+    LayerIONames io_names;
+    EXPECT_THROW(LayerZ().IONames(io_names), std::exception);
 
-    cfg.Input(LayerZ::KEY_INPUT_SPIKES, NAME_INPUT_SPIKES);
-    EXPECT_THROW(LayerZ().IONames(cfg), std::exception) << "still missing required output spikes";
+    io_names.Input(LayerZ::KEY_INPUT_SPIKES, NAME_INPUT_SPIKES);
+    EXPECT_THROW(LayerZ().IONames(io_names), std::exception) << "still missing required output spikes";
 
-    cfg.Output(LayerZ::KEY_OUTPUT_SPIKES, NAME_OUTPUT_SPIKES);
-    EXPECT_NO_THROW(LayerZ().IONames(cfg)) << "Are all required IO names present?";
+    io_names.Output(LayerZ::KEY_OUTPUT_SPIKES, NAME_OUTPUT_SPIKES);
+    EXPECT_NO_THROW(LayerZ().IONames(io_names)) << "Are all required IO names present?";
 }
 
 typedef std::pair<std::string, float > TParamPairSF; /// convinience typdef to use as test params below
