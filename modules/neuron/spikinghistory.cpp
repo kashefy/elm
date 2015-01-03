@@ -24,6 +24,11 @@ void SpikingHistory::Reset()
     history_ = Mat1i::zeros(1, dims_);
 }
 
+void SpikingHistory::Reset(int index)
+{
+    history_(index) = 0;
+}
+
 bool SpikingHistory::Recent(int index) const
 {
     return history_(index) > 0;

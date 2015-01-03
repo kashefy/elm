@@ -4,7 +4,9 @@
 
 using namespace cv;
 
-class SpikingHistoryTest : public testing::Test
+namespace {
+
+class SpikingHistoryTest : public ::testing::Test
 {
 protected:
     SpikingHistoryTest()
@@ -14,7 +16,7 @@ protected:
 
     virtual void SetUp()
     {
-        len_ = 5;
+        len_  = 5;
         dims_ = 3;
         to_ = SpikingHistory(dims_, len_);
         to_.Update(Mat::ones(1, dims_, CV_8UC1));
@@ -37,6 +39,25 @@ TEST_F(SpikingHistoryTest, Reset)
 
         to_.Reset();
         EXPECT_MAT_EQ(to_.History(), expected) << "History mismatch at i=" << i;
+    }
+}
+
+TEST_F(SpikingHistoryTest, Reset_index)
+{
+    for(int i=0; i<len_*3; i++) {
+
+        EXPECT_MAT_EQ(to_.History(), Mat1i(1, dims_, len_)) << "History not initialized properly for this iteration.";
+
+        int index = abs(randu<int>()) % dims_;
+        std::cout<<index<<std::endl;
+        to_.Reset(index);
+
+        Mat1i expected = Mat1i(1, dims_, len_);
+        expected(index) = 0;
+
+        EXPECT_MAT_EQ(to_.History(), expected) << "History mismatch at i=" << i;
+
+        to_.Update(Mat::ones(1, dims_, CV_8UC1));
     }
 }
 
@@ -128,3 +149,5 @@ TEST_F(SpikingHistoryTest, Update)
         else                { EXPECT_FALSE (to_.Recent(0)); }
     }
 }
+
+} // annonymous namespace for test cases

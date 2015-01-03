@@ -33,6 +33,11 @@ public:
     virtual void Reset();
 
     /**
+     * @brief Reset history at a given index
+     */
+    virtual void Reset(int index);
+
+    /**
      * @brief Check if input at given index has fired recently
      * @param index
      * @return true on recent firing
