@@ -35,7 +35,7 @@ AttentionWindow::AttentionWindow(const LayerConfig &cfg)
 void AttentionWindow::Clear()
 {
     window_ = Mat1f(window_.size());
-    window_tl_.x = window_tl_.y = -1;
+    tl_.x = tl_.y = -1;
 }
 
 void AttentionWindow::Reset(const LayerConfig &config)
@@ -77,13 +77,13 @@ void AttentionWindow::Activate(const Signal &signal)
         SEM_THROW_BAD_DIMS(s.str());
     }
 
-    Point2i loc = sem::Mat2Point(loc_mat);
+    tl_ = sem::Mat2Point(loc_mat);
 
     // rectify location: shift it so that the window falls entirly within the scene
-    loc.x = RectifyCoord(loc.x, window_.cols, scene.cols);
-    loc.y = RectifyCoord(loc.y, window_.rows, scene.rows);
+    tl_.x = RectifyCoord(tl_.x, window_.cols, scene.cols);
+    tl_.y = RectifyCoord(tl_.y, window_.rows, scene.rows);
 
-    window_ = Mat(scene, Rect2i(loc, window_.size()));
+    window_ = Mat(scene, Rect2i(tl_, window_.size()));
 }
 
 void AttentionWindow::Response(Signal &signal)
@@ -92,7 +92,7 @@ void AttentionWindow::Response(Signal &signal)
 
     // optional outputs
     if(name_out_tl_) {
-        signal.Append(name_out_tl_.get(), sem::Point2Mat(window_tl_));
+        signal.Append(name_out_tl_.get(), sem::Point2Mat(tl_));
     }
 }
 
@@ -107,7 +107,7 @@ int AttentionWindow::RectifyCoord(int center, int window_dim, int scene_dim) con
     }
     else if(coordinate + window_dim - 1 >= scene_dim) {
 
-        coordinate = scene_dim - window_dim - 1;
+        coordinate = scene_dim - window_dim;
     }
     return coordinate;
 }

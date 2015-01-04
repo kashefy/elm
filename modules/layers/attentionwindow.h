@@ -62,7 +62,7 @@ protected:
     OptS        name_out_tl_;  ///< optional desitnation to recitfied location
 
     cv::Mat1f   window_;        ///< window of attention
-    cv::Point2i window_tl_;     ///< window's top-left corner
+    cv::Point2i tl_;     ///< window's top-left corner
 };
 
 #endif // SEM_LAYERS_ATTENTIONWINDOW_H_
