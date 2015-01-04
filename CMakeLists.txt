@@ -54,7 +54,7 @@ if(${FORCE_IN_SOURCE} AND (${PATH_A} STREQUAL ${PATH_B}))
 endif()
 
 # ----------------------------------------------------------------------------
-# LOCATE DEPENDENCIES: GTest, OpenCV, Boost
+# Locate Dependencies: GTest, OpenCV, Boost
 # ----------------------------------------------------------------------------
 
 status("Resolve Dependencies:")
@@ -147,6 +147,47 @@ else(Boost_FOUND)
     message(FATAL_ERROR "Failed to find Boost (or missing components). Check that \"BOOST_ROOT\" is properly set")
 endif(Boost_FOUND)
 
+# Required dependencies covered\
+# ----------------------------------------------------------------------------
+# Locate Optional dependencies: PCL
+# ----------------------------------------------------------------------------
+
+status("Resolve Opt. Dependencies:")
+
+# ----------------------------------------------------------------------------
+# Point Cloud Library (PCL)
+# ----------------------------------------------------------------------------
+# Iterative closest point
+# ----------------------------------------------------------------------------
+# the components we're currently interested in:
+#     common
+# find_package PCL
+# Defines:
+#     PCL_FOUND:        set to 1 if PCL is found, otherwise unset
+#     PCL_INCLUDE_DIRS: set to the paths to PCL installed headers and the dependency headers
+#     PCL_LIBRARIES:    set to the file names of the built and installed PCL libraries
+#     PCL_LIBRARY_DIRS: set to the paths to where PCL libraries and 3rd party dependencies reside
+#     PCL_VERSION:      the version of the found PCL
+#     PCL_COMPONENTS:   lists all available components
+# ----------------------------------------------------------------------------
+set(WITH_PCL ON CACHE BOOL "Whether to build with PCL support.")
+
+if(WITH_PCL)
+    set(PCL_COMPONENTS_REQ common io registration)
+    status("Find PCL:")
+    find_package(PCL 1.7 REQUIRED COMPONENTS ${PCL_COMPONENTS_REQ})
+    if(PCL_FOUND)
+        list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${PCL_INCLUDE_DIRS})
+        list(APPEND ${ROOT_PROJECT}_LIBS ${PCL_LIBRARIES})
+    else(PCL_FOUND)
+        message(FATAL_ERROR "Failed to find PCL (or missing components). Check that the library is properly installed")
+    endif(PCL_FOUND)
+    status("")
+endif(WITH_PCL)
+
+# Dependencies covered
+# ----------------------------------------------------------------------------
+
 include_directories(${${ROOT_PROJECT}_INCLUDE_DIRS})
 
 add_subdirectory(modules)
@@ -207,6 +248,14 @@ status("        lib Dir.:  "   Boost_FOUND THEN "${BOOST_ROOT}/lib" ELSE "-")
 set(Boost_LIB_NAMES ${Boost_LIBRARIES})
 convert_to_lib_name(Boost_LIB_NAMES ${Boost_LIB_NAMES})
 status("        components :  "      Boost_FOUND THEN ${Boost_LIB_NAMES} ELSE "-")
+
+status("")
+
+status("Optional Dependencies:")
+status("")
+status("    PCL:  "   PCL_FOUND THEN YES (${PCL_VERSION}) ELSE NO)
+status("        lib Dir.:  "      PCL_FOUND THEN "${PCL_LIBRARY_DIRS}" ELSE "-")
+status("        components.:  "   PCL_FOUND THEN "${PCL_COMPONENTS_REQ}" ELSE "-")
 
 status("")
 
