@@ -37,6 +37,7 @@ Configure and Build:
 We use cmake for configuring the build. This allows building for a variety of toolchains and IDEs and keeping the code independent of such.
   
 Example cmake configuration command if dependencies are install in the usual system paths (e.g. /usr/lib):
+  
     cmake $SRC_DIR/sem
     make
   
