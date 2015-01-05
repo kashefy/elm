@@ -19,7 +19,7 @@ This implementation is work by Youssef Kashef. It extends the original SEM with 
   
 Anticipated milestones:
   
-* JNI to interface with DVS input
+* JNI to facilitate [DVS](http://siliconretina.ini.uzh.ch/wiki/index.php) support
 * Python bindings for enabling scripting of experimens and more visual evaluations without the critical need for Matlab
 * Integration with ROS to leverage ROS's nodelets, io and messaging infrastructure
 * Large scale experiments
