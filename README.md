@@ -1,6 +1,8 @@
-Getting your SEM build up and running.
+The SEM framework
 
-A C++ implementation of Spike-based Expectation Maximization (SEM), a biologically inspired model, for object detection and recognition.
+This started off as a a C++ implementation of a Spike-based Expectation Maximization (SEM) model, a biologically inspired model for object detection and recognition.
+It then grew into a more generic framework to support experimenting with as many models as possible, providing an interface for adding custom algorithms and methods.
+How ever said coding in C++ couldn't be done as smoothly as scripting languages?
 
 # Background #
 
@@ -12,10 +14,20 @@ This implementation is work by Youssef Kashef. It extends the original SEM with 
 
 1. Matlab implementation by Michael Pfeiffer and authors of 2010 SEM paper (not included).
 2. Java implementation + Evaluation in Matlab
-3. SEM model extended with scale and translation invariance
-4. C++ implementation and code refactoring **in progress**
+3. SEM model extended with scale and translation invariance through hiearchical learning
+4. C++ implementation and code refactoring **in progress** (partially complete)
+  
+Anticipated milestones:
+  
+* JNI to interface with DVS input
+* Python bindings for enabling scripting of experimens and more visual evaluations without the critical need for Matlab
+* Integration with ROS to leverage ROS's nodelets, io and messaging infrastructure
+* Large scale experiments
+* support for mobile platforms
+* GPU support
+* Enhanced parallelization
 
-### How do I get set up? ###
+### Getting your framework build up and running ###
 
 The build is IDE agnostic and platform independent. After setting up all required dependencies, you configure the build for your toolchain/IDE of choice and build it.
 Required tools:
@@ -68,12 +80,14 @@ Resolve by adding -pthread or -lpthread to the linker. You can do so by reconifu
 * Writing tests: Google Test framework used for writing C++ unit tests. Please see source files under sub directories **/test/ for examples. modules/ts contains utilities used for testing (e.g. custom assertions)
 * Code review: Create a pull request to start a review. Describe the main contribution of this pull request. The changes in a pull request should be self contained and not pending approval of other pull requests. Purpose of changes should be concise. Pull requests with code styling changes are permitted, 
 * Other guidelines: [Google's C++ Code Style guidelines](http://google-styleguide.googlecode.com/svn/trunk/cppguide.html)
-
+* Keep header files for definitions only and free of implementation details whenever applicable (i.e. non-template definitions)
+* Documentation generated via [doxygen](http://www.stack.nl/~dimitri/doxygen/).
+  
 ### How do I generate the documentation? ###
 
 cd <source.dir>
 doxygen ./docs/doxygenConf*
 
-### Who do I talk to? ###
+### Whom do I talk to? ###
 
 * alias "kashefy"
