@@ -21,10 +21,10 @@ Anticipated milestones:
   
 * JNI to facilitate [DVS](http://siliconretina.ini.uzh.ch/wiki/index.php) support
 * Python bindings for enabling scripting of experimens and more visual evaluations without the critical need for Matlab
-* Integration with ROS to leverage ROS's nodelets, io and messaging infrastructure
+* Integration with [ROS](http://www.ros.org/) to leverage its nodelets, io and messaging infrastructure
 * Large scale experiments
 * support for mobile platforms
-* GPU support
+* GPU support, maybe by channeling through [OpenCV's OpenCL module](http://docs.opencv.org/modules/ocl/doc/introduction.html) or directly through OpenCL
 * Enhanced parallelization
 
 ### Getting your framework build up and running ###
@@ -32,16 +32,16 @@ Anticipated milestones:
 The build is IDE agnostic and platform independent. After setting up all required dependencies, you configure the build for your toolchain/IDE of choice and build it.
 Required tools:
 
-* C++ build tools (e.g. gcc, clang,...)
-* CMake
+* C++ build tools (e.g. gcc, clang, MinGW,...)
+* [CMake](http://www.cmake.org/)
   
 Dependencies:
   
 You'll need to set up the following dependencies.You can build them from source or install them via your platforms package management software (e.g. Ubuntu's apt-get, Fedora's yum)
   
-* OpenCV, version 2.4.x or later
-* Google Test framework (gtest), version 1.7 or later
-* Boost Libraries, version 1.54.0 or later (components used: system, filesystem)
+* [OpenCV](http://opencv.org/), version 2.4.x or later
+* [Google Test framework](https://code.google.com/p/googletest/) (gtest), version 1.7 or later
+* [Boost Libraries](http://www.boost.org/), version 1.54.0 or later (components used: system, filesystem)
   
   
 Configure and Build:
