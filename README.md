@@ -17,15 +17,28 @@ This implementation is work by Youssef Kashef. It extends the original SEM with 
 
 ### How do I get set up? ###
 
-* The build is IDE agnostic and platform independent. You bascially configure the build for your toolchain/IDE of choice and build it.
+* The build is IDE agnostic and platform independent. After setting up all required dependencies, you configure the build for your toolchain/IDE of choice and build it.
 Required tools:
 * C++ build tools (e.g. gcc, clang,...)
 * CMake
-* Configuration:
 
 * Dependencies
-* * OpenCV
-* * Google Test framework (gtest)
+You'll need to set up the following dependencies.
+You can build them from source or install them via your platforms package management software (e.g. Ubuntu's apt-get, Fedora's yum)
+* * OpenCV, version 2.4.x or later
+* * Google Test framework (gtest), version 1.7 or later
+* * Boost Libraries, version 1.54.0 or later (components used: system, filesystem)
+
+* Configuration
+We use cmake for configuring the build. This allows building for a variety of toolchains and IDEs and keeping the code independent of such.
+
+Example cmake configuration command if dependencies are install in the usual system paths (e.g. /usr/lib):
+cmake $SRC_DIR/sem
+
+Example cmake configuration command for when dependencies are in custom paths, or if you want to link against dependencies other than those installed under the usual system paths:
+
+cmake -DGTEST_ROOT=<gtest build dir> -DOpenCV_DIR=<opencv build dir> -DBOOST_ROOT=<boost build dir> -DBoost_NO_SYSTEM_PATHS=ON $SRC_DIR/sem
+cmake -DGTEST_ROOT=~/src/gtest-1.7.0 -DOpenCV_DIR=~/build/opencv/share/ -DBOOST_ROOT=~/build/boost/boost_1_57_0/ -DBoost_NO_SYSTEM_PATHS=ON $SRC_DIR/sem
 
 * How to run tests
 Build the run_unittests target and running the resulting executable binary runs the tests. Running the binary in a terminal displays test results.
