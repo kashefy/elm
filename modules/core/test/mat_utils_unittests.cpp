@@ -8,50 +8,6 @@ using namespace std;
 using namespace cv;
 using namespace sem;
 
-TEST(MatUtilsTest, Dummy)
-{
-    Mat3i m(3, 4);
-    randn(m, 0, 100);
-    //cout<<m<<endl;
-
-
-    const int* p = m.ptr<int>(0);
-    std::vector<int> v(p, p+m.total());
-
-    const int ROWS=2, COLS=3, PLANES=4;
-    int d[3] = {ROWS, COLS, PLANES};
-    Mat m3 = Mat(3, d, CV_32SC1);
-
-    randn(m3, 0, 100);
-
-    const int* p3 = m3.ptr<int>(0);
-    std::vector<int> flat0(p3, p3+m3.total());
-
-    for(int r=0; r<ROWS; r++) {
-        for(int c=0; c<COLS; c++) {
-            for(int p=0; p<PLANES; p++) {
-                cout<<m3.at<int>(r, c, p)<<",";
-            }
-        }
-    }
-    cout<<endl;
-
-    Mat m2(ROWS, COLS*PLANES, CV_32SC1, m3.data);
-    Mat m2xPlanes = m2.reshape(PLANES);
-    std::vector<cv::Mat> planes;
-    cv::split(m2xPlanes, planes);
-
-    std::vector<int> flat;
-    for(size_t i=0; i<planes.size(); i++) {
-        Mat plane_i = planes[i];
-        const int* plane_i_ptr = plane_i.ptr<int>(0);
-        flat.insert(flat.end(), plane_i_ptr, plane_i_ptr+plane_i.total());
-    }
-
-    int x = 0;
-    x++;
-}
-
 TEST(MatUtilsTest, ConvertTo8U_zeros)
 {
     const Size2i SIZE(3, 3);
@@ -865,7 +821,22 @@ TEST(Mat_ToVec_Test, OneDimensional)
 template <class T>
 class MatPODTypesTest : public testing::Test
 {
+protected:
+    /**
+     * @brief Push back uniformly random values into a vector
+     * @param no. of items to push back
+     * @return vector initialized radnomly
+     */
 };
+
+template <typename T>
+void push_back_randu(std::vector<T> &v, int N)
+{
+    for(int i=0; i<N; i++) {
+
+        v.push_back(randu<T>());
+    }
+}
 
 /**
  * @brief the struct below enables defining values to be used inside the tests
@@ -1166,7 +1137,7 @@ TYPED_TEST_P(MatPODTypesTest, Mat_ToVec_ThreeDimensional)
     Mat in = Mat(3, d, CV_MAKETYPE(MatDepth_<TypeParam>::depth, 1));
 
     randn(in, 0, 100);
-    std::vector<TypeParam > out = Mat_ToVec_<TypeParam >(in);
+    vector<TypeParam > out = Mat_ToVec_<TypeParam >(in);
     EXPECT_EQ(size_t(ROWS*COLS*PLANES), in.total()) << "Not all elements acccounted for.";
     EXPECT_SIZE(in.total(), out) << "Not all elements acccounted for.";
 
@@ -1212,6 +1183,183 @@ TYPED_TEST_P(MatPODTypesTest, Mat_ToVec_Invalid_NonContinuous_Mat_)
     }
 }
 
+// STL vector to template Mat_ conversions
+/**
+ * @brief Empty in empty out
+ */
+TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_Empty)
+{
+    vector<TypeParam > v;
+    EXPECT_TRUE(Vec_ToRowMat_<TypeParam >(v).empty());
+}
+
+/**
+ * @brief test that a row matrix is produced with the correct no. of cols
+ */
+TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_AlwaysRowMat)
+{
+    for(int s=1; s<10; s++) {
+
+        vector<TypeParam > v(s, randu<TypeParam >());
+
+        Mat_<TypeParam > m = Vec_ToRowMat_<TypeParam >(v);
+        ASSERT_FALSE(m.empty()) << "Why is this matrix empty?";
+        ASSERT_EQ(1, m.rows)    << "Expecting row matrix. Expecting matrix with a single row";
+        ASSERT_EQ(s, m.cols);
+        ASSERT_EQ(s, static_cast<int>(m.total()));
+        EXPECT_MAT_DIMS_EQ(m, Size2i(static_cast<int>(v.size()), 1)) << "Encountered unexpected size";
+    }
+}
+
+/**
+ * @brief test resulting matrix element values
+ */
+TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_Values)
+{
+    for(int s=1; s<10; s++) {
+
+        vector<TypeParam > v;
+        push_back_randu<TypeParam >(v, s);
+
+        Mat_<TypeParam > m = Vec_ToRowMat_<TypeParam >(v);
+        EXPECT_MAT_DIMS_EQ(m, Size2i(static_cast<int>(v.size()), 1)) << "Encountered unexpected size";
+
+        // check values
+        for(int i=0; i<s; i++) {
+            EXPECT_EQ(v[i], m(i));
+            EXPECT_EQ(v[i], m(0, i));
+        }
+    }
+}
+
+/**
+ * @brief Test that no copying happened and that both point to the same memory chunk.
+ *Q: Who owns the data? A: the source vector
+ */
+TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_NoCopy)
+{
+    const int SIZE=3;
+
+    // initialize a vector with random values
+    vector<TypeParam > v;
+    push_back_randu<TypeParam >(v, SIZE);
+
+    Mat_<TypeParam > m = Vec_ToRowMat_<TypeParam >(v);
+
+    // modify each element in one and see it reflect in the other
+    for(int i=0; i<SIZE; i++) {
+
+        // check before doing anything
+        EXPECT_EQ(v[i], m(i));
+        EXPECT_EQ(v[i], m(0, i));
+
+        // modify in vector
+        v[i] = randu<TypeParam >();
+        EXPECT_EQ(v[i], m(i));
+        EXPECT_EQ(v[i], m(0, i));
+
+        // modify in matrix
+        m(i) = randu<TypeParam >();
+        EXPECT_EQ(v[i], m(i));
+        EXPECT_EQ(v[i], m(0, i));
+    }
+}
+
+/**
+ * @brief Q: Who owns the data? A: the source vector
+ *
+ * We'll test for:
+ * 1) If the matrix goes out of scope or is released -> vector is not affected
+ * 2) If the vector goes out of scope matrix values become undetermined
+ */
+TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_Ownership)
+{
+    const int SIZE=3;
+
+    Mat_<TypeParam > m_outer;
+    Mat_<TypeParam > m_bckp;
+    vector<TypeParam > bckp;
+    {
+        // initialize a vector with random values
+        vector<TypeParam > v;
+        push_back_randu(v, SIZE);
+
+        // make an explicit back up of the vector values
+        bckp = v;
+
+        for(int i=0; i<SIZE; i++) {
+            EXPECT_EQ(v[i], bckp[i]);
+        }
+
+        // test ownership after mat release
+        {
+            Mat_<TypeParam > m_inner = Vec_ToRowMat_(v);
+            m_inner.copyTo(m_bckp);
+            m_inner.release(); // will not affect the data
+
+            for(int i=0; i<SIZE; i++) {
+                EXPECT_EQ(v[i], bckp[i]);
+            }
+        }
+
+        // check again after mat going out of scope
+        for(int i=0; i<SIZE; i++) {
+            EXPECT_EQ(v[i], bckp[i]);
+        }
+
+        m_outer = Vec_ToRowMat_(v);
+        for(int i=0; i<SIZE; i++) {
+            EXPECT_EQ(v[i], m_outer(i));
+        }
+    }
+
+    for(int i=0; i<SIZE; i++) {
+
+        EXPECT_EQ(bckp[i], m_bckp(i));
+    }
+
+    Mat cmp_out;
+    compare(m_outer, m_bckp, cmp_out, CMP_NE);
+    int n = countNonZero(cmp_out); // n==0 -> equal
+    EXPECT_NE(n, 0) << "They turned out to be equal.";
+}
+
+/**
+ * @brief test assignment to regular non-template Mat object
+ */
+TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_AssignToMat)
+{
+    const int SIZE=3;
+
+    // initialize a vector with random values
+    vector<TypeParam > v;
+    push_back_randu<TypeParam >(v, SIZE);
+
+    Mat m = Vec_ToRowMat_<TypeParam >(v);
+
+    EXPECT_MAT_DIMS_EQ(m, Size2i(static_cast<int>(v.size()), 1)) << "Encountered unexpected size";
+    EXPECT_MAT_TYPE(m, MatDepth_<TypeParam >::depth) << "Unexpected mat type";
+
+    // check values
+    for(int i=0; i<SIZE; i++) {
+        EXPECT_EQ(v[i], m.at<TypeParam >(i));
+        EXPECT_EQ(v[i], m.at<TypeParam >(0, i));
+    }
+}
+
+/**
+ * @brief test utility function for populating a vector with uniformly random values
+ */
+TYPED_TEST_P(MatPODTypesTest, Push_back_randu_size)
+{
+    for(int i=0; i<11; i++) {
+
+        vector<TypeParam > v;
+        push_back_randu(v, i);
+        EXPECT_SIZE(i, v);
+    }
+}
+
 /* Write additional type+value parameterized tests here.
  * Acquaint yourself with the values passed to along with each type.
  */
@@ -1226,7 +1374,14 @@ REGISTER_TYPED_TEST_CASE_P(MatPODTypesTest,
                            FindFirstOf_Found,
                            FindFirstOf_Duplicate,
                            Mat_ToVec_ThreeDimensional,
-                           Mat_ToVec_Invalid_NonContinuous_Mat_); ///< register additional typed_test_p (i.e. unit test) routines here
+                           Mat_ToVec_Invalid_NonContinuous_Mat_,
+                           Vec_TRowMat_Empty,
+                           Vec_TRowMat_AlwaysRowMat,
+                           Vec_TRowMat_Values,
+                           Vec_TRowMat_NoCopy,
+                           Vec_TRowMat_Ownership,
+                           Vec_TRowMat_AssignToMat,
+                           Push_back_randu_size); ///< register additional typed_test_p (i.e. unit test) routines here
 
 ///< Register values to work with inside tests, note how they're used inside the tests
 template<> std::vector<float> V_<float>::values{-1.f, 0.f, 1.f, 100.f, 101.f, 200.f};
