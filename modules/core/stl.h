@@ -5,6 +5,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 namespace sem {
 
@@ -25,6 +26,24 @@ namespace sem {
             obj = itr->second;
         }
         return found;
+    }
+
+    /**
+     * @brief List all keys in a map
+     * @param map
+     * @return vector of all map keys
+     */
+    template <class TKey, class TVal>
+    std::vector<TKey > Keys(const std::map<TKey, TVal > &m)
+    {
+        std::vector<TKey > v;
+
+        typename std::map<TKey, TVal >::const_iterator itr;
+        for(itr=m.begin(); itr != m.end(); ++itr) {
+
+            v.push_back(itr->first);
+        }
+        return v;
     }
 }
 
