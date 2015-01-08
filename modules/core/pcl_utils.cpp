@@ -9,7 +9,7 @@ using namespace cv;
 using namespace pcl;
 using namespace sem;
 
-PointCloudXYZ::Ptr sem::Mat2PointCloud(const Mat1f &m)
+PointCloudXYZ::Ptr sem::Mat2PointCloud(const Mat_<float> &m)
 {
     PointCloudXYZ::Ptr cloud_ptr;
 
@@ -60,6 +60,12 @@ PointCloudXYZ::Ptr sem::Mat2PointCloud(const Mat1f &m)
     }
 
     return cloud_ptr;
+}
+
+Mat1f sem::PointCloud2Mat(PointCloudXYZ::Ptr &cloud_ptr)
+{
+    PointXYZ *points_ptr = cloud_ptr->points.data();
+    return Mat1f(cloud_ptr->height, cloud_ptr->width*4, reinterpret_cast<float*>(points_ptr));
 }
 
 #endif // __WITH_PCL

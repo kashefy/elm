@@ -50,7 +50,7 @@ TEST(PCLUtilsMat2PointCloudTEST, Invalid)
     EXPECT_THROW(Mat2PointCloud(Mat1f::zeros(3, 4)), ExceptionBadDims);
 }
 
-TEST(PCLUtilsMat2PointCloudTEST, TestSize)
+TEST(PCLUtilsMat2PointCloudTEST, Dims)
 {
     Mat1f m(1, 9);
     randn(m, 0.f, 100.f);
@@ -75,7 +75,7 @@ TEST(PCLUtilsMat2PointCloudTEST, TestSize)
     EXPECT_EQ(4, static_cast<int>(cloud_ptr->height));
 }
 
-TEST(PCLUtilsMat2PointCloudTEST, TestSize3Ch)
+TEST(PCLUtilsMat2PointCloudTEST, Dims3Ch)
 {
     Mat3f m(1, 9);
     randn(m, 0.f, 100.f);
@@ -232,6 +232,83 @@ TEST(PCLUtilsMat2PointCloudTEST, SingleChannelVs3ChannelMat)
             EXPECT_FLOAT_EQ(_p2.x, _p1.x) << "Unexpected value for x coordinate.";
             EXPECT_FLOAT_EQ(_p2.y, _p1.y) << "Unexpected value for y coordinate.";
             EXPECT_FLOAT_EQ(_p2.z, _p1.z) << "Unexpected value for z coordinate.";
+        }
+    }
+}
+
+TEST(PCLUtilsPointCloud2MatTEST, Empty)
+{
+    PointCloudXYZ::Ptr cloud_ptr;
+    cloud_ptr.reset(new PointCloudXYZ());
+    EXPECT_TRUE(PointCloud2Mat(cloud_ptr).empty());
+
+    cloud_ptr.reset(new PointCloudXYZ(0, 0));
+    EXPECT_TRUE(PointCloud2Mat(cloud_ptr).empty());
+
+    cloud_ptr.reset(new PointCloudXYZ(0, 1));
+    EXPECT_TRUE(PointCloud2Mat(cloud_ptr).empty());
+
+    cloud_ptr.reset(new PointCloudXYZ(1, 0));
+    EXPECT_TRUE(PointCloud2Mat(cloud_ptr).empty());
+}
+
+
+TEST(PCLUtilsPointCloud2MatTEST, Dims)
+{
+    Mat1f m(9, 9);
+    randn(m, 0.f, 100.f);
+
+    PointCloudXYZ::Ptr cloud_ptr;
+
+    cloud_ptr = Mat2PointCloud(m);
+    EXPECT_MAT_DIMS_EQ(PointCloud2Mat(cloud_ptr), Size2i(12, m.rows));
+
+    cloud_ptr = Mat2PointCloud(m.reshape(1, 27));
+    EXPECT_MAT_DIMS_EQ(PointCloud2Mat(cloud_ptr), Size2i(4, 27));
+}
+
+TEST(PCLUtilsPointCloud2MatTEST, Values)
+{
+    // organized point cloud
+    Mat1f m(4, 3);
+    randn(m, 0.f, 100.f);
+    PointCloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+
+    Mat1f m2 = PointCloud2Mat(cloud_ptr);
+    hconcat(m, Mat1f(m.rows, 1, 1), m);
+
+    EXPECT_MAT_EQ(m, m2);
+}
+
+TEST(PCLUtilsPointCloud2MatTEST, Owner)
+{
+    // organized point cloud
+    Mat1f m(4, 3);
+    randn(m, 0.f, 100.f);
+    PointCloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+
+    Mat1f m2 = PointCloud2Mat(cloud_ptr);
+
+    for(size_t r=0; r<cloud_ptr->height; r++) {
+
+        int i=0;
+        for(size_t c=0; c<cloud_ptr->width; c++, i+=4) {
+
+            PointXYZ _p = cloud_ptr->at(c, r);
+            EXPECT_FLOAT_EQ(m2(r, i)  , _p.x) << "Unexpected value for x coordinate.";
+            EXPECT_FLOAT_EQ(m2(r, i+1), _p.y) << "Unexpected value for y coordinate.";
+            EXPECT_FLOAT_EQ(m2(r, i+2), _p.z) << "Unexpected value for z coordinate.";
+
+            PointXYZ _p2;
+            _p2.x += 1.f;
+            _p2.y += 2.f;
+            _p2.z += 3.f;
+
+            cloud_ptr->at(c, r) = _p2;
+
+            EXPECT_FLOAT_EQ(m2(r, i)  , _p2.x) << "Unexpected value for x coordinate.";
+            EXPECT_FLOAT_EQ(m2(r, i+1), _p2.y) << "Unexpected value for y coordinate.";
+            EXPECT_FLOAT_EQ(m2(r, i+2), _p2.z) << "Unexpected value for z coordinate.";
         }
     }
 }

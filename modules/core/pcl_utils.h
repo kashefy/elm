@@ -26,7 +26,15 @@ typedef pcl::PointCloud<pcl::PointXYZ> PointCloudXYZ;
  * @return pointer to point cloud instance
  * @todo Avoid deep copy
  */
-PointCloudXYZ::Ptr Mat2PointCloud(const cv::Mat1f &m);
+PointCloudXYZ::Ptr Mat2PointCloud(const cv::Mat_<float> &m);
+
+/**
+ * @brief Convert XYZ point cloud to OpenCv Mat of floats.
+ *
+ * @param source point cloud
+ * @return resulting Mat
+ */
+cv::Mat1f PointCloud2Mat(PointCloudXYZ::Ptr &cloud_ptr);
 
 }
 
