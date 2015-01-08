@@ -209,12 +209,12 @@ if(BUILD_TESTS)
     add_definitions(-D__WITH_GTEST) # Useful in case test class needs to be friend of class under test
 
     # Copy over test data (if it exists)
-    if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
+    if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/testdata")
 
-        status("Copying test-data")
-        file(COPY ${CMAKE_SOURCE_DIR}/test-data DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+        status("Copying test data")
+        file(COPY ${CMAKE_SOURCE_DIR}/testdata DESTINATION ${EXECUTABLE_OUTPUT_PATH})
 
-    endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
+    endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/testdata")
 
 endif(BUILD_TESTS)
 
