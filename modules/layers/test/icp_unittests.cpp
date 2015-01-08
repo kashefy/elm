@@ -146,7 +146,17 @@ protected:
     PointCloudXYZ::Ptr cloud_target_;
 };
 
+/**
+ * @brief Compare Layer ICP with PCL's ICP routines
+ */
 TEST_F(ICPTest, ActivateAndResponse) {
+
+    IterativeClosestPoint<PointXYZ, PointXYZ> icp;
+    icp.setInputSource(cloud_in_);
+    icp.setInputTarget(cloud_target_);
+
+    PointCloudXYZ fin;
+    icp.align(fin);
 
     to_->Activate(sig_);
 
@@ -183,6 +193,41 @@ TEST_F(ICPTest, ActivateAndResponse) {
 
         EXPECT_FLOAT_EQ(1.f, transformation_actual(i, i)) << "Expecting diagonal of 1's";
     }
+}
+
+/**
+ * @brief Pick a scenario that would not converge
+ */
+TEST_F(ICPTest, NoConvergence)
+{
+    Mat1f in = Mat1f::zeros(1, 3);
+    Mat1f target = in.clone();
+
+    sig_.Append(NAME_INPUT_POINT_CLOUD_SRC, in);
+    sig_.Append(NAME_INPUT_POINT_CLOUD_TARGET, target);
+
+    to_->Activate(sig_);
+    to_->Response(sig_);
+
+    EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_CONVERGENCE));
+    EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_SCORE));
+    EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_TRANSFORMATION));
+
+    // check response
+    // convergence:
+    EXPECT_FALSE(sig_.MostRecent(NAME_OUTPUT_CONVERGENCE).at<float>(0)==1.f) << "Not expecting convergence.";
+
+    // fitness score
+    EXPECT_MAT_EQ(sig_.MostRecent(NAME_OUTPUT_SCORE), Mat1f(1, 1, 0.f)) << "Expecting zero score.";
+
+    // more detailed check of transformation matrix, expecting a diagonal matrix
+    Mat1f diagonal(4, 4, 0.f);
+    for(int i=0; i<diagonal.rows; i++) {
+
+        diagonal(i, i) = 1.f;
+    }
+
+    EXPECT_MAT_EQ(sig_.MostRecent(NAME_OUTPUT_TRANSFORMATION), diagonal) << "Expecting diagonal matrix when convergence fails.";
 }
 
 #else // __WITH_PCL
