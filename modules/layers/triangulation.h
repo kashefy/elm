@@ -10,6 +10,9 @@
 #include <string>
 #include "core/base_Layer.h"
 
+/**
+ * @brief The triangulation layer wraps around the greedy projection algorithm usign pcl @cite Marton09ICRA
+ */
 class Triangulation : public base_Layer
 {
 public:
