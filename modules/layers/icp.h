@@ -60,7 +60,6 @@ protected:
     bool has_conveged_;                 ///< flag whether icp converged
     float fitness_score_;               ///< fitness score to most recent stimuli
     cv::Mat1f transformation_;          ///< final estimated transformation matrix
-
 };
 #endif  // __WITH_PCL
 
