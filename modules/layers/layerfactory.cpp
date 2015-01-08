@@ -8,10 +8,11 @@
  *  1. include its header below
  *  2. Add it to the initialization of g_layerRegistry map.
  */
+#include "layers/attentionwindow.h"
+#include "layers/icp.h"
 #include "layers/layer_y.h"
 #include "layers/layer_z.h"
 #include "encoding/populationcode.h"
-#include "layers/attentionwindow.h"
 #include "layers/saliencyitti.h"
 #include "layers/weightedsum.h"
 
@@ -28,6 +29,7 @@ typedef Registor_<base_Layer>::Registry LayerRegistry;
 
 LayerRegistry g_layerRegistry = map_list_of
         LAYER_REGISTRY_PAIR( AttentionWindow )
+        LAYER_REGISTRY_PAIR( ICP )
         LAYER_REGISTRY_PAIR( LayerY )
         LAYER_REGISTRY_PAIR( LayerZ )
         LAYER_REGISTRY_PAIR( MutexPopulationCode )
@@ -39,16 +41,16 @@ LayerFactory::LayerFactory()
 {
 }
 
-LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateLayerPtrShared(const LayerType &type)
+LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateShared(const LayerType &type)
 {
     return LayerRegistor::CreatePtrShared(g_layerRegistry, type);
 }
 
-LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateLayerPtrShared(const LayerType &type,
+LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateShared(const LayerType &type,
                                                                           const LayerConfig &config,
                                                                           const LayerIONames &io)
 {
-    LayerRegistor::RegisteredTypeSharedPtr ptr = LayerFactory::CreateLayerPtrShared(type);
+    LayerRegistor::RegisteredTypeSharedPtr ptr = LayerFactory::CreateShared(type);
     ptr->Reset(config);
     ptr->IONames(io);
     return ptr;

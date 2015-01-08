@@ -76,7 +76,7 @@ protected:
         cfg.Input(MutexPopulationCode::KEY_INPUT_STIMULUS, NAME_STIMULUS);
         cfg.Output(MutexPopulationCode::KEY_OUTPUT_POP_CODE, NAME_POP_CODE);
 
-        to_ptr_ = LayerFactory::CreateLayerPtrShared("MutexPopulationCode", cfg, cfg);
+        to_ptr_ = LayerFactory::CreateShared("MutexPopulationCode", cfg, cfg);
     }
 
     std::shared_ptr<base_Layer > to_ptr_; ///< test object

@@ -1,7 +1,11 @@
 #include "layers/icp.h"
 
+#include "pcl/registration/registration.h"
+#include "pcl/registration/icp.h"
+
 #include "core/exception.h"
 #include "core/layerconfig.h"
+#include "core/pcl_utils.h"
 #include "core/signal.h"
 #include "core/stl.h"
 #include "layers/layerfactory.h"
@@ -10,6 +14,7 @@
 
 using namespace std;
 using namespace cv;
+using namespace pcl;
 using namespace sem;
 
 namespace {
@@ -31,6 +36,12 @@ protected:
         cfg_ = LayerConfig();
         cfg_.Params(params_);
         io_names_ = LayerIONames();
+
+        io_names_.Input(ICP::KEY_INPUT_POINT_CLOUD_SRC   , NAME_INPUT_POINT_CLOUD_SRC);
+        io_names_.Input(ICP::KEY_INPUT_POINT_CLOUD_TARGET, NAME_INPUT_POINT_CLOUD_TARGET);
+        io_names_.Output(ICP::KEY_OUTPUT_CONVERGENCE     , NAME_OUTPUT_CONVERGENCE);
+        io_names_.Output(ICP::KEY_OUTPUT_SCORE           , NAME_OUTPUT_SCORE);
+        io_names_.Output(ICP::KEY_OUTPUT_TRANSFORMATION  , NAME_OUTPUT_TRANSFORMATION);
     }
 
     virtual void TearDown()
@@ -76,6 +87,13 @@ TEST_F(ICPInitTest, MissingRequiredIONames)
     ValidateRequiredIONames(io_pairs, to_ptr);
 }
 
+TEST_F(ICPInitTest, CreateWithFactory)
+{
+    shared_ptr<base_Layer> to_ptr = LayerFactory::CreateShared("ICP", cfg_, io_names_);
+
+    EXPECT_TRUE(bool(to_ptr));
+}
+
 /**
  * @brief Test the live methods assuming a sucessful initialization
  */
@@ -85,6 +103,33 @@ protected:
     virtual void SetUp()
     {
         ICPInitTest::SetUp();
+
+        to_ = LayerFactory::CreateShared("ICP", cfg_, io_names_);
+
+        cloud_in_.reset(new PointCloudXYZ);
+
+        // Fill in the CloudIn data
+        cloud_in_->width    = 5;
+        cloud_in_->height   = 1;
+        cloud_in_->is_dense = false;
+        cloud_in_->points.resize(cloud_in_->width * cloud_in_->height);
+        for(size_t i=0; i < cloud_in_->points.size(); ++i) {
+
+            cloud_in_->points[i].x = 1024 * rand () / (RAND_MAX + 1.0f);
+            cloud_in_->points[i].y = 1024 * rand () / (RAND_MAX + 1.0f);
+            cloud_in_->points[i].z = 1024 * rand () / (RAND_MAX + 1.0f);
+        }
+
+        // target.x = in.x + constant
+        cloud_target_.reset(new PointCloudXYZ);
+        *cloud_target_ = *cloud_in_;
+        for(size_t i=0; i < cloud_in_->points.size (); ++i) {
+
+            cloud_target_->points[i].x += 0.7f;
+        }
+
+        sig_.Append(NAME_INPUT_POINT_CLOUD_SRC, PointCloud2Mat(cloud_in_));
+        sig_.Append(NAME_INPUT_POINT_CLOUD_TARGET, PointCloud2Mat(cloud_target_));
     }
 
     virtual void TearDown()
@@ -94,7 +139,30 @@ protected:
 
     shared_ptr<base_Layer> to_; ///< pointer to test object
     Signal sig_;
+    PointCloudXYZ::Ptr cloud_in_;
+    PointCloudXYZ::Ptr cloud_target_;
 };
+
+TEST_F(ICPTest, Activate) {
+
+    IterativeClosestPoint<PointXYZ, PointXYZ> icp;
+    icp.setInputSource(cloud_in_);
+    icp.setInputTarget(cloud_target_);
+    PointCloudXYZ fin;
+    icp.align(fin);
+    cout << "has converged:" << icp.hasConverged() << " score: " <<
+                 icp.getFitnessScore() << endl;
+    cout << icp.getFinalTransformation() << endl;
+
+    EXPECT_FALSE(sig_.Exists(NAME_OUTPUT_CONVERGENCE));
+    EXPECT_FALSE(sig_.Exists(NAME_OUTPUT_SCORE));
+    EXPECT_FALSE(sig_.Exists(NAME_OUTPUT_TRANSFORMATION));
+
+    to_->Response(sig_);
+
+    EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_CONVERGENCE));
+    EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_SCORE));
+}
 
 #else // __WITH_PCL
     #warning "Skipping building ICP layer unittests"

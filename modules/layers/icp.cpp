@@ -2,14 +2,20 @@
 
 #ifdef __WITH_PCL   // the layer is otherwise implemented as unsupported
 
+#include "pcl/registration/icp.h"
+
 #include "core/exception.h"
 #include "core/layerconfig.h"
 #include "core/mat_utils.h"
+#include "core/pcl_utils.h"
 #include "core/signal.h"
 
 using namespace std;
 using namespace cv;
+using namespace pcl;
 using namespace sem;
+
+typedef IterativeClosestPoint<PointXYZ, PointXYZ > ICPXYZ;
 
 const string ICP::KEY_INPUT_POINT_CLOUD_SRC     = "source";
 const string ICP::KEY_INPUT_POINT_CLOUD_TARGET  = "target";
@@ -56,15 +62,30 @@ void ICP::IONames(const LayerIONames &io)
     name_score_         = io.Output(KEY_OUTPUT_SCORE);
     name_transf_        = io.Output(KEY_OUTPUT_TRANSFORMATION);
 }
-
+#include <iostream>
 void ICP::Activate(const Signal &signal)
 {
+    Mat1f i = signal.MostRecent(name_src_cloud_);
+    cout<<i<<endl;
+    PointCloudXYZ::Ptr cloud_src = Mat2PointCloud(signal.MostRecent(name_src_cloud_));
+    PointCloudXYZ::Ptr cloud_target = Mat2PointCloud(signal.MostRecent(name_target_cloud_));
 
+    ICPXYZ icp;
+    icp.setInputSource(cloud_src);
+    icp.setInputTarget(cloud_target);
+
+    PointCloudXYZ fin;
+    icp.align(fin);
+
+    has_conveged_ = icp.hasConverged();
+    fitness_score_ = static_cast<float>(icp.getFitnessScore());
+    ICPXYZ::Matrix4 x = icp.getFinalTransformation();
 }
 
 void ICP::Response(Signal &signal)
 {
-
+    signal.Append(name_convergence_, Mat1f(1, 1, has_conveged_? 1.f : 0.f));
+    signal.Append(name_convergence_, Mat1f(1, 1, fitness_score_));
 }
 
 #endif // __WITH_PCL

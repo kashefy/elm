@@ -56,6 +56,7 @@ protected:
     std::string name_transf_;           ///< desitnation name of final transformation
 
     bool has_conveged_;                 ///< flag whether icp converged
+    float fitness_score_;               ///< fitness score to most recent stimuli
 
 };
 #endif  // __WITH_PCL
