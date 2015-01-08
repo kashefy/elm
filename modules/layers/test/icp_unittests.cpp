@@ -3,8 +3,8 @@
 #include "pcl/registration/registration.h"
 #include "pcl/registration/icp.h"
 
-#include <Eigen/Dense>            ///< to enable OpenCV's eigen2cv()
-#include <opencv2/core/eigen.hpp> ///< for eigen2cv(), preceeded be #include <Eigen/Dense>
+#include <Eigen/Dense>            // to enable OpenCV's eigen2cv()
+#include <opencv2/core/eigen.hpp> // for eigen2cv(), preceeded be #include <Eigen/Dense>
 
 #include "core/exception.h"
 #include "core/layerconfig.h"
