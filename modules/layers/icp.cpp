@@ -4,6 +4,8 @@
 
 #include "pcl/registration/icp.h"
 
+#include <opencv2/core/eigen.hpp> ///< for eigen2cv(), must be preceeded definitio of Eigen either PCL or #include <Eigen/Dense>
+
 #include "core/exception.h"
 #include "core/layerconfig.h"
 #include "core/mat_utils.h"
@@ -62,11 +64,9 @@ void ICP::IONames(const LayerIONames &io)
     name_score_         = io.Output(KEY_OUTPUT_SCORE);
     name_transf_        = io.Output(KEY_OUTPUT_TRANSFORMATION);
 }
-#include <iostream>
+
 void ICP::Activate(const Signal &signal)
 {
-    Mat1f i = signal.MostRecent(name_src_cloud_);
-    cout<<i<<endl;
     PointCloudXYZ::Ptr cloud_src = Mat2PointCloud(signal.MostRecent(name_src_cloud_));
     PointCloudXYZ::Ptr cloud_target = Mat2PointCloud(signal.MostRecent(name_target_cloud_));
 
@@ -79,13 +79,15 @@ void ICP::Activate(const Signal &signal)
 
     has_conveged_ = icp.hasConverged();
     fitness_score_ = static_cast<float>(icp.getFitnessScore());
-    ICPXYZ::Matrix4 x = icp.getFinalTransformation();
+    eigen2cv(icp.getFinalTransformation(), transformation_);
 }
 
 void ICP::Response(Signal &signal)
 {
     signal.Append(name_convergence_, Mat1f(1, 1, has_conveged_? 1.f : 0.f));
-    signal.Append(name_convergence_, Mat1f(1, 1, fitness_score_));
+    signal.Append(name_score_, Mat1f(1, 1, fitness_score_));
+
+    signal.Append(name_transf_, transformation_);
 }
 
 #endif // __WITH_PCL

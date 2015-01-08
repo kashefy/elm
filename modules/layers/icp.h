@@ -9,6 +9,8 @@
     class ICP : public SEM_LAYER_NOT_SUPPORTED(ICP, "Building with PCL is required for supporting ICP layer.");
 #else   // __WITH_PCL
 
+#include <opencv2/core.hpp>
+
 #include "core/base_Layer.h"
 
 /**
@@ -57,6 +59,7 @@ protected:
 
     bool has_conveged_;                 ///< flag whether icp converged
     float fitness_score_;               ///< fitness score to most recent stimuli
+    cv::Mat1f transformation_;          ///< final estimated transformation matrix
 
 };
 #endif  // __WITH_PCL

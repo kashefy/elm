@@ -3,6 +3,9 @@
 #include "pcl/registration/registration.h"
 #include "pcl/registration/icp.h"
 
+#include <Eigen/Dense>            ///< to enable OpenCV's eigen2cv()
+#include <opencv2/core/eigen.hpp> ///< for eigen2cv(), preceeded be #include <Eigen/Dense>
+
 #include "core/exception.h"
 #include "core/layerconfig.h"
 #include "core/pcl_utils.h"
@@ -21,12 +24,12 @@ namespace {
 
 #ifdef __WITH_PCL // test normally
 
-const string NAME_INPUT_POINT_CLOUD_SRC;         ///< key to source cloud
-const string NAME_INPUT_POINT_CLOUD_TARGET;      ///< key to target cloud
+const string NAME_INPUT_POINT_CLOUD_SRC     = "src";    ///< key to source cloud
+const string NAME_INPUT_POINT_CLOUD_TARGET  = "target"; ///< key to target cloud
 
-const string NAME_OUTPUT_SCORE;                  ///< key to fitness score
-const string NAME_OUTPUT_CONVERGENCE;            ///< key to convergence result
-const string NAME_OUTPUT_TRANSFORMATION;         ///< key to optional final tansformation
+const string NAME_OUTPUT_SCORE              = "score";  ///< key to fitness score
+const string NAME_OUTPUT_CONVERGENCE        = "c";      ///< key to convergence result
+const string NAME_OUTPUT_TRANSFORMATION     = "transf"; ///< key to optional final tansformation
 
 class ICPInitTest : public ::testing::Test
 {
@@ -143,16 +146,9 @@ protected:
     PointCloudXYZ::Ptr cloud_target_;
 };
 
-TEST_F(ICPTest, Activate) {
+TEST_F(ICPTest, ActivateAndResponse) {
 
-    IterativeClosestPoint<PointXYZ, PointXYZ> icp;
-    icp.setInputSource(cloud_in_);
-    icp.setInputTarget(cloud_target_);
-    PointCloudXYZ fin;
-    icp.align(fin);
-    cout << "has converged:" << icp.hasConverged() << " score: " <<
-                 icp.getFitnessScore() << endl;
-    cout << icp.getFinalTransformation() << endl;
+    to_->Activate(sig_);
 
     EXPECT_FALSE(sig_.Exists(NAME_OUTPUT_CONVERGENCE));
     EXPECT_FALSE(sig_.Exists(NAME_OUTPUT_SCORE));
@@ -162,6 +158,31 @@ TEST_F(ICPTest, Activate) {
 
     EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_CONVERGENCE));
     EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_SCORE));
+    EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_TRANSFORMATION));
+
+    // check response
+    // convergence:
+    ASSERT_TRUE(icp.hasConverged()) << "this test needs to converge";
+    EXPECT_MAT_DIMS_EQ(sig_.MostRecent(NAME_OUTPUT_CONVERGENCE), Size2i(1, 1)) << "Expecting Mat of single element for convergence.";
+    EXPECT_EQ(sig_.MostRecent(NAME_OUTPUT_CONVERGENCE).at<float>(0)==1.f, icp.hasConverged()) << "Mismatched convergence.";
+
+    // fitness score
+    EXPECT_MAT_DIMS_EQ(sig_.MostRecent(NAME_OUTPUT_SCORE), Size2i(1, 1)) << "Expecting Mat of single element for fitness score.";
+    EXPECT_FLOAT_EQ(sig_.MostRecent(NAME_OUTPUT_SCORE).at<float>(0), static_cast<float>(icp.getFitnessScore())) << "Mismatched fitness score.";
+
+    // final transformation matrix estimated by registration method
+    Mat1f transformation_expected;
+    eigen2cv(icp.getFinalTransformation(), transformation_expected);
+
+    Mat1f transformation_actual = sig_.MostRecent(NAME_OUTPUT_TRANSFORMATION);
+    EXPECT_MAT_EQ(transformation_expected, transformation_actual) << "Mismatch in final transformation";
+
+    // more detailed check of transformation matrix
+    EXPECT_EQ(transformation_actual.rows, transformation_actual.cols) << "Expecting square matrix";
+    for(int i=0; i<transformation_actual.rows; i++) {
+
+        EXPECT_FLOAT_EQ(1.f, transformation_actual(i, i)) << "Expecting diagonal of 1's";
+    }
 }
 
 #else // __WITH_PCL
