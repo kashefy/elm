@@ -9,7 +9,7 @@
  * Does not learn.
  * Its spiking is controlled by its state and a poisson process
  *
- * \cite Nessler2010
+ * @cite Nessler2010
  */
 class YNeuron
 {

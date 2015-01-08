@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "core/base_Layer.h"
-#include "core/layerconfig.h"   ///< OptS member definition
+#include "core/layerconfig.h"   // OptS member definition
 #include "neuron/zneuron.h"
 #include "neuron/wtapoisson.h"
 
@@ -13,7 +13,7 @@
  *
  *  A set of spiking neurons in a WTA circuit that learn via STDP
  *
- * @todo proper citation
+ * @cite Nessler2010
  */
 class LayerZ : public base_LearningLayer
 {
