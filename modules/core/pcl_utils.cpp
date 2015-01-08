@@ -32,8 +32,19 @@ PointCloudXYZ::Ptr sem::Mat2PointCloud(const Mat_<float> &m)
             *itr = (PointXYZ(m(i), m(i+1), m(i+2)));
         }
     }
-    // 3 channel matrix
-    else if(m.channels()==3) {
+    else if(nb_channels == 1 && (m.cols % 4 == 0)) {
+
+        // determine width and height of new poValuesint cloud
+        cloud_ptr.reset(new PointCloudXYZ(m.cols/4, m.rows));
+
+        // populate
+        size_t i=0;
+        for(PointCloudXYZ::iterator itr=cloud_ptr->begin(); i<m.total(); ++itr, i+=4) {
+
+            *itr = (PointXYZ(m(i), m(i+1), m(i+2))); // ignore last coordinate
+        }
+    }
+    else if(m.channels()==3) { // 3 channel matrix
 
         if(m.empty()) {
             cloud_ptr.reset(new PointCloudXYZ);
@@ -48,6 +59,25 @@ PointCloudXYZ::Ptr sem::Mat2PointCloud(const Mat_<float> &m)
             for(int c=0; c<m.cols; c++) {
 
                 Vec3f p = m.at<Vec3f>(r, c);
+                cloud_ptr->push_back(PointXYZ(p[0], p[1], p[2]));
+            }
+        }
+    }
+    else if(m.channels()==4) { // 4-channel matrix
+
+        if(m.empty()) {
+            cloud_ptr.reset(new PointCloudXYZ);
+        }
+        else {
+            // widht and heigh of new point cloud directly follows source mat dims
+            cloud_ptr.reset(new PointCloudXYZ(m.cols, m.rows));
+        }
+
+        for(int r=0; r<m.rows; r++) {
+
+            for(int c=0; c<m.cols; c++) {
+
+                Vec4f p = m.at<Vec4f>(r, c);
                 cloud_ptr->push_back(PointXYZ(p[0], p[1], p[2]));
             }
         }

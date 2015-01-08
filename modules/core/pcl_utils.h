@@ -24,7 +24,7 @@ typedef pcl::PointCloud<pcl::PointXYZ> PointCloudXYZ;
  *
  * @param source matrix
  * @return pointer to point cloud instance
- * @todo Avoid deep copy
+ * @todo Avoid deep copy, add test coverage for 4-channel Mat
  */
 PointCloudXYZ::Ptr Mat2PointCloud(const cv::Mat_<float> &m);
 

@@ -47,7 +47,6 @@ TEST(PCLUtilsMat2PointCloudTEST, Invalid)
     EXPECT_THROW(Mat2PointCloud(Mat1f::ones(1, 2)), ExceptionBadDims);
     EXPECT_THROW(Mat2PointCloud(Mat1f::ones(2, 2)), ExceptionBadDims);
     EXPECT_THROW(Mat2PointCloud(Mat1f::ones(4, 1)), ExceptionBadDims);
-    EXPECT_THROW(Mat2PointCloud(Mat1f::zeros(3, 4)), ExceptionBadDims);
 }
 
 TEST(PCLUtilsMat2PointCloudTEST, Dims)
@@ -73,6 +72,12 @@ TEST(PCLUtilsMat2PointCloudTEST, Dims)
     EXPECT_EQ(4, static_cast<int>(cloud_ptr->size()));
     EXPECT_EQ(1, static_cast<int>(cloud_ptr->width));
     EXPECT_EQ(4, static_cast<int>(cloud_ptr->height));
+
+    EXPECT_NO_THROW(Mat2PointCloud(Mat1f::zeros(3, 4)));
+    cloud_ptr = Mat2PointCloud(Mat1f::zeros(3, 4));
+    EXPECT_EQ(3, static_cast<int>(cloud_ptr->size()));
+    EXPECT_EQ(1, static_cast<int>(cloud_ptr->width));
+    EXPECT_EQ(3, static_cast<int>(cloud_ptr->height));
 }
 
 TEST(PCLUtilsMat2PointCloudTEST, Dims3Ch)
