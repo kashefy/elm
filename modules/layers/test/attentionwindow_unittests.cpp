@@ -99,7 +99,7 @@ protected:
 
         io_.Output(AttentionWindow::KEY_OUTPUT_OPT_TL, NAME_TL);
 
-        to_ = LayerFactory::CreateLayerPtrShared("AttentionWindow", cfg_, io_);
+        to_ = LayerFactory::CreateShared("AttentionWindow", cfg_, io_);
 
         // append stimulus
         Mat1f stimulus(6, 8);

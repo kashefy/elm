@@ -25,7 +25,7 @@ public:
      * @return pointer to layer instance
      * @throws ExceptionTypeError on unrecognized layer type
      */
-    static std::shared_ptr<base_Layer> CreateLayerPtrShared(const LayerType &type);
+    static std::shared_ptr<base_Layer> CreateShared(const LayerType &type);
 
     /**
      * @brief Create smart pointer to an instantiated layer
@@ -35,7 +35,7 @@ public:
      * @return pointer to layer instance
      * @throws ExceptionTypeError on unrecognized layer type
      */
-    static std::shared_ptr<base_Layer> CreateLayerPtrShared(const LayerType &type,
+    static std::shared_ptr<base_Layer> CreateShared(const LayerType &type,
                                                             const LayerConfig &config,
                                                             const LayerIONames &io);
 };

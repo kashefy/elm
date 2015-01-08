@@ -112,6 +112,22 @@ std::vector<T> Mat_ToVec_(const cv::Mat_<T> &m) {
     return v;
 }
 
+/** @brief Function for converting STL vector of POD type into an OpenCV Mat.
+ *
+ * No deep copy.
+ * The data is not copied to the matrix.
+ * The data remains owned by the vector
+ * The resulting mat object should not be referenced if the source vector goes out of scope
+ *
+ * @param source vector of POD type
+ * @return resulting row matrix, matrix with single row pointing to the vector's underlying data
+ */
+template <typename T>
+cv::Mat_<T> Vec_ToRowMat_(std::vector<T> &v)
+{
+    return cv::Mat_<T>(1, static_cast<int>(v.size()), v.data());
+}
+
 /**
  * @brief get first index of element with a specific value in matrix
  * Inspired by this Stack Overflow post: @see http://stackoverflow.com/questions/25835587/find-element-in-opencv-mat-efficiently

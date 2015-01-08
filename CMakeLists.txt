@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 2.8.7)
 set(ROOT_PROJECT sem)
 project(${ROOT_PROJECT})
 set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules)
-set(${ROOT_PROJECT}_LIBS "")
+set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
 
 # ----------------------------------------------------------------------------
@@ -176,10 +176,11 @@ if(WITH_PCL)
     set(PCL_COMPONENTS_REQ common io registration)
     status("Find PCL:")
     find_package(PCL 1.7 REQUIRED COMPONENTS ${PCL_COMPONENTS_REQ})
-    if(PCL_FOUND)
+    if(PCL_FOUND)   # true
+        add_definitions(-D__WITH_PCL) # Useful for conditional building of PCL dependent functionality
         list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${PCL_INCLUDE_DIRS})
         list(APPEND ${ROOT_PROJECT}_LIBS ${PCL_LIBRARIES})
-    else(PCL_FOUND)
+    else(PCL_FOUND) # false
         message(FATAL_ERROR "Failed to find PCL (or missing components). Check that the library is properly installed")
     endif(PCL_FOUND)
     status("")
