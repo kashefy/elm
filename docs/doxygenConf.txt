@@ -587,7 +587,7 @@ LAYOUT_FILE            =
 # of the bibliography can be controlled using LATEX_BIB_STYLE. To use this
 # feature you need bibtex and perl available in the search path.
 
-CITE_BIB_FILES         = docs/sem.bib
+CITE_BIB_FILES         = docs/sem.bib docs/pcl.bib 
 
 #---------------------------------------------------------------------------
 # configuration options related to warning and progress messages
@@ -1505,7 +1505,7 @@ INCLUDE_FILE_PATTERNS  =
 # undefined via #undef or recursively expanded use the := operator
 # instead of the = operator.
 
-PREDEFINED             = CORE_GROUP
+PREDEFINED             = CORE_GROUP __WITH_PCL
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then
 # this tag can be used to specify a list of macro names that should be expanded.
