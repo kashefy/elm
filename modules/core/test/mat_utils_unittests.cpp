@@ -822,13 +822,13 @@ template <class T>
 class MatPODTypesTest : public testing::Test
 {
 protected:
-    /**
-     * @brief Push back uniformly random values into a vector
-     * @param no. of items to push back
-     * @return vector initialized radnomly
-     */
 };
 
+/**
+ * @brief Push back uniformly random values into a vector
+ * @param vector pushing back into
+ * @param no. of items to push back
+ */
 template <typename T>
 void push_back_randu(std::vector<T> &v, int N)
 {
