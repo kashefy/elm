@@ -42,11 +42,17 @@ public:
 
     /**
      * @brief Activate layer computations to most recent stimuli
+     * This is expected to perform the heavy lifting
+     *
+     * @param[in] signal object with input features
+     * @throws sem::ExceptionKeyError for missing features
      */
     virtual void Activate(const Signal &signal) = 0;
 
     /**
-     * @brief Get layer response
+     * @brief Get layer response due to most recent stimuli
+     *
+     * @param[out] signal object to populate with layer's output features
      */
     virtual void Response(Signal &signal) = 0;
 
