@@ -14,6 +14,7 @@
 #include "layers/layer_z.h"
 #include "encoding/populationcode.h"
 #include "layers/saliencyitti.h"
+#include "layers/triangulation.h"
 #include "layers/weightedsum.h"
 
 using boost::assign::map_list_of;
@@ -34,6 +35,7 @@ LayerRegistry g_layerRegistry = map_list_of
         LAYER_REGISTRY_PAIR( LayerZ )
         LAYER_REGISTRY_PAIR( MutexPopulationCode )
         LAYER_REGISTRY_PAIR( SaliencyItti )
+        LAYER_REGISTRY_PAIR( Triangulation )
         LAYER_REGISTRY_PAIR( WeightedSum )
         ; ///< <-- add new layer to registry here
 
