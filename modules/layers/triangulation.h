@@ -8,6 +8,9 @@
 #else   // __WITH_PCL
 
 #include <string>
+
+#include <pcl/surface/gp3.h>
+
 #include "core/base_Layer.h"
 
 /**
@@ -16,7 +19,52 @@
 class Triangulation : public base_Layer
 {
 public:
+    // Parameters
+    static const std::string PARAM_SEARCH_RADIUS;       ///< maximum distance between connected points (maximum edge length)
+    static const std::string PARAM_MU;
+    static const std::string PARAM_MAX_NN;              ///< maximum neighrest neighbors
+    static const std::string PARAM_MAX_SURFACE_ANGLE;   ///< maximum surface angle
+    static const std::string PARAM_MIN_ANGLE;           ///< [rad]
+    static const std::string PARAM_MAX_ANGLE;           ///< [rad]
+    static const std::string PARAM_IS_NORMAL_CONSISTENT;///< yes/no
+
+    // I/O names
+    static const std::string KEY_INPUT_POINT_CLOUD;         ///< key to source cloud
+
+    // Default parameter values
+    static const float DEFAULT_SEARCH_RADIUS;               ///< 0.025
+    static const float DEFAULT_MU;                          ///< 2.5
+    static const float DEFAULT_MAX_SURFACE_ANGLE;           ///< PI/4 rad = 45 deg
+    static const float DEFAULT_MIN_ANGLE;                   ///< PI/18 rad = 10 deg
+    static const float DEFAULT_MAX_ANGLE;                   ///< 2/3*PI rad = 120 deg
+
+    static const int  DEFAULT_MAX_NN;                       ///< 100
+    static const bool DEFAULT_IS_NORMAL_CONSISTENCY;        ///< false
+
     Triangulation();
+
+    Triangulation(const LayerConfig &cfg);
+
+    void Clear();
+
+    void Reset();
+
+    void Reset(const LayerConfig &cfg);
+
+    void Reconfigure(const LayerConfig &cfg);
+
+    void IONames(const LayerIONames &config);
+
+    void Activate(const Signal &signal);
+
+    void Response(Signal &signal);
+
+protected:
+    std::string name_src_cloud_;        ///< name of input point cloud in signal object
+
+
+
+    pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;
 };
 
 #endif // __WITH_PCL
