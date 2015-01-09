@@ -98,5 +98,40 @@ Mat1f sem::PointCloud2Mat(PointCloudXYZ::Ptr &cloud_ptr)
     return Mat1f(cloud_ptr->height, cloud_ptr->width*4, reinterpret_cast<float*>(points_ptr));
 }
 
+Mat1f sem::VecVertices2Mat(const vector<Vertices >& vv, bool do_row_mat)
+{
+    Mat1f m;
+    if(vv.size() > 0) {
+
+        int nb_vertices = static_cast<int>(vv.size());
+        int sz_vertex = static_cast<int>(vv[0].vertices.size());
+
+        int mat_rows = 1;
+        int mat_cols = nb_vertices;
+
+        if(do_row_mat) {
+            mat_cols *= sz_vertex;
+        }
+        else {
+
+            mat_rows = nb_vertices;
+        }
+
+        m = Mat1f(mat_rows, mat_cols);
+        int k=0;
+        for(int i=0; i<nb_vertices; i++) {
+
+            vector<uint32_t> tmp = vv[i].vertices;
+            for(int j=0; j<sz_vertex; j++) {
+
+                m(k++) = static_cast<float>(tmp[j]);
+            }
+        }
+
+    }
+
+    return m;
+}
+
 #endif // __WITH_PCL
 

@@ -12,6 +12,7 @@
 
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
+#include <pcl/Vertices.h>
 
 namespace sem {
 
@@ -35,6 +36,17 @@ PointCloudXYZ::Ptr Mat2PointCloud(const cv::Mat_<float> &m);
  * @return resulting Mat
  */
 cv::Mat1f PointCloud2Mat(PointCloudXYZ::Ptr &cloud_ptr);
+
+/**
+ * @brief Convert vector of Vertices to a Mat of floats
+ *
+ * Unfortunately, a shallow copy did not work, this will be a deep copy
+ *
+ * @param vector of vertices
+ * @param whether to format the resulting Mat as a row matrix or not
+ * @return Mat of floats with vertex data
+ */
+cv::Mat1f VecVertices2Mat(const std::vector<pcl::Vertices >& vv, bool do_row_mat=true);
 
 }
 
