@@ -9,6 +9,8 @@
 
 #include <string>
 
+#include <opencv2/core.hpp>
+
 #include <pcl/surface/gp3.h>
 
 #include "core/base_Layer.h"
@@ -30,6 +32,7 @@ public:
 
     // I/O names
     static const std::string KEY_INPUT_POINT_CLOUD;         ///< key to source cloud
+    static const std::string KEY_OUTPUT_VERTICES;           ///< key to output vertices
 
     // Default parameter values
     static const float DEFAULT_SEARCH_RADIUS;               ///< 0.025
@@ -60,11 +63,11 @@ public:
     void Response(Signal &signal);
 
 protected:
-    std::string name_src_cloud_;        ///< name of input point cloud in signal object
+    std::string name_src_cloud_;   ///< name of input point cloud in signal object
+    std::string name_vertices_;    ///< desitnation name of output vertices
 
-
-
-    pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;
+    cv::Mat1f vertices_;            ///< populated with vertices of reconstructed triangular mesh
+    pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;   ///< greedy projection triangulation from point cloud
 };
 
 #endif // __WITH_PCL

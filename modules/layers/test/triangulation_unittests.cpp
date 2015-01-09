@@ -31,7 +31,9 @@ namespace {
 const bfs::path TEST_DIR("testdata");
 const bfs::path TEST_PATH_PCD = TEST_DIR/"bun0.pcd";
 
-const string NAME_INPUT_POINT_CLOUD = "in";    ///< name of input point cloud
+// Names for I/O
+const string NAME_INPUT_POINT_CLOUD = "in";   ///< name of input point cloud
+const string NAME_OUTPUT_VERTICES   = "v";    ///< name of output vertices
 
 class TriangulationInitTest : public ::testing::Test
 {
@@ -42,7 +44,8 @@ protected:
         cfg_.Params(params_);
         io_names_ = LayerIONames();
 
-        io_names_.Input(Triangulation::KEY_INPUT_POINT_CLOUD, NAME_INPUT_POINT_CLOUD);
+        io_names_.Input(Triangulation::KEY_INPUT_POINT_CLOUD,   NAME_INPUT_POINT_CLOUD);
+        io_names_.Output(Triangulation::KEY_OUTPUT_VERTICES,     NAME_OUTPUT_VERTICES);
     }
 
     virtual void TearDown()
@@ -79,7 +82,8 @@ TEST_F(TriangulationInitTest, MissingRequiredIONames)
     EXPECT_THROW(to_ptr->IONames(LayerIONames()), ExceptionKeyError);
 
     map<string, pair<bool, string> > io_pairs; // false for input, true for output
-    io_pairs[Triangulation::KEY_INPUT_POINT_CLOUD] = make_pair(0, NAME_INPUT_POINT_CLOUD);
+    io_pairs[Triangulation::KEY_INPUT_POINT_CLOUD]  = make_pair(0, NAME_INPUT_POINT_CLOUD);
+    io_pairs[Triangulation::KEY_OUTPUT_VERTICES]    = make_pair(1, NAME_OUTPUT_VERTICES);
 
     ValidateRequiredIONames(io_pairs, to_ptr);
 }
@@ -109,11 +113,14 @@ protected:
         fromPCLPointCloud2 (cloud_blob, *cloud_in_);
 
         to_ = LayerFactory::CreateShared("Triangulation", cfg_, io_names_);
+
+        sig_.Append(NAME_INPUT_POINT_CLOUD, PointCloud2Mat(cloud_in_));
     }
 
     virtual void TearDown()
     {
         TriangulationInitTest::TearDown();
+        sig_.Clear();
     }
 
     shared_ptr<base_Layer> to_; ///< pointer to test object
@@ -121,8 +128,13 @@ protected:
     PointCloudXYZ::Ptr cloud_in_;
 };
 
+TEST_F(TriangulationTest, ActivateEmptyInput)
+{
+    sig_.Append(NAME_INPUT_POINT_CLOUD, Mat1f());
+    EXPECT_THROW(to_->Activate(sig_), ExceptionBadDims);
+}
 
-TEST_F(TriangulationTest, FOO)
+TEST_F(TriangulationTest, ActivateAndResponse)
 {
     // Normal estimation*
     NormalEstimation<PointXYZ, Normal> n;
@@ -147,7 +159,6 @@ TEST_F(TriangulationTest, FOO)
 
     // Initialize objects
     GreedyProjectionTriangulation<PointNormal> gp3;
-    PolygonMesh triangles;
 
     // Set the maximum distance between connected points (maximum edge length)
     gp3.setSearchRadius(Triangulation::DEFAULT_SEARCH_RADIUS);
@@ -163,15 +174,45 @@ TEST_F(TriangulationTest, FOO)
     // Get result
     gp3.setInputCloud(cloud_with_normals);
     gp3.setSearchMethod(tree2);
-    gp3.reconstruct(triangles);
+
+    //PolygonMesh triangles;
+    //gp3.reconstruct(triangles);
+
+    vector<Vertices > vertices_vec;
+    gp3.reconstruct(vertices_vec);
 
     // Additional vertex information
-    vector<int> parts = gp3.getPartIDs();
-    vector<int> states = gp3.getPointStates();
+//    vector<int> parts = gp3.getPartIDs();
+//    vector<int> states = gp3.getPointStates();
 
-    cout<<triangles<<endl;
+//    cout<<triangles<<endl;
     // Finish
     //pcl::io::saveVTKFile ("mesh.vtk", triangles);
+
+    to_->Activate(sig_);
+
+    EXPECT_FALSE(sig_.Exists(NAME_OUTPUT_VERTICES)) << "Output feature already exists, better clear signal first.";
+
+    to_->Response(sig_);
+
+    EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_VERTICES)) << "Output feature is missing.";
+
+    Mat1f vertices_mat = sig_.MostRecent(NAME_OUTPUT_VERTICES);
+
+    int nb_vertices = static_cast<int>(vertices_vec.size());
+    int sz_vertex = static_cast<int>(vertices_vec[0].vertices.size());
+
+    EXPECT_MAT_DIMS_EQ(vertices_mat, Size2i(nb_vertices*sz_vertex, 1)) << "Dimensions do not match.";
+
+    int k=0;
+    for(int i=0; i<nb_vertices; i++) {
+
+        vector<uint32_t> tmp = vertices_vec[i].vertices;
+        for(int j=0; j<sz_vertex; j++) {
+
+            EXPECT_FLOAT_EQ(static_cast<float>(tmp[j]), vertices_mat(k++)) << "Vertex mismatch.";
+        }
+    }
 }
 
 #else // __WITH_PCL

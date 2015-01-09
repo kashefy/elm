@@ -4,6 +4,8 @@
 
 #ifdef __WITH_PCL   // the layer is otherwise implemented as unsupported
 
+#include <iostream>
+
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/kdtree/kdtree_flann.h>
@@ -41,7 +43,8 @@ const int   Triangulation::DEFAULT_MAX_NN                   = 100;  ///< maximum
 const bool  Triangulation::DEFAULT_IS_NORMAL_CONSISTENCY    = false;
 
 // initialize I/O names
-const string Triangulation::KEY_INPUT_POINT_CLOUD = "cloud_in";
+const string Triangulation::KEY_INPUT_POINT_CLOUD   = "cloud";
+const string Triangulation::KEY_OUTPUT_VERTICES     = "vertices";
 
 Triangulation::Triangulation()
     : base_Layer()
@@ -98,11 +101,18 @@ void Triangulation::Reconfigure(const LayerConfig &cfg)
 void Triangulation::IONames(const LayerIONames &io)
 {
     name_src_cloud_ = io.Input(KEY_INPUT_POINT_CLOUD);
+    name_vertices_  = io.Output(KEY_OUTPUT_VERTICES);
 }
 
 void Triangulation::Activate(const Signal &signal)
 {
-    PointCloudXYZ::Ptr cld_in = Mat2PointCloud(signal.MostRecent(name_src_cloud_));
+    Mat1f cld_in_mat = signal.MostRecent(name_src_cloud_);
+    if(cld_in_mat.empty()) {
+
+        SEM_THROW_BAD_DIMS("Cannot Activate Triangulation layer with empty input point cloud.");
+    }
+
+    PointCloudXYZ::Ptr cld_in = Mat2PointCloud(cld_in_mat);
 
     // Normal estimation*
     NormalEstimation<PointXYZ, Normal> n;
@@ -125,22 +135,26 @@ void Triangulation::Activate(const Signal &signal)
     search::KdTree<PointNormal>::Ptr tree2(new search::KdTree<PointNormal>);
     tree2->setInputCloud(cloud_with_normals);
 
-    // Initialize objects
-    PolygonMesh triangles;
-
     // Get result
     gp3.setInputCloud(cloud_with_normals);
     gp3.setSearchMethod(tree2);
-    gp3.reconstruct(triangles);
 
-    // Additional vertex information
-    vector<int> parts = gp3.getPartIDs();
-    vector<int> states = gp3.getPointStates();
+    // PolygonMesh triangles;
+    // gp3.reconstruct(triangles);
+
+    std::vector<Vertices > vertices;
+    gp3.reconstruct(vertices);
+
+    vertices_ = VecVertices2Mat(vertices, true);
 }
 
 void Triangulation::Response(Signal &signal)
 {
+    // Additional vertex information
+//    vector<int> parts = gp3.getPartIDs();
+//    vector<int> states = gp3.getPointStates();
 
+    signal.Append(name_vertices_, vertices_);
 }
 
 #endif // __WITH_PCL
