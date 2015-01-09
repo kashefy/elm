@@ -161,6 +161,11 @@ status("Resolve Opt. Dependencies:")
 # ----------------------------------------------------------------------------
 # the components we're currently interested in:
 #     common
+#     io            - loading pcd files
+#     registration  - icp
+#     features      - triangulation
+#     kdtree        - triangulation
+#     surface       - triangulation
 # find_package PCL
 # Defines:
 #     PCL_FOUND:        set to 1 if PCL is found, otherwise unset
@@ -173,7 +178,7 @@ status("Resolve Opt. Dependencies:")
 set(WITH_PCL ON CACHE BOOL "Whether to build with PCL support.")
 
 if(WITH_PCL)
-    set(PCL_COMPONENTS_REQ common io registration)
+    set(PCL_COMPONENTS_REQ common io registration features kdtree surface)
     status("Find PCL:")
     find_package(PCL 1.7 REQUIRED COMPONENTS ${PCL_COMPONENTS_REQ})
     if(PCL_FOUND)   # true
