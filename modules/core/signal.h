@@ -31,14 +31,10 @@ public:
     void Append(const std::string &name, const FeatureData &feature_data);
 
     /**
-     * @brief Overloading Append method accepting Mat as input
-     * @param name or key
-     * @param feature data to append
-     */
-    void Append(const std::string &name, const cv::Mat &feature_data);
-
-    /**
-     * @brief Overloading Append method accepting Mat as input
+     * @brief Overloading Append method accepting MatExpr as input
+     *
+     * Mainly for resolving call ambiguities.
+     *
      * @param name or key
      * @param feature data to append
      */

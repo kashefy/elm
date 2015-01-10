@@ -24,11 +24,6 @@ void Signal::Append(const string &name, const MatExpr &feature_data)
     Append(name, Mat(feature_data));
 }
 
-void Signal::Append(const string &name, const Mat &feature_data)
-{
-    Append(name, FeatureData(feature_data));
-}
-
 void Signal::Append(const string &name, const FeatureData &feature_data)
 {
     map<string, VecFeatData >::iterator itr = signals_.find(name);
