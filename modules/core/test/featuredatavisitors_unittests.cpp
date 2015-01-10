@@ -46,8 +46,8 @@ TYPED_TEST_P(FeatDataVisitorPOD_Test, Value)
 {
     FeatDataVisitorPOD_<TypeParam > to;
 
-    float _v = 256; // to cover a range of values common between all of our PODs
-    while(--_v >= 0) {
+    float _v = 256.f; // to cover a range of values common between all of our PODs
+    while(--_v >= 0.f) {
 
         EXPECT_EQ(static_cast<TypeParam >(_v), to(Mat_f(1, 1, _v))) << "Value mismatch.";
     }
