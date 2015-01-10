@@ -91,14 +91,15 @@ TEST_F(FeatureDataTest, Cached_Cloud)
  * @brief Type-Parameterized tests around FeatureData class with POD typed feature data
  */
 template <class T>
-class FeatureDataPOD_Test : public FeatureDataTest
+class FeatureDataPOD_Test : public ::testing::Test
 {
 protected:
 };
-TYPED_TEST_CASE_P(FeatureDataPOD_Test);
+typedef ::testing::Types<float, int, uchar> PODTypes;
+TYPED_TEST_CASE(FeatureDataPOD_Test, PODTypes);
 
-TYPED_TEST_P(FeatureDataPOD_Test, FromMat_Invalid) {
-
+TYPED_TEST(FeatureDataPOD_Test, FromMat_Invalid)
+{
     // empty
     EXPECT_THROW(FeatureData(Mat_f()).get<TypeParam >(), ExceptionBadDims);
     EXPECT_THROW(FeatureData(Mat_f(0, 0)).get<TypeParam >(), ExceptionBadDims);
@@ -110,12 +111,13 @@ TYPED_TEST_P(FeatureDataPOD_Test, FromMat_Invalid) {
     EXPECT_THROW(FeatureData(Mat_f(1, 2)).get<TypeParam >(), ExceptionBadDims);
     EXPECT_THROW(FeatureData(Mat_f(2, 2)).get<TypeParam >(), ExceptionBadDims);
 
+    // multiple elements + initialized with scalar
     EXPECT_THROW(FeatureData(Mat_f(2, 1, 1.f)).get<TypeParam >(), ExceptionBadDims);
     EXPECT_THROW(FeatureData(Mat_f(1, 2, 0.f)).get<TypeParam >(), ExceptionBadDims);
     EXPECT_THROW(FeatureData(Mat_f(2, 2, 3.f)).get<TypeParam >(), ExceptionBadDims);
 }
 
-TYPED_TEST_P(FeatureDataPOD_Test, FromMat)
+TYPED_TEST(FeatureDataPOD_Test, FromMat)
 {
     float _v = 256; // to cover a range of values common between all of our PODs
     while(--_v >= 0) {
@@ -128,7 +130,7 @@ TYPED_TEST_P(FeatureDataPOD_Test, FromMat)
 /**
  * @todo: anyway to make this less manual?
  */
-TYPED_TEST_P(FeatureDataPOD_Test, FromPOD)
+TYPED_TEST(FeatureDataPOD_Test, FromPOD)
 {
     float vf = 256.f; // to cover a range of values common between all of our PODs
     TypeParam _v = static_cast<TypeParam >(vf); // to cover a range of values common between all of our PODs
@@ -149,7 +151,7 @@ TYPED_TEST_P(FeatureDataPOD_Test, FromPOD)
 
 #ifdef __WITH_PCL // PCL support required for these tests
 
-TYPED_TEST_P(FeatureDataPOD_Test, Invalid_Cloud)
+TYPED_TEST(FeatureDataPOD_Test, Invalid_Cloud)
 {
     // empty
     CloudXYZ::Ptr cld(new CloudXYZ);
@@ -181,27 +183,10 @@ TYPED_TEST_P(FeatureDataPOD_Test, Invalid_Cloud)
 }
 #else // __WITH_PCL
 
-TYPED_TEST_P(FeatureDataPOD_Test, DISABLED_Invalid_Cloud)
+TYPED_TEST(FeatureDataPOD_Test, DISABLED_Invalid_Cloud)
 {
 }
 
 #endif // __WITH_PCL
-
-/** Write additional type+value parameterized tests here.
- *  Acquaint yourself with the values passed to along with each type.
- *
- *  Register test names:
- */
-REGISTER_TYPED_TEST_CASE_P(FeatureDataPOD_Test,
-                           FromMat_Invalid,
-                           FromMat,
-                           Invalid_Cloud,
-                           FromPOD
-                           ); ///< register additional typed_test_p (i.e. unit test) routines here
-
-typedef ::testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of plain old data types
-INSTANTIATE_TYPED_TEST_CASE_P(FeatureDataPOD_TypedTest, FeatureDataPOD_Test, PODTypes);
-
-
 
 } // annonymous namespace for test fixtures
