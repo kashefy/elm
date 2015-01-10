@@ -12,4 +12,6 @@ typedef std::vector< cv::Mat1f > VecMat;    ///< Convinience typedef for vector 
 typedef VecMat1f::const_iterator VecMat1fCIter; ///< Convinience typedef for VecMat1f const iterator
 typedef VecMat1f::const_iterator VecMat1fIter;  ///< Convinience typedef for VecMat1f iterator
 
+typedef cv::Mat_<float> Mat_f;   ///< convinience typedef for Mat of floats without constrains on no. of channels
+
 #endif // SEM_CORE_TYPEDEFS_H_

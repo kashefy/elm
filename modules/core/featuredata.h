@@ -43,12 +43,12 @@ class FeatDataVisitor_ :
  * @brief visitor class for converting to Mat of floats
  */
 class FeatDataVisitorMatF :
-        public FeatDataVisitor_<cv::Mat_<float> >
+        public FeatDataVisitor_<Mat_f >
 {
 public:
-    cv::Mat_<float> operator()(const cv::Mat_<float> &m) const;
+    Mat_f operator()(const Mat_f &m) const;
 
-    cv::Mat_<float> operator()(sem::PointCloudXYZ::Ptr &c) const;
+    Mat_f operator()(sem::PointCloudXYZ::Ptr &c) const;
 };
 
 /**
@@ -63,7 +63,7 @@ public:
 
     sem::PointCloudXYZ::Ptr operator()(sem::PointCloudXYZ::Ptr &c);
 
-    sem::PointCloudXYZ::Ptr operator()(const cv::Mat_<float> &m);
+    sem::PointCloudXYZ::Ptr operator()(const Mat_f &m);
 
 protected:
     sem::PointCloudXYZ::Ptr c_; ///< internal reference for caching most recent conversion result
