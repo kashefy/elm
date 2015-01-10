@@ -115,7 +115,7 @@ TYPED_TEST_P(FeatureDataPOD_Test, FromMat_Invalid) {
     EXPECT_THROW(FeatureData(Mat_f(2, 2, 3.f)).get<TypeParam >(), ExceptionBadDims);
 }
 
-TYPED_TEST_P(FeatureDataPOD_Test, FromMat)\
+TYPED_TEST_P(FeatureDataPOD_Test, FromMat)
 {
     float _v = 256; // to cover a range of values common between all of our PODs
     while(--_v >= 0) {
@@ -125,6 +125,68 @@ TYPED_TEST_P(FeatureDataPOD_Test, FromMat)\
     }
 }
 
+/**
+ * @todo: anyway to make this less manual?
+ */
+TYPED_TEST_P(FeatureDataPOD_Test, FromPOD)
+{
+    float vf = 256.f; // to cover a range of values common between all of our PODs
+    TypeParam _v = static_cast<TypeParam >(vf); // to cover a range of values common between all of our PODs
+    while(--vf >= 0.f) {
+
+        FeatureData to(--_v);
+        EXPECT_EQ( static_cast<float >(_v),  to.get<float>() )  << "Value mismatch while getting float.";
+        EXPECT_EQ( static_cast<int >(_v),    to.get<int>()   )  << "Value mismatch while getting int.";
+        EXPECT_EQ( static_cast<uchar >(_v),  to.get<uchar>() )  << "Value mismatch while getting uchar.";
+
+        EXPECT_MAT_EQ( Mat_f(1, 1, static_cast<float >(_v)), to.get<Mat_f >()) << "Value mismatch while getting Mat_f.";
+
+#ifdef __WITH_PCL
+        EXPECT_THROW( to.get<CloudXYZ::Ptr >(), ExceptionTypeError );
+#endif // __WITH_PCL
+    }
+}
+
+#ifdef __WITH_PCL // PCL support required for these tests
+
+TYPED_TEST_P(FeatureDataPOD_Test, Invalid_Cloud)
+{
+    // empty
+    CloudXYZ::Ptr cld(new CloudXYZ);
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    // multi-row, 3-col
+    cld = Mat2PointCloud(Mat1f(4, 3, 0.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    cld = Mat2PointCloud(Mat1f(4, 3, 1.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    cld = Mat2PointCloud(Mat1f(4, 3, 2.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    // single row
+    cld = Mat2PointCloud(Mat1f(1, 3, 0.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    cld = Mat2PointCloud(Mat1f(1, 3, 1.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    // 3-channel
+    cld = Mat2PointCloud(Mat3f(1, 1, 0.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    cld = Mat2PointCloud(Mat3f(1, 1, 1.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+}
+#else // __WITH_PCL
+
+TYPED_TEST_P(FeatureDataPOD_Test, DISABLED_Invalid_Cloud)
+{
+}
+
+#endif // __WITH_PCL
+
 /** Write additional type+value parameterized tests here.
  *  Acquaint yourself with the values passed to along with each type.
  *
@@ -132,7 +194,9 @@ TYPED_TEST_P(FeatureDataPOD_Test, FromMat)\
  */
 REGISTER_TYPED_TEST_CASE_P(FeatureDataPOD_Test,
                            FromMat_Invalid,
-                           FromMat
+                           FromMat,
+                           Invalid_Cloud,
+                           FromPOD
                            ); ///< register additional typed_test_p (i.e. unit test) routines here
 
 typedef ::testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of plain old data types
