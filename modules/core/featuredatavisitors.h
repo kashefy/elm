@@ -40,6 +40,37 @@ class FeatDataVisitor_ :
 };
 
 /**
+ * @brief template class for scalar POD static visitors
+ */
+template <typename T>
+class FeatDataVisitorPOD_ :
+        public boost::static_visitor<T >,
+        public base_FeatDataConversionCache
+{
+public:
+    T operator()(const Mat_f &m) const
+    {
+        size_t n = m.total();
+        if(n != 1) {
+
+            std::stringstream s;
+            s << "Cannot convert " << n << "-element Mat to Scalar.";
+            SEM_THROW_BAD_DIMS(s.str());
+        }
+        else {
+            return static_cast<T>(m(0));
+        }
+    }
+
+#ifdef __WITH_PCL // PCL support required
+    T operator()(sem::CloudXYZ::Ptr &c) const
+    {
+        SEM_THROW_TYPE_ERROR("Cannot convert point cloud to scalar.");
+    }
+#endif // __WITH_PCL
+};
+
+/**
  * @brief A do-nothing visitor class to use in place of unsupported visitors
  */
 class FeatDataVisitorVoid :

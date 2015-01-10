@@ -1,3 +1,6 @@
+/** @file test out feature data visitors,
+ * some fixtures may be scattered somewhat awkwardly in this file due to conditional support (e.g. PCL support)
+ */
 #include "core/featuredatavisitors.h"
 
 #include "core/exception.h"
@@ -8,6 +11,99 @@ using namespace cv;
 using namespace sem;
 
 namespace {
+
+/**
+ * @brief Type-Parameterized tests around POD visitor class
+ */
+template <class T>
+class FeatDataVisitorPOD_Test : public ::testing::Test
+{
+protected:
+};
+TYPED_TEST_CASE_P(FeatDataVisitorPOD_Test);
+
+TYPED_TEST_P(FeatDataVisitorPOD_Test, Invalid_Mat) {
+
+    FeatDataVisitorPOD_<TypeParam > to;
+
+    // empty
+    EXPECT_THROW(to(Mat_f()), ExceptionBadDims);
+    EXPECT_THROW(to(Mat_f(0, 0)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat_f(1, 0)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat_f(0, 1)), ExceptionBadDims);
+
+    // multiple elements
+    EXPECT_THROW(to(Mat_f(2, 1)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat_f(1, 2)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat_f(2, 1)), ExceptionBadDims);
+
+    EXPECT_THROW(to(Mat_f(2, 1, 1.f)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat_f(1, 2, 0.f)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat_f(2, 1, 3.f)), ExceptionBadDims);
+}
+
+TYPED_TEST_P(FeatDataVisitorPOD_Test, Value)
+{
+    FeatDataVisitorPOD_<TypeParam > to;
+
+    float _v = 256;
+    while(--_v >= 0) {
+
+        EXPECT_EQ(static_cast<TypeParam >(_v), to(Mat_f(1, 1, _v))) << "Value mismatch.";
+    }
+}
+
+#ifdef __WITH_PCL // PCL support required for these tests
+
+TYPED_TEST_P(FeatDataVisitorPOD_Test, Invalid_Cloud)
+{
+    FeatDataVisitorPOD_<TypeParam > to;
+
+    // empty
+    CloudXYZ::Ptr cld(new CloudXYZ);
+    EXPECT_THROW(to(cld), ExceptionTypeError);
+
+    // multi-row, 3-col
+    cld = Mat2PointCloud(Mat1f(4, 3, 0.f));
+    EXPECT_THROW(to(cld), ExceptionTypeError);
+
+    cld = Mat2PointCloud(Mat1f(4, 3, 1.f));
+    EXPECT_THROW(to(cld), ExceptionTypeError);
+
+    cld = Mat2PointCloud(Mat1f(4, 3, 2.f));
+    EXPECT_THROW(to(cld), ExceptionTypeError);
+
+    // single row
+    cld = Mat2PointCloud(Mat1f(1, 3, 0.f));
+    EXPECT_THROW(to(cld), ExceptionTypeError);
+
+    cld = Mat2PointCloud(Mat1f(1, 3, 1.f));
+    EXPECT_THROW(to(cld), ExceptionTypeError);
+
+    // 3-channel
+    cld = Mat2PointCloud(Mat3f(1, 1, 0.f));
+    EXPECT_THROW(to(cld), ExceptionTypeError);
+
+    cld = Mat2PointCloud(Mat3f(1, 1, 1.f));
+    EXPECT_THROW(to(cld), ExceptionTypeError);
+}
+
+#endif // __WITH_PCL
+
+/** Write additional type+value parameterized tests here.
+ *  Acquaint yourself with the values passed to along with each type.
+ *
+ *  Register test names:
+ */
+REGISTER_TYPED_TEST_CASE_P(FeatDataVisitorPOD_Test,
+                           Invalid_Mat,
+                           Value,
+                           Invalid_Cloud); ///< register additional typed_test_p (i.e. unit test) routines here
+
+typedef ::testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of matrices
+INSTANTIATE_TYPED_TEST_CASE_P(FeatureDataVisitorPOD_Test, FeatDataVisitorPOD_Test, PODTypes);
+
+
 
 /**
  * @brief test class around FeatDataVisitorMat_f

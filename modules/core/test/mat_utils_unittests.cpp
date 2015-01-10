@@ -1,8 +1,8 @@
 #include "core/mat_utils.h"
 
-#include "gtest/gtest.h"
-#include "ts/ts.h"
 #include <string>
+
+#include "ts/ts.h"
 
 using namespace std;
 using namespace cv;
@@ -824,6 +824,8 @@ class MatPODTypesTest : public testing::Test
 protected:
 };
 
+// define some helper routines and class
+
 /**
  * @brief Push back uniformly random values into a vector
  * @param vector pushing back into
@@ -1393,5 +1395,5 @@ template<> const int MatDepth_<float>::depth   = CV_32F;
 template<> const int MatDepth_<int>::depth     = CV_32S;
 template<> const int MatDepth_<uchar>::depth   = CV_8U;
 
-typedef testing::Types<float, int, uchar> PODTypes;  ///< // lists the usual suspects of matrices
+typedef testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of matrices
 INSTANTIATE_TYPED_TEST_CASE_P(MatUtilsPODTypesTest, MatPODTypesTest, PODTypes);
