@@ -68,7 +68,7 @@ TEST_F(DiffOfGaussians2dSqTest, Kernel)
     EXPECT_LT(min_val, 0);
     EXPECT_GE(mid_row(0), min_val);
     EXPECT_GE(mid_row(mid_row.cols-1), min_val);
-    EXPECT_TRUE(max_idx[2]-abs(max_idx[2]-min_idx[2]) < kernel.cols/3);
+    EXPECT_LT(max_idx[2]-abs(max_idx[2]-min_idx[2]), kernel.cols/3);
 }
 
 TEST_F(DiffOfGaussians2dSqTest, OnOff)
