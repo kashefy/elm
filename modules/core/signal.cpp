@@ -55,9 +55,23 @@ VecS Signal::FeatureNames() const
     return feature_names;
 }
 
+VecFeatData Signal::GetFeatureData(const string &name) const
+{
+    MapSVecFD::const_iterator itr = signals_.find(name);
+    if(itr != signals_.end()) { // found
+
+        return itr->second;
+    }
+    else {
+        stringstream s;
+        s << "Feature \'" << name << "\' does not exist.";
+        SEM_THROW_KEY_ERROR(s.str());
+    }
+}
+
 VecMat Signal::operator [](const string &name) const
 {
-    map<string, VecFeatData >::const_iterator itr = signals_.find(name);
+    MapSVecFD::const_iterator itr = signals_.find(name);
     if(itr != signals_.end()) { // found
 
         VecFeatData vf = itr->second;
@@ -78,7 +92,7 @@ VecMat Signal::operator [](const string &name) const
 
 Mat Signal::MostRecent(const string &name) const
 {
-    map<string, VecFeatData >::const_iterator itr = signals_.find(name);
+    MapSVecFD::const_iterator itr = signals_.find(name);
     if(itr != signals_.end()) { // found
 
         size_t len = itr->second.size();

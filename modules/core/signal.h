@@ -8,6 +8,8 @@
 
 #include "core/featuredata.h"
 
+typedef std::vector<FeatureData> VecFeatData; ///< convinience typedef for vector of FeatureData objects
+
 /**
  * @brief The Signal class, a class for holding single and multiple samples of features
  */
@@ -53,22 +55,30 @@ public:
      */
     VecS FeatureNames() const;
 
-    /** Get features under a given name
+    /**
+     * @brief Get features under a given name
      * @param name
      * @return vector of features found under key
      */
+    VecFeatData GetFeatureData(const std::string &name) const;
+
+    /** @brief Get features as Mat under a given name
+     * @param name
+     * @return vector of features found under key represented as Mat objects
+     * @todo Deprecate?
+     */
     VecMat operator [](const std::string &name) const;
 
-    /** Get most recent feature under a given name
+    /** @brief Get most recent feature under a given name
       * @param name
       * @return most recent feature found under key
       */
     cv::Mat MostRecent(const std::string& name) const;
 
 protected:
-    typedef std::vector<FeatureData> VecFeatData; ///< convinience typedef for vector of FeatureData objects
+    typedef std::map<std::string, VecFeatData> MapSVecFD; ///< convinience typedef for a map with string keys and VecFeatData values
 
-    std::map<std::string, VecFeatData> signals_; ///< encapuslated signal features
+    MapSVecFD signals_; ///< encapuslated signal features
 };
 
 #endif // SEM_CORE_SIGNAL_H_
