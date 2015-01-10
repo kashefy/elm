@@ -42,7 +42,7 @@ class FeatDataVisitor_ :
 /**
  * @brief visitor class for converting to Mat of floats
  */
-class FeatDataVisitorMatF :
+class FeatDataVisitorMat_f :
         public FeatDataVisitor_<Mat_f >
 {
 public:
@@ -88,6 +88,9 @@ public:
     /**
      * @brief Extract new representation of underlying feature data.
      * Utilizes cached conversion if applicable
+     *
+     * Implemented explcitiy for suported types.
+     *
      * @return new feature data representation
      */
     template <class T>
@@ -109,7 +112,7 @@ protected:
 
     boost::variant< cv::Mat1f, sem::CloudXYZ::Ptr > var_; ///< variant object to enable finite representations of a single feature data instance
 
-    FeatDataVisitorMatF visitor_mat_;       ///< visitor for converting to Mat objects
+    FeatDataVisitorMat_f visitor_mat_;       ///< visitor for converting to Mat objects
     FeatDataVisitorCloud visitor_cloud_;    ///< visitor for converting to pcl point clouds
 };
 

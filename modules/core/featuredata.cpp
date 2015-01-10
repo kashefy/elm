@@ -17,12 +17,12 @@ base_FeatDataConversionCache::base_FeatDataConversionCache()
 {
 }
 
-Mat_<float> FeatDataVisitorMatF::operator()(const Mat_<float> &m) const
+Mat_<float> FeatDataVisitorMat_f::operator()(const Mat_<float> &m) const
 {
     return m;
 }
 
-Mat_<float> FeatDataVisitorMatF::operator()(CloudXYZ::Ptr &c) const
+Mat_<float> FeatDataVisitorMat_f::operator()(CloudXYZ::Ptr &c) const
 {
     return PointCloud2Mat(c);
 }
