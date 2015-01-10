@@ -67,14 +67,14 @@ void ICP::IONames(const LayerIONames &io)
 
 void ICP::Activate(const Signal &signal)
 {
-    PointCloudXYZ::Ptr cloud_src = Mat2PointCloud(signal.MostRecent(name_src_cloud_));
-    PointCloudXYZ::Ptr cloud_target = Mat2PointCloud(signal.MostRecent(name_target_cloud_));
+    CloudXYZ::Ptr cloud_src = Mat2PointCloud(signal.MostRecent(name_src_cloud_));
+    CloudXYZ::Ptr cloud_target = Mat2PointCloud(signal.MostRecent(name_target_cloud_));
 
     ICPXYZ icp;
     icp.setInputSource(cloud_src);
     icp.setInputTarget(cloud_target);
 
-    PointCloudXYZ fin;
+    CloudXYZ fin;
     icp.align(fin);
 
     has_conveged_ = icp.hasConverged();

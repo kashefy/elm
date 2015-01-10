@@ -54,7 +54,7 @@ TEST(PCLUtilsMat2PointCloudTEST, Dims)
     Mat1f m(1, 9);
     randn(m, 0.f, 100.f);
 
-    PointCloudXYZ::Ptr cloud_ptr;
+    CloudXYZ::Ptr cloud_ptr;
 
     cloud_ptr = Mat2PointCloud(m);
     EXPECT_EQ(m.total()/3, cloud_ptr->size());
@@ -85,7 +85,7 @@ TEST(PCLUtilsMat2PointCloudTEST, Dims3Ch)
     Mat3f m(1, 9);
     randn(m, 0.f, 100.f);
 
-    PointCloudXYZ::Ptr cloud_ptr;
+    CloudXYZ::Ptr cloud_ptr;
 
     cloud_ptr = Mat2PointCloud(m);
     EXPECT_EQ(m.total(), cloud_ptr->size());
@@ -132,10 +132,10 @@ TEST(PCLUtilsMat2PointCloudTEST, ValuesNonOrganized)
 {
     Mat1f m(1, 9);
     randn(m, 0.f, 100.f);
-    PointCloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
 
     int i=0;
-    for(PointCloudXYZ::iterator itr=cloud_ptr->begin(); itr != cloud_ptr->end(); ++itr, i+=3) {
+    for(CloudXYZ::iterator itr=cloud_ptr->begin(); itr != cloud_ptr->end(); ++itr, i+=3) {
 
         PointXYZ _p = *itr;
         EXPECT_FLOAT_EQ(m(i)  , _p.x) << "Unexpected value for x coordinate.";
@@ -148,10 +148,10 @@ TEST(PCLUtilsMat2PointCloudTEST, ValuesNonOrganized3Ch)
 {
     Mat3f m(1, 9);
     randn(m, 0.f, 100.f);
-    PointCloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
 
     int i=0;
-    for(PointCloudXYZ::iterator itr=cloud_ptr->begin(); itr != cloud_ptr->end(); ++itr, i++) {
+    for(CloudXYZ::iterator itr=cloud_ptr->begin(); itr != cloud_ptr->end(); ++itr, i++) {
 
         PointXYZ _p = *itr;
         Vec3f _pm = m(i);
@@ -169,7 +169,7 @@ TEST(PCLUtilsMat2PointCloudTEST, ValuesOrganized)
     // organized point cloud
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
-    PointCloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
 
     for(size_t r=0; r<cloud_ptr->height; r++) {
 
@@ -189,7 +189,7 @@ TEST(PCLUtilsMat2PointCloudTEST, ValuesOrganized3Ch)
     // organized point cloud
     Mat3f m(4, 3);
     randn(m, 0.f, 100.f);
-    PointCloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
 
     for(size_t r=0; r<cloud_ptr->height; r++) {
 
@@ -224,8 +224,8 @@ TEST(PCLUtilsMat2PointCloudTEST, SingleChannelVs3ChannelMat)
         m3Ch(j++) = tmp;
     }
 
-    PointCloudXYZ::Ptr cloud_ptr1Ch = Mat2PointCloud(m1Ch);
-    PointCloudXYZ::Ptr cloud_ptr3Ch = Mat2PointCloud(m3Ch);
+    CloudXYZ::Ptr cloud_ptr1Ch = Mat2PointCloud(m1Ch);
+    CloudXYZ::Ptr cloud_ptr3Ch = Mat2PointCloud(m3Ch);
 
     for(size_t r=0; r<cloud_ptr1Ch->height; r++) {
 
@@ -243,17 +243,17 @@ TEST(PCLUtilsMat2PointCloudTEST, SingleChannelVs3ChannelMat)
 
 TEST(PCLUtilsPointCloud2MatTEST, Empty)
 {
-    PointCloudXYZ::Ptr cloud_ptr;
-    cloud_ptr.reset(new PointCloudXYZ());
+    CloudXYZ::Ptr cloud_ptr;
+    cloud_ptr.reset(new CloudXYZ());
     EXPECT_TRUE(PointCloud2Mat(cloud_ptr).empty());
 
-    cloud_ptr.reset(new PointCloudXYZ(0, 0));
+    cloud_ptr.reset(new CloudXYZ(0, 0));
     EXPECT_TRUE(PointCloud2Mat(cloud_ptr).empty());
 
-    cloud_ptr.reset(new PointCloudXYZ(0, 1));
+    cloud_ptr.reset(new CloudXYZ(0, 1));
     EXPECT_TRUE(PointCloud2Mat(cloud_ptr).empty());
 
-    cloud_ptr.reset(new PointCloudXYZ(1, 0));
+    cloud_ptr.reset(new CloudXYZ(1, 0));
     EXPECT_TRUE(PointCloud2Mat(cloud_ptr).empty());
 }
 
@@ -263,7 +263,7 @@ TEST(PCLUtilsPointCloud2MatTEST, Dims)
     Mat1f m(9, 9);
     randn(m, 0.f, 100.f);
 
-    PointCloudXYZ::Ptr cloud_ptr;
+    CloudXYZ::Ptr cloud_ptr;
 
     cloud_ptr = Mat2PointCloud(m);
     EXPECT_MAT_DIMS_EQ(PointCloud2Mat(cloud_ptr), Size2i(12, m.rows));
@@ -277,7 +277,7 @@ TEST(PCLUtilsPointCloud2MatTEST, Values)
     // organized point cloud
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
-    PointCloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
 
     Mat1f m2 = PointCloud2Mat(cloud_ptr);
     hconcat(m, Mat1f(m.rows, 1, 1), m);
@@ -290,7 +290,7 @@ TEST(PCLUtilsPointCloud2MatTEST, Owner)
     // organized point cloud
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
-    PointCloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
 
     Mat1f m2 = PointCloud2Mat(cloud_ptr);
 

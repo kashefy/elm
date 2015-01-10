@@ -112,7 +112,7 @@ void Triangulation::Activate(const Signal &signal)
         SEM_THROW_BAD_DIMS("Cannot Activate Triangulation layer with empty input point cloud.");
     }
 
-    PointCloudXYZ::Ptr cld_in = Mat2PointCloud(cld_in_mat);
+    CloudXYZ::Ptr cld_in = Mat2PointCloud(cld_in_mat);
 
     // Normal estimation*
     NormalEstimation<PointXYZ, Normal> n;

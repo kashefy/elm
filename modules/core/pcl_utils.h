@@ -16,7 +16,7 @@
 
 namespace sem {
 
-typedef pcl::PointCloud<pcl::PointXYZ> PointCloudXYZ;
+typedef pcl::PointCloud<pcl::PointXYZ> CloudXYZ;
 
 /**
  * @brief Convert Mat of floats to XYZ point cloud.
@@ -27,7 +27,7 @@ typedef pcl::PointCloud<pcl::PointXYZ> PointCloudXYZ;
  * @return pointer to point cloud instance
  * @todo Avoid deep copy, add test coverage for 4-channel Mat
  */
-PointCloudXYZ::Ptr Mat2PointCloud(const cv::Mat_<float> &m);
+CloudXYZ::Ptr Mat2PointCloud(const cv::Mat_<float> &m);
 
 /**
  * @brief Convert XYZ point cloud to OpenCv Mat of floats.
@@ -35,7 +35,7 @@ PointCloudXYZ::Ptr Mat2PointCloud(const cv::Mat_<float> &m);
  * @param source point cloud
  * @return resulting Mat
  */
-cv::Mat1f PointCloud2Mat(PointCloudXYZ::Ptr &cloud_ptr);
+cv::Mat1f PointCloud2Mat(CloudXYZ::Ptr &cloud_ptr);
 
 /**
  * @brief Convert vector of Vertices to a Mat of floats

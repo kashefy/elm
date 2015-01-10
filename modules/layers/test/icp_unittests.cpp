@@ -109,7 +109,7 @@ protected:
 
         to_ = LayerFactory::CreateShared("ICP", cfg_, io_names_);
 
-        cloud_in_.reset(new PointCloudXYZ);
+        cloud_in_.reset(new CloudXYZ);
 
         // Fill in the CloudIn data
         cloud_in_->width    = 5;
@@ -124,7 +124,7 @@ protected:
         }
 
         // target.x = in.x + constant
-        cloud_target_.reset(new PointCloudXYZ);
+        cloud_target_.reset(new CloudXYZ);
         *cloud_target_ = *cloud_in_;
         for(size_t i=0; i < cloud_in_->points.size (); ++i) {
 
@@ -142,8 +142,8 @@ protected:
 
     shared_ptr<base_Layer> to_; ///< pointer to test object
     Signal sig_;
-    PointCloudXYZ::Ptr cloud_in_;
-    PointCloudXYZ::Ptr cloud_target_;
+    CloudXYZ::Ptr cloud_in_;
+    CloudXYZ::Ptr cloud_target_;
 };
 
 /**
@@ -155,7 +155,7 @@ TEST_F(ICPTest, ActivateAndResponse) {
     icp.setInputSource(cloud_in_);
     icp.setInputTarget(cloud_target_);
 
-    PointCloudXYZ fin;
+    CloudXYZ fin;
     icp.align(fin);
 
     to_->Activate(sig_);

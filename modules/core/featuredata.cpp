@@ -22,7 +22,7 @@ Mat_<float> FeatDataVisitorMatF::operator()(const Mat_<float> &m) const
     return m;
 }
 
-Mat_<float> FeatDataVisitorMatF::operator()(PointCloudXYZ::Ptr &c) const
+Mat_<float> FeatDataVisitorMatF::operator()(CloudXYZ::Ptr &c) const
 {
     return PointCloud2Mat(c);
 }
@@ -32,7 +32,7 @@ void FeatDataVisitorCloud::Reset()
     c_.reset();
 }
 
-PointCloudXYZ::Ptr FeatDataVisitorCloud::operator()(PointCloudXYZ::Ptr &c)
+CloudXYZ::Ptr FeatDataVisitorCloud::operator()(CloudXYZ::Ptr &c)
 {
     if(!bool(c_)) {
 
@@ -41,7 +41,7 @@ PointCloudXYZ::Ptr FeatDataVisitorCloud::operator()(PointCloudXYZ::Ptr &c)
     return c_;
 }
 
-PointCloudXYZ::Ptr FeatDataVisitorCloud::operator()(const Mat_<float> &m)
+CloudXYZ::Ptr FeatDataVisitorCloud::operator()(const Mat_<float> &m)
 {
     if(!bool(c_)) {
 
@@ -57,7 +57,7 @@ FeatureData::FeatureData()
 
 // explicit specialization for template method get()
 template<>
-PointCloudXYZ::Ptr FeatureData::get()
+CloudXYZ::Ptr FeatureData::get()
 {
     return var_.apply_visitor(visitor_cloud_);
 }

@@ -48,7 +48,7 @@ class FeatDataVisitorMatF :
 public:
     Mat_f operator()(const Mat_f &m) const;
 
-    Mat_f operator()(sem::PointCloudXYZ::Ptr &c) const;
+    Mat_f operator()(sem::CloudXYZ::Ptr &c) const;
 };
 
 /**
@@ -56,17 +56,17 @@ public:
  * And keeping track of when a heavy conversion (involving deep copy) occured
  */
 class FeatDataVisitorCloud :
-        public FeatDataVisitor_<sem::PointCloudXYZ::Ptr >
+        public FeatDataVisitor_<sem::CloudXYZ::Ptr >
 {
 public:
     void Reset();
 
-    sem::PointCloudXYZ::Ptr operator()(sem::PointCloudXYZ::Ptr &c);
+    sem::CloudXYZ::Ptr operator()(sem::CloudXYZ::Ptr &c);
 
-    sem::PointCloudXYZ::Ptr operator()(const Mat_f &m);
+    sem::CloudXYZ::Ptr operator()(const Mat_f &m);
 
 protected:
-    sem::PointCloudXYZ::Ptr c_; ///< internal reference for caching most recent conversion result
+    sem::CloudXYZ::Ptr c_; ///< internal reference for caching most recent conversion result
 };
 
 /**
@@ -107,7 +107,7 @@ protected:
      */
     void Reset();
 
-    boost::variant< cv::Mat1f, sem::PointCloudXYZ::Ptr > var_; ///< variant object to enable finite representations of a single feature data instance
+    boost::variant< cv::Mat1f, sem::CloudXYZ::Ptr > var_; ///< variant object to enable finite representations of a single feature data instance
 
     FeatDataVisitorMatF visitor_mat_;       ///< visitor for converting to Mat objects
     FeatDataVisitorCloud visitor_cloud_;    ///< visitor for converting to pcl point clouds

@@ -9,25 +9,25 @@ using namespace cv;
 using namespace pcl;
 using namespace sem;
 
-PointCloudXYZ::Ptr sem::Mat2PointCloud(const Mat_<float> &m)
+CloudXYZ::Ptr sem::Mat2PointCloud(const Mat_<float> &m)
 {
-    PointCloudXYZ::Ptr cloud_ptr;
+    CloudXYZ::Ptr cloud_ptr;
 
     int nb_channels = m.channels();
     bool is_empty = m.empty();
 
     if(nb_channels == 1 && is_empty) {
 
-        cloud_ptr.reset(new PointCloudXYZ);;
+        cloud_ptr.reset(new CloudXYZ);;
     }
     else if(nb_channels == 1 && (m.cols % 3 == 0)) {
 
         // determine width and height of new poValuesint cloud
-        cloud_ptr.reset(new PointCloudXYZ(m.cols/3, m.rows));
+        cloud_ptr.reset(new CloudXYZ(m.cols/3, m.rows));
 
         // populate
         size_t i=0;
-        for(PointCloudXYZ::iterator itr=cloud_ptr->begin(); i<m.total(); ++itr, i+=3) {
+        for(CloudXYZ::iterator itr=cloud_ptr->begin(); i<m.total(); ++itr, i+=3) {
 
             *itr = (PointXYZ(m(i), m(i+1), m(i+2)));
         }
@@ -35,11 +35,11 @@ PointCloudXYZ::Ptr sem::Mat2PointCloud(const Mat_<float> &m)
     else if(nb_channels == 1 && (m.cols % 4 == 0)) {
 
         // determine width and height of new poValuesint cloud
-        cloud_ptr.reset(new PointCloudXYZ(m.cols/4, m.rows));
+        cloud_ptr.reset(new CloudXYZ(m.cols/4, m.rows));
 
         // populate
         size_t i=0;
-        for(PointCloudXYZ::iterator itr=cloud_ptr->begin(); i<m.total(); ++itr, i+=4) {
+        for(CloudXYZ::iterator itr=cloud_ptr->begin(); i<m.total(); ++itr, i+=4) {
 
             *itr = (PointXYZ(m(i), m(i+1), m(i+2))); // ignore last coordinate
         }
@@ -47,11 +47,11 @@ PointCloudXYZ::Ptr sem::Mat2PointCloud(const Mat_<float> &m)
     else if(m.channels()==3) { // 3 channel matrix
 
         if(m.empty()) {
-            cloud_ptr.reset(new PointCloudXYZ);
+            cloud_ptr.reset(new CloudXYZ);
         }
         else {
             // widht and heigh of new point cloud directly follows source mat dims
-            cloud_ptr.reset(new PointCloudXYZ(m.cols, m.rows));
+            cloud_ptr.reset(new CloudXYZ(m.cols, m.rows));
         }
 
         for(int r=0; r<m.rows; r++) {
@@ -66,11 +66,11 @@ PointCloudXYZ::Ptr sem::Mat2PointCloud(const Mat_<float> &m)
     else if(m.channels()==4) { // 4-channel matrix
 
         if(m.empty()) {
-            cloud_ptr.reset(new PointCloudXYZ);
+            cloud_ptr.reset(new CloudXYZ);
         }
         else {
             // widht and heigh of new point cloud directly follows source mat dims
-            cloud_ptr.reset(new PointCloudXYZ(m.cols, m.rows));
+            cloud_ptr.reset(new CloudXYZ(m.cols, m.rows));
         }
 
         for(int r=0; r<m.rows; r++) {
@@ -92,7 +92,7 @@ PointCloudXYZ::Ptr sem::Mat2PointCloud(const Mat_<float> &m)
     return cloud_ptr;
 }
 
-Mat1f sem::PointCloud2Mat(PointCloudXYZ::Ptr &cloud_ptr)
+Mat1f sem::PointCloud2Mat(CloudXYZ::Ptr &cloud_ptr)
 {
     PointXYZ *points_ptr = cloud_ptr->points.data();
     return Mat1f(cloud_ptr->height, cloud_ptr->width*4, reinterpret_cast<float*>(points_ptr));

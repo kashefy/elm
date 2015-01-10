@@ -62,7 +62,7 @@ TEST_F(FeatDataVisitorMatFTest, Cloud)
 {
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
-    PointCloudXYZ::Ptr cloud = Mat2PointCloud(m);
+    CloudXYZ::Ptr cloud = Mat2PointCloud(m);
 
     Mat_f m2 = to_(cloud);
     hconcat(m, Mat1f(m.rows, 1, 1), m);
@@ -80,7 +80,7 @@ TEST_F(FeatureDataTest, Foo)
 {
     Mat_f m(1, 3, 2);
     FeatureData x(m);
-    PointCloudXYZ::Ptr cld = x.get<PointCloudXYZ::Ptr>();
+    CloudXYZ::Ptr cld = x.get<CloudXYZ::Ptr>();
 
 
     cld = Mat2PointCloud(m);
