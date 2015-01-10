@@ -20,6 +20,8 @@ Mat_f FeatDataVisitorMat_f::operator()(const Mat_f &m) const
     return m;
 }
 
+#ifdef __WITH_PCL // definitions below require PCL support
+
 Mat_f FeatDataVisitorMat_f::operator()(CloudXYZ::Ptr &c) const
 {
     return PointCloud2Mat(c);
@@ -47,3 +49,5 @@ CloudXYZ::Ptr FeatDataVisitorCloud::operator()(const Mat_f &m)
     }
     return c_;
 }
+
+#endif // __WITH_PCL

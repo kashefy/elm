@@ -18,27 +18,20 @@ protected:
     FeatDataVisitorMat_f to_;    ///< test object
 };
 
-TEST_F(FeatDataVisitorMat_fTest, Empty)
+TEST_F(FeatDataVisitorMat_fTest, EmptyMat)
 {
     EXPECT_TRUE(to_(Mat_f()).empty());
     EXPECT_TRUE(to_(Mat_f(0, 0)).empty());
     EXPECT_TRUE(to_(Mat_f(1, 0)).empty());
     EXPECT_TRUE(to_(Mat_f(0, 1)).empty());
-
-    CloudXYZ::Ptr cld(new CloudXYZ);
-    EXPECT_TRUE(to_(cld).empty());
 }
 
-
-TEST_F(FeatDataVisitorMat_fTest, EmptySize)
+TEST_F(FeatDataVisitorMat_fTest, EmptyMatSize)
 {
     EXPECT_MAT_DIMS_EQ(to_(Mat_f()), Size2i(0, 0));
     EXPECT_MAT_DIMS_EQ(to_(Mat_f(0, 0)), Size2i(0, 0));
     EXPECT_MAT_DIMS_EQ(to_(Mat_f(1, 0)), Size2i(0, 1));
     EXPECT_MAT_DIMS_EQ(to_(Mat_f(0, 1)), Size2i(1, 0));
-
-    CloudXYZ::Ptr cld(new CloudXYZ);
-    EXPECT_MAT_DIMS_EQ(to_(cld), Size2i(0, 0));
 }
 
 TEST_F(FeatDataVisitorMat_fTest, FromMat_f)
@@ -60,6 +53,33 @@ TEST_F(FeatDataVisitorMat_fTest, FromMat_f)
     }
 }
 
+TEST_F(FeatDataVisitorMat_fTest, Reset)
+{
+    EXPECT_NO_THROW(to_.Reset());
+
+    Mat1f m(4, 3);
+    randn(m, 0.f, 100.f);
+
+    Mat_f m2 = to_(m);
+    EXPECT_NO_THROW(to_.Reset());
+}
+
+#ifndef __WITH_PCL
+    #warning "Disabling unit tests that require PCL support."
+#else // __WITH_PCL
+
+TEST_F(FeatDataVisitorMat_fTest, EmptyCLoud)
+{
+    CloudXYZ::Ptr cld(new CloudXYZ);
+    EXPECT_TRUE(to_(cld).empty());
+}
+
+TEST_F(FeatDataVisitorMat_fTest, EmptyCloudSize)
+{
+    CloudXYZ::Ptr cld(new CloudXYZ);
+    EXPECT_MAT_DIMS_EQ(to_(cld), Size2i(0, 0));
+}
+
 TEST_F(FeatDataVisitorMat_fTest, FromCloud)
 {
     Mat1f m(4, 3);
@@ -73,7 +93,7 @@ TEST_F(FeatDataVisitorMat_fTest, FromCloud)
     EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
 }
 
-TEST_F(FeatDataVisitorMat_fTest, Reset)
+TEST_F(FeatDataVisitorMat_fTest, Reset_with_cloud)
 {
     EXPECT_NO_THROW(to_.Reset());
 
@@ -115,7 +135,6 @@ TEST_F(FeatDataVisitorCloudTest, Empty)
     CloudXYZ::Ptr cld(new CloudXYZ);
     EXPECT_TRUE(to_(cld)->empty());
 }
-
 
 TEST_F(FeatDataVisitorCloudTest, EmptySize)
 {
@@ -213,5 +232,7 @@ TEST_F(FeatDataVisitorCloudTest, Reset)
         to_.Reset();
     }
 }
+
+#endif // __WITH_PCL
 
 } // annonymous namespace for visitors' test fixtures

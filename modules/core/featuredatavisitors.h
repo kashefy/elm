@@ -40,6 +40,14 @@ class FeatDataVisitor_ :
 };
 
 /**
+ * @brief A do-nothing visitor class to use in place of unsupported visitors
+ */
+class FeatDataVisitorVoid :
+        public FeatDataVisitor_<void>
+{
+};
+
+/**
  * @brief visitor class for converting to Mat of floats
  */
 class FeatDataVisitorMat_f :
@@ -48,12 +56,18 @@ class FeatDataVisitorMat_f :
 public:
     Mat_f operator()(const Mat_f &m) const;
 
+#ifdef __WITH_PCL // this conversion requires PCL support
     Mat_f operator()(sem::CloudXYZ::Ptr &c) const;
+#endif // __WITH_PCL
 };
+
+#ifdef __WITH_PCL // this visitor derived class definition requires PCL support
 
 /**
  * @brief visitor class for converting to pcl point cloud
  * And keeping track of when a heavy conversion (involving deep copy) occured
+ *
+ * Requires PCL support.
  */
 class FeatDataVisitorCloud :
         public FeatDataVisitor_<sem::CloudXYZ::Ptr >
@@ -68,5 +82,9 @@ public:
 protected:
     sem::CloudXYZ::Ptr c_; ///< internal reference for caching most recent conversion result
 };
+
+#else // __WITH_PCL
+    #warning "Unable to define FeatDataVisitorCloud visitor without PCL support."
+#endif // __WITH_PCL
 
 #endif // SEM_CORE_FEATUREDATAVISITORS_H_

@@ -1,7 +1,6 @@
 #include "core/featuredata.h"
 
 using namespace std;
-using namespace pcl;
 using namespace cv;
 using namespace sem;
 
@@ -11,11 +10,13 @@ FeatureData::FeatureData()
 }
 
 // explicit specialization for template method get()
+#ifdef __WITH_PCL // PCL support required
 template<>
 CloudXYZ::Ptr FeatureData::get()
 {
     return var_.apply_visitor(visitor_cloud_);
 }
+#endif // __WITH_PCL
 
 template<>
 Mat_<float> FeatureData::get()

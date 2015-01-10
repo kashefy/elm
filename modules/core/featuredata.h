@@ -55,7 +55,11 @@ protected:
     boost::variant< cv::Mat1f, sem::CloudXYZ::Ptr > var_; ///< variant object to enable finite representations of a single feature data instance
 
     FeatDataVisitorMat_f visitor_mat_;      ///< visitor for converting to Mat objects
+#ifdef __WITH_PCL
     FeatDataVisitorCloud visitor_cloud_;    ///< visitor for converting to pcl point clouds
+#else
+    FeatDataVisitorVoid visitor_cloud_;    ///< place holder visitor that does nothing
+#endif // __WITH_PCL
 };
 
 #endif // SEM_CORE_FEATUREDATA_H_
