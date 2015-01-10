@@ -6,6 +6,8 @@
 
 #include <opencv2/core.hpp>
 
+#include "core/featuredata.h"
+
 /**
  * @brief The Signal class, a class for holding single and multiple samples of features
  */
@@ -22,11 +24,25 @@ public:
     void Clear();
 
     /**
-     * @brief Append signal to an existing key. Will add if it doesn't exist.
+     * @brief Append signal feature to an existing key. Will add if it doesn't exist.
+     * @param name or key
+     * @param feature data to append
+     */
+    void Append(const std::string &name, const FeatureData &feature_data);
+
+    /**
+     * @brief Overloading Append method accepting Mat as input
      * @param name or key
      * @param feature data to append
      */
     void Append(const std::string &name, const cv::Mat &feature_data);
+
+    /**
+     * @brief Overloading Append method accepting Mat as input
+     * @param name or key
+     * @param feature data to append
+     */
+    void Append(const std::string &name, const cv::MatExpr &feature_data);
 
     /**
      * @brief Check if a signal exists under a given name
@@ -54,7 +70,9 @@ public:
     cv::Mat MostRecent(const std::string& name) const;
 
 protected:
-    std::map<std::string, VecMat> signals_; ///< encapuslated signals
+    typedef std::vector<FeatureData> VecFeatData; ///< convinience typedef for vector of FeatureData objects
+
+    std::map<std::string, VecFeatData> signals_; ///< encapuslated signal features
 };
 
 #endif // SEM_CORE_SIGNAL_H_

@@ -19,29 +19,39 @@ void Signal::Clear()
     signals_.clear();
 }
 
+void Signal::Append(const string &name, const MatExpr &feature_data)
+{
+    Append(name, Mat(feature_data));
+}
+
 void Signal::Append(const string &name, const Mat &feature_data)
 {
-    map<string, VecMat >::iterator itr = signals_.find(name);
+    Append(name, FeatureData(feature_data));
+}
+
+void Signal::Append(const string &name, const FeatureData &feature_data)
+{
+    map<string, VecFeatData >::iterator itr = signals_.find(name);
     if(itr != signals_.end()) { // found
 
         itr->second.push_back(feature_data);
     }
     else { // not found, new insertion
 
-        signals_[name] = VecMat(1, feature_data);
+        signals_[name] = VecFeatData(1, feature_data);
     }
 }
 
 bool Signal::Exists(const string &name) const
 {
-    VecMat tmp;
+    VecFeatData tmp;
     return sem::Find(signals_, name, tmp);
 }
 
 VecS Signal::FeatureNames() const
 {
     VecS feature_names;
-    for(map<string, VecMat >::const_iterator itr=signals_.begin();
+    for(map<string, VecFeatData >::const_iterator itr=signals_.begin();
         itr != signals_.end();
         ++itr) {
 
@@ -52,10 +62,17 @@ VecS Signal::FeatureNames() const
 
 VecMat Signal::operator [](const string &name) const
 {
-    map<string, VecMat >::const_iterator itr = signals_.find(name);
+    map<string, VecFeatData >::const_iterator itr = signals_.find(name);
     if(itr != signals_.end()) { // found
 
-        return itr->second;
+        VecFeatData vf = itr->second;
+        VecMat v;
+        for(size_t i=0; i < vf.size(); i++) {
+
+            Mat_f m = vf[i].get<Mat_f>();
+            v.push_back(m);
+        }
+        return v;
     }
     else {
         stringstream s;
@@ -66,13 +83,13 @@ VecMat Signal::operator [](const string &name) const
 
 Mat Signal::MostRecent(const string &name) const
 {
-    map<string, VecMat >::const_iterator itr = signals_.find(name);
+    map<string, VecFeatData >::const_iterator itr = signals_.find(name);
     if(itr != signals_.end()) { // found
 
         size_t len = itr->second.size();
         if(len > 0) {
 
-            return itr->second[len-1];
+            return static_cast<FeatureData>(itr->second[len-1]).get<Mat_f>();
         }
         else {
             stringstream s;
