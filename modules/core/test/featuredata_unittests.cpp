@@ -25,10 +25,6 @@ TEST_F(FeatureDataTest, Foo)
     FeatureData y(cld);
 
     Mat_<float> m2 = y.get<Mat_<float> >();
-
-
-    m2 = static_cast<Mat_<float> >(x);
-
 }
 
 } // annonymous namespace for test fixtures

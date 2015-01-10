@@ -60,14 +60,6 @@ Mat_<float> FeatureData::get()
     return var_.apply_visitor(visitor_mat_);
 }
 
-//// explicit specialization for template conversion method
-//template<>
-//PointCloudXYZ::Ptr FeatureData::operator PointCloudXYZ::Ptr()
-//{
-//    return get<PointCloudXYZ>();
-//}
-
-
 void FeatureData::Init()
 {
     Reset();
