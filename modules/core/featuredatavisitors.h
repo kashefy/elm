@@ -62,6 +62,12 @@ public:
         }
     }
 
+    template <class TPar>
+    T operator()(TPar t) const
+    {
+        return static_cast<T>(t);
+    }
+
 #ifdef __WITH_PCL // PCL support required
     T operator()(sem::CloudXYZ::Ptr &c) const
     {
@@ -87,6 +93,12 @@ class FeatDataVisitorMat_f :
 public:
     Mat_f operator()(const Mat_f &m) const;
 
+    Mat_f operator()(float f) const;
+
+    Mat_f operator()(int n) const;
+
+    Mat_f operator()(uchar c) const;
+
 #ifdef __WITH_PCL // this conversion requires PCL support
     Mat_f operator()(sem::CloudXYZ::Ptr &c) const;
 #endif // __WITH_PCL
@@ -107,6 +119,12 @@ public:
     void Reset();
 
     sem::CloudXYZ::Ptr operator()(sem::CloudXYZ::Ptr &c);
+
+    sem::CloudXYZ::Ptr operator()(float f);
+
+    sem::CloudXYZ::Ptr operator()(int n);
+
+    sem::CloudXYZ::Ptr operator()(uchar c);
 
     sem::CloudXYZ::Ptr operator()(const Mat_f &m);
 

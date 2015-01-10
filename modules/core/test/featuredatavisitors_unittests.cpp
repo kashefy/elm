@@ -35,7 +35,7 @@ TYPED_TEST_P(FeatDataVisitorPOD_Test, Invalid_Mat) {
     // multiple elements
     EXPECT_THROW(to(Mat_f(2, 1)), ExceptionBadDims);
     EXPECT_THROW(to(Mat_f(1, 2)), ExceptionBadDims);
-    EXPECT_THROW(to(Mat_f(2, 1)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat_f(2, 2)), ExceptionBadDims);
 
     EXPECT_THROW(to(Mat_f(2, 1, 1.f)), ExceptionBadDims);
     EXPECT_THROW(to(Mat_f(1, 2, 0.f)), ExceptionBadDims);
@@ -46,7 +46,7 @@ TYPED_TEST_P(FeatDataVisitorPOD_Test, Value)
 {
     FeatDataVisitorPOD_<TypeParam > to;
 
-    float _v = 256;
+    float _v = 256; // to cover a range of values common between all of our PODs
     while(--_v >= 0) {
 
         EXPECT_EQ(static_cast<TypeParam >(_v), to(Mat_f(1, 1, _v))) << "Value mismatch.";
@@ -87,6 +87,11 @@ TYPED_TEST_P(FeatDataVisitorPOD_Test, Invalid_Cloud)
     cld = Mat2PointCloud(Mat3f(1, 1, 1.f));
     EXPECT_THROW(to(cld), ExceptionTypeError);
 }
+#else // __WITH_PCL
+
+TYPED_TEST_P(FeatDataVisitorPOD_Test, DISABLED_Invalid_Cloud)
+{
+}
 
 #endif // __WITH_PCL
 
@@ -94,13 +99,15 @@ TYPED_TEST_P(FeatDataVisitorPOD_Test, Invalid_Cloud)
  *  Acquaint yourself with the values passed to along with each type.
  *
  *  Register test names:
+ * @todo: add define macro guard for PCL support
  */
 REGISTER_TYPED_TEST_CASE_P(FeatDataVisitorPOD_Test,
                            Invalid_Mat,
                            Value,
-                           Invalid_Cloud); ///< register additional typed_test_p (i.e. unit test) routines here
+                           Invalid_Cloud
+                           ); ///< register additional typed_test_p (i.e. unit test) routines here
 
-typedef ::testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of matrices
+typedef ::testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of plain old data types
 INSTANTIATE_TYPED_TEST_CASE_P(FeatureDataVisitorPOD_Test, FeatDataVisitorPOD_Test, PODTypes);
 
 

@@ -12,6 +12,8 @@
 /**
  * @brief The Feature data class.
  * Encapsulating a feature in multiple types and caching different represenations
+ *
+ * @todo map getter typename to visitor object at runtime
  */
 class FeatureData
 {
@@ -52,14 +54,18 @@ protected:
      */
     void Reset();
 
-    boost::variant< cv::Mat1f, sem::CloudXYZ::Ptr > var_; ///< variant object to enable finite representations of a single feature data instance
-
-    FeatDataVisitorMat_f visitor_mat_;      ///< visitor for converting to Mat objects
+    // Cusom object visitors
 #ifdef __WITH_PCL
+    boost::variant< cv::Mat1f, sem::CloudXYZ::Ptr, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
+
     FeatDataVisitorCloud visitor_cloud_;    ///< visitor for converting to pcl point clouds
 #else
-    FeatDataVisitorVoid visitor_cloud_;    ///< place holder visitor that does nothing
+    boost::variant< cv::Mat1f, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
+
+    FeatDataVisitorVoid visitor_cloud_;     ///< place holder visitor that does nothing
 #endif // __WITH_PCL
+
+    FeatDataVisitorMat_f visitor_mat_;      ///< visitor for converting to Mat objects
 };
 
 #endif // SEM_CORE_FEATUREDATA_H_

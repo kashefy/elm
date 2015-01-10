@@ -87,4 +87,57 @@ TEST_F(FeatureDataTest, Cached_Cloud)
     EXPECT_EQ(cld2.use_count(), old_cld_use_count+1);
 }
 
+/**
+ * @brief Type-Parameterized tests around FeatureData class with POD typed feature data
+ */
+template <class T>
+class FeatureDataPOD_Test : public FeatureDataTest
+{
+protected:
+};
+TYPED_TEST_CASE_P(FeatureDataPOD_Test);
+
+TYPED_TEST_P(FeatureDataPOD_Test, FromMat_Invalid) {
+
+    // empty
+    EXPECT_THROW(FeatureData(Mat_f()).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat_f(0, 0)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat_f(1, 0)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat_f(0, 1)).get<TypeParam >(), ExceptionBadDims);
+
+    // multiple elements
+    EXPECT_THROW(FeatureData(Mat_f(2, 1)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat_f(1, 2)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat_f(2, 2)).get<TypeParam >(), ExceptionBadDims);
+
+    EXPECT_THROW(FeatureData(Mat_f(2, 1, 1.f)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat_f(1, 2, 0.f)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat_f(2, 2, 3.f)).get<TypeParam >(), ExceptionBadDims);
+}
+
+TYPED_TEST_P(FeatureDataPOD_Test, FromMat)\
+{
+    float _v = 256; // to cover a range of values common between all of our PODs
+    while(--_v >= 0) {
+
+        FeatureData to(Mat1f(1, 1, _v));
+        EXPECT_EQ(static_cast<TypeParam >(_v), to.get<TypeParam >()) << "Value mismatch.";
+    }
+}
+
+/** Write additional type+value parameterized tests here.
+ *  Acquaint yourself with the values passed to along with each type.
+ *
+ *  Register test names:
+ */
+REGISTER_TYPED_TEST_CASE_P(FeatureDataPOD_Test,
+                           FromMat_Invalid,
+                           FromMat
+                           ); ///< register additional typed_test_p (i.e. unit test) routines here
+
+typedef ::testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of plain old data types
+INSTANTIATE_TYPED_TEST_CASE_P(FeatureDataPOD_TypedTest, FeatureDataPOD_Test, PODTypes);
+
+
+
 } // annonymous namespace for test fixtures
