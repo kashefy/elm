@@ -5,7 +5,15 @@ using namespace pcl;
 using namespace cv;
 using namespace sem;
 
-void FeatDataConversionCache::Reset()
+base_FeatDataConversionCache::~base_FeatDataConversionCache()
+{
+}
+
+void base_FeatDataConversionCache::Reset()
+{
+}
+
+base_FeatDataConversionCache::base_FeatDataConversionCache()
 {
 }
 

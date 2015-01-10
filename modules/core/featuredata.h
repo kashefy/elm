@@ -13,13 +13,20 @@
 /**
  * @brief base class for caching feature data conversion
  */
-class FeatDataConversionCache
+class base_FeatDataConversionCache
 {
 public:
+    virtual ~base_FeatDataConversionCache();
+
     /**
      * @brief Reset cache indicating a conversion took place
      */
     virtual void Reset();
+protected:
+    /**
+     * @brief keep constructor protected, treat this as an interface
+     */
+    base_FeatDataConversionCache();
 };
 
 /**
@@ -28,7 +35,7 @@ public:
 template <typename T>
 class FeatDataVisitor_ :
         public boost::static_visitor<T >,
-        public FeatDataConversionCache
+        public base_FeatDataConversionCache
 {
 };
 
