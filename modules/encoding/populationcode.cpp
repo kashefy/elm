@@ -53,7 +53,7 @@ void base_PopulationCode::IONames(const LayerIONames &config)
 
 void base_PopulationCode::Activate(const Signal &signal)
 {
-    State(signal.MostRecent(name_stimulus_), VecMat1f());
+    State(signal.MostRecentMat(name_stimulus_), VecMat1f());
     pop_code_ = PopCode();
 }
 

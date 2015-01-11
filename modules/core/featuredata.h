@@ -38,6 +38,12 @@ public:
     template <class T>
     T get();
 
+    template <class T>
+    operator T()
+    {
+        return get<T>();
+    }
+
 protected:
     /**
      * @brief Only keep overloaded constructors public

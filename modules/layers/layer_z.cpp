@@ -113,7 +113,7 @@ void LayerZ::IONames(const LayerIONames &config)
 
 void LayerZ::Activate(const Signal &signal)
 {
-    cv::Mat1f spikes_in = signal.MostRecent(name_input_spikes_);
+    cv::Mat1f spikes_in = signal.MostRecentMat(name_input_spikes_);
     if(spikes_in.total() != static_cast<size_t>(nb_afferents_)) {
 
         std::stringstream s;

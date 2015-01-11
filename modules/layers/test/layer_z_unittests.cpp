@@ -160,14 +160,14 @@ TEST_F(LayerZTest, ResponseDims)
         to_.Response(signal_);
 
         // check membrane potential
-        Mat u = signal_.MostRecent(NAME_OUTPUT_MEM_POT);
+        Mat u = signal_.MostRecentMat(NAME_OUTPUT_MEM_POT);
         EXPECT_MAT_DIMS_EQ(u, Size(nb_output_nodes, 1)) << "Expecting scalar result from Predict method";
         EXPECT_MAT_TYPE(u, CV_32F) << "Unexpected Mat type";
         EXPECT_EQ(1, u.channels()) << "Expecting single-channel matrix";
         EXPECT_LT(u.at<float>(0), 0);
 
         // check output spikes
-        Mat spikes = signal_.MostRecent(NAME_OUTPUT_SPIKES);
+        Mat spikes = signal_.MostRecentMat(NAME_OUTPUT_SPIKES);
         EXPECT_MAT_DIMS_EQ(spikes, Size(nb_output_nodes, 1)) << "Expecting scalar result from Predict method";
         EXPECT_MAT_TYPE(spikes, CV_32F) << "Unexpected Mat type";
         EXPECT_EQ(1, spikes.channels()) << "Expecting single-channel matrix";
@@ -192,7 +192,7 @@ TEST_F(LayerZTest, StatelessMemPot)
         to_.Activate(signal_);
         to_.Response(signal_);
 
-        Mat u = signal_.MostRecent(NAME_OUTPUT_MEM_POT);
+        Mat u = signal_.MostRecentMat(NAME_OUTPUT_MEM_POT);
 
         if(i == 0) {
 
@@ -402,7 +402,7 @@ TEST_F(LayerZLearnTest, InitialWeights)
     to.Reset(config_);
     to.IONames(config_);
     to.Response(signal_);
-    const Mat1f initial_weights = signal_.MostRecent(NAME_OUTPUT_WEIGHTS);
+    const Mat1f initial_weights = signal_.MostRecentMat(NAME_OUTPUT_WEIGHTS);
     EXPECT_MAT_DIMS_EQ(initial_weights, Size2i(nb_afferents_, nb_output_nodes));
 }
 
@@ -416,7 +416,7 @@ TEST_F(LayerZLearnTest, BiasDims)
     to.Reset(config_);
     to.IONames(config_);
     to.Response(signal_);
-    const Mat1f initial_bias = signal_.MostRecent(NAME_OUTPUT_BIAS);
+    const Mat1f initial_bias = signal_.MostRecentMat(NAME_OUTPUT_BIAS);
     EXPECT_MAT_DIMS_EQ(initial_bias, Size2i(nb_output_nodes, 1));
 }
 
@@ -437,13 +437,13 @@ TEST_F(LayerZLearnTest, WeightsNotCopied)
     Mat1f w0;
 
     // get from signal
-    Mat1f w1 = signal_.MostRecent(NAME_OUTPUT_WEIGHTS);
+    Mat1f w1 = signal_.MostRecentMat(NAME_OUTPUT_WEIGHTS);
     w1.copyTo(w0); // back up, deep-copy
 
     // get form signal one more time
     // any modification on w2 will reflect on w1, because we're only copying
     // the matrix header inside this signal object
-    Mat1f w2 = signal_.MostRecent(NAME_OUTPUT_WEIGHTS);
+    Mat1f w2 = signal_.MostRecentMat(NAME_OUTPUT_WEIGHTS);
 
     // update signal with layer response and get it a third time
     // any modification on w3 will reflect on w2 and w1, because we're effectivly
@@ -453,7 +453,7 @@ TEST_F(LayerZLearnTest, WeightsNotCopied)
     // Given that the weights, are probably going to be used for evaluations and visualizations rather than
     // downstream computation, this is acceptable
     to_.Response(signal_);
-    Mat1f w3 = signal_.MostRecent(NAME_OUTPUT_WEIGHTS);
+    Mat1f w3 = signal_.MostRecentMat(NAME_OUTPUT_WEIGHTS);
 
     // add increments to the different weight copies
     w1 += 1.f;
@@ -480,7 +480,7 @@ TEST_F(LayerZLearnTest, Static)
 
         to_.Activate(signal_);
         to_.Response(signal_);
-        Mat w = signal_.MostRecent(NAME_OUTPUT_WEIGHTS);
+        Mat w = signal_.MostRecentMat(NAME_OUTPUT_WEIGHTS);
 
         if(i == 0) {
 
@@ -506,19 +506,19 @@ TEST_F(LayerZLearnTest, Learn_NoFire)
     to_.IONames(config_);
 
     to_.Response(signal_);
-    const Mat1f initial_weights = signal_.MostRecent(NAME_OUTPUT_WEIGHTS).clone();
+    const Mat1f initial_weights = signal_.MostRecentMat(NAME_OUTPUT_WEIGHTS).clone();
 
     for(int i=0; i<50; i++) {
 
         signal_.Append(NAME_INPUT_SPIKES, Mat1f::ones(1, nb_afferents_));
 
-        Mat1f bias_prev = signal_.MostRecent(NAME_OUTPUT_BIAS).clone();
+        Mat1f bias_prev = signal_.MostRecentMat(NAME_OUTPUT_BIAS).clone();
 
         to_.Activate(signal_);
         to_.Learn();
         to_.Response(signal_);
-        Mat1f weights = signal_.MostRecent(NAME_OUTPUT_WEIGHTS).clone();
-        Mat1f bias = signal_.MostRecent(NAME_OUTPUT_BIAS).clone();
+        Mat1f weights = signal_.MostRecentMat(NAME_OUTPUT_WEIGHTS).clone();
+        Mat1f bias = signal_.MostRecentMat(NAME_OUTPUT_BIAS).clone();
 
         EXPECT_MAT_EQ(initial_weights, weights) << "weights changed inspite of disabling spiking";
 
@@ -543,8 +543,8 @@ TEST_F(LayerZLearnTest, Learn)
     for(int i=0; i<50; i++) {
 
         to_.Response(signal_);
-        Mat1f bias_prev = signal_.MostRecent(NAME_OUTPUT_BIAS).clone();
-        Mat1f weights_prev = signal_.MostRecent(NAME_OUTPUT_WEIGHTS).clone();
+        Mat1f bias_prev = signal_.MostRecentMat(NAME_OUTPUT_BIAS).clone();
+        Mat1f weights_prev = signal_.MostRecentMat(NAME_OUTPUT_WEIGHTS).clone();
 
         signal_.Append(NAME_INPUT_SPIKES, stimuli.next(0));
 
@@ -552,11 +552,11 @@ TEST_F(LayerZLearnTest, Learn)
         to_.Learn();
         to_.Response(signal_);
 
-        Mat1f weights = signal_.MostRecent(NAME_OUTPUT_WEIGHTS).clone();
-        Mat1f bias = signal_.MostRecent(NAME_OUTPUT_BIAS).clone();
+        Mat1f weights = signal_.MostRecentMat(NAME_OUTPUT_WEIGHTS).clone();
+        Mat1f bias = signal_.MostRecentMat(NAME_OUTPUT_BIAS).clone();
 
         // who spiked?
-        Mat spikes_out = signal_.MostRecent(NAME_OUTPUT_SPIKES);
+        Mat spikes_out = signal_.MostRecentMat(NAME_OUTPUT_SPIKES);
         int spiking_neuron_index;
 
         // Spiking in the WTA circuit is probabilistic, so we want to go through the checks at least once.

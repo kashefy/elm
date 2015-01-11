@@ -61,7 +61,7 @@ void SimulationSEM::Learn()
 
             if(!z_) {
 
-                z_ = InitLearners(static_cast<int>(sig.MostRecent(NAME_SPIKES_Y).total()), 10);
+                z_ = InitLearners(static_cast<int>(sig.MostRecentMat(NAME_SPIKES_Y).total()), 10);
             }
 
             z_->Activate(sig);
@@ -103,7 +103,7 @@ void SimulationSEM::Eval()
 {
     Signal signal;
     z_->Response(signal);
-    SimulationSEM::VisualizeOnOffWeights(signal.MostRecent(NAME_WEIGHTS));
+    SimulationSEM::VisualizeOnOffWeights(signal.MostRecentMat(NAME_WEIGHTS));
 }
 
 shared_ptr<base_Layer> SimulationSEM::InitPopulationCode() const

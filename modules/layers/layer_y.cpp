@@ -74,7 +74,7 @@ void LayerY::IONames(const LayerIONames &config)
 
 void LayerY::Activate(const Signal &signal)
 {
-    state_ = State(signal.MostRecent(name_stimulus_));
+    state_ = State(signal.MostRecentMat(name_stimulus_));
 }
 
 void LayerY::Response(Signal &signal)

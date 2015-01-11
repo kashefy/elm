@@ -106,7 +106,7 @@ void Triangulation::IONames(const LayerIONames &io)
 
 void Triangulation::Activate(const Signal &signal)
 {
-    Mat1f cld_in_mat = signal.MostRecent(name_src_cloud_);
+    Mat1f cld_in_mat = signal.MostRecentMat(name_src_cloud_);
     if(cld_in_mat.empty()) {
 
         SEM_THROW_BAD_DIMS("Cannot Activate Triangulation layer with empty input point cloud.");

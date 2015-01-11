@@ -63,8 +63,8 @@ void AttentionWindow::IONames(const LayerIONames &config)
 
 void AttentionWindow::Activate(const Signal &signal)
 {
-    Mat1i loc_mat = signal.MostRecent(name_in_loc_);
-    Mat1f scene = signal.MostRecent(name_in_scene_);
+    Mat1i loc_mat = signal.MostRecentMat(name_in_loc_);
+    Mat1f scene = signal.MostRecentMat(name_in_scene_);
 
     if(scene.rows < window_.rows || scene.cols < window_.cols) {
 

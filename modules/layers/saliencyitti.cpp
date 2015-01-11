@@ -82,7 +82,7 @@ void SaliencyItti::IONames(const LayerIONames &config)
 
 void SaliencyItti::Activate(const Signal &signal)
 {
-    Mat1f stimulus = signal.MostRecent(name_scene_);
+    Mat1f stimulus = signal.MostRecentMat(name_scene_);
     pop_code_orient_.State(stimulus, gabors_);
 
     Mat orientation_spikes = pop_code_orient_.PopCode();

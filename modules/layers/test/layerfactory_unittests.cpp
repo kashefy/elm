@@ -74,8 +74,8 @@ TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared_WithConfig)
 
     // check response
     EXPECT_TRUE(signal.Exists(NAME_RESPONSE));
-    EXPECT_MAT_DIMS_EQ(signal.MostRecent(NAME_RESPONSE), cv::Size2i(1, 1));
-    EXPECT_FLOAT_EQ(signal.MostRecent(NAME_RESPONSE).at<float>(0), 0.5f);
+    EXPECT_MAT_DIMS_EQ(signal.MostRecentMat(NAME_RESPONSE), cv::Size2i(1, 1));
+    EXPECT_FLOAT_EQ(signal.MostRecentMat(NAME_RESPONSE).at<float>(0), 0.5f);
 }
 
 } // annonymous namespace

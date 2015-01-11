@@ -3,8 +3,6 @@
 
 #include <map>
 
-#include <opencv2/core.hpp>
-
 #include "core/exception.h"
 #include "core/stl.h"
 #include "core/typedefs.h"

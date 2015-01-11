@@ -10,64 +10,15 @@ Signal::~Signal()
 {
 }
 
-Signal::Signal()
+Signal::Signal() :
+    Signal_<FeatureData >()
 {
 }
 
-void Signal::Clear()
-{
-    signals_.clear();
-}
-
-void Signal::Append(const string &name, const MatExpr &feature_data)
-{
-    Append(name, Mat(feature_data));
-}
-
-void Signal::Append(const string &name, const FeatureData &feature_data)
-{
-    map<string, VecFeatData >::iterator itr = signals_.find(name);
-    if(itr != signals_.end()) { // found
-
-        itr->second.push_back(feature_data);
-    }
-    else { // not found, new insertion
-
-        signals_[name] = VecFeatData(1, feature_data);
-    }
-}
-
-bool Signal::Exists(const string &name) const
-{
-    VecFeatData tmp;
-    return sem::Find(signals_, name, tmp);
-}
-
-VecS Signal::FeatureNames() const
-{
-    VecS feature_names;
-    for(map<string, VecFeatData >::const_iterator itr=signals_.begin();
-        itr != signals_.end();
-        ++itr) {
-
-        feature_names.push_back(itr->first);
-    }
-    return feature_names;
-}
-
-VecFeatData Signal::GetFeatureData(const string &name) const
-{
-    MapSVecFD::const_iterator itr = signals_.find(name);
-    if(itr != signals_.end()) { // found
-
-        return itr->second;
-    }
-    else {
-        stringstream s;
-        s << "Feature \'" << name << "\' does not exist.";
-        SEM_THROW_KEY_ERROR(s.str());
-    }
-}
+//void Signal::Append(const string &name, const MatExpr &feature_data)
+//{
+//    Append(name, FeatureData(Mat(feature_data)));
+//}
 
 VecMat Signal::operator [](const string &name) const
 {
@@ -90,7 +41,7 @@ VecMat Signal::operator [](const string &name) const
     }
 }
 
-Mat Signal::MostRecent(const string &name) const
+Mat Signal::MostRecentMat(const string &name) const
 {
     MapSVecFD::const_iterator itr = signals_.find(name);
     if(itr != signals_.end()) { // found

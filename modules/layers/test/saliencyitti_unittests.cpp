@@ -107,7 +107,7 @@ TEST_F(SaliencyIttiTest, Activate)
     for(int i=0; i<NB_SAMPLES; i++) {
 
         to_.Response(signal);
-        Mat1i loc_mat = signal.MostRecent(NAME_LOC_);
+        Mat1i loc_mat = signal.MostRecentMat(NAME_LOC_);
         sampled_saliency(loc_mat(1), loc_mat(0))++;
     }
 
@@ -131,9 +131,9 @@ TEST_F(SaliencyIttiTest, DISABLED_DisplayApplyMNIST)
     to_.Activate(signal);
     to_.Response(signal);
 
-    imshow("sal", sem::ConvertTo8U(signal.MostRecent(NAME_SALIENCY_)));
+    imshow("sal", sem::ConvertTo8U(signal.MostRecentMat(NAME_SALIENCY_)));
 
-    Mat1i loc_mat = signal.MostRecent(NAME_LOC_);
+    Mat1i loc_mat = signal.MostRecentMat(NAME_LOC_);
     cout<<loc_mat<<endl;
 
     waitKey();
