@@ -98,6 +98,19 @@ Mat1f sem::PointCloud2Mat(CloudXYZ::Ptr &cloud_ptr)
     return Mat1f(cloud_ptr->height, cloud_ptr->width*4, reinterpret_cast<float*>(points_ptr));
 }
 
+vector<Vertices > sem::Mat2VecVertices(const Mat_f &m)
+{
+    vector<Vertices > vv;
+
+    if(!m.empty()) {
+
+        int nb_channels = m.channels();
+
+    }
+
+    return vv;
+}
+
 Mat1f sem::VecVertices2Mat(const vector<Vertices >& vv, bool do_row_mat)
 {
     Mat1f m;
@@ -127,7 +140,6 @@ Mat1f sem::VecVertices2Mat(const vector<Vertices >& vv, bool do_row_mat)
                 m(k++) = static_cast<float>(tmp[j]);
             }
         }
-
     }
 
     return m;

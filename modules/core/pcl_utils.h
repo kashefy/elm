@@ -8,7 +8,7 @@
     #warning "Skipping pcl utilities since PCL support is disabled."
 #else // __WITH_PCL
 
-#include <opencv2/core.hpp>
+#include "core/typedefs.h"
 
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
@@ -36,6 +36,17 @@ CloudXYZ::Ptr Mat2PointCloud(const cv::Mat_<float> &m);
  * @return resulting Mat
  */
 cv::Mat1f PointCloud2Mat(CloudXYZ::Ptr &cloud_ptr);
+
+
+/**
+ * @brief Convert Mat of floats to vector of pcl Vertices
+ *
+ * Unfortunately, a shallow copy did not work, this will be a deep copy
+ *
+ * @param Mat with vertices info
+ * @return vector of verrtices
+ */
+std::vector<pcl::Vertices > Mat2VecVertices(const Mat_f &m);
 
 /**
  * @brief Convert vector of Vertices to a Mat of floats
