@@ -41,10 +41,12 @@ cv::Mat1f PointCloud2Mat(CloudXYZ::Ptr &cloud_ptr);
 /**
  * @brief Convert Mat of floats to vector of pcl Vertices
  *
- * Unfortunately, a shallow copy did not work, this will be a deep copy
+ * Unfortunately, a shallow copy did not work, this will be a deep copy.
  *
  * @param Mat with vertices info
  * @return vector of verrtices
+ *
+ * @todo We know how to convert a Mat_<T1> -> STL vector<T1> but for this we need to convert a Mat_<T1> -> STL vector<T2!>
  */
 std::vector<pcl::Vertices > Mat2VecVertices(const cv::Mat &m);
 

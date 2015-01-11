@@ -108,25 +108,11 @@ vector<Vertices > sem::Mat2VecVertices(const Mat &m)
         vv.reserve(m.rows);
 
         int nb_channels = m.channels();
+        int len_vertices;
         if(nb_channels==1) {
 
             // single-channel matrix, treat columns as vertices values
-
-            for(int i=0; i<m.rows; i++) {
-
-                Mat mat_row = m.row(i);
-                if((mat_row.type() & CV_MAT_DEPTH_MASK) != CV_32F) {
-
-                    mat_row.convertTo(mat_row, CV_32F);
-                }
-
-                Vertices v;
-                v.vertices = Mat_ToVec_(
-                            Mat_<uint32_t>(1, m.cols,
-                                           reinterpret_cast<uint32_t*>((mat_row.data)))
-                            );
-                vv.push_back(v);
-            }
+            len_vertices = m.cols;
         }
         else {
             // multi-channel matrix, treat channels as vertices values
@@ -135,21 +121,18 @@ vector<Vertices > sem::Mat2VecVertices(const Mat &m)
                 SEM_THROW_BAD_DIMS("Cannot extract vertices from multi-channel multi-column matrix.");
             }
 
-            for(int i=0; i<m.rows; i++) {
+            len_vertices = nb_channels;
+        }
 
-                Mat mat_row = m.row(i);
-                if((mat_row.type() & CV_MAT_DEPTH_MASK) != CV_32F) {
+        for(int i=0; i<m.rows; i++) {
 
-                    mat_row.convertTo(mat_row, CV_32F);
-                }
+            Vertices v;
+            v.vertices.reserve(size_t(len_vertices));
+            for(int j=0; j<len_vertices; j++) {
 
-                Vertices v;
-                v.vertices = Mat_ToVec_(
-                            Mat_<uint32_t>(1, m.channels(),
-                                           reinterpret_cast<uint32_t*>((mat_row.data)))
-                            );
-                vv.push_back(v);
+                v.vertices.push_back(m.at<float>(i, j));
             }
+            vv.push_back(v);
         }
     }
 

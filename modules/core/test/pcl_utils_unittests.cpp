@@ -417,8 +417,11 @@ TEST(PCLUtilsMat2VecVerticesTest, VerticesValues_single_ch)
     for(int cols=1; cols<5; cols++) {
 
         Mat1f m(3, cols);
-        randn(m, 0, 100);
-        m = abs(m); // only +ve values
+        // fill with values that make sense when represented as uint32_t
+        for(size_t i=0; i<m.total(); i++) {
+
+            m(i) = static_cast<float>(randu<uint32_t>() % 256);
+        }
         vector<Vertices > vv = Mat2VecVertices(m);
 
         for(size_t i=0; i<vv.size(); i++) {
@@ -440,8 +443,16 @@ TEST(PCLUtilsMat2VecVerticesTest, VerticesValues_single_ch)
 TEST(PCLUtilsMat2VecVerticesTest, VerticesValues_ch3)
 {
     Mat3f m(3, 1);
-    randn(m, 0, 100);
-    m = abs(m); // only +ve values
+
+    // fill with values that make sense when represented as uint32_t
+    for(size_t i=0; i<m.total(); i++) {
+
+        for(int ch=0; ch<m.channels(); ch++) {
+
+            m(i)[ch] = static_cast<float>(randu<uint32_t>() % 256);
+        }
+    }
+
     vector<Vertices > vv = Mat2VecVertices(m);
 
     for(size_t i=0; i<vv.size(); i++) {
