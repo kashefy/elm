@@ -15,11 +15,6 @@ Signal::Signal() :
 {
 }
 
-//void Signal::Append(const string &name, const MatExpr &feature_data)
-//{
-//    Append(name, FeatureData(Mat(feature_data)));
-//}
-
 VecMat Signal::operator [](const string &name) const
 {
     MapSVecFD::const_iterator itr = signals_.find(name);
@@ -43,24 +38,6 @@ VecMat Signal::operator [](const string &name) const
 
 Mat Signal::MostRecentMat(const string &name) const
 {
-    MapSVecFD::const_iterator itr = signals_.find(name);
-    if(itr != signals_.end()) { // found
-
-        size_t len = itr->second.size();
-        if(len > 0) {
-
-            return static_cast<FeatureData>(itr->second[len-1]).get<Mat_f>();
-        }
-        else {
-            stringstream s;
-            s << "Feature \'" << name << "\' is empty.";
-            SEM_THROW_BAD_DIMS(s.str());
-        }
-    }
-    else {
-        stringstream s;
-        s << "Feature \'" << name << "\' does not exist.";
-        SEM_THROW_KEY_ERROR(s.str());
-    }
+    return static_cast<FeatureData>(MostRecent(name)).get<Mat_f>();
 }
 

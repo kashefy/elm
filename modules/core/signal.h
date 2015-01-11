@@ -18,16 +18,6 @@ public:
 
     Signal();
 
-    /**
-     * @brief Overloading Append method accepting MatExpr as input
-     *
-     * Mainly for resolving call ambiguities.
-     *
-     * @param name or key
-     * @param feature data to append
-     */
-    //void Append(const std::string &name, const cv::MatExpr &feature_data);
-
     /** @brief Get features as Mat under a given name
      * @param name
      * @return vector of features found under key represented as Mat objects
@@ -35,7 +25,7 @@ public:
      */
     VecMat operator [](const std::string &name) const;
 
-    /** @brief Get most recent feature under a given name
+    /** @brief Get most recent feature under a given name, short-circuit to returning Mat
       * @param name
       * @return most recent feature found under key
       */
