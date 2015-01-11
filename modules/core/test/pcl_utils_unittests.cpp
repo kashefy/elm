@@ -317,3 +317,140 @@ TEST(PCLUtilsPointCloud2MatTEST, Owner)
         }
     }
 }
+
+TEST(PCLUtilsMat2VecVerticesTest, Empty)
+{
+    EXPECT_TRUE(Mat2VecVertices(Mat_f()).empty());
+    EXPECT_TRUE(Mat2VecVertices(Mat_f(1, 0)).empty());
+    EXPECT_TRUE(Mat2VecVertices(Mat_f(0, 1)).empty());
+    EXPECT_TRUE(Mat2VecVertices(Mat_f(0, 0)).empty());
+    EXPECT_TRUE(Mat2VecVertices(Mat_f(3, 0)).empty());
+}
+
+TEST(PCLUtilsMat2VecVerticesTest, Non_continuous)
+{
+    Mat1f m(3, 4, 1.f);
+    EXPECT_NO_THROW(Mat2VecVertices(m.colRange(0, 2)));
+    EXPECT_NO_THROW(Mat2VecVertices(m.col(0)));
+}
+
+TEST(PCLUtilsMat2VecVerticesTest, Invalid_multi_ch_multi_col)
+{
+    for(int ch=1; ch<4; ch++) {
+
+        for(int cols=1; cols<5; cols++) {
+
+            Mat m(3, cols, CV_MAKETYPE(CV_32F, ch), Scalar_<float>(1.f));
+            if(ch > 1 && m.cols > 1) {
+
+                EXPECT_THROW(Mat2VecVertices(m), ExceptionBadDims);
+            }
+            else {
+
+                EXPECT_NO_THROW(Mat2VecVertices(m));
+            }
+        }
+    }
+}
+
+/**
+ * @brief check size of Vertices vector after conversion, expecting it to match no. of rows in input Mat
+ */
+TEST(PCLUtilsMat2VecVerticesTest, Nb_Verticies)
+{
+    for(int r=1; r<11; r++) {
+
+        for(int ch=1; ch<4; ch++) {
+
+            for(int cols=1; cols<5; cols++) {
+
+                if(ch > 1 && cols > 1) {
+
+                    continue;
+                }
+                else {
+
+                    Mat m(r, cols, CV_MAKETYPE(CV_32F, ch), Scalar_<float>(1.f));
+                    EXPECT_SIZE(size_t(r), Mat2VecVertices(m)) << "Unexpected no. of Vertices.";
+                }
+            }
+        }
+    }
+}
+
+/**
+ * @brief test length of each Vertices object in vector after conversion
+ */
+TEST(PCLUtilsMat2VecVerticesTest, Len_Verticies)
+{
+    for(int r=1; r<3; r++) {
+
+        for(int ch=1; ch<4; ch++) {
+
+            for(int cols=1; cols<5; cols++) {
+
+                if(ch > 1 && cols > 1) {
+
+                    continue;
+                }
+                else {
+
+                    Mat m(r, cols, CV_MAKETYPE(CV_32F, ch), Scalar_<float>(1.f));
+                    vector<Vertices > vv = Mat2VecVertices(m);
+
+                    for(size_t i=0; i<vv.size(); i++) {
+
+                        EXPECT_SIZE(size_t((ch==1)? cols : ch), vv[i].vertices) << "Unexpected length of Vertices.";
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * @brief test vertex values after conversion from a single-channel Mat of floats
+ * Randomize the matrix with positive values since, Verticie stores them as uint32_t
+ */
+TEST(PCLUtilsMat2VecVerticesTest, VerticesValues_single_ch)
+{
+    for(int cols=1; cols<5; cols++) {
+
+        Mat1f m(3, cols);
+        randn(m, 0, 100);
+        m = abs(m); // only +ve values
+        vector<Vertices > vv = Mat2VecVertices(m);
+
+        for(size_t i=0; i<vv.size(); i++) {
+
+            Vertices v = vv[i];
+            for(size_t j=0; j<v.vertices.size(); j++) {
+
+                float vertex = static_cast<float>(v.vertices[j]);
+                EXPECT_FLOAT_EQ(m(i, j), vertex) << "Vertex mismatch at " << i << "," << j;
+            }
+        }
+    }
+}
+
+/**
+ * @brief test vertex values after conversion from 3-channel Mat of floats
+ * Randomize the matrix with positive values since, Verticie stores them as uint32_t
+ */
+TEST(PCLUtilsMat2VecVerticesTest, VerticesValues_ch3)
+{
+    Mat3f m(3, 1);
+    randn(m, 0, 100);
+    m = abs(m); // only +ve values
+    vector<Vertices > vv = Mat2VecVertices(m);
+
+    for(size_t i=0; i<vv.size(); i++) {
+
+        Vertices v = vv[i];
+        for(size_t j=0; j<v.vertices.size(); j++) {
+
+            float vertex = static_cast<float>(v.vertices[j]);
+            EXPECT_FLOAT_EQ(m(i)[j], vertex) << "Vertex mismatch at " << i << "," << j;
+        }
+    }
+}

@@ -46,7 +46,7 @@ cv::Mat1f PointCloud2Mat(CloudXYZ::Ptr &cloud_ptr);
  * @param Mat with vertices info
  * @return vector of verrtices
  */
-std::vector<pcl::Vertices > Mat2VecVertices(const Mat_f &m);
+std::vector<pcl::Vertices > Mat2VecVertices(const cv::Mat &m);
 
 /**
  * @brief Convert vector of Vertices to a Mat of floats

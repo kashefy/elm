@@ -3,6 +3,7 @@
 #ifdef __WITH_PCL
 
 #include "core/exception.h"
+#include "core/mat_utils.h"
 
 using namespace std;
 using namespace cv;
@@ -98,14 +99,58 @@ Mat1f sem::PointCloud2Mat(CloudXYZ::Ptr &cloud_ptr)
     return Mat1f(cloud_ptr->height, cloud_ptr->width*4, reinterpret_cast<float*>(points_ptr));
 }
 
-vector<Vertices > sem::Mat2VecVertices(const Mat_f &m)
+vector<Vertices > sem::Mat2VecVertices(const Mat &m)
 {
     vector<Vertices > vv;
 
     if(!m.empty()) {
 
-        int nb_channels = m.channels();
+        vv.reserve(m.rows);
 
+        int nb_channels = m.channels();
+        if(nb_channels==1) {
+
+            // single-channel matrix, treat columns as vertices values
+
+            for(int i=0; i<m.rows; i++) {
+
+                Mat mat_row = m.row(i);
+                if((mat_row.type() & CV_MAT_DEPTH_MASK) != CV_32F) {
+
+                    mat_row.convertTo(mat_row, CV_32F);
+                }
+
+                Vertices v;
+                v.vertices = Mat_ToVec_(
+                            Mat_<uint32_t>(1, m.cols,
+                                           reinterpret_cast<uint32_t*>((mat_row.data)))
+                            );
+                vv.push_back(v);
+            }
+        }
+        else {
+            // multi-channel matrix, treat channels as vertices values
+            if(m.cols > 1) {
+
+                SEM_THROW_BAD_DIMS("Cannot extract vertices from multi-channel multi-column matrix.");
+            }
+
+            for(int i=0; i<m.rows; i++) {
+
+                Mat mat_row = m.row(i);
+                if((mat_row.type() & CV_MAT_DEPTH_MASK) != CV_32F) {
+
+                    mat_row.convertTo(mat_row, CV_32F);
+                }
+
+                Vertices v;
+                v.vertices = Mat_ToVec_(
+                            Mat_<uint32_t>(1, m.channels(),
+                                           reinterpret_cast<uint32_t*>((mat_row.data)))
+                            );
+                vv.push_back(v);
+            }
+        }
     }
 
     return vv;
