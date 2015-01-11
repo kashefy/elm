@@ -1,4 +1,5 @@
 /** Define variant visitor classes for FeatureData conversions
+ * @todo switch Mat_f to basic Mat
   */
 #ifndef SEM_CORE_FEATUREDATAVISITORS_H_
 #define SEM_CORE_FEATUREDATAVISITORS_H_
