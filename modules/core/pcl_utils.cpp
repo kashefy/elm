@@ -99,9 +99,9 @@ Mat1f sem::PointCloud2Mat(CloudXYZ::Ptr &cloud_ptr)
     return Mat1f(cloud_ptr->height, cloud_ptr->width*4, reinterpret_cast<float*>(points_ptr));
 }
 
-vector<Vertices > sem::Mat2VecVertices(const Mat &m)
+VecVertices sem::Mat2VecVertices(const Mat &m)
 {
-    vector<Vertices > vv;
+    VecVertices vv;
 
     if(!m.empty()) {
 
@@ -139,7 +139,7 @@ vector<Vertices > sem::Mat2VecVertices(const Mat &m)
     return vv;
 }
 
-Mat1f sem::VecVertices2Mat(const vector<Vertices >& vv, bool do_row_mat)
+Mat1f sem::VecVertices2Mat(const VecVertices& vv, bool do_row_mat)
 {
     Mat1f m;
     if(vv.size() > 0) {
@@ -148,10 +148,10 @@ Mat1f sem::VecVertices2Mat(const vector<Vertices >& vv, bool do_row_mat)
         int sz_vertex = static_cast<int>(vv[0].vertices.size());
 
         int mat_rows = 1;
-        int mat_cols = nb_vertices;
+        int mat_cols = sz_vertex;
 
         if(do_row_mat) {
-            mat_cols *= sz_vertex;
+            mat_cols *= nb_vertices;
         }
         else {
 

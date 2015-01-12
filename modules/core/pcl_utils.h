@@ -38,6 +38,8 @@ CloudXYZ::Ptr Mat2PointCloud(const cv::Mat_<float> &m);
 cv::Mat1f PointCloud2Mat(CloudXYZ::Ptr &cloud_ptr);
 
 
+typedef std::vector<pcl::Vertices > VecVertices;
+
 /**
  * @brief Convert Mat of floats to vector of pcl Vertices
  *
@@ -48,7 +50,7 @@ cv::Mat1f PointCloud2Mat(CloudXYZ::Ptr &cloud_ptr);
  *
  * @todo We know how to convert a Mat_<T1> -> STL vector<T1> but for this we need to convert a Mat_<T1> -> STL vector<T2!>
  */
-std::vector<pcl::Vertices > Mat2VecVertices(const cv::Mat &m);
+VecVertices Mat2VecVertices(const cv::Mat &m);
 
 /**
  * @brief Convert vector of Vertices to a Mat of floats
@@ -59,7 +61,7 @@ std::vector<pcl::Vertices > Mat2VecVertices(const cv::Mat &m);
  * @param whether to format the resulting Mat as a row matrix or not
  * @return Mat of floats with vertex data
  */
-cv::Mat1f VecVertices2Mat(const std::vector<pcl::Vertices >& vv, bool do_row_mat=true);
+cv::Mat1f VecVertices2Mat(const VecVertices& vv, bool do_row_mat=true);
 
 }
 
