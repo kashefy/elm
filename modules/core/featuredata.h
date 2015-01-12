@@ -64,8 +64,8 @@ protected:
 #ifdef __WITH_PCL
     boost::variant< cv::Mat1f, sem::CloudXYZ::Ptr, sem::VecVertices, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
 
-    FeatDataVisitorCloud visitor_cloud_;    ///< visitor for converting to pcl point clouds
-    FeatDataVisitorVecVertices visitor_vv_; ///< visitor for converting to STL vector of PCL Vertices
+    VisitorCloud visitor_cloud_;    ///< visitor for converting to pcl point clouds
+    VisitorVecVertices visitor_vv_; ///< visitor for converting to STL vector of PCL Vertices
 #else
     boost::variant< cv::Mat1f, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
 
@@ -73,7 +73,7 @@ protected:
     FeatDataVisitorVoid visitor_vv_;     ///< place holder visitor that does nothing
 #endif // __WITH_PCL
 
-    FeatDataVisitorMat_f visitor_mat_;      ///< visitor for converting to Mat objects
+    VisitorMat_f visitor_mat_;      ///< visitor for converting to Mat objects
 };
 
 #endif // SEM_CORE_FEATUREDATA_H_

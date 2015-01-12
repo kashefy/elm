@@ -1,8 +1,8 @@
-/** Define variant visitor classes for FeatureData conversions
+/** Define variant visitor classes for data type conversions
  * @todo switch Mat_f to basic Mat
   */
-#ifndef SEM_CORE_FEATUREDATAVISITORS_H_
-#define SEM_CORE_FEATUREDATAVISITORS_H_
+#ifndef SEM_CORE_VISITORS_H_
+#define SEM_CORE_VISITORS_H_
 
 #include <boost/variant.hpp>
 
@@ -12,12 +12,12 @@
 #include "core/pcl_utils.h"
 
 /**
- * @brief base class for caching feature data conversion
+ * @brief base class for caching heavy data type conversions
  */
-class base_FeatDataConversionCache
+class base_ConversionCache
 {
 public:
-    virtual ~base_FeatDataConversionCache();
+    virtual ~base_ConversionCache();
 
     /**
      * @brief Reset cache indicating a conversion took place
@@ -27,16 +27,16 @@ protected:
     /**
      * @brief keep constructor protected, treat this as an interface
      */
-    base_FeatDataConversionCache();
+    base_ConversionCache();
 };
 
 /**
  * @brief template class for different static visitors
  */
 template <typename T>
-class FeatDataVisitor_ :
+class Visitor_ :
         public boost::static_visitor<T >,
-        public base_FeatDataConversionCache
+        public base_ConversionCache
 {
 };
 
@@ -44,9 +44,9 @@ class FeatDataVisitor_ :
  * @brief template class for scalar POD static visitors
  */
 template <typename T>
-class FeatDataVisitorPOD_ :
+class VisitorPOD_ :
         public boost::static_visitor<T >,
-        public base_FeatDataConversionCache
+        public base_ConversionCache
 {
 public:
     T operator()(const Mat_f &m) const
@@ -80,16 +80,16 @@ public:
 /**
  * @brief A do-nothing visitor class to use in place of unsupported visitors
  */
-class FeatDataVisitorVoid :
-        public FeatDataVisitor_<void>
+class VisitorVoid :
+        public Visitor_<void>
 {
 };
 
 /**
  * @brief visitor class for converting to Mat of floats
  */
-class FeatDataVisitorMat_f :
-        public FeatDataVisitor_<Mat_f >
+class VisitorMat_f :
+        public Visitor_<Mat_f >
 {
 public:
     Mat_f operator()(const Mat_f &m) const;
@@ -117,8 +117,8 @@ public:
  *
  * Requires PCL support.
  */
-class FeatDataVisitorCloud :
-        public FeatDataVisitor_<sem::CloudXYZ::Ptr >
+class VisitorCloud :
+        public Visitor_<sem::CloudXYZ::Ptr >
 {
 public:
     void Reset();
@@ -143,8 +143,8 @@ protected:
  *
  * Requires PCL support.
  */
-class FeatDataVisitorVecVertices :
-        public FeatDataVisitor_<sem::VecVertices >
+class VisitorVecVertices :
+        public Visitor_<sem::VecVertices >
 {
 public:
     void Reset();
@@ -175,8 +175,8 @@ protected:
 };
 
 #else // __WITH_PCL
-    #warning "Unable to define FeatDataVisitorCloud visitor without PCL support."
-    #warning "Unable to define FeatDataVisitorVecVertices visitor without PCL support."
+    #warning "Unable to define VisitorCloud visitor without PCL support."
+    #warning "Unable to define VisitorVecVertices visitor without PCL support."
 #endif // __WITH_PCL
 
-#endif // SEM_CORE_FEATUREDATAVISITORS_H_
+#endif // SEM_CORE_VISITORS_H_

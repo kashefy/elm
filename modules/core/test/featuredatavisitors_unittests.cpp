@@ -1,4 +1,4 @@
-/** @file test out feature data visitors,
+/** @file test out visitors,
  * some fixtures may be scattered somewhat awkwardly in this file due to conditional support (e.g. PCL support)
  */
 #include "core/featuredatavisitors.h"
@@ -16,15 +16,15 @@ namespace {
  * @brief Type-Parameterized tests around POD visitor class
  */
 template <class T>
-class FeatDataVisitorPOD_Test : public ::testing::Test
+class VisitorPOD_Test : public ::testing::Test
 {
 protected:
 };
-TYPED_TEST_CASE_P(FeatDataVisitorPOD_Test);
+TYPED_TEST_CASE_P(VisitorPOD_Test);
 
-TYPED_TEST_P(FeatDataVisitorPOD_Test, Invalid_Mat) {
+TYPED_TEST_P(VisitorPOD_Test, Invalid_Mat) {
 
-    FeatDataVisitorPOD_<TypeParam > to;
+    VisitorPOD_<TypeParam > to;
 
     // empty
     EXPECT_THROW(to(Mat_f()), ExceptionBadDims);
@@ -42,9 +42,9 @@ TYPED_TEST_P(FeatDataVisitorPOD_Test, Invalid_Mat) {
     EXPECT_THROW(to(Mat_f(2, 1, 3.f)), ExceptionBadDims);
 }
 
-TYPED_TEST_P(FeatDataVisitorPOD_Test, Value)
+TYPED_TEST_P(VisitorPOD_Test, Value)
 {
-    FeatDataVisitorPOD_<TypeParam > to;
+    VisitorPOD_<TypeParam > to;
 
     float _v = 256.f; // to cover a range of values common between all of our PODs
     while(--_v >= 0.f) {
@@ -55,9 +55,9 @@ TYPED_TEST_P(FeatDataVisitorPOD_Test, Value)
 
 #ifdef __WITH_PCL // PCL support required for these tests
 
-TYPED_TEST_P(FeatDataVisitorPOD_Test, Invalid_Cloud)
+TYPED_TEST_P(VisitorPOD_Test, Invalid_Cloud)
 {
-    FeatDataVisitorPOD_<TypeParam > to;
+    VisitorPOD_<TypeParam > to;
 
     // empty
     CloudXYZ::Ptr cld(new CloudXYZ);
@@ -89,7 +89,7 @@ TYPED_TEST_P(FeatDataVisitorPOD_Test, Invalid_Cloud)
 }
 #else // __WITH_PCL
 
-TYPED_TEST_P(FeatDataVisitorPOD_Test, DISABLED_Invalid_Cloud)
+TYPED_TEST_P(VisitorPOD_Test, DISABLED_Invalid_Cloud)
 {
 }
 
@@ -101,27 +101,27 @@ TYPED_TEST_P(FeatDataVisitorPOD_Test, DISABLED_Invalid_Cloud)
  *  Register test names:
  * @todo: add define macro guard for PCL support
  */
-REGISTER_TYPED_TEST_CASE_P(FeatDataVisitorPOD_Test,
+REGISTER_TYPED_TEST_CASE_P(VisitorPOD_Test,
                            Invalid_Mat,
                            Value,
                            Invalid_Cloud
                            ); ///< register additional typed_test_p (i.e. unit test) routines here
 
 typedef ::testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of plain old data types
-INSTANTIATE_TYPED_TEST_CASE_P(FeatureDataVisitorPOD_Test, FeatDataVisitorPOD_Test, PODTypes);
+INSTANTIATE_TYPED_TEST_CASE_P(FeatureDataVisitorPOD_Test, VisitorPOD_Test, PODTypes);
 
 
 
 /**
- * @brief test class around FeatDataVisitorMat_f
+ * @brief test class around VisitorMat_f
  */
-class FeatDataVisitorMat_fTest : public ::testing::Test
+class VisitorMat_fTest : public ::testing::Test
 {
 protected:
-    FeatDataVisitorMat_f to_;    ///< test object
+    VisitorMat_f to_;    ///< test object
 };
 
-TEST_F(FeatDataVisitorMat_fTest, EmptyMat)
+TEST_F(VisitorMat_fTest, EmptyMat)
 {
     EXPECT_TRUE(to_(Mat_f()).empty());
     EXPECT_TRUE(to_(Mat_f(0, 0)).empty());
@@ -129,7 +129,7 @@ TEST_F(FeatDataVisitorMat_fTest, EmptyMat)
     EXPECT_TRUE(to_(Mat_f(0, 1)).empty());
 }
 
-TEST_F(FeatDataVisitorMat_fTest, EmptyMatSize)
+TEST_F(VisitorMat_fTest, EmptyMatSize)
 {
     EXPECT_MAT_DIMS_EQ(to_(Mat_f()), Size2i(0, 0));
     EXPECT_MAT_DIMS_EQ(to_(Mat_f(0, 0)), Size2i(0, 0));
@@ -137,7 +137,7 @@ TEST_F(FeatDataVisitorMat_fTest, EmptyMatSize)
     EXPECT_MAT_DIMS_EQ(to_(Mat_f(0, 1)), Size2i(1, 0));
 }
 
-TEST_F(FeatDataVisitorMat_fTest, FromMat_f)
+TEST_F(VisitorMat_fTest, FromMat_f)
 {
     int N=5;
 
@@ -156,7 +156,7 @@ TEST_F(FeatDataVisitorMat_fTest, FromMat_f)
     }
 }
 
-TEST_F(FeatDataVisitorMat_fTest, Reset)
+TEST_F(VisitorMat_fTest, Reset)
 {
     EXPECT_NO_THROW(to_.Reset());
 
@@ -171,19 +171,19 @@ TEST_F(FeatDataVisitorMat_fTest, Reset)
     #warning "Disabling unit tests that require PCL support."
 #else // __WITH_PCL
 
-TEST_F(FeatDataVisitorMat_fTest, EmptyCLoud)
+TEST_F(VisitorMat_fTest, EmptyCLoud)
 {
     CloudXYZ::Ptr cld(new CloudXYZ);
     EXPECT_TRUE(to_(cld).empty());
 }
 
-TEST_F(FeatDataVisitorMat_fTest, EmptyCloudSize)
+TEST_F(VisitorMat_fTest, EmptyCloudSize)
 {
     CloudXYZ::Ptr cld(new CloudXYZ);
     EXPECT_MAT_DIMS_EQ(to_(cld), Size2i(0, 0));
 }
 
-TEST_F(FeatDataVisitorMat_fTest, FromCloud)
+TEST_F(VisitorMat_fTest, FromCloud)
 {
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
@@ -196,7 +196,7 @@ TEST_F(FeatDataVisitorMat_fTest, FromCloud)
     EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
 }
 
-TEST_F(FeatDataVisitorMat_fTest, Reset_with_cloud)
+TEST_F(VisitorMat_fTest, Reset_with_cloud)
 {
     EXPECT_NO_THROW(to_.Reset());
 
@@ -215,9 +215,9 @@ TEST_F(FeatDataVisitorMat_fTest, Reset_with_cloud)
 }
 
 /**
- * @brief test class around FeatDataVisitorCloud
+ * @brief test class around VisitorCloud
  */
-class FeatDataVisitorCloudTest : public ::testing::Test
+class VisitorCloudTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
@@ -225,10 +225,10 @@ protected:
         to_.Reset();
     }
 
-    FeatDataVisitorCloud to_;    ///< test object
+    VisitorCloud to_;    ///< test object
 };
 
-TEST_F(FeatDataVisitorCloudTest, Empty)
+TEST_F(VisitorCloudTest, Empty)
 {
     EXPECT_TRUE(to_(Mat_f())->empty());
     EXPECT_TRUE(to_(Mat_f(0, 0))->empty());
@@ -239,7 +239,7 @@ TEST_F(FeatDataVisitorCloudTest, Empty)
     EXPECT_TRUE(to_(cld)->empty());
 }
 
-TEST_F(FeatDataVisitorCloudTest, EmptySize)
+TEST_F(VisitorCloudTest, EmptySize)
 {
     EXPECT_EQ(size_t(0), to_(Mat_f())->size());
     EXPECT_EQ(size_t(0), to_(Mat_f(0, 0))->size());
@@ -250,7 +250,7 @@ TEST_F(FeatDataVisitorCloudTest, EmptySize)
     EXPECT_EQ(size_t(0), to_(cld)->size());
 }
 
-TEST_F(FeatDataVisitorCloudTest, FromMat_f)
+TEST_F(VisitorCloudTest, FromMat_f)
 {
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
@@ -263,7 +263,7 @@ TEST_F(FeatDataVisitorCloudTest, FromMat_f)
     EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
 }
 
-TEST_F(FeatDataVisitorCloudTest, Cloud)
+TEST_F(VisitorCloudTest, Cloud)
 {
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
@@ -286,7 +286,7 @@ TEST_F(FeatDataVisitorCloudTest, Cloud)
     }
 }
 
-TEST_F(FeatDataVisitorCloudTest, ResetValid)
+TEST_F(VisitorCloudTest, ResetValid)
 {
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
@@ -305,7 +305,7 @@ TEST_F(FeatDataVisitorCloudTest, ResetValid)
 /**
  * @brief Thest this visitor's caching
  */
-TEST_F(FeatDataVisitorCloudTest, Reset)
+TEST_F(VisitorCloudTest, Reset)
 {
     Mat1f m(4, 3, 1.f);
     Mat1f m0 = m.clone();

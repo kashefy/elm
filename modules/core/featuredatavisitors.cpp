@@ -3,56 +3,56 @@
 using namespace cv;
 using namespace sem;
 
-base_FeatDataConversionCache::~base_FeatDataConversionCache()
+base_ConversionCache::~base_ConversionCache()
 {
 }
 
-void base_FeatDataConversionCache::Reset()
+void base_ConversionCache::Reset()
 {
 }
 
-base_FeatDataConversionCache::base_FeatDataConversionCache()
+base_ConversionCache::base_ConversionCache()
 {
 }
 
-Mat_f FeatDataVisitorMat_f::operator()(const Mat_f &m) const
+Mat_f VisitorMat_f::operator()(const Mat_f &m) const
 {
     return m;
 }
 
-Mat_f FeatDataVisitorMat_f::operator()(float f) const
+Mat_f VisitorMat_f::operator()(float f) const
 {
     return Mat_f(1, 1, f);
 }
 
-Mat_f FeatDataVisitorMat_f::operator()(int n) const
+Mat_f VisitorMat_f::operator()(int n) const
 {
     return Mat_f(1, 1, static_cast<float>(n));
 }
 
-Mat_f FeatDataVisitorMat_f::operator()(uchar c) const
+Mat_f VisitorMat_f::operator()(uchar c) const
 {
     return Mat_f(1, 1, static_cast<float>(c));
 }
 
 #ifdef __WITH_PCL // definitions below require PCL support
 
-Mat_f FeatDataVisitorMat_f::operator()(const VecVertices &vv) const
+Mat_f VisitorMat_f::operator()(const VecVertices &vv) const
 {
     return VecVertices2Mat(vv, false);
 }
 
-Mat_f FeatDataVisitorMat_f::operator()(CloudXYZ::Ptr &c) const
+Mat_f VisitorMat_f::operator()(CloudXYZ::Ptr &c) const
 {
     return PointCloud2Mat(c);
 }
 
-void FeatDataVisitorCloud::Reset()
+void VisitorCloud::Reset()
 {
     c_.reset();
 }
 
-CloudXYZ::Ptr FeatDataVisitorCloud::operator()(CloudXYZ::Ptr &c)
+CloudXYZ::Ptr VisitorCloud::operator()(CloudXYZ::Ptr &c)
 {
     if(!bool(c_)) {
 
@@ -61,25 +61,25 @@ CloudXYZ::Ptr FeatDataVisitorCloud::operator()(CloudXYZ::Ptr &c)
     return c_;
 }
 
-CloudXYZ::Ptr FeatDataVisitorCloud::operator()(float f)
+CloudXYZ::Ptr VisitorCloud::operator()(float f)
 {
     Reset();
     SEM_THROW_TYPE_ERROR("Cannot create point cloud from float");
 }
 
-CloudXYZ::Ptr FeatDataVisitorCloud::operator()(int n)
+CloudXYZ::Ptr VisitorCloud::operator()(int n)
 {
     Reset();
     SEM_THROW_TYPE_ERROR("Cannot create point cloud from int");
 }
 
-CloudXYZ::Ptr FeatDataVisitorCloud::operator()(uchar c)
+CloudXYZ::Ptr VisitorCloud::operator()(uchar c)
 {
     Reset();
     SEM_THROW_TYPE_ERROR("Cannot create point cloud from uchar");
 }
 
-CloudXYZ::Ptr FeatDataVisitorCloud::operator()(const Mat_f &m)
+CloudXYZ::Ptr VisitorCloud::operator()(const Mat_f &m)
 {
     if(!bool(c_)) {
 
@@ -89,12 +89,12 @@ CloudXYZ::Ptr FeatDataVisitorCloud::operator()(const Mat_f &m)
 }
 
 // imeplemnt VecVertices visitor methods
-void FeatDataVisitorVecVertices::Reset()
+void VisitorVecVertices::Reset()
 {
     vv_.clear();
 }
 
-VecVertices FeatDataVisitorVecVertices::operator()(const VecVertices &vv)
+VecVertices VisitorVecVertices::operator()(const VecVertices &vv)
 {
     if(vv_.empty()) {
 
@@ -103,7 +103,7 @@ VecVertices FeatDataVisitorVecVertices::operator()(const VecVertices &vv)
     return vv_;
 }
 
-VecVertices FeatDataVisitorVecVertices::operator()(CloudXYZ::Ptr &c)
+VecVertices VisitorVecVertices::operator()(CloudXYZ::Ptr &c)
 {
     if(vv_.empty()) {
 
@@ -112,25 +112,25 @@ VecVertices FeatDataVisitorVecVertices::operator()(CloudXYZ::Ptr &c)
     return vv_;
 }
 
-VecVertices FeatDataVisitorVecVertices::operator()(float f)
+VecVertices VisitorVecVertices::operator()(float f)
 {
     FromScalar(f);
     return vv_;
 }
 
-VecVertices FeatDataVisitorVecVertices::operator()(int n)
+VecVertices VisitorVecVertices::operator()(int n)
 {
     FromScalar(n);
     return vv_;
 }
 
-VecVertices FeatDataVisitorVecVertices::operator()(uchar c)
+VecVertices VisitorVecVertices::operator()(uchar c)
 {
     FromScalar(c);
     return vv_;
 }
 
-VecVertices FeatDataVisitorVecVertices::operator()(const Mat_f &m)
+VecVertices VisitorVecVertices::operator()(const Mat_f &m)
 {
     if(vv_.empty()) {
 
