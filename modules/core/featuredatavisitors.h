@@ -101,11 +101,15 @@ public:
     Mat_f operator()(uchar c) const;
 
 #ifdef __WITH_PCL // this conversion requires PCL support
+
     Mat_f operator()(sem::CloudXYZ::Ptr &c) const;
+
+    Mat_f operator()(const sem::VecVertices &vv) const;
+
 #endif // __WITH_PCL
 };
 
-#ifdef __WITH_PCL // this visitor derived class definition requires PCL support
+#ifdef __WITH_PCL // the following visitor derived class definitions requires PCL support
 
 /**
  * @brief visitor class for converting to pcl point cloud
@@ -133,8 +137,46 @@ protected:
     sem::CloudXYZ::Ptr c_; ///< internal reference for caching most recent conversion result
 };
 
+/**
+ * @brief visitor class for converting to STL vector of PCL vertices
+ * And keeping track of when a heavy conversion (involving deep copy) occured
+ *
+ * Requires PCL support.
+ */
+class FeatDataVisitorVecVertices :
+        public FeatDataVisitor_<sem::VecVertices >
+{
+public:
+    void Reset();
+
+    sem::VecVertices operator()(const sem::VecVertices &vv);
+
+    sem::VecVertices operator()(sem::CloudXYZ::Ptr &c);
+
+    sem::VecVertices operator()(float f);
+
+    sem::VecVertices operator()(int n);
+
+    sem::VecVertices operator()(uchar c);
+
+    sem::VecVertices operator()(const Mat_f &m);
+
+protected:
+    template <typename TScalar>
+    void FromScalar(TScalar s) {
+
+        Reset();
+        pcl::Vertices v;
+        v.vertices.push_back(static_cast<uint32_t>(s));
+        vv_.push_back(v);
+    }
+
+    sem::VecVertices vv_;   ///< internal copy for caching most recent conversion result
+};
+
 #else // __WITH_PCL
     #warning "Unable to define FeatDataVisitorCloud visitor without PCL support."
+    #warning "Unable to define FeatDataVisitorVecVertices visitor without PCL support."
 #endif // __WITH_PCL
 
 #endif // SEM_CORE_FEATUREDATAVISITORS_H_

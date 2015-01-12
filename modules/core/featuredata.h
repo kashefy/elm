@@ -62,13 +62,15 @@ protected:
 
     // Cusom object visitors
 #ifdef __WITH_PCL
-    boost::variant< cv::Mat1f, sem::CloudXYZ::Ptr, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
+    boost::variant< cv::Mat1f, sem::CloudXYZ::Ptr, sem::VecVertices, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
 
     FeatDataVisitorCloud visitor_cloud_;    ///< visitor for converting to pcl point clouds
+    FeatDataVisitorVecVertices visitor_vv_; ///< visitor for converting to STL vector of PCL Vertices
 #else
     boost::variant< cv::Mat1f, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
 
     FeatDataVisitorVoid visitor_cloud_;     ///< place holder visitor that does nothing
+    FeatDataVisitorVoid visitor_vv_;     ///< place holder visitor that does nothing
 #endif // __WITH_PCL
 
     FeatDataVisitorMat_f visitor_mat_;      ///< visitor for converting to Mat objects
