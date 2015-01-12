@@ -1,3 +1,6 @@
+/** Write unit tests around Mat assertions.
+ * @todo: Refactor into TYPED_TEST to reduce clutter
+ */
 #include "ts/ts.h"
 
 #include "core/typedefs.h"
@@ -134,6 +137,128 @@ TEST(MatAssertionsTest, MatEqDimsEmpty) {
     EXPECT_TRUE( EqualDims(Mat(), Size2i(0, 0)) );
     EXPECT_TRUE( EqualDims(Mat(), Mat()) );
     EXPECT_TRUE( EqualDims(Mat(), Mat().size()) );
+}
+
+// test equality with template Mat objects
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims and elem. values)
+ */
+TEST(MatAssertionsTest, Mat_Eq) {
+
+    const int R = 3;
+    const int C = 2;
+    Mat1f a = Mat1i::zeros(R, C);
+    Mat1i b = Mat1f::zeros(R, C);
+
+    ASSERT_EQ(a.rows, R) << "No. of rows do not match.";
+    ASSERT_EQ(a.cols, C) << "No. of columns do not match.";
+    ASSERT_EQ(a.rows, b.rows) << "No. of rows do not match.";
+    ASSERT_EQ(a.cols, b.cols) << "No. of columns do not match.";
+    ASSERT_EQ(a.total(), b.total()) << "No. of elements do not match.";
+    ASSERT_EQ(static_cast<int>(a.total()), R*C) << "No. of elements do not match.";
+    ASSERT_TRUE( EqualDims(a, b) );
+
+    EXPECT_MAT_DIMS_EQ(a, b);
+    EXPECT_MAT_DIMS_EQ(a, b.size());
+    EXPECT_MAT_DIMS_EQ(a, Size2i(C, R));
+
+    for(int r=0; r<R; r++) {
+        for(int c=0; c<C; c++) {
+
+            EXPECT_FLOAT_EQ(a(r, c), 0.f);
+            EXPECT_FLOAT_EQ(static_cast<float>(b(r, c)), 0.f);
+            EXPECT_FLOAT_EQ(a(r, c), static_cast<float>(b(r, c)));
+        }
+    }
+    EXPECT_TRUE( Equal(a, b) );
+    EXPECT_MAT_EQ(a, b);
+}
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims, non-equal elem. values)
+ */
+TEST(MatAssertionsTest, Mat_NotEq) {
+
+    const int R=3, C=2;
+    Mat1f a = Mat1f::zeros(R, C);
+    Mat1i b = Mat1i::ones(R, C);
+
+    EXPECT_MAT_DIMS_EQ(a, b);
+    EXPECT_MAT_DIMS_EQ(a, b.size());
+    EXPECT_MAT_DIMS_EQ(a, Size2i(C, R));
+    EXPECT_FALSE( Equal(a, b) );
+}
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims, single value different)
+ */
+TEST(MatAssertionsTest, Mat_NotEqSingleEl) {
+
+    const int R=3, C=2;
+    Mat1f a = Mat1f::ones(R, C);
+
+    for(int r=0; r<R; r++) {
+        for(int c=0; c<C; c++) {
+
+            Mat1f b = a.clone();
+            EXPECT_MAT_DIMS_EQ(a, b);
+            EXPECT_MAT_DIMS_EQ(a, b.size());
+            EXPECT_MAT_DIMS_EQ(a, Size2i(C, R));
+            EXPECT_MAT_EQ(a, b);
+            b.at<float>(r, c) += 123;
+            EXPECT_FALSE( Equal(a, b) );
+        }
+    }
+}
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (non-equal dims, non-equal elem. values)
+ */
+TEST(MatAssertionsTest, Mat_NotEqDims) {
+
+    Mat1f a = Mat1f::zeros(3, 2);
+    Mat1i b = Mat1i::ones(2, 3);
+
+    EXPECT_FALSE( EqualDims(a, b) );
+    EXPECT_FALSE( Equal(a, b) );
+}
+
+/**
+ * @brief repeat Mat1fNotEqDims test with cv::Size overload
+ */
+TEST(MatAssertionsTest, Mat_NotEqDims_size) {
+
+    Mat1f a = Mat1f::zeros(3, 2);
+    Size2i s(3, 2);
+    Mat1i b = Mat1i::ones(s);
+
+    EXPECT_FALSE( EqualDims(a, s) );
+    EXPECT_FALSE( EqualDims(a, b.size()) );
+    EXPECT_FALSE( Equal(a, b) );
+}
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (non-equal dims, equal elem. values)
+ */
+TEST(MatAssertionsTest, Mat_NotEqDimsAllZeros) {
+
+    Mat1f a = Mat1f::zeros(3, 2);
+
+    EXPECT_FALSE( EqualDims(a, a.t()) );
+    EXPECT_FALSE( Equal(a, a.t()) );
+}
+
+/**
+ * @brief repeat Mat1fNotEqDimsAllZeros test with cv::Size overload
+ */
+TEST(MatAssertionsTest, Mat_NotEqDimsAllZeros_size) {
+
+    Mat1f a = Mat1f::zeros(3, 2);
+
+    EXPECT_FALSE( EqualDims(a, Size2i(3, 2)) );
+    EXPECT_FALSE( EqualDims(a, a.t().size()) );
+    EXPECT_FALSE( Equal(a, a.t()) );
 }
 
 /**
