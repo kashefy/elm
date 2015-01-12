@@ -1,4 +1,7 @@
-#include "core/visitors/visitors.h"
+/** @file test out cloud visitor
+ */
+#ifdef __WITH_PCL // PCL support required for these tests
+#include "core/visitors/visitorcloud.h"
 
 #include "core/exception.h"
 #include "ts/ts.h"
@@ -8,8 +11,6 @@ using namespace cv;
 using namespace sem;
 
 namespace {
-
-#ifdef __WITH_PCL // PCL support required for these tests
 
 /**
  * @brief test class around VisitorCloud
@@ -133,9 +134,8 @@ TEST_F(VisitorCloudTest, Reset)
     }
 }
 
+} // annonymous namespace for cloud visitors' test fixtures
+
 #else // __WITH_PCL
     #warning "Skipping building cloud visitor unit tests due to no pcl support."
 #endif // __WITH_PCL
-
-
-} // annonymous namespace for visitors' test fixtures
