@@ -44,6 +44,28 @@ std::string MatFailureMessageNonZero(const cv::Mat& a, const cv::Mat& b, const c
 std::string MatFailureMessageNonZero(const cv::Mat& a, const cv::Mat& cmp);
 
 ::testing::AssertionResult Equal(const cv::Mat& a, const cv::Mat& b);
+
+/** Compare two template Mat of different types.
+ *  Requires per-element comparison instead, since we cannot call cv::compare with Mats of different types
+ */
+template <class T1, class T2>
+::testing::AssertionResult Equal(const cv::Mat_<T1>& a, const cv::Mat_<T2>& b)
+{
+    using namespace ::testing;
+    AssertionResult equal_dims = EqualDims(a, b);
+    if(equal_dims != AssertionSuccess()) { return equal_dims; }
+
+    cv::Mat1b cmp_out(a.size());
+    for(size_t i=0; i<a.total(); i++) {
+
+        cmp_out(i) = a(i) != b(i);
+    }
+    int n = countNonZero(cmp_out);
+    if(n == 0) { return AssertionSuccess(); }
+    else {
+        return AssertionFailure() << MatFailureMessageNonZero(a, b, cmp_out);
+    }
+}
 #define EXPECT_MAT_EQ(a, b) EXPECT_TRUE( Equal(a, b) )
 
 ::testing::AssertionResult Near(const cv::Mat& a, const cv::Mat& b, float tolerance);
@@ -58,16 +80,17 @@ std::string MatFailureMessageNonZero(const cv::Mat& a, const cv::Mat& cmp);
 template <typename T>
 ::testing::AssertionResult LT(const cv::Mat_<T>& m, const T &v)
 {
+    using namespace ::testing;
     if(m.empty()) {
-         return ::testing::AssertionFailure() << "Matrix operand is empty";
+         return AssertionFailure() << "Matrix operand is empty";
     }
     else {
 
         cv::Mat cmp_out = m >= v;
         int n = countNonZero(cmp_out);
-        if(n == 0) { return ::testing::AssertionSuccess(); }
+        if(n == 0) { return AssertionSuccess(); }
         else {
-            return ::testing::AssertionFailure() << MatFailureMessageNonZero(m, cmp_out);
+            return AssertionFailure() << MatFailureMessageNonZero(m, cmp_out);
         }
     }
 }
