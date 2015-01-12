@@ -61,6 +61,15 @@ CloudXYZ::Ptr VisitorCloud::operator()(CloudXYZ::Ptr &c)
     return c_;
 }
 
+CloudXYZ::Ptr VisitorCloud::operator()(const VecVertices &vv)
+{
+    if(!bool(c_)) {
+
+        c_ = Mat2PointCloud(VecVertices2Mat(vv, false));
+    }
+    return c_;
+}
+
 CloudXYZ::Ptr VisitorCloud::operator()(float f)
 {
     Reset();

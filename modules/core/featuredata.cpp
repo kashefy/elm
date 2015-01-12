@@ -23,10 +23,16 @@ CloudXYZ::Ptr FeatureData::get()
 {
     return var_.apply_visitor(visitor_cloud_);
 }
+
+template<>
+VecVertices FeatureData::get()
+{
+    return var_.apply_visitor(visitor_vv_);
+}
 #endif // __WITH_PCL
 
 #define IMPLEMENT_STATELESS_GET(_TYP) template<> _TYP FeatureData::get() {  \
-    return boost::apply_visitor(VisitorPOD_<_TYP>(), var_);                \
+    return boost::apply_visitor(VisitorPOD_<_TYP>(), var_);                 \
                                                                          }
 
 IMPLEMENT_STATELESS_GET(float)

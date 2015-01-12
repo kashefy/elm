@@ -74,6 +74,24 @@ public:
     {
         SEM_THROW_TYPE_ERROR("Cannot convert point cloud to scalar.");
     }
+
+    T operator()(sem::VecVertices &vv) const
+    {
+        if(vv.size() == 1) {
+
+            if(vv[0].vertices.size() == 1) {
+
+                SEM_THROW_BAD_DIMS("Can only convert Vertices of size 1 to scalar.");
+            }
+            else {
+                return static_cast<T>(vv[0].vertices[0]);
+            }
+        }
+        else {
+
+            SEM_THROW_BAD_DIMS("Can only convert VecVertices of size 1 to scalar.");
+        }
+    }
 #endif // __WITH_PCL
 };
 
@@ -124,6 +142,8 @@ public:
     void Reset();
 
     sem::CloudXYZ::Ptr operator()(sem::CloudXYZ::Ptr &c);
+
+    sem::CloudXYZ::Ptr operator()(const sem::VecVertices &vv);
 
     sem::CloudXYZ::Ptr operator()(float f);
 
