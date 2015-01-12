@@ -37,6 +37,23 @@ TEST_F(VisitorVecVerticesTest, EmptyVecVertices_Size)
     EXPECT_SIZE(0, to_(VecVertices()));
 }
 
+TEST_F(VisitorVecVerticesTest, Twos_cloud)
+{
+    CloudXYZ::Ptr in = Mat2PointCloud(Mat1f(4, 3, 2));
+
+    VecVertices vv = to_(in);
+
+    EXPECT_SIZE(4, vv);
+    EXPECT_SIZE(4, vv[0].vertices);
+
+    for(uint32_t i=0; i<in->height; i++) {
+        for(uint32_t j=0; j<in->width; j++) {
+
+            EXPECT_EQ(static_cast<uint32_t>(2), vv[i].vertices[j]);
+        }
+    }
+}
+
 template<class T>
 class VisitorVecVerticesTypedTest : public VisitorVecVerticesTest
 {
@@ -61,10 +78,10 @@ struct Twos_
 };
 
 ///< Register static variables to work with inside tests
-template<> const float Twos_<float>::val   = 2.f;
-template<> const int Twos_<int>::val     = 2;
-template<> const uchar Twos_<uchar>::val   = 2;
-template<> const Mat1f Twos_<Mat1f>::val   = Mat1f(1, 1, 2.f);
+template<> const float Twos_<float>::val    = 2.f;
+template<> const int Twos_<int>::val        = 2;
+template<> const uchar Twos_<uchar>::val    = 2;
+template<> const Mat1f Twos_<Mat1f>::val    = Mat1f(1, 1, 2.f);
 
 typedef ::testing::Types<Mat1f, float, int, uchar> VisitorTypes;
 TYPED_TEST_CASE(VisitorVecVerticesTypedTest, VisitorTypes);
