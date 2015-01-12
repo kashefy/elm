@@ -134,6 +134,23 @@ TEST_F(VisitorCloudTest, Reset)
     }
 }
 
+TEST_F(VisitorCloudTest, FromVecVertices)
+{
+    Mat1f m(4, 3);
+    for(size_t i=0; i<m.total(); i++) {
+
+        m(i) = static_cast<float>(randu<uint32_t>() % 256);
+    }
+
+    CloudXYZ::Ptr cld = to_(Mat2VecVertices(m));
+
+    Mat1f m2 = PointCloud2Mat(cld);
+    hconcat(m, Mat1f(m.rows, 1, 1), m);
+
+    EXPECT_MAT_EQ(m, m2);
+    EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
+}
+
 } // annonymous namespace for cloud visitors' test fixtures
 
 #else // __WITH_PCL

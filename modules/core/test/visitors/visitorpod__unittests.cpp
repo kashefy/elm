@@ -52,6 +52,22 @@ TYPED_TEST_P(VisitorPOD_Test, Value)
     }
 }
 
+TYPED_TEST_P(VisitorPOD_Test, Value_FromVecVertices)
+{
+    VisitorPOD_<TypeParam > to;
+
+    float _v = 256.f; // to cover a range of values common between all of our PODs
+    while(--_v >= 0.f) {
+
+        pcl::Vertices v;
+        v.vertices.push_back(static_cast<uint32_t>(_v));
+        VecVertices vv;
+        vv.push_back(v);
+
+        EXPECT_EQ(static_cast<TypeParam >(_v), to(vv)) << "Value mismatch.";
+    }
+}
+
 #ifdef __WITH_PCL // PCL support required for these tests
 
 TYPED_TEST_P(VisitorPOD_Test, Invalid_Cloud)
@@ -86,9 +102,41 @@ TYPED_TEST_P(VisitorPOD_Test, Invalid_Cloud)
     cld = Mat2PointCloud(Mat3f(1, 1, 1.f));
     EXPECT_THROW(to(cld), ExceptionTypeError);
 }
+
+TYPED_TEST_P(VisitorPOD_Test, Invalid_VecVertices)
+{
+    VisitorPOD_<TypeParam > to;
+
+    // empty
+    EXPECT_THROW(to(VecVertices()), ExceptionBadDims);
+
+    // multi-row
+    {
+        pcl::Vertices v;
+        v.vertices.push_back(1);
+        VecVertices vv;
+        vv.push_back(v);
+        vv.push_back(v);
+        EXPECT_THROW(to(vv), ExceptionBadDims);
+    }
+
+    // multi-col
+    {
+        pcl::Vertices v;
+        v.vertices.push_back(1);
+        v.vertices.push_back(2);
+        VecVertices vv;
+        vv.push_back(v);
+        EXPECT_THROW(to(vv), ExceptionBadDims);
+    }
+}
 #else // __WITH_PCL
 
 TYPED_TEST_P(VisitorPOD_Test, DISABLED_Invalid_Cloud)
+{
+}
+
+TYPED_TEST_P(VisitorPOD_Test, DISABLED_Invalid_VecVertices)
 {
 }
 
@@ -98,12 +146,13 @@ TYPED_TEST_P(VisitorPOD_Test, DISABLED_Invalid_Cloud)
  *  Acquaint yourself with the values passed to along with each type.
  *
  *  Register test names:
- * @todo: add define macro guard for PCL support
  */
 REGISTER_TYPED_TEST_CASE_P(VisitorPOD_Test,
                            Invalid_Mat,
                            Value,
-                           Invalid_Cloud
+                           Value_FromVecVertices,
+                           Invalid_Cloud,
+                           Invalid_VecVertices
                            ); ///< register additional typed_test_p (i.e. unit test) routines here
 
 typedef ::testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of plain old data types

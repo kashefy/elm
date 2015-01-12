@@ -41,11 +41,11 @@ public:
         SEM_THROW_TYPE_ERROR("Cannot convert point cloud to scalar.");
     }
 
-    T operator()(sem::VecVertices &vv) const
+    T operator()(const sem::VecVertices &vv) const
     {
         if(vv.size() == 1) {
 
-            if(vv[0].vertices.size() == 1) {
+            if(vv[0].vertices.size() != 1) {
 
                 SEM_THROW_BAD_DIMS("Can only convert Vertices of size 1 to scalar.");
             }
