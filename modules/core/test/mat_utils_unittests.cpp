@@ -1397,3 +1397,100 @@ template<> const int MatDepth_<uchar>::depth   = CV_8U;
 
 typedef testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of matrices
 INSTANTIATE_TYPED_TEST_CASE_P(MatUtilsPODTypesTest, MatPODTypesTest, PODTypes);
+
+/**
+ * @brief Keep tabs on overload call precedence
+ */
+class MatOverloadCallPrecedenceTest : public ::testing::Test
+{
+protected:
+    virtual void SetUp()
+    {
+        const int MAT_ROWS = abs(randu<int>()) % 10 + 1;
+        const int MAT_COLS = abs(randu<int>()) % 100 + 1;
+
+        mi_ = Mat_<int>(MAT_ROWS, MAT_COLS);
+        randn(mi_, 0, 100);  // nothing too large so that it can be fully represented in other type
+
+        mf_ = Mat_<float>(MAT_ROWS, MAT_COLS);
+        for(size_t i=0; i<static_cast<size_t>(MAT_ROWS*MAT_COLS); i++) {
+
+            mf_(i) = static_cast<float>(mi_(i));
+        }
+    }
+
+    Mat_<int> mi_;
+    Mat_<float> mf_;
+};
+
+enum OverloadId
+{
+    _MAT,
+    _1I,
+    _TT,
+    _TEmptyEmpty,
+    _2F,
+    _TF,
+    _TI
+};
+
+OverloadId foo(const Mat &a, const Mat &b) { return _MAT; }
+
+OverloadId foo(const Mat1i &a, const Mat1f &b) { return _1I; }
+
+template <class T1, class T2>
+OverloadId foo(const Mat_<T1> &a, const Mat_<T2> &b) { return _TT; }
+
+template <>
+OverloadId foo(const Mat1i &a, const Mat1f &b) { return _TEmptyEmpty; }
+
+OverloadId foo(const Mat1f &a, const Mat1i &b) { return _2F; }
+template <class T1>
+
+OverloadId foo(const Mat_<T1> &a, const Mat1f &b) { return _TF; }
+
+template <class T1>
+OverloadId foo(const Mat_<T1> &a, const Mat1i &b) { return _TI; }
+
+TEST_F(MatOverloadCallPrecedenceTest, SanityCheck)
+{
+    ASSERT_NE(_MAT, _TF);
+    ASSERT_NE(_MAT, _1I);
+    ASSERT_NE(_1I, _TF);
+
+    EXPECT_EQ(foo(Mat1f(), Mat1f()), foo(Mat_f(), Mat_f()));
+    EXPECT_NE(foo(Mat1i(), Mat1f()), foo(Mat_f(), Mat_f()));
+
+    /* comment those out unless you want to see the warning:
+        warning: ISO C++ says that these are ambiguous,
+        even though the worst conversion for the first
+        is better than the worst conversion for the second: [enabled by default]
+        */
+//    EXPECT_NE(foo(Mat1i(), Mat1f()), foo(Mat(), Mat_f()));
+//    EXPECT_NE(foo(Mat1i(), Mat1i()), foo(Mat_f(), Mat()));
+
+}
+
+TEST_F(MatOverloadCallPrecedenceTest, CheckId)
+{
+    EXPECT_MAT_EQ(mi_, mf_) << "Matrices are not equal";
+
+    EXPECT_EQ(_1I, foo(mi_, mf_));
+
+    EXPECT_EQ(_MAT, foo(Mat(), Mat()));
+
+    EXPECT_EQ(_TF, foo(Mat_f(), Mat_f()));
+    EXPECT_EQ(_1I, foo(Mat1i(), Mat1f()));
+    EXPECT_EQ(_TI, foo(Mat1i(), Mat1i()));
+    EXPECT_EQ(_TF, foo(Mat1f(), Mat1f()));
+    EXPECT_EQ(_2F, foo(Mat1f(), Mat1i()));
+
+    /* comment those out unless you want to see the warning:
+        warning: ISO C++ says that these are ambiguous,
+        even though the worst conversion for the first
+        is better than the worst conversion for the second: [enabled by default]
+        */
+//    EXPECT_EQ(_MAT, foo(Mat(), Mat_f()));
+//    EXPECT_EQ(_MAT, foo(Mat_f(), Mat()));
+
+}
