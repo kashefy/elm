@@ -5,9 +5,7 @@
 
 #include <boost/variant.hpp>
 
-#include <opencv2/core.hpp>
-
-#include "core/visitors.h"
+#include "core/visitors/visitors.h"
 
 /**
  * @brief The Feature data class.

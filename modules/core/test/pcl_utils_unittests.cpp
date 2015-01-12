@@ -1,5 +1,7 @@
 #include "core/pcl_utils.h"
 
+#ifdef __WITH_PCL // PCL support required for these tests
+
 #include "core/exception.h"
 #include "ts/ts.h"
 
@@ -531,3 +533,7 @@ TEST_F(PCLUtilsMat2VecVertices3ChTest, RoundTrip)
         }
     }
 }
+
+#else // __WITH_PCL
+    #warning "Skipping building pcl utils unit tests due to no pcl support."
+#endif // __WITH_PCL
