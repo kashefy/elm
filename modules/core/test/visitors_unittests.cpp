@@ -1,7 +1,7 @@
 /** @file test out visitors,
  * some fixtures may be scattered somewhat awkwardly in this file due to conditional support (e.g. PCL support)
  */
-#include "core/featuredatavisitors.h"
+#include "core/visitors.h"
 
 #include "core/exception.h"
 #include "ts/ts.h"

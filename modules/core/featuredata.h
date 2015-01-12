@@ -7,7 +7,7 @@
 
 #include <opencv2/core.hpp>
 
-#include "core/featuredatavisitors.h"
+#include "core/visitors.h"
 
 /**
  * @brief The Feature data class.
