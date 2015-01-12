@@ -15,6 +15,19 @@ base_ConversionCache::base_ConversionCache()
 {
 }
 
+Mat_f VisitorMat_f::operator()(const Mat &m) const
+{
+    if((m.type() & CV_MAT_DEPTH_MASK) != (CV_32F & CV_MAT_DEPTH_MASK)) {
+
+        Mat mf;
+        m.convertTo(mf, CV_MAKE_TYPE(CV_32F, m.channels()));
+        return mf;
+    }
+    else {
+        return m;
+    }
+}
+
 Mat_f VisitorMat_f::operator()(const Mat_f &m) const
 {
     return m;

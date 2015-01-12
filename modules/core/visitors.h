@@ -110,6 +110,8 @@ class VisitorMat_f :
         public Visitor_<Mat_f >
 {
 public:
+    Mat_f operator()(const cv::Mat &m) const;
+
     Mat_f operator()(const Mat_f &m) const;
 
     Mat_f operator()(float f) const;
