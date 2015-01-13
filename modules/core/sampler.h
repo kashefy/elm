@@ -1,8 +1,6 @@
 #ifndef SEM_CORE_SAMPLER_H_
 #define SEM_CORE_SAMPLER_H_
 
-#include <opencv2/core.hpp>
-
 #include "core/cv/typedefs_fwd.h"
 
 /**
@@ -29,7 +27,6 @@ public:
 protected:
     base_Sampler();
 
-    static cv::RNG rng_;        ///< random number generator
     cv::Mat1f pdf_;                  ///< probability density function
 };
 

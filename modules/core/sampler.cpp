@@ -4,8 +4,6 @@
 
 using namespace cv;
 
-cv::RNG base_Sampler::rng_(0xFFFFFFFF);
-
 void base_Sampler::pdf(const Mat1f &pdf) {
 
     pdf_ = pdf/sum(pdf)(0);
@@ -28,7 +26,7 @@ Sampler1D::Sampler1D()
 
 int Sampler1D::Sample() const {
 
-    const float RANDOM = float(rng_);
+    const float RANDOM = float(theRNG());
     int i = 0;
     while(pdf_(i) < RANDOM && i < static_cast<int>(pdf_.total())){
         i++;
@@ -51,7 +49,7 @@ Sampler2D::Sampler2D()
 
 Point2i Sampler2D::Sample() const {
 
-    const float RANDOM = float(rng_);
+    const float RANDOM = float(theRNG());
     int i = 0;
     while(pdf_(i) < RANDOM){
         i++;
