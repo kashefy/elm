@@ -1,7 +1,7 @@
 #include "core/ptree_utils.h"
 
 #include "core/exception.h"
-#include "core/stl/typedefs_fwd.h"
+#include "core/stl/typedefs.h"
 #include "ts/ts.h"
 
 using namespace std;

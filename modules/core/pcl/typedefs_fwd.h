@@ -8,7 +8,7 @@
 #else // __WITH_PCL
 
 #include "core/boost/typedefs_fwd.h"
-#include "core/stl/typedefs_fwd.h"
+#include "core/stl/typedefs.h"
 
 namespace pcl {
 

@@ -3,7 +3,7 @@
 #ifndef SEM_CORE_OPENCV_TYPEDEFS_FWD_H_
 #define SEM_CORE_OPENCV_TYPEDEFS_FWD_H_
 
-#include "core/stl/typedefs_fwd.h"
+#include "core/stl/typedefs.h"
 #include <opencv2/core.hpp>
 
 namespace cv {

@@ -3,7 +3,7 @@
 #include "ts/ts.h"
 
 #include "core/exception.h"
-#include "core/stl/typedefs_fwd.h"
+#include "core/stl/typedefs.h"
 
 using namespace cv;
 using namespace sem;
