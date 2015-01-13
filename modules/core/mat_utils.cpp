@@ -5,6 +5,9 @@
 using namespace std;
 using namespace cv;
 
+typedef VecMat1f::const_iterator VecMat1fCIter; ///< Convinience typedef for VecMat1f const iterator
+typedef VecMat1f::const_iterator VecMat1fIter;  ///< Convinience typedef for VecMat1f iterator
+
 Mat_<uchar> sem::ConvertTo8U(const Mat &src)
 {
     double min_val, max_val;

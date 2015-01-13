@@ -2,7 +2,7 @@
 #define SEM_CORE_MAT_UTILS_H_
 
 #include <string>
-#include "core/typedefs.h"
+#include "core/cv/typedefs_fwd.h"
 #include "core/exception.h"
 
 #include <iostream>

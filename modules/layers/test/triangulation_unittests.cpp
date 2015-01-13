@@ -12,7 +12,7 @@
 
 #include "core/exception.h"
 #include "core/layerconfig.h"
-#include "core/pcl_utils.h"
+#include "core/pcl/vertices.h"
 #include "core/signal.h"
 #include "layers/layerfactory.h"
 #include "ts/ts.h"
@@ -125,7 +125,7 @@ protected:
 
     shared_ptr<base_Layer> to_; ///< pointer to test object
     Signal sig_;
-    CloudXYZ::Ptr cloud_in_;
+    CloudXYZPtr cloud_in_;
 };
 
 TEST_F(TriangulationTest, ActivateEmptyInput)

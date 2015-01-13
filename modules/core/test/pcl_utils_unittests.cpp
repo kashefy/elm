@@ -1,4 +1,5 @@
-#include "core/pcl_utils.h"
+#include "core/pcl/cloud.h"
+#include "core/pcl/vertices.h"
 
 #ifdef __WITH_PCL // PCL support required for these tests
 
@@ -56,7 +57,7 @@ TEST(PCLUtilsMat2PointCloudTEST, Dims)
     Mat1f m(1, 9);
     randn(m, 0.f, 100.f);
 
-    CloudXYZ::Ptr cloud_ptr;
+    CloudXYZPtr cloud_ptr;
 
     cloud_ptr = Mat2PointCloud(m);
     EXPECT_EQ(m.total()/3, cloud_ptr->size());
@@ -87,7 +88,7 @@ TEST(PCLUtilsMat2PointCloudTEST, Dims3Ch)
     Mat3f m(1, 9);
     randn(m, 0.f, 100.f);
 
-    CloudXYZ::Ptr cloud_ptr;
+    CloudXYZPtr cloud_ptr;
 
     cloud_ptr = Mat2PointCloud(m);
     EXPECT_EQ(m.total(), cloud_ptr->size());
@@ -134,7 +135,7 @@ TEST(PCLUtilsMat2PointCloudTEST, ValuesNonOrganized)
 {
     Mat1f m(1, 9);
     randn(m, 0.f, 100.f);
-    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZPtr cloud_ptr = Mat2PointCloud(m);
 
     int i=0;
     for(CloudXYZ::iterator itr=cloud_ptr->begin(); itr != cloud_ptr->end(); ++itr, i+=3) {
@@ -150,7 +151,7 @@ TEST(PCLUtilsMat2PointCloudTEST, ValuesNonOrganized3Ch)
 {
     Mat3f m(1, 9);
     randn(m, 0.f, 100.f);
-    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZPtr cloud_ptr = Mat2PointCloud(m);
 
     int i=0;
     for(CloudXYZ::iterator itr=cloud_ptr->begin(); itr != cloud_ptr->end(); ++itr, i++) {
@@ -171,7 +172,7 @@ TEST(PCLUtilsMat2PointCloudTEST, ValuesOrganized)
     // organized point cloud
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
-    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZPtr cloud_ptr = Mat2PointCloud(m);
 
     for(size_t r=0; r<cloud_ptr->height; r++) {
 
@@ -191,7 +192,7 @@ TEST(PCLUtilsMat2PointCloudTEST, ValuesOrganized3Ch)
     // organized point cloud
     Mat3f m(4, 3);
     randn(m, 0.f, 100.f);
-    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZPtr cloud_ptr = Mat2PointCloud(m);
 
     for(size_t r=0; r<cloud_ptr->height; r++) {
 
@@ -226,8 +227,8 @@ TEST(PCLUtilsMat2PointCloudTEST, SingleChannelVs3ChannelMat)
         m3Ch(j++) = tmp;
     }
 
-    CloudXYZ::Ptr cloud_ptr1Ch = Mat2PointCloud(m1Ch);
-    CloudXYZ::Ptr cloud_ptr3Ch = Mat2PointCloud(m3Ch);
+    CloudXYZPtr cloud_ptr1Ch = Mat2PointCloud(m1Ch);
+    CloudXYZPtr cloud_ptr3Ch = Mat2PointCloud(m3Ch);
 
     for(size_t r=0; r<cloud_ptr1Ch->height; r++) {
 
@@ -245,7 +246,7 @@ TEST(PCLUtilsMat2PointCloudTEST, SingleChannelVs3ChannelMat)
 
 TEST(PCLUtilsPointCloud2MatTEST, Empty)
 {
-    CloudXYZ::Ptr cloud_ptr;
+    CloudXYZPtr cloud_ptr;
     cloud_ptr.reset(new CloudXYZ());
     EXPECT_TRUE(PointCloud2Mat(cloud_ptr).empty());
 
@@ -265,7 +266,7 @@ TEST(PCLUtilsPointCloud2MatTEST, Dims)
     Mat1f m(9, 9);
     randn(m, 0.f, 100.f);
 
-    CloudXYZ::Ptr cloud_ptr;
+    CloudXYZPtr cloud_ptr;
 
     cloud_ptr = Mat2PointCloud(m);
     EXPECT_MAT_DIMS_EQ(PointCloud2Mat(cloud_ptr), Size2i(12, m.rows));
@@ -279,7 +280,7 @@ TEST(PCLUtilsPointCloud2MatTEST, Values)
     // organized point cloud
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
-    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZPtr cloud_ptr = Mat2PointCloud(m);
 
     Mat1f m2 = PointCloud2Mat(cloud_ptr);
     hconcat(m, Mat1f(m.rows, 1, 1), m);
@@ -292,7 +293,7 @@ TEST(PCLUtilsPointCloud2MatTEST, Owner)
     // organized point cloud
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
-    CloudXYZ::Ptr cloud_ptr = Mat2PointCloud(m);
+    CloudXYZPtr cloud_ptr = Mat2PointCloud(m);
 
     Mat1f m2 = PointCloud2Mat(cloud_ptr);
 

@@ -1,6 +1,9 @@
 #include "core/visitors/visitormat_.h"
 
-#include "core/pcl_utils.h"
+#include <opencv2/core.hpp>
+
+#include "core/pcl/cloud.h"
+#include "core/pcl/vertices.h"
 
 using namespace cv;
 using namespace sem;
@@ -45,7 +48,7 @@ Mat_f VisitorMat_f::operator()(const VecVertices &vv) const
     return VecVertices2Mat(vv, false);
 }
 
-Mat_f VisitorMat_f::operator()(CloudXYZ::Ptr &c) const
+Mat_f VisitorMat_f::operator()(CloudXYZPtr &c) const
 {
     return PointCloud2Mat(c);
 }

@@ -16,7 +16,7 @@
 #include "core/exception.h"
 #include "core/layerconfig.h"
 #include "core/mat_utils.h"
-#include "core/pcl_utils.h"
+#include "core/pcl/vertices.h"
 #include "core/signal.h"
 
 using namespace std;
@@ -112,7 +112,7 @@ void Triangulation::Activate(const Signal &signal)
         SEM_THROW_BAD_DIMS("Cannot Activate Triangulation layer with empty input point cloud.");
     }
 
-    CloudXYZ::Ptr cld_in = Mat2PointCloud(cld_in_mat);
+    CloudXYZPtr cld_in = Mat2PointCloud(cld_in_mat);
 
     // Normal estimation*
     NormalEstimation<PointXYZ, Normal> n;

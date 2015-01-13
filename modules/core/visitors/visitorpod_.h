@@ -4,7 +4,8 @@
 #include "core/visitors/visitor_.h"
 
 #include "core/mat_utils.h"
-#include "core/pcl_utils.h"
+#include "core/pcl/cloud.h"
+#include "core/pcl/vertices.h"
 
 /**
  * @brief template class for scalar POD static visitors
@@ -36,7 +37,7 @@ public:
     }
 
 #ifdef __WITH_PCL // PCL support required
-    T operator()(sem::CloudXYZ::Ptr &c) const
+    T operator()(sem::CloudXYZPtr &c) const
     {
         SEM_THROW_TYPE_ERROR("Cannot convert point cloud to scalar.");
     }

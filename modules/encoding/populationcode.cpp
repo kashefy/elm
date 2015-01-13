@@ -130,7 +130,7 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
     kernel_response.reserve(kernels.size());
     float norm_factor;  // normalization factor across individual responses
 
-    for(VecMat1fCIter itr=kernels.begin();
+    for(VecMat1f::const_iterator itr=kernels.begin();
         itr != kernels.end();
         itr++) {
 
@@ -150,7 +150,7 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
     // normalize individual responses by global factor
     if(norm_factor != 0) {
 
-        for(VecMat1fIter itr=kernel_response.begin();
+        for(VecMat1f::iterator itr=kernel_response.begin();
             itr != kernel_response.end();
             itr++) {
 
@@ -167,7 +167,7 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
         int c = i % in.cols;
         Mat1f node_state(1, fan_out_);
         int k=0;
-        for(VecMat1fCIter itr=kernel_response.begin();
+        for(VecMat1f::const_iterator itr=kernel_response.begin();
             itr != kernel_response.end();
             itr++, k++) {
 
@@ -193,7 +193,7 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const std::unique_ptr<base_Fi
         int c = i % in.cols;
         Mat1f node_state(1, fan_out_);
         int k=0;
-        for(VecMat1fCIter itr=kernel_response.begin();
+        for(VecMat1f::const_iterator itr=kernel_response.begin();
             itr != kernel_response.end();
             itr++, k++) {
 
@@ -208,7 +208,7 @@ void SoftMaxPopulationCode::Normalize(VecMat1f &response) const
 {
     // normalization factor across individual responses
     float norm_factor;
-    for(VecMat1fCIter itr=response.begin();
+    for(VecMat1f::const_iterator itr=response.begin();
         itr != response.end();
         itr++) {
 
@@ -223,7 +223,7 @@ void SoftMaxPopulationCode::Normalize(VecMat1f &response) const
     // normalize individual responses by global factor
     if(norm_factor != 0) {
 
-        for(VecMat1fIter itr=response.begin();
+        for(VecMat1f::iterator itr=response.begin();
             itr != response.end();
             itr++) {
 
@@ -237,7 +237,7 @@ Mat1f SoftMaxPopulationCode::PopCode()
     Mat1f pop_code = Mat1f::zeros(1, fan_out_*static_cast<int>(state_.size()));
 
     int col = 0;
-    for(VecMat1fCIter itr=state_.begin(); itr != state_.end(); itr++, col+=fan_out_) {
+    for(VecMat1f::const_iterator itr=state_.begin(); itr != state_.end(); itr++, col+=fan_out_) {
 
         Sampler1D sampler;
         // no sampling for all-zero response

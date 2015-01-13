@@ -75,7 +75,7 @@ TYPED_TEST_P(VisitorPOD_Test, Invalid_Cloud)
     VisitorPOD_<TypeParam > to;
 
     // empty
-    CloudXYZ::Ptr cld(new CloudXYZ);
+    CloudXYZPtr cld(new CloudXYZ);
     EXPECT_THROW(to(cld), ExceptionTypeError);
 
     // multi-row, 3-col

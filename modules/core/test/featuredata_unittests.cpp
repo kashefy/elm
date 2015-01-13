@@ -26,7 +26,7 @@ protected:
     }
 
     Mat_f mat_;
-    CloudXYZ::Ptr cld_;
+    CloudXYZPtr cld_;
 };
 
 /**
@@ -37,7 +37,7 @@ TEST_F(FeatureDataTest, Init_Cloud)
     FeatureData to(cld_);
 
     Mat_f m = to.get<Mat_f>();
-    CloudXYZ::Ptr cld = to.get<CloudXYZ::Ptr>();
+    CloudXYZPtr cld = to.get<CloudXYZPtr>();
 
     EXPECT_MAT_EQ(m, mat_);
     EXPECT_MAT_EQ(PointCloud2Mat(cld), mat_);
@@ -51,7 +51,7 @@ TEST_F(FeatureDataTest, Init_Mat_f)
     FeatureData to(mat_);
 
     Mat_f m = to.get<Mat_f>();
-    CloudXYZ::Ptr cld = to.get<CloudXYZ::Ptr>();
+    CloudXYZPtr cld = to.get<CloudXYZPtr>();
 
     EXPECT_MAT_EQ(m, mat_);
     EXPECT_MAT_EQ(PointCloud2Mat(cld), mat_);
@@ -78,11 +78,11 @@ TEST_F(FeatureDataTest, Cached_Cloud)
 {
     FeatureData to(mat_);
 
-    CloudXYZ::Ptr cld = to.get<CloudXYZ::Ptr>();
+    CloudXYZPtr cld = to.get<CloudXYZPtr>();
     EXPECT_NE(cld, cld_);
     long old_cld_use_count = cld.use_count();
 
-    CloudXYZ::Ptr cld2 = to.get<CloudXYZ::Ptr>();
+    CloudXYZPtr cld2 = to.get<CloudXYZPtr>();
     EXPECT_NE(cld2, cld_);
     EXPECT_EQ(cld2, cld);
 
@@ -148,7 +148,7 @@ TYPED_TEST(FeatureDataPOD_Test, FromPOD)
         EXPECT_MAT_EQ( Mat_f(1, 1, static_cast<float >(_v)), to.get<Mat_f >()) << "Value mismatch while getting Mat_f.";
 
 #ifdef __WITH_PCL
-        EXPECT_THROW( to.get<CloudXYZ::Ptr >(), ExceptionTypeError );
+        EXPECT_THROW( to.get<CloudXYZPtr >(), ExceptionTypeError );
 
         {
             VecVertices vv = to.get<VecVertices >();
@@ -166,7 +166,7 @@ TYPED_TEST(FeatureDataPOD_Test, FromPOD)
 TYPED_TEST(FeatureDataPOD_Test, Invalid_Cloud)
 {
     // empty
-    CloudXYZ::Ptr cld(new CloudXYZ);
+    CloudXYZPtr cld(new CloudXYZ);
     EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
 
     // multi-row, 3-col
@@ -196,35 +196,6 @@ TYPED_TEST(FeatureDataPOD_Test, Invalid_Cloud)
 
 TYPED_TEST(FeatureDataPOD_Test, Invalid_VecVertices)
 {
-    std::string str = "Hello";
-    std::vector<std::string> v;
-
-    // uses the push_back(const T&) overload, which means
-    // we'll incur the cost of copying str
-    v.push_back(str);
-    std::cout << "After copy, str is \"" << str << "\"\n";
-
-    // uses the rvalue reference push_back(T&&) overload,
-    // which means no strings will be copied; instead, the contents
-    // of str will be moved into the vector.  This is less
-    // expensive, but also means str might now be empty.
-    v.push_back(std::move(str));
-    std::cout << "After move, str is \"" << str << "\"\n";
-
-    std::cout << "The contents of the vector are \"" << v[0]
-                                         << "\", \"" << v[1] << "\"\n";
-
-    // string move assignment operator is often implemented as swap,
-    // in this case, the moved-from object is NOT empty
-    std::string str2 = "Good-bye";
-    std::cout << "Before move from str2, str2 = '" << str2 << "'\n";
-    v[0] = std::move(str2);
-
-
-    std::cout << "After move from str2, str2 = '" << str2 << "'\n";
-    std::cout << "The contents of the vector are \"" << v[0]
-                                         << "\", \"" << v[1] << "\"\n";
-
 //    // empty
 //    EXPECT_THROW(FeatureData(VecVertices()).get<TypeParam >(), ExceptionTypeError);
 

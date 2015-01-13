@@ -9,7 +9,7 @@
 #include "core/exception.h"
 #include "core/layerconfig.h"
 #include "core/mat_utils.h"
-#include "core/pcl_utils.h"
+#include "core/pcl/cloud.h"
 #include "core/signal.h"
 
 using namespace std;
@@ -67,8 +67,8 @@ void ICP::IONames(const LayerIONames &io)
 
 void ICP::Activate(const Signal &signal)
 {
-    CloudXYZ::Ptr cloud_src = Mat2PointCloud(signal.MostRecentMat(name_src_cloud_));
-    CloudXYZ::Ptr cloud_target = Mat2PointCloud(signal.MostRecentMat(name_target_cloud_));
+    CloudXYZPtr cloud_src = Mat2PointCloud(signal.MostRecentMat(name_src_cloud_));
+    CloudXYZPtr cloud_target = Mat2PointCloud(signal.MostRecentMat(name_target_cloud_));
 
     ICPXYZ icp;
     icp.setInputSource(cloud_src);

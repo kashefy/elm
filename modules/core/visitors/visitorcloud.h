@@ -3,7 +3,9 @@
 
 #ifdef __WITH_PCL // the following visitor derived class definitions requires PCL support
 
-#include "core/pcl_utils.h"
+#include "core/cv/typedefs_fwd.h"
+#include "core/pcl/typedefs_fwd.h"
+#include "core/pcl/cloud.h"
 #include "core/visitors/visitor_.h"
 
 /**
@@ -13,25 +15,25 @@
  * Requires PCL support.
  */
 class VisitorCloud :
-        public Visitor_<sem::CloudXYZ::Ptr >
+        public Visitor_<sem::CloudXYZPtr >
 {
 public:
     void Reset();
 
-    sem::CloudXYZ::Ptr operator()(sem::CloudXYZ::Ptr &c);
+    sem::CloudXYZPtr operator()(sem::CloudXYZPtr &c);
 
-    sem::CloudXYZ::Ptr operator()(const sem::VecVertices &vv);
+    sem::CloudXYZPtr operator()(const sem::VecVertices &vv);
 
-    sem::CloudXYZ::Ptr operator()(float f);
+    sem::CloudXYZPtr operator()(float f);
 
-    sem::CloudXYZ::Ptr operator()(int n);
+    sem::CloudXYZPtr operator()(int n);
 
-    sem::CloudXYZ::Ptr operator()(uchar c);
+    sem::CloudXYZPtr operator()(uchar c);
 
-    sem::CloudXYZ::Ptr operator()(const Mat_f &m);
+    sem::CloudXYZPtr operator()(const Mat_f &m);
 
 protected:
-    sem::CloudXYZ::Ptr c_; ///< internal reference for caching most recent conversion result
+    sem::CloudXYZPtr c_; ///< internal reference for caching most recent conversion result
 };
 
 #else // __WITH_PCL

@@ -5,10 +5,10 @@
 #ifndef SEM_CORE_VISITORMAT__H_
 #define SEM_CORE_VISITORMAT__H_
 
-#include "core/typedefs.h"
+#include "core/cv/typedefs_fwd.h"
 #include "core/visitors/visitor_.h"
 
-#include "core/pcl_utils.h"
+#include "core/pcl/typedefs_fwd.h"
 
 /**
  * @brief visitor class for converting to Mat of floats
@@ -29,7 +29,7 @@ public:
 
 #ifdef __WITH_PCL // this conversion requires PCL support
 
-    Mat_f operator()(sem::CloudXYZ::Ptr &c) const;
+    Mat_f operator()(sem::CloudXYZPtr &c) const;
 
     Mat_f operator()(const sem::VecVertices &vv) const;
 

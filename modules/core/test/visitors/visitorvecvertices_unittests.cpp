@@ -5,6 +5,7 @@
 #include "core/visitors/visitorvertices.h"
 
 #include "core/exception.h"
+#include "core/pcl/cloud.h"
 #include "ts/ts.h"
 
 using namespace std;
@@ -39,7 +40,7 @@ TEST_F(VisitorVecVerticesTest, EmptyVecVertices_Size)
 
 TEST_F(VisitorVecVerticesTest, Twos_cloud)
 {
-    CloudXYZ::Ptr in = Mat2PointCloud(Mat1f(4, 3, 2));
+    CloudXYZPtr in = Mat2PointCloud(Mat1f(4, 3, 2));
 
     VecVertices vv = to_(in);
 

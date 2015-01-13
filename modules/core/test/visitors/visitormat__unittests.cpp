@@ -4,6 +4,8 @@
 #include "core/visitors/visitormat_.h"
 
 #include "core/exception.h"
+#include "core/pcl/cloud.h"
+#include "core/pcl/vertices.h"
 #include "ts/ts.h"
 
 using namespace std;
@@ -73,13 +75,13 @@ TEST_F(VisitorMat_fTest, Reset)
 
 TEST_F(VisitorMat_fTest, EmptyCLoud)
 {
-    CloudXYZ::Ptr cld(new CloudXYZ);
+    CloudXYZPtr cld(new CloudXYZ);
     EXPECT_TRUE(to_(cld).empty());
 }
 
 TEST_F(VisitorMat_fTest, EmptyCloudSize)
 {
-    CloudXYZ::Ptr cld(new CloudXYZ);
+    CloudXYZPtr cld(new CloudXYZ);
     EXPECT_MAT_DIMS_EQ(to_(cld), Size2i(0, 0));
 }
 
@@ -87,7 +89,7 @@ TEST_F(VisitorMat_fTest, FromCloud)
 {
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
-    CloudXYZ::Ptr cloud = Mat2PointCloud(m);
+    CloudXYZPtr cloud = Mat2PointCloud(m);
 
     Mat_f m2 = to_(cloud);
     hconcat(m, Mat1f(m.rows, 1, 1), m);
@@ -106,7 +108,7 @@ TEST_F(VisitorMat_fTest, Reset_with_cloud)
     Mat_f m2 = to_(m);
     EXPECT_NO_THROW(to_.Reset());
 
-    CloudXYZ::Ptr cloud = Mat2PointCloud(m);
+    CloudXYZPtr cloud = Mat2PointCloud(m);
     m2 = to_(cloud);
     EXPECT_NO_THROW(to_.Reset());
 
@@ -151,7 +153,7 @@ TEST_F(VisitorMat_fTest, DISABLED_Reset_with_VecVertices)
 //    Mat_f m2 = to_(m);
 //    EXPECT_NO_THROW(to_.Reset());
 
-//    CloudXYZ::Ptr cloud = Mat2PointCloud(m);
+//    CloudXYZPtr cloud = Mat2PointCloud(m);
 //    m2 = to_(cloud);
 //    EXPECT_NO_THROW(to_.Reset());
 

@@ -19,7 +19,7 @@ Mat_<float> FeatureData::get()
 
 #ifdef __WITH_PCL // PCL support required
 template<>
-CloudXYZ::Ptr FeatureData::get()
+CloudXYZPtr FeatureData::get()
 {
     return var_.apply_visitor(visitor_cloud_);
 }

@@ -4,6 +4,7 @@
 #include "core/visitors/visitorcloud.h"
 
 #include "core/exception.h"
+#include "core/pcl/vertices.h"
 #include "ts/ts.h"
 
 using namespace std;
@@ -33,7 +34,7 @@ TEST_F(VisitorCloudTest, Empty)
     EXPECT_TRUE(to_(Mat_f(1, 0))->empty());
     EXPECT_TRUE(to_(Mat_f(0, 1))->empty());
 
-    CloudXYZ::Ptr cld(new CloudXYZ);
+    CloudXYZPtr cld(new CloudXYZ);
     EXPECT_TRUE(to_(cld)->empty());
 }
 
@@ -44,7 +45,7 @@ TEST_F(VisitorCloudTest, EmptySize)
     EXPECT_EQ(size_t(0), to_(Mat_f(1, 0))->size());
     EXPECT_EQ(size_t(0), to_(Mat_f(0, 1))->size());
 
-    CloudXYZ::Ptr cld(new CloudXYZ);
+    CloudXYZPtr cld(new CloudXYZ);
     EXPECT_EQ(size_t(0), to_(cld)->size());
 }
 
@@ -53,7 +54,7 @@ TEST_F(VisitorCloudTest, FromMat_f)
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
 
-    CloudXYZ::Ptr cld = to_(m);
+    CloudXYZPtr cld = to_(m);
     Mat1f m2 = PointCloud2Mat(cld);
     hconcat(m, Mat1f(m.rows, 1, 1), m);
 
@@ -65,9 +66,9 @@ TEST_F(VisitorCloudTest, Cloud)
 {
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
-    CloudXYZ::Ptr cld = Mat2PointCloud(m);
+    CloudXYZPtr cld = Mat2PointCloud(m);
 
-    CloudXYZ::Ptr cld2 = to_(cld);
+    CloudXYZPtr cld2 = to_(cld);
 
     EXPECT_EQ(cld->size(), cld2->size()) << "Size mismatch.";
     EXPECT_EQ(cld->width, cld2->width) << "Width mismatch.";
@@ -89,11 +90,11 @@ TEST_F(VisitorCloudTest, ResetValid)
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
 
-    CloudXYZ::Ptr cld1 = to_(m);
+    CloudXYZPtr cld1 = to_(m);
     EXPECT_NO_THROW(to_.Reset());
 
-    CloudXYZ::Ptr cld2 = Mat2PointCloud(m);
-    CloudXYZ::Ptr cld3 = to_(cld2);
+    CloudXYZPtr cld2 = Mat2PointCloud(m);
+    CloudXYZPtr cld3 = to_(cld2);
     EXPECT_NO_THROW(to_.Reset());
 
     cld1 = to_(m);
@@ -109,7 +110,7 @@ TEST_F(VisitorCloudTest, Reset)
     Mat1f m0 = m.clone();
     hconcat(m0, Mat1f(m0.rows, 1, 1), m0);
 
-    CloudXYZ::Ptr cld = to_(m);
+    CloudXYZPtr cld = to_(m);
     EXPECT_MAT_EQ(PointCloud2Mat(cld), m0);
 
     cld = to_(m); // result of first call is cached.
@@ -142,7 +143,7 @@ TEST_F(VisitorCloudTest, FromVecVertices)
         m(i) = static_cast<float>(randu<uint32_t>() % 256);
     }
 
-    CloudXYZ::Ptr cld = to_(Mat2VecVertices(m));
+    CloudXYZPtr cld = to_(Mat2VecVertices(m));
 
     Mat1f m2 = PointCloud2Mat(cld);
     hconcat(m, Mat1f(m.rows, 1, 1), m);

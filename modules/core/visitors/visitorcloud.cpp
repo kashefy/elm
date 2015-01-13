@@ -3,6 +3,8 @@
 #ifdef __WITH_PCL // definitions below require PCL support
 
 #include "core/exception.h"
+#include "core/pcl/cloud.h"
+#include "core/pcl/vertices.h"
 
 using namespace sem;
 
@@ -11,7 +13,7 @@ void VisitorCloud::Reset()
     c_.reset();
 }
 
-CloudXYZ::Ptr VisitorCloud::operator()(CloudXYZ::Ptr &c)
+CloudXYZPtr VisitorCloud::operator()(CloudXYZPtr &c)
 {
     if(!bool(c_)) {
 
@@ -20,7 +22,7 @@ CloudXYZ::Ptr VisitorCloud::operator()(CloudXYZ::Ptr &c)
     return c_;
 }
 
-CloudXYZ::Ptr VisitorCloud::operator()(const VecVertices &vv)
+CloudXYZPtr VisitorCloud::operator()(const VecVertices &vv)
 {
     if(!bool(c_)) {
 
@@ -29,25 +31,25 @@ CloudXYZ::Ptr VisitorCloud::operator()(const VecVertices &vv)
     return c_;
 }
 
-CloudXYZ::Ptr VisitorCloud::operator()(float f)
+CloudXYZPtr VisitorCloud::operator()(float f)
 {
     Reset();
     SEM_THROW_TYPE_ERROR("Cannot create point cloud from float");
 }
 
-CloudXYZ::Ptr VisitorCloud::operator()(int n)
+CloudXYZPtr VisitorCloud::operator()(int n)
 {
     Reset();
     SEM_THROW_TYPE_ERROR("Cannot create point cloud from int");
 }
 
-CloudXYZ::Ptr VisitorCloud::operator()(uchar c)
+CloudXYZPtr VisitorCloud::operator()(uchar c)
 {
     Reset();
     SEM_THROW_TYPE_ERROR("Cannot create point cloud from uchar");
 }
 
-CloudXYZ::Ptr VisitorCloud::operator()(const Mat_f &m)
+CloudXYZPtr VisitorCloud::operator()(const Mat_f &m)
 {
     if(!bool(c_)) {
 

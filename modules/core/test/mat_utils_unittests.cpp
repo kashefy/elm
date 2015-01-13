@@ -636,7 +636,7 @@ TEST(ElementsAt, ElementsAt)
 
             Mat1f elements_expected(1, static_cast<int>(data.size()));
             int k=0;
-            for(VecMat1fCIter itr=data.begin();
+            for(VecMat1f::const_iterator itr=data.begin();
                 itr != data.end();
                 itr++, k++) {
 

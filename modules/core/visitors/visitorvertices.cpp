@@ -4,7 +4,8 @@
 
 using namespace sem;
 
-// imeplemnt VecVertices visitor methods
+#include "core/pcl/cloud.h"
+
 void VisitorVecVertices::Reset()
 {
     vv_.clear();
@@ -19,7 +20,7 @@ VecVertices VisitorVecVertices::operator()(const VecVertices &vv)
     return vv_;
 }
 
-VecVertices VisitorVecVertices::operator()(CloudXYZ::Ptr &c)
+VecVertices VisitorVecVertices::operator()(CloudXYZPtr &c)
 {
     if(vv_.empty()) {
 

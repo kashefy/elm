@@ -20,7 +20,7 @@ VecMat1f base_FilterBank::Compute(Mat1f stimulus)
     response_.clear();
     response_.reserve(kernels_.size());
 
-    for(VecMat1fCIter itr=kernels_.begin();
+    for(VecMat1f::const_iterator itr=kernels_.begin();
      itr != kernels_.end();
      itr++) {
 

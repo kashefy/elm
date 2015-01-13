@@ -5,7 +5,7 @@
 
 #include "core/exception.h"
 #include "core/stl.h"
-#include "core/typedefs.h"
+#include "core/stl/typedefs_fwd.h"
 
 /**
  * @brief The template Signal class, a class for holding single and multiple samples of features

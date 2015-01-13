@@ -3,9 +3,9 @@
 
 #ifdef __WITH_PCL // the following visitor derived class definitions requires PCL support
 
+#include "core/pcl/typedefs_fwd.h"
+#include "core/pcl/vertices.h"
 #include "core/visitors/visitor_.h"
-
-#include "core/pcl_utils.h"
 
 /**
  * @brief visitor class for converting to STL vector of PCL vertices
@@ -21,7 +21,7 @@ public:
 
     sem::VecVertices operator()(const sem::VecVertices &vv);
 
-    sem::VecVertices operator()(sem::CloudXYZ::Ptr &c);
+    sem::VecVertices operator()(sem::CloudXYZPtr &c);
 
     sem::VecVertices operator()(float f);
 

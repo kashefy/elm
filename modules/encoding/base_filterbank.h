@@ -10,7 +10,7 @@
 #include <opencv2/core.hpp>
 
 #include "core/exception.h"
-#include "core/typedefs.h"
+#include "core/cv/typedefs_fwd.h"
 
 /**
  * @brief base class for filter banks

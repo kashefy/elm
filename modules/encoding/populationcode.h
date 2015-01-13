@@ -3,9 +3,11 @@
 
 #include <memory>
 
+#include <opencv2/core.hpp>
+
 #include "core/base_Layer.h"
 #include "core/layerconfig.h"
-#include "core/typedefs.h"
+#include "core/cv/typedefs_fwd.h"
 
 class base_FilterBank;
 

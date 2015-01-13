@@ -8,7 +8,7 @@
 
 #include "core/exception.h"
 #include "core/layerconfig.h"
-#include "core/pcl_utils.h"
+#include "core/pcl/cloud.h"
 #include "core/signal.h"
 #include "core/stl.h"
 #include "layers/layerfactory.h"
@@ -142,8 +142,8 @@ protected:
 
     shared_ptr<base_Layer> to_; ///< pointer to test object
     Signal sig_;
-    CloudXYZ::Ptr cloud_in_;
-    CloudXYZ::Ptr cloud_target_;
+    CloudXYZPtr cloud_in_;
+    CloudXYZPtr cloud_target_;
 };
 
 /**
