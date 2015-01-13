@@ -9,6 +9,10 @@ using namespace sem;
 
 namespace {
 
+/**
+ * @brief Test FeatureData class
+ * @todo define guards around PCL dependent tests
+ */
 class FeatureDataTest : public ::testing::Test
 {
 protected:
@@ -145,6 +149,14 @@ TYPED_TEST(FeatureDataPOD_Test, FromPOD)
 
 #ifdef __WITH_PCL
         EXPECT_THROW( to.get<CloudXYZ::Ptr >(), ExceptionTypeError );
+
+        {
+            VecVertices vv = to.get<VecVertices >();
+            EXPECT_SIZE(1, vv);
+            EXPECT_SIZE(1, vv[0].vertices);
+
+            EXPECT_EQ(static_cast<uint32_t>(_v), vv[0].vertices[0]);
+        }
 #endif // __WITH_PCL
     }
 }
@@ -181,9 +193,40 @@ TYPED_TEST(FeatureDataPOD_Test, Invalid_Cloud)
     cld = Mat2PointCloud(Mat3f(1, 1, 1.f));
     EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
 }
+
+TYPED_TEST(FeatureDataPOD_Test, Invalid_VecVertices)
+{
+//    // empty
+//    EXPECT_THROW(FeatureData(VecVertices()).get<TypeParam >(), ExceptionTypeError);
+
+//    // multi-row
+//    {
+//        pcl::Vertices v;
+//        v.vertices.push_back(1);
+//        VecVertices vv;
+//        vv.push_back(v);
+//        vv.push_back(v);
+//        EXPECT_THROW(FeatureData(vv).get<TypeParam >(), ExceptionBadDims);
+//    }
+
+//    // multi-col
+//    {
+//        pcl::Vertices v;
+//        v.vertices.push_back(1);
+//        v.vertices.push_back(2);
+//        VecVertices vv;
+//        vv.push_back(v);
+//        EXPECT_THROW(FeatureData(vv).get<TypeParam >(), ExceptionBadDims);
+//    }
+}
+
 #else // __WITH_PCL
 
 TYPED_TEST(FeatureDataPOD_Test, DISABLED_Invalid_Cloud)
+{
+}
+
+TYPED_TEST(FeatureDataPOD_Test, Invalid_VecVertices)
 {
 }
 

@@ -58,7 +58,7 @@ protected:
      */
     void Reset();
 
-    // Cusom object visitors
+    // variant and custom object visitors
 #ifdef __WITH_PCL
     boost::variant< cv::Mat1f, sem::CloudXYZ::Ptr, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
 
