@@ -1,12 +1,23 @@
 #include "core/signal.h"
 
 #include "core/exception.h"
+#include "ts/signal_tp_.h"
 #include "ts/ts.h"
 
 using namespace std;
 using namespace cv;
 using namespace sem;
 
+INSTANTIATE_TYPED_TEST_CASE_P(SignalTP_FtData_Tests, Signal_TP_, FeatureData);
+
+template<>
+std::vector<FeatureData> FtV_<FeatureData>::values{FeatureData(Mat1f(1, 1, 0.f)),
+            FeatureData(Mat1f(1, 1, 1.f)),
+            FeatureData(Mat1f(1, 1, 100.f))};
+
+/**
+ * @brief Additional coverage for main Signal class with FeatureData template
+ */
 class SignalTest : public ::testing::Test
 {
 protected:
@@ -30,42 +41,6 @@ protected:
     VecS in_;   ///< test feature names
 };
 
-TEST_F(SignalTest, Constructor)
-{
-    EXPECT_NO_THROW(Signal());
-}
-
-TEST_F(SignalTest, Clear)
-{
-    EXPECT_NO_THROW(Signal().Clear()) << "Redundant but should still work smoothly.";
-
-    ASSERT_FALSE(to_.FeatureNames().empty()) << "Signal should contain something for this test.";
-    EXPECT_NO_THROW(to_.Clear());
-
-    EXPECT_TRUE(to_.FeatureNames().empty());
-
-    EXPECT_NO_THROW(Signal().Clear()) << "Again, redundant but should still work smoothly.";
-}
-
-TEST_F(SignalTest, FeatureNames)
-{
-    EXPECT_EMPTY(Signal().FeatureNames()) << "Signal should initially be empty";
-
-    VecS feature_names = to_.FeatureNames();
-    EXPECT_EQ(size_t(2), feature_names.size());
-
-    // linear search to see if feature names were added
-    for(uint i=0; i<in_.size(); i++) {
-
-        bool found = false;
-        for(uint j=0; j<feature_names.size() && !found; j++) {
-
-            found = feature_names[j] == in_[i];
-        }
-        EXPECT_TRUE(found) << "Could not find added name " << in_[i];
-    }
-}
-
 TEST_F(SignalTest, GetFeatures)
 {
     EXPECT_THROW(to_["wrong"], ExceptionKeyError);
@@ -83,7 +58,6 @@ TEST_F(SignalTest, MostRecentMat)
     EXPECT_THROW(to_.MostRecentMat("wrong"), ExceptionKeyError);
     EXPECT_THROW(to_.MostRecentMat("Foo"), ExceptionKeyError);
     EXPECT_THROW(to_.MostRecentMat("FOO"), ExceptionKeyError);
-
 
     for(int i=0; i<3; i++) {
 
