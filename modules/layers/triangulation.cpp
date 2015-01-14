@@ -82,8 +82,8 @@ void Triangulation::Reconfigure(const LayerConfig &cfg)
     float mu                = p.get<float>( PARAM_MU,     DEFAULT_MU);
     int max_nn              = p.get<int>(   PARAM_MAX_NN, DEFAULT_MAX_NN);
     float max_surface_angle = p.get<float>( PARAM_MAX_SURFACE_ANGLE, DEFAULT_MAX_SURFACE_ANGLE);
-    float min_angle         = p.get<float>(PARAM_MIN_ANGLE, DEFAULT_MIN_ANGLE);
-    float max_angle         = p.get<float>(PARAM_MAX_ANGLE, DEFAULT_MAX_ANGLE);
+    float min_angle         = p.get<float>( PARAM_MIN_ANGLE, DEFAULT_MIN_ANGLE);
+    float max_angle         = p.get<float>( PARAM_MAX_ANGLE, DEFAULT_MAX_ANGLE);
     bool is_normal_consistency = p.get<bool>(PARAM_IS_NORMAL_CONSISTENT, DEFAULT_IS_NORMAL_CONSISTENCY);
 
     // Set the maximum distance between connected points (maximum edge length)
