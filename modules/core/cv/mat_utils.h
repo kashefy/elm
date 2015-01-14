@@ -5,8 +5,6 @@
 #include "core/cv/typedefs_fwd.h"
 #include "core/exception.h"
 
-#include <iostream>
-
 namespace sem {
 
 /**

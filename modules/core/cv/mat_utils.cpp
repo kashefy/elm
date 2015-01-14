@@ -1,12 +1,7 @@
 #include "core/cv/mat_utils.h"
 
-#include <iostream>
-
 using namespace std;
 using namespace cv;
-
-typedef VecMat1f::const_iterator VecMat1fCIter; ///< Convinience typedef for VecMat1f const iterator
-typedef VecMat1f::const_iterator VecMat1fIter;  ///< Convinience typedef for VecMat1f iterator
 
 Mat_<uchar> sem::ConvertTo8U(const Mat &src)
 {
@@ -122,7 +117,7 @@ Mat1f sem::ElementsAt(const VecMat1f &v, int r, int c)
 {
     Mat1f values(1, static_cast<int>(v.size()));
     int k=0;
-    for(VecMat1fCIter itr=v.begin();
+    for(VecMat1f::const_iterator itr=v.begin();
         itr != v.end();
         itr++, k++) {
 
