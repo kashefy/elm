@@ -79,7 +79,7 @@ void LayerY::Activate(const Signal &signal)
 
 void LayerY::Response(Signal &signal)
 {
-    signal.Append(name_spikes_, state_);
+    signal.Append(name_spikes_, static_cast<cv::Mat1f>(state_));
 }
 
 cv::Mat1i LayerY::State(cv::Mat1f state)

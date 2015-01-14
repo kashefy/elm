@@ -101,7 +101,7 @@ TEST_F(SaliencyIttiTest, Activate)
     l.Next(img, tmp);
     img.convertTo(scene, CV_32FC1, 1./255.);
 
-    signal.Append(NAME_SCENE_, scene);
+    signal.Append(NAME_SCENE_, static_cast<Mat1f>(scene));
     to_.Activate(signal);
 
     for(int i=0; i<NB_SAMPLES; i++) {
@@ -126,7 +126,7 @@ TEST_F(SaliencyIttiTest, DISABLED_DisplayApplyMNIST)
     img = r.Next();
     imshow("img", img);
     img.convertTo(scene, CV_32FC1, 1./255.);
-    signal.Append(NAME_SCENE_, scene);
+    signal.Append(NAME_SCENE_, static_cast<Mat1f>(scene));
 
     to_.Activate(signal);
     to_.Response(signal);

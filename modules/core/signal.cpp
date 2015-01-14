@@ -37,7 +37,7 @@ VecMat Signal::operator [](const string &name) const
     }
 }
 
-Mat Signal::MostRecentMat(const string &name) const
+Mat1f Signal::MostRecentMat(const string &name) const
 {
     return static_cast<FeatureData>(MostRecent(name)).get<Mat_f>();
 }

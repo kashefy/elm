@@ -46,7 +46,7 @@ void SimulationSEM::Learn()
 
         sig.Clear();
 
-        Mat img = r.Next();
+        Mat1f img = r.Next();
 
         sig.Append(NAME_STIMULUS, img);
 
@@ -85,7 +85,7 @@ void SimulationSEM::Test()
 
         sig.Clear();
 
-        Mat img = r.Next();
+        Mat1f img = r.Next();
         //cv::imshow("i", img);
         sig.Append(NAME_STIMULUS, img);
 

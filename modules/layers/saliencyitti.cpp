@@ -137,7 +137,7 @@ void SaliencyItti::Response(Signal &signal)
     signal.Append(name_saliency_, saliency_);
 
     Point2i loc = saliency_sampler_.Sample();
-    Mat1i loc_mat = Point2Mat(loc);
+    Mat1f loc_mat = Point2Mat(loc);
 
     signal.Append(name_salient_loc_, loc_mat);
 }

@@ -142,7 +142,7 @@ protected:
         to_.IONames(config_);
 
         FakeEvidence stimuli(nb_afferents_);
-        signal_.Append(NAME_INPUT_SPIKES, stimuli.next(0));
+        signal_.Append(NAME_INPUT_SPIKES, static_cast<Mat1f>(stimuli.next(0)));
     }
 
     // members
@@ -546,7 +546,7 @@ TEST_F(LayerZLearnTest, Learn)
         Mat1f bias_prev = signal_.MostRecentMat(NAME_OUTPUT_BIAS).clone();
         Mat1f weights_prev = signal_.MostRecentMat(NAME_OUTPUT_WEIGHTS).clone();
 
-        signal_.Append(NAME_INPUT_SPIKES, stimuli.next(0));
+        signal_.Append(NAME_INPUT_SPIKES, static_cast<Mat1f>(stimuli.next(0)));
 
         to_.Activate(signal_);
         to_.Learn();
