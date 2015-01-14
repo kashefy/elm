@@ -1,6 +1,6 @@
 #include "core/zerocrossings.h"
 
-#include <opencv2/imgproc.hpp>
+#include <opencv2/core.hpp>
 
 using namespace cv;
 
@@ -17,7 +17,7 @@ ZeroCrossingsDiff::ZeroCrossingsDiff()
 {
 }
 
-void ZeroCrossingsDiff::operator ()(const cv::Mat1f &src, cv::Mat1f &dst) const
+void ZeroCrossingsDiff::operator ()(const Mat1f &src, Mat1f &dst) const
 {
     if(src.empty()) { return; }
 

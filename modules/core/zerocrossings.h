@@ -1,7 +1,7 @@
 #ifndef SEM_CORE_ZEROCROSSINGS_H_
 #define SEM_CORE_ZEROCROSSINGS_H_
 
-#include <opencv2/core.hpp>
+#include "core/cv/typedefs_fwd.h"
 
 /**
  * @brief base class for computing zero corssings
@@ -35,7 +35,6 @@ public:
     void operator ()(const cv::Mat1f &src, cv::Mat1f &dst) const;
 
 private:
-    typedef cv::Mat1f::const_iterator Mat1fCIter; ///< Convinience typedef for iterating through matrix of floats
 };
 
 #endif // SEM_CORE_ZEROCROSSINGS_H_
