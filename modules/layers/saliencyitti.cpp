@@ -6,6 +6,7 @@
 #include "core/layerconfig.h"
 #include "core/cv/mat_utils.h"
 #include "core/cv/mat_utils_inl.h"
+#include "core/cv/neighborhood.h"
 #include "core/percentile.h"
 #include "core/signal.h"
 #include "encoding/orientation.h"

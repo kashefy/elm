@@ -3,9 +3,6 @@
 #ifndef SEM_CORE_OPENCV_TYPEDEFS_FWD_H_
 #define SEM_CORE_OPENCV_TYPEDEFS_FWD_H_
 
-#include "core/stl/typedefs.h"
-#include <opencv2/core.hpp>
-
 namespace cv {
 
 // only types that are defined by OpenCV
@@ -13,7 +10,8 @@ class Mat;
 
 template <typename T> class Mat_;
 
-typedef Mat_<float> Mat1f;   ///< convinience typedef for Mat of floats without constrains on no. of channels
+typedef Mat_<float> Mat1f;   ///< convinience typedef for Mat of floats without constraints on no. of channels
+typedef Mat_<int> Mat1i;   ///< convinience typedef for Mat of integers
 
 template <typename T> class Point_;
 

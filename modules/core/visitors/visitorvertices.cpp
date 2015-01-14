@@ -2,9 +2,11 @@
 
 #ifdef __WITH_PCL // definitions below require PCL support
 
-using namespace sem;
+#include <opencv2/core.hpp>
 
 #include "core/pcl/cloud.h"
+
+using namespace sem;
 
 void VisitorVecVertices::Reset()
 {

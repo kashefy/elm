@@ -1,5 +1,7 @@
 #include "core/sampler.h"
 
+#include <opencv2/core.hpp>
+
 #include "core/cv/mat_utils.h"
 
 using namespace cv;

@@ -1,7 +1,7 @@
 #ifndef SEM_CORE_SAMPLER_H_
 #define SEM_CORE_SAMPLER_H_
 
-#include "core/cv/typedefs_fwd.h"
+#include <opencv2/core/mat.hpp>
 
 /**
  * @brief base class for sampling from a distribution
