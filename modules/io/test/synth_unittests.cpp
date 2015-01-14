@@ -9,7 +9,7 @@
 using namespace std;
 using namespace sem;
 
-class SynthBarsTest : public testing::Test
+class SynthBarsTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
@@ -114,7 +114,7 @@ TEST_F(SynthBarsTest, Uniform)
     cv::Mat m, s;
     cv::meanStdDev(hist_normalized, m, s);
     EXPECT_MAT_NEAR(m, cv::Mat1d(1, 1, 1.f/static_cast<double>(NB_VARIATIONS)), 1e-5);
-    EXPECT_MAT_NEAR(s, cv::Mat1d::zeros(1, 1), 1e-2);
+    EXPECT_MAT_NEAR(s, cv::Mat1d::zeros(1, 1), 0.013);
 }
 
 /**
