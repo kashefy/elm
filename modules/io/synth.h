@@ -3,7 +3,7 @@
 #ifndef SEM_IO_SYNTH_H_
 #define SEM_IO_SYNTH_H_
 
-#include <opencv2/core.hpp>
+#include "core/cv/typedefs_fwd.h"
 
 /**
  * @brief Base class for synthetic data generation
