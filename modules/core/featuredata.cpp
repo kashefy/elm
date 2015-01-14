@@ -50,7 +50,7 @@ void FeatureData::Reset()
     visitor_mat_.Reset();
 }
 
-ostream& operator<<(ostream& os, FeatureData& obj)
+std::ostream& operator<<(std::ostream& os, FeatureData& obj)
 {
     os << obj.get<Mat_<float> >();
     return os;
