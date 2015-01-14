@@ -6,7 +6,7 @@
 #include <string>
 
 #include "core/exception.h"
-#include "core/stl.h"
+#include "core/stl/stl.h"
 
 /** @brief class for registering derived instantances
  * Partially inspired by:

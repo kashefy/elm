@@ -3,7 +3,7 @@
 
 #include "core/visitors/visitor_.h"
 
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 #include "core/pcl/cloud.h"
 #include "core/pcl/vertices.h"
 

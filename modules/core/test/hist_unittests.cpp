@@ -5,7 +5,7 @@
 #include <opencv2/imgproc.hpp>
 
 #include "core/exception.h"
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 #include "ts/ts.h"
 
 using namespace cv;

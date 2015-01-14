@@ -3,7 +3,7 @@
 #include <opencv2/highgui.hpp>
 
 #include "core/layerconfig.h"
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 #include "core/signal.h"
 #include "io/synth.h"
 #include "io/readmnist.h"

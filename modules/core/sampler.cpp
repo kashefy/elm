@@ -1,6 +1,6 @@
 #include "core/sampler.h"
 
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 
 using namespace cv;
 

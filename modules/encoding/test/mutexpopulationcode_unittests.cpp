@@ -2,7 +2,7 @@
 
 #include <opencv2/highgui.hpp>
 
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 #include "core/layerconfig.h"
 #include "layers/layerfactory.h"
 #include "core/signal.h"

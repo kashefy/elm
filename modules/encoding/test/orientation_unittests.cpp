@@ -5,7 +5,7 @@
 
 #include "core/defs.h"
 #include "core/exception.h"
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 #include "io/synth.h"
 #include "io/readmnist.h"
 #include "ts/ts.h"

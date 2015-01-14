@@ -15,7 +15,7 @@
 #include "core/defs.h"
 #include "core/exception.h"
 #include "core/layerconfig.h"
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 #include "core/pcl/vertices.h"
 #include "core/signal.h"
 

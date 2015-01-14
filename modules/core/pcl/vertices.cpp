@@ -3,7 +3,7 @@
 #ifdef __WITH_PCL
 
 #include "core/exception.h"
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 
 using namespace std;
 using namespace cv;

@@ -10,7 +10,7 @@
 #include "core/layerconfig.h"
 #include "core/pcl/cloud.h"
 #include "core/signal.h"
-#include "core/stl.h"
+#include "core/stl/stl.h"
 #include "layers/layerfactory.h"
 #include "ts/ts.h"
 #include "ts/layer_assertions.h"

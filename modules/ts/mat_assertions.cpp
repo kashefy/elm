@@ -1,6 +1,6 @@
 #include "ts/mat_assertions.h"
 
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 
 using namespace std;
 using namespace testing;

@@ -4,7 +4,7 @@
 
 #include "core/defs.h"
 #include "core/layerconfig.h"
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 #include "core/percentile.h"
 #include "core/signal.h"
 #include "encoding/orientation.h"

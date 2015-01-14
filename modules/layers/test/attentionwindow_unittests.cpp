@@ -1,7 +1,7 @@
 #include "layers/attentionwindow.h"
 
 #include "core/exception.h"
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 #include "core/signal.h"
 #include "layers/layerfactory.h"
 #include "ts/ts.h"

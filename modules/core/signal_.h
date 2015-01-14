@@ -4,7 +4,7 @@
 #include <map>
 
 #include "core/exception.h"
-#include "core/stl.h"
+#include "core/stl/stl.h"
 #include "core/stl/typedefs.h"
 
 /**

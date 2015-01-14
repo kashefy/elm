@@ -7,7 +7,7 @@
 #include <opencv2/highgui.hpp>
 
 #include "core/signal.h"
-#include "core/mat_utils.h"
+#include "core/cv/mat_utils.h"
 #include "encoding/populationcode.h"
 #include "io/readmnist.h"
 #include "layers/layerfactory.h"
