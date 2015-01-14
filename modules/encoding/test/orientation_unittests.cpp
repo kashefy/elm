@@ -6,6 +6,7 @@
 #include "core/defs.h"
 #include "core/exception.h"
 #include "core/cv/mat_utils.h"
+#include "core/cv/mat_utils_inl.h"
 #include "io/synth.h"
 #include "io/readmnist.h"
 #include "ts/ts.h"

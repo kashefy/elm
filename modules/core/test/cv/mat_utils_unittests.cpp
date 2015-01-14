@@ -1,6 +1,5 @@
 #include "core/cv/mat_utils.h"
-
-#include <string>
+#include "core/cv/mat_utils_inl.h"
 
 #include "ts/ts.h"
 

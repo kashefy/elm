@@ -2,12 +2,12 @@
 
 #include <opencv2/highgui.hpp>
 
-#include "core/cv/mat_utils.h"
+#include "core/cv/mat_utils_inl.h"
 #include "core/layerconfig.h"
-#include "layers/layerfactory.h"
 #include "core/signal.h"
 #include "encoding/orientation.h"
 #include "io/synth.h"
+#include "layers/layerfactory.h"
 #include "ts/ts.h"
 
 using std::string;
@@ -213,4 +213,4 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_filter_bank_orientation)
     }
 }
 
-} // annonymous namespace
+} // annonymous namespace for test fixtures

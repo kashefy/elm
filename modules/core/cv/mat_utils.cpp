@@ -1,5 +1,7 @@
 #include "core/cv/mat_utils.h"
 
+#include "core/exception.h"
+
 using namespace std;
 using namespace cv;
 

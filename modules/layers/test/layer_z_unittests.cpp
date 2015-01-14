@@ -11,7 +11,7 @@
 #include "layers/layer_z.h"
 
 #include "core/exception.h"
-#include "core/cv/mat_utils.h"
+#include "core/cv/mat_utils_inl.h"
 #include "core/boost/ptree_utils.h"
 #include "core/signal.h"
 #include "ts/ts.h"
