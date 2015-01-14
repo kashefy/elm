@@ -7,7 +7,7 @@
 
 #include "core/base_Layer.h"
 #include "core/layerconfig.h"
-#include "core/cv/typedefs_fwd.h"
+#include "core/typedefs_fwd.h"
 
 class base_FilterBank;
 
@@ -29,7 +29,7 @@ public:
      *
      * @todo Drop kernel parameter, when filter bank becomes a layer
      */
-    virtual void State(const cv::Mat1f& in, const VecMat1f& kernels=VecMat1f()) = 0;
+    virtual void State(const cv::Mat1f& in, const sem::VecMat1f& kernels=sem::VecMat1f()) = 0;
 
     /**
      * @brief get population code
@@ -81,7 +81,7 @@ public:
 
     MutexPopulationCode(const LayerConfig &config);
 
-    virtual void State(const cv::Mat1f& in, const VecMat1f& kernels=VecMat1f());
+    virtual void State(const cv::Mat1f& in, const sem::VecMat1f& kernels=sem::VecMat1f());
 
     virtual cv::Mat1f PopCode();
 };
@@ -125,7 +125,7 @@ public:
      * @param input stimulus
      * @param kernels (e.g. filter bank)
      */
-    virtual void State(const cv::Mat1f& in, const VecMat1f& kernels=VecMat1f());
+    virtual void State(const cv::Mat1f& in, const sem::VecMat1f& kernels=sem::VecMat1f());
 
     /**
      * @brief Compute distribution for each node from different kernel responses
@@ -145,10 +145,10 @@ protected:
      * @brief Normalize kernel response by global factor
      * @param response normalized in-place
      */
-    virtual void Normalize(VecMat1f &response) const;
+    virtual void Normalize(sem::VecMat1f &response) const;
 
-    VecMat1f state_;            ///< internal state
-    VecMat1f response_distr_;   ///< response distribution
+    sem::VecMat1f state_;            ///< internal state
+    sem::VecMat1f response_distr_;   ///< response distribution
     int fan_out_;               ///< dimensions of state per node (e.g. no. of kernels)
 
 };

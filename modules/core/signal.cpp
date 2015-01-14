@@ -5,6 +5,7 @@
 
 using namespace std;
 using namespace cv;
+using namespace sem;
 
 Signal::~Signal()
 {

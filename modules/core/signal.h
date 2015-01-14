@@ -1,7 +1,7 @@
 #ifndef SEM_CORE_SIGNAL_H_
 #define SEM_CORE_SIGNAL_H_
 
-#include "core/typedefs.h"
+#include "core/typedefs_fwd.h"
 
 #include "core/featuredata.h"
 #include "core/signal_.h"
@@ -23,7 +23,7 @@ public:
      * @return vector of features found under key represented as Mat objects
      * @todo Deprecate?
      */
-    VecMat operator [](const std::string &name) const;
+    sem::VecMat operator [](const std::string &name) const;
 
     /** @brief Get most recent feature under a given name, short-circuit to returning Mat
       * @param name

@@ -1,7 +1,7 @@
 /** @file template utility definitions that have to be defined inline
   */
-#ifndef SEM_CORE_MAT_UTILS_H__
-#define SEM_CORE_MAT_UTILS_H__
+#ifndef SEM_CORE_MAT_UTILS_INL_H__
+#define SEM_CORE_MAT_UTILS_INL_H__
 
 #include "core/cv/typedefs_fwd.h"
 #include "core/exception.h"
@@ -134,4 +134,4 @@ cv::Mat_<T> ARange_(T start, T stop, T step)
 
 } // sem namespace
 
-#endif // SEM_CORE_MAT_UTILS_H_
+#endif // SEM_CORE_MAT_UTILS_INL_H__

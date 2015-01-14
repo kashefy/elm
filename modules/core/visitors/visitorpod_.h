@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_VISITORPOD__H
-#define SEM_CORE_VISITORPOD__H
+#ifndef SEM_CORE_VISITORPOD__H_
+#define SEM_CORE_VISITORPOD__H_
 
 #include "core/visitors/visitor_.h"
 
@@ -7,6 +7,7 @@
 #include "core/cv/mat_utils.h"
 #include "core/pcl/cloud.h"
 #include "core/pcl/vertices.h"
+#include "core/typedefs_fwd.h"
 
 /**
  * @brief template class for scalar POD static visitors
@@ -17,7 +18,7 @@ class VisitorPOD_ :
         public base_ConversionCache
 {
 public:
-    T operator()(const Mat_f &m) const
+    T operator()(const sem::Mat_f &m) const
     {
         size_t n = m.total();
         if(n != 1) {
@@ -63,4 +64,4 @@ public:
 #endif // __WITH_PCL
 };
 
-#endif // SEM_CORE_VISITORPOD__H
+#endif // SEM_CORE_VISITORPOD__H_

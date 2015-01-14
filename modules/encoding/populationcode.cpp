@@ -9,9 +9,11 @@
 #include "core/signal.h"
 #include "encoding/base_filterbank.h"
 
+using std::string;
+
 using cv::Mat1f;
 
-using std::string;
+using namespace sem;
 
 const string base_PopulationCode::KEY_INPUT_STIMULUS   = "in";
 const string base_PopulationCode::KEY_OUTPUT_POP_CODE  = "pc";

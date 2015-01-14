@@ -10,7 +10,7 @@
 #include <opencv2/core.hpp>
 
 #include "core/exception.h"
-#include "core/cv/typedefs_fwd.h"
+#include "core/typedefs_fwd.h"
 
 /**
  * @brief base class for filter banks
@@ -30,7 +30,7 @@ public:
      * @param stimulus
      * @return response per kernel
      */
-    virtual VecMat1f Compute(cv::Mat1f stimulus);
+    virtual sem::VecMat1f Compute(cv::Mat1f stimulus);
 
     /**
      * @brief Get element response across all kernels
@@ -45,14 +45,14 @@ public:
      * Mostly meant for testing purposes because it can involve a heavy copy of matrices.
      * @return vector of kernels
      */
-    virtual VecMat1f Kernels() const = 0;
+    virtual sem::VecMat1f Kernels() const = 0;
 
     /**
      * @brief Get response to most recent stimulus
      * May involve heavy copy operations.
      * @return vector of response matrices
      */
-    virtual VecMat1f Response() const;
+    virtual sem::VecMat1f Response() const;
 
     /**
      * @brief size of the filter bank (e.g. no. of kernels)
@@ -73,8 +73,8 @@ protected:
      */
     virtual void Rectify(cv::Mat1f &response);
 
-    VecMat1f kernels_;  ///< individual kernels
-    VecMat1f response_; ///< response per kernel for most recent input
+    sem::VecMat1f kernels_;  ///< individual kernels
+    sem::VecMat1f response_; ///< response per kernel for most recent input
 };
 
 #endif // SEM_ENCODING_BASE_FILTERBANK_H_

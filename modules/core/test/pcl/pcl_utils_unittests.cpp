@@ -4,6 +4,7 @@
 #ifdef __WITH_PCL // PCL support required for these tests
 
 #include "core/exception.h"
+#include "core/typedefs_fwd.h"
 #include "ts/ts.h"
 
 using namespace std;

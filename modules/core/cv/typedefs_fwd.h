@@ -23,12 +23,4 @@ typedef Point2i Point;
 
 } // fake namespace cv for fwd declaration
 
-// custom typedefs
-
-typedef cv::Mat_<float> Mat_f;   ///< convinience typedef for Mat of floats without constrains on no. of channels
-
-typedef std::vector< cv::Mat1f > VecMat1f;  ///< Convinience typedef for vector of single channel float matrices
-typedef std::vector< cv::Mat1f > VecMat;    ///< Convinience typedef for vector of matrices
-
-
 #endif // SEM_CORE_OPENCV_TYPEDEFS_FWD_H_

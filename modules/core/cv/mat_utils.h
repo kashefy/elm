@@ -4,7 +4,7 @@
 #ifndef SEM_CORE_MAT_UTILS_H_
 #define SEM_CORE_MAT_UTILS_H_
 
-#include "core/cv/typedefs_fwd.h"
+#include "core/typedefs_fwd.h"
 
 namespace sem {
 

@@ -6,6 +6,7 @@
 #include "core/cv/mat_utils.h"
 
 using namespace cv;
+using namespace sem;
 
 base_FilterBank::~base_FilterBank()
 {

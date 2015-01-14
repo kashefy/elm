@@ -3,7 +3,7 @@
 
 #ifdef __WITH_PCL // the following visitor derived class definitions requires PCL support
 
-#include "core/cv/typedefs_fwd.h"
+#include "core/typedefs_fwd.h"
 #include "core/pcl/typedefs_fwd.h"
 #include "core/pcl/cloud.h"
 #include "core/visitors/visitor_.h"
@@ -30,7 +30,7 @@ public:
 
     sem::CloudXYZPtr operator()(uchar c);
 
-    sem::CloudXYZPtr operator()(const Mat_f &m);
+    sem::CloudXYZPtr operator()(const sem::Mat_f &m);
 
 protected:
     sem::CloudXYZPtr c_; ///< internal reference for caching most recent conversion result

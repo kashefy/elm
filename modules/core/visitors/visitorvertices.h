@@ -5,6 +5,7 @@
 
 #include "core/pcl/typedefs_fwd.h"
 #include "core/pcl/vertices.h"
+#include "core/typedefs_fwd.h"
 #include "core/visitors/visitor_.h"
 
 /**
@@ -29,7 +30,7 @@ public:
 
     sem::VecVertices operator()(uchar c);
 
-    sem::VecVertices operator()(const Mat_f &m);
+    sem::VecVertices operator()(const sem::Mat_f &m);
 
 protected:
     template <typename TScalar>

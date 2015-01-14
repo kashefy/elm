@@ -1,4 +1,7 @@
 #ifndef SEM_CORE_TYPEDEFS_H_
 #define SEM_CORE_TYPEDEFS_H_
 
+
+
+
 #endif // SEM_CORE_TYPEDEFS_H_

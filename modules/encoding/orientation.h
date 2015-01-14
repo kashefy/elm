@@ -47,14 +47,14 @@ public:
      * @param ps phase offset in radians
      * @return kernel in 32-bit floats
      */
-    static VecMat1f CreateKernels(int radius,
-                                  float sigma,
-                                  const VecF &theta_rad,
-                                  float lambd,
-                                  float gamma,
-                                  float ps);
+    static sem::VecMat1f CreateKernels(int radius,
+                                       float sigma,
+                                       const VecF &theta_rad,
+                                       float lambd,
+                                       float gamma,
+                                       float ps);
 
-    VecMat1f Kernels() const;
+    sem::VecMat1f Kernels() const;
 
 protected:
     /**
