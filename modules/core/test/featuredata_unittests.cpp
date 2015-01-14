@@ -142,6 +142,9 @@ TYPED_TEST(FeatureDataPOD_Test, cout)
 
         stringstream ss1, ss2;
         ss1<<to<<endl;
+
+        EXPECT_GT(ss1.str().size(), size_t(0)) << "Unexpectedly empty.";
+
         ss2<<m<<endl;
 
         EXPECT_EQ(ss1.str(), ss2.str()) << "Unexpected string in output stream.";
