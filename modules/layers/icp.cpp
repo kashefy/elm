@@ -67,8 +67,8 @@ void ICP::IONames(const LayerIONames &io)
 
 void ICP::Activate(const Signal &signal)
 {
-    CloudXYZPtr cloud_src = Mat2PointCloud(signal.MostRecentMat(name_src_cloud_));
-    CloudXYZPtr cloud_target = Mat2PointCloud(signal.MostRecentMat(name_target_cloud_));
+    CloudXYZPtr cloud_src = signal.MostRecent(name_src_cloud_).get<CloudXYZPtr>();
+    CloudXYZPtr cloud_target = signal.MostRecent(name_target_cloud_).get<CloudXYZPtr>();
 
     ICPXYZ icp;
     icp.setInputSource(cloud_src);
