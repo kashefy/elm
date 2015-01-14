@@ -14,6 +14,11 @@
 #include "ts/mat_assertions.h"
 #include "ts/container.h"
 
+namespace sem
+{
+
 const char* FullTestName(const ::testing::TestInfo *test_info);
+
+} // namespace sem
 
 #endif // SEM_TS_H_

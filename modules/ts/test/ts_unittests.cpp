@@ -1,6 +1,6 @@
 #include "ts/ts.h"
 
-using namespace cv;
+using namespace sem;
 
 namespace {
 
@@ -13,5 +13,5 @@ TEST_F(DummyTest, FullTestName)
     EXPECT_EQ("DummyTest.FullTestName", std::string(FullTestName(test_info_)));
 }
 
-} // namespace
+} // annonymous namespace around tests
 
