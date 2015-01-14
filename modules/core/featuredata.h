@@ -42,6 +42,8 @@ public:
         return get<T>();
     }
 
+    friend std::ostream& operator<<(std::ostream& os, const FeatureData &f);
+
 protected:
     /**
      * @brief Only keep overloaded constructors public
@@ -73,5 +75,7 @@ protected:
 
     VisitorMat_f visitor_mat_;      ///< visitor for converting to Mat objects
 };
+
+std::ostream& operator<<(std::ostream& os, FeatureData& obj);
 
 #endif // SEM_CORE_FEATUREDATA_H_
