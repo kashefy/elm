@@ -77,7 +77,7 @@ void AttentionWindow::Activate(const Signal &signal)
         SEM_THROW_BAD_DIMS(s.str());
     }
 
-    tl_ = sem::Mat2Point(loc_mat);
+    tl_ = sem::Mat2Point2i(loc_mat);
 
     // rectify location: shift it so that the window falls entirly within the scene
     tl_.x = RectifyCoord(tl_.x, window_.cols, scene.cols);

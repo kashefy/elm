@@ -317,7 +317,7 @@ TEST(Point2MatTest, Point2Mat)
     }
 }
 
-TEST(Mat2PointTest, Mat2Point)
+TEST(Mat2PointTest, Mat2Point2i)
 {
     const int N=10;
     for(int i=0; i<N; i++) {
@@ -332,7 +332,7 @@ TEST(Mat2PointTest, Mat2Point)
 
         for(int j=0; j<2; j++) {
 
-            Point2i p = Mat2Point(m);
+            Point2i p = Mat2Point2i(m);
             EXPECT_EQ(x, p.x) << "Unexpected value for x coordinate";
             EXPECT_EQ(y, p.y) << "Unexpected value for y coordinate";
 
@@ -341,7 +341,59 @@ TEST(Mat2PointTest, Mat2Point)
     }
 }
 
-TEST(Mat2PointTest, Mat2Point_redundnantElems)
+TEST(Mat2PointTest, Mat2Point3i)
+{
+    const int N=10;
+    for(int i=0; i<N; i++) {
+
+        int x = randu<int>();
+        int y = randu<int>();
+        int z = randu<int>();
+
+        Mat1i m = Mat1i(1, 3);
+        m(0) = x;
+        m(1) = y;
+        m(2) = z;
+
+        /* Iterate twice to transpose the second time around.
+         * This way we test row as well as column Mat input.
+         */
+        for(int j=0; j<2; j++) {
+
+            Point3i p = Mat2Point3_(m);
+            EXPECT_EQ(x, p.x) << "Unexpected value for x coordinate";
+            EXPECT_EQ(y, p.y) << "Unexpected value for y coordinate";
+            EXPECT_EQ(z, p.z) << "Unexpected value for z coordinate";
+
+            m = m.t();
+        }
+    }
+}
+
+TEST(Mat2PointTest, Mat2Point3f)
+{
+    const int N=10;
+    for(int i=0; i<N; i++) {
+
+        Mat1f m = Mat1f(1, 3);
+        randu(m, 0.f, 100.f);
+
+        /* Iterate twice to transpose the second time around.
+         * This way we test row as well as column Mat input.
+         */
+        for(int j=0; j<2; j++) {
+
+            Point3f p = Mat2Point3_(m);
+            EXPECT_EQ(m(0), p.x) << "Unexpected value for x coordinate";
+            EXPECT_EQ(m(1), p.y) << "Unexpected value for y coordinate";
+            EXPECT_EQ(m(2), p.z) << "Unexpected value for z coordinate";
+
+            m = m.t();
+        }
+    }
+}
+
+TEST(Mat2PointTest, Mat2Point2i_redundnantElems)
 {
     const int N=10;
     for(int i=0; i<N; i++) {
@@ -352,18 +404,83 @@ TEST(Mat2PointTest, Mat2Point_redundnantElems)
         int y = m(1);
 
         // twice to transpose the second time around
-        Point2i p = Mat2Point(m);
+        Point2i p = Mat2Point2i(m);
         EXPECT_EQ(x, p.x) << "Unexpected value for x coordinate";
         EXPECT_EQ(y, p.y) << "Unexpected value for y coordinate";
     }
 }
 
+TEST(Mat2PointTest, Mat2Point3i_redundnantElems)
+{
+    const int N=10;
+    for(int i=0; i<N; i++) {
+
+        Mat1i m = Mat1i(1, 10);
+        randu(m, 0, 100);
+
+        // twice to transpose the second time around
+        Point3i p = Mat2Point3_(m);
+        EXPECT_EQ(m(0), p.x) << "Unexpected value for x coordinate";
+        EXPECT_EQ(m(1), p.y) << "Unexpected value for y coordinate";
+        EXPECT_EQ(m(2), p.z) << "Unexpected value for z coordinate";
+    }
+}
+
+TEST(Mat2PointTest, Mat2Point3f_redundnantElems)
+{
+    const int N=10;
+    for(int i=0; i<N; i++) {
+
+        Mat1f m = Mat1f(1, 10);
+        randu(m, 0.f, 100.f);
+
+        // twice to transpose the second time around
+        Point3f p = Mat2Point3_(m);
+        EXPECT_EQ(m(0), p.x) << "Unexpected value for x coordinate";
+        EXPECT_EQ(m(1), p.y) << "Unexpected value for y coordinate";
+        EXPECT_EQ(m(2), p.z) << "Unexpected value for z coordinate";
+    }
+}
+
+
 TEST(Mat2PointTest, Invalid)
 {
-    EXPECT_THROW(Mat2Point(Mat1i()),        ExceptionBadDims);
-    EXPECT_THROW(Mat2Point(Mat1i(0, 0)),    ExceptionBadDims);
-    EXPECT_THROW(Mat2Point(Mat1i(1, 0)),        ExceptionBadDims);
-    EXPECT_THROW(Mat2Point(Mat1i(0, 1)),        ExceptionBadDims);
+    // sanity check on what's returned from Mat::total()
+    ASSERT_EQ(size_t(1), Mat1i(1, 1).total());
+    ASSERT_EQ(size_t(2), Mat1i(1, 2).total());
+    ASSERT_EQ(size_t(2), Mat1i(2, 1).total());
+    ASSERT_EQ(size_t(0), Mat1i(1, 0).total());
+    ASSERT_EQ(size_t(0), Mat1i(0, 1).total());
+    ASSERT_EQ(size_t(0), Mat1i(0, 0).total());
+
+    ASSERT_EQ(size_t(1), Mat1f(1, 1).total());
+    ASSERT_EQ(size_t(2), Mat1f(1, 2).total());
+    ASSERT_EQ(size_t(2), Mat1f(2, 1).total());
+    ASSERT_EQ(size_t(0), Mat1f(1, 0).total());
+    ASSERT_EQ(size_t(0), Mat1f(0, 1).total());
+    ASSERT_EQ(size_t(0), Mat1f(0, 0).total());
+
+    EXPECT_THROW(Mat2Point2i(Mat1i()),        ExceptionBadDims);
+    EXPECT_THROW(Mat2Point2i(Mat1i(0, 0)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point2i(Mat1i(1, 0)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point2i(Mat1i(0, 1)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point2i(Mat1i(1, 1)),    ExceptionBadDims);
+
+    EXPECT_THROW(Mat2Point3_(Mat1f()),        ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1f(0, 0)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1f(1, 0)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1f(0, 1)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1f(1, 1)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1f(2, 1)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1f(1, 2)),    ExceptionBadDims);
+
+    EXPECT_THROW(Mat2Point3_(Mat1i()),        ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1i(0, 0)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1i(1, 0)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1i(0, 1)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1i(1, 1)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1i(2, 1)),    ExceptionBadDims);
+    EXPECT_THROW(Mat2Point3_(Mat1i(1, 2)),    ExceptionBadDims);
 }
 
 TEST(ElementsAtLoc, EmptyVector)

@@ -21,7 +21,6 @@ typedef Point_<int> Point2i;    ///< convinience typedef for 2d point of integer
 typedef Point_<float> Point2f;  ///< convinience typedef for 2d point of floats
 typedef Point2i Point;          ///< extra-convinience typedef for 2d point of integers
 
-/
 template<typename _Tp> class Point3_;
 /**
  * @typedef 3d points
