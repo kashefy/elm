@@ -8,8 +8,6 @@
 
 #include "core/exception.h"
 #include "core/layerconfig.h"
-#include "core/cv/mat_utils.h"
-#include "core/pcl/cloud.h"
 #include "core/signal.h"
 
 using namespace std;
