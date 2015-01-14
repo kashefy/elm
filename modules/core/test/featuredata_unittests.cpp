@@ -131,6 +131,23 @@ TYPED_TEST(FeatureDataPOD_Test, FromMat)
     }
 }
 
+TYPED_TEST(FeatureDataPOD_Test, cout)
+{
+    float vf = 3.f; // to cover a range of values common between all of our PODs
+    TypeParam _v = static_cast<TypeParam >(vf); // to cover a range of values common between all of our PODs
+    while(--vf >= 0.f) {
+
+        FeatureData to(--_v);
+        Mat1f m(1, 1, _v);
+
+        stringstream ss1, ss2;
+        ss1<<to<<endl;
+        ss2<<m<<endl;
+
+        EXPECT_EQ(ss1.str(), ss2.str()) << "Unexpected string in output stream.";
+    }
+}
+
 /**
  * @todo: anyway to make this less manual?
  */
