@@ -471,35 +471,38 @@ TYPED_TEST(MatPODTypesTest, FindFirstOf_Invalid_MultiChannel) {
 
     std::vector<TypeParam> v = V_<TypeParam>::values;
 
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::zeros(1, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::ones(1, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::zeros(10, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >::ones(10, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >(10, 1, randu<TypeParam>()), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >(1, 10, randu<TypeParam>()), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >(1, 10, v[0]), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >(3, 4, v[0]), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 2> >(4, 3, v[0]), v[0]), ExceptionBadDims );
+    typedef Mat_<Vec<TypeParam, 2> > MatVecTP2;
+    EXPECT_THROW( find_first_of(MatVecTP2::zeros(1, 1), v[0]),  ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP2::ones (1, 1), v[0]),  ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP2::zeros(10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP2::ones (10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP2   (10, 1, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP2   (1, 10, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP2   (1, 10, v[0]), v[0]),    ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP2   (3, 4, v[0]), v[0]),    ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP2   (4, 3, v[0]), v[0]),    ExceptionBadDims );
 
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::zeros(1, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::ones(1, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::zeros(10, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >::ones(10, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >(10, 1, randu<TypeParam>()), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >(1, 10, randu<TypeParam>()), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >(1, 10, v[0]), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >(3, 4, v[0]), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 3> >(4, 3, v[0]), v[0]), ExceptionBadDims );
+    typedef Mat_<Vec<TypeParam, 3> > MatVecTP3;
+    EXPECT_THROW( find_first_of(MatVecTP3::zeros(1, 1), v[0]),  ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP3::ones (1, 1), v[0]),  ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP3::zeros(10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP3::ones (10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP3   (10, 1, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP3   (1, 10, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP3   (1, 10, v[0]), v[0]),   ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP3   (3, 4, v[0]), v[0]),    ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP3   (4, 3, v[0]), v[0]),    ExceptionBadDims );
 
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::zeros(1, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::ones(1, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::zeros(10, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >::ones(10, 1), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >(10, 1, randu<TypeParam>()), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >(1, 10, randu<TypeParam>()), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >(1, 10, v[0]), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >(3, 4, v[0]), v[0]), ExceptionBadDims );
-    EXPECT_THROW( find_first_of(Mat_<Vec<TypeParam, 4> >(4, 3, v[0]), v[0]), ExceptionBadDims );
+    typedef Mat_<Vec<TypeParam, 4> > MatVecTP4;
+    EXPECT_THROW( find_first_of(MatVecTP4::zeros(1, 1), v[0]),  ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP4::ones (1, 1), v[0]),  ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP4::zeros(10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP4::ones (10, 1), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP4   (10, 1, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP4   (1, 10, randu<TypeParam>()), v[0]), ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP4   (1, 10, v[0]), v[0]),   ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP4   (3, 4, v[0]), v[0]),    ExceptionBadDims );
+    EXPECT_THROW( find_first_of(MatVecTP4   (4, 3, v[0]), v[0]),    ExceptionBadDims );
 }
 
 /**
