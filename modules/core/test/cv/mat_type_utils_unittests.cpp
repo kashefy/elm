@@ -1,6 +1,12 @@
-#include "core/cv/type_utils.h"
+#include "core/cv/mat_type_utils.h"
 
 #include "gtest/gtest.h"
+
+#include <opencv2/core.hpp>
+
+using namespace std;
+using namespace cv;
+using namespace sem;
 
 namespace {
 

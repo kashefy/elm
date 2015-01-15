@@ -4,8 +4,10 @@
 
 #include "core/defs.h"
 #include "core/layerconfig.h"
-#include "core/cv/mat_utils.h"
-#include "core/cv/mat_utils_inl.h"
+#include "core/cv/mat_utils.h"          // Point conversions
+#include "core/cv/mat_utils_inl.h"      // ARange_
+#include "core/cv/mat_vector_utils.h"   // Reshape()
+#include "core/cv/mat_vector_utils_inl.h"   // Mat <-> vector
 #include "core/cv/neighborhood.h"
 #include "core/percentile.h"
 #include "core/signal.h"

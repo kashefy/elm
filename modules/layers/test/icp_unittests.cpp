@@ -191,7 +191,7 @@ TEST_F(ICPTest, ActivateAndResponse) {
     EXPECT_EQ(transformation_actual.rows, transformation_actual.cols) << "Expecting square matrix";
     for(int i=0; i<transformation_actual.rows; i++) {
 
-        EXPECT_FLOAT_EQ(1.f, transformation_actual(i, i)) << "Expecting diagonal of 1's";
+        EXPECT_NEAR(1.f, transformation_actual(i, i), 1e-5) << "Expecting diagonal of 1's";
     }
 }
 

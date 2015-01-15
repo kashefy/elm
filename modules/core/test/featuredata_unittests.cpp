@@ -1,5 +1,6 @@
 #include "core/featuredata.h"
 
+#include "core/stl/stl.h"
 #include "core/exception.h"
 #include "ts/ts.h"
 
@@ -92,7 +93,7 @@ TEST_F(FeatureDataTest, Cached_Cloud)
 }
 
 /**
- * @brief Type-Parameterized tests around FeatureData class with POD typed feature data
+ * @brief Typed tests around FeatureData class with POD typed feature data
  */
 template <class T>
 class FeatureDataPOD_Test : public ::testing::Test

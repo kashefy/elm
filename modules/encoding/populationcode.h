@@ -7,7 +7,7 @@
 
 #include "core/base_Layer.h"
 #include "core/layerconfig.h"
-#include "core/typedefs_fwd.h"
+#include "core/typedefs_sfwd.h"
 
 class base_FilterBank;
 

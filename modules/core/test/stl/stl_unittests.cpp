@@ -56,5 +56,29 @@ TEST(STLKeysTest, Keys)
     }
 }
 
+/**
+ * @brief Typed tests around Vector routines with POD types
+ */
+template <class T>
+class STL_VectorUtils : public ::testing::Test
+{
+protected:
+};
+typedef ::testing::Types<float, int, uchar> PODTypes;
+TYPED_TEST_CASE(STL_VectorUtils, PODTypes);
+
+/**
+ * @brief test utility function for populating a vector with uniformly random values
+ */
+TYPED_TEST(STL_VectorUtils, Push_back_randu_size)
+{
+    for(int n=0; n<11; n++) {
+
+        vector<TypeParam > v;
+        push_back_randu(v, n);
+        EXPECT_SIZE(n, v);
+    }
+}
+
 
 

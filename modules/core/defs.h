@@ -9,4 +9,9 @@
  */
 #define SEM_DYN_CAST(type, ptr) dynamic_cast<type*>(ptr.get())
 
+namespace sem
+{
+static int NA_IDX   =   -1;   ///< non-applicable index
+}
+
 #endif // SEM_CORE_DEFS_H_

@@ -3,7 +3,7 @@
 #include <opencv2/features2d.hpp>
 #include <opencv2/imgproc.hpp>
 
-#include "core/cv/mat_utils.h"
+#include "core/cv/mat_vector_utils.h"
 
 using namespace cv;
 using namespace sem;

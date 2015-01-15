@@ -1,4 +1,4 @@
-#include "core/cv/type_utils.h"
+#include "core/cv/mat_type_utils.h"
 
 #include <opencv2/core.hpp>
 

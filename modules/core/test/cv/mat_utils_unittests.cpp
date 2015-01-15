@@ -390,7 +390,6 @@ TEST(Mat2PointTest, Mat2Point3f_redundnantElems)
     }
 }
 
-
 TEST(Mat2PointTest, Invalid)
 {
     // sanity check on what's returned from Mat::total()
@@ -431,218 +430,6 @@ TEST(Mat2PointTest, Invalid)
     EXPECT_THROW(Mat2Point3_(Mat1i(1, 2)),    ExceptionBadDims);
 }
 
-TEST(ElementsAtLoc, EmptyVector)
-{
-    EXPECT_NO_THROW(ElementsAt(VecMat1f(), 0, 0));
-    EXPECT_EMPTY(ElementsAt(VecMat1f(), 0, 0));
-
-    EXPECT_NO_THROW(ElementsAt(VecMat1f(), 999, 999));
-    EXPECT_EMPTY(ElementsAt(VecMat1f(), 999, 999));
-
-    EXPECT_NO_THROW(ElementsAt(VecMat1f(), 999, 0));
-    EXPECT_EMPTY(ElementsAt(VecMat1f(), 999, 0));
-
-    EXPECT_NO_THROW(ElementsAt(VecMat1f(), 0, 999));
-    EXPECT_EMPTY(ElementsAt(VecMat1f(), 0, 999));
-}
-
-TEST(ElementsAt, ElementsAt)
-{
-    const int SIZE=10;
-    const int ROWS=3;
-    const int COLS=4;
-    VecMat1f data;
-    for(int i=0; i<SIZE; i++) {
-
-        Mat1f tmp(ROWS, COLS);
-        randn(tmp, 0., 1.);
-        data.push_back(tmp);
-    }
-
-    for(int r=0; r<ROWS; r++) {
-        for(int c=0; c<COLS; c++) {
-
-            Mat1f elements_expected(1, static_cast<int>(data.size()));
-            int k=0;
-            for(VecMat1f::const_iterator itr=data.begin();
-                itr != data.end();
-                itr++, k++) {
-
-                elements_expected(k) = (*itr)(r, c);
-            }
-            Mat1f elements_actual = sem::ElementsAt(data, r, c);
-
-            EXPECT_MAT_DIMS_EQ(elements_actual, Size(static_cast<int>(data.size()), 1)) << "Expecting a row matrix";
-            EXPECT_MAT_EQ(elements_expected, elements_actual) << "Unexpected element values";
-        }
-    }
-}
-
-TEST(ElementsAt, Invalid)
-{
-    const int SIZE=2;
-    const int ROWS=3;
-    const int COLS=4;
-    VecMat1f data;
-    for(int i=0; i<SIZE; i++) {
-
-        Mat1f tmp(ROWS, COLS);
-        randn(tmp, 0., 1.);
-        data.push_back(tmp);
-    }
-
-    EXPECT_NO_THROW(ElementsAt(data, 0, 0));
-    EXPECT_THROW(ElementsAt(data, -1, 0), ExceptionBadDims);
-    EXPECT_THROW(ElementsAt(data, 0, -1), ExceptionBadDims);
-    EXPECT_THROW(ElementsAt(data, -1, 0), ExceptionBadDims);
-    EXPECT_THROW(ElementsAt(data, -1, -1), ExceptionBadDims);
-    EXPECT_THROW(ElementsAt(data, ROWS, 0), ExceptionBadDims);
-    EXPECT_THROW(ElementsAt(data, 0, COLS), ExceptionBadDims);
-}
-
-/**
- * @brief test reshape routine with empty input
- */
-TEST(ReshapeVecMatTest, Empty)
-{
-    // empty vector
-    EXPECT_EMPTY(Reshape(VecMat1f())) << "Empty input yielded non-empty output. That's odd.";
-
-    // vector filled with empty matrices
-    for(int i=1; i<10; i++) {
-
-        EXPECT_EMPTY(Reshape(VecMat1f(i, Mat1f())));
-    }
-}
-
-/**
- * @brief test dimensions of reshaped input
- */
-TEST(ReshapeVecMatTest, Dims)
-{
-    for(int i=1; i<=10; i++) {
-
-        for(int r=1; r<7; r++) {
-
-            for(int c=1; c<7; c++) {
-
-                EXPECT_MAT_DIMS_EQ(Reshape(VecMat1f(i, Mat1f::zeros(r, c))), Size(i, r*c))
-                        << "Unexpected dims returend from reshappign vector of matrices";
-            }
-        }
-    }
-}
-
-/**
- * @brief test values after reshape
- */
-TEST(ReshapeVecMatTest, Values)
-{
-    const int N=10; ///< no. of matrices in vector
-    const int ROWS=3;
-    const int COLS=4;
-    VecMat1f in;
-    for(int i=0; i<N; i++) {
-
-        Mat1f m(ROWS, COLS);
-        randn(m, 0, 100);
-        in.push_back(m);
-    }
-
-    Mat1f result = Reshape(in);
-
-    // inspect result
-    for(int i=0; i<N; i++) {
-
-        for(int r=0; r<ROWS; r++) {
-
-            for(int c=0; c<COLS; c++) {
-
-                EXPECT_FLOAT_EQ(in[i](r, c), result(r*COLS+c, i))
-                        << "Value mismatch between initial input and reshaped output";
-            }
-        }
-    }
-}
-
-TEST(Mat_ToVec_Test, Empty)
-{
-    EXPECT_EMPTY(Mat_ToVec_<float>(Mat1f()));
-    EXPECT_EMPTY(Mat_ToVec_<float>(Mat1i()));
-    EXPECT_EMPTY(Mat_ToVec_<float>(Mat1b()));
-    EXPECT_EMPTY(Mat_ToVec_<float>(Mat()));
-}
-
-TEST(Mat_ToVec_Test, Invalid)
-{
-    EXPECT_THROW(Mat_ToVec_<float>(Mat1f::zeros(3, 4).col(0)), ExceptionTypeError);
-    EXPECT_THROW(Mat_ToVec_<float>(Mat1f(3, 4, 11.f).colRange(0, 2)), ExceptionTypeError);
-}
-
-/**
- * @brief test conversion to vector with two-dimensional matrix as input
- */
-TEST(Mat_ToVec_Test, TwoDimensional_Landscape)
-{
-    const int ROWS=3;
-    const int COLS=4;
-    Mat1f in(ROWS, COLS);
-    randn(in, 0, 100);
-    VecF out = Mat_ToVec_<float>(in);
-    EXPECT_SIZE(in.total(), out) << "Not all elements acccounted for";
-
-    // check values
-    for(int r=0; r<ROWS; r++) {
-
-        for(int c=0; c<COLS; c++) {
-
-            EXPECT_FLOAT_EQ(in(r, c), out[r*COLS+c]) << "value mismatch";
-        }
-    }
-}
-
-TEST(Mat_ToVec_Test, TwoDimensional_Portrait)
-{
-    const int ROWS=4;
-    const int COLS=3;
-    Mat1f in(ROWS, COLS);
-    randn(in, 0, 100);
-    VecF out = Mat_ToVec_(in);
-    EXPECT_SIZE(in.total(), out) << "Not all elements acccounted for";
-
-    // check values
-    for(int r=0; r<ROWS; r++) {
-
-        for(int c=0; c<COLS; c++) {
-
-            EXPECT_FLOAT_EQ(in(r, c), out[r*COLS+c]) << "value mismatch";
-        }
-    }
-}
-
-/**
- * @brief test conversion with one-dimensional matrix
- */
-TEST(Mat_ToVec_Test, OneDimensional)
-{
-    const int SIZE=5;
-    Mat1i in(SIZE, 1);
-    randn(in, 0, 100);
-
-    ASSERT_GT(SIZE, 0) << "This test needs zero-sized input";
-
-    std::vector<int> out = Mat_ToVec_<int>(in);
-    EXPECT_SIZE(SIZE, out) << "Not all elements acccounted for";
-    EXPECT_SIZE(SIZE, Mat_ToVec_<int>(in.t())) << "Not all elements acccounted for";
-
-    // check values
-    for(int i=0; i<SIZE; i++) {
-
-        EXPECT_EQ(in(i), out[i]) << "Value mismatch at i=" << i;
-    }
-}
-
-
 /**
  * @brief A setup for repeating tests with different types of mat objects (int, float, uchar)
  */
@@ -652,21 +439,7 @@ class MatPODTypesTest : public testing::Test
 protected:
 };
 
-// define some helper routines and class
-
-/**
- * @brief Push back uniformly random values into a vector
- * @param vector pushing back into
- * @param no. of items to push back
- */
-template <typename T>
-void push_back_randu(std::vector<T> &v, int N)
-{
-    for(int i=0; i<N; i++) {
-
-        v.push_back(randu<T>());
-    }
-}
+// define some helper routines and classes
 
 /**
  * @brief the struct below enables defining values to be used inside the tests
@@ -957,239 +730,6 @@ TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Duplicate) {
     ASSERT_GE(index_actual, 0) << "Test didn't really do anything.";
 }
 
-TYPED_TEST_P(MatPODTypesTest, Mat_ToVec_ThreeDimensional)
-{
-    const int ROWS=2, COLS=3, PLANES=4;
-
-    ASSERT_GT(ROWS*COLS*PLANES, 0) << "Useless test if there aren't any elements.";
-
-    int d[3] = {ROWS, COLS, PLANES};
-    Mat in = Mat(3, d, CV_MAKETYPE(MatDepth_<TypeParam>::depth, 1));
-
-    randn(in, 0, 100);
-    vector<TypeParam > out = Mat_ToVec_<TypeParam >(in);
-    EXPECT_EQ(size_t(ROWS*COLS*PLANES), in.total()) << "Not all elements acccounted for.";
-    EXPECT_SIZE(in.total(), out) << "Not all elements acccounted for.";
-
-    // check values
-    int i=0;
-    for(int r=0; r<ROWS; r++) {
-        for(int c=0; c<COLS; c++) {
-            for(int p=0; p<PLANES; p++) {
-
-                EXPECT_TRUE(in.at<TypeParam>(r, c, p) == out[i++])
-                        << "value mismatch at (" << r << "," << c << "," << p << ")";
-            }
-        }
-    }
-}
-
-TYPED_TEST_P(MatPODTypesTest, Mat_ToVec_Invalid_NonContinuous_Mat_)
-{
-    typedef Mat_<TypeParam> MatTP;
-
-    // copy vector of values into matrix object
-    MatTP m(2, 3);
-    randn(m, 0, 100);
-
-    /* provoke non-continuous input by taking out column ranges
-     */
-    // col() yielding single columns
-    for(int c=0; c<m.cols; c++) {
-
-        EXPECT_THROW( Mat_ToVec_(m.col(c)), ExceptionTypeError );
-        EXPECT_THROW( Mat_ToVec_(m.col(c)), ExceptionTypeError );
-    }
-
-    // colRange()
-    for(int c=1; c<m.cols-1; c++) {
-
-        EXPECT_THROW( Mat_ToVec_<TypeParam >(m.colRange(c, m.cols)), ExceptionTypeError );
-    }
-
-    for(int c=1; c<m.cols; c++) {
-
-        EXPECT_THROW( Mat_ToVec_<TypeParam >(m.colRange(0, c)), ExceptionTypeError );
-    }
-}
-
-// STL vector to template Mat_ conversions
-/**
- * @brief Empty in empty out
- */
-TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_Empty)
-{
-    vector<TypeParam > v;
-    EXPECT_TRUE(Vec_ToRowMat_<TypeParam >(v).empty());
-}
-
-/**
- * @brief test that a row matrix is produced with the correct no. of cols
- */
-TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_AlwaysRowMat)
-{
-    for(int s=1; s<10; s++) {
-
-        vector<TypeParam > v(s, randu<TypeParam >());
-
-        Mat_<TypeParam > m = Vec_ToRowMat_<TypeParam >(v);
-        ASSERT_FALSE(m.empty()) << "Why is this matrix empty?";
-        ASSERT_EQ(1, m.rows)    << "Expecting row matrix. Expecting matrix with a single row";
-        ASSERT_EQ(s, m.cols);
-        ASSERT_EQ(s, static_cast<int>(m.total()));
-        EXPECT_MAT_DIMS_EQ(m, Size2i(static_cast<int>(v.size()), 1)) << "Encountered unexpected size";
-    }
-}
-
-/**
- * @brief test resulting matrix element values
- */
-TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_Values)
-{
-    for(int s=1; s<10; s++) {
-
-        vector<TypeParam > v;
-        push_back_randu<TypeParam >(v, s);
-
-        Mat_<TypeParam > m = Vec_ToRowMat_<TypeParam >(v);
-        EXPECT_MAT_DIMS_EQ(m, Size2i(static_cast<int>(v.size()), 1)) << "Encountered unexpected size";
-
-        // check values
-        for(int i=0; i<s; i++) {
-            EXPECT_EQ(v[i], m(i));
-            EXPECT_EQ(v[i], m(0, i));
-        }
-    }
-}
-
-/**
- * @brief Test that no copying happened and that both point to the same memory chunk.
- *Q: Who owns the data? A: the source vector
- */
-TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_NoCopy)
-{
-    const int SIZE=3;
-
-    // initialize a vector with random values
-    vector<TypeParam > v;
-    push_back_randu<TypeParam >(v, SIZE);
-
-    Mat_<TypeParam > m = Vec_ToRowMat_<TypeParam >(v);
-
-    // modify each element in one and see it reflect in the other
-    for(int i=0; i<SIZE; i++) {
-
-        // check before doing anything
-        EXPECT_EQ(v[i], m(i));
-        EXPECT_EQ(v[i], m(0, i));
-
-        // modify in vector
-        v[i] = randu<TypeParam >();
-        EXPECT_EQ(v[i], m(i));
-        EXPECT_EQ(v[i], m(0, i));
-
-        // modify in matrix
-        m(i) = randu<TypeParam >();
-        EXPECT_EQ(v[i], m(i));
-        EXPECT_EQ(v[i], m(0, i));
-    }
-}
-
-/**
- * @brief Q: Who owns the data? A: the source vector
- *
- * We'll test for:
- * 1) If the matrix goes out of scope or is released -> vector is not affected
- * 2) If the vector goes out of scope matrix values become undetermined
- */
-TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_Ownership)
-{
-    const int SIZE=3;
-
-    Mat_<TypeParam > m_outer;
-    Mat_<TypeParam > m_bckp;
-    vector<TypeParam > bckp;
-    {
-        // initialize a vector with random values
-        vector<TypeParam > v;
-        push_back_randu(v, SIZE);
-
-        // make an explicit back up of the vector values
-        bckp = v;
-
-        for(int i=0; i<SIZE; i++) {
-            EXPECT_EQ(v[i], bckp[i]);
-        }
-
-        // test ownership after mat release
-        {
-            Mat_<TypeParam > m_inner = Vec_ToRowMat_(v);
-            m_inner.copyTo(m_bckp);
-            m_inner.release(); // will not affect the data
-
-            for(int i=0; i<SIZE; i++) {
-                EXPECT_EQ(v[i], bckp[i]);
-            }
-        }
-
-        // check again after mat going out of scope
-        for(int i=0; i<SIZE; i++) {
-            EXPECT_EQ(v[i], bckp[i]);
-        }
-
-        m_outer = Vec_ToRowMat_(v);
-        for(int i=0; i<SIZE; i++) {
-            EXPECT_EQ(v[i], m_outer(i));
-        }
-    }
-
-    for(int i=0; i<SIZE; i++) {
-
-        EXPECT_EQ(bckp[i], m_bckp(i));
-    }
-
-    Mat cmp_out;
-    compare(m_outer, m_bckp, cmp_out, CMP_NE);
-    int n = countNonZero(cmp_out); // n==0 -> equal
-    EXPECT_NE(n, 0) << "They turned out to be equal.";
-}
-
-/**
- * @brief test assignment to regular non-template Mat object
- */
-TYPED_TEST_P(MatPODTypesTest, Vec_TRowMat_AssignToMat)
-{
-    const int SIZE=3;
-
-    // initialize a vector with random values
-    vector<TypeParam > v;
-    push_back_randu<TypeParam >(v, SIZE);
-
-    Mat m = Vec_ToRowMat_<TypeParam >(v);
-
-    EXPECT_MAT_DIMS_EQ(m, Size2i(static_cast<int>(v.size()), 1)) << "Encountered unexpected size";
-    EXPECT_MAT_TYPE(m, MatDepth_<TypeParam >::depth) << "Unexpected mat type";
-
-    // check values
-    for(int i=0; i<SIZE; i++) {
-        EXPECT_EQ(v[i], m.at<TypeParam >(i));
-        EXPECT_EQ(v[i], m.at<TypeParam >(0, i));
-    }
-}
-
-/**
- * @brief test utility function for populating a vector with uniformly random values
- */
-TYPED_TEST_P(MatPODTypesTest, Push_back_randu_size)
-{
-    for(int i=0; i<11; i++) {
-
-        vector<TypeParam > v;
-        push_back_randu(v, i);
-        EXPECT_SIZE(i, v);
-    }
-}
-
 /**
  * @brief Keep tabs on what happens when assigning a Mat of M channels to a Mat of N channels or generic Mat
  */
@@ -1206,11 +746,13 @@ TYPED_TEST_P(MatPODTypesTest, InterChannelCasting)
 
     typedef Vec<TypeParam, 3 > Vec3TP;
     Mat_<Vec3TP > m3 = m1;
+
+    EXPECT_EQ(1, m1.channels()) << "Unexpected no. of channels.";
     EXPECT_EQ(3, m3.channels()) << "Unexpected no. of channels.";
     for(int i=0; i<m1.cols; i++) {
 
-        EXPECT_EQ(m1(i), m3(i)[0]);
-        EXPECT_EQ(V_<float>::values[i], m3(0)[i]) << "Mismatch at i=" << i;
+        EXPECT_EQ(m1(i), m3(0)[i]);
+        EXPECT_EQ(V_<TypeParam>::values[i], m3(0)[i]) << "Mismatch at i=" << i;
     }
 
     Mat mm = m1;
@@ -1218,15 +760,15 @@ TYPED_TEST_P(MatPODTypesTest, InterChannelCasting)
     for(int i=0; i<m1.cols; i++) {
 
         EXPECT_EQ(m1(i), mm.at<TypeParam >(i));
-        EXPECT_EQ(V_<float>::values[i], mm.at<TypeParam >(i)) << "Mismatch at i=" << i;
+        EXPECT_EQ(V_<TypeParam>::values[i], mm.at<TypeParam >(i)) << "Mismatch at i=" << i;
     }
 
     Mat mm3 = m3;
-    EXPECT_EQ(3, mm.channels()) << "Unexpected no. of channels.";
+    EXPECT_EQ(3, mm3.channels()) << "Unexpected no. of channels.";
     for(int i=0; i<m1.cols; i++) {
 
         EXPECT_EQ(m3(0)[i], mm3.at<Vec3TP >(0)[i]);
-        EXPECT_EQ(V_<float>::values[i], mm3.at<Vec3TP >(0)[i]) << "Mismatch at i=" << i;
+        EXPECT_EQ(V_<TypeParam>::values[i], mm3.at<Vec3TP >(0)[i]) << "Mismatch at i=" << i;
     }
 }
 
@@ -1243,15 +785,6 @@ REGISTER_TYPED_TEST_CASE_P(MatPODTypesTest,
                            FindFirstOf_NotFound,
                            FindFirstOf_Found,
                            FindFirstOf_Duplicate,
-                           Mat_ToVec_ThreeDimensional,
-                           Mat_ToVec_Invalid_NonContinuous_Mat_,
-                           Vec_TRowMat_Empty,
-                           Vec_TRowMat_AlwaysRowMat,
-                           Vec_TRowMat_Values,
-                           Vec_TRowMat_NoCopy,
-                           Vec_TRowMat_Ownership,
-                           Vec_TRowMat_AssignToMat,
-                           Push_back_randu_size,
                            InterChannelCasting); ///< register additional typed_test_p (i.e. unit test) routines here
 
 ///< Register values to work with inside tests, note how they're used inside the tests

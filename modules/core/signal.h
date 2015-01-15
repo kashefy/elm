@@ -1,7 +1,7 @@
 #ifndef SEM_CORE_SIGNAL_H_
 #define SEM_CORE_SIGNAL_H_
 
-#include "core/typedefs_fwd.h"
+#include "core/typedefs_sfwd.h" // VecMat
 
 #include "core/featuredata.h"
 #include "core/signal_.h"

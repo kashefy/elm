@@ -45,6 +45,20 @@ namespace sem {
         }
         return v;
     }
+
+    /**
+     * @brief Push back uniformly random values into a vector
+     * @param vector pushing back into
+     * @param no. of items to push back
+     */
+    template <typename T>
+    void push_back_randu(std::vector<T> &v, int N)
+    {
+        for(int i=0; i<N; i++) {
+
+            v.push_back(static_cast<T>(rand()));
+        }
+    }
 }
 
 #endif // SEM_CORE_STL_H_
