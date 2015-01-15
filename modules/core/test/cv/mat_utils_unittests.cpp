@@ -1242,6 +1242,46 @@ TYPED_TEST_P(MatPODTypesTest, Push_back_randu_size)
     }
 }
 
+/**
+ * @brief Keep tabs on what happens when assigning a Mat of M channels to a Mat of N channels or generic Mat
+ */
+TYPED_TEST_P(MatPODTypesTest, InterChannelCasting)
+{
+    ASSERT_GE(V_<float>::values.size(), size_t(3)) << "This test requires at least 3 values to be defined.";
+
+    Mat_<TypeParam > m1(1, 3);
+
+    for(int i=0; i<m1.cols; i++) {
+
+        m1(i) = V_<TypeParam >::values[i];
+    }
+
+    typedef Vec<TypeParam, 3 > Vec3TP;
+    Mat_<Vec3TP > m3 = m1;
+    EXPECT_EQ(3, m3.channels()) << "Unexpected no. of channels.";
+    for(int i=0; i<m1.cols; i++) {
+
+        EXPECT_EQ(m1(i), m3(i)[0]);
+        EXPECT_EQ(V_<float>::values[i], m3(0)[i]) << "Mismatch at i=" << i;
+    }
+
+    Mat mm = m1;
+    EXPECT_EQ(1, mm.channels()) << "Unexpected no. of channels.";
+    for(int i=0; i<m1.cols; i++) {
+
+        EXPECT_EQ(m1(i), mm.at<TypeParam >(i));
+        EXPECT_EQ(V_<float>::values[i], mm.at<TypeParam >(i)) << "Mismatch at i=" << i;
+    }
+
+    Mat mm3 = m3;
+    EXPECT_EQ(3, mm.channels()) << "Unexpected no. of channels.";
+    for(int i=0; i<m1.cols; i++) {
+
+        EXPECT_EQ(m3(0)[i], mm3.at<Vec3TP >(0)[i]);
+        EXPECT_EQ(V_<float>::values[i], mm3.at<Vec3TP >(0)[i]) << "Mismatch at i=" << i;
+    }
+}
+
 /* Write additional type+value parameterized tests here.
  * Acquaint yourself with the values passed to along with each type.
  */
@@ -1263,7 +1303,8 @@ REGISTER_TYPED_TEST_CASE_P(MatPODTypesTest,
                            Vec_TRowMat_NoCopy,
                            Vec_TRowMat_Ownership,
                            Vec_TRowMat_AssignToMat,
-                           Push_back_randu_size); ///< register additional typed_test_p (i.e. unit test) routines here
+                           Push_back_randu_size,
+                           InterChannelCasting); ///< register additional typed_test_p (i.e. unit test) routines here
 
 ///< Register values to work with inside tests, note how they're used inside the tests
 template<> std::vector<float> V_<float>::values{-1.f, 0.f, 1.f, 100.f, 101.f, 200.f};
