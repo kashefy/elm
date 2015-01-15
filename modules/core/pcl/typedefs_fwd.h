@@ -14,7 +14,7 @@ namespace pcl {
 
 class PointXYZ;
 
-template <typename T> class PointCloud;
+template <typename TPoint> class PointCloud;
 
 class Vertices;
 

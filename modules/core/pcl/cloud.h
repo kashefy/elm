@@ -8,6 +8,7 @@
     #warning "Skipping pcl utilities since PCL support is disabled."
 #else // __WITH_PCL
 
+// any user will need complete type definitions, so let's provide them
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 
@@ -26,6 +27,9 @@ namespace sem {
  * @todo Avoid deep copy, add test coverage for 4-channel Mat
  */
 CloudXYZPtr Mat2PointCloud(const cv::Mat1f &m);
+
+template <class TPoint>
+boost::shared_ptr<pcl::PointCloud<TPoint > > Mat2PointCloud_(const cv::Mat1f &m);
 
 /**
  * @brief Convert XYZ point cloud to OpenCv Mat of floats.
