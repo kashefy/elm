@@ -457,9 +457,9 @@ protected:
 typedef ::testing::Types<float, int, uchar> PODTypes;
 
 ///< Initialize values to work with inside the tests, please note how they're used inside the tests
-template<> std::vector<float> V_<float>::values{-1.f, 0.f, 1.f, 100.f, 101.f, 200.f};
-template<> std::vector<int> V_<int>::values{-1, 0, 1, 100, 101, 200};
-template<> std::vector<uchar> V_<uchar>::values{255, 0, 1, 100, 101, 200};
+template<> std::vector<float>   V_<float>::values   {-1.f, 0.f, 1.f, 100.f, 101.f, 200.f};
+template<> std::vector<int>     V_<int>::values     {-1, 0, 1, 100, 101, 200};
+template<> std::vector<uchar>   V_<uchar>::values   {255, 0, 1, 100, 101, 200};
 
 TYPED_TEST_CASE(MatPODTypesTest, PODTypes);
 
