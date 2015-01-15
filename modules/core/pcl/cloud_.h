@@ -5,16 +5,14 @@
 
 #include <opencv2/core.hpp>
 
-using namespace std;
-using namespace cv;
-using namespace pcl;
-
 namespace sem {
 
 template <class TPoint>
 typename pcl::PointCloud<TPoint >::Ptr Mat2PointCloudTP(const cv::Mat1f &m)
 {
     // preemt code clutter due to all the different namespaces and types
+    using namespace std;
+    using namespace cv;
     using namespace pcl;
 
     typedef PointCloud<TPoint> CloudTP;
