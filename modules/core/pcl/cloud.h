@@ -25,7 +25,7 @@ namespace sem {
  * @return pointer to point cloud instance
  * @todo Avoid deep copy, add test coverage for 4-channel Mat
  */
-CloudXYZPtr Mat2PointCloud(const cv::Mat_<float> &m);
+CloudXYZPtr Mat2PointCloud(const cv::Mat1f &m);
 
 /**
  * @brief Convert XYZ point cloud to OpenCv Mat of floats.

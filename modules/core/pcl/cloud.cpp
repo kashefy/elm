@@ -4,7 +4,7 @@
 
 #include "core/exception.h"
 #include "core/cv/mat_utils.h"
-
+#include <pcl/point_traits.h>
 using namespace std;
 using namespace cv;
 using namespace pcl;
