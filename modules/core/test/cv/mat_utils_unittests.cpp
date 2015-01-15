@@ -432,6 +432,7 @@ TEST(Mat2PointTest, Invalid)
 
 /**
  * @brief A setup for repeating tests with different types of mat objects (int, float, uchar)
+ * @todo convert to TYPED_TESTS
  */
 template <class T>
 class MatPODTypesTest : public testing::Test
@@ -449,16 +450,6 @@ template<class T>
 struct V_
 {
     static std::vector<T> values;
-};
-
-/**
- * @brief this struct translates a fixed POD type into OpenCV's runtime type id
- * These values are set below once per type.
- */
-template<class T>
-struct MatDepth_
-{
-    static const int depth;
 };
 
 TYPED_TEST_CASE_P(MatPODTypesTest);
@@ -791,11 +782,6 @@ REGISTER_TYPED_TEST_CASE_P(MatPODTypesTest,
 template<> std::vector<float> V_<float>::values{-1.f, 0.f, 1.f, 100.f, 101.f, 200.f};
 template<> std::vector<int> V_<int>::values{-1, 0, 1, 100, 101, 200};
 template<> std::vector<uchar> V_<uchar>::values{255, 0, 1, 100, 101, 200};
-
-///< Register OpenCV's runtime type ids to work with inside tests
-template<> const int MatDepth_<float>::depth   = CV_32F;
-template<> const int MatDepth_<int>::depth     = CV_32S;
-template<> const int MatDepth_<uchar>::depth   = CV_8U;
 
 typedef testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of matrices
 INSTANTIATE_TYPED_TEST_CASE_P(MatUtilsPODTypesTest, MatPODTypesTest, PODTypes);
