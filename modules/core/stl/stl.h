@@ -36,12 +36,13 @@ namespace sem {
     template <class TKey, class TVal>
     std::vector<TKey > Keys(const std::map<TKey, TVal > &m)
     {
-        std::vector<TKey > v;
+        std::vector<TKey > v(m.size());
 
         typename std::map<TKey, TVal >::const_iterator itr;
+        int i=0;
         for(itr=m.begin(); itr != m.end(); ++itr) {
 
-            v.push_back(itr->first);
+            v[i++] = itr->first;
         }
         return v;
     }
