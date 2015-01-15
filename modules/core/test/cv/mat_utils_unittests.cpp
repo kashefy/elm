@@ -434,13 +434,8 @@ TEST(Mat2PointTest, Invalid)
  * @brief A setup for repeating tests with different types of mat objects (int, float, uchar)
  * @todo convert to TYPED_TESTS
  */
-template <class T>
-class MatPODTypesTest : public testing::Test
-{
-protected:
-};
 
-// define some helper routines and classes
+// define some helper routines and classes first
 
 /**
  * @brief the struct below enables defining values to be used inside the tests
@@ -452,13 +447,27 @@ struct V_
     static std::vector<T> values;
 };
 
-TYPED_TEST_CASE_P(MatPODTypesTest);
+/** @brief Define the test case
+ */
+template <class T>
+class MatPODTypesTest : public ::testing::Test
+{
+protected:
+};
+typedef ::testing::Types<float, int, uchar> PODTypes;
+
+///< Initialize values to work with inside the tests, please note how they're used inside the tests
+template<> std::vector<float> V_<float>::values{-1.f, 0.f, 1.f, 100.f, 101.f, 200.f};
+template<> std::vector<int> V_<int>::values{-1, 0, 1, 100, 101, 200};
+template<> std::vector<uchar> V_<uchar>::values{255, 0, 1, 100, 101, 200};
+
+TYPED_TEST_CASE(MatPODTypesTest, PODTypes);
 
 /**
  * @brief pass invalid input and check exception thrown
  * Multi-channels matrices not supported.
  */
-TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Invalid_MultiChannel) {
+TYPED_TEST(MatPODTypesTest, FindFirstOf_Invalid_MultiChannel) {
 
     std::vector<TypeParam> v = V_<TypeParam>::values;
 
@@ -497,7 +506,7 @@ TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Invalid_MultiChannel) {
  * @brief pass invalid empty input and check exception thrown
  * Multi-channels matrices not supported.
  */
-TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Invalid_MultiChannelEmpty) {
+TYPED_TEST(MatPODTypesTest, FindFirstOf_Invalid_MultiChannelEmpty) {
 
     std::vector<TypeParam> v = V_<TypeParam>::values;
     typedef Mat_<TypeParam> MatTP;
@@ -550,7 +559,7 @@ TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Invalid_MultiChannelEmpty) {
  * @brief pass invalid input and check exception thrown
  * Only continuous matrices supported for now.
  */
-TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Invalid_NonContinuous) {
+TYPED_TEST(MatPODTypesTest, FindFirstOf_Invalid_NonContinuous) {
 
     std::vector<TypeParam> v = V_<TypeParam>::values;
     typedef Mat_<TypeParam> MatTP;
@@ -614,7 +623,7 @@ TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Invalid_NonContinuous) {
 /**
  * @brief test finding elements in empty matrices
  */
-TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Empty) {
+TYPED_TEST(MatPODTypesTest, FindFirstOf_Empty) {
 
     std::vector<TypeParam> v = V_<TypeParam>::values;
     typedef Mat_<TypeParam> MatTP;
@@ -631,7 +640,7 @@ TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Empty) {
  * This test assumes that values[4] is within range and its value is unique.
  * Matrix is reshaped and transposed.
  */
-TYPED_TEST_P(MatPODTypesTest, FindFirstOf_NotFound) {
+TYPED_TEST(MatPODTypesTest, FindFirstOf_NotFound) {
 
     std::vector<TypeParam> v = V_<TypeParam>::values;
     typedef Mat_<TypeParam> MatTP;
@@ -653,7 +662,7 @@ TYPED_TEST_P(MatPODTypesTest, FindFirstOf_NotFound) {
  * @brief We expect to find something.
  * Matrix is reshaped and transposed.
  */
-TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Found) {
+TYPED_TEST(MatPODTypesTest, FindFirstOf_Found) {
 
     std::vector<TypeParam> v = V_<TypeParam>::values;
     typedef Mat_<TypeParam> MatTP;
@@ -686,7 +695,7 @@ TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Found) {
  * @brief One value is duplicated and placed into previous index
  * Matrix is reshaped and transposed.
  */
-TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Duplicate) {
+TYPED_TEST(MatPODTypesTest, FindFirstOf_Duplicate) {
 
     std::vector<TypeParam> v = V_<TypeParam>::values;
     typedef Mat_<TypeParam> MatTP;
@@ -724,7 +733,7 @@ TYPED_TEST_P(MatPODTypesTest, FindFirstOf_Duplicate) {
 /**
  * @brief Keep tabs on what happens when assigning a Mat of M channels to a Mat of N channels or generic Mat
  */
-TYPED_TEST_P(MatPODTypesTest, InterChannelCasting)
+TYPED_TEST(MatPODTypesTest, InterChannelCasting)
 {
     ASSERT_GE(V_<float>::values.size(), size_t(3)) << "This test requires at least 3 values to be defined.";
 
@@ -762,29 +771,6 @@ TYPED_TEST_P(MatPODTypesTest, InterChannelCasting)
         EXPECT_EQ(V_<TypeParam>::values[i], mm3.at<Vec3TP >(0)[i]) << "Mismatch at i=" << i;
     }
 }
-
-/* Write additional type+value parameterized tests here.
- * Acquaint yourself with the values passed to along with each type.
- */
-
-// Register test names
-REGISTER_TYPED_TEST_CASE_P(MatPODTypesTest,
-                           FindFirstOf_Invalid_NonContinuous,
-                           FindFirstOf_Invalid_MultiChannel,
-                           FindFirstOf_Invalid_MultiChannelEmpty,
-                           FindFirstOf_Empty,
-                           FindFirstOf_NotFound,
-                           FindFirstOf_Found,
-                           FindFirstOf_Duplicate,
-                           InterChannelCasting); ///< register additional typed_test_p (i.e. unit test) routines here
-
-///< Register values to work with inside tests, note how they're used inside the tests
-template<> std::vector<float> V_<float>::values{-1.f, 0.f, 1.f, 100.f, 101.f, 200.f};
-template<> std::vector<int> V_<int>::values{-1, 0, 1, 100, 101, 200};
-template<> std::vector<uchar> V_<uchar>::values{255, 0, 1, 100, 101, 200};
-
-typedef testing::Types<float, int, uchar> PODTypes;  ///< lists the usual suspects of matrices
-INSTANTIATE_TYPED_TEST_CASE_P(MatUtilsPODTypesTest, MatPODTypesTest, PODTypes);
 
 /**
  * @brief Keep tabs on overload call precedence
