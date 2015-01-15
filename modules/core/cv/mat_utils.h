@@ -1,8 +1,8 @@
 /** Non-template utility definitions
  * For template inline definitions see *_inl*
   */
-#ifndef SEM_CORE_MAT_UTILS_H_
-#define SEM_CORE_MAT_UTILS_H_
+#ifndef SEM_CORE_CV_MAT_UTILS_H_
+#define SEM_CORE_CV_MAT_UTILS_H_
 
 #include "core/typedefs_fwd.h"
 
@@ -26,13 +26,6 @@ cv::Mat_<unsigned char> ConvertTo8U(const cv::Mat &src);
  * @param dst matrix
  */
 void CumSum(const cv::Mat1f &src, cv::Mat1f &dst);
-
-/**
- * @brief Get string representation of matrix type
- * @param matrix
- * @return type as string
- */
-std::string MatTypeToString(const cv::Mat& m);
 
 /**
   * @brief Convert 2d point of integers to single channel Mat of integers
@@ -81,4 +74,4 @@ cv::Mat1f Reshape(const VecMat1f &v);
 
 } // sem namespace
 
-#endif // SEM_CORE_MAT_UTILS_H_
+#endif // SEM_CORE_CV_MAT_UTILS_H_
