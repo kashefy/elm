@@ -18,7 +18,7 @@
 namespace sem {
 
 /**
- * @brief Convert Mat of floats to XYZ point cloud.
+ * @brief Convert Mat of floats to point cloud.
  *
  * Involves a deep copy of matrix elements
  *
@@ -26,21 +26,19 @@ namespace sem {
  * @return pointer to point cloud instance
  * @todo Avoid deep copy, add test coverage for 4-channel Mat
  */
-CloudXYZPtr Mat2PointCloud(const cv::Mat1f &m);
-
 template <class TPoint>
 boost::shared_ptr<pcl::PointCloud<TPoint > > Mat2PointCloud_(const cv::Mat1f &m);
 
 /**
- * @brief Convert XYZ point cloud to OpenCV's Mat of floats.
+ * @brief Convert point cloud to OpenCV's Mat of floats.
+ *
+ * No deep copy involved, ownership of underlying data remains with point cloud.
  *
  * @param source point cloud
  * @return resulting Mat
  */
-cv::Mat1f PointCloud2Mat(CloudXYZPtr &cloud_ptr);
-
 template <class TPoint>
-cv::Mat1f PointCloud_2Mat(boost::shared_ptr<pcl::PointCloud<TPoint > > &cloud_ptr);
+cv::Mat1f PointCloud2Mat_(boost::shared_ptr<pcl::PointCloud<TPoint > > &cloud_ptr);
 
 } // namespace sem
 

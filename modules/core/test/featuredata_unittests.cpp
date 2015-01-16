@@ -22,8 +22,8 @@ protected:
         mat_ = Mat_f(4, 3);
         randn(mat_, 0.f, 100.f);
 
-        cld_ = Mat2PointCloud(mat_.clone());
-        mat_ = PointCloud2Mat(cld_).clone();
+        cld_ = Mat2PointCloud_<pcl::PointXYZ>(mat_.clone());
+        mat_ = PointCloud2Mat_<pcl::PointXYZ>(cld_).clone();
     }
 
     Mat_f mat_;
@@ -41,7 +41,7 @@ TEST_F(FeatureDataTest, Init_Cloud)
     CloudXYZPtr cld = to.get<CloudXYZPtr>();
 
     EXPECT_MAT_EQ(m, mat_);
-    EXPECT_MAT_EQ(PointCloud2Mat(cld), mat_);
+    EXPECT_MAT_EQ(PointCloud2Mat_<pcl::PointXYZ>(cld), mat_);
 }
 
 /**
@@ -55,7 +55,7 @@ TEST_F(FeatureDataTest, Init_Mat_f)
     CloudXYZPtr cld = to.get<CloudXYZPtr>();
 
     EXPECT_MAT_EQ(m, mat_);
-    EXPECT_MAT_EQ(PointCloud2Mat(cld), mat_);
+    EXPECT_MAT_EQ(PointCloud2Mat_<pcl::PointXYZ>(cld), mat_);
 }
 
 /**
@@ -191,27 +191,27 @@ TYPED_TEST(FeatureDataPOD_Test, Invalid_Cloud)
     EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
 
     // multi-row, 3-col
-    cld = Mat2PointCloud(Mat1f(4, 3, 0.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(4, 3, 0.f));
     EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
 
-    cld = Mat2PointCloud(Mat1f(4, 3, 1.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(4, 3, 1.f));
     EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
 
-    cld = Mat2PointCloud(Mat1f(4, 3, 2.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(4, 3, 2.f));
     EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
 
     // single row
-    cld = Mat2PointCloud(Mat1f(1, 3, 0.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(1, 3, 0.f));
     EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
 
-    cld = Mat2PointCloud(Mat1f(1, 3, 1.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(1, 3, 1.f));
     EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
 
     // 3-channel
-    cld = Mat2PointCloud(Mat3f(1, 1, 0.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat3f(1, 1, 0.f));
     EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
 
-    cld = Mat2PointCloud(Mat3f(1, 1, 1.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat3f(1, 1, 1.f));
     EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
 }
 

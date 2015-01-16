@@ -8,6 +8,7 @@
 #include "ts/ts.h"
 
 using namespace std;
+using namespace pcl;
 using namespace cv;
 using namespace sem;
 
@@ -55,7 +56,7 @@ TEST_F(VisitorCloudTest, FromMat_f)
     randn(m, 0.f, 100.f);
 
     CloudXYZPtr cld = to_(m);
-    Mat1f m2 = PointCloud2Mat(cld);
+    Mat1f m2 = PointCloud2Mat_<PointXYZ>(cld);
     hconcat(m, Mat1f(m.rows, 1, 1), m);
 
     EXPECT_MAT_EQ(m, m2);
@@ -66,7 +67,7 @@ TEST_F(VisitorCloudTest, Cloud)
 {
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
-    CloudXYZPtr cld = Mat2PointCloud(m);
+    CloudXYZPtr cld = Mat2PointCloud_<PointXYZ>(m);
 
     CloudXYZPtr cld2 = to_(cld);
 
@@ -93,7 +94,7 @@ TEST_F(VisitorCloudTest, ResetValid)
     CloudXYZPtr cld1 = to_(m);
     EXPECT_NO_THROW(to_.Reset());
 
-    CloudXYZPtr cld2 = Mat2PointCloud(m);
+    CloudXYZPtr cld2 = Mat2PointCloud_<PointXYZ>(m);
     CloudXYZPtr cld3 = to_(cld2);
     EXPECT_NO_THROW(to_.Reset());
 
@@ -111,7 +112,7 @@ TEST_F(VisitorCloudTest, Reset)
     hconcat(m0, Mat1f(m0.rows, 1, 1), m0);
 
     CloudXYZPtr cld = to_(m);
-    EXPECT_MAT_EQ(PointCloud2Mat(cld), m0);
+    EXPECT_MAT_EQ(PointCloud2Mat_<PointXYZ>(cld), m0);
 
     cld = to_(m); // result of first call is cached.
 
@@ -123,13 +124,13 @@ TEST_F(VisitorCloudTest, Reset)
 
         if(i == 0) {
 
-            EXPECT_MAT_EQ(PointCloud2Mat(cld), m0) << "Not suing cahced cloud.";
+            EXPECT_MAT_EQ(PointCloud2Mat_<PointXYZ>(cld), m0) << "Not suing cahced cloud.";
         }
         else {
 
             Mat1f m2 = m0.clone();
             m2.colRange(0, m2.cols-1).setTo(2.f);
-            EXPECT_MAT_EQ(PointCloud2Mat(cld), m2) << "Still using cached cloud";
+            EXPECT_MAT_EQ(PointCloud2Mat_<PointXYZ>(cld), m2) << "Still using cached cloud";
         }
         to_.Reset();
     }
@@ -145,7 +146,7 @@ TEST_F(VisitorCloudTest, FromVecVertices)
 
     CloudXYZPtr cld = to_(Mat2VecVertices(m));
 
-    Mat1f m2 = PointCloud2Mat(cld);
+    Mat1f m2 = PointCloud2Mat_<PointXYZ>(cld);
     hconcat(m, Mat1f(m.rows, 1, 1), m);
 
     EXPECT_MAT_EQ(m, m2);

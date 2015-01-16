@@ -131,8 +131,8 @@ protected:
             cloud_target_->points[i].x += 0.7f;
         }
 
-        sig_.Append(NAME_INPUT_POINT_CLOUD_SRC, PointCloud2Mat(cloud_in_));
-        sig_.Append(NAME_INPUT_POINT_CLOUD_TARGET, PointCloud2Mat(cloud_target_));
+        sig_.Append(NAME_INPUT_POINT_CLOUD_SRC, PointCloud2Mat_<PointXYZ>(cloud_in_));
+        sig_.Append(NAME_INPUT_POINT_CLOUD_TARGET, PointCloud2Mat_<PointXYZ>(cloud_target_));
     }
 
     virtual void TearDown()

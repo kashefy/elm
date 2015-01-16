@@ -9,6 +9,7 @@
 #include "ts/ts.h"
 
 using namespace std;
+using namespace pcl;
 using namespace cv;
 using namespace sem;
 
@@ -38,9 +39,9 @@ TEST_F(VisitorVecVerticesTest, EmptyVecVertices_Size)
     EXPECT_SIZE(0, to_(VecVertices()));
 }
 
-TEST_F(VisitorVecVerticesTest, Twos_cloud)
+TEST_F(VisitorVecVerticesTest, Twos_cloudXYZ)
 {
-    CloudXYZPtr in = Mat2PointCloud(Mat1f(4, 3, 2));
+    CloudXYZPtr in = Mat2PointCloud_<PointXYZ>(Mat1f(4, 3, 2));
 
     VecVertices vv = to_(in);
 

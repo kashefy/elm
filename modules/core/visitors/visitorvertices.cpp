@@ -6,6 +6,7 @@
 
 #include "core/pcl/cloud.h"
 
+using namespace pcl;
 using namespace sem;
 
 void VisitorVecVertices::Reset()
@@ -26,7 +27,7 @@ VecVertices VisitorVecVertices::operator()(CloudXYZPtr &c)
 {
     if(vv_.empty()) {
 
-        vv_ = Mat2VecVertices(PointCloud2Mat(c)); // or keep cache?
+        vv_ = Mat2VecVertices(PointCloud2Mat_<PointXYZ>(c)); // or keep cache?
     }
     return vv_;
 }

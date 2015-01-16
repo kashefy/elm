@@ -50,7 +50,7 @@ Mat_f VisitorMat_f::operator()(const VecVertices &vv) const
 
 Mat_f VisitorMat_f::operator()(CloudXYZPtr &c) const
 {
-    return PointCloud2Mat(c);
+    return PointCloud2Mat_<pcl::PointXYZ>(c);
 }
 
 #endif // __WITH_PCL

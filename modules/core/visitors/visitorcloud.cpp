@@ -6,6 +6,7 @@
 #include "core/pcl/cloud.h"
 #include "core/pcl/vertices.h"
 
+using namespace pcl;
 using namespace sem;
 
 void VisitorCloud::Reset()
@@ -26,7 +27,7 @@ CloudXYZPtr VisitorCloud::operator()(const VecVertices &vv)
 {
     if(!bool(c_)) {
 
-        c_ = Mat2PointCloud(VecVertices2Mat(vv, false));
+        c_ = Mat2PointCloud_<PointXYZ>(VecVertices2Mat(vv, false));
     }
     return c_;
 }
@@ -53,7 +54,7 @@ CloudXYZPtr VisitorCloud::operator()(const Mat_f &m)
 {
     if(!bool(c_)) {
 
-        c_ = Mat2PointCloud(m);
+        c_ = Mat2PointCloud_<PointXYZ>(m);
     }
     return c_;
 }

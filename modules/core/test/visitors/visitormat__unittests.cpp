@@ -89,7 +89,7 @@ TEST_F(VisitorMat_fTest, FromCloud)
 {
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
-    CloudXYZPtr cloud = Mat2PointCloud(m);
+    CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
 
     Mat_f m2 = to_(cloud);
     hconcat(m, Mat1f(m.rows, 1, 1), m);
@@ -108,7 +108,7 @@ TEST_F(VisitorMat_fTest, Reset_with_cloud)
     Mat_f m2 = to_(m);
     EXPECT_NO_THROW(to_.Reset());
 
-    CloudXYZPtr cloud = Mat2PointCloud(m);
+    CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
     m2 = to_(cloud);
     EXPECT_NO_THROW(to_.Reset());
 

@@ -79,27 +79,27 @@ TYPED_TEST_P(VisitorPOD_Test, Invalid_Cloud)
     EXPECT_THROW(to(cld), ExceptionTypeError);
 
     // multi-row, 3-col
-    cld = Mat2PointCloud(Mat1f(4, 3, 0.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(4, 3, 0.f));
     EXPECT_THROW(to(cld), ExceptionTypeError);
 
-    cld = Mat2PointCloud(Mat1f(4, 3, 1.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(4, 3, 1.f));
     EXPECT_THROW(to(cld), ExceptionTypeError);
 
-    cld = Mat2PointCloud(Mat1f(4, 3, 2.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(4, 3, 2.f));
     EXPECT_THROW(to(cld), ExceptionTypeError);
 
     // single row
-    cld = Mat2PointCloud(Mat1f(1, 3, 0.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(1, 3, 0.f));
     EXPECT_THROW(to(cld), ExceptionTypeError);
 
-    cld = Mat2PointCloud(Mat1f(1, 3, 1.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(1, 3, 1.f));
     EXPECT_THROW(to(cld), ExceptionTypeError);
 
     // 3-channel
-    cld = Mat2PointCloud(Mat3f(1, 1, 0.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat3f(1, 1, 0.f));
     EXPECT_THROW(to(cld), ExceptionTypeError);
 
-    cld = Mat2PointCloud(Mat3f(1, 1, 1.f));
+    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat3f(1, 1, 1.f));
     EXPECT_THROW(to(cld), ExceptionTypeError);
 }
 

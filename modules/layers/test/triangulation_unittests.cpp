@@ -114,7 +114,7 @@ protected:
 
         to_ = LayerFactory::CreateShared("Triangulation", cfg_, io_names_);
 
-        sig_.Append(NAME_INPUT_POINT_CLOUD, PointCloud2Mat(cloud_in_));
+        sig_.Append(NAME_INPUT_POINT_CLOUD, PointCloud2Mat_<PointXYZ>(cloud_in_));
     }
 
     virtual void TearDown()
