@@ -24,7 +24,7 @@ size_t FieldCount() {
  * @return no. of floats occupied by point struct
  */
 template <class TPoint>
-size_t FloatFootprintWPadding()
+size_t NbFloats()
 {
     static_assert(sizeof(TPoint) % sizeof(float) == 0, "This point type has non-float components");
     return sizeof(TPoint) / sizeof(float);
@@ -74,7 +74,7 @@ typename pcl::PointCloud<TPoint >::Ptr Mat2PointCloudTP(const cv::Mat1f &m)
 
     int nb_channels = m.channels();
     size_t field_count = FieldCount<TPoint >();
-    size_t sz_point = FloatFootprintWPadding<TPoint> ();
+    size_t sz_point = NbFloats<TPoint>();
 
     if(m.empty()) { // 1. empty
         cloud_ptr.reset(new CloudTP);
