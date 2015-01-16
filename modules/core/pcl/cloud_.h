@@ -2,7 +2,6 @@
 #define SEM_CORE_PCL_CLOUD__H
 
 #include <pcl/point_cloud.h>
-#include <pcl/point_traits.h>
 #include <pcl/common/io.h>      // getFields()
 
 #include "core/exception.h"
