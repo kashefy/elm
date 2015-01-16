@@ -5,7 +5,7 @@
 
 #include "core/exception.h"
 #include "core/cv/mat_utils.h"
-#include "core/pcl/cloud.h"
+#include "core/pcl/cloud_.h"
 #include "core/pcl/vertices.h"
 #include "core/typedefs_fwd.h"
 

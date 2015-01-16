@@ -5,7 +5,7 @@
 #include "core/visitors/visitorvertices.h"
 
 #include "core/exception.h"
-#include "core/pcl/cloud.h"
+#include "core/pcl/cloud_.h"
 #include "ts/ts.h"
 
 using namespace std;

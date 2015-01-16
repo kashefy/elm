@@ -4,7 +4,7 @@
 #include "core/visitors/visitormat_.h"
 
 #include "core/exception.h"
-#include "core/pcl/cloud.h"
+#include "core/pcl/cloud_.h"
 #include "core/pcl/vertices.h"
 #include "ts/ts.h"
 

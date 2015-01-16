@@ -3,7 +3,7 @@
 #ifdef __WITH_PCL // definitions below require PCL support
 
 #include "core/exception.h"
-#include "core/pcl/cloud.h"
+#include "core/pcl/cloud_.h"
 #include "core/pcl/vertices.h"
 
 using namespace pcl;

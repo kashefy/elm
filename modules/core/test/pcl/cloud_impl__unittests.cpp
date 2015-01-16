@@ -1,4 +1,4 @@
-#include "core/pcl/cloud_.h"
+#include "core/pcl/cloud_impl_.h"
 
 #include "ts/ts.h"
 
@@ -32,14 +32,14 @@ TYPED_TEST_CASE(PCL_Cloud_T_TypedTests, PCLPointTypes);
 
 TYPED_TEST(PCL_Cloud_T_TypedTests, FieldCount)
 {
-    ASSERT_GT(FieldCount<TypeParam >(), size_t(0)) << "This point type does not have any fields.";
-    EXPECT_EQ(FieldCount<TypeParam >(), Expected<TypeParam >::field_count);
+    ASSERT_GT(ConverterCloudMat_<TypeParam >::FieldCount(), size_t(0)) << "This point type does not have any fields.";
+    EXPECT_EQ(ConverterCloudMat_<TypeParam >::FieldCount(), Expected<TypeParam >::field_count);
 }
 
 TYPED_TEST(PCL_Cloud_T_TypedTests, NbFloats)
 {
-    ASSERT_GT(NbFloats<TypeParam >()*sizeof(float), size_t(0));
-    EXPECT_EQ(sizeof(TypeParam), NbFloats<TypeParam >()*sizeof(float));
+    ASSERT_GT(ConverterCloudMat_<TypeParam >::NbFloats()*sizeof(float), size_t(0));
+    EXPECT_EQ(sizeof(TypeParam), ConverterCloudMat_<TypeParam >::NbFloats()*sizeof(float));
 }
 
 

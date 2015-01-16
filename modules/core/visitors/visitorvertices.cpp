@@ -4,7 +4,7 @@
 
 #include <opencv2/core.hpp>
 
-#include "core/pcl/cloud.h"
+#include "core/pcl/cloud_.h"
 
 using namespace pcl;
 using namespace sem;

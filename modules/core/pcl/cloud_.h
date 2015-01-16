@@ -1,124 +1,47 @@
-#ifndef SEM_CORE_PCL_CLOUD__H
-#define SEM_CORE_PCL_CLOUD__H
+/** A collection of routines to facilitate working with PCL data types.
+ * Only defined if PCL support exists.
+ */
+#ifndef SEM_CORE_PCL_CLOUD__H_
+#define SEM_CORE_PCL_CLOUD__H_
 
+#ifndef __WITH_PCL
+    #warning "Skipping pcl utilities since PCL support is disabled."
+#else // __WITH_PCL
+
+// any user will need complete type definitions, so let's provide them
+#include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
-#include <pcl/common/io.h>      // getFields()
 
-#include "core/exception.h"
+#include "core/cv/typedefs_fwd.h"
+#include "core/pcl/typedefs_fwd.h"
 
 namespace sem {
 
-/** @brief get no. of fields of a pcl point type.
- * This does not account for SSE alignment or mixed types
- * @return field count
+/**
+ * @brief Convert Mat of floats to point cloud.
+ *
+ * Involves a deep copy of matrix elements
+ *
+ * @param source matrix
+ * @return pointer to point cloud instance
+ * @todo Avoid deep copy, add test coverage for 4-channel Mat
  */
 template <class TPoint>
-size_t FieldCount() {
+boost::shared_ptr<pcl::PointCloud<TPoint > > Mat2PointCloud_(const cv::Mat1f &m);
 
-    std::vector<pcl::PCLPointField> fields;
-    pcl::getFields<TPoint>(fields);
-    return fields.size();
-}
-
-/** @brief Get no. of floats occupied by Point struct
- * @return no. of floats occupied by point struct
+/**
+ * @brief Convert point cloud to OpenCV's Mat of floats.
+ *
+ * No deep copy involved, ownership of underlying data remains with point cloud.
+ *
+ * @param source point cloud
+ * @return resulting Mat
  */
 template <class TPoint>
-size_t NbFloats()
-{
-    static_assert(sizeof(TPoint) % sizeof(float) == 0, "This point type has non-float components");
-    return sizeof(TPoint) / sizeof(float);
-}
-
-template <class TPoint>
-void CopyMatData2Cloud(const cv::Mat1f &src, size_t step, typename pcl::PointCloud<TPoint >::Ptr dst)
-{
-    float *mat_data_ptr = reinterpret_cast<float*>(src.data);
-    size_t step_size = sizeof(float)*step;
-    for(typename pcl::PointCloud<TPoint>::iterator itr=dst->begin();
-            itr != dst->end(); ++itr) {
-
-        memcpy((*itr).data, mat_data_ptr, step_size);
-        mat_data_ptr += step;
-    }
-}
-
-/** @brief Convert Mat of floats to template PointCloud
- *
- * This conversion involves a deep copy.
- *
- * logic followed:
- *
- * 1. empty Mat -> produce an empty PointCloud
- * 2. single-channel Mat columns are divisible by no. of point fields, mat data is not pre-padded
- * 3. single-channel Mat columns are divisible by no. of points' float capacity, mat contains padded data
- * 4. multi-channel Mat...
- *
- * @param mat with point cloud data
- * @return PointCloud after conversion
- */
-template <class TPoint>
-typename pcl::PointCloud<TPoint >::Ptr Mat2PointCloudTP(const cv::Mat1f &m)
-{
-    // preemt code clutter due to all the different namespaces and types
-    using namespace std;
-    using namespace cv;
-    using namespace pcl;
-
-    typedef PointCloud<TPoint> CloudTP;
-    typedef typename PointCloud<TPoint>::iterator CloudTPIter;
-
-    // all types and namespaces defined.
-
-    typename CloudTP::Ptr cloud_ptr;
-
-    int nb_channels = m.channels();
-    size_t field_count = FieldCount<TPoint >();
-    size_t sz_point = NbFloats<TPoint>();
-
-    if(m.empty()) { // 1. empty
-        cloud_ptr.reset(new CloudTP);
-    }
-    else if(nb_channels == 1) {
-
-        if(m.cols % field_count == 0) { // 2. no padding
-
-            // determine width and height of new point cloud
-            cloud_ptr.reset(new CloudTP(m.cols/static_cast<int>(field_count), m.rows));
-            sem::CopyMatData2Cloud<TPoint >(m, field_count, cloud_ptr);
-        }
-        else if(m.cols % sz_point == 0) {
-
-            // determine width and height of new point cloud
-            cloud_ptr.reset(new CloudTP(m.cols/static_cast<int>(sz_point), m.rows));
-            sem::CopyMatData2Cloud<TPoint >(m, sz_point, cloud_ptr);
-        }
-        else {
-
-            stringstream s;
-            s << "Failed to convert this matrix to a point cloud." <<
-                 " No. of Mat columns must be a multiple of the Point's field count "<<
-                 "(with or without padding).";
-            SEM_THROW_BAD_DIMS(s.str());
-        }
-    }
-    else if(nb_channels==static_cast<int>(field_count) || nb_channels==static_cast<int>(sz_point)) { // n-channel matrix
-
-        cloud_ptr.reset(new CloudTP(m.cols, m.rows));
-        sem::CopyMatData2Cloud<TPoint >(m, static_cast<size_t>(nb_channels), cloud_ptr);
-    }
-    else {
-
-        stringstream s;
-        s << "Failed to convert this matrix to point cloud." <<
-             " No. of Mat channels must be a multiple of the Point type's field count "<<
-             "(with or without padding).";
-        SEM_THROW_BAD_DIMS(s.str());
-    }
-
-    return cloud_ptr;
-}
+cv::Mat1f PointCloud2Mat_(boost::shared_ptr<pcl::PointCloud<TPoint > > &cloud_ptr);
 
 } // namespace sem
 
-#endif // CLOUD__H
+#endif // __WITH_PCL
+
+#endif // SEM_CORE_PCL_CLOUD__H_

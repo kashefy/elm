@@ -5,7 +5,7 @@
 
 #include "core/typedefs_fwd.h"
 #include "core/pcl/typedefs_fwd.h"
-#include "core/pcl/cloud.h"
+#include "core/pcl/cloud_.h"
 #include "core/visitors/visitor_.h"
 
 /**

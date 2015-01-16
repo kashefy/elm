@@ -1,4 +1,4 @@
-#include "core/pcl/cloud.h"
+#include "core/pcl/cloud_.h"
 
 #ifdef __WITH_PCL // PCL support required for these tests
 
