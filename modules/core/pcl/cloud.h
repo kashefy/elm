@@ -32,12 +32,15 @@ template <class TPoint>
 boost::shared_ptr<pcl::PointCloud<TPoint > > Mat2PointCloud_(const cv::Mat1f &m);
 
 /**
- * @brief Convert XYZ point cloud to OpenCv Mat of floats.
+ * @brief Convert XYZ point cloud to OpenCV's Mat of floats.
  *
  * @param source point cloud
  * @return resulting Mat
  */
 cv::Mat1f PointCloud2Mat(CloudXYZPtr &cloud_ptr);
+
+template <class TPoint>
+cv::Mat1f PointCloud_2Mat(boost::shared_ptr<pcl::PointCloud<TPoint > > &cloud_ptr);
 
 } // namespace sem
 

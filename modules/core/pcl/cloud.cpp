@@ -14,11 +14,20 @@ using namespace sem;
 namespace sem {
 
 // macro for implementing Mat2PointCloud_() specializations
-#define ADD_SPECIALIZATION_Mat2PointCloud__(TPoint) template<> boost::shared_ptr<pcl::PointCloud<TPoint > > Mat2PointCloud_(const Mat1f &m) { \
+#define ADD_SPECIALIZATION__Mat2PointCloud___(TPoint) template<> boost::shared_ptr<pcl::PointCloud<TPoint > > Mat2PointCloud_(const Mat1f &m) { \
     return Mat2PointCloudTP<TPoint>(m); \
 }
 
-ADD_SPECIALIZATION_Mat2PointCloud__(PointXYZ)
+ADD_SPECIALIZATION__Mat2PointCloud___(PointXYZ)
+
+// macro for implementing Mat2PointCloud_() specializations
+#define ADD_SPECIALIZATION__PointCloud_2Mat__(TPoint) template<> cv::Mat1f PointCloud_2Mat(typename pcl::PointCloud<TPoint >::Ptr &cloud_ptr) {    \
+                                                                                                                                        \
+    TPoint *points_ptr = cloud_ptr->points.data();                                                                                      \
+    return cv::Mat1f(cloud_ptr->height, cloud_ptr->width*static_cast<int>(NbFloats<TPoint>()), reinterpret_cast<float*>(points_ptr));   \
+}
+
+ADD_SPECIALIZATION__PointCloud_2Mat__(PointXYZ)
 
 } // namespace sem
 
@@ -29,8 +38,7 @@ CloudXYZPtr sem::Mat2PointCloud(const Mat_<float> &m)
 
 Mat1f sem::PointCloud2Mat(CloudXYZPtr &cloud_ptr)
 {
-    PointXYZ *points_ptr = cloud_ptr->points.data();
-    return Mat1f(cloud_ptr->height, cloud_ptr->width*4, reinterpret_cast<float*>(points_ptr));
+    return PointCloud_2Mat<PointXYZ>(cloud_ptr);
 }
 
 #endif // __WITH_PCL

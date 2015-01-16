@@ -83,13 +83,13 @@ typename pcl::PointCloud<TPoint >::Ptr Mat2PointCloudTP(const cv::Mat1f &m)
 
         if(m.cols % field_count == 0) { // 2. no padding
 
-            // determine width and height of new poValuesint cloud
+            // determine width and height of new point cloud
             cloud_ptr.reset(new CloudTP(m.cols/static_cast<int>(field_count), m.rows));
             sem::CopyMatData2Cloud<TPoint >(m, field_count, cloud_ptr);
         }
         else if(m.cols % sz_point == 0) {
 
-            // determine width and height of new poValuesint cloud
+            // determine width and height of new point cloud
             cloud_ptr.reset(new CloudTP(m.cols/static_cast<int>(sz_point), m.rows));
             sem::CopyMatData2Cloud<TPoint >(m, sz_point, cloud_ptr);
         }
@@ -108,6 +108,7 @@ typename pcl::PointCloud<TPoint >::Ptr Mat2PointCloudTP(const cv::Mat1f &m)
         sem::CopyMatData2Cloud<TPoint >(m, static_cast<size_t>(nb_channels), cloud_ptr);
     }
     else {
+
         stringstream s;
         s << "Failed to convert this matrix to point cloud." <<
              " No. of Mat channels must be a multiple of the Point type's field count "<<
