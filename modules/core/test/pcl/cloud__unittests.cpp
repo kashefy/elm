@@ -211,7 +211,7 @@ TEST(PCLUtilsMat2PointCloudTEST, Values_Organized3Ch)
 
 /**
  * @brief Populate a single and 3-channel matrix with same values
- * and compare that both result in the same point cloud.
+ * and compare that both result into the same point cloud.
  */
 TEST(PCLUtilsMat2PointCloudTEST, SingleChannelVs3ChannelMat)
 {
@@ -245,6 +245,7 @@ TEST(PCLUtilsMat2PointCloudTEST, SingleChannelVs3ChannelMat)
     }
 }
 
+// reverse conversion direction
 TEST(PCLUtilsPointCloud_2MatTEST, Empty)
 {
     CloudXYZPtr cloud_ptr;
