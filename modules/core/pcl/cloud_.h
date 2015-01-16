@@ -22,9 +22,15 @@ namespace sem {
  *
  * Involves a deep copy of matrix elements
  *
+ * Types for which specializations exist:
+ * pcl::PointXYZ, pcl::Normal, pcl::PointNormal
+ *
  * @param source matrix
  * @return pointer to point cloud instance
- * @todo Avoid deep copy, add test coverage for 4-channel Mat
+ *
+ * @todo Avoid deep copy
+ * @todo add test coverage for 4-channel Mat
+ * @todo produce clearer error messages for types without specializations
  */
 template <class TPoint>
 boost::shared_ptr<pcl::PointCloud<TPoint > > Mat2PointCloud_(const cv::Mat1f &m);
@@ -34,8 +40,12 @@ boost::shared_ptr<pcl::PointCloud<TPoint > > Mat2PointCloud_(const cv::Mat1f &m)
  *
  * No deep copy involved, ownership of underlying data remains with point cloud.
  *
+ * Types for which specializations exist:
+ * pcl::PointXYZ, pcl::Normal, pcl::PointNormal
+ *
  * @param source point cloud
  * @return resulting Mat
+ * @todo produce clearer error messages for types without specializations
  */
 template <class TPoint>
 cv::Mat1f PointCloud2Mat_(boost::shared_ptr<pcl::PointCloud<TPoint > > &cloud_ptr);

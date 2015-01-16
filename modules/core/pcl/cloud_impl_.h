@@ -1,6 +1,8 @@
 #ifndef SEM_CORE_PCL_CLOUD_IMPL__H_
 #define SEM_CORE_PCL_CLOUD_IMPL__H_
 
+#include <iostream>
+
 #include <pcl/point_cloud.h>
 #include <pcl/common/io.h>      // getFields()
 
@@ -20,6 +22,14 @@ public:
     {
         std::vector<pcl::PCLPointField> fields;
         pcl::getFields<TPoint>(fields);
+
+//        for(size_t i=0; i<fields.size(); i++)
+//        {
+//            pcl::PCLPointField f = fields[i];
+//            std::cout<<f.name<<",";
+//        }
+//        std::cout<<std::endl;
+
         return fields.size();
     }
 
@@ -39,7 +49,8 @@ public:
         for(typename pcl::PointCloud<TPoint>::iterator itr=dst->begin();
                 itr != dst->end(); ++itr) {
 
-            memcpy((*itr).data, mat_data_ptr, step_size);
+            //memcpy((*itr).data, mat_data_ptr, step_size); // Normal has data_n[] member, not data[]
+            memcpy(&(*itr), mat_data_ptr, step_size);       // dangerous
             mat_data_ptr += step;
         }
     }

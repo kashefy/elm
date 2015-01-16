@@ -18,8 +18,6 @@ namespace sem {
     return ConverterCloudMat_<TPoint>::Mat2PointCloud(m); \
 }
 
-ADD_SPECIALIZATION__Mat2PointCloud___(PointXYZ)
-
 // macro for implementing Mat2PointCloud_() specializations
 #define ADD_SPECIALIZATION__PointCloud2Mat___(TPoint) template<> cv::Mat1f PointCloud2Mat_(typename pcl::PointCloud<TPoint >::Ptr &cloud_ptr) {    \
                                                                                                                                         \
@@ -27,7 +25,14 @@ ADD_SPECIALIZATION__Mat2PointCloud___(PointXYZ)
     return cv::Mat1f(cloud_ptr->height, cloud_ptr->width*static_cast<int>(ConverterCloudMat_<TPoint>::NbFloats()), reinterpret_cast<float*>(points_ptr));   \
 }
 
+ADD_SPECIALIZATION__Mat2PointCloud___(PointXYZ)
 ADD_SPECIALIZATION__PointCloud2Mat___(PointXYZ)
+
+ADD_SPECIALIZATION__Mat2PointCloud___(Normal)
+ADD_SPECIALIZATION__PointCloud2Mat___(Normal)
+
+ADD_SPECIALIZATION__Mat2PointCloud___(PointNormal)
+ADD_SPECIALIZATION__PointCloud2Mat___(PointNormal)
 
 } // namespace sem
 

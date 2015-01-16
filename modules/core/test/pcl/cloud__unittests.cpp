@@ -168,7 +168,7 @@ TEST(PCLUtilsMat2PointCloudTEST, ValuesNonOrganized3Ch)
 /**
  * @brief check values stored in organized point cloud after conversion
  */
-TEST(PCLUtilsMat2PointCloudTEST, ValuesOrganized)
+TEST(PCLUtilsMat2PointCloudTEST, Values_Organized)
 {
     // organized point cloud
     Mat1f m(4, 3);
@@ -188,7 +188,7 @@ TEST(PCLUtilsMat2PointCloudTEST, ValuesOrganized)
     }
 }
 
-TEST(PCLUtilsMat2PointCloudTEST, ValuesOrganized3Ch)
+TEST(PCLUtilsMat2PointCloudTEST, Values_Organized3Ch)
 {
     // organized point cloud
     Mat3f m(4, 3);
