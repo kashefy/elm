@@ -1,18 +1,18 @@
 #include "sem/core/area.h"
 
+#include <opencv2/core.hpp>
+
 #include "sem/core/exception.h"
 
 using namespace cv;
 
 base_AUC::base_AUC()
 {
-
 }
 
 Trapz::Trapz()
     : base_AUC()
 {
-
 }
 
 float Trapz::operator ()(const Mat1f &x, const Mat1f &y) const

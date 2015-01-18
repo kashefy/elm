@@ -1,7 +1,7 @@
 #ifndef SEM_CORE_AREA_H_
 #define SEM_CORE_AREA_H_
 
-#include <opencv2/core.hpp>
+#include "sem/core/cv/typedefs_fwd.h"
 
 class base_AUC
 {
