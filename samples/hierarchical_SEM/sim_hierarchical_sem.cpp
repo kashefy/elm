@@ -2,8 +2,8 @@
  */
 #include <iostream>
 
-#include "core/core.h"
-#include "simulationhsem.h"
+#include "sem/core/core.h"
+#include "sem/simulationhsem.h"
 
 using namespace std;
 

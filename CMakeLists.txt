@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 2.8.7)
 # ----------------------------------------------------------------------------
 set(ROOT_PROJECT sem)
 project(${ROOT_PROJECT})
-set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules)
+set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules) # enforce includes to start with project's parent dir (e.g. #include <sem/core/core.h>)
 set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
 
@@ -196,7 +196,7 @@ endif(WITH_PCL)
 
 include_directories(${${ROOT_PROJECT}_INCLUDE_DIRS})
 
-add_subdirectory(modules)
+add_subdirectory(modules/${ROOT_PROJECT})
 add_subdirectory(samples)
 
 # ----------------------------------------------------------------------------
