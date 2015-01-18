@@ -13,7 +13,7 @@
 // define constants
 namespace sem
 {
-static int NA_IDX   =   -1;   ///< non-applicable index
+extern int NA_IDX;  ///< = -1; non-applicable index
 
 }
 
