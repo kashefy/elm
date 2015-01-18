@@ -1,7 +1,7 @@
 #ifndef SEM_CORE_VISITORCLOUD_H_
 #define SEM_CORE_VISITORCLOUD_H_
 
-#ifdef __WITH_PCL // the following visitor derived class definitions requires PCL support
+#ifdef __WITH_PCL // the following visitor derived class definition requires PCL support
 
 #include "core/typedefs_fwd.h"
 #include "core/pcl/typedefs_fwd.h"
