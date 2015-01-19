@@ -1,47 +1,29 @@
 #ifndef SEM_CORE_PCL_CLOUD_IMPL__H_
 #define SEM_CORE_PCL_CLOUD_IMPL__H_
 
-#include <iostream>
+#ifdef __WITH_PCL // the following template Converter Cloud Mat class requires PCL support
 
 #include <pcl/point_cloud.h>
-#include <pcl/common/io.h>      // getFields()
 
 #include "sem/core/exception.h"
+#include "sem/core/pcl/point_traits.h"
 
 namespace sem {
 
-/** @brief get no. of fields of a pcl point type.
- * This does not account for SSE alignment or mixed types
- * @return field count
+/**
+ * @brief Template class with utilities for Cloud-Mat conversions depending on Point type
  */
 template <class TPoint>
 class ConverterCloudMat_
 {
 public:
-    static size_t FieldCount()
-    {
-        std::vector<pcl::PCLPointField> fields;
-        pcl::getFields<TPoint>(fields);
-
-//        for(size_t i=0; i<fields.size(); i++)
-//        {
-//            pcl::PCLPointField f = fields[i];
-//            std::cout<<f.name<<",";
-//        }
-//        std::cout<<std::endl;
-
-        return fields.size();
-    }
-
-    /** @brief Get no. of floats occupied by Point struct
-     * @return no. of floats occupied by point struct
+    typedef PCLPointTraits_<TPoint> PointTraitsTP;
+    /**
+     * @brief Copy Mat data to cloud
+     * @param src Mat
+     * @param step (no. of floats per element)
+     * @param dst cloud
      */
-    static size_t NbFloats()
-    {
-        static_assert(sizeof(TPoint) % sizeof(float) == 0, "This point type has non-float components");
-        return sizeof(TPoint) / sizeof(float);
-    }
-
     static void CopyMatData2Cloud(const cv::Mat1f &src, size_t step, typename pcl::PointCloud<TPoint >::Ptr dst)
     {
         float *mat_data_ptr = reinterpret_cast<float*>(src.data);
@@ -84,8 +66,8 @@ public:
         typename CloudTP::Ptr cloud_ptr;
 
         int nb_channels = m.channels();
-        size_t field_count = ConverterCloudMat_::FieldCount();
-        size_t sz_point = ConverterCloudMat_::NbFloats();
+        size_t field_count = PointTraitsTP::FieldCount();
+        size_t sz_point = PointTraitsTP::NbFloats();
 
         if(m.empty()) { // 1. empty
             cloud_ptr.reset(new CloudTP);
@@ -132,5 +114,9 @@ public:
 };
 
 } // namespace sem
+
+#else // __WITH_PCL
+    #warning "Unable to define template Converter Cloud Mat without PCL support."
+#endif // __WITH_PCL
 
 #endif // SEM_CORE_PCL_CLOUD_IMPL__H_

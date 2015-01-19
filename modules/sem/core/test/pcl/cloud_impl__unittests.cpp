@@ -1,74 +1,29 @@
 #include "sem/core/pcl/cloud_impl_.h"
-#include <pcl/point_traits.h>
 
+#include "sem/core/pcl/point_traits.h"
+#include "sem/ts/pcl_point_typed_tests.h"
 #include "sem/ts/ts.h"
 
 using namespace std;
 using namespace cv;
 using namespace pcl;
 using namespace sem;
+using namespace sem::ts;
 
 namespace {
 
 template<typename TPoint>
-class PCL_Cloud_T_TypedTests : public ::testing::Test
-{
-protected:
-};
-typedef ::testing::Types<PointXYZ, Normal, PointNormal> PCLPointTypes;
-
-/** @brief helper struct with expected results
- */
-template <typename TPoint>
-struct Expected
-{
-    static const size_t field_count;
-    static const size_t nb_floats;
-    static const std::string name;
-};
-
-#define SEM_SET_EXPECTED_POINT_NAME(TPoint)             template<> const std::string Expected<TPoint>::name = #TPoint
-#define SEM_SET_EXPECTED_POINT_FIELD_COUNT(TPoint, c)   template<> const size_t Expected<TPoint>::field_count = c
-#define SEM_SET_EXPECTED_POINT_NB_FLOAT(TPoint, n) template<> const size_t Expected<TPoint>::nb_floats = n
-
-/** Set expected attributes for a Point type used in tests below.
- *  @param TPoint point type
- *  @param c field count    (no. of floats without padding)
- *  @param n no. of floats occupied (no. of floats with padding)
-  */
-#define SEM_SET_EXPECTED_POINT_ATTR(TPoint, c, n) SEM_SET_EXPECTED_POINT_NAME(TPoint); SEM_SET_EXPECTED_POINT_FIELD_COUNT(TPoint, c); SEM_SET_EXPECTED_POINT_NB_FLOAT(TPoint, n)
-
-SEM_SET_EXPECTED_POINT_ATTR(PointXYZ,   3,  4);  // x, y, z
-SEM_SET_EXPECTED_POINT_ATTR(Normal,     4,  8);  // n1, n2, n3, curvature
-SEM_SET_EXPECTED_POINT_ATTR(PointNormal, 7, 12); // PointXYZ + Normal = 4+3
-
-TYPED_TEST_CASE(PCL_Cloud_T_TypedTests, PCLPointTypes);
-
-TYPED_TEST(PCL_Cloud_T_TypedTests, FieldCount)
-{
-    ASSERT_GT(ConverterCloudMat_<TypeParam >::FieldCount(), size_t(0)) << "This point type does not have any fields.";
-    EXPECT_EQ(ConverterCloudMat_<TypeParam >::FieldCount(), Expected<TypeParam >::field_count);
-}
-
-TYPED_TEST(PCL_Cloud_T_TypedTests, NbFloats)
-{
-    ASSERT_GT(ConverterCloudMat_<TypeParam >::NbFloats()*sizeof(float), size_t(0));
-    EXPECT_EQ(sizeof(TypeParam), ConverterCloudMat_<TypeParam >::NbFloats()*sizeof(float));
-    EXPECT_EQ(ConverterCloudMat_<TypeParam >::NbFloats(), Expected<TypeParam >::nb_floats);
-}
-
-template<typename TPoint>
-class PCL_Cloud_T_Conversion_Single_Ch_TypedTests : public PCL_Cloud_T_TypedTests<TPoint >
+class PCL_Cloud_T_Conversion_Single_Ch_TypedTests : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
-        typedef ConverterCloudMat_<TPoint > C_;
+        typedef PCLPointTraits_<TPoint > PTraits;
 
-        field_count_sz_ = C_::FieldCount();
+        field_count_sz_ = PTraits::FieldCount();
         field_count_i_ = static_cast<int>(field_count_sz_);
 
-        nb_floats_sz_ = C_::NbFloats();
+        nb_floats_sz_ = PTraits::NbFloats();
         nb_floats_i_ = static_cast<int>(nb_floats_sz_);
     }
 
@@ -288,6 +243,11 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Values_Organized)
     }
 }
 
+// must preceed static_assertions
+SEM_SET_EXPECTED_POINT_ATTR(pcl::PointXYZ,   3,  4);  // x, y, z
+SEM_SET_EXPECTED_POINT_ATTR(pcl::Normal,     4,  8);  // n1, n2, n3, curvature
+SEM_SET_EXPECTED_POINT_ATTR(pcl::PointNormal, 7, 12); // PointXYZ + Normal = 4+3
+
 /**
  * @brief test Mat to Point cloud conversion with multi-channel Mat input.
  * Since OpenCV doesn't allow creation of Mat objects with > 4 channels, we'll limit tests to an appropriate subset
@@ -307,7 +267,7 @@ protected:
 
         /** Sanity check that our subset of PointTypes is fit for mutli-channel tests
          */
-        static_assert(Expected<TPoint >::field_count <= 4,
+        static_assert(ExpectedPointAttr_<TPoint >::field_count <= 4,
                       "No. of fields exceed max no. of channels allowed by OpenCV.");
         PCL_Cloud_T_Conversion_Single_Ch_TypedTests<TPoint>::SetUp();
     }
@@ -380,7 +340,7 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Dims)
 
         for(int c=1; c<7; c++) {
 
-            Mat_<Vec<float, Expected<TypeParam >::field_count > > m(r, c, 1.f);
+            Mat_<Vec<float, ExpectedPointAttr_<TypeParam >::field_count > > m(r, c, 1.f);
 
             typename PointCloud<TypeParam >::Ptr cloud_ptr;
 
@@ -401,7 +361,7 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, IsOrganized)
 {
     typedef ConverterCloudMat_<TypeParam > C_;
 
-    Mat_<Vec<float, Expected<TypeParam >::field_count > > m(9, 9, 1.f);
+    Mat_<Vec<float, ExpectedPointAttr_<TypeParam >::field_count > > m(9, 9, 1.f);
 
     EXPECT_TRUE(C_::Mat2PointCloud(m)->isOrganized());
     EXPECT_TRUE(C_::Mat2PointCloud(m.reshape(1, 3))->isOrganized());
@@ -417,7 +377,7 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Values_NonOrganized)
 
     const int CLOUD_COLS=3;
 
-    Mat_<Vec<float, Expected<TypeParam >::field_count > > m(9, CLOUD_COLS, 1.f);
+    Mat_<Vec<float, ExpectedPointAttr_<TypeParam >::field_count > > m(9, CLOUD_COLS, 1.f);
     randn(m, 0.f, 100.f);
     typename PointCloud<TypeParam >::Ptr cloud_ptr = C_::Mat2PointCloud(m);
 
@@ -427,7 +387,7 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Values_NonOrganized)
         TypeParam pt = *itr;
         float *pt_data_ptr = reinterpret_cast<float*>(&pt);
 
-        Vec<float, Expected<TypeParam >::field_count > v = m(i++);
+        Vec<float, ExpectedPointAttr_<TypeParam >::field_count > v = m(i++);
 
         for(int field_idx=0; field_idx<this->field_count_i_; field_idx++) {
 
@@ -446,7 +406,7 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Values_Organized)
     const int CLOUD_COLS=3;
 
     // organized point cloud
-    Mat_<Vec<float, Expected<TypeParam >::field_count > > m(9, CLOUD_COLS, 1.f);
+    Mat_<Vec<float, ExpectedPointAttr_<TypeParam >::field_count > > m(9, CLOUD_COLS, 1.f);
     randn(m, 0.f, 100.f);
     typename PointCloud<TypeParam >::Ptr cloud_ptr = C_::Mat2PointCloud(m);
 
@@ -457,7 +417,7 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Values_Organized)
             TypeParam pt = cloud_ptr->at(c, r);;
             float *pt_data_ptr = reinterpret_cast<float*>(&pt);
 
-            Vec<float, Expected<TypeParam >::field_count > v = m(r, c);
+            Vec<float, ExpectedPointAttr_<TypeParam >::field_count > v = m(r, c);
 
             for(int field_idx=0; field_idx<this->field_count_i_; field_idx++) {
 
@@ -482,11 +442,11 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Single_Ch_vs_multi_channe
     Mat1f m_single_ch(ROWS, CLOUD_COLS*this->field_count_i_);
     randn(m_single_ch, 0.f, 100.f);
 
-    Mat_<Vec<float, Expected<TypeParam >::field_count > > m_multi_ch(ROWS, CLOUD_COLS);
+    Mat_<Vec<float, ExpectedPointAttr_<TypeParam >::field_count > > m_multi_ch(ROWS, CLOUD_COLS);
 
     for(size_t i=0, j=0; i<m_single_ch.total(); i+=this->field_count_i_) {
 
-        Vec<float, Expected<TypeParam >::field_count > tmp;
+        Vec<float, ExpectedPointAttr_<TypeParam >::field_count > tmp;
         for(int k=0; k<this->field_count_i_; k++) {
 
             tmp[k] = m_single_ch(i+k);

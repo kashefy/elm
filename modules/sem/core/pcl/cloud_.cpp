@@ -5,6 +5,7 @@
 #include "sem/core/exception.h"
 #include "sem/core/cv/mat_utils.h"
 #include "sem/core/pcl/cloud_impl_.h"
+#include "sem/core/pcl/point_traits.h"
 
 using namespace std;
 using namespace cv;
@@ -22,7 +23,7 @@ namespace sem {
 #define SEM_ADD_SPECIALIZATION__PointCloud2Mat___(TPoint) template<> cv::Mat1f PointCloud2Mat_(typename pcl::PointCloud<TPoint >::Ptr &cloud_ptr) {    \
                                                                                                                                         \
     TPoint *points_ptr = cloud_ptr->points.data();                                                                                      \
-    return cv::Mat1f(cloud_ptr->height, cloud_ptr->width*static_cast<int>(ConverterCloudMat_<TPoint>::NbFloats()), reinterpret_cast<float*>(points_ptr));   \
+    return cv::Mat1f(cloud_ptr->height, cloud_ptr->width*static_cast<int>(PCLPointTraits_<TPoint>::NbFloats()), reinterpret_cast<float*>(points_ptr));   \
 }
 
 SEM_ADD_SPECIALIZATION__Mat2PointCloud___(PointXYZ)
