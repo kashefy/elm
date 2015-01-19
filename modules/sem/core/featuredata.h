@@ -64,7 +64,7 @@ protected:
 #ifdef __WITH_PCL
     boost::variant< cv::Mat1f, sem::CloudXYZPtr, sem::VecVertices, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
 
-    VisitorCloud visitor_cloud_;    ///< visitor for converting to pcl point clouds
+    sem::VisitorCloud_<pcl::PointXYZ> visitor_cloud_xyz_;    ///< visitor for converting to pcl point clouds
     VisitorVecVertices visitor_vv_; ///< visitor for converting to STL vector of PCL Vertices
 #else
     boost::variant< cv::Mat1f, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance

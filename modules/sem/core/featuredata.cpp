@@ -21,7 +21,7 @@ Mat_<float> FeatureData::get()
 template<>
 CloudXYZPtr FeatureData::get()
 {
-    return var_.apply_visitor(visitor_cloud_);
+    return var_.apply_visitor(visitor_cloud_xyz_);
 }
 
 template<>
@@ -46,7 +46,7 @@ void FeatureData::Init()
 
 void FeatureData::Reset()
 {
-    visitor_cloud_.Reset();
+    visitor_cloud_xyz_.Reset();
     visitor_mat_.Reset();
 }
 

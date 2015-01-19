@@ -1,7 +1,7 @@
 /** @file test out cloud visitor
  */
 #ifdef __WITH_PCL // PCL support required for these tests
-#include "sem/core/visitors/visitorcloud.h"
+#include "sem/core/visitors/visitorcloud_.h"
 
 #include "sem/core/exception.h"
 #include "sem/core/pcl/vertices.h"
@@ -25,7 +25,7 @@ protected:
         to_.Reset();
     }
 
-    VisitorCloud to_;    ///< test object
+    VisitorCloud_<PointXYZ> to_;    ///< test object
 };
 
 TEST_F(VisitorCloudTest, Empty)
