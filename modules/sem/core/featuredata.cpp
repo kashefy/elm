@@ -25,6 +25,18 @@ CloudXYZPtr FeatureData::get()
 }
 
 template<>
+CloudNrmlPtr FeatureData::get()
+{
+    return var_.apply_visitor(visitor_cloud_nrml_);
+}
+
+template<>
+CloudPtNrmlPtr FeatureData::get()
+{
+    return var_.apply_visitor(visitor_cloud_ptnrml_);
+}
+
+template<>
 VecVertices FeatureData::get()
 {
     return var_.apply_visitor(visitor_vv_);

@@ -32,6 +32,24 @@ VecVertices VisitorVecVertices::operator()(CloudXYZPtr &c)
     return vv_;
 }
 
+VecVertices VisitorVecVertices::operator()(CloudNrmlPtr &c)
+{
+    if(vv_.empty()) {
+
+        vv_ = Mat2VecVertices(PointCloud2Mat_<Normal>(c)); // or keep cache?
+    }
+    return vv_;
+}
+
+VecVertices VisitorVecVertices::operator()(CloudPtNrmlPtr &c)
+{
+    if(vv_.empty()) {
+
+        vv_ = Mat2VecVertices(PointCloud2Mat_<PointNormal>(c)); // or keep cache?
+    }
+    return vv_;
+}
+
 VecVertices VisitorVecVertices::operator()(float f)
 {
     FromScalar(f);

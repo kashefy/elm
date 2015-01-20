@@ -31,6 +31,10 @@ public:
 
    sem::Mat_f operator()(sem::CloudXYZPtr &c) const;
 
+   sem::Mat_f operator()(sem::CloudNrmlPtr &c) const;
+
+   sem::Mat_f operator()(sem::CloudPtNrmlPtr &c) const;
+
    sem::Mat_f operator()(const sem::VecVertices &vv) const;
 
 #endif // __WITH_PCL

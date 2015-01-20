@@ -14,6 +14,10 @@ namespace pcl {
 
 class PointXYZ;
 
+class Normal;
+
+class PointNormal;
+
 template <typename TPoint> class PointCloud;
 
 class Vertices;
@@ -25,6 +29,14 @@ namespace sem {
 typedef pcl::PointCloud<pcl::PointXYZ> CloudXYZ;
 
 typedef boost::shared_ptr<CloudXYZ > CloudXYZPtr;
+
+typedef pcl::PointCloud<pcl::Normal> CloudNormal;
+
+typedef boost::shared_ptr<CloudNormal > CloudNrmlPtr;
+
+typedef pcl::PointCloud<pcl::PointNormal> CloudPtNrml;
+
+typedef boost::shared_ptr<CloudPtNrml > CloudPtNrmlPtr;
 
 typedef std::vector<pcl::Vertices > VecVertices;
 

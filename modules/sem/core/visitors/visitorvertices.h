@@ -24,6 +24,10 @@ public:
 
     sem::VecVertices operator()(sem::CloudXYZPtr &c);
 
+    sem::VecVertices operator()(sem::CloudNrmlPtr &c);
+
+    sem::VecVertices operator()(sem::CloudPtNrmlPtr &c);
+
     sem::VecVertices operator()(float f);
 
     sem::VecVertices operator()(int n);

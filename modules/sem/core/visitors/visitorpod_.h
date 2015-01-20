@@ -39,7 +39,8 @@ public:
     }
 
 #ifdef __WITH_PCL // PCL support required
-    T operator()(sem::CloudXYZPtr &c) const
+    template <class TPoint>
+    T operator()(boost::shared_ptr<pcl::PointCloud<TPoint > > &c) const
     {
         SEM_THROW_TYPE_ERROR("Cannot convert point cloud to scalar.");
     }

@@ -53,4 +53,14 @@ Mat_f VisitorMat_f::operator()(CloudXYZPtr &c) const
     return PointCloud2Mat_<pcl::PointXYZ>(c);
 }
 
+Mat_f VisitorMat_f::operator()(CloudNrmlPtr &c) const
+{
+    return PointCloud2Mat_<pcl::Normal>(c);
+}
+
+Mat_f VisitorMat_f::operator()(CloudPtNrmlPtr &c) const
+{
+    return PointCloud2Mat_<pcl::PointNormal>(c);
+}
+
 #endif // __WITH_PCL

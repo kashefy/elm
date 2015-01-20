@@ -62,15 +62,29 @@ protected:
 
     // variant and custom object visitors
 #ifdef __WITH_PCL
-    boost::variant< cv::Mat1f, sem::CloudXYZPtr, sem::VecVertices, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
+    boost::variant
+    <
+    cv::Mat1f,
+    sem::CloudXYZPtr,
+    sem::CloudNrmlPtr,
+    sem::CloudPtNrmlPtr,
+    sem::VecVertices,
+    float, int, uchar
+    > var_; ///< variant object to enable finite representations of a single feature data instance
 
-    sem::VisitorCloud_<pcl::PointXYZ> visitor_cloud_xyz_;    ///< visitor for converting to pcl point clouds
+    sem::VisitorCloud_<pcl::PointXYZ> visitor_cloud_xyz_;       ///< visitor for converting to pcl point clouds
+    sem::VisitorCloud_<pcl::Normal> visitor_cloud_nrml_;        ///< visitor for converting to pcl point clouds
+    sem::VisitorCloud_<pcl::PointNormal> visitor_cloud_ptnrml_;   ///< visitor for converting to pcl point clouds
+
     VisitorVecVertices visitor_vv_; ///< visitor for converting to STL vector of PCL Vertices
 #else
     boost::variant< cv::Mat1f, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
 
-    FeatDataVisitorVoid visitor_cloud_;     ///< place holder visitor that does nothing
-    FeatDataVisitorVoid visitor_vv_;     ///< place holder visitor that does nothing
+    FeatDataVisitorVoid visitor_cloud_;         ///< place holder visitor that does nothing
+    FeatDataVisitorVoid visitor_cloud_nrml_;    ///< place holder visitor that does nothing
+    FeatDataVisitorVoid visitor_cloud_ptnrml_;  ///< place holder visitor that does nothing
+
+    FeatDataVisitorVoid visitor_vv_;            ///< place holder visitor that does nothing
 #endif // __WITH_PCL
 
     VisitorMat_f visitor_mat_;      ///< visitor for converting to Mat objects
