@@ -3,14 +3,13 @@
 
 #ifdef __WITH_PCL // the following visitor derived template class definitions require PCL support
 
-#include "sem/core/exception.h"
-#include "sem/core/pcl/cloud_.h"
-#include "sem/core/pcl/typedefs_fwd.h"
-#include "sem/core/pcl/point_traits.h"
+#include "sem/core/pcl/cloud_2cloud_.h"
 #include "sem/core/pcl/vertices.h"
 #include "sem/core/cv/typedefs_fwd.h"
 #include "sem/core/typedefs_fwd.h"
 #include "sem/core/visitors/visitor_.h"
+
+#include <iostream>
 
 namespace sem {
 
@@ -20,19 +19,32 @@ namespace sem {
  *
  * Requires PCL support.
  */
-template <class TPoint>
+template <class TPointDst>
 class VisitorCloud_ :
-        public Visitor_<boost::shared_ptr<pcl::PointCloud<TPoint > > >
+        public Visitor_<boost::shared_ptr<pcl::PointCloud<TPointDst > > >
 {
 public:
-    typedef boost::shared_ptr<pcl::PointCloud<TPoint > > CloudTPPtr;
+    typedef boost::shared_ptr<pcl::PointCloud<TPointDst > > CloudTPDstPtr;
 
     void Reset() {
 
         c_.reset();
     }
 
-    CloudTPPtr operator()(CloudTPPtr &c) {
+    /**
+     * @brief Convert one point cloud to another (see specializations)
+     */
+    template <class TPointSrc >
+    CloudTPDstPtr operator()(boost::shared_ptr<pcl::PointCloud<TPointSrc > > &cld_src) {
+
+        if(!bool(c_)) {
+
+            Cloud_2Cloud_<TPointSrc, TPointDst>::Convert(cld_src, c_);
+        }
+        return c_;
+    }
+
+    CloudTPDstPtr operator()(CloudTPDstPtr &c) {
 
         if(!bool(c_)) {
 
@@ -44,76 +56,64 @@ public:
     /**
      * @todo avoid double deep copy
      */
-    CloudTPPtr operator()(const sem::VecVertices &vv) {
+    CloudTPDstPtr operator()(const sem::VecVertices &vv) {
 
         if(!bool(c_)) {
 
-            c_ = Mat2PointCloud_<TPoint >(VecVertices2Mat(vv, false));
+            c_ = Mat2PointCloud_<TPointDst >(VecVertices2Mat(vv, false));
         }
         return c_;
     }
 
-    CloudTPPtr operator()(float f) {
+    CloudTPDstPtr operator()(float f) {
 
-        if(PCLPointTraits_<TPoint>::FieldCount() != 1) {
+        if(PCLPointTraits_<TPointDst >::FieldCount() != 1) {
 
             std::stringstream s;
             s << "Cannot convert scalar to point" <<
-                 PCLPointTraits_<TPoint>::FieldCount() << " fields required.";
+                 PCLPointTraits_<TPointDst>::FieldCount() << " fields required.";
             SEM_THROW_TYPE_ERROR(s.str());
         }
         SEM_THROW_NOT_IMPLEMENTED;
     }
 
-    CloudTPPtr operator()(int n) {
+    CloudTPDstPtr operator()(int n) {
 
-        if(PCLPointTraits_<TPoint>::FieldCount() != 1) {
+        if(PCLPointTraits_<TPointDst>::FieldCount() != 1) {
 
             std::stringstream s;
             s << "Cannot convert scalar to point" <<
-                 PCLPointTraits_<TPoint>::FieldCount() << " fields required.";
+                 PCLPointTraits_<TPointDst>::FieldCount() << " fields required.";
             SEM_THROW_TYPE_ERROR(s.str());
         }
         SEM_THROW_NOT_IMPLEMENTED;
     }
 
-    CloudTPPtr operator()(uchar c) {
+    CloudTPDstPtr operator()(uchar c) {
 
-        if(PCLPointTraits_<TPoint>::FieldCount() != 1) {
+        if(PCLPointTraits_<TPointDst>::FieldCount() != 1) {
 
             std::stringstream s;
             s << "Cannot convert scalar to point" <<
-                 PCLPointTraits_<TPoint>::FieldCount() << " fields required.";
+                 PCLPointTraits_<TPointDst>::FieldCount() << " fields required.";
             SEM_THROW_TYPE_ERROR(s.str());
         }
         SEM_THROW_NOT_IMPLEMENTED;
     }
 
-    CloudTPPtr operator()(const sem::Mat_f &m) {
+    CloudTPDstPtr operator()(const sem::Mat_f &m) {
 
         if(!bool(c_)) {
 
-            c_ = Mat2PointCloud_<TPoint>(m);
-        }
-        return c_;
-    }
-
-    /**
-     * @todo Possible redundant double deep copy. If true, avoid it.
-     */
-    template <class TPointArg >
-    CloudTPPtr operator()(boost::shared_ptr<pcl::PointCloud<TPointArg > > &cld_arg) {
-
-        if(!bool(c_)) {
-
-            c_ = Mat2PointCloud_<TPoint>(PointCloud2Mat_<TPointArg >(cld_arg));
+            c_ = Mat2PointCloud_<TPointDst >(m);
         }
         return c_;
     }
 
 protected:
-     CloudTPPtr c_; ///< internal reference for caching most recent conversion result
+     CloudTPDstPtr c_; ///< internal reference for caching most recent conversion result
 };
+
 
 } // namespace sem
 

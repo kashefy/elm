@@ -23,17 +23,63 @@ public:
      * @param src Mat
      * @param step (no. of floats per element)
      * @param dst cloud
+     * @throw sem::ExceptionTypeError for non-continuous Mat input
+     */
+    static void CopyContMatData2Cloud(const cv::Mat1f &src, size_t step, typename pcl::PointCloud<TPoint >::Ptr dst)
+    {
+        if(src.isContinuous()) {
+
+            float *mat_data_ptr = reinterpret_cast<float*>(src.data);
+            size_t step_size = sizeof(float)*step;
+            for(typename pcl::PointCloud<TPoint>::iterator itr=dst->begin();
+                    itr != dst->end(); ++itr) {
+
+                //memcpy((*itr).data, mat_data_ptr, step_size); // Normal has data_n[] member, not data[]
+                memcpy(&(*itr), mat_data_ptr, step_size);       // dangerous
+                mat_data_ptr += step;
+            }
+        }
+        else {
+            SEM_THROW_TYPE_ERROR("Mat must be continuous.");
+        }
+    }
+
+    /**
+     * @brief Copy Mat data to cloud for non-continuous Mat objects (slower)
+     * @param src Mat
+     * @param step (no. of floats per element)
+     * @param dst cloud
+     * @todo test test test
      */
     static void CopyMatData2Cloud(const cv::Mat1f &src, size_t step, typename pcl::PointCloud<TPoint >::Ptr dst)
     {
-        float *mat_data_ptr = reinterpret_cast<float*>(src.data);
-        size_t step_size = sizeof(float)*step;
-        for(typename pcl::PointCloud<TPoint>::iterator itr=dst->begin();
-                itr != dst->end(); ++itr) {
+        if(src.isContinuous()) {
 
-            //memcpy((*itr).data, mat_data_ptr, step_size); // Normal has data_n[] member, not data[]
-            memcpy(&(*itr), mat_data_ptr, step_size);       // dangerous
-            mat_data_ptr += step;
+            ConverterCloudMat_::CopyContMatData2Cloud(src, step, dst);
+        }
+        else {
+
+            const float *mat_data_ptr = reinterpret_cast<const float*>(src.data);
+            size_t step_size = sizeof(float)*step;
+
+            int row = 0;
+            int col = 0;
+
+            for(typename pcl::PointCloud<TPoint>::iterator itr=dst->begin();
+                    itr != dst->end(); ++itr) {
+
+                if(col == src.cols) {
+
+                    mat_data_ptr = src.ptr<float>(++row);
+                    col = 0;
+                }
+
+                //memcpy((*itr).data, mat_data_ptr, step_size); // Normal has data_n[] member, not data[]
+                memcpy(&(*itr), mat_data_ptr, step_size);       // dangerous
+                mat_data_ptr += step;
+
+                col++;
+            }
         }
     }
 

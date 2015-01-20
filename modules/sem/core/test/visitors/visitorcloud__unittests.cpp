@@ -76,6 +76,9 @@ TYPED_TEST(VisitorCloud_PointTypedTest, FromMat_f)
     EXPECT_NE(this->m_.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
 }
 
+/**
+ * @brief from same typed point cloud
+ */
 TYPED_TEST(VisitorCloud_PointTypedTest, Cloud)
 {
     typedef boost::shared_ptr<PointCloud<TypeParam > > CloudTPPtr;
@@ -185,6 +188,297 @@ TYPED_TEST(VisitorCloud_PointTypedTest, FromVecVertices)
     EXPECT_MAT_EQ(this->m_, mat_cld.colRange(0, this->m_.cols));
     EXPECT_NE(this->m_.data, mat_cld.data) << "Expecting deep copy. " <<
                                               "If intentionally optimized to be a shared copy, please update test.";
+}
+
+template <class TPoint>
+class VisitorCloud_Cloud2Cloud_PointTypedTest : public ::testing::Test
+{
+protected:
+};
+
+TYPED_TEST_CASE(VisitorCloud_Cloud2Cloud_PointTypedTest, PCLPointTypes);
+
+enum Cld2CldBehavior {
+
+    IDENTICAL,
+    IMPLEMENTED,
+    INVALID,
+    NOT_IMPLEMENTED
+};
+
+template <class TPointSrc, class TPointDst>
+struct ExpectedCld_2_Cld_ {
+
+    static const Cld2CldBehavior behavior;
+    static const size_t src_floats_offset; ///< padded offset in source point to get to desired fields
+    static const size_t x;
+};
+
+// behavior (generalized)
+template<class TPointSrc, class TPointDst> const Cld2CldBehavior ExpectedCld_2_Cld_<TPointSrc, TPointDst>::behavior = Cld2CldBehavior::IDENTICAL;
+
+// behavior (specialized)
+template<> const Cld2CldBehavior ExpectedCld_2_Cld_<PointXYZ, Normal>::behavior = Cld2CldBehavior::INVALID;
+template<> const Cld2CldBehavior ExpectedCld_2_Cld_<PointXYZ, PointNormal>::behavior = Cld2CldBehavior::INVALID;
+
+template<> const Cld2CldBehavior ExpectedCld_2_Cld_<Normal, PointXYZ>::behavior = Cld2CldBehavior::INVALID;
+template<> const Cld2CldBehavior ExpectedCld_2_Cld_<Normal, PointNormal>::behavior = Cld2CldBehavior::INVALID;
+
+template<> const Cld2CldBehavior ExpectedCld_2_Cld_<PointNormal, PointXYZ>::behavior = Cld2CldBehavior::IMPLEMENTED;
+template<> const Cld2CldBehavior ExpectedCld_2_Cld_<PointNormal, Normal>::behavior = Cld2CldBehavior::IMPLEMENTED;
+
+// src offset (specialized for select types)
+template<class TPointSrc, class TPointDst> const size_t ExpectedCld_2_Cld_<TPointSrc, TPointDst>::src_floats_offset = 0;
+template<> const size_t ExpectedCld_2_Cld_<PointNormal, Normal>::src_floats_offset = 4;
+
+/** macro for appending failure messages with additional point type parameter
+  */
+#define PointTypeMsgSuffix(TPoint) string("where ") + #TPoint + string(" = ") + ExpectedPointAttr_<TPoint>::name
+
+template <class TPointSrc, class TPointDst>
+void CompareClouds()
+{
+    // set data
+    Mat1f m(3, PCLPointTraits_<TPointSrc>::FieldCount());
+    randn(m, 0.f, 100.f);
+
+    // set clouds
+    boost::shared_ptr<PointCloud<TPointSrc > > cld_src = Mat2PointCloud_<TPointSrc >(m);
+
+    VisitorCloud_<TPointDst> to;
+    boost::shared_ptr<PointCloud<TPointDst > > cld_dst = to(cld_src);
+
+    // compare cloud widths and height:
+    EXPECT_EQ(cld_dst->size(), cld_src->size()) << "Size mismatch.";
+    EXPECT_EQ(cld_dst->width, cld_src->width) << "Width mismatch.";
+    EXPECT_EQ(cld_dst->height, cld_src->height) << "Height mismatch.";
+
+    // compare cloud elements
+
+    size_t min_field_count = min(PCLPointTraits_<TPointSrc >::FieldCount(),
+                                 PCLPointTraits_<TPointDst >::FieldCount());
+
+    size_t src_float_offset = ExpectedCld_2_Cld_<TPointSrc, TPointDst>::src_floats_offset;
+
+    for(uint32_t r=0; r<cld_dst->height; r++) {
+
+        for(uint32_t c=0; c<cld_dst->width; c++) {
+
+            TPointSrc pt_src = cld_src->at(c, r);
+            TPointDst pt_dst = cld_dst->at(c, r);
+
+            float *pt_data_ptr_src = reinterpret_cast<float*>(&pt_src);
+            float *pt_data_ptr_dst = reinterpret_cast<float*>(&pt_dst);
+
+            EXPECT_NE(pt_data_ptr_src, pt_data_ptr_dst) << "Pointers are pointing to the same memory location. Is this intentional?";
+
+            for(size_t i=0; i<min_field_count; i++) {
+
+                EXPECT_FLOAT_EQ(pt_data_ptr_src[i+src_float_offset], pt_data_ptr_dst[i]) << "Unexpected value for coordinate i=" << i;
+            }
+        }
+    }
+}
+
+/**
+ * @brief test conversion from same and other point type
+ * @todo clean up code clutter
+ */
+TYPED_TEST(VisitorCloud_Cloud2Cloud_PointTypedTest, FromPointCloudOfDifferentType)
+{
+    // TypeParam is src point type
+    typedef TypeParam TPointSrc;
+
+    // set data
+    Mat1f m(3, PCLPointTraits_<TPointSrc>::FieldCount());
+    randn(m, 0.f, 100.f);
+
+    // set clouds
+    typename PointCloud<TPointSrc >::Ptr cld_src = Mat2PointCloud_<TPointSrc >(m);
+
+    {
+        typedef PointXYZ TPointDst;
+        typename PointCloud<TPointDst >::Ptr cld_dst;
+
+        VisitorCloud_<TPointDst> to;
+
+        switch(ExpectedCld_2_Cld_<TPointSrc, TPointDst>::behavior) {
+
+        case Cld2CldBehavior::IDENTICAL:
+        case Cld2CldBehavior::IMPLEMENTED:
+
+            CompareClouds<TPointSrc, TPointDst>();
+            break;
+
+        case Cld2CldBehavior::NOT_IMPLEMENTED:
+        case Cld2CldBehavior::INVALID:
+
+            EXPECT_THROW(cld_dst = to(cld_src), ExceptionNotImpl) << PointTypeMsgSuffix(TPointDst);
+            break;
+
+        default:
+            FAIL() << "Non-addressed case, " << PointTypeMsgSuffix(TPointDst);
+            break;
+        }
+    }
+
+    {
+        typedef Normal TPointDst;
+        typename PointCloud<TPointDst >::Ptr cld_dst;
+
+        VisitorCloud_<TPointDst> to;
+
+        switch(ExpectedCld_2_Cld_<TPointSrc, TPointDst>::behavior) {
+
+        case Cld2CldBehavior::IDENTICAL:
+        case Cld2CldBehavior::IMPLEMENTED:
+
+            CompareClouds<TPointSrc, TPointDst>();
+            break;
+
+        case Cld2CldBehavior::NOT_IMPLEMENTED:
+        case Cld2CldBehavior::INVALID:
+
+            EXPECT_THROW(cld_dst = to(cld_src), ExceptionNotImpl) << PointTypeMsgSuffix(TPointDst);
+            break;
+
+        default:
+            FAIL() << "Non-addressed case, " << PointTypeMsgSuffix(TPointDst);
+            break;
+        }
+    }
+
+    {
+        typedef PointNormal TPointDst;
+        typename PointCloud<TPointDst >::Ptr cld_dst;
+
+        VisitorCloud_<TPointDst> to;
+
+        switch(ExpectedCld_2_Cld_<TPointSrc, TPointDst>::behavior) {
+
+        case Cld2CldBehavior::IDENTICAL:
+        case Cld2CldBehavior::IMPLEMENTED:
+
+            CompareClouds<TPointSrc, TPointDst>();
+            break;
+
+        case Cld2CldBehavior::NOT_IMPLEMENTED:
+        case Cld2CldBehavior::INVALID:
+
+            EXPECT_THROW(cld_dst = to(cld_src), ExceptionNotImpl);
+            break;
+
+        default:
+            FAIL() << "Non-addressed case, " << PointTypeMsgSuffix(TPointDst);
+            break;
+        }
+    }
+}
+
+/**
+ * @brief test conversion from same and other point type
+ * @todo clean up code clutter
+ */
+TYPED_TEST(VisitorCloud_Cloud2Cloud_PointTypedTest, ToPointCloudOfDifferentType)
+{
+    // TypeParam is destination point type
+    typedef TypeParam TPointDst;
+
+    {
+        typedef PointXYZ TPointSrc;
+        typename PointCloud<TPointDst >::Ptr cld_dst;
+
+        VisitorCloud_<TPointDst> to;
+
+        // set data
+        Mat1f m(3, PCLPointTraits_<TPointSrc>::FieldCount());
+        randn(m, 0.f, 100.f);
+        // set clouds
+        typename PointCloud<TPointSrc >::Ptr cld_src = Mat2PointCloud_<TPointSrc >(m);
+
+        switch(ExpectedCld_2_Cld_<TPointSrc, TPointDst>::behavior) {
+
+        case Cld2CldBehavior::IDENTICAL:
+        case Cld2CldBehavior::IMPLEMENTED:
+
+            CompareClouds<TPointSrc, TPointDst>();
+            break;
+
+        case Cld2CldBehavior::NOT_IMPLEMENTED:
+        case Cld2CldBehavior::INVALID:
+
+            EXPECT_THROW(cld_dst = to(cld_src), ExceptionNotImpl) << PointTypeMsgSuffix(TPointDst);
+            break;
+
+        default:
+            FAIL() << "Non-addressed case, " << PointTypeMsgSuffix(TPointDst);
+            break;
+        }
+    }
+
+    {
+        typedef Normal TPointSrc;
+        typename PointCloud<TPointDst >::Ptr cld_dst;
+
+        VisitorCloud_<TPointDst> to;
+
+        // set data
+        Mat1f m(3, PCLPointTraits_<TPointSrc>::FieldCount());
+        randn(m, 0.f, 100.f);
+        // set clouds
+        typename PointCloud<TPointSrc >::Ptr cld_src = Mat2PointCloud_<TPointSrc >(m);
+
+        switch(ExpectedCld_2_Cld_<TPointSrc, TPointDst>::behavior) {
+
+        case Cld2CldBehavior::IDENTICAL:
+        case Cld2CldBehavior::IMPLEMENTED:
+
+            CompareClouds<TPointSrc, TPointDst>();
+            break;
+
+        case Cld2CldBehavior::NOT_IMPLEMENTED:
+        case Cld2CldBehavior::INVALID:
+
+            EXPECT_THROW(cld_dst = to(cld_src), ExceptionNotImpl) << PointTypeMsgSuffix(TPointDst);
+            break;
+
+        default:
+            FAIL() << "Non-addressed case, " << PointTypeMsgSuffix(TPointDst);
+            break;
+        }
+    }
+
+    {
+        typedef PointNormal TPointSrc;
+        typename PointCloud<TPointDst >::Ptr cld_dst;
+
+        VisitorCloud_<TPointDst> to;
+
+        // set data
+        Mat1f m(3, PCLPointTraits_<TPointSrc>::FieldCount());
+        randn(m, 0.f, 100.f);
+        // set clouds
+        typename PointCloud<TPointSrc >::Ptr cld_src = Mat2PointCloud_<TPointSrc >(m);
+
+        switch(ExpectedCld_2_Cld_<TPointSrc, TPointDst>::behavior) {
+
+        case Cld2CldBehavior::IDENTICAL:
+        case Cld2CldBehavior::IMPLEMENTED:
+
+            CompareClouds<TPointSrc, TPointDst>();
+            break;
+
+        case Cld2CldBehavior::NOT_IMPLEMENTED:
+        case Cld2CldBehavior::INVALID:
+
+            EXPECT_THROW(cld_dst = to(cld_src), ExceptionNotImpl);
+            break;
+
+        default:
+            FAIL() << "Non-addressed case, " << PointTypeMsgSuffix(TPointDst);
+            break;
+        }
+    }
 }
 
 } // annonymous namespace for cloud visitors' test fixtures
