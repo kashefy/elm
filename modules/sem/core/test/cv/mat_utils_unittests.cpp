@@ -773,6 +773,14 @@ TYPED_TEST(MatPODTypesTest, InterChannelCasting)
         EXPECT_EQ(m3(0)[i], mm3.at<Vec3TP >(0)[i]);
         EXPECT_EQ(V_<TypeParam>::values[i], mm3.at<Vec3TP >(0)[i]) << "Mismatch at i=" << i;
     }
+
+    Mat_<TypeParam > m1_b = m3;
+    EXPECT_EQ(1, m1_b.channels()) << "no. of channels did not compress to one.";
+    for(int i=0; i<m1.cols; i++) {
+
+        EXPECT_EQ(m3(0)[i], m1_b(i));
+        EXPECT_EQ(V_<TypeParam>::values[i], m1_b(i)) << "Mismatch at i=" << i;
+    }
 }
 
 /**
