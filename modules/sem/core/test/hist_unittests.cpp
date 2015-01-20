@@ -177,7 +177,7 @@ TEST_F(HistCh1Test, Hist)
   calcHist( &bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate );
   calcHist( &bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate );
 
-  std::cout<<b_hist.t()<<std::endl;
-  std::cout<<g_hist.t()<<std::endl;
-  std::cout<<r_hist.t()<<std::endl;
+//  std::cout<<b_hist.t()<<std::endl;
+//  std::cout<<g_hist.t()<<std::endl;
+//  std::cout<<r_hist.t()<<std::endl;
 }
