@@ -7,8 +7,8 @@
 
 #include <opencv2/core.hpp>
 
-#include "core/base_Layer.h"
-#include "core/typedefs.h"
+#include "sem/core/base_Layer.h"
+#include "sem/core/typedefs.h"
 
 class SimulationSEM
 {

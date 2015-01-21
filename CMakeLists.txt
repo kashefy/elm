@@ -9,8 +9,8 @@ cmake_minimum_required(VERSION 2.8.7)
 # ----------------------------------------------------------------------------
 set(ROOT_PROJECT sem)
 project(${ROOT_PROJECT})
-set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules)
-set(${ROOT_PROJECT}_LIBS "")
+set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules) # enforce includes to start with project's parent dir (e.g. #include <sem/core/core.h>)
+set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
 
 # ----------------------------------------------------------------------------
@@ -54,7 +54,7 @@ if(${FORCE_IN_SOURCE} AND (${PATH_A} STREQUAL ${PATH_B}))
 endif()
 
 # ----------------------------------------------------------------------------
-# LOCATE DEPENDENCIES: GTest, OpenCV, Boost
+# Locate Dependencies: GTest, OpenCV, Boost
 # ----------------------------------------------------------------------------
 
 status("Resolve Dependencies:")
@@ -147,9 +147,56 @@ else(Boost_FOUND)
     message(FATAL_ERROR "Failed to find Boost (or missing components). Check that \"BOOST_ROOT\" is properly set")
 endif(Boost_FOUND)
 
+# Required dependencies covered\
+# ----------------------------------------------------------------------------
+# Locate Optional dependencies: PCL
+# ----------------------------------------------------------------------------
+
+status("Resolve Opt. Dependencies:")
+
+# ----------------------------------------------------------------------------
+# Point Cloud Library (PCL)
+# ----------------------------------------------------------------------------
+# Iterative closest point
+# ----------------------------------------------------------------------------
+# the components we're currently interested in:
+#     common
+#     io            - loading pcd files
+#     registration  - icp
+#     features      - triangulation
+#     kdtree        - triangulation
+#     surface       - triangulation
+# find_package PCL
+# Defines:
+#     PCL_FOUND:        set to 1 if PCL is found, otherwise unset
+#     PCL_INCLUDE_DIRS: set to the paths to PCL installed headers and the dependency headers
+#     PCL_LIBRARIES:    set to the file names of the built and installed PCL libraries
+#     PCL_LIBRARY_DIRS: set to the paths to where PCL libraries and 3rd party dependencies reside
+#     PCL_VERSION:      the version of the found PCL
+#     PCL_COMPONENTS:   lists all available components
+# ----------------------------------------------------------------------------
+set(WITH_PCL ON CACHE BOOL "Whether to build with PCL support.")
+
+if(WITH_PCL)
+    set(PCL_COMPONENTS_REQ common io registration features kdtree surface)
+    status("Find PCL:")
+    find_package(PCL 1.7 REQUIRED COMPONENTS ${PCL_COMPONENTS_REQ})
+    if(PCL_FOUND)   # true
+        add_definitions(-D__WITH_PCL) # Useful for conditional building of PCL dependent functionality
+        list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${PCL_INCLUDE_DIRS})
+        list(APPEND ${ROOT_PROJECT}_LIBS ${PCL_LIBRARIES})
+    else(PCL_FOUND) # false
+        message(FATAL_ERROR "Failed to find PCL (or missing components). Check that the library is properly installed")
+    endif(PCL_FOUND)
+    status("")
+endif(WITH_PCL)
+
+# Dependencies covered
+# ----------------------------------------------------------------------------
+
 include_directories(${${ROOT_PROJECT}_INCLUDE_DIRS})
 
-add_subdirectory(modules)
+add_subdirectory(modules/${ROOT_PROJECT})
 add_subdirectory(samples)
 
 # ----------------------------------------------------------------------------
@@ -167,12 +214,12 @@ if(BUILD_TESTS)
     add_definitions(-D__WITH_GTEST) # Useful in case test class needs to be friend of class under test
 
     # Copy over test data (if it exists)
-    if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
+    if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/testdata")
 
-        status("Copying test-data")
-        file(COPY ${CMAKE_SOURCE_DIR}/test-data DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+        status("Copying test data")
+        file(COPY ${CMAKE_SOURCE_DIR}/testdata DESTINATION ${EXECUTABLE_OUTPUT_PATH})
 
-    endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
+    endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/testdata")
 
 endif(BUILD_TESTS)
 
@@ -207,6 +254,14 @@ status("        lib Dir.:  "   Boost_FOUND THEN "${BOOST_ROOT}/lib" ELSE "-")
 set(Boost_LIB_NAMES ${Boost_LIBRARIES})
 convert_to_lib_name(Boost_LIB_NAMES ${Boost_LIB_NAMES})
 status("        components :  "      Boost_FOUND THEN ${Boost_LIB_NAMES} ELSE "-")
+
+status("")
+
+status("Optional Dependencies:")
+status("")
+status("    PCL:  "   PCL_FOUND THEN YES (${PCL_VERSION}) ELSE NO)
+status("        lib Dir.:  "      PCL_FOUND THEN "${PCL_LIBRARY_DIRS}" ELSE "-")
+status("        components.:  "   PCL_FOUND THEN "${PCL_COMPONENTS_REQ}" ELSE "-")
 
 status("")
 

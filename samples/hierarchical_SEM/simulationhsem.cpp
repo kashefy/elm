@@ -1,4 +1,4 @@
-#include "simulationhsem.h"
+#include "sem/simulationhsem.h"
 
 #include <iostream>
 
@@ -6,13 +6,13 @@
 
 #include <opencv2/highgui.hpp>
 
-#include "core/signal.h"
-#include "core/mat_utils.h"
-#include "encoding/populationcode.h"
-#include "io/readmnist.h"
-#include "layers/layerfactory.h"
-#include "layers/layer_y.h"
-#include "layers/layer_z.h"
+#include "sem/core/signal.h"
+#include "sem/core/cv/mat_utils.h"
+#include "sem/encoding/populationcode.h"
+#include "sem/io/readmnist.h"
+#include "sem/layers/layerfactory.h"
+#include "sem/layers/layer_y.h"
+#include "sem/layers/layer_z.h"
 
 using namespace cv;
 using namespace std;
@@ -61,7 +61,7 @@ void SimulationHSEM::Learn()
 
             if(!z_) {
 
-                z_ = InitLearners(static_cast<int>(sig.MostRecent(NAME_SPIKES_Y).total()), 10);
+                z_ = InitLearners(static_cast<int>(sig.MostRecentMat(NAME_SPIKES_Y).total()), 10);
             }
 
             z_->Activate(sig);
@@ -103,7 +103,7 @@ void SimulationHSEM::Eval()
 {
     Signal signal;
     z_->Response(signal);
-    SimulationHSEM::VisualizeOnOffWeights(signal.MostRecent(NAME_WEIGHTS));
+    SimulationHSEM::VisualizeOnOffWeights(signal.MostRecentMat(NAME_WEIGHTS));
 }
 
 shared_ptr<base_Layer> SimulationHSEM::InitPopulationCode() const
@@ -112,7 +112,7 @@ shared_ptr<base_Layer> SimulationHSEM::InitPopulationCode() const
     cfg.Input(MutexPopulationCode::KEY_INPUT_STIMULUS, NAME_STIMULUS);
     cfg.Output(MutexPopulationCode::KEY_OUTPUT_POP_CODE, NAME_POP_CODE);
 
-    return LayerFactory::CreateLayerPtrShared("MutexPopulationCode", cfg, cfg);
+    return LayerFactory::CreateShared("MutexPopulationCode", cfg, cfg);
 }
 
 shared_ptr<base_Layer> SimulationHSEM::InitLayerY() const
@@ -128,7 +128,7 @@ shared_ptr<base_Layer> SimulationHSEM::InitLayerY() const
     io.Input(LayerY::KEY_INPUT_STIMULUS, NAME_POP_CODE);
     io.Output(LayerY::KEY_OUTPUT_SPIKES, NAME_SPIKES_Y);
 
-    return LayerFactory::CreateLayerPtrShared("LayerY", cfg, io);
+    return LayerFactory::CreateShared("LayerY", cfg, io);
 }
 
 shared_ptr<base_Layer> SimulationHSEM::InitLearners(int nb_features, int history_length) const
@@ -144,7 +144,7 @@ shared_ptr<base_Layer> SimulationHSEM::InitLearners(int nb_features, int history
     cfg.Output(LayerZ::KEY_OUTPUT_SPIKES, NAME_SPIKES_Z);
     cfg.Output(LayerZ::KEY_OUTPUT_WEIGHTS, NAME_WEIGHTS);
 
-    return LayerFactory::CreateLayerPtrShared("LayerZ", cfg, cfg);
+    return LayerFactory::CreateShared("LayerZ", cfg, cfg);
 }
 
 void SimulationHSEM::VisualizeOnOffWeights(const Mat1f &weights)
