@@ -1,247 +1,161 @@
-/** @todo convert into typed tests
-  */
 #include "sem/core/pcl/cloud_.h"
 
 #ifdef __WITH_PCL // PCL support required for these tests
 
 #include "sem/core/exception.h"
+#include "sem/core/pcl/point_traits.h"
+#include "sem/ts/pcl_point_typed_tests.h"
 #include "sem/ts/ts.h"
 
 using namespace std;
 using namespace cv;
 using namespace pcl;
 using namespace sem;
+using namespace sem::ts;
 
 namespace {
 
-TEST(PCLUtilsMat2PointCloudTEST, Empty)
+template<typename TPoint>
+class PCL_Mat2PointCloud_Single_Ch_TypedTests : public ::testing::Test
 {
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat1f())->empty());
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat1f(1, 0))->empty());
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat1f(0, 1))->empty());
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat1f(0, 0))->empty());
+protected:
+    virtual void SetUp()
+    {
+        typedef PCLPointTraits_<TPoint > PTraits;
+
+        this->field_count_i_ = static_cast<int>(PTraits::FieldCount());
+
+        this->nb_floats_i_ = static_cast<int>(PTraits::NbFloats());
+    }
+
+    int field_count_i_;
+    int nb_floats_i_;
+};
+
+TYPED_TEST_CASE(PCL_Mat2PointCloud_Single_Ch_TypedTests, PCLPointTypes);
+
+TYPED_TEST(PCL_Mat2PointCloud_Single_Ch_TypedTests, Empty)
+{
+    EXPECT_TRUE(Mat2PointCloud_<TypeParam >(Mat1f())->empty());
+    EXPECT_TRUE(Mat2PointCloud_<TypeParam >(Mat1f(1, 0))->empty());
+    EXPECT_TRUE(Mat2PointCloud_<TypeParam >(Mat1f(0, 1))->empty());
+    EXPECT_TRUE(Mat2PointCloud_<TypeParam >(Mat1f(0, 0))->empty());
 }
 
-TEST(PCLUtilsMat2PointCloudTEST, Empty3Ch)
+TYPED_TEST(PCL_Mat2PointCloud_Single_Ch_TypedTests, EmptySize)
 {
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat3f())->empty());
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat3f(1, 0))->empty());
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat3f(0, 1))->empty());
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat3f(0, 0))->empty());
+    EXPECT_EQ(size_t(0), Mat2PointCloud_<TypeParam >(Mat1f())->size());
+    EXPECT_EQ(size_t(0), Mat2PointCloud_<TypeParam >(Mat1f(1, 0))->size());
+    EXPECT_EQ(size_t(0), Mat2PointCloud_<TypeParam >(Mat1f(0, 1))->size());
+    EXPECT_EQ(size_t(0), Mat2PointCloud_<TypeParam >(Mat1f(0, 0))->size());
 }
 
-TEST(PCLUtilsMat2PointCloudTEST, EmptySizeZero)
+TYPED_TEST(PCL_Mat2PointCloud_Single_Ch_TypedTests, Invalid)
 {
-    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat1f())->size());
-    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat1f(1, 0))->size());
-    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat1f(0, 1))->size());
-    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat1f(0, 0))->size());
+    EXPECT_THROW(Mat2PointCloud_<TypeParam >(Mat1f::ones(1, 1)), ExceptionBadDims);
+    EXPECT_THROW(Mat2PointCloud_<TypeParam >(Mat1f::ones(2, 1)), ExceptionBadDims);
+    EXPECT_THROW(Mat2PointCloud_<TypeParam >(Mat1f::ones(1, 2)), ExceptionBadDims);
+    EXPECT_THROW(Mat2PointCloud_<TypeParam >(Mat1f::ones(2, 2)), ExceptionBadDims);
+    EXPECT_THROW(Mat2PointCloud_<TypeParam >(Mat1f::ones(5, 1)), ExceptionBadDims);
 }
 
-TEST(PCLUtilsMat2PointCloudTEST, EmptySizeZero3Ch)
+TYPED_TEST(PCL_Mat2PointCloud_Single_Ch_TypedTests, Dims_field_count)
 {
-    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat3f())->size());
-    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat3f(1, 0))->size());
-    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat3f(0, 1))->size());
-    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat3f(0, 0))->size());
-}
+    int n = 2;
+    int cols = n*this->field_count_i_;
+    while(cols % this->nb_floats_i_ == 0) {
 
-TEST(PCLUtilsMat2PointCloudTEST, Invalid)
-{
-    EXPECT_THROW(Mat2PointCloud_<PointXYZ>(Mat1f::ones(1, 1)), ExceptionBadDims);
-    EXPECT_THROW(Mat2PointCloud_<PointXYZ>(Mat1f::ones(2, 1)), ExceptionBadDims);
-    EXPECT_THROW(Mat2PointCloud_<PointXYZ>(Mat1f::ones(1, 2)), ExceptionBadDims);
-    EXPECT_THROW(Mat2PointCloud_<PointXYZ>(Mat1f::ones(2, 2)), ExceptionBadDims);
-    EXPECT_THROW(Mat2PointCloud_<PointXYZ>(Mat1f::ones(5, 1)), ExceptionBadDims);
-}
+        cols += this->field_count_i_;
+        ++n;
+    }
 
-TEST(PCLUtilsMat2PointCloudTEST, Dims)
-{
-    Mat1f m(1, 9);
+    Mat1f m(1, cols);
     randn(m, 0.f, 100.f);
 
-    CloudXYZPtr cloud_ptr;
+    typename PointCloud<TypeParam >::Ptr cloud_ptr;
 
-    cloud_ptr = Mat2PointCloud_<PointXYZ>(m);
-    EXPECT_EQ(m.total()/3, cloud_ptr->size());
-    EXPECT_EQ(3, static_cast<int>(cloud_ptr->width));
+    cloud_ptr = Mat2PointCloud_<TypeParam >(m);
+    EXPECT_EQ(m.total()/static_cast<size_t>(this->field_count_i_), cloud_ptr->size());
+    EXPECT_EQ(n, static_cast<int>(cloud_ptr->width));
     EXPECT_EQ(1, static_cast<int>(cloud_ptr->height));
 
-    cloud_ptr = Mat2PointCloud_<PointXYZ>(m.reshape(1, 3));
-    EXPECT_EQ(m.total()/3, cloud_ptr->size());
-    EXPECT_EQ(1, static_cast<int>(cloud_ptr->width));
-    EXPECT_EQ(3, static_cast<int>(cloud_ptr->height));
+//    cloud_ptr = Mat2PointCloud_<PointXYZ>(m.reshape(1, 3));
+//    EXPECT_EQ(m.total()/static_cast<size_t>(this->field_count_i_), cloud_ptr->size());
+//    EXPECT_EQ(1, static_cast<int>(cloud_ptr->width));
+//    EXPECT_EQ(3, static_cast<int>(cloud_ptr->height));
 
-    Mat1f m2(4, 3);
+    Mat1f m2(4, this->field_count_i_);
     randn(m2, 0.f, 100.f);
-    cloud_ptr = Mat2PointCloud_<PointXYZ>(m2);
+    cloud_ptr = Mat2PointCloud_<TypeParam >(m2);
     EXPECT_EQ(4, static_cast<int>(cloud_ptr->size()));
     EXPECT_EQ(1, static_cast<int>(cloud_ptr->width));
     EXPECT_EQ(4, static_cast<int>(cloud_ptr->height));
+}
 
-    cloud_ptr = Mat2PointCloud_<PointXYZ>(Mat1f::zeros(3, 4));
+TYPED_TEST(PCL_Mat2PointCloud_Single_Ch_TypedTests, Dims_nb_floats)
+{
+    typename PointCloud<TypeParam >::Ptr cloud_ptr;
+
+    cloud_ptr = Mat2PointCloud_<TypeParam >(Mat1f::zeros(3, this->nb_floats_i_));
     EXPECT_EQ(3, static_cast<int>(cloud_ptr->size()));
     EXPECT_EQ(1, static_cast<int>(cloud_ptr->width));
     EXPECT_EQ(3, static_cast<int>(cloud_ptr->height));
 }
 
-TEST(PCLUtilsMat2PointCloudTEST, Dims3Ch)
+TYPED_TEST(PCL_Mat2PointCloud_Single_Ch_TypedTests, IsOrganized)
 {
-    Mat3f m(1, 9);
+    Mat1f m(9, 3*this->field_count_i_);
     randn(m, 0.f, 100.f);
 
-    CloudXYZPtr cloud_ptr;
-
-    cloud_ptr = Mat2PointCloud_<PointXYZ>(m);
-    EXPECT_EQ(m.total(), cloud_ptr->size());
-    EXPECT_EQ(9, static_cast<int>(cloud_ptr->width));
-    EXPECT_EQ(1, static_cast<int>(cloud_ptr->height));
-
-    cloud_ptr = Mat2PointCloud_<PointXYZ>(m.reshape(1, 3));
-    EXPECT_EQ(m.total(), cloud_ptr->size());
-    EXPECT_EQ(3, static_cast<int>(cloud_ptr->width));
-    EXPECT_EQ(3, static_cast<int>(cloud_ptr->height));
-
-    Mat3f m2(4, 3);
-    randn(m2, 0.f, 100.f);
-    cloud_ptr = Mat2PointCloud_<PointXYZ>(m2);
-    EXPECT_EQ(4*3, static_cast<int>(cloud_ptr->size()));
-    EXPECT_EQ(3, static_cast<int>(cloud_ptr->width));
-    EXPECT_EQ(4, static_cast<int>(cloud_ptr->height));
-}
-
-TEST(PCLUtilsMat2PointCloudTEST, IsOrganized)
-{
-    Mat1f m(9, 9);
-    randn(m, 0.f, 100.f);
-
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(m)->isOrganized());
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(m.reshape(1, 3))->isOrganized());
-    EXPECT_FALSE(Mat2PointCloud_<PointXYZ>(m.reshape(1, 1))->isOrganized()) << "Row matrices yield un-organized point clouds";
-}
-
-TEST(PCLUtilsMat2PointCloudTEST, IsOrganized3Ch)
-{
-    Mat3f m(9, 9);
-    randn(m, 0.f, 100.f);
-
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(m)->isOrganized());
-    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(m.reshape(1, 3))->isOrganized());
-    EXPECT_FALSE(Mat2PointCloud_<PointXYZ>(m.reshape(1, 1))->isOrganized()) << "Row matrices yield un-organized point clouds";
+    EXPECT_TRUE(Mat2PointCloud_<TypeParam >(m)->isOrganized());
+    EXPECT_TRUE(Mat2PointCloud_<TypeParam >(m.reshape(1, 3))->isOrganized());
+    EXPECT_FALSE(Mat2PointCloud_<TypeParam >(m.reshape(1, 1))->isOrganized()) << "Row matrices yield un-organized point clouds";
 }
 
 /**
  * @brief check values stored in non-organized point cloud after conversion
  */
-TEST(PCLUtilsMat2PointCloudTEST, ValuesNonOrganized)
+TYPED_TEST(PCL_Mat2PointCloud_Single_Ch_TypedTests, ValuesNonOrganized)
 {
-    Mat1f m(1, 9);
+    Mat1f m(1, 3*this->field_count_i_);
     randn(m, 0.f, 100.f);
-    CloudXYZPtr cloud_ptr = Mat2PointCloud_<PointXYZ>(m);
+
+    typename PointCloud<TypeParam >::Ptr cloud_ptr = Mat2PointCloud_<TypeParam >(m);
 
     int i=0;
-    for(CloudXYZ::iterator itr=cloud_ptr->begin(); itr != cloud_ptr->end(); ++itr, i+=3) {
+    for(typename PointCloud<TypeParam >::iterator itr=cloud_ptr->begin(); itr != cloud_ptr->end(); ++itr) {
 
-        PointXYZ _p = *itr;
-        EXPECT_FLOAT_EQ(m(i)  , _p.x) << "Unexpected value for x coordinate.";
-        EXPECT_FLOAT_EQ(m(i+1), _p.y) << "Unexpected value for y coordinate.";
-        EXPECT_FLOAT_EQ(m(i+2), _p.z) << "Unexpected value for z coordinate.";
-    }
-}
+        TypeParam pt = *itr;
+        float *pt_data_ptr = reinterpret_cast<float*>(&pt);
+        for(int field_idx=0; field_idx<this->field_count_i_; field_idx++) {
 
-TEST(PCLUtilsMat2PointCloudTEST, ValuesNonOrganized3Ch)
-{
-    Mat3f m(1, 9);
-    randn(m, 0.f, 100.f);
-    CloudXYZPtr cloud_ptr = Mat2PointCloud_<PointXYZ>(m);
-
-    int i=0;
-    for(CloudXYZ::iterator itr=cloud_ptr->begin(); itr != cloud_ptr->end(); ++itr, i++) {
-
-        PointXYZ _p = *itr;
-        Vec3f _pm = m(i);
-        EXPECT_FLOAT_EQ(_pm[0], _p.x) << "Unexpected value for x coordinate.";
-        EXPECT_FLOAT_EQ(_pm[1], _p.y) << "Unexpected value for y coordinate.";
-        EXPECT_FLOAT_EQ(_pm[2], _p.z) << "Unexpected value for z coordinate.";
+            EXPECT_FLOAT_EQ(m(i++), pt_data_ptr[field_idx]) << "Unexpected value for field " << i << ".";
+        }
     }
 }
 
 /**
  * @brief check values stored in organized point cloud after conversion
  */
-TEST(PCLUtilsMat2PointCloudTEST, Values_Organized)
+TYPED_TEST(PCL_Mat2PointCloud_Single_Ch_TypedTests, Values_Organized)
 {
     // organized point cloud
-    Mat1f m(4, 3);
+    Mat1f m(4, this->field_count_i_);
     randn(m, 0.f, 100.f);
-    CloudXYZPtr cloud_ptr = Mat2PointCloud_<PointXYZ>(m);
+    typename PointCloud<TypeParam >::Ptr cloud_ptr = Mat2PointCloud_<TypeParam >(m);
 
     for(size_t r=0; r<cloud_ptr->height; r++) {
 
         int i=0;
-        for(size_t c=0; c<cloud_ptr->width; c++, i+=3) {
+        for(size_t c=0; c<cloud_ptr->width; c++) {
 
-            PointXYZ _p = cloud_ptr->at(c, r);
-            EXPECT_FLOAT_EQ(m(r, i)  , _p.x) << "Unexpected value for x coordinate.";
-            EXPECT_FLOAT_EQ(m(r, i+1), _p.y) << "Unexpected value for y coordinate.";
-            EXPECT_FLOAT_EQ(m(r, i+2), _p.z) << "Unexpected value for z coordinate.";
-        }
-    }
-}
+            TypeParam pt = cloud_ptr->at(c, r);;
+            float *pt_data_ptr = reinterpret_cast<float*>(&pt);
 
-TEST(PCLUtilsMat2PointCloudTEST, Values_Organized3Ch)
-{
-    // organized point cloud
-    Mat3f m(4, 3);
-    randn(m, 0.f, 100.f);
-    CloudXYZPtr cloud_ptr = Mat2PointCloud_<PointXYZ>(m);
+            for(int field_idx=0; field_idx<this->field_count_i_; field_idx++) {
 
-    for(size_t r=0; r<cloud_ptr->height; r++) {
-
-        int i=0;
-        for(size_t c=0; c<cloud_ptr->width; c++, i++) {
-
-            PointXYZ _p = cloud_ptr->at(c, r);
-            Vec3f _pm = m(r, c);
-            EXPECT_FLOAT_EQ(_pm[0], _p.x) << "Unexpected value for x coordinate.";
-            EXPECT_FLOAT_EQ(_pm[1], _p.y) << "Unexpected value for y coordinate.";
-            EXPECT_FLOAT_EQ(_pm[2], _p.z) << "Unexpected value for z coordinate.";
-        }
-    }
-}
-
-/**
- * @brief Populate a single and 3-channel matrix with same values
- * and compare that both result into the same point cloud.
- */
-TEST(PCLUtilsMat2PointCloudTEST, SingleChannelVs3ChannelMat)
-{
-    // organized point cloud
-    Mat1f m1Ch(3, 6);
-    randn(m1Ch, 0.f, 100.f);
-
-    Mat3f m3Ch(3, 2);
-    for(size_t i=0, j=0; i<m1Ch.total(); i+=3) {
-        Vec3f tmp;
-        tmp[0] = m1Ch(i);
-        tmp[1] = m1Ch(i+1);
-        tmp[2] = m1Ch(i+2);
-        m3Ch(j++) = tmp;
-    }
-
-    CloudXYZPtr cloud_ptr1Ch = Mat2PointCloud_<PointXYZ>(m1Ch);
-    CloudXYZPtr cloud_ptr3Ch = Mat2PointCloud_<PointXYZ>(m3Ch);
-
-    for(size_t r=0; r<cloud_ptr1Ch->height; r++) {
-
-        int i=0;
-        for(size_t c=0; c<cloud_ptr1Ch->width; c++, i++) {
-
-            PointXYZ _p1 = cloud_ptr1Ch->at(c, r);
-            PointXYZ _p2 = cloud_ptr3Ch->at(c, r);
-            EXPECT_FLOAT_EQ(_p2.x, _p1.x) << "Unexpected value for x coordinate.";
-            EXPECT_FLOAT_EQ(_p2.y, _p1.y) << "Unexpected value for y coordinate.";
-            EXPECT_FLOAT_EQ(_p2.z, _p1.z) << "Unexpected value for z coordinate.";
+                EXPECT_FLOAT_EQ(m(r, i++), pt_data_ptr[field_idx]) << "Unexpected value for field " << i << ".";
+            }
         }
     }
 }
@@ -320,6 +234,132 @@ TEST(PCLUtilsPointCloud_2MatTEST, Owner)
             EXPECT_FLOAT_EQ(m2(r, i)  , _p2.x) << "Unexpected value for x coordinate.";
             EXPECT_FLOAT_EQ(m2(r, i+1), _p2.y) << "Unexpected value for y coordinate.";
             EXPECT_FLOAT_EQ(m2(r, i+2), _p2.z) << "Unexpected value for z coordinate.";
+        }
+    }
+}
+
+// multi-channel test case
+TEST(PCLUtilsMat2PointCloudTEST, Empty3Ch)
+{
+    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat3f())->empty());
+    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat3f(1, 0))->empty());
+    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat3f(0, 1))->empty());
+    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(Mat3f(0, 0))->empty());
+}
+
+TEST(PCLUtilsMat2PointCloudTEST, EmptySizeZero3Ch)
+{
+    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat3f())->size());
+    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat3f(1, 0))->size());
+    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat3f(0, 1))->size());
+    EXPECT_EQ(size_t(0), Mat2PointCloud_<PointXYZ>(Mat3f(0, 0))->size());
+}
+
+TEST(PCLUtilsMat2PointCloudTEST, Dims3Ch)
+{
+    Mat3f m(1, 9);
+    randn(m, 0.f, 100.f);
+
+    CloudXYZPtr cloud_ptr;
+
+    cloud_ptr = Mat2PointCloud_<PointXYZ>(m);
+    EXPECT_EQ(m.total(), cloud_ptr->size());
+    EXPECT_EQ(9, static_cast<int>(cloud_ptr->width));
+    EXPECT_EQ(1, static_cast<int>(cloud_ptr->height));
+
+    cloud_ptr = Mat2PointCloud_<PointXYZ>(m.reshape(1, 3));
+    EXPECT_EQ(m.total(), cloud_ptr->size());
+    EXPECT_EQ(3, static_cast<int>(cloud_ptr->width));
+    EXPECT_EQ(3, static_cast<int>(cloud_ptr->height));
+
+    Mat3f m2(4, 3);
+    randn(m2, 0.f, 100.f);
+    cloud_ptr = Mat2PointCloud_<PointXYZ>(m2);
+    EXPECT_EQ(4*3, static_cast<int>(cloud_ptr->size()));
+    EXPECT_EQ(3, static_cast<int>(cloud_ptr->width));
+    EXPECT_EQ(4, static_cast<int>(cloud_ptr->height));
+}
+
+TEST(PCLUtilsMat2PointCloudTEST, IsOrganized3Ch)
+{
+    Mat3f m(9, 9);
+    randn(m, 0.f, 100.f);
+
+    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(m)->isOrganized());
+    EXPECT_TRUE(Mat2PointCloud_<PointXYZ>(m.reshape(1, 3))->isOrganized());
+    EXPECT_FALSE(Mat2PointCloud_<PointXYZ>(m.reshape(1, 1))->isOrganized()) << "Row matrices yield un-organized point clouds";
+}
+
+TEST(PCLUtilsMat2PointCloudTEST, ValuesNonOrganized3Ch)
+{
+    Mat3f m(1, 9);
+    randn(m, 0.f, 100.f);
+    CloudXYZPtr cloud_ptr = Mat2PointCloud_<PointXYZ>(m);
+
+    int i=0;
+    for(CloudXYZ::iterator itr=cloud_ptr->begin(); itr != cloud_ptr->end(); ++itr, i++) {
+
+        PointXYZ _p = *itr;
+        Vec3f _pm = m(i);
+        EXPECT_FLOAT_EQ(_pm[0], _p.x) << "Unexpected value for x coordinate.";
+        EXPECT_FLOAT_EQ(_pm[1], _p.y) << "Unexpected value for y coordinate.";
+        EXPECT_FLOAT_EQ(_pm[2], _p.z) << "Unexpected value for z coordinate.";
+    }
+}
+
+TEST(PCLUtilsMat2PointCloudTEST, Values_Organized3Ch)
+{
+    // organized point cloud
+    Mat3f m(4, 3);
+    randn(m, 0.f, 100.f);
+    CloudXYZPtr cloud_ptr = Mat2PointCloud_<PointXYZ>(m);
+
+    for(size_t r=0; r<cloud_ptr->height; r++) {
+
+        int i=0;
+        for(size_t c=0; c<cloud_ptr->width; c++, i++) {
+
+            PointXYZ _p = cloud_ptr->at(c, r);
+            Vec3f _pm = m(r, c);
+            EXPECT_FLOAT_EQ(_pm[0], _p.x) << "Unexpected value for x coordinate.";
+            EXPECT_FLOAT_EQ(_pm[1], _p.y) << "Unexpected value for y coordinate.";
+            EXPECT_FLOAT_EQ(_pm[2], _p.z) << "Unexpected value for z coordinate.";
+        }
+    }
+}
+
+/**
+ * @brief Populate a single and 3-channel matrix with same values
+ * and compare that both result into the same point cloud.
+ */
+TEST(PCLUtilsMat2PointCloudTEST, SingleChannelVs3ChannelMat)
+{
+    // organized point cloud
+    Mat1f m1Ch(3, 6);
+    randn(m1Ch, 0.f, 100.f);
+
+    Mat3f m3Ch(3, 2);
+    for(size_t i=0, j=0; i<m1Ch.total(); i+=3) {
+        Vec3f tmp;
+        tmp[0] = m1Ch(i);
+        tmp[1] = m1Ch(i+1);
+        tmp[2] = m1Ch(i+2);
+        m3Ch(j++) = tmp;
+    }
+
+    CloudXYZPtr cloud_ptr1Ch = Mat2PointCloud_<PointXYZ>(m1Ch);
+    CloudXYZPtr cloud_ptr3Ch = Mat2PointCloud_<PointXYZ>(m3Ch);
+
+    for(size_t r=0; r<cloud_ptr1Ch->height; r++) {
+
+        int i=0;
+        for(size_t c=0; c<cloud_ptr1Ch->width; c++, i++) {
+
+            PointXYZ _p1 = cloud_ptr1Ch->at(c, r);
+            PointXYZ _p2 = cloud_ptr3Ch->at(c, r);
+            EXPECT_FLOAT_EQ(_p2.x, _p1.x) << "Unexpected value for x coordinate.";
+            EXPECT_FLOAT_EQ(_p2.y, _p1.y) << "Unexpected value for y coordinate.";
+            EXPECT_FLOAT_EQ(_p2.z, _p1.z) << "Unexpected value for z coordinate.";
         }
     }
 }
