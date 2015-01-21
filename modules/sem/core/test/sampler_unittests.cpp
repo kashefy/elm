@@ -247,7 +247,7 @@ TEST(ExponentialPDFTest, Sample)
 TEST(ExponentialPDFTest, Lambda)
 {
     const float PDF_END=5.;   // last x element in pdf function
-    const int SIZE=10, N=3e3;  // no. of bins, no. of samples to draw
+    const int SIZE=10, N=4e3;  // no. of bins, no. of samples to draw
     const float PDF_SCALE_FACTOR=static_cast<float>(SIZE)/PDF_END;
 
     // generate a histogram from sampled values
