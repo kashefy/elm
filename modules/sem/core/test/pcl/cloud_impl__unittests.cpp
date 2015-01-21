@@ -386,7 +386,6 @@ class PCL_Cloud_T_Conversion_Multi_Ch_TypedTests : public PCL_Cloud_T_Conversion
 protected:
     virtual void SetUp()
     {
-
         /** Sanity check that our subset of PointTypes is fit for mutli-channel tests
          */
         static_assert(ExpectedPointAttr_<TPoint >::field_count <= 4,
