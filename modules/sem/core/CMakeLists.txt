@@ -7,7 +7,7 @@ set(MODULE_NAME ${ROOT_PROJECT}_core)
 project(${MODULE_NAME})
 
 file(GLOB_RECURSE SRC_LIST *.c*)
-#file(GLOB_RECURSE HEADERS  *.h*)
+file(GLOB_RECURSE HEADERS  *.h*)
 
 # Filter out test related sources
 set(REGEX_EXCLUDE_FROM_MODULE "(.*test.*)|(.*~.*)")
