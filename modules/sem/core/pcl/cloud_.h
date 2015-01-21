@@ -18,7 +18,7 @@
 namespace sem {
 
 /**
- * @brief Convert Mat of floats to point cloud.
+ * @brief Convert a single-channel Mat of floats to point cloud.
  *
  * Involves a deep copy of matrix elements
  *
@@ -29,14 +29,13 @@ namespace sem {
  * @return pointer to point cloud instance
  *
  * @todo Avoid deep copy
- * @todo add test coverage for 4-channel Mat
  * @todo produce clearer error messages for types without specializations
  */
 template <class TPoint>
 boost::shared_ptr<pcl::PointCloud<TPoint > > Mat2PointCloud_(const cv::Mat1f &m);
 
 /**
- * @brief Convert point cloud to OpenCV's Mat of floats.
+ * @brief Convert point cloud to OpenCV's single-channel Mat of floats.
  *
  * No deep copy involved, ownership of underlying data remains with point cloud.
  *

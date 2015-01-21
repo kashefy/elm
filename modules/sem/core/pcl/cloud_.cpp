@@ -34,6 +34,7 @@ SEM_ADD_SPECIALIZATION__PointCloud2Mat___(Normal)
 
 SEM_ADD_SPECIALIZATION__Mat2PointCloud___(PointNormal)
 SEM_ADD_SPECIALIZATION__PointCloud2Mat___(PointNormal)
+// no multi-channel specialization for PointNormal, channels would take up > 4.
 
 } // namespace sem
 
