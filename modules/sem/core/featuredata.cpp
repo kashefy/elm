@@ -58,8 +58,11 @@ void FeatureData::Init()
 
 void FeatureData::Reset()
 {
+    visitor_cloud_nrml_.Reset();
+    visitor_cloud_ptnrml_.Reset();
     visitor_cloud_xyz_.Reset();
     visitor_mat_.Reset();
+    visitor_vv_.Reset();
 }
 
 std::ostream& operator<<(std::ostream& os, FeatureData& obj)
