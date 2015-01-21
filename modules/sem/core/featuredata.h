@@ -17,6 +17,14 @@ class FeatureData
 {
 public:
     /**
+     * @brief Construct a new object with initially represented as a Mat
+     */
+    FeatureData(const cv::Mat &m)
+    {
+        var_ = static_cast<cv::Mat_<float> >(m);
+    }
+
+    /**
      * @brief Construct a new object with initial representation
      */
     template <class T>
