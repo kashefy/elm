@@ -1,5 +1,7 @@
 #include "sem/core/pcl/cloud_2cloud_.h"
 
+#ifdef __WITH_PCL // conversions from one point cloud to another require PCL support
+
 using namespace pcl;
 
 typedef boost::shared_ptr<pcl::PointCloud<PointXYZ > > CloudXYZPtr;
@@ -71,3 +73,5 @@ void Cloud_2Cloud_<PointNormal, Normal>::Convert(CloudPointNrmlPtr &src, CloudNr
 
 
 }
+
+#endif // __WITH_PCL
