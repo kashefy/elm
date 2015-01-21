@@ -73,12 +73,26 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Invalid)
         for(int c=1; c<15; c++) {
 
             Mat1f m(r, c, 1.f);
-            if(c % this->field_count_i_ == 0 || c % this->nb_floats_i_ == 0) {
 
-                EXPECT_NO_THROW(C_::Mat2PointCloud(m));
+            if((c % this->field_count_i_ != 0) && (c % this->nb_floats_i_ != 0)) {
+
+                EXPECT_THROW(C_::Mat2PointCloud(m), ExceptionBadDims) << "with cols = " << c;
+            }
+            else if((c % this->field_count_i_ == 0) && (c % this->nb_floats_i_ == 0)) {
+
+                // ambiguous
+                EXPECT_NO_THROW(C_::Mat2PointCloud(m)) << "with cols = " << c;
             }
             else {
-                EXPECT_THROW(C_::Mat2PointCloud(m), ExceptionBadDims);
+                if(c % this->field_count_i_ == 0) {
+
+                    EXPECT_NO_THROW(C_::Mat2PointCloud(m)) << "with cols = " << c;
+                }
+
+                if(this->nb_floats_i_ == 0) {
+
+                    EXPECT_NO_THROW(C_::Mat2PointCloud(m)) << "with cols = " << c;
+                }
             }
         }
     }
@@ -118,10 +132,10 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Invalid_nb_floats)
             if(c % this->field_count_i_ != 0) {
                 if(c % this->nb_floats_i_ == 0) {
 
-                    EXPECT_NO_THROW(C_::Mat2PointCloud(m));
+                    EXPECT_NO_THROW(C_::Mat2PointCloud(m)) << "with cols = " << c;
                 }
                 else {
-                    EXPECT_THROW(C_::Mat2PointCloud(m), ExceptionBadDims);
+                    EXPECT_THROW(C_::Mat2PointCloud(m), ExceptionBadDims) << "with cols = " << c;
                 }
             }
         }
@@ -140,14 +154,17 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Dims_field_count)
         for(int n=1; n<7; n++) {
 
             int c = n*this->field_count_i_;
-            Mat1f m(r, c, 1.f);
+            if(c % this->nb_floats_i_ != 0) {
 
-            typename PointCloud<TypeParam >::Ptr cloud_ptr;
-            cloud_ptr = C_::Mat2PointCloud(m);
+                Mat1f m(r, c, 1.f);
 
-            EXPECT_EQ(r*n, static_cast<int>(cloud_ptr->size()));
-            EXPECT_EQ(n, static_cast<int>(cloud_ptr->width));
-            EXPECT_EQ(r, static_cast<int>(cloud_ptr->height));
+                typename PointCloud<TypeParam >::Ptr cloud_ptr;
+                cloud_ptr = C_::Mat2PointCloud(m);
+
+                EXPECT_EQ(r*n, static_cast<int>(cloud_ptr->size()));
+                EXPECT_EQ(n, static_cast<int>(cloud_ptr->width));
+                EXPECT_EQ(r, static_cast<int>(cloud_ptr->height));
+            }
         }
     }
 }
@@ -166,6 +183,7 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Dims_nb_floats)
                 Mat1f m(r, c, 1.f);
 
                 typename PointCloud<TypeParam >::Ptr cloud_ptr;
+
                 cloud_ptr = C_::Mat2PointCloud(m);
 
                 EXPECT_EQ(r*n, static_cast<int>(cloud_ptr->size()));
@@ -241,6 +259,110 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Values_Organized)
             }
         }
     }
+}
+
+template<typename TPoint>
+class PCL_Cloud_T_Conversion_Single_Ch_IsPadded_TypedTests : public PCL_Cloud_T_Conversion_Single_Ch_TypedTests<TPoint >
+{
+protected:
+};
+
+TYPED_TEST_CASE(PCL_Cloud_T_Conversion_Single_Ch_IsPadded_TypedTests, PCLPointTypes);
+
+TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_IsPadded_TypedTests, EmptyMat)
+{
+    typedef ConverterCloudMat_<TypeParam > C_;
+
+    EXPECT_FALSE(C_::IsPaddedMat(Mat1f()));
+    EXPECT_FALSE(C_::IsPaddedMat(Mat1f(1, 0)));
+    EXPECT_FALSE(C_::IsPaddedMat(Mat1f(0, 1)));
+
+    EXPECT_FALSE(C_::IsPaddedMat(Mat1f(this->field_count_i_, 0)));
+    EXPECT_FALSE(C_::IsPaddedMat(Mat1f(0, this->field_count_i_)));
+
+    EXPECT_FALSE(C_::IsPaddedMat(Mat1f(this->nb_floats_i_, 0)));
+    EXPECT_FALSE(C_::IsPaddedMat(Mat1f(0, this->nb_floats_i_)));
+}
+
+TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_IsPadded_TypedTests, Multiple_FieldCount)
+{
+    typedef ConverterCloudMat_<TypeParam > C_;
+
+    for(int n=1; n<9; n++) {
+
+        int cols = n*this->field_count_i_;
+        if(cols % this->nb_floats_i_ != 0) {
+
+            Mat1f m(3, cols);
+            randn(m, 0.f, 100.f);
+            EXPECT_FALSE(C_::IsPaddedMat(m));
+        }
+    }
+}
+
+TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_IsPadded_TypedTests, Multiple_NbFloats)
+{
+    typedef ConverterCloudMat_<TypeParam > C_;
+
+    for(int n=1; n<9; n++) {
+
+        int cols = n*this->nb_floats_i_;
+        if(cols % this->field_count_i_ != 0) {
+
+            Mat1f m(3, cols);
+            randn(m, 0.f, 100.f);
+            EXPECT_TRUE(C_::IsPaddedMat(m));
+        }
+    }
+}
+
+TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_IsPadded_TypedTests, No_Multiple)
+{
+    typedef ConverterCloudMat_<TypeParam > C_;
+
+    for(int cols=1; cols<=this->field_count_i_*this->nb_floats_i_; cols++) {
+
+        if((cols % this->field_count_i_ != 0) && (cols % this->nb_floats_i_ != 0)) {
+
+            Mat1f m(3, cols);
+            randn(m, 0.f, 100.f);
+            EXPECT_THROW(C_::IsPaddedMat(m), ExceptionBadDims) << "where cols = " << cols;
+        }
+    }
+}
+
+TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_IsPadded_TypedTests, Ambiguous_Padded)
+{
+    typedef ConverterCloudMat_<TypeParam > C_;
+
+    EXPECT_TRUE(C_::IsPaddedMat(Mat1f::ones(3, this->field_count_i_*this->nb_floats_i_)));
+    EXPECT_TRUE(C_::IsPaddedMat(Mat1f::zeros(3, this->field_count_i_*this->nb_floats_i_)));
+
+    Mat1f m(3, this->field_count_i_*this->nb_floats_i_);
+    randn(m, 0.f, 100.f);
+
+    int p = this->nb_floats_i_ - this->field_count_i_;
+
+    for(int col=this->field_count_i_; col<m.cols; col+=this->nb_floats_i_) {
+
+        m.colRange(col, col+p).setTo(0.f);
+    }
+    EXPECT_TRUE(C_::IsPaddedMat(m));
+
+    EXPECT_TRUE(C_::IsPaddedMat(m.row(0)));
+    EXPECT_TRUE(C_::IsPaddedMat(m.rowRange(0, 2)));
+}
+
+TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_IsPadded_TypedTests, Ambiguous_NotPadded)
+{
+    typedef ConverterCloudMat_<TypeParam > C_;
+
+    Mat1f m(3, this->field_count_i_*this->nb_floats_i_);
+    randn(m, 0.f, 100.f);
+    EXPECT_FALSE(C_::IsPaddedMat(m));
+
+    EXPECT_TRUE(C_::IsPaddedMat(m.row(0)));
+    EXPECT_FALSE(C_::IsPaddedMat(m.rowRange(0, 2)));
 }
 
 // must preceed static_assertions
@@ -332,16 +454,19 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Empty_Size)
     EXPECT_EQ(size_t(0), C_::Mat2PointCloud(Mat4f(0, 3))->size());
 }
 
-TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Dims)
+/**
+ * @brief Multi-channel Mat where no. of channels are equal to Point type's field count
+ */
+TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Dims_field_count)
 {
     typedef ConverterCloudMat_<TypeParam > C_;
+    typedef Mat_<Vec<float, ExpectedPointAttr_<TypeParam >::field_count > > Matnf;
 
     for(int r=1; r<7; r++) {
 
         for(int c=1; c<7; c++) {
 
-            Mat_<Vec<float, ExpectedPointAttr_<TypeParam >::field_count > > m(r, c, 1.f);
-
+            Matnf m(r, c, 1.f);
             typename PointCloud<TypeParam >::Ptr cloud_ptr;
 
             cloud_ptr = C_::Mat2PointCloud(m);
@@ -349,7 +474,8 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Dims)
             EXPECT_EQ(c, static_cast<int>(cloud_ptr->width));
             EXPECT_EQ(r, static_cast<int>(cloud_ptr->height));
 
-            cloud_ptr = C_::Mat2PointCloud(m.reshape(1, 1));
+            // reshape returns a Mat wich invokes the single-channel overload. Therefore, we need an explicit cast.
+            cloud_ptr = C_::Mat2PointCloud(static_cast<Matnf>(m.reshape(m.channels(), 1)));
             EXPECT_EQ(m.total(), cloud_ptr->size());
             EXPECT_EQ(c*r, static_cast<int>(cloud_ptr->width));
             EXPECT_EQ(1, static_cast<int>(cloud_ptr->height));
@@ -357,15 +483,47 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Dims)
     }
 }
 
+/**
+ * @brief Multi-channel Mat where no. of channels are equal to Point type's nb_floats
+ * Not applied for Point types with nb_floats > 4. This is OpenCV's upper limit on no. of channels.
+ */
+TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Dims_nb_floats)
+{
+    typedef ConverterCloudMat_<TypeParam > C_;
+    if(ExpectedPointAttr_<TypeParam >::nb_floats <= 4) {
+
+        typedef Mat_<Vec<float, ExpectedPointAttr_<TypeParam >::nb_floats > > Matnf;
+        for(int r=1; r<7; r++) {
+
+            for(int c=1; c<7; c++) {
+
+                Matnf m(r, c, 1.f);
+                typename PointCloud<TypeParam >::Ptr cloud_ptr;
+
+                cloud_ptr = C_::Mat2PointCloud(m);
+                EXPECT_EQ(m.total(), cloud_ptr->size());
+                EXPECT_EQ(c, static_cast<int>(cloud_ptr->width));
+                EXPECT_EQ(r, static_cast<int>(cloud_ptr->height));
+
+                // reshape returns a Mat wich invokes the single-channel overload. Therefore, we need an explicit cast.
+                cloud_ptr = C_::Mat2PointCloud(static_cast<Matnf>(m.reshape(m.channels(), 1)));
+                EXPECT_EQ(m.total(), cloud_ptr->size());
+                EXPECT_EQ(c*r, static_cast<int>(cloud_ptr->width));
+                EXPECT_EQ(1, static_cast<int>(cloud_ptr->height));
+            }
+        }
+    }
+}
+
 TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, IsOrganized)
 {
     typedef ConverterCloudMat_<TypeParam > C_;
-
-    Mat_<Vec<float, ExpectedPointAttr_<TypeParam >::field_count > > m(9, 9, 1.f);
+    typedef Mat_<Vec<float, ExpectedPointAttr_<TypeParam >::field_count > > Matnf;
+    Matnf m(9, 9, 1.f);
 
     EXPECT_TRUE(C_::Mat2PointCloud(m)->isOrganized());
-    EXPECT_TRUE(C_::Mat2PointCloud(m.reshape(1, 3))->isOrganized());
-    EXPECT_FALSE(C_::Mat2PointCloud(m.reshape(1, 1))->isOrganized()) << "Row matrices yield un-organized point clouds";
+    EXPECT_TRUE(C_::Mat2PointCloud(m.reshape(m.channels(), 3))->isOrganized());
+    EXPECT_FALSE(C_::Mat2PointCloud(m.reshape(m.channels(), 1))->isOrganized()) << "Row matrices yield un-organized point clouds";
 }
 
 /**
@@ -398,8 +556,9 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Values_NonOrganized)
 
 /**
  * @brief check values stored in organized point cloud after conversion
+ * no. of channels equal to Point type field count
  */
-TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Values_Organized)
+TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Values_Organized_field_count)
 {
     typedef ConverterCloudMat_<TypeParam > C_;
 
@@ -426,6 +585,43 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Values_Organized)
         }
     }
 }
+
+/**
+ * @brief check values stored in organized point cloud after conversion
+ * no. of channels equal to point's nb floats
+ * Not applied for Point types with nb_floats > 4. This is OpenCV's upper limit on no. of channels.
+ */
+TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Values_Organized_nb_floats)
+{
+    if(ExpectedPointAttr_<TypeParam >::nb_floats <= 4) {
+
+        typedef ConverterCloudMat_<TypeParam > C_;
+
+        const int CLOUD_COLS=3;
+
+        // organized point cloud
+        Mat_<Vec<float, ExpectedPointAttr_<TypeParam >::nb_floats > > m(9, CLOUD_COLS, 1.f);
+        randn(m, 0.f, 100.f);
+        typename PointCloud<TypeParam >::Ptr cloud_ptr = C_::Mat2PointCloud(m);
+
+        for(size_t r=0; r<cloud_ptr->height; r++) {
+
+            for(size_t c=0; c<cloud_ptr->width; c++) {
+
+                TypeParam pt = cloud_ptr->at(c, r);;
+                float *pt_data_ptr = reinterpret_cast<float*>(&pt);
+
+                Vec<float, ExpectedPointAttr_<TypeParam >::nb_floats > v = m(r, c);
+
+                for(int field_idx=0; field_idx<this->nb_floats_i_; field_idx++) {
+
+                    EXPECT_FLOAT_EQ(v[field_idx], pt_data_ptr[field_idx]) << "Unexpected value for field " << field_idx << "at r=" << r << ", c=" << c <<".";
+                }
+            }
+        }
+    }
+}
+
 
 /**
  * @brief Populate a single and multi-channel matrix with same values

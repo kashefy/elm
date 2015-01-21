@@ -46,7 +46,7 @@ public:
         }
         else {
 
-            dst = Mat2PointCloud_<TPointDst>(PointCloud2Mat_<TPointSrc >(src));
+            dst = Mat2PointCloud_<TPointDst >(PointCloud2Mat_<TPointSrc >(src));
         }
     }
 
