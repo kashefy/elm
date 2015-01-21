@@ -1,5 +1,7 @@
 #include "sem/core/pcl/cloud_impl_.h"
 
+#ifdef __WITH_PCL // following test cases require PCL support
+
 #include "sem/core/pcl/point_traits.h"
 #include "sem/ts/pcl_point_typed_tests.h"
 #include "sem/ts/ts.h"
@@ -368,3 +370,5 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_IsPadded_TypedTests, Ambiguous_NotPa
 // multi-channel tests under different source file "cloud...multi_channel...unittests.cpp"
 
 } // annonymous namespace for tests
+
+#endif // WITH_PCL

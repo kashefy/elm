@@ -52,6 +52,8 @@ TYPED_TEST_P(VisitorPOD_Test, Value)
     }
 }
 
+#ifdef __WITH_PCL // PCL support required for these tests
+
 TYPED_TEST_P(VisitorPOD_Test, Value_FromVecVertices)
 {
     VisitorPOD_<TypeParam > to;
@@ -67,8 +69,6 @@ TYPED_TEST_P(VisitorPOD_Test, Value_FromVecVertices)
         EXPECT_EQ(static_cast<TypeParam >(_v), to(vv)) << "Value mismatch.";
     }
 }
-
-#ifdef __WITH_PCL // PCL support required for these tests
 
 TYPED_TEST_P(VisitorPOD_Test, Invalid_Cloud)
 {
@@ -132,11 +132,15 @@ TYPED_TEST_P(VisitorPOD_Test, Invalid_VecVertices)
 }
 #else // __WITH_PCL
 
-TYPED_TEST_P(VisitorPOD_Test, DISABLED_Invalid_Cloud)
+TYPED_TEST_P(VisitorPOD_Test, Value_FromVecVertices)
 {
 }
 
-TYPED_TEST_P(VisitorPOD_Test, DISABLED_Invalid_VecVertices)
+TYPED_TEST_P(VisitorPOD_Test, Invalid_Cloud)
+{
+}
+
+TYPED_TEST_P(VisitorPOD_Test, Invalid_VecVertices)
 {
 }
 

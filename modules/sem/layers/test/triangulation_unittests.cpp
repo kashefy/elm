@@ -1,5 +1,7 @@
 #include "sem/layers/triangulation.h"
 
+#ifdef __WITH_PCL // test normally
+
 #include <boost/filesystem.hpp>
 
 #include <pcl/point_types.h>
@@ -25,8 +27,6 @@ using namespace pcl;
 using namespace sem;
 
 namespace {
-
-#ifdef __WITH_PCL // test normally
 
 const bfs::path TEST_DIR("testdata");
 const bfs::path TEST_PATH_PCD = TEST_DIR/"bun0.pcd";
@@ -215,9 +215,8 @@ TEST_F(TriangulationTest, ActivateAndResponse)
     }
 }
 
+} // annonymous namespace for test fixtures
+
 #else // __WITH_PCL
     #warning "Skipping building Triangulation layer unit tests"
 #endif // __WITH_PCL
-
-} // annonymous namespace for test fixtures
-
