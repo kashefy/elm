@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 2.8.7)
 # ----------------------------------------------------------------------------
 set(ROOT_PROJECT sem)
 project(${ROOT_PROJECT})
-set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules)
+set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules) # enforce includes to start with project's parent dir (e.g. #include <sem/core/core.h>)
 set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
 
@@ -161,6 +161,11 @@ status("Resolve Opt. Dependencies:")
 # ----------------------------------------------------------------------------
 # the components we're currently interested in:
 #     common
+#     io            - loading pcd files
+#     registration  - icp
+#     features      - triangulation
+#     kdtree        - triangulation
+#     surface       - triangulation
 # find_package PCL
 # Defines:
 #     PCL_FOUND:        set to 1 if PCL is found, otherwise unset
@@ -173,7 +178,7 @@ status("Resolve Opt. Dependencies:")
 set(WITH_PCL ON CACHE BOOL "Whether to build with PCL support.")
 
 if(WITH_PCL)
-    set(PCL_COMPONENTS_REQ common io registration)
+    set(PCL_COMPONENTS_REQ common io registration features kdtree surface)
     status("Find PCL:")
     find_package(PCL 1.7 REQUIRED COMPONENTS ${PCL_COMPONENTS_REQ})
     if(PCL_FOUND)   # true
@@ -191,7 +196,7 @@ endif(WITH_PCL)
 
 include_directories(${${ROOT_PROJECT}_INCLUDE_DIRS})
 
-add_subdirectory(modules)
+add_subdirectory(modules/${ROOT_PROJECT})
 add_subdirectory(samples)
 
 # ----------------------------------------------------------------------------
@@ -209,12 +214,12 @@ if(BUILD_TESTS)
     add_definitions(-D__WITH_GTEST) # Useful in case test class needs to be friend of class under test
 
     # Copy over test data (if it exists)
-    if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
+    if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/testdata")
 
-        status("Copying test-data")
-        file(COPY ${CMAKE_SOURCE_DIR}/test-data DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+        status("Copying test data")
+        file(COPY ${CMAKE_SOURCE_DIR}/testdata DESTINATION ${EXECUTABLE_OUTPUT_PATH})
 
-    endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/test-data")
+    endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/testdata")
 
 endif(BUILD_TESTS)
 

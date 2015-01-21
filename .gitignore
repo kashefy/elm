@@ -33,7 +33,13 @@
 # IDE files
 *.autosave
 
+# Editor backup files
+*~
+*.swp
+*.swo
+
 # Generated documentation
 docs/*
 !docs/*.bib
-!docs/doxygenConf*
+!docs/doxygenConf
+!docs/doxygenConf.txt

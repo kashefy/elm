@@ -1,4 +1,4 @@
-#include "simulationsem.h"
+#include "sem/simulationsem.h"
 
 #include <iostream>
 
@@ -6,13 +6,13 @@
 
 #include <opencv2/highgui.hpp>
 
-#include "core/signal.h"
-#include "core/mat_utils.h"
-#include "encoding/populationcode.h"
-#include "io/readmnist.h"
-#include "layers/layerfactory.h"
-#include "layers/layer_y.h"
-#include "layers/layer_z.h"
+#include "sem/core/signal.h"
+#include "sem/core/cv/mat_utils.h"
+#include "sem/encoding/populationcode.h"
+#include "sem/io/readmnist.h"
+#include "sem/layers/layerfactory.h"
+#include "sem/layers/layer_y.h"
+#include "sem/layers/layer_z.h"
 
 using namespace cv;
 using namespace std;
@@ -46,7 +46,7 @@ void SimulationSEM::Learn()
 
         sig.Clear();
 
-        Mat img = r.Next();
+        Mat1f img = r.Next();
 
         sig.Append(NAME_STIMULUS, img);
 
@@ -61,7 +61,7 @@ void SimulationSEM::Learn()
 
             if(!z_) {
 
-                z_ = InitLearners(static_cast<int>(sig.MostRecent(NAME_SPIKES_Y).total()), 10);
+                z_ = InitLearners(static_cast<int>(sig.MostRecentMat(NAME_SPIKES_Y).total()), 10);
             }
 
             z_->Activate(sig);
@@ -85,7 +85,7 @@ void SimulationSEM::Test()
 
         sig.Clear();
 
-        Mat img = r.Next();
+        Mat1f img = r.Next();
         //cv::imshow("i", img);
         sig.Append(NAME_STIMULUS, img);
 
@@ -103,7 +103,7 @@ void SimulationSEM::Eval()
 {
     Signal signal;
     z_->Response(signal);
-    SimulationSEM::VisualizeOnOffWeights(signal.MostRecent(NAME_WEIGHTS));
+    SimulationSEM::VisualizeOnOffWeights(signal.MostRecentMat(NAME_WEIGHTS));
 }
 
 shared_ptr<base_Layer> SimulationSEM::InitPopulationCode() const
