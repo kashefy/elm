@@ -2,10 +2,12 @@
 
 #include "sem/core/stl/stl.h"
 #include "sem/core/exception.h"
+#include "sem/ts/pcl_point_typed_tests.h"
 #include "sem/ts/ts.h"
 
 using namespace std;
 using namespace cv;
+using namespace pcl;
 using namespace sem;
 
 namespace {
@@ -21,28 +23,11 @@ protected:
     {
         mat_ = Mat_f(4, 3);
         randn(mat_, 0.f, 100.f);
-
-        cld_ = Mat2PointCloud_<pcl::PointXYZ>(mat_.clone());
-        mat_ = PointCloud2Mat_<pcl::PointXYZ>(cld_).clone();
     }
 
     Mat_f mat_;
-    CloudXYZPtr cld_;
 };
 
-/**
- * @brief Initialize test object with Cloud object, then call getters.
- */
-TEST_F(FeatureDataTest, Init_Cloud)
-{
-    FeatureData to(cld_);
-
-    Mat_f m = to.get<Mat_f>();
-    CloudXYZPtr cld = to.get<CloudXYZPtr>();
-
-    EXPECT_MAT_EQ(m, mat_);
-    EXPECT_MAT_EQ(PointCloud2Mat_<pcl::PointXYZ>(cld), mat_);
-}
 
 /**
  * @brief Initialize test object with Mat object, then call getters.
@@ -52,10 +37,8 @@ TEST_F(FeatureDataTest, Init_Mat_f)
     FeatureData to(mat_);
 
     Mat_f m = to.get<Mat_f>();
-    CloudXYZPtr cld = to.get<CloudXYZPtr>();
 
     EXPECT_MAT_EQ(m, mat_);
-    EXPECT_MAT_EQ(PointCloud2Mat_<pcl::PointXYZ>(cld), mat_);
 }
 
 /**
@@ -72,19 +55,85 @@ TEST_F(FeatureDataTest, Same_Mat)
 }
 
 /**
+ * @brief Typed tests around FeatureData class with pcl PointCloud typed feature data
+ */
+template <class TPoint>
+class FeatureDataCloud_Test : public ::testing::Test
+{
+protected:
+    virtual void SetUp()
+    {
+        size_t field_count = sem::ts::ExpectedPointAttr_<TPoint>::field_count;
+        size_t nb_floats = sem::ts::ExpectedPointAttr_<TPoint>::nb_floats;
+
+        int cols = 2*field_count;
+        while(cols % nb_floats == 0 && cols % field_count == 0) {
+            cols += field_count;
+        }
+
+        mat_ = Mat1f(2, cols);
+        randn(mat_, 0.f, 3.f);
+        mat_ = Mat1i(mat_);
+
+        cld_ = Mat2PointCloud_<TPoint >(mat_.clone());
+        mat_ = PointCloud2Mat_(cld_).clone();
+    }
+
+    Mat_f mat_;
+    boost::shared_ptr<pcl::PointCloud<TPoint > > cld_;
+};
+
+TYPED_TEST_CASE(FeatureDataCloud_Test, PCLPointTypes);
+
+/**
+ * @brief Initialize test object with Cloud object, then call getters.
+ */
+TYPED_TEST(FeatureDataCloud_Test, InitWithCloud)
+{
+    typedef boost::shared_ptr<pcl::PointCloud< TypeParam > > CloudTPPtr;
+
+    FeatureData to(this->cld_);
+
+    Mat_f m = to.get<Mat_f>();
+    CloudTPPtr cld = to.get<CloudTPPtr >();
+
+    EXPECT_MAT_EQ(m, this->mat_);
+    EXPECT_MAT_EQ(PointCloud2Mat_<TypeParam>(cld), this->mat_);
+
+    EXPECT_THROW(to.get<float >(), ExceptionTypeError);
+    EXPECT_THROW(to.get<int >(), ExceptionTypeError);
+}
+
+/**
+ * @brief Initialize test object with Mat object, then call cloud getters.
+ */
+TYPED_TEST(FeatureDataCloud_Test, InitWithMat_f)
+{
+    typedef boost::shared_ptr<pcl::PointCloud< TypeParam > > CloudTPPtr;
+
+    FeatureData to(this->mat_);
+
+    CloudTPPtr cld = to.get<CloudTPPtr >();
+
+    EXPECT_MAT_EQ(PointCloud2Mat_<TypeParam >(cld), this->mat_);
+}
+
+/**
  * @brief Test caching of cloud reference
  * by comparing what the pointers are pointing at and verifying the use count increased by 1 after calling get
  */
-TEST_F(FeatureDataTest, Cached_Cloud)
+TYPED_TEST(FeatureDataCloud_Test, Cached_Cloud)
 {
-    FeatureData to(mat_);
+    typedef boost::shared_ptr<pcl::PointCloud< TypeParam > > CloudTPPtr;
 
-    CloudXYZPtr cld = to.get<CloudXYZPtr>();
-    EXPECT_NE(cld, cld_);
+    FeatureData to(this->mat_);
+
+    CloudTPPtr cld = to.get<CloudTPPtr >();
+    EXPECT_NE(cld, this->cld_);
     long old_cld_use_count = cld.use_count();
 
-    CloudXYZPtr cld2 = to.get<CloudXYZPtr>();
-    EXPECT_NE(cld2, cld_);
+    CloudTPPtr cld2 = to.get<CloudTPPtr >();
+    EXPECT_NE(cld2, this->cld_);
     EXPECT_EQ(cld2, cld);
 
     // check use count increased
@@ -169,8 +218,13 @@ TYPED_TEST(FeatureDataPOD_Test, FromPOD)
         EXPECT_MAT_EQ( Mat_f(1, 1, static_cast<float >(_v)), to.get<Mat_f >()) << "Value mismatch while getting Mat_f.";
 
 #ifdef __WITH_PCL
-        EXPECT_THROW( to.get<CloudXYZPtr >(), ExceptionTypeError );
 
+        // cloud types
+        EXPECT_THROW( to.get<CloudXYZPtr >(), ExceptionTypeError );
+        EXPECT_THROW( to.get<CloudNrmlPtr >(), ExceptionTypeError );
+        EXPECT_THROW( to.get<CloudPtNrmlPtr >(), ExceptionTypeError );
+
+        // vertices
         {
             VecVertices vv = to.get<VecVertices >();
             EXPECT_SIZE(1, vv);
@@ -178,67 +232,89 @@ TYPED_TEST(FeatureDataPOD_Test, FromPOD)
 
             EXPECT_EQ(static_cast<uint32_t>(_v), vv[0].vertices[0]);
         }
+
 #endif // __WITH_PCL
     }
 }
 
 #ifdef __WITH_PCL // PCL support required for these tests
 
+template<typename TypeParam, class TPoint>
+void Invalid_Cloud_Tests()
+{
+    int field_count = static_cast<int>(PCLPointTraits_<TPoint >::FieldCount());
+    int nb_floats = static_cast<int>(PCLPointTraits_<TPoint >::NbFloats());
+
+    // empty
+    typename PointCloud<TPoint >::Ptr cld(new PointCloud<TPoint >);
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    // multi-row, columns are multiple of field count
+    cld = Mat2PointCloud_<TPoint>(Mat1f(4, field_count, 0.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    cld = Mat2PointCloud_<TPoint>(Mat1f(4, field_count, 1.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    cld = Mat2PointCloud_<TPoint>(Mat1f(4, field_count, 2.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    // multi-row, columns are multiple of nb_floats
+    cld = Mat2PointCloud_<TPoint>(Mat1f(4, nb_floats, 0.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    cld = Mat2PointCloud_<TPoint>(Mat1f(4, nb_floats, 1.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    cld = Mat2PointCloud_<TPoint>(Mat1f(4, nb_floats, 2.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    // single row, columns are multiple of field count
+    cld = Mat2PointCloud_<TPoint>(Mat1f(1, field_count, 0.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    cld = Mat2PointCloud_<TPoint>(Mat1f(1, field_count, 1.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    // single row, columns are multiple of nb_floats
+    cld = Mat2PointCloud_<TPoint>(Mat1f(1, nb_floats, 0.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+
+    cld = Mat2PointCloud_<TPoint>(Mat1f(1, nb_floats, 1.f));
+    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+}
+
 TYPED_TEST(FeatureDataPOD_Test, Invalid_Cloud)
 {
-    // empty
-    CloudXYZPtr cld(new CloudXYZ);
-    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
-
-    // multi-row, 3-col
-    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(4, 3, 0.f));
-    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
-
-    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(4, 3, 1.f));
-    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
-
-    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(4, 3, 2.f));
-    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
-
-    // single row
-    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(1, 3, 0.f));
-    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
-
-    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat1f(1, 3, 1.f));
-    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
-
-    // 3-channel
-    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat3f(1, 1, 0.f));
-    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
-
-    cld = Mat2PointCloud_<pcl::PointXYZ>(Mat3f(1, 1, 1.f));
-    EXPECT_THROW(FeatureData(cld).get<TypeParam >(), ExceptionTypeError);
+    Invalid_Cloud_Tests<TypeParam, PointXYZ >();
+    Invalid_Cloud_Tests<TypeParam, Normal >();
+    Invalid_Cloud_Tests<TypeParam, PointNormal >();
 }
 
 TYPED_TEST(FeatureDataPOD_Test, Invalid_VecVertices)
 {
-//    // empty
-//    EXPECT_THROW(FeatureData(VecVertices()).get<TypeParam >(), ExceptionTypeError);
+    // empty
+    EXPECT_THROW(FeatureData(VecVertices()).get<TypeParam >(), ExceptionBadDims);
 
-//    // multi-row
-//    {
-//        pcl::Vertices v;
-//        v.vertices.push_back(1);
-//        VecVertices vv;
-//        vv.push_back(v);
-//        vv.push_back(v);
-//        EXPECT_THROW(FeatureData(vv).get<TypeParam >(), ExceptionBadDims);
-//    }
+    // multi-row
+    {
+        pcl::Vertices v;
+        v.vertices.push_back(1);
+        VecVertices vv;
+        vv.push_back(v);
+        vv.push_back(v);
+        EXPECT_THROW(FeatureData(vv).get<TypeParam >(), ExceptionBadDims);
+    }
 
-//    // multi-col
-//    {
-//        pcl::Vertices v;
-//        v.vertices.push_back(1);
-//        v.vertices.push_back(2);
-//        VecVertices vv;
-//        vv.push_back(v);
-//        EXPECT_THROW(FeatureData(vv).get<TypeParam >(), ExceptionBadDims);
-//    }
+    // multi-col
+    {
+        pcl::Vertices v;
+        v.vertices.push_back(1);
+        v.vertices.push_back(2);
+        VecVertices vv;
+        vv.push_back(v);
+        EXPECT_THROW(FeatureData(vv).get<TypeParam >(), ExceptionBadDims);
+    }
 }
 
 #else // __WITH_PCL
@@ -247,7 +323,7 @@ TYPED_TEST(FeatureDataPOD_Test, DISABLED_Invalid_Cloud)
 {
 }
 
-TYPED_TEST(FeatureDataPOD_Test, Invalid_VecVertices)
+TYPED_TEST(FeatureDataPOD_Test, DISABLED_Invalid_VecVertices)
 {
 }
 
