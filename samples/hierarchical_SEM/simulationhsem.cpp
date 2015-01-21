@@ -1,4 +1,4 @@
-#include "simulationhsem.h"
+#include "sem/simulationhsem.h"
 
 #include <iostream>
 
@@ -6,13 +6,13 @@
 
 #include <opencv2/highgui.hpp>
 
-#include "core/signal.h"
-#include "core/cv/mat_utils.h"
-#include "encoding/populationcode.h"
-#include "io/readmnist.h"
-#include "layers/layerfactory.h"
-#include "layers/layer_y.h"
-#include "layers/layer_z.h"
+#include "sem/core/signal.h"
+#include "sem/core/cv/mat_utils.h"
+#include "sem/encoding/populationcode.h"
+#include "sem/io/readmnist.h"
+#include "sem/layers/layerfactory.h"
+#include "sem/layers/layer_y.h"
+#include "sem/layers/layer_z.h"
 
 using namespace cv;
 using namespace std;
