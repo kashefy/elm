@@ -30,6 +30,7 @@ Anticipated milestones:
 * GPU support, maybe by channeling through [OpenCV's OpenCL module](http://docs.opencv.org/modules/ocl/doc/introduction.html) or directly through OpenCL
 * Enhanced parallelization
 * Easier plugging-in of groups of custom layers into LayerFactory
+* pull everything into the elm namespace
 
 ### Getting your framework build up and running ###
 
