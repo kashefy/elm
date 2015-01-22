@@ -21,7 +21,7 @@ namespace elm {
  * @throws ExceptionBadDims if no. of channels != 1, ExceptionTypeError for non-continuous matrix input.
  */
 template <class T>
-bool find_first_of(const cv::Mat &m, const T &value, int &index=sem::NA_IDX)
+bool find_first_of(const cv::Mat &m, const T &value, int &index=elm::NA_IDX)
 {
     if(!m.empty()) {
 

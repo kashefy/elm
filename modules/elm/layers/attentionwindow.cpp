@@ -92,7 +92,7 @@ void AttentionWindow::Response(Signal &signal)
 
     // optional outputs
     if(name_out_tl_) {
-        signal.Append(name_out_tl_.get(), static_cast<Mat1f>(sem::Point2Mat(tl_)));
+        signal.Append(name_out_tl_.get(), static_cast<Mat1f>(elm::Point2Mat(tl_)));
     }
 }
 

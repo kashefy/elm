@@ -105,7 +105,7 @@ protected:
         Mat1f stimulus(6, 8);
         randn(stimulus, 0.f, 100.f);
         sig_.Append(NAME_SCENE, stimulus);
-        sig_.Append(NAME_LOC, static_cast<Mat1f>(sem::Point2Mat(Point2i(3, 4))));
+        sig_.Append(NAME_LOC, static_cast<Mat1f>(elm::Point2Mat(Point2i(3, 4))));
     }
 
     virtual void TearDown()
@@ -206,7 +206,7 @@ TEST_F(AttentionWindowTest, Window)
         Point2i loc;
         loc.x = abs(randu<int>()) % (scene.cols-4);
         loc.y = abs(randu<int>()) % (scene.rows-3);
-        sig_.Append(NAME_LOC, static_cast<Mat1f>(sem::Point2Mat(loc)));
+        sig_.Append(NAME_LOC, static_cast<Mat1f>(elm::Point2Mat(loc)));
 
         to_->Activate(sig_);
         to_->Response(sig_);
@@ -235,7 +235,7 @@ TEST_F(AttentionWindowTest, Loc_NoRectify)
 
             Point2i tl_expected(x, y);
             Point2i loc = TL2Centre(tl_expected, WIN_SIZE);
-            sig_.Append(NAME_LOC, static_cast<Mat1f>(sem::Point2Mat(loc)));
+            sig_.Append(NAME_LOC, static_cast<Mat1f>(elm::Point2Mat(loc)));
 
             to_->Activate(sig_);
             to_->Response(sig_);
@@ -263,7 +263,7 @@ TEST_F(AttentionWindowTest, Loc_Borders)
         Point2i loc = TL2Centre(tl_expected, WIN_SIZE);
         loc.y = y;
 
-        sig_.Append(NAME_LOC, static_cast<Mat1f>(sem::Point2Mat(loc)));
+        sig_.Append(NAME_LOC, static_cast<Mat1f>(elm::Point2Mat(loc)));
 
         to_->Activate(sig_);
         to_->Response(sig_);
@@ -280,7 +280,7 @@ TEST_F(AttentionWindowTest, Loc_Borders)
         Point2i loc = TL2Centre(tl_expected, WIN_SIZE);
         loc.x = x;
 
-        sig_.Append(NAME_LOC, static_cast<Mat1f>(sem::Point2Mat(loc)));
+        sig_.Append(NAME_LOC, static_cast<Mat1f>(elm::Point2Mat(loc)));
 
         to_->Activate(sig_);
         to_->Response(sig_);
@@ -298,7 +298,7 @@ TEST_F(AttentionWindowTest, Loc_Borders)
         loc.x = x;
         tl_expected.x = scene.cols-WIN_COLS;
 
-        sig_.Append(NAME_LOC, static_cast<Mat1f>(sem::Point2Mat(loc)));
+        sig_.Append(NAME_LOC, static_cast<Mat1f>(elm::Point2Mat(loc)));
 
         to_->Activate(sig_);
         to_->Response(sig_);
@@ -316,7 +316,7 @@ TEST_F(AttentionWindowTest, Loc_Borders)
         loc.y = y;
         tl_expected.y = scene.rows-WIN_ROWS;
 
-        sig_.Append(NAME_LOC, static_cast<Mat1f>(sem::Point2Mat(loc)));
+        sig_.Append(NAME_LOC, static_cast<Mat1f>(elm::Point2Mat(loc)));
 
         to_->Activate(sig_);
         to_->Response(sig_);

@@ -15,18 +15,18 @@
  * Requires PCL support.
  */
 class VisitorVecVertices :
-        public Visitor_<sem::VecVertices >
+        public Visitor_<elm::VecVertices >
 {
 public:
     void Reset();
 
     elm::VecVertices operator()(const elm::VecVertices &vv);
 
-    elm::VecVertices operator()(sem::CloudXYZPtr &c);
+    elm::VecVertices operator()(elm::CloudXYZPtr &c);
 
-    elm::VecVertices operator()(sem::CloudNrmlPtr &c);
+    elm::VecVertices operator()(elm::CloudNrmlPtr &c);
 
-    elm::VecVertices operator()(sem::CloudPtNrmlPtr &c);
+    elm::VecVertices operator()(elm::CloudPtNrmlPtr &c);
 
     elm::VecVertices operator()(float f);
 

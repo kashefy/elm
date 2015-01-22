@@ -51,7 +51,7 @@ void LayerY::Reconfigure(const LayerConfig &config)
     }
 
     VecS unused_keys;
-    if(sem::UnusedNodes(params,
+    if(elm::UnusedNodes(params,
                         VecS({PARAM_FREQ, PARAM_DELTA_T_MSEC}),
                         unused_keys)) {
 

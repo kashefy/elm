@@ -1,4 +1,4 @@
-/** @file Run Hierarchical SEM simulation (Kasehf, Masters Thesis 2013)
+/** @file Run Hierarchical SEM simulation (Kashef, Masters Thesis 2013)
  */
 #include <iostream>
 
@@ -9,7 +9,7 @@ using namespace std;
 
 int main() {
 
-    cout<<sem::GetVersion()<<endl;
+    cout<<elm::GetVersion()<<endl;
 
     SimulationHSEM s;
 

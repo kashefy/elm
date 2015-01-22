@@ -1,6 +1,6 @@
 /**
  * @file Define variant visitor classes around Mat <-> X type conversions
- * @todo switchsem::Mat_f to basic Mat
+ * @todo switchelm::Mat_f to basic Mat
  */
 #ifndef ELM_CORE_VISITORMAT__H_
 #define ELM_CORE_VISITORMAT__H_
@@ -14,7 +14,7 @@
  * @brief visitor class for converting to Mat of floats
  */
 class VisitorMat_f :
-        public Visitor_<sem::Mat_f >
+        public Visitor_<elm::Mat_f >
 {
 public:
    elm::Mat_f operator()(const cv::Mat &m) const;
@@ -29,11 +29,11 @@ public:
 
 #ifdef __WITH_PCL // this conversion requires PCL support
 
-   elm::Mat_f operator()(sem::CloudXYZPtr &c) const;
+   elm::Mat_f operator()(elm::CloudXYZPtr &c) const;
 
-   elm::Mat_f operator()(sem::CloudNrmlPtr &c) const;
+   elm::Mat_f operator()(elm::CloudNrmlPtr &c) const;
 
-   elm::Mat_f operator()(sem::CloudPtNrmlPtr &c) const;
+   elm::Mat_f operator()(elm::CloudPtNrmlPtr &c) const;
 
    elm::Mat_f operator()(const elm::VecVertices &vv) const;
 
