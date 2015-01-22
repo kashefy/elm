@@ -1,8 +1,8 @@
-The SEM framework
+The Elm framework
 
 This started off as a a C++ implementation of a Spike-based Expectation Maximization (SEM) model, a biologically inspired model for object detection and recognition.
-It then grew into a more generic framework to support experimenting with as many models as possible, providing an interface for adding custom algorithms and methods.
-How ever said coding in C++ couldn't be done as smoothly as scripting languages?
+It then grew into a more generic framework called Elm to support experimenting with as many models as possible, providing an interface for adding custom algorithms and methods.
+Whoever said coding in C++ couldn't be done as smoothly as scripting languages?
 
 # Background #
 
@@ -10,12 +10,15 @@ Nessler, Pfeiffer and Maass originally propose the SEM model in 2010. They demon
 
 This implementation is work by Youssef Kashef. It extends the original SEM with hierarchical learning of features and selective visual attention. This work was as part of a Masters Thesis at ETH Zürich titled "Scale- and Translation-Invariant Unsupervised Learning of Hidden Causes Using Spiking Neurons with Selective Visual Attention"
 
+The extended SEM and its specific layers will gradually be detached from the generic ELM framework but continue subscribing to it.
+
 ## Milestones ##
 
 1. Matlab implementation by Michael Pfeiffer and authors of 2010 SEM paper (not included).
 2. Java implementation + Evaluation in Matlab
 3. SEM model extended with scale and translation invariance through hiearchical learning
 4. C++ implementation and code refactoring **in progress** (partially complete)
+5. Separate SEM specific layers, hello Elm framework
   
 Anticipated milestones:
   
@@ -26,6 +29,7 @@ Anticipated milestones:
 * support for mobile platforms
 * GPU support, maybe by channeling through [OpenCV's OpenCL module](http://docs.opencv.org/modules/ocl/doc/introduction.html) or directly through OpenCL
 * Enhanced parallelization
+* Easier plugging-in of groups of custom layers into LayerFactory
 
 ### Getting your framework build up and running ###
 
