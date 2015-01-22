@@ -9,7 +9,7 @@
 class base_Ganglion
 {
 public:
-    ~base_Ganglion();
+    virtual ~base_Ganglion();
 
     /**
      * @brief Initialize ganglion cell model

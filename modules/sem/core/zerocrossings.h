@@ -9,7 +9,7 @@
 class base_ZeroCrossings
 {
 public:
-    ~base_ZeroCrossings();
+    virtual ~base_ZeroCrossings();
 
     virtual void operator ()(const cv::Mat1f &src, cv::Mat1f &dst) const = 0;
 
@@ -33,8 +33,6 @@ public:
      * @param[out] dst
      */
     void operator ()(const cv::Mat1f &src, cv::Mat1f &dst) const;
-
-private:
 };
 
 #endif // SEM_CORE_ZEROCROSSINGS_H_
