@@ -1,11 +1,11 @@
-#include "sem/core/pcl/cloud_.h"
+#include "elm/core/pcl/cloud_.h"
 
 #ifdef __WITH_PCL // PCL support required for these tests
 
-#include "sem/core/exception.h"
-#include "sem/core/pcl/point_traits.h"
-#include "sem/ts/pcl_point_typed_tests.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/core/pcl/point_traits.h"
+#include "elm/ts/pcl_point_typed_tests.h"
+#include "elm/ts/ts.h"
 
 using namespace std;
 using namespace cv;

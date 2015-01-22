@@ -1,7 +1,7 @@
-#include "sem/core/area.h"
+#include "elm/core/area.h"
 
 #include "gtest/gtest.h"
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 using cv::Mat1f;
 using namespace elm;

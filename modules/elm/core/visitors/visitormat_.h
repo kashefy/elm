@@ -5,10 +5,10 @@
 #ifndef ELM_CORE_VISITORMAT__H_
 #define ELM_CORE_VISITORMAT__H_
 
-#include "sem/core/typedefs_fwd.h"
-#include "sem/core/visitors/visitor_.h"
+#include "elm/core/typedefs_fwd.h"
+#include "elm/core/visitors/visitor_.h"
 
-#include "sem/core/pcl/typedefs_fwd.h"
+#include "elm/core/pcl/typedefs_fwd.h"
 
 /**
  * @brief visitor class for converting to Mat of floats

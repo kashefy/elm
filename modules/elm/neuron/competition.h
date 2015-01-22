@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "sem/neuron/base_learner.h"
+#include "elm/neuron/base_learner.h"
 
 /**
  * @brief Base class for defining competition between learners

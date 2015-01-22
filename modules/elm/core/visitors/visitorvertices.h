@@ -3,10 +3,10 @@
 
 #ifdef __WITH_PCL // the following visitor derived class definitions requires PCL support
 
-#include "sem/core/pcl/typedefs_fwd.h"
-#include "sem/core/pcl/vertices.h"
-#include "sem/core/typedefs_fwd.h"
-#include "sem/core/visitors/visitor_.h"
+#include "elm/core/pcl/typedefs_fwd.h"
+#include "elm/core/pcl/vertices.h"
+#include "elm/core/typedefs_fwd.h"
+#include "elm/core/visitors/visitor_.h"
 
 /**
  * @brief visitor class for converting to STL vector of PCL vertices

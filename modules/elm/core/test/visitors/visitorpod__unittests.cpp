@@ -1,10 +1,10 @@
 /** @file test out POD visitors,
  * some fixtures may be scattered somewhat awkwardly in this file due to conditional support (e.g. PCL support)
  */
-#include "sem/core/visitors/visitorpod_.h"
+#include "elm/core/visitors/visitorpod_.h"
 
-#include "sem/core/exception.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/ts/ts.h"
 
 using namespace std;
 using namespace cv;

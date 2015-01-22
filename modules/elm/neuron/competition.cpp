@@ -1,4 +1,4 @@
-#include "sem/neuron/competition.h"
+#include "elm/neuron/competition.h"
 
 base_Competition::base_Competition()
 {

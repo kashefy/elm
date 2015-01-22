@@ -1,9 +1,9 @@
-#include "sem/encoding/orientation.h"
+#include "elm/encoding/orientation.h"
 
 #include <opencv2/imgproc.hpp>
 
-#include "sem/core/defs.h"
-#include "sem/core/exception.h"
+#include "elm/core/defs.h"
+#include "elm/core/exception.h"
 
 using namespace cv;
 using namespace elm;

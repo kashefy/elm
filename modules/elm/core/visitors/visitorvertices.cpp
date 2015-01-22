@@ -1,10 +1,10 @@
-#include "sem/core/visitors/visitorvertices.h"
+#include "elm/core/visitors/visitorvertices.h"
 
 #ifdef __WITH_PCL // definitions below require PCL support
 
 #include <opencv2/core.hpp>
 
-#include "sem/core/pcl/cloud_.h"
+#include "elm/core/pcl/cloud_.h"
 
 using namespace pcl;
 using namespace elm;

@@ -5,8 +5,8 @@
 
 #include <pcl/point_cloud.h>
 
-#include "sem/core/exception.h"
-#include "sem/core/pcl/point_traits.h"
+#include "elm/core/exception.h"
+#include "elm/core/pcl/point_traits.h"
 
 namespace elm {
 

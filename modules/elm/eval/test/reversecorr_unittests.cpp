@@ -1,7 +1,7 @@
-#include "sem/eval/reversecorr.h"
+#include "elm/eval/reversecorr.h"
 
-#include "sem/core/exception.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/ts/ts.h"
 
 using namespace cv;
 using namespace elm;

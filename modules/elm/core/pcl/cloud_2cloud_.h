@@ -5,10 +5,10 @@
 
 #include <iostream>
 
-#include "sem/core/exception.h"
-#include "sem/core/pcl/cloud_.h"
-#include "sem/core/pcl/point_traits.h"
-#include "sem/core/pcl/typedefs_fwd.h"
+#include "elm/core/exception.h"
+#include "elm/core/pcl/cloud_.h"
+#include "elm/core/pcl/point_traits.h"
+#include "elm/core/pcl/typedefs_fwd.h"
 
 namespace elm {
 /**

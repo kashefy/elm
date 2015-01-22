@@ -1,12 +1,12 @@
-#include "sem/core/base_Layer.h"
+#include "elm/core/base_Layer.h"
 
 #include "gtest/gtest.h"
 
 #include <memory>
 
-#include "sem/core/exception.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/signal.h"
+#include "elm/core/exception.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/signal.h"
 
 using namespace std;
 using std::unique_ptr;

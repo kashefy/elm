@@ -1,9 +1,9 @@
-#include "sem/core/pcl/point_traits.h"
+#include "elm/core/pcl/point_traits.h"
 
 #ifdef __WITH_PCL // the following tests require PCL support
 
-#include "sem/ts/pcl_point_typed_tests.h"
-#include "sem/ts/ts.h"
+#include "elm/ts/pcl_point_typed_tests.h"
+#include "elm/ts/ts.h"
 
 using namespace pcl;
 using namespace elm;

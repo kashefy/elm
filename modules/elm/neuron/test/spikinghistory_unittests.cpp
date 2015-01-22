@@ -1,6 +1,6 @@
-#include "sem/neuron/spikinghistory.h"
+#include "elm/neuron/spikinghistory.h"
 
-#include "sem/ts/ts.h"
+#include "elm/ts/ts.h"
 
 using namespace cv;
 

@@ -1,4 +1,4 @@
-#include "sem/neuron/spikinghistory.h"
+#include "elm/neuron/spikinghistory.h"
 
 using namespace cv;
 

@@ -1,13 +1,13 @@
-#include "sem/layers/weightedsum.h"
+#include "elm/layers/weightedsum.h"
 
 #include "gtest/gtest.h"
 
 #include <memory>
 
-#include "sem/core/exception.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/signal.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/signal.h"
+#include "elm/ts/ts.h"
 
 using namespace std;
 using namespace cv;

@@ -1,4 +1,4 @@
-#include "sem/layers/triangulation.h"
+#include "elm/layers/triangulation.h"
 
 #ifdef __WITH_PCL // test normally
 
@@ -12,13 +12,13 @@
 
 #include <pcl/io/vtk_io.h>
 
-#include "sem/core/exception.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/pcl/vertices.h"
-#include "sem/core/signal.h"
-#include "sem/layers/layerfactory.h"
-#include "sem/ts/ts.h"
-#include "sem/ts/layer_assertions.h"
+#include "elm/core/exception.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/pcl/vertices.h"
+#include "elm/core/signal.h"
+#include "elm/layers/layerfactory.h"
+#include "elm/ts/ts.h"
+#include "elm/ts/layer_assertions.h"
 
 using namespace std;
 namespace bfs=boost::filesystem;

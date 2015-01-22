@@ -1,11 +1,11 @@
-#include "sem/layers/layernotsupported.h"
+#include "elm/layers/layernotsupported.h"
 
 #include "gtest/gtest.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/signal.h"
-#include "sem/layers/layerfactory.h"
+#include "elm/core/exception.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/signal.h"
+#include "elm/layers/layerfactory.h"
 
 using std::string;
 using elm::ExceptionNotImpl;

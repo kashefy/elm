@@ -1,13 +1,13 @@
 #ifndef ELM_CORE_VISITORPOD__H_
 #define ELM_CORE_VISITORPOD__H_
 
-#include "sem/core/visitors/visitor_.h"
+#include "elm/core/visitors/visitor_.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/cv/mat_utils.h"
-#include "sem/core/pcl/cloud_.h"
-#include "sem/core/pcl/vertices.h"
-#include "sem/core/typedefs_fwd.h"
+#include "elm/core/exception.h"
+#include "elm/core/cv/mat_utils.h"
+#include "elm/core/pcl/cloud_.h"
+#include "elm/core/pcl/vertices.h"
+#include "elm/core/typedefs_fwd.h"
 
 /**
  * @brief template class for scalar POD static visitors

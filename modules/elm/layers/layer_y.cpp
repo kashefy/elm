@@ -1,9 +1,9 @@
-#include "sem/layers/layer_y.h"
+#include "elm/layers/layer_y.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/boost/ptree_utils.h"
-#include "sem/core/signal.h"
+#include "elm/core/exception.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/boost/ptree_utils.h"
+#include "elm/core/signal.h"
 
 using std::string;
 

@@ -1,10 +1,10 @@
-#include "sem/layers/layer_y.h"
+#include "elm/layers/layer_y.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/signal.h"
-#include "sem/layers/layerfactory.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/signal.h"
+#include "elm/layers/layerfactory.h"
+#include "elm/ts/ts.h"
 
 using namespace elm;
 using boost::property_tree::ptree_bad_path;

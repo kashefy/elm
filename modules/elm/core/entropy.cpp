@@ -1,6 +1,6 @@
-#include "sem/core/entropy.h"
+#include "elm/core/entropy.h"
 
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 using namespace cv;
 

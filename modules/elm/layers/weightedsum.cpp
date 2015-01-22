@@ -1,8 +1,8 @@
-#include "sem/layers/weightedsum.h"
+#include "elm/layers/weightedsum.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/signal.h"
+#include "elm/core/exception.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/signal.h"
 
 using namespace std;
 using namespace cv;

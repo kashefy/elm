@@ -1,21 +1,21 @@
-#include "sem/layers/layerfactory.h"
+#include "elm/layers/layerfactory.h"
 
 #include <boost/assign/list_of.hpp>
 
-#include "sem/core/registor.h"
+#include "elm/core/registor.h"
 
 /** Whenever a new layer is imeplemented:
  *  1. include its header below
  *  2. Add it to the initialization of g_layerRegistry map.
  */
-#include "sem/layers/attentionwindow.h"
-#include "sem/layers/icp.h"
-#include "sem/layers/layer_y.h"
-#include "sem/layers/layer_z.h"
-#include "sem/encoding/populationcode.h"
-#include "sem/layers/saliencyitti.h"
-#include "sem/layers/triangulation.h"
-#include "sem/layers/weightedsum.h"
+#include "elm/layers/attentionwindow.h"
+#include "elm/layers/icp.h"
+#include "elm/layers/layer_y.h"
+#include "elm/layers/layer_z.h"
+#include "elm/encoding/populationcode.h"
+#include "elm/layers/saliencyitti.h"
+#include "elm/layers/triangulation.h"
+#include "elm/layers/weightedsum.h"
 
 using boost::assign::map_list_of;
 

@@ -1,8 +1,8 @@
-#include "sem/io/synth.h"
+#include "elm/io/synth.h"
 
-#include "sem/ts/ts.h"
+#include "elm/ts/ts.h"
 
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 #include <opencv2/highgui.hpp>
 

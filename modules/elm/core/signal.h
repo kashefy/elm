@@ -1,10 +1,10 @@
 #ifndef ELM_CORE_SIGNAL_H_
 #define ELM_CORE_SIGNAL_H_
 
-#include "sem/core/typedefs_sfwd.h" // VecMat
+#include "elm/core/typedefs_sfwd.h" // VecMat
 
-#include "sem/core/featuredata.h"
-#include "sem/core/signal_.h"
+#include "elm/core/featuredata.h"
+#include "elm/core/signal_.h"
 
 typedef Signal_<FeatureData >::VecFeat_ VecFeatData; ///< convinience typedef for vector of FeatureData objects
 

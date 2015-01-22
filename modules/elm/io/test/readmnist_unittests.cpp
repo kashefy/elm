@@ -1,11 +1,11 @@
-#include "sem/io/readmnist.h"
+#include "elm/io/readmnist.h"
 
-#include "sem/ts/ts.h"          ///< custom assertions
+#include "elm/ts/ts.h"          ///< custom assertions
 
 #include <boost/filesystem.hpp>
 
-#include "sem/core/exception.h"
-#include "sem/io/binary.h"      ///< determine and swap endianness
+#include "elm/core/exception.h"
+#include "elm/io/binary.h"      ///< determine and swap endianness
 
 using namespace std;
 namespace bfs=boost::filesystem; // use alias

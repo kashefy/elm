@@ -1,10 +1,10 @@
-#include "sem/io/readmnist.h"
+#include "elm/io/readmnist.h"
 
 #include <iostream>
 #include <sstream>
 
-#include "sem/core/exception.h"
-#include "sem/io/binary.h"
+#include "elm/core/exception.h"
+#include "elm/io/binary.h"
 
 using namespace std;
 using namespace elm;

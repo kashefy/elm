@@ -1,7 +1,7 @@
 #ifndef ELM_CORE_AREA_H_
 #define ELM_CORE_AREA_H_
 
-#include "sem/core/cv/typedefs_fwd.h"
+#include "elm/core/cv/typedefs_fwd.h"
 
 class base_AUC
 {

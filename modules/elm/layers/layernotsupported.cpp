@@ -1,6 +1,6 @@
-#include "sem/layers/layernotsupported.h"
+#include "elm/layers/layernotsupported.h"
 
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 using std::string;
 

@@ -1,9 +1,9 @@
-#include "sem/core/registor.h"
+#include "elm/core/registor.h"
 
 #include <boost/assign/list_of.hpp>
 
-#include "sem/core/exception.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/ts/ts.h"
 
 namespace {
 

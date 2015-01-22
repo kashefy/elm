@@ -1,4 +1,4 @@
-#include "sem/neuron/neuron.h"
+#include "elm/neuron/neuron.h"
 
 #include "gtest/gtest.h"
 

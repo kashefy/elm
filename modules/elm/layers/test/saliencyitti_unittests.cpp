@@ -1,13 +1,13 @@
-#include "sem/layers/saliencyitti.h"
+#include "elm/layers/saliencyitti.h"
 
 #include <opencv2/highgui.hpp>
 
-#include "sem/core/layerconfig.h"
-#include "sem/core/cv/mat_utils.h"
-#include "sem/core/signal.h"
-#include "sem/io/synth.h"
-#include "sem/io/readmnist.h"
-#include "sem/ts/ts.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/cv/mat_utils.h"
+#include "elm/core/signal.h"
+#include "elm/io/synth.h"
+#include "elm/io/readmnist.h"
+#include "elm/ts/ts.h"
 
 using namespace cv;
 using namespace std;

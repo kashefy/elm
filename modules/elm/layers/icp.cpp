@@ -1,4 +1,4 @@
-#include "sem/layers/icp.h"
+#include "elm/layers/icp.h"
 
 #ifdef __WITH_PCL   // the layer is otherwise implemented as unsupported
 
@@ -6,9 +6,9 @@
 
 #include <opencv2/core/eigen.hpp> // for eigen2cv(), must be preceeded definitio of Eigen either PCL or #include <Eigen/Dense>
 
-#include "sem/core/exception.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/signal.h"
+#include "elm/core/exception.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/signal.h"
 
 using namespace std;
 using namespace cv;

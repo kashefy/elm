@@ -1,6 +1,6 @@
-#include "sem/neuron/zneuron.h"
+#include "elm/neuron/zneuron.h"
 
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 using namespace cv;
 

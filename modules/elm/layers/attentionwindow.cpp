@@ -1,8 +1,8 @@
-#include "sem/layers/attentionwindow.h"
+#include "elm/layers/attentionwindow.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/cv/mat_utils.h"
-#include "sem/core/signal.h"
+#include "elm/core/exception.h"
+#include "elm/core/cv/mat_utils.h"
+#include "elm/core/signal.h"
 
 using namespace cv;
 using namespace std;

@@ -1,6 +1,6 @@
-#include "sem/encoding/intensitycontrast.h"
+#include "elm/encoding/intensitycontrast.h"
 
-#include "sem/core/zerocrossings.h"
+#include "elm/core/zerocrossings.h"
 
 using namespace cv;
 

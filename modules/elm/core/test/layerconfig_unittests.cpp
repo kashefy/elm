@@ -1,7 +1,7 @@
-#include "sem/core/layerconfig.h"
+#include "elm/core/layerconfig.h"
 
 #include "gtest/gtest.h"
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 using namespace std;
 using namespace elm;

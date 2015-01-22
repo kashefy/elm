@@ -1,9 +1,9 @@
 /** Write unit tests around Mat assertions.
  * @todo: Refactor into TYPED_TEST to reduce clutter
  */
-#include "sem/ts/ts.h"
+#include "elm/ts/ts.h"
 
-#include "sem/core/typedefs.h"
+#include "elm/core/typedefs.h"
 
 using namespace cv;
 

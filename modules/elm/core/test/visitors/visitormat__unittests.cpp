@@ -1,12 +1,12 @@
 /** @file test out Mat_ visitors,
  * some fixtures may be scattered somewhat awkwardly in this file due to conditional support (e.g. PCL support)
  */
-#include "sem/core/visitors/visitormat_.h"
+#include "elm/core/visitors/visitormat_.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/pcl/cloud_.h"
-#include "sem/core/pcl/vertices.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/core/pcl/cloud_.h"
+#include "elm/core/pcl/vertices.h"
+#include "elm/ts/ts.h"
 
 using namespace std;
 using namespace cv;

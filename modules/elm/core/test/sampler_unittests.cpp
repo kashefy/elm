@@ -1,11 +1,11 @@
-#include "sem/core/sampler.h"
+#include "elm/core/sampler.h"
 
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
-#include "sem/core/area.h"
-#include "sem/io/synth.h"
-#include "sem/ts/ts.h"
+#include "elm/core/area.h"
+#include "elm/io/synth.h"
+#include "elm/ts/ts.h"
 
 using namespace cv;
 

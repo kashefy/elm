@@ -5,8 +5,8 @@
 
 #include <opencv2/core.hpp>
 
-#include "sem/core/base_Layer.h"
-#include "sem/core/layerconfig.h"
+#include "elm/core/base_Layer.h"
+#include "elm/core/layerconfig.h"
 
 /**
  * @brief layer for sampling patch around attended location (e.g. salient location)

@@ -6,13 +6,13 @@
 
 #include <opencv2/highgui.hpp>
 
-#include "sem/core/signal.h"
-#include "sem/core/cv/mat_utils.h"
-#include "sem/encoding/populationcode.h"
-#include "sem/io/readmnist.h"
-#include "sem/layers/layerfactory.h"
-#include "sem/layers/layer_y.h"
-#include "sem/layers/layer_z.h"
+#include "elm/core/signal.h"
+#include "elm/core/cv/mat_utils.h"
+#include "elm/encoding/populationcode.h"
+#include "elm/io/readmnist.h"
+#include "elm/layers/layerfactory.h"
+#include "elm/layers/layer_y.h"
+#include "elm/layers/layer_z.h"
 
 using namespace cv;
 using namespace std;

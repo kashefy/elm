@@ -1,4 +1,4 @@
-#include "sem/ts/pcl_point_typed_tests.h"
+#include "elm/ts/pcl_point_typed_tests.h"
 
 #ifdef __WITH_PCL // following initializations only applicable with PCL support
 

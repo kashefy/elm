@@ -1,9 +1,9 @@
-#include "sem/core/pcl/vertices.h"
+#include "elm/core/pcl/vertices.h"
 
 #ifdef __WITH_PCL
 
-#include "sem/core/exception.h"
-#include "sem/core/cv/mat_utils.h"
+#include "elm/core/exception.h"
+#include "elm/core/cv/mat_utils.h"
 
 using namespace std;
 using namespace cv;

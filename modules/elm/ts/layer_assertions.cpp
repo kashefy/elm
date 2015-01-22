@@ -1,11 +1,11 @@
-#include "sem/ts/layer_assertions.h"
+#include "elm/ts/layer_assertions.h"
 
 #include "gtest/gtest.h"
 
-#include "sem/core/base_Layer.h"
-#include "sem/core/exception.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/stl/stl.h"
+#include "elm/core/base_Layer.h"
+#include "elm/core/exception.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/stl/stl.h"
 
 using namespace std;
 using namespace elm;

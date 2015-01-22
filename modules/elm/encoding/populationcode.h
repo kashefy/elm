@@ -5,9 +5,9 @@
 
 #include <opencv2/core.hpp>
 
-#include "sem/core/base_Layer.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/typedefs_sfwd.h"
+#include "elm/core/base_Layer.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/typedefs_sfwd.h"
 
 class base_FilterBank;
 

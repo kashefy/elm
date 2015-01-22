@@ -3,9 +3,9 @@
 
 #include <map>
 
-#include "sem/core/exception.h"
-#include "sem/core/stl/stl.h"
-#include "sem/core/stl/typedefs.h"
+#include "elm/core/exception.h"
+#include "elm/core/stl/stl.h"
+#include "elm/core/stl/typedefs.h"
 
 /**
  * @brief The template Signal class, a class for holding single and multiple samples of features

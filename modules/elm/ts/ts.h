@@ -10,9 +10,9 @@
 
 #include <string>
 
-#include "sem/ts/interval.h"
-#include "sem/ts/mat_assertions.h"
-#include "sem/ts/container.h"
+#include "elm/ts/interval.h"
+#include "elm/ts/mat_assertions.h"
+#include "elm/ts/container.h"
 
 namespace elm
 {

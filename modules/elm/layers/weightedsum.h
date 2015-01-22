@@ -5,7 +5,7 @@
 
 #include <opencv2/core.hpp>
 
-#include "sem/core/base_Layer.h"
+#include "elm/core/base_Layer.h"
 
 /** class to implement base layer methods
   * Yields weighted sum of stimulus with 2 elements

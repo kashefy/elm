@@ -1,7 +1,7 @@
-#include "sem/core/signal.h"
+#include "elm/core/signal.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/stl/stl.h"
+#include "elm/core/exception.h"
+#include "elm/core/stl/stl.h"
 
 using namespace std;
 using namespace cv;

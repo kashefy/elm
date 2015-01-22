@@ -1,4 +1,4 @@
-#include "sem/core/interval.h"
+#include "elm/core/interval.h"
 
 base_Interval::base_Interval(float a, float b)
     : a_(a), b_(b)

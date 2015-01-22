@@ -7,8 +7,8 @@
     #warning "Skipping pcl utilities since PCL support is disabled."
 #else // __WITH_PCL
 
-#include "sem/core/boost/typedefs_fwd.h"
-#include "sem/core/stl/typedefs.h"
+#include "elm/core/boost/typedefs_fwd.h"
+#include "elm/core/stl/typedefs.h"
 
 namespace pcl {
 

@@ -1,8 +1,8 @@
-#include "sem/io/binary.h"
+#include "elm/io/binary.h"
 
 #include "gtest/gtest.h"
 
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 using namespace std;
 

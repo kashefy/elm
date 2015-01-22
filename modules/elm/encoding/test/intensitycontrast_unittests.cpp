@@ -1,8 +1,8 @@
-#include "sem/encoding/intensitycontrast.h"
+#include "elm/encoding/intensitycontrast.h"
 
-#include "sem/core/exception.h"
-#include "sem/io/synth.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/io/synth.h"
+#include "elm/ts/ts.h"
 
 using namespace cv;
 using namespace elm;

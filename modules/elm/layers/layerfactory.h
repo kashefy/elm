@@ -4,8 +4,8 @@
 #include <memory>
 #include <string>
 
-#include "sem/core/base_Layer.h"
-#include "sem/core/exception.h"
+#include "elm/core/base_Layer.h"
+#include "elm/core/exception.h"
 
 /**
  * @brief class for implementing layer related factory methods

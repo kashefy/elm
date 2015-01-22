@@ -5,7 +5,7 @@
 
 #include <opencv2/core.hpp>
 
-#include "sem/encoding/ganglion.h"
+#include "elm/encoding/ganglion.h"
 
 /**
  * @brief base class for measuring intensity contrast

@@ -8,14 +8,14 @@
  * gtest test fixutres as well as value-parameterization we'll define
  * the a bast class for testing in the form of a mixin.
  */
-#include "sem/layers/layer_z.h"
+#include "elm/layers/layer_z.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/cv/mat_utils_inl.h"
-#include "sem/core/boost/ptree_utils.h"
-#include "sem/core/signal.h"
-#include "sem/ts/ts.h"
-#include "sem/ts/fakeevidence.h"
+#include "elm/core/exception.h"
+#include "elm/core/cv/mat_utils_inl.h"
+#include "elm/core/boost/ptree_utils.h"
+#include "elm/core/signal.h"
+#include "elm/ts/ts.h"
+#include "elm/ts/fakeevidence.h"
 
 using namespace std;
 using namespace cv;

@@ -1,10 +1,10 @@
-#include "sem/core/pcl/vertices.h"
+#include "elm/core/pcl/vertices.h"
 
 #ifdef __WITH_PCL // PCL support required for these tests
 
-#include "sem/core/exception.h"
-#include "sem/core/typedefs_fwd.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/core/typedefs_fwd.h"
+#include "elm/ts/ts.h"
 
 using namespace std;
 using namespace cv;

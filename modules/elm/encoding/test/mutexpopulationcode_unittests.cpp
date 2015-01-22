@@ -1,14 +1,14 @@
-#include "sem/encoding/populationcode.h"
+#include "elm/encoding/populationcode.h"
 
 #include <opencv2/highgui.hpp>
 
-#include "sem/core/cv/mat_utils.h"
-#include "sem/core/layerconfig.h"
-#include "sem/layers/layerfactory.h"
-#include "sem/core/signal.h"
-#include "sem/encoding/orientation.h"
-#include "sem/io/synth.h"
-#include "sem/ts/ts.h"
+#include "elm/core/cv/mat_utils.h"
+#include "elm/core/layerconfig.h"
+#include "elm/layers/layerfactory.h"
+#include "elm/core/signal.h"
+#include "elm/encoding/orientation.h"
+#include "elm/io/synth.h"
+#include "elm/ts/ts.h"
 
 using std::string;
 using cv::Mat1f;

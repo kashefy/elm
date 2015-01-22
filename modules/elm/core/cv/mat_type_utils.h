@@ -1,8 +1,8 @@
 #ifndef ELM_CORE_CV_MAT_TYPE_UTILS_H_
 #define ELM_CORE_CV_MAT_TYPE_UTILS_H_
 
-#include "sem/core/stl/typedefs.h"
-#include "sem/core/cv/typedefs_fwd.h"
+#include "elm/core/stl/typedefs.h"
+#include "elm/core/cv/typedefs_fwd.h"
 
 namespace elm {
 

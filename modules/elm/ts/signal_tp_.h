@@ -22,9 +22,9 @@
 
 #include "gtest/gtest.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/signal_.h"
-#include "sem/ts/container.h"
+#include "elm/core/exception.h"
+#include "elm/core/signal_.h"
+#include "elm/ts/container.h"
 
 // define some helper routines and classes
 

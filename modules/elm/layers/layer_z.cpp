@@ -1,9 +1,9 @@
-#include "sem/layers/layer_z.h"
+#include "elm/layers/layer_z.h"
 
 #include <iostream>
 
-#include "sem/core/exception.h"
-#include "sem/core/signal.h"
+#include "elm/core/exception.h"
+#include "elm/core/signal.h"
 
 using std::shared_ptr;
 using cv::Mat1f;

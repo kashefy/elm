@@ -1,15 +1,15 @@
-#include "sem/encoding/orientation.h"
+#include "elm/encoding/orientation.h"
 
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
-#include "sem/core/defs.h"
-#include "sem/core/exception.h"
-#include "sem/core/cv/mat_utils.h"
-#include "sem/core/cv/mat_utils_inl.h"
-#include "sem/io/synth.h"
-#include "sem/io/readmnist.h"
-#include "sem/ts/ts.h"
+#include "elm/core/defs.h"
+#include "elm/core/exception.h"
+#include "elm/core/cv/mat_utils.h"
+#include "elm/core/cv/mat_utils_inl.h"
+#include "elm/io/synth.h"
+#include "elm/io/readmnist.h"
+#include "elm/ts/ts.h"
 
 using namespace cv;
 using namespace elm;

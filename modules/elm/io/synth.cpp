@@ -1,8 +1,8 @@
-#include "sem/io/synth.h"
+#include "elm/io/synth.h"
 
 #include <opencv2/imgproc.hpp>
 
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 using namespace cv;
 

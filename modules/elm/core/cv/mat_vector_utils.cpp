@@ -1,8 +1,8 @@
-#include "sem/core/cv/mat_vector_utils.h"
+#include "elm/core/cv/mat_vector_utils.h"
 
 #include <opencv2/core.hpp>
 
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 using namespace std;
 using namespace cv;

@@ -5,8 +5,8 @@
 #include <memory>
 #include <string>
 
-#include "sem/core/exception.h"
-#include "sem/core/stl/stl.h"
+#include "elm/core/exception.h"
+#include "elm/core/stl/stl.h"
 
 /** @brief class for registering derived instantances
  * Partially inspired by:

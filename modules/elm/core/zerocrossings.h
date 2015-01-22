@@ -1,7 +1,7 @@
 #ifndef ELM_CORE_ZEROCROSSINGS_H_
 #define ELM_CORE_ZEROCROSSINGS_H_
 
-#include "sem/core/cv/typedefs_fwd.h"
+#include "elm/core/cv/typedefs_fwd.h"
 
 /**
  * @brief base class for computing zero corssings

@@ -1,9 +1,9 @@
-#include "sem/core/featuredata.h"
+#include "elm/core/featuredata.h"
 
-#include "sem/core/stl/stl.h"
-#include "sem/core/exception.h"
-#include "sem/ts/pcl_point_typed_tests.h"
-#include "sem/ts/ts.h"
+#include "elm/core/stl/stl.h"
+#include "elm/core/exception.h"
+#include "elm/ts/pcl_point_typed_tests.h"
+#include "elm/ts/ts.h"
 
 using namespace std;
 using namespace cv;

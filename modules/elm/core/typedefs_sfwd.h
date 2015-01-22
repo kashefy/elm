@@ -3,8 +3,8 @@
 #ifndef ELM_CORE_TYPEDEFS_SFWD_H_
 #define ELM_CORE_TYPEDEFS_SFWD_H_
 
-#include "sem/core/typedefs_fwd.h"
-#include "sem/core/stl/typedefs.h"
+#include "elm/core/typedefs_fwd.h"
+#include "elm/core/stl/typedefs.h"
 
 namespace elm {
 

@@ -1,8 +1,8 @@
-#include "sem/core/area.h"
+#include "elm/core/area.h"
 
 #include <opencv2/core.hpp>
 
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 using namespace cv;
 

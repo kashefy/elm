@@ -1,10 +1,10 @@
-#include "sem/layers/attentionwindow.h"
+#include "elm/layers/attentionwindow.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/cv/mat_utils.h"
-#include "sem/core/signal.h"
-#include "sem/layers/layerfactory.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/core/cv/mat_utils.h"
+#include "elm/core/signal.h"
+#include "elm/layers/layerfactory.h"
+#include "elm/ts/ts.h"
 
 namespace bpt=boost::property_tree;
 using namespace std;

@@ -3,11 +3,11 @@
 
 #include <memory>
 
-#include "sem/core/base_Layer.h"
-#include "sem/core/sampler.h"
-#include "sem/encoding/intensitycontrast.h"
-#include "sem/encoding/orientation.h"
-#include "sem/encoding/populationcode.h"
+#include "elm/core/base_Layer.h"
+#include "elm/core/sampler.h"
+#include "elm/encoding/intensitycontrast.h"
+#include "elm/encoding/orientation.h"
+#include "elm/encoding/populationcode.h"
 
 /**
  * @brief Implement Itti et al.'s boottom-up saliency measure

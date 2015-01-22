@@ -1,6 +1,6 @@
-#include "sem/core/cv/neighborhood.h"
+#include "elm/core/cv/neighborhood.h"
 
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 using namespace cv;
 

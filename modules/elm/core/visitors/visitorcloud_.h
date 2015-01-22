@@ -3,11 +3,11 @@
 
 #ifdef __WITH_PCL // the following visitor derived template class definitions require PCL support
 
-#include "sem/core/pcl/cloud_2cloud_.h"
-#include "sem/core/pcl/vertices.h"
-#include "sem/core/cv/typedefs_fwd.h"
-#include "sem/core/typedefs_fwd.h"
-#include "sem/core/visitors/visitor_.h"
+#include "elm/core/pcl/cloud_2cloud_.h"
+#include "elm/core/pcl/vertices.h"
+#include "elm/core/cv/typedefs_fwd.h"
+#include "elm/core/typedefs_fwd.h"
+#include "elm/core/visitors/visitor_.h"
 
 #include <iostream>
 

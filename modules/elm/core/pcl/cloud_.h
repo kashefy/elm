@@ -12,8 +12,8 @@
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 
-#include "sem/core/cv/typedefs_fwd.h"
-#include "sem/core/pcl/typedefs_fwd.h"
+#include "elm/core/cv/typedefs_fwd.h"
+#include "elm/core/pcl/typedefs_fwd.h"
 
 namespace elm {
 

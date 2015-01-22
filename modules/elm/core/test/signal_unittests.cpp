@@ -1,8 +1,8 @@
-#include "sem/core/signal.h"
+#include "elm/core/signal.h"
 
-#include "sem/core/exception.h"
-#include "sem/ts/signal_tp_.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/ts/signal_tp_.h"
+#include "elm/ts/ts.h"
 
 using namespace std;
 using namespace cv;

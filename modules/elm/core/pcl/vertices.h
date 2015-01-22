@@ -11,8 +11,8 @@
 #include <boost/shared_ptr.hpp>
 #include <pcl/Vertices.h>
 
-#include "sem/core/cv/typedefs_fwd.h"
-#include "sem/core/pcl/typedefs_fwd.h"
+#include "elm/core/cv/typedefs_fwd.h"
+#include "elm/core/pcl/typedefs_fwd.h"
 
 namespace elm {
 

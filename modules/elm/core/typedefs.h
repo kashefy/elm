@@ -1,7 +1,7 @@
 #ifndef ELM_CORE_TYPEDEFS_H_
 #define ELM_CORE_TYPEDEFS_H_
 
-#include "sem/core/stl/typedefs.h"
+#include "elm/core/stl/typedefs.h"
 
 namespace elm {
 

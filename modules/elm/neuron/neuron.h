@@ -1,7 +1,7 @@
 #ifndef ELM_NEURON_H_
 #define ELM_NEURON_H_
 
-#include "sem/core/sampler.h"
+#include "elm/core/sampler.h"
 
 /**
  * @brief layer for trivial spiking neuron.

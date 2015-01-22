@@ -1,9 +1,9 @@
-#include "sem/core/entropy.h"
+#include "elm/core/entropy.h"
 
-#include "sem/ts/ts.h"
+#include "elm/ts/ts.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/stl/typedefs.h"
+#include "elm/core/exception.h"
+#include "elm/core/stl/typedefs.h"
 
 using namespace cv;
 using namespace elm;

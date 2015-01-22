@@ -9,8 +9,8 @@
 
 #include <opencv2/core.hpp>
 
-#include "sem/core/exception.h"
-#include "sem/core/typedefs_sfwd.h"
+#include "elm/core/exception.h"
+#include "elm/core/typedefs_sfwd.h"
 
 /**
  * @brief base class for filter banks

@@ -1,8 +1,8 @@
 #ifndef ELM_ENCODING_ORIENTATION_H_
 #define ELM_ENCODING_ORIENTATION_H_
 
-#include "sem/core/typedefs.h"
-#include "sem/encoding/base_filterbank.h"
+#include "elm/core/typedefs.h"
+#include "elm/encoding/base_filterbank.h"
 
 class GaborFilterBank : public base_FilterBank
 {

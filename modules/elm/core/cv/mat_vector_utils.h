@@ -3,7 +3,7 @@
 #ifndef ELM_CORE_CV_MAT_VECTOR_UTILS_H_
 #define ELM_CORE_CV_MAT_VECTOR_UTILS_H_
 
-#include "sem/core/typedefs_sfwd.h"
+#include "elm/core/typedefs_sfwd.h"
 
 namespace elm {
 

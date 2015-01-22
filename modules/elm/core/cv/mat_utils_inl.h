@@ -3,9 +3,9 @@
 #ifndef ELM_CORE_MAT_UTILS_INL_H__
 #define ELM_CORE_MAT_UTILS_INL_H__
 
-#include "sem/core/cv/typedefs_fwd.h"
-#include "sem/core/defs.h"
-#include "sem/core/exception.h"
+#include "elm/core/cv/typedefs_fwd.h"
+#include "elm/core/defs.h"
+#include "elm/core/exception.h"
 
 namespace elm {
 

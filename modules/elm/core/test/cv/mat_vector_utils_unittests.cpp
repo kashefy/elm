@@ -1,8 +1,8 @@
-#include "sem/core/cv/mat_vector_utils.h"
-#include "sem/core/cv/mat_vector_utils_inl.h"
+#include "elm/core/cv/mat_vector_utils.h"
+#include "elm/core/cv/mat_vector_utils_inl.h"
 
-#include "sem/core/stl/stl.h"
-#include "sem/ts/ts.h"
+#include "elm/core/stl/stl.h"
+#include "elm/ts/ts.h"
 
 using namespace std;
 using namespace cv;

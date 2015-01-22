@@ -1,6 +1,6 @@
-#include "sem/neuron/neuron.h"
+#include "elm/neuron/neuron.h"
 
-#include "sem/core/exception.h"
+#include "elm/core/exception.h"
 
 YNeuron::YNeuron()
     : poisson_(0.f, 0.f) // dummy initialization, ugly

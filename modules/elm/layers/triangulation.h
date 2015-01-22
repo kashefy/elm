@@ -3,7 +3,7 @@
 
 #ifndef __WITH_PCL
     #warning "Disabling Triangulation layer due to no PCL support and defining it as a non-supported"
-    #include "sem/layers/layernotsupported.h"
+    #include "elm/layers/layernotsupported.h"
     class Triangulation : public ELM_LAYER_NOT_SUPPORTED(Triangulation, "Building with PCL is required for supporting Triangulation layer.");
 #else   // __WITH_PCL
 
@@ -13,7 +13,7 @@
 
 #include <pcl/surface/gp3.h>
 
-#include "sem/core/base_Layer.h"
+#include "elm/core/base_Layer.h"
 
 /**
  * @brief The triangulation layer wraps around the greedy projection algorithm usign pcl @cite Marton09ICRA

@@ -1,9 +1,9 @@
-#include "sem/encoding/base_filterbank.h"
+#include "elm/encoding/base_filterbank.h"
 
 #include <opencv2/features2d.hpp>
 #include <opencv2/imgproc.hpp>
 
-#include "sem/core/cv/mat_vector_utils.h"
+#include "elm/core/cv/mat_vector_utils.h"
 
 using namespace cv;
 using namespace elm;

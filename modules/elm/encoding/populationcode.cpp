@@ -1,13 +1,13 @@
-#include "sem/encoding/populationcode.h"
+#include "elm/encoding/populationcode.h"
 
 #include <boost/foreach.hpp> ///< for iterating through param kernels
 
 #include <opencv2/features2d.hpp>
 #include <opencv2/imgproc.hpp>
 
-#include "sem/core/sampler.h"
-#include "sem/core/signal.h"
-#include "sem/encoding/base_filterbank.h"
+#include "elm/core/sampler.h"
+#include "elm/core/signal.h"
+#include "elm/encoding/base_filterbank.h"
 
 using std::string;
 

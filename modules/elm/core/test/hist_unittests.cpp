@@ -1,13 +1,13 @@
-#include "sem/core/hist.h"
+#include "elm/core/hist.h"
 
 #include <vector>
 
 #include <opencv2/imgproc.hpp>
 
-#include "sem/core/exception.h"
-#include "sem/core/cv/mat_utils_inl.h"
-//#include "sem/core/cv/mat_utils.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/core/cv/mat_utils_inl.h"
+//#include "elm/core/cv/mat_utils.h"
+#include "elm/ts/ts.h"
 
 using namespace cv;
 using namespace elm;

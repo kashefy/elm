@@ -2,11 +2,11 @@
  */
 #ifdef __WITH_PCL // PCL support required for these tests
 
-#include "sem/core/visitors/visitorvertices.h"
+#include "elm/core/visitors/visitorvertices.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/pcl/cloud_.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/core/pcl/cloud_.h"
+#include "elm/ts/ts.h"
 
 using namespace std;
 using namespace pcl;

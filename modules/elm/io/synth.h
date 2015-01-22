@@ -3,7 +3,7 @@
 #ifndef ELM_IO_SYNTH_H_
 #define ELM_IO_SYNTH_H_
 
-#include "sem/core/cv/typedefs_fwd.h"
+#include "elm/core/cv/typedefs_fwd.h"
 
 /**
  * @brief Base class for synthetic data generation

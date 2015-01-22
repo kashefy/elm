@@ -1,4 +1,4 @@
-#include "sem/layers/icp.h"
+#include "elm/layers/icp.h"
 
 #ifdef __WITH_PCL // test normally
 
@@ -8,14 +8,14 @@
 #include <Eigen/Dense>            // to enable OpenCV's eigen2cv()
 #include <opencv2/core/eigen.hpp> // for eigen2cv(), preceeded be #include <Eigen/Dense>
 
-#include "sem/core/exception.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/pcl/cloud_.h"
-#include "sem/core/signal.h"
-#include "sem/core/stl/stl.h"
-#include "sem/layers/layerfactory.h"
-#include "sem/ts/layer_assertions.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/pcl/cloud_.h"
+#include "elm/core/signal.h"
+#include "elm/core/stl/stl.h"
+#include "elm/layers/layerfactory.h"
+#include "elm/ts/layer_assertions.h"
+#include "elm/ts/ts.h"
 
 using namespace std;
 using namespace cv;

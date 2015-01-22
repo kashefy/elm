@@ -1,8 +1,8 @@
-#include "sem/core/sampler.h"
+#include "elm/core/sampler.h"
 
 #include <opencv2/core.hpp>
 
-#include "sem/core/cv/mat_utils.h"
+#include "elm/core/cv/mat_utils.h"
 
 using namespace cv;
 

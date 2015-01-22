@@ -3,10 +3,10 @@
 
 #include <vector>
 
-#include "sem/core/base_Layer.h"
-#include "sem/core/layerconfig.h"   // OptS member definition
-#include "sem/neuron/zneuron.h"
-#include "sem/neuron/wtapoisson.h"
+#include "elm/core/base_Layer.h"
+#include "elm/core/layerconfig.h"   // OptS member definition
+#include "elm/neuron/zneuron.h"
+#include "elm/neuron/wtapoisson.h"
 
 /**
  * @brief Class for defining learning nodes as in the SEM NIPS paper 2010

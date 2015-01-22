@@ -7,8 +7,8 @@
 
 #include <opencv2/core.hpp>
 
-#include "sem/core/base_Layer.h"
-#include "sem/core/typedefs.h"
+#include "elm/core/base_Layer.h"
+#include "elm/core/typedefs.h"
 
 /**
  * @brief class for simulating hierarchical spike-based Expectation Maximization

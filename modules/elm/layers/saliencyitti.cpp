@@ -1,17 +1,17 @@
-#include "sem/layers/saliencyitti.h"
+#include "elm/layers/saliencyitti.h"
 
 #include <opencv2/imgproc.hpp>
 
-#include "sem/core/defs.h"
-#include "sem/core/layerconfig.h"
-#include "sem/core/cv/mat_utils.h"          // Point conversions
-#include "sem/core/cv/mat_utils_inl.h"      // ARange_
-#include "sem/core/cv/mat_vector_utils.h"   // Reshape()
-#include "sem/core/cv/mat_vector_utils_inl.h"   // Mat <-> vector
-#include "sem/core/cv/neighborhood.h"
-#include "sem/core/percentile.h"
-#include "sem/core/signal.h"
-#include "sem/encoding/orientation.h"
+#include "elm/core/defs.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/cv/mat_utils.h"          // Point conversions
+#include "elm/core/cv/mat_utils_inl.h"      // ARange_
+#include "elm/core/cv/mat_vector_utils.h"   // Reshape()
+#include "elm/core/cv/mat_vector_utils_inl.h"   // Mat <-> vector
+#include "elm/core/cv/neighborhood.h"
+#include "elm/core/percentile.h"
+#include "elm/core/signal.h"
+#include "elm/encoding/orientation.h"
 
 using namespace std;
 using namespace cv;

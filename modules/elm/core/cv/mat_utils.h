@@ -4,7 +4,7 @@
 #ifndef ELM_CORE_CV_MAT_UTILS_H_
 #define ELM_CORE_CV_MAT_UTILS_H_
 
-#include "sem/core/typedefs_fwd.h"
+#include "elm/core/typedefs_fwd.h"
 
 namespace elm {
 

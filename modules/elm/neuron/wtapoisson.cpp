@@ -1,7 +1,7 @@
-#include "sem/neuron/wtapoisson.h"
+#include "elm/neuron/wtapoisson.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/sampler.h"
+#include "elm/core/exception.h"
+#include "elm/core/sampler.h"
 
 using namespace std;
 using namespace cv;

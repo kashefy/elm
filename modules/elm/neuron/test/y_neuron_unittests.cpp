@@ -1,7 +1,7 @@
-#include "sem/neuron/neuron.h"
+#include "elm/neuron/neuron.h"
 
-#include "sem/core/exception.h"
-#include "sem/ts/ts.h"
+#include "elm/core/exception.h"
+#include "elm/ts/ts.h"
 
 using cv::Mat1f;
 using namespace elm;

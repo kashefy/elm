@@ -1,12 +1,12 @@
 /** @file test out cloud visitor
  */
 #ifdef __WITH_PCL // PCL support required for these tests
-#include "sem/core/visitors/visitorcloud_.h"
+#include "elm/core/visitors/visitorcloud_.h"
 
-#include "sem/core/exception.h"
-#include "sem/core/pcl/vertices.h"
-#include "sem/ts/ts.h"
-#include "sem/ts/pcl_point_typed_tests.h"
+#include "elm/core/exception.h"
+#include "elm/core/pcl/vertices.h"
+#include "elm/ts/ts.h"
+#include "elm/ts/pcl_point_typed_tests.h"
 
 using namespace std;
 using namespace pcl;
