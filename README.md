@@ -55,14 +55,14 @@ We use cmake for configuring the build. This allows building for a variety of to
   
 Example cmake configuration command if dependencies are install in the usual system paths (e.g. /usr/lib):
   
-    cmake $SRC_DIR/sem
+    cmake $SRC_DIR/elm
     make
   
 Example cmake configuration command for when dependencies are in custom paths, or if you want to link against dependencies other than those installed under the usual system paths:
   
-    cmake -DGTEST_ROOT=<gtest build dir> -DOpenCV_DIR=<opencv build dir> -DBOOST_ROOT=<boost build dir> -DBoost_NO_SYSTEM_PATHS=ON $SRC_DIR/sem
+    cmake -DGTEST_ROOT=<gtest build dir> -DOpenCV_DIR=<opencv build dir> -DBOOST_ROOT=<boost build dir> -DBoost_NO_SYSTEM_PATHS=ON $SRC_DIR/elm
   
-    cmake -DGTEST_ROOT=~/src/gtest-1.7.0 -DOpenCV_DIR=~/build/opencv/share/ -DBOOST_ROOT=~/build/boost/boost_1_57_0/ -DBoost_NO_SYSTEM_PATHS=ON $SRC_DIR/sem
+    cmake -DGTEST_ROOT=~/src/gtest-1.7.0 -DOpenCV_DIR=~/build/opencv/share/ -DBOOST_ROOT=~/build/boost/boost_1_57_0/ -DBoost_NO_SYSTEM_PATHS=ON $SRC_DIR/elm
 
 * How to run tests
 Build the run_unittests target and running the resulting executable binary runs the tests. Running the binary in a terminal displays test results.
