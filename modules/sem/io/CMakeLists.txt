@@ -16,3 +16,6 @@ target_link_libraries(${MODULE_NAME} ${${ROOT_PROJECT}_LIBS} ${ROOT_PROJECT}_cor
 
 list (APPEND ${ROOT_PROJECT}_MODULES ${MODULE_NAME})
 set (${ROOT_PROJECT}_MODULES ${${ROOT_PROJECT}_MODULES} PARENT_SCOPE)
+
+# add module's install targets, header installation is centralized
+install(TARGETS ${MODULE_NAME} DESTINATION lib)

@@ -6,6 +6,8 @@
 
 #include "sem/core/cv/typedefs_fwd.h"
 
+typedef unsigned char uchar;
+
 namespace sem {
 
 typedef cv::Mat_<float> Mat_f;   ///< convinience forward typedef for Mat of floats without constraints on no. of channels

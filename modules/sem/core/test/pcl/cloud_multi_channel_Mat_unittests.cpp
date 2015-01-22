@@ -1,5 +1,7 @@
 #include "sem/core/pcl/cloud_impl_.h"
 
+#ifdef __WITH_PCL // following test cases require PCL support
+
 #include "sem/core/pcl/point_traits.h"
 #include "sem/ts/pcl_point_typed_tests.h"
 #include "sem/ts/ts.h"
@@ -353,3 +355,5 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Single_Ch_vs_multi_channe
 }
 
 } // annonymous namespace for tests
+
+#endif // WITH_PCL

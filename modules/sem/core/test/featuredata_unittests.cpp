@@ -7,7 +7,6 @@
 
 using namespace std;
 using namespace cv;
-using namespace pcl;
 using namespace sem;
 
 namespace {
@@ -53,6 +52,10 @@ TEST_F(FeatureDataTest, Same_Mat)
     EXPECT_EQ(m.data, mat_.data) << "Both Mats are not pointing to the same memory location.";
     ASSERT_NE(m.clone().data, mat_.data) << "Cannot still be pointing to the same memory chunk after cloning.";
 }
+
+#ifdef __WITH_PCL // following test case only applicable with PCL support and Point Cloud definitions
+
+using namespace pcl;
 
 /**
  * @brief Typed tests around FeatureData class with pcl PointCloud typed feature data
@@ -140,6 +143,8 @@ TYPED_TEST(FeatureDataCloud_Test, Cached_Cloud)
     EXPECT_EQ(cld2.use_count(), cld.use_count());
     EXPECT_EQ(cld2.use_count(), old_cld_use_count+1);
 }
+
+#endif // __WITH_PCL
 
 /**
  * @brief Typed tests around FeatureData class with POD typed feature data

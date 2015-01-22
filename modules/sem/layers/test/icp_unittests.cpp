@@ -1,5 +1,7 @@
 #include "sem/layers/icp.h"
 
+#ifdef __WITH_PCL // test normally
+
 #include <pcl/registration/registration.h>
 #include <pcl/registration/icp.h>
 
@@ -21,8 +23,6 @@ using namespace pcl;
 using namespace sem;
 
 namespace {
-
-#ifdef __WITH_PCL // test normally
 
 const string NAME_INPUT_POINT_CLOUD_SRC     = "src";    ///< key to source cloud
 const string NAME_INPUT_POINT_CLOUD_TARGET  = "target"; ///< key to target cloud
@@ -230,8 +230,8 @@ TEST_F(ICPTest, NoConvergence)
     EXPECT_MAT_EQ(sig_.MostRecentMat(NAME_OUTPUT_TRANSFORMATION), diagonal) << "Expecting diagonal matrix when convergence fails.";
 }
 
-#else // __WITH_PCL
-    #warning "Skipping building ICP layer unittests"
-#endif // __WITH_PCL
-
 } // annonymous namespace for test fixtures
+
+#else // __WITH_PCL
+    #warning "Skipping building ICP layer unittests due to no PCL support"
+#endif // __WITH_PCL

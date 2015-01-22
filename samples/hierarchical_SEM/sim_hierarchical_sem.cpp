@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "sem/core/core.h"
-#include "sem/simulationhsem.h"
+#include "simulationhsem.h"
 
 using namespace std;
 

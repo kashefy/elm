@@ -8,3 +8,9 @@ endforeach()
 
 # Propagate the modules up to parent level
 set( ${ROOT_PROJECT}_MODULES ${${ROOT_PROJECT}_MODULES} PARENT_SCOPE )
+
+install(DIRECTORY
+        ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include
+        FILES_MATCHING PATTERN "*.h*"
+        PATTERN "ts" EXCLUDE
+        PATTERN "test" EXCLUDE)

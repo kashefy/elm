@@ -1,4 +1,4 @@
-#include "sem/simulationhsem.h"
+#include "simulationhsem.h"
 
 #include <iostream>
 

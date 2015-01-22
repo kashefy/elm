@@ -17,6 +17,14 @@ class FeatureData
 {
 public:
     /**
+     * @brief Construct a new object with initially represented as a Mat
+     */
+    FeatureData(const cv::Mat &m)
+    {
+        var_ = static_cast<cv::Mat_<float> >(m);
+    }
+
+    /**
      * @brief Construct a new object with initial representation
      */
     template <class T>
@@ -80,11 +88,11 @@ protected:
 #else
     boost::variant< cv::Mat1f, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
 
-    FeatDataVisitorVoid visitor_cloud_;         ///< place holder visitor that does nothing
-    FeatDataVisitorVoid visitor_cloud_nrml_;    ///< place holder visitor that does nothing
-    FeatDataVisitorVoid visitor_cloud_ptnrml_;  ///< place holder visitor that does nothing
+    VisitorVoid visitor_cloud_xyz_;     ///< place holder visitor that does nothing
+    VisitorVoid visitor_cloud_nrml_;    ///< place holder visitor that does nothing
+    VisitorVoid visitor_cloud_ptnrml_;  ///< place holder visitor that does nothing
 
-    FeatDataVisitorVoid visitor_vv_;            ///< place holder visitor that does nothing
+    VisitorVoid visitor_vv_;            ///< place holder visitor that does nothing
 #endif // __WITH_PCL
 
     VisitorMat_f visitor_mat_;      ///< visitor for converting to Mat objects

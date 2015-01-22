@@ -13,7 +13,7 @@
 class base_IntensityContrast
 {
 public:
-    ~base_IntensityContrast();
+    virtual ~base_IntensityContrast();
 
     /**
      * @brief Initialize
