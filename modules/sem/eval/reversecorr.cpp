@@ -26,7 +26,7 @@ void STA::Add(InputArray in)
     if(sta_.empty()) {
 
         if(in.empty()) {
-            SEM_THROW_BAD_DIMS("Initial input is empty.");
+            ELM_THROW_BAD_DIMS("Initial input is empty.");
         }
         else {
             sta_ = Mat1f::zeros(in.rows(), in.cols());
@@ -34,7 +34,7 @@ void STA::Add(InputArray in)
     }
     else if(sta_.size() != in.size())
     {
-        SEM_THROW_BAD_DIMS("STA input dims have changed from initial input.");
+        ELM_THROW_BAD_DIMS("STA input dims have changed from initial input.");
     }
 
     Mat non_zero;

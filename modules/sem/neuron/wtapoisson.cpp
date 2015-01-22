@@ -15,7 +15,7 @@ WTAPoisson::WTAPoisson(float max_frequency, float delta_t_msec)
 
 void WTAPoisson::NextSpikeTime()
 {
-    next_spike_time_sec_ = sem::randexp(lambda_);
+    next_spike_time_sec_ = elm::randexp(lambda_);
 }
 
 Mat WTAPoisson::Compete(vector<shared_ptr<base_Learner> > &learners)
@@ -50,7 +50,7 @@ cv::Mat WTAPoisson::LearnerStateDistr(const std::vector<std::shared_ptr<base_Lea
 
     if(nb_learners < 1) {
 
-        SEM_THROW_BAD_DIMS("Learner vector is empty.");
+        ELM_THROW_BAD_DIMS("Learner vector is empty.");
     }
 
     Mat1f u(1, nb_learners);

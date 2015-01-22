@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_BASE_LAYER_H_
-#define SEM_CORE_BASE_LAYER_H_
+#ifndef ELM_CORE_BASE_LAYER_H_
+#define ELM_CORE_BASE_LAYER_H_
 
 class LayerConfig;
 class LayerIONames;
@@ -45,7 +45,7 @@ public:
      * This is expected to perform the heavy lifting
      *
      * @param[in] signal object with input features
-     * @throws sem::ExceptionKeyError for missing features
+     * @throws elm::ExceptionKeyError for missing features
      */
     virtual void Activate(const Signal &signal) = 0;
 
@@ -92,4 +92,4 @@ protected:
     base_LearningLayer(const LayerConfig& config);
 };
 
-#endif // SEM_CORE_BASE_LAYER_H_
+#endif // ELM_CORE_BASE_LAYER_H_

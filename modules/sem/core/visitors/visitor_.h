@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_VISITOR__H_
-#define SEM_CORE_VISITOR__H_
+#ifndef ELM_CORE_VISITOR__H_
+#define ELM_CORE_VISITOR__H_
 
 #include <boost/variant/static_visitor.hpp>
 
@@ -40,4 +40,4 @@ class VisitorVoid :
 {
 };
 
-#endif // SEM_CORE_VISITOR__H_
+#endif // ELM_CORE_VISITOR__H_

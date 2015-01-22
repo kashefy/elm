@@ -1,5 +1,5 @@
-#ifndef SEM_NEURON_ZNEURON_H_
-#define SEM_NEURON_ZNEURON_H_
+#ifndef ELM_NEURON_ZNEURON_H_
+#define ELM_NEURON_ZNEURON_H_
 
 #include "sem/neuron/base_learner.h"
 #include "sem/neuron/spikinghistory.h"
@@ -78,4 +78,4 @@ protected:
     float u_;                   ///< membrane potential
 };
 
-#endif // SEM_NEURON_ZNEURON_H_
+#endif // ELM_NEURON_ZNEURON_H_

@@ -62,20 +62,20 @@ void LayerZ::Reset(const LayerConfig &config)
     // afferents
     int tmp = params.get<int>(PARAM_NB_AFFERENTS);
     if(tmp < 1) {
-        SEM_THROW_VALUE_ERROR("No. of afferents must be > 0");
+        ELM_THROW_VALUE_ERROR("No. of afferents must be > 0");
     }
     nb_afferents_ = tmp;
 
     // output nodes
     tmp = params.get<int>(PARAM_NB_OUTPUT_NODES);
     if(tmp < 1) {
-        SEM_THROW_VALUE_ERROR("No. of output nodes must be > 0");
+        ELM_THROW_VALUE_ERROR("No. of output nodes must be > 0");
     }
     int nb_outputs = tmp;
 
     tmp = params.get<int>(PARAM_LEN_HISTORY, DEFAULT_LEN_HISTORY);
     if(tmp < 1) {
-        SEM_THROW_VALUE_ERROR("History length must be > 0");
+        ELM_THROW_VALUE_ERROR("History length must be > 0");
     }
     int len_history = tmp;
 
@@ -85,21 +85,21 @@ void LayerZ::Reset(const LayerConfig &config)
     float freq = params.get<float>(PARAM_WTA_FREQ, DEFAULT_WTA_FREQ);
     if(freq < 0.f) {
 
-        SEM_THROW_VALUE_ERROR("Frequency must be >= 0");
+        ELM_THROW_VALUE_ERROR("Frequency must be >= 0");
     }
     // TODO: log warning when freq == 0
 
     float delta_t = params.get<float>(PARAM_DELTA_T, DEFAULT_DELTA_T);
     if(delta_t <= 0.f) {
 
-        SEM_THROW_VALUE_ERROR("time resolution delta t must be > 0");
+        ELM_THROW_VALUE_ERROR("time resolution delta t must be > 0");
     }
     wta_ = WTAPoisson(freq, delta_t);
 }
 
 void LayerZ::Reconfigure(const LayerConfig &config)
 {
-    SEM_THROW_NOT_IMPLEMENTED;
+    ELM_THROW_NOT_IMPLEMENTED;
 }
 
 void LayerZ::IONames(const LayerIONames &config)
@@ -118,7 +118,7 @@ void LayerZ::Activate(const Signal &signal)
 
         std::stringstream s;
         s << "Expecting " << nb_afferents_ << " input spikes";
-        SEM_THROW_BAD_DIMS(s.str());
+        ELM_THROW_BAD_DIMS(s.str());
     }
 
     // compute membrane potential for each neuron

@@ -1,5 +1,5 @@
-#ifndef SEM_NEURON_SPIKINGHISTORY_H_
-#define SEM_NEURON_SPIKINGHISTORY_H_
+#ifndef ELM_NEURON_SPIKINGHISTORY_H_
+#define ELM_NEURON_SPIKINGHISTORY_H_
 
 #include <opencv2/core.hpp>
 
@@ -77,4 +77,4 @@ protected:
     cv::Mat1i history_;  ///< input history
 };
 
-#endif // SEM_NEURON_SPIKINGHISTORY_H_
+#endif // ELM_NEURON_SPIKINGHISTORY_H_

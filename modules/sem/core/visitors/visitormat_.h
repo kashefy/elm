@@ -2,8 +2,8 @@
  * @file Define variant visitor classes around Mat <-> X type conversions
  * @todo switchsem::Mat_f to basic Mat
  */
-#ifndef SEM_CORE_VISITORMAT__H_
-#define SEM_CORE_VISITORMAT__H_
+#ifndef ELM_CORE_VISITORMAT__H_
+#define ELM_CORE_VISITORMAT__H_
 
 #include "sem/core/typedefs_fwd.h"
 #include "sem/core/visitors/visitor_.h"
@@ -17,27 +17,27 @@ class VisitorMat_f :
         public Visitor_<sem::Mat_f >
 {
 public:
-   sem::Mat_f operator()(const cv::Mat &m) const;
+   elm::Mat_f operator()(const cv::Mat &m) const;
 
-   sem::Mat_f operator()(const sem::Mat_f &m) const;
+   elm::Mat_f operator()(const elm::Mat_f &m) const;
 
-   sem::Mat_f operator()(float f) const;
+   elm::Mat_f operator()(float f) const;
 
-   sem::Mat_f operator()(int n) const;
+   elm::Mat_f operator()(int n) const;
 
-   sem::Mat_f operator()(uchar c) const;
+   elm::Mat_f operator()(uchar c) const;
 
 #ifdef __WITH_PCL // this conversion requires PCL support
 
-   sem::Mat_f operator()(sem::CloudXYZPtr &c) const;
+   elm::Mat_f operator()(sem::CloudXYZPtr &c) const;
 
-   sem::Mat_f operator()(sem::CloudNrmlPtr &c) const;
+   elm::Mat_f operator()(sem::CloudNrmlPtr &c) const;
 
-   sem::Mat_f operator()(sem::CloudPtNrmlPtr &c) const;
+   elm::Mat_f operator()(sem::CloudPtNrmlPtr &c) const;
 
-   sem::Mat_f operator()(const sem::VecVertices &vv) const;
+   elm::Mat_f operator()(const elm::VecVertices &vv) const;
 
 #endif // __WITH_PCL
 };
 
-#endif // SEM_CORE_VISITORMAT__H_
+#endif // ELM_CORE_VISITORMAT__H_

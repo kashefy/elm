@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_VISITORVERTICES_H_
-#define SEM_CORE_VISITORVERTICES_H_
+#ifndef ELM_CORE_VISITORVERTICES_H_
+#define ELM_CORE_VISITORVERTICES_H_
 
 #ifdef __WITH_PCL // the following visitor derived class definitions requires PCL support
 
@@ -20,21 +20,21 @@ class VisitorVecVertices :
 public:
     void Reset();
 
-    sem::VecVertices operator()(const sem::VecVertices &vv);
+    elm::VecVertices operator()(const elm::VecVertices &vv);
 
-    sem::VecVertices operator()(sem::CloudXYZPtr &c);
+    elm::VecVertices operator()(sem::CloudXYZPtr &c);
 
-    sem::VecVertices operator()(sem::CloudNrmlPtr &c);
+    elm::VecVertices operator()(sem::CloudNrmlPtr &c);
 
-    sem::VecVertices operator()(sem::CloudPtNrmlPtr &c);
+    elm::VecVertices operator()(sem::CloudPtNrmlPtr &c);
 
-    sem::VecVertices operator()(float f);
+    elm::VecVertices operator()(float f);
 
-    sem::VecVertices operator()(int n);
+    elm::VecVertices operator()(int n);
 
-    sem::VecVertices operator()(uchar c);
+    elm::VecVertices operator()(uchar c);
 
-    sem::VecVertices operator()(const sem::Mat_f &m);
+    elm::VecVertices operator()(const elm::Mat_f &m);
 
 protected:
     template <typename TScalar>
@@ -46,7 +46,7 @@ protected:
         vv_.push_back(v);
     }
 
-    sem::VecVertices vv_;   ///< internal copy for caching most recent conversion result
+    elm::VecVertices vv_;   ///< internal copy for caching most recent conversion result
 };
 
 #else // __WITH_PCL
@@ -54,4 +54,4 @@ protected:
 #endif // __WITH_PCL
 
 
-#endif // SEM_CORE_VISITORVERTICES_H_
+#endif // ELM_CORE_VISITORVERTICES_H_

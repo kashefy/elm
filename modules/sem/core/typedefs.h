@@ -1,10 +1,10 @@
-#ifndef SEM_CORE_TYPEDEFS_H_
-#define SEM_CORE_TYPEDEFS_H_
+#ifndef ELM_CORE_TYPEDEFS_H_
+#define ELM_CORE_TYPEDEFS_H_
 
 #include "sem/core/stl/typedefs.h"
 
-namespace sem {
+namespace elm {
 
-} // namespace sem
+} // namespace elm
 
-#endif // SEM_CORE_TYPEDEFS_H_
+#endif // ELM_CORE_TYPEDEFS_H_

@@ -4,7 +4,7 @@
 #include "sem/ts/ts.h"
 
 using cv::Mat1f;
-using namespace sem;
+using namespace elm;
 
 namespace {
 

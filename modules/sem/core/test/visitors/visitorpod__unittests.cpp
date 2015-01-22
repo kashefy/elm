@@ -8,7 +8,7 @@
 
 using namespace std;
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 namespace {
 /**

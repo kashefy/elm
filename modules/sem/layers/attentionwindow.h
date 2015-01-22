@@ -1,5 +1,5 @@
-#ifndef SEM_LAYERS_ATTENTIONWINDOW_H_
-#define SEM_LAYERS_ATTENTIONWINDOW_H_
+#ifndef ELM_LAYERS_ATTENTIONWINDOW_H_
+#define ELM_LAYERS_ATTENTIONWINDOW_H_
 
 #include <string>
 
@@ -65,4 +65,4 @@ protected:
     cv::Point2i tl_;     ///< window's top-left corner
 };
 
-#endif // SEM_LAYERS_ATTENTIONWINDOW_H_
+#endif // ELM_LAYERS_ATTENTIONWINDOW_H_

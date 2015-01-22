@@ -4,7 +4,7 @@
 #include "sem/core/stl/stl.h"
 
 using namespace std;
-using namespace sem;
+using namespace elm;
 
 void LayerIONames::Input(const string &key, const string &name)
 {
@@ -21,7 +21,7 @@ string LayerIONames::Input(const string &key) const
     string name;
     if(!Find<string>(inputs_, key, name)) {
 
-        SEM_THROW_KEY_ERROR("No name found for input key \'" + key + "\'");
+        ELM_THROW_KEY_ERROR("No name found for input key \'" + key + "\'");
     }
     return name;
 }
@@ -38,7 +38,7 @@ string LayerIONames::Output(const string &key) const
     string name;
     if(!Find<string>(outputs_, key, name)) {
 
-        SEM_THROW_KEY_ERROR("No name found for input key \'" + key + "\'");
+        ELM_THROW_KEY_ERROR("No name found for input key \'" + key + "\'");
     }
     return name;
 }

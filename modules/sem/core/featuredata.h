@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_FEATUREDATA_H_
-#define SEM_CORE_FEATUREDATA_H_
+#ifndef ELM_CORE_FEATUREDATA_H_
+#define ELM_CORE_FEATUREDATA_H_
 
 #include <memory>
 
@@ -73,16 +73,16 @@ protected:
     boost::variant
     <
     cv::Mat1f,
-    sem::CloudXYZPtr,
-    sem::CloudNrmlPtr,
-    sem::CloudPtNrmlPtr,
-    sem::VecVertices,
+    elm::CloudXYZPtr,
+    elm::CloudNrmlPtr,
+    elm::CloudPtNrmlPtr,
+    elm::VecVertices,
     float, int, uchar
     > var_; ///< variant object to enable finite representations of a single feature data instance
 
-    sem::VisitorCloud_<pcl::PointXYZ> visitor_cloud_xyz_;       ///< visitor for converting to pcl point clouds
-    sem::VisitorCloud_<pcl::Normal> visitor_cloud_nrml_;        ///< visitor for converting to pcl point clouds
-    sem::VisitorCloud_<pcl::PointNormal> visitor_cloud_ptnrml_;   ///< visitor for converting to pcl point clouds
+    elm::VisitorCloud_<pcl::PointXYZ> visitor_cloud_xyz_;       ///< visitor for converting to pcl point clouds
+    elm::VisitorCloud_<pcl::Normal> visitor_cloud_nrml_;        ///< visitor for converting to pcl point clouds
+    elm::VisitorCloud_<pcl::PointNormal> visitor_cloud_ptnrml_;   ///< visitor for converting to pcl point clouds
 
     VisitorVecVertices visitor_vv_; ///< visitor for converting to STL vector of PCL Vertices
 #else
@@ -100,4 +100,4 @@ protected:
 
 std::ostream& operator<<(std::ostream& os, FeatureData& obj);
 
-#endif // SEM_CORE_FEATUREDATA_H_
+#endif // ELM_CORE_FEATUREDATA_H_

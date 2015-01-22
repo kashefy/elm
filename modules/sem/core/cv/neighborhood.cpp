@@ -4,14 +4,14 @@
 
 using namespace cv;
 
-void sem::NeighMeanVar(const Mat1f &m, int radius, Mat1f &neigh_mean, Mat1f &neigh_var,
+void elm::NeighMeanVar(const Mat1f &m, int radius, Mat1f &neigh_mean, Mat1f &neigh_var,
                        int border_type, const Scalar &value)
 {
     int diameter = radius*2+1;
 
     // check radius
     if(radius < 0) {
-        SEM_THROW_VALUE_ERROR("radius must be >= 0");
+        ELM_THROW_VALUE_ERROR("radius must be >= 0");
     }
     else if(radius == 0) {
 

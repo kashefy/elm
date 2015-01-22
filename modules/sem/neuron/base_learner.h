@@ -1,5 +1,5 @@
-#ifndef SEM_NEURON_BASE_LEARNER_H_
-#define SEM_NEURON_BASE_LEARNER_H_
+#ifndef ELM_NEURON_BASE_LEARNER_H_
+#define ELM_NEURON_BASE_LEARNER_H_
 
 #include <opencv2/core.hpp>
 
@@ -39,4 +39,4 @@ protected:
     base_Learner();
 };
 
-#endif // SEM_NEURON_BASE_LEARNER_H_
+#endif // ELM_NEURON_BASE_LEARNER_H_

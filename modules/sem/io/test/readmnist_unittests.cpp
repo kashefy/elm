@@ -9,7 +9,7 @@
 
 using namespace std;
 namespace bfs=boost::filesystem; // use alias
-using namespace sem;
+using namespace elm;
 
 class FakeMNISTLabelsWriter {
 
@@ -41,7 +41,7 @@ public:
 
     void WriteInt(int n)
     {
-        if(IS_32_LITTLE_ENDIAN) { sem::SwapEndian(&n); }
+        if(IS_32_LITTLE_ENDIAN) { elm::SwapEndian(&n); }
         out_.write(reinterpret_cast<char*>(&n), sizeof(int32_t));
     }
 
@@ -58,7 +58,7 @@ protected:
 
             stringstream s;
             s << "Faied to write test file (" << path_ << ").";
-            SEM_THROW_FILEIO_ERROR(s.str());
+            ELM_THROW_FILEIO_ERROR(s.str());
         }
 
         WriteInt(magic_number);

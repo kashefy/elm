@@ -1,10 +1,10 @@
-#ifndef SEM_CORE_CV_MAT_TYPE_UTILS_H_
-#define SEM_CORE_CV_MAT_TYPE_UTILS_H_
+#ifndef ELM_CORE_CV_MAT_TYPE_UTILS_H_
+#define ELM_CORE_CV_MAT_TYPE_UTILS_H_
 
 #include "sem/core/stl/typedefs.h"
 #include "sem/core/cv/typedefs_fwd.h"
 
-namespace sem {
+namespace elm {
 
 /**
  * @brief Get string representation of matrix type
@@ -13,6 +13,6 @@ namespace sem {
  */
 std::string MatTypeToString(const cv::Mat& m);
 
-} // namespace sem
+} // namespace elm
 
-#endif // SEM_CORE_CV_MAT_TYPE_UTILS_H_
+#endif // ELM_CORE_CV_MAT_TYPE_UTILS_H_

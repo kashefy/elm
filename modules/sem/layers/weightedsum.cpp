@@ -43,7 +43,7 @@ void WeightedSum::Activate(const Signal &signal)
     Mat1f stimulus = signal[name_stimulus_][0];
     if(stimulus.cols > 2) {
 
-        SEM_THROW_BAD_DIMS("Cannot handle stimulus with > 2 columns.");
+        ELM_THROW_BAD_DIMS("Cannot handle stimulus with > 2 columns.");
     }
 
     response_ = Mat1f(stimulus.rows, 1);

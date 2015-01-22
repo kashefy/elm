@@ -3,8 +3,8 @@
  * - test-related routines
  * Don't forget to add new headers as you create them
   */
-#ifndef SEM_TS_H_
-#define SEM_TS_H_
+#ifndef ELM_TS_H_
+#define ELM_TS_H_
 
 #include "gtest/gtest.h"
 
@@ -14,11 +14,11 @@
 #include "sem/ts/mat_assertions.h"
 #include "sem/ts/container.h"
 
-namespace sem
+namespace elm
 {
 
 const char* FullTestName(const ::testing::TestInfo *test_info);
 
-} // namespace sem
+} // namespace elm
 
-#endif // SEM_TS_H_
+#endif // ELM_TS_H_

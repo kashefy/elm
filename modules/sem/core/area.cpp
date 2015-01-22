@@ -19,7 +19,7 @@ float Trapz::operator ()(const Mat1f &x, const Mat1f &y) const
 {
     if(x.total() < 2 || y .total() < 2) {
 
-        SEM_THROW_BAD_DIMS("x and y dims must both have >= 2 elements.");
+        ELM_THROW_BAD_DIMS("x and y dims must both have >= 2 elements.");
     }
 
     float area = 0.f;

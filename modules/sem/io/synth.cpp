@@ -22,7 +22,7 @@ SynthBars::SynthBars()
 
 void SynthBars::Reset(int rows, int cols, int nb_variations)
 {
-    if(nb_variations <= 0) { SEM_THROW_VALUE_ERROR("No. of variation must be > 0."); }
+    if(nb_variations <= 0) { ELM_THROW_VALUE_ERROR("No. of variation must be > 0."); }
     rows_ = rows;
     cols_ = cols;
     nb_variations_ = nb_variations;

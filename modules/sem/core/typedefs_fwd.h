@@ -1,17 +1,17 @@
 /** @file near-fwd declarations for convinience typedefs
  * Not fully forward due to STL types.
  */
-#ifndef SEM_CORE_TYPEDEFS_FWD_H_
-#define SEM_CORE_TYPEDEFS_FWD_H_
+#ifndef ELM_CORE_TYPEDEFS_FWD_H_
+#define ELM_CORE_TYPEDEFS_FWD_H_
 
 #include "sem/core/cv/typedefs_fwd.h"
 
 typedef unsigned char uchar;
 
-namespace sem {
+namespace elm {
 
 typedef cv::Mat_<float> Mat_f;   ///< convinience forward typedef for Mat of floats without constraints on no. of channels
 
-} // namespace sem
+} // namespace elm
 
-#endif // SEM_CORE_TYPEDEFS_FWD_H_
+#endif // ELM_CORE_TYPEDEFS_FWD_H_

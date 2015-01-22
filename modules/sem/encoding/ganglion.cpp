@@ -27,7 +27,7 @@ void DiffOfGaussians2dSq::Init(int radius, float scale, bool center_on)
 
     if(radius < 1) {
 
-        SEM_THROW_BAD_DIMS("Diff. of Gaussians radius must be > 0.");
+        ELM_THROW_BAD_DIMS("Diff. of Gaussians radius must be > 0.");
     }
 
     size_ = radius*2+1;

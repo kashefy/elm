@@ -5,11 +5,11 @@
 #include <boost/property_tree/xml_parser.hpp>
 
 using namespace std;
-using namespace sem;
+using namespace elm;
 
 using namespace boost::property_tree;
 
-void sem::PrintXML(const PTree &pt,
+void elm::PrintXML(const PTree &pt,
                 std::basic_ostream<
                 typename PTree::key_type::value_type
                 > &stream)
@@ -17,7 +17,7 @@ void sem::PrintXML(const PTree &pt,
     xml_parser::write_xml(stream, pt);
 }
 
-bool sem::UnusedNodes(const PTree &p, const vector<string> &keys_used, vector<string> &keys_unused)
+bool elm::UnusedNodes(const PTree &p, const vector<string> &keys_used, vector<string> &keys_unused)
 {
     for(PTree::const_iterator itr=p.begin(); itr != p.end(); ++itr) {
 

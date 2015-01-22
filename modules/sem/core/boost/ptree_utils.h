@@ -1,7 +1,7 @@
 /** @file utilities around boost property tree
  */
-#ifndef SEM_CORE_PTREE_UTILS_H_
-#define SEM_CORE_PTREE_UTILS_H_
+#ifndef ELM_CORE_PTREE_UTILS_H_
+#define ELM_CORE_PTREE_UTILS_H_
 
 #include <iostream>
 #include <vector>
@@ -9,7 +9,7 @@
 #include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
 
-namespace sem
+namespace elm
 {
 typedef boost::property_tree::ptree PTree;
 
@@ -51,4 +51,4 @@ bool UnusedNodes(const PTree &p, const std::vector<std::string> &keys_used, std:
 
 }
 
-#endif // SEM_CORE_PTREE_UTILS_H_
+#endif // ELM_CORE_PTREE_UTILS_H_

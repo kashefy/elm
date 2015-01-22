@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_HIST_H_
-#define SEM_CORE_HIST_H_
+#ifndef ELM_CORE_HIST_H_
+#define ELM_CORE_HIST_H_
 
 #include <opencv2/core.hpp>
 
@@ -44,4 +44,4 @@ protected:
     cv::Mat1f hist_;                  ///< computed histogram
 };
 
-#endif // SEM_CORE_HIST_H_
+#endif // ELM_CORE_HIST_H_

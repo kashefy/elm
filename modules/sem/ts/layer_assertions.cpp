@@ -8,9 +8,9 @@
 #include "sem/core/stl/stl.h"
 
 using namespace std;
-using namespace sem;
+using namespace elm;
 
-void sem::ValidateRequiredIONames(const MapIONames &io_pairs, shared_ptr<base_Layer> &layer_ptr)
+void elm::ValidateRequiredIONames(const MapIONames &io_pairs, shared_ptr<base_Layer> &layer_ptr)
 {
     VecS keys = Keys(io_pairs);
 

@@ -1,13 +1,13 @@
 /**@file collection of STL utility/convinience functions
  */
-#ifndef SEM_CORE_STL_H_
-#define SEM_CORE_STL_H_
+#ifndef ELM_CORE_STL_H_
+#define ELM_CORE_STL_H_
 
 #include <map>
 #include <string>
 #include <vector>
 
-namespace sem {
+namespace elm {
 
     /**
      * @brief Find key in map and provide corresponding object if exists.
@@ -62,4 +62,4 @@ namespace sem {
     }
 }
 
-#endif // SEM_CORE_STL_H_
+#endif // ELM_CORE_STL_H_

@@ -20,7 +20,7 @@
 using namespace std;
 using namespace cv;
 using namespace pcl;
-using namespace sem;
+using namespace elm;
 
 // initialize paramter keys
 const string Triangulation::PARAM_SEARCH_RADIUS        = "radius";
@@ -34,7 +34,7 @@ const string Triangulation::PARAM_IS_NORMAL_CONSISTENT = "normal_consistency";
 // initialize default float paramter values
 const float Triangulation::DEFAULT_SEARCH_RADIUS            = 0.025f;
 const float Triangulation::DEFAULT_MU                       = 2.5f;
-const float Triangulation::DEFAULT_MAX_SURFACE_ANGLE        = SEM_PI2 / 2.f;
+const float Triangulation::DEFAULT_MAX_SURFACE_ANGLE        = ELM_PI2 / 2.f;
 const float Triangulation::DEFAULT_MIN_ANGLE                = CV_PI / 18.f;
 const float Triangulation::DEFAULT_MAX_ANGLE                = 2 * CV_PI / 3.f;
 const int   Triangulation::DEFAULT_MAX_NN                   = 100;  ///< maximum neighrest neighbors
@@ -107,7 +107,7 @@ void Triangulation::Activate(const Signal &signal)
     CloudXYZPtr cld_in = signal.MostRecent(name_src_cloud_).get<CloudXYZPtr>();
     if(cld_in->empty()) {
 
-        SEM_THROW_BAD_DIMS("Cannot Activate Triangulation layer with empty input point cloud.");
+        ELM_THROW_BAD_DIMS("Cannot Activate Triangulation layer with empty input point cloud.");
     }
 
     // Normal estimation*

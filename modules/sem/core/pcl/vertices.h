@@ -1,8 +1,8 @@
 /** A collection of routines to facilitate working with PCL data types.
  * Only defined if PCL support exists.
  */
-#ifndef SEM_CORE_PCL_UTILS_H_
-#define SEM_CORE_PCL_UTILS_H_
+#ifndef ELM_CORE_PCL_UTILS_H_
+#define ELM_CORE_PCL_UTILS_H_
 
 #ifndef __WITH_PCL
     #warning "Skipping pcl utilities since PCL support is disabled."
@@ -14,7 +14,7 @@
 #include "sem/core/cv/typedefs_fwd.h"
 #include "sem/core/pcl/typedefs_fwd.h"
 
-namespace sem {
+namespace elm {
 
 /**
  * @brief Convert Mat of floats to vector of pcl Vertices
@@ -43,4 +43,4 @@ cv::Mat1f VecVertices2Mat(const VecVertices& vv, bool do_row_mat=true);
 
 #endif // __WITH_PCL
 
-#endif // SEM_CORE_PCL_UTILS_H_
+#endif // ELM_CORE_PCL_UTILS_H_

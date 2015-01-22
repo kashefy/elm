@@ -8,14 +8,14 @@
 #include "sem/layers/layerfactory.h"
 
 using std::string;
-using sem::ExceptionNotImpl;
+using elm::ExceptionNotImpl;
 
 namespace {
 
 /**
  * @brief use macro for defining a layer as not supported
  */
-class DummyLayerNotSupported : public SEM_LAYER_NOT_SUPPORTED(DummyLayerNotSupported, "Boooh");
+class DummyLayerNotSupported : public ELM_LAYER_NOT_SUPPORTED(DummyLayerNotSupported, "Boooh");
 
 /** @brief test routines around "dummy not supported layer".
  * Bbascially testing that Exceptions are thrown correctly

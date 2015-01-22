@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_PCL_CLOUD_IMPL__H_
-#define SEM_CORE_PCL_CLOUD_IMPL__H_
+#ifndef ELM_CORE_PCL_CLOUD_IMPL__H_
+#define ELM_CORE_PCL_CLOUD_IMPL__H_
 
 #ifdef __WITH_PCL // the following template Converter Cloud Mat class requires PCL support
 
@@ -8,7 +8,7 @@
 #include "sem/core/exception.h"
 #include "sem/core/pcl/point_traits.h"
 
-namespace sem {
+namespace elm {
 
 /**
  * @brief Template class with utilities for Cloud-Mat conversions depending on Point type
@@ -23,7 +23,7 @@ public:
      * @param src Mat
      * @param step (no. of floats per element)
      * @param dst cloud
-     * @throw sem::ExceptionTypeError for non-continuous Mat input
+     * @throw elm::ExceptionTypeError for non-continuous Mat input
      */
     static void CopyContMatData2Cloud(const cv::Mat1f &src, size_t step, typename pcl::PointCloud<TPoint >::Ptr dst)
     {
@@ -40,7 +40,7 @@ public:
             }
         }
         else {
-            SEM_THROW_TYPE_ERROR("Mat must be continuous.");
+            ELM_THROW_TYPE_ERROR("Mat must be continuous.");
         }
     }
 
@@ -132,7 +132,7 @@ public:
             s << "Cannot determine padding for this Mat " <<
                  "no. of cols must be a multiple of either points field count or no. of floats occupied " <<
                  "(with or without padding).";
-            SEM_THROW_BAD_DIMS(s.str());
+            ELM_THROW_BAD_DIMS(s.str());
         }
     }
 
@@ -191,7 +191,7 @@ public:
             s << "Failed to convert this matrix to a point cloud." <<
                  " No. of Mat columns must be a multiple of the Point's field count if not padded,"<<
                  " or no. of floats occupied by point element if mat is padded accordingly.";
-            SEM_THROW_BAD_DIMS(s.str());
+            ELM_THROW_BAD_DIMS(s.str());
         }
 
         return cloud_ptr;
@@ -233,17 +233,17 @@ public:
             s << "Failed to convert this matrix to a point cloud." <<
                  " No. of Mat columns must be a multiple of the Point's field count if not padded,"<<
                  " or no. of floats occupied by point element if mat is padded accordingly.";
-            SEM_THROW_BAD_DIMS(s.str());
+            ELM_THROW_BAD_DIMS(s.str());
         }
 
         return cloud_ptr;
     }
 };
 
-} // namespace sem
+} // namespace elm
 
 #else // __WITH_PCL
     #warning "Unable to define template Converter Cloud Mat without PCL support."
 #endif // __WITH_PCL
 
-#endif // SEM_CORE_PCL_CLOUD_IMPL__H_
+#endif // ELM_CORE_PCL_CLOUD_IMPL__H_

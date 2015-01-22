@@ -1,10 +1,10 @@
-#ifndef SEM_LAYERS_TRIANGULATION_H_
-#define SEM_LAYERS_TRIANGULATION_H_
+#ifndef ELM_LAYERS_TRIANGULATION_H_
+#define ELM_LAYERS_TRIANGULATION_H_
 
 #ifndef __WITH_PCL
     #warning "Disabling Triangulation layer due to no PCL support and defining it as a non-supported"
     #include "sem/layers/layernotsupported.h"
-    class Triangulation : public SEM_LAYER_NOT_SUPPORTED(Triangulation, "Building with PCL is required for supporting Triangulation layer.");
+    class Triangulation : public ELM_LAYER_NOT_SUPPORTED(Triangulation, "Building with PCL is required for supporting Triangulation layer.");
 #else   // __WITH_PCL
 
 #include <string>
@@ -72,4 +72,4 @@ protected:
 
 #endif // __WITH_PCL
 
-#endif // SEM_LAYERS_TRIANGULATION_H_
+#endif // ELM_LAYERS_TRIANGULATION_H_

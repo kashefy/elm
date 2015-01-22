@@ -1,5 +1,5 @@
-#ifndef SEM_LAYERS_SALIENCYITTI_H_
-#define SEM_LAYERS_SALIENCYITTI_H_
+#ifndef ELM_LAYERS_SALIENCYITTI_H_
+#define ELM_LAYERS_SALIENCYITTI_H_
 
 #include <memory>
 
@@ -72,4 +72,4 @@ protected:
     float percentile_orientation_response_; ///< percentile for masking low orientation responses
 };
 
-#endif // SEM_LAYERS_SALIENCYITTI_H_
+#endif // ELM_LAYERS_SALIENCYITTI_H_

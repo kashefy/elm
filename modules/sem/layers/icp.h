@@ -1,12 +1,12 @@
-#ifndef SEM_LAYERS_ICP_H_
-#define SEM_LAYERS_ICP_H_
+#ifndef ELM_LAYERS_ICP_H_
+#define ELM_LAYERS_ICP_H_
 
 #include <string>
 
 #ifndef __WITH_PCL
     #warning "Disabling ICP layer due to no PCL support and defining it as a non-supported"
     #include "sem/layers/layernotsupported.h"
-    class ICP : public SEM_LAYER_NOT_SUPPORTED(ICP, "Building with PCL is required for supporting ICP layer.");
+    class ICP : public ELM_LAYER_NOT_SUPPORTED(ICP, "Building with PCL is required for supporting ICP layer.");
 #else   // __WITH_PCL
 
 #include <opencv2/core.hpp>
@@ -63,4 +63,4 @@ protected:
 };
 #endif  // __WITH_PCL
 
-#endif // SEM_LAYERS_ICP_H_
+#endif // ELM_LAYERS_ICP_H_

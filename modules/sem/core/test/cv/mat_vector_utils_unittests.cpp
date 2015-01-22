@@ -6,7 +6,7 @@
 
 using namespace std;
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 namespace {
 
@@ -127,7 +127,7 @@ TEST(ElementsAt, ElementsAt)
 
                 elements_expected(k) = (*itr)(r, c);
             }
-            Mat1f elements_actual = sem::ElementsAt(data, r, c);
+            Mat1f elements_actual = elm::ElementsAt(data, r, c);
 
             EXPECT_MAT_DIMS_EQ(elements_actual, Size(static_cast<int>(data.size()), 1)) << "Expecting a row matrix";
             EXPECT_MAT_EQ(elements_expected, elements_actual) << "Unexpected element values";

@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_SAMPLER_H_
-#define SEM_CORE_SAMPLER_H_
+#ifndef ELM_CORE_SAMPLER_H_
+#define ELM_CORE_SAMPLER_H_
 
 #include <opencv2/core/mat.hpp>
 
@@ -74,7 +74,7 @@ public:
     cv::Point2i Sample() const;
 };
 
-namespace sem
+namespace elm
 {
 
 /**
@@ -86,4 +86,4 @@ float randexp(float lambda);
 
 }
 
-#endif // SEM_CORE_SAMPLER_H_
+#endif // ELM_CORE_SAMPLER_H_

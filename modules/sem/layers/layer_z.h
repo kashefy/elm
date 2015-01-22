@@ -1,5 +1,5 @@
-#ifndef SEM_LAYERS_LAYER_Z_H_
-#define SEM_LAYERS_LAYER_Z_H_
+#ifndef ELM_LAYERS_LAYER_Z_H_
+#define ELM_LAYERS_LAYER_Z_H_
 
 #include <vector>
 
@@ -85,4 +85,4 @@ protected:
     WTAPoisson wta_;                    ///< winner-take-all to govern Z neuron spiking
 };
 
-#endif // SEM_LAYERS_LAYER_Z_H_
+#endif // ELM_LAYERS_LAYER_Z_H_

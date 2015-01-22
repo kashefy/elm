@@ -1,6 +1,6 @@
 #include "sem/ts/ts.h"
 
-using namespace sem;
+using namespace elm;
 
 namespace {
 

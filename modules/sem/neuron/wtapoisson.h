@@ -1,5 +1,5 @@
-#ifndef SEM_NEURON_WTAPOISSON_H_
-#define SEM_NEURON_WTAPOISSON_H_
+#ifndef ELM_NEURON_WTAPOISSON_H_
+#define ELM_NEURON_WTAPOISSON_H_
 
 #include "sem/neuron/competition.h"
 
@@ -38,4 +38,4 @@ protected:
     float next_spike_time_sec_; ///< timestamp for next spike event in seconds
 };
 
-#endif // SEM_NEURON_WTAPOISSON_H_
+#endif // ELM_NEURON_WTAPOISSON_H_

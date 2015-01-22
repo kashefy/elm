@@ -5,7 +5,7 @@
 
 using namespace std;
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 TEST(MatUtilsTest, ConvertTo8U_zeros)
 {
@@ -89,7 +89,7 @@ TEST(MatUtilsTest, CumSum_zeros) {
 
             Mat1f in = Mat1f::zeros(r, c);
             Mat1f out;
-            sem::CumSum(in, out);
+            elm::CumSum(in, out);
             EXPECT_MAT_EQ(in, out);
         }
     }
@@ -107,7 +107,7 @@ TEST(MatUtilsTest, CumSum_ones) {
 
             Mat1f in = Mat1f::ones(r, c);
             Mat1f out;
-            sem::CumSum(in, out);
+            elm::CumSum(in, out);
 
             // check output
             EXPECT_MAT_DIMS_EQ(in, out);
@@ -131,7 +131,7 @@ TEST(MatUtilsTest, CumSum_ones_neg) {
 
             Mat1f in = -Mat1f::ones(r, c);
             Mat1f out;
-            sem::CumSum(in, out);
+            elm::CumSum(in, out);
 
             // check output
             EXPECT_MAT_DIMS_EQ(in, out);
@@ -150,7 +150,7 @@ TEST(MatUtilsTest, CumSum_empty) {
 
     Mat1f in = Mat1f::zeros(0, 0);
     Mat1f out;
-    sem::CumSum(in, out);
+    elm::CumSum(in, out);
     EXPECT_EQ(out.total(), size_t(0));
 }
 

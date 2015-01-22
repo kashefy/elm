@@ -12,7 +12,7 @@
 
 using std::string;
 using cv::Mat1f;
-using namespace sem;
+using namespace elm;
 
 namespace {
 

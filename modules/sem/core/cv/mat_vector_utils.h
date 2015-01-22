@@ -1,11 +1,11 @@
 /** @file define routines involving STL vectors of Mat objects
   */
-#ifndef SEM_CORE_CV_MAT_VECTOR_UTILS_H_
-#define SEM_CORE_CV_MAT_VECTOR_UTILS_H_
+#ifndef ELM_CORE_CV_MAT_VECTOR_UTILS_H_
+#define ELM_CORE_CV_MAT_VECTOR_UTILS_H_
 
 #include "sem/core/typedefs_sfwd.h"
 
-namespace sem {
+namespace elm {
 
 /**
  * @brief Get all element values at a position across different matrices
@@ -28,6 +28,6 @@ cv::Mat1f ElementsAt(const VecMat1f &v, int row, int col);
  */
 cv::Mat1f Reshape(const VecMat1f &v);
 
-} // sem namespace
+} // elm namespace
 
-#endif // SEM_CORE_CV_MAT_VECTOR_UTILS_H_
+#endif // ELM_CORE_CV_MAT_VECTOR_UTILS_H_

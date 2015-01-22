@@ -5,7 +5,7 @@
 
 using namespace std;
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 Signal::~Signal()
 {
@@ -33,7 +33,7 @@ VecMat Signal::operator [](const string &name) const
     else {
         stringstream s;
         s << "Feature \'" << name << "\' does not exist.";
-        SEM_THROW_KEY_ERROR(s.str());
+        ELM_THROW_KEY_ERROR(s.str());
     }
 }
 

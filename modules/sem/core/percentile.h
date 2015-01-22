@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_PERCENTILE_H_
-#define SEM_CORE_PERCENTILE_H_
+#ifndef ELM_CORE_PERCENTILE_H_
+#define ELM_CORE_PERCENTILE_H_
 
 #include <opencv2/core.hpp>
 
@@ -20,4 +20,4 @@ public:
     float CalcPercentile(const cv::Mat1f &in, float percentile) const;
 };
 
-#endif // SEM_CORE_PERCENTILE_H_
+#endif // ELM_CORE_PERCENTILE_H_

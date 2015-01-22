@@ -1,6 +1,6 @@
 #include "sem/core/core.h"
 
-const char* sem::GetVersion() {
+const char* elm::GetVersion() {
 
-    return SEM_VERSION;
+    return ELM_VERSION;
 }

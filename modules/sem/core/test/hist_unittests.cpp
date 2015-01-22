@@ -10,7 +10,7 @@
 #include "sem/ts/ts.h"
 
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 /** @brief class for testing single-channe histogram wrapper
  */

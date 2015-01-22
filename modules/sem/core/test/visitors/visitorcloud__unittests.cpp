@@ -11,8 +11,8 @@
 using namespace std;
 using namespace pcl;
 using namespace cv;
-using namespace sem;
-using namespace sem::ts;
+using namespace elm;
+using namespace elm::ts;
 
 namespace {
 

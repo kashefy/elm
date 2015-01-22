@@ -1,5 +1,5 @@
-#ifndef SEM_TS_FAKEEVIDENCE_H_
-#define SEM_TS_FAKEEVIDENCE_H_
+#ifndef ELM_TS_FAKEEVIDENCE_H_
+#define ELM_TS_FAKEEVIDENCE_H_
 
 #include <opencv2/core.hpp>
 
@@ -29,4 +29,4 @@ public:
     int nb_features_;
 };
 
-#endif // SEM_TS_FAKEEVIDENCE_H_
+#endif // ELM_TS_FAKEEVIDENCE_H_

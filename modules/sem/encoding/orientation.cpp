@@ -6,7 +6,7 @@
 #include "sem/core/exception.h"
 
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 GaborFilterBank::GaborFilterBank()
     : base_FilterBank()
@@ -36,8 +36,8 @@ Mat1f GaborFilterBank::CreateKernel(int radius,
                   float gamma,
                   float ps)
 {
-    theta_rad = -theta_rad + SEM_PI2;
-    if(radius < 1) { SEM_THROW_VALUE_ERROR("Gabor kernel radius must be >= 1."); }
+    theta_rad = -theta_rad + ELM_PI2;
+    if(radius < 1) { ELM_THROW_VALUE_ERROR("Gabor kernel radius must be >= 1."); }
     int diam = radius*2+1;
     Mat1f kernel = getGaborKernel(Size2i(diam, diam),
                                   sigma, theta_rad, lambd, gamma,

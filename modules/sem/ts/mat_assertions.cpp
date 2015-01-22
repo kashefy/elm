@@ -19,8 +19,8 @@ string MatTypeFailureMessage(const Mat& a, int mat_type) {
     stringstream failure_msg;
 
     failure_msg << "Mat of type " <<
-                   sem::MatTypeToString(a) <<
-                   " != " << sem::MatTypeToString(Mat(1, 1, mat_type));
+                   elm::MatTypeToString(a) <<
+                   " != " << elm::MatTypeToString(Mat(1, 1, mat_type));
     failure_msg << std::endl;
     return failure_msg.str();
 }

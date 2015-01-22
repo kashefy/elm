@@ -26,7 +26,7 @@ int YNeuron::State(float state)
         spike = poisson_.Sample();
     }
     else {
-        SEM_THROW_NOT_IMPLEMENTED_WMSG("Analog state not supported.");
+        ELM_THROW_NOT_IMPLEMENTED_WMSG("Analog state not supported.");
     }
 
     return spike;

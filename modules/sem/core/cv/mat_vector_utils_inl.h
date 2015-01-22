@@ -1,14 +1,14 @@
 /** @file template utility definitions using STL vectors that have to be defined inline
   */
-#ifndef SEM_CORE_MAT_VECTOR_UTILS_INL_H_
-#define SEM_CORE_MAT_VECTOR_UTILS_INL_H_
+#ifndef ELM_CORE_MAT_VECTOR_UTILS_INL_H_
+#define ELM_CORE_MAT_VECTOR_UTILS_INL_H_
 
 #include <vector>
 
 #include "sem/core/cv/typedefs_fwd.h"
 #include "sem/core/exception.h"
 
-namespace sem {
+namespace elm {
 
 /**
  * @brief Function for converting a Mat_ object into a vector of same type
@@ -26,7 +26,7 @@ std::vector<T> Mat_ToVec_(const cv::Mat_<T> &m) {
 
     if(!m.empty() && !m.isContinuous()) {
 
-        SEM_THROW_TYPE_ERROR("Only conitnuous matrices supported.");
+        ELM_THROW_TYPE_ERROR("Only conitnuous matrices supported.");
     }
     // syntax learned from posts here:
     // http://stackoverflow.com/questions/610245/where-and-why-do-i-have-to-put-the-template-and-typename-keywords
@@ -53,4 +53,4 @@ cv::Mat_<T> Vec_ToRowMat_(std::vector<T> &v)
 
 }
 
-#endif // SEM_CORE_MAT_VECTOR_UTILS_INL_H_
+#endif // ELM_CORE_MAT_VECTOR_UTILS_INL_H_

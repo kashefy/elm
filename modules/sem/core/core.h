@@ -1,14 +1,14 @@
-#ifndef SEM_CORE_H_
-#define SEM_CORE_H_
+#ifndef ELM_CORE_H_
+#define ELM_CORE_H_
 
-#ifndef SEM_VERSION
-#define SEM_VERSION "Development"
-#endif // SEM_VERSION
+#ifndef ELM_VERSION
+#define ELM_VERSION "Development"
+#endif // ELM_VERSION
 
-namespace sem {
+namespace elm {
 
 const char* GetVersion();
 
 }
 
-#endif // SEM_CORE_H_
+#endif // ELM_CORE_H_

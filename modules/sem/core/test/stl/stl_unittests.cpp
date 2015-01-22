@@ -5,7 +5,7 @@
 #include <string>
 
 using namespace std;
-using namespace sem;
+using namespace elm;
 
 TEST(STLFindTest, Find)
 {

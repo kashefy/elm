@@ -1,7 +1,7 @@
 /**@file Synthetic data generator
   */
-#ifndef SEM_IO_SYNTH_H_
-#define SEM_IO_SYNTH_H_
+#ifndef ELM_IO_SYNTH_H_
+#define ELM_IO_SYNTH_H_
 
 #include "sem/core/cv/typedefs_fwd.h"
 
@@ -67,4 +67,4 @@ protected:
     float delta_;   ///< no. of orientation variations
 };
 
-#endif // SEM_IO_SYNTH_H_
+#endif // ELM_IO_SYNTH_H_

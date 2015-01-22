@@ -9,7 +9,7 @@ using namespace cv;
 void base_Sampler::pdf(const Mat1f &pdf) {
 
     pdf_ = pdf/sum(pdf)(0);
-    sem::CumSum(pdf_, pdf_);
+    elm::CumSum(pdf_, pdf_);
 }
 
 Mat1f base_Sampler::pdf() const
@@ -59,7 +59,7 @@ Point2i Sampler2D::Sample() const {
     return Point2i(i%pdf_.cols, i/pdf_.cols);
 }
 
-float sem::randexp(float lambda)
+float elm::randexp(float lambda)
 {
     Mat u(1, 1, CV_64FC1);
     randu(u, 0, 1);

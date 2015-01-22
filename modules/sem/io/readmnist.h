@@ -1,8 +1,8 @@
 /** Classes for reading MNIST database files
  *  source: http://yann.lecun.com/exdb/mnist/
  */
-#ifndef SEM_IO_READMNIST_H_
-#define SEM_IO_READMNIST_H_
+#ifndef ELM_IO_READMNIST_H_
+#define ELM_IO_READMNIST_H_
 
 #include <string>
 #include <fstream>
@@ -117,4 +117,4 @@ protected:
     cv::Point2i current_loc_;    ///< top-left of most recent location
 };
 
-#endif // SEM_IO_READMNIST_H_
+#endif // ELM_IO_READMNIST_H_

@@ -165,8 +165,8 @@ void SimulationHSEM::VisualizeOnOffWeights(const Mat1f &weights)
         //cout<<w_on.t()<<endl;
         //cout<<w_off.t()<<endl;
 
-        imshow("on", sem::ConvertTo8U(w_on).reshape(1, 28));
-        imshow("off", sem::ConvertTo8U(w_off).reshape(1, 28));
+        imshow("on", elm::ConvertTo8U(w_on).reshape(1, 28));
+        imshow("off", elm::ConvertTo8U(w_off).reshape(1, 28));
         waitKey();
     }
 }

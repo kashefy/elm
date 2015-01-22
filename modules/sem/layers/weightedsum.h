@@ -1,5 +1,5 @@
-#ifndef SEM_LAYERS_WEIGHTEDSUM_H_
-#define SEM_LAYERS_WEIGHTEDSUM_H_
+#ifndef ELM_LAYERS_WEIGHTEDSUM_H_
+#define ELM_LAYERS_WEIGHTEDSUM_H_
 
 #include <string>
 
@@ -53,4 +53,4 @@ protected:
     cv::Mat1f response_;        ///< most recent response
 };
 
-#endif // SEM_LAYERS_WEIGHTEDSUM_H_
+#endif // ELM_LAYERS_WEIGHTEDSUM_H_

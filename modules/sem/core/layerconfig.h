@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_LAYERCONFIG_H_
-#define SEM_CORE_LAYERCONFIG_H_
+#ifndef ELM_CORE_LAYERCONFIG_H_
+#define ELM_CORE_LAYERCONFIG_H_
 
 #include <string>
 #include <vector>
@@ -91,4 +91,4 @@ private:
     PTree params_;
 };
 
-#endif // SEM_CORE_LAYERCONFIG_H_
+#endif // ELM_CORE_LAYERCONFIG_H_

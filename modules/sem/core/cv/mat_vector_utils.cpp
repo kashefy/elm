@@ -6,9 +6,9 @@
 
 using namespace std;
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
-Mat1f sem::ElementsAt(const VecMat1f &v, int r, int c)
+Mat1f elm::ElementsAt(const VecMat1f &v, int r, int c)
 {
     Mat1f values(1, static_cast<int>(v.size()));
     int k=0;
@@ -21,7 +21,7 @@ Mat1f sem::ElementsAt(const VecMat1f &v, int r, int c)
             stringstream s;
             s << "Cannot access element at (" << r << "," << c << ") in v[" << k << "]"
               << " with dims (" << (*itr).rows << "," << (*itr).cols <<")";
-            SEM_THROW_BAD_DIMS(s.str());
+            ELM_THROW_BAD_DIMS(s.str());
         }
         else {
             values(k) = (*itr)(r, c);
@@ -31,7 +31,7 @@ Mat1f sem::ElementsAt(const VecMat1f &v, int r, int c)
     return values;
 }
 
-Mat1f sem::Reshape(const VecMat1f &v)
+Mat1f elm::Reshape(const VecMat1f &v)
 {
     Mat1f dst;
     const int COLS = static_cast<int>(v.size());

@@ -1,5 +1,5 @@
-#ifndef SEM_ENCODING_ORIENTATION_H_
-#define SEM_ENCODING_ORIENTATION_H_
+#ifndef ELM_ENCODING_ORIENTATION_H_
+#define ELM_ENCODING_ORIENTATION_H_
 
 #include "sem/core/typedefs.h"
 #include "sem/encoding/base_filterbank.h"
@@ -47,14 +47,14 @@ public:
      * @param ps phase offset in radians
      * @return kernel in 32-bit floats
      */
-    static sem::VecMat1f CreateKernels(int radius,
+    static elm::VecMat1f CreateKernels(int radius,
                                        float sigma,
                                        const VecF &theta_rad,
                                        float lambd,
                                        float gamma,
                                        float ps);
 
-    sem::VecMat1f Kernels() const;
+    elm::VecMat1f Kernels() const;
 
 protected:
     /**
@@ -65,4 +65,4 @@ protected:
 
 }; // GaborFilterBank
 
-#endif // SEM_ENCODING_ORIENTATION_H_
+#endif // ELM_ENCODING_ORIENTATION_H_

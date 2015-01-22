@@ -1,5 +1,5 @@
-#ifndef SEM_EVAL_REVERSECORR_H_
-#define SEM_EVAL_REVERSECORR_H_
+#ifndef ELM_EVAL_REVERSECORR_H_
+#define ELM_EVAL_REVERSECORR_H_
 
 #include <opencv2/core.hpp>
 
@@ -49,4 +49,4 @@ private:
     int nb_samples_;    ///< no. of accumulated evidence
 };
 
-#endif // SEM_EVAL_REVERSECORR_H_
+#endif // ELM_EVAL_REVERSECORR_H_

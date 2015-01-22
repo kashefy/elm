@@ -6,7 +6,7 @@
 #include "sem/layers/layerfactory.h"
 #include "sem/ts/ts.h"
 
-using namespace sem;
+using namespace elm;
 using boost::property_tree::ptree_bad_path;
 
 namespace {

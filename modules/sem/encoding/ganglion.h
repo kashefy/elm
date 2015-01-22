@@ -1,5 +1,5 @@
-#ifndef SEM_ENCODING_GANGLION_H_
-#define SEM_ENCODING_GANGLION_H_
+#ifndef ELM_ENCODING_GANGLION_H_
+#define ELM_ENCODING_GANGLION_H_
 
 #include <opencv2/core.hpp>
 
@@ -55,4 +55,4 @@ protected:
     int size_;
 };
 
-#endif // SEM_ENCODING_GANGLION_H_
+#endif // ELM_ENCODING_GANGLION_H_

@@ -1,20 +1,20 @@
-#ifndef SEM_CORE_EXCEPTION_H_
-#define SEM_CORE_EXCEPTION_H_
+#ifndef ELM_CORE_EXCEPTION_H_
+#define ELM_CORE_EXCEPTION_H_
 
 #include <string>
 #include <opencv2/core.hpp>
 
 /** Preprocessor macros for throwing types of Exceptions with custom error messages
  */
-#define SEM_THROW_BAD_DIMS(msg) throw sem::ExceptionBadDims(msg)
-#define SEM_THROW_NOT_IMPLEMENTED throw sem::ExceptionNotImpl("Not implemented yet.")
-#define SEM_THROW_NOT_IMPLEMENTED_WMSG(msg) throw sem::ExceptionNotImpl(msg)
-#define SEM_THROW_FILEIO_ERROR(msg) throw sem::ExceptionFileIOError(msg)
-#define SEM_THROW_VALUE_ERROR(msg) throw sem::ExceptionValueError(msg)
-#define SEM_THROW_KEY_ERROR(msg) throw sem::ExceptionKeyError(msg)
-#define SEM_THROW_TYPE_ERROR(msg) throw sem::ExceptionTypeError(msg)
+#define ELM_THROW_BAD_DIMS(msg) throw elm::ExceptionBadDims(msg)
+#define ELM_THROW_NOT_IMPLEMENTED throw elm::ExceptionNotImpl("Not implemented yet.")
+#define ELM_THROW_NOT_IMPLEMENTED_WMSG(msg) throw elm::ExceptionNotImpl(msg)
+#define ELM_THROW_FILEIO_ERROR(msg) throw elm::ExceptionFileIOError(msg)
+#define ELM_THROW_VALUE_ERROR(msg) throw elm::ExceptionValueError(msg)
+#define ELM_THROW_KEY_ERROR(msg) throw elm::ExceptionKeyError(msg)
+#define ELM_THROW_TYPE_ERROR(msg) throw elm::ExceptionTypeError(msg)
 
-namespace sem {
+namespace elm {
 
 class Exception : public cv::Exception
 {
@@ -59,6 +59,6 @@ public:
     ExceptionTypeError(const std::string &msg);
 };
 
-} // namespace sem
+} // namespace elm
 
-#endif // SEM_CORE_EXCEPTION_H_
+#endif // ELM_CORE_EXCEPTION_H_

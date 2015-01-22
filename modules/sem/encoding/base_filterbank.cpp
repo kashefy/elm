@@ -6,7 +6,7 @@
 #include "sem/core/cv/mat_vector_utils.h"
 
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 base_FilterBank::~base_FilterBank()
 {
@@ -45,7 +45,7 @@ void base_FilterBank::Rectify(Mat1f &response)
 
 Mat1f base_FilterBank::ElementResponse(int r, int c) const
 {
-    return sem::ElementsAt(response_, r, c);
+    return elm::ElementsAt(response_, r, c);
 }
 
 size_t base_FilterBank::size() const

@@ -1,5 +1,5 @@
-#ifndef SEM_NEURON_H_
-#define SEM_NEURON_H_
+#ifndef ELM_NEURON_H_
+#define ELM_NEURON_H_
 
 #include "sem/core/sampler.h"
 
@@ -34,4 +34,4 @@ protected:
     PoissonProcess poisson_;
 };
 
-#endif // SEM_NEURON_H_
+#endif // ELM_NEURON_H_

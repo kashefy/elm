@@ -8,9 +8,9 @@
 using namespace std;
 using namespace cv;
 using namespace pcl;
-using namespace sem;
+using namespace elm;
 
-VecVertices sem::Mat2VecVertices(const Mat &m)
+VecVertices elm::Mat2VecVertices(const Mat &m)
 {
     VecVertices vv;
 
@@ -29,7 +29,7 @@ VecVertices sem::Mat2VecVertices(const Mat &m)
             // multi-channel matrix, treat channels as vertices values
             if(m.cols > 1) {
 
-                SEM_THROW_BAD_DIMS("Cannot extract vertices from multi-channel multi-column matrix.");
+                ELM_THROW_BAD_DIMS("Cannot extract vertices from multi-channel multi-column matrix.");
             }
 
             len_vertices = nb_channels;
@@ -50,7 +50,7 @@ VecVertices sem::Mat2VecVertices(const Mat &m)
     return vv;
 }
 
-Mat1f sem::VecVertices2Mat(const VecVertices& vv, bool do_row_mat)
+Mat1f elm::VecVertices2Mat(const VecVertices& vv, bool do_row_mat)
 {
     Mat1f m;
     if(vv.size() > 0) {

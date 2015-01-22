@@ -7,7 +7,7 @@
 #include "sem/io/binary.h"
 
 using namespace std;
-using namespace sem;
+using namespace elm;
 
 base_ReadMNISTFile::base_ReadMNISTFile()
     : nb_items_(0)
@@ -25,7 +25,7 @@ int base_ReadMNISTFile::ReadHeader(const string &path)
 
     if(!input_.is_open()) {
 
-        SEM_THROW_FILEIO_ERROR("Failed to open file " + path);
+        ELM_THROW_FILEIO_ERROR("Failed to open file " + path);
     }
 
     int32_t tmp_i;
@@ -37,14 +37,14 @@ int base_ReadMNISTFile::ReadHeader(const string &path)
         stringstream s;
         s << "Unexpected magic number ("
           << tmp_i << "), expecting " << MagicNumber();
-        SEM_THROW_FILEIO_ERROR(s.str());
+        ELM_THROW_FILEIO_ERROR(s.str());
     }
 
     input_.read(reinterpret_cast<char*>(&tmp_i), sizeof(int32_t));
     if(IS_32_LITTLE_ENDIAN) { SwapEndian<int32_t>(&tmp_i); }
     if(tmp_i < 0) {
 
-        SEM_THROW_FILEIO_ERROR("No. of items must be >= 0");
+        ELM_THROW_FILEIO_ERROR("No. of items must be >= 0");
     }
     nb_items_ = static_cast<int>(tmp_i);
 
@@ -96,7 +96,7 @@ int ReadMNISTImages::ReadHeader(const string &path)
     if(IS_32_LITTLE_ENDIAN) { SwapEndian<int32_t>(&tmp_i); }
     if(tmp_i < 0) {
 
-        SEM_THROW_FILEIO_ERROR("No. of rows must be >= 0");
+        ELM_THROW_FILEIO_ERROR("No. of rows must be >= 0");
     }
     rows_ = static_cast<int>(tmp_i);
 
@@ -104,7 +104,7 @@ int ReadMNISTImages::ReadHeader(const string &path)
     if(IS_32_LITTLE_ENDIAN) { SwapEndian<int32_t>(&tmp_i); }
     if(tmp_i < 0) {
 
-        SEM_THROW_FILEIO_ERROR("No. of columns must be >= 0");
+        ELM_THROW_FILEIO_ERROR("No. of columns must be >= 0");
     }
     cols_ = static_cast<int>(tmp_i);
 
@@ -152,7 +152,7 @@ int ReadMNISTImagesTransl::ReadHeader(const string &path)
         stringstream s;
         s << "Scene dims too small. Need min of ";
         s << "w(" << cols_ << ") h(" << rows_ << ")";
-        SEM_THROW_BAD_DIMS(s.str());
+        ELM_THROW_BAD_DIMS(s.str());
     }
     return nb_items;
 }
@@ -178,7 +178,7 @@ void ReadMNISTImagesTransl::SceneDims(int rows, int cols)
     else {
         stringstream s;
         s << "Scene dims must be > 0. (" << rows << " rows, " << cols << " cols)";
-        SEM_THROW_BAD_DIMS(s.str());
+        ELM_THROW_BAD_DIMS(s.str());
     }
 }
 

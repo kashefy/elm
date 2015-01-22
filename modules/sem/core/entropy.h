@@ -1,9 +1,9 @@
-#ifndef SEM_CORE_ENTROPY_H_
-#define SEM_CORE_ENTROPY_H_
+#ifndef ELM_CORE_ENTROPY_H_
+#define ELM_CORE_ENTROPY_H_
 
 #include <opencv2/core.hpp>
 
-namespace sem {
+namespace elm {
 
 /**
  * @brief Compute the normalized conditional entropy of a probability distribution
@@ -13,6 +13,6 @@ namespace sem {
  */
 float CondEntropy(cv::InputArray &pdf);
 
-} // namespace sem
+} // namespace elm
 
-#endif // SEM_CORE_ENTROPY_H_
+#endif // ELM_CORE_ENTROPY_H_

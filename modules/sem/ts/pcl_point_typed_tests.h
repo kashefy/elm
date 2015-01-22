@@ -1,7 +1,7 @@
 /** @file utilitites for setting up typed tests using PCL Point
   */
-#ifndef SEM_TS_PCL_POINT_TYPED_TESTS_H_
-#define SEM_TS_PCL_POINT_TYPED_TESTS_H_
+#ifndef ELM_TS_PCL_POINT_TYPED_TESTS_H_
+#define ELM_TS_PCL_POINT_TYPED_TESTS_H_
 
 #ifdef __WITH_PCL // the following definition require PCL support
 
@@ -13,7 +13,7 @@
 
 typedef ::testing::Types<pcl::PointXYZ, pcl::Normal, pcl::PointNormal> PCLPointTypes;
 
-namespace sem {
+namespace elm {
 
 namespace ts {
 
@@ -27,37 +27,37 @@ struct ExpectedPointAttr_
     static const std::string name;
 };
 
-#define SEM_DECLARE_SPECIALIZATION_EXPECTED_POINT_FIELD_COUNT(TPoint)   template<> const size_t sem::ts::ExpectedPointAttr_<TPoint>::field_count
-#define SEM_DECLARE_SPECIALIZATION_EXPECTED_POINT_NB_FLOAT(TPoint)      template<> const size_t sem::ts::ExpectedPointAttr_<TPoint>::nb_floats
-#define SEM_DECLARE_SPECIALIZATION_EXPECTED_POINT_NAME(TPoint)          template<> const std::string sem::ts::ExpectedPointAttr_<TPoint>::name
+#define ELM_DECLARE_SPECIALIZATION_EXPECTED_POINT_FIELD_COUNT(TPoint)   template<> const size_t elm::ts::ExpectedPointAttr_<TPoint>::field_count
+#define ELM_DECLARE_SPECIALIZATION_EXPECTED_POINT_NB_FLOAT(TPoint)      template<> const size_t elm::ts::ExpectedPointAttr_<TPoint>::nb_floats
+#define ELM_DECLARE_SPECIALIZATION_EXPECTED_POINT_NAME(TPoint)          template<> const std::string elm::ts::ExpectedPointAttr_<TPoint>::name
 
 /** Declare specialization of expected attributes for a Point type used in tests below.
  *  @param TPoint point type
  *  @param c field count    (no. of floats without padding)
  *  @param n no. of floats occupied (no. of floats with padding)
   */
-#define SEM_DECLARE_SPECIALIZATION_EXPECTED_POINT_ATTR(TPoint) SEM_DECLARE_SPECIALIZATION_EXPECTED_POINT_NAME(TPoint); SEM_DECLARE_SPECIALIZATION_EXPECTED_POINT_FIELD_COUNT(TPoint); SEM_DECLARE_SPECIALIZATION_EXPECTED_POINT_NB_FLOAT(TPoint)
+#define ELM_DECLARE_SPECIALIZATION_EXPECTED_POINT_ATTR(TPoint) ELM_DECLARE_SPECIALIZATION_EXPECTED_POINT_NAME(TPoint); ELM_DECLARE_SPECIALIZATION_EXPECTED_POINT_FIELD_COUNT(TPoint); ELM_DECLARE_SPECIALIZATION_EXPECTED_POINT_NB_FLOAT(TPoint)
 
 // Declare specializations
-SEM_DECLARE_SPECIALIZATION_EXPECTED_POINT_ATTR(pcl::PointXYZ);
-SEM_DECLARE_SPECIALIZATION_EXPECTED_POINT_ATTR(pcl::Normal);
-SEM_DECLARE_SPECIALIZATION_EXPECTED_POINT_ATTR(pcl::PointNormal);
+ELM_DECLARE_SPECIALIZATION_EXPECTED_POINT_ATTR(pcl::PointXYZ);
+ELM_DECLARE_SPECIALIZATION_EXPECTED_POINT_ATTR(pcl::Normal);
+ELM_DECLARE_SPECIALIZATION_EXPECTED_POINT_ATTR(pcl::PointNormal);
 
-#define SEM_SET_EXPECTED_POINT_FIELD_COUNT(TPoint, c)   template<> const size_t sem::ts::ExpectedPointAttr_<TPoint>::field_count(c)
-#define SEM_SET_EXPECTED_POINT_NB_FLOAT(TPoint, n)  template<> const size_t sem::ts::ExpectedPointAttr_<TPoint>::nb_floats(n)
-#define SEM_SET_EXPECTED_POINT_NAME(TPoint)         template<> const std::string sem::ts::ExpectedPointAttr_<TPoint>::name(#TPoint)
+#define ELM_SET_EXPECTED_POINT_FIELD_COUNT(TPoint, c)   template<> const size_t elm::ts::ExpectedPointAttr_<TPoint>::field_count(c)
+#define ELM_SET_EXPECTED_POINT_NB_FLOAT(TPoint, n)  template<> const size_t elm::ts::ExpectedPointAttr_<TPoint>::nb_floats(n)
+#define ELM_SET_EXPECTED_POINT_NAME(TPoint)         template<> const std::string elm::ts::ExpectedPointAttr_<TPoint>::name(#TPoint)
 
 /** Set expected attributes for a Point type used in tests below.
  *  @param TPoint point type
  *  @param c field count    (no. of floats without padding)
  *  @param n no. of floats occupied (no. of floats with padding)
   */
-#define SEM_SET_EXPECTED_POINT_ATTR(TPoint, c, n) SEM_SET_EXPECTED_POINT_NAME(TPoint); SEM_SET_EXPECTED_POINT_FIELD_COUNT(TPoint, c); SEM_SET_EXPECTED_POINT_NB_FLOAT(TPoint, n)
+#define ELM_SET_EXPECTED_POINT_ATTR(TPoint, c, n) ELM_SET_EXPECTED_POINT_NAME(TPoint); ELM_SET_EXPECTED_POINT_FIELD_COUNT(TPoint, c); ELM_SET_EXPECTED_POINT_NB_FLOAT(TPoint, n)
 
 } // namespace ts
 
-} // namespace sem
+} // namespace elm
 
 #endif // __WITH_PCL
 
-#endif // SEM_TS_PCL_POINT_TYPED_TESTS_H_
+#endif // ELM_TS_PCL_POINT_TYPED_TESTS_H_

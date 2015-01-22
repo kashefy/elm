@@ -7,7 +7,7 @@
 
 using namespace std;
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 namespace {
 
@@ -66,8 +66,8 @@ class FeatureDataCloud_Test : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        size_t field_count = sem::ts::ExpectedPointAttr_<TPoint>::field_count;
-        size_t nb_floats = sem::ts::ExpectedPointAttr_<TPoint>::nb_floats;
+        size_t field_count = elm::ts::ExpectedPointAttr_<TPoint>::field_count;
+        size_t nb_floats = elm::ts::ExpectedPointAttr_<TPoint>::nb_floats;
 
         int cols = 2*field_count;
         while(cols % nb_floats == 0 && cols % field_count == 0) {

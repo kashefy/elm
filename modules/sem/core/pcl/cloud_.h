@@ -1,8 +1,8 @@
 /** A collection of routines to facilitate working with PCL data types.
  * Only defined if PCL support exists.
  */
-#ifndef SEM_CORE_PCL_CLOUD__H_
-#define SEM_CORE_PCL_CLOUD__H_
+#ifndef ELM_CORE_PCL_CLOUD__H_
+#define ELM_CORE_PCL_CLOUD__H_
 
 #ifndef __WITH_PCL
     #warning "Skipping pcl utilities since PCL support is disabled."
@@ -15,7 +15,7 @@
 #include "sem/core/cv/typedefs_fwd.h"
 #include "sem/core/pcl/typedefs_fwd.h"
 
-namespace sem {
+namespace elm {
 
 /**
  * @brief Convert a single-channel Mat of floats to point cloud.
@@ -49,8 +49,8 @@ boost::shared_ptr<pcl::PointCloud<TPoint > > Mat2PointCloud_(const cv::Mat1f &m)
 template <class TPoint>
 cv::Mat1f PointCloud2Mat_(boost::shared_ptr<pcl::PointCloud<TPoint > > &cloud_ptr);
 
-} // namespace sem
+} // namespace elm
 
 #endif // __WITH_PCL
 
-#endif // SEM_CORE_PCL_CLOUD__H_
+#endif // ELM_CORE_PCL_CLOUD__H_

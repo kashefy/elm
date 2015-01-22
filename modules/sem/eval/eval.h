@@ -1,5 +1,5 @@
-#ifndef SEM_EVAL_H_
-#define SEM_EVAL_H_
+#ifndef ELM_EVAL_H_
+#define ELM_EVAL_H_
 
 
-#endif // SEM_EVAL_H_
+#endif // ELM_EVAL_H_

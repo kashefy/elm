@@ -1,8 +1,8 @@
 /** @file Define classes for encapsulating, applying filter banks
  * and different response iterators (per kernel, per element across kernels).
  */
-#ifndef SEM_ENCODING_BASE_FILTERBANK_H_
-#define SEM_ENCODING_BASE_FILTERBANK_H_
+#ifndef ELM_ENCODING_BASE_FILTERBANK_H_
+#define ELM_ENCODING_BASE_FILTERBANK_H_
 
 #include <string>
 #include <vector>
@@ -30,7 +30,7 @@ public:
      * @param stimulus
      * @return response per kernel
      */
-    virtual sem::VecMat1f Compute(cv::Mat1f stimulus);
+    virtual elm::VecMat1f Compute(cv::Mat1f stimulus);
 
     /**
      * @brief Get element response across all kernels
@@ -45,14 +45,14 @@ public:
      * Mostly meant for testing purposes because it can involve a heavy copy of matrices.
      * @return vector of kernels
      */
-    virtual sem::VecMat1f Kernels() const = 0;
+    virtual elm::VecMat1f Kernels() const = 0;
 
     /**
      * @brief Get response to most recent stimulus
      * May involve heavy copy operations.
      * @return vector of response matrices
      */
-    virtual sem::VecMat1f Response() const;
+    virtual elm::VecMat1f Response() const;
 
     /**
      * @brief size of the filter bank (e.g. no. of kernels)
@@ -73,8 +73,8 @@ protected:
      */
     virtual void Rectify(cv::Mat1f &response);
 
-    sem::VecMat1f kernels_;  ///< individual kernels
-    sem::VecMat1f response_; ///< response per kernel for most recent input
+    elm::VecMat1f kernels_;  ///< individual kernels
+    elm::VecMat1f response_; ///< response per kernel for most recent input
 };
 
-#endif // SEM_ENCODING_BASE_FILTERBANK_H_
+#endif // ELM_ENCODING_BASE_FILTERBANK_H_

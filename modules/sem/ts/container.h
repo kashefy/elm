@@ -1,7 +1,7 @@
 /** Assertions around common container classes
   */
-#ifndef SEM_TS_CONTAINER_H_
-#define SEM_TS_CONTAINER_H_
+#ifndef ELM_TS_CONTAINER_H_
+#define ELM_TS_CONTAINER_H_
 
 #include "gtest/gtest.h"
 
@@ -24,4 +24,4 @@ template <class T>
 
 #define EXPECT_SIZE(sz, container) EXPECT_EQ(size_t(sz), container.size())
 
-#endif // SEM_TS_CONTAINER_H_
+#endif // ELM_TS_CONTAINER_H_

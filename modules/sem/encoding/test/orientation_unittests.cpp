@@ -12,7 +12,7 @@
 #include "sem/ts/ts.h"
 
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 const int RADIUS    = 9;        ///< kernel radius
 const float SIGMA   = 3;        ///< sigma of gaussian envelope
@@ -120,7 +120,7 @@ TEST(GaborKernelTest, FilterBankVector)
 {
     const size_t N=9;
 
-    float angle=-SEM_PI2;
+    float angle=-ELM_PI2;
     VecF theta;
 
     for(size_t i=0; i<N; i++) {
@@ -136,7 +136,7 @@ TEST(GaborKernelTest, FilterBankVector)
         }
 
         theta.push_back(angle);
-        angle += SEM_PI2;
+        angle += ELM_PI2;
     }
 }
 

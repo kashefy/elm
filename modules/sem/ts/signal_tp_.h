@@ -17,8 +17,8 @@
  *
  *  for more details, please see: https://code.google.com/p/googletest/wiki/AdvancedGuide#Type-Parameterized_Tests
  */
-#ifndef SEM_TS_SIGNAL_TP__H_
-#define SEM_TS_SIGNAL_TP__H_
+#ifndef ELM_TS_SIGNAL_TP__H_
+#define ELM_TS_SIGNAL_TP__H_
 
 #include "gtest/gtest.h"
 
@@ -113,9 +113,9 @@ TYPED_TEST_P(Signal_TP_, FeatureNames)
 
 TYPED_TEST_P(Signal_TP_, GetFeatures)
 {
-    EXPECT_THROW(this->to_.GetFeatureData("wrong"),   sem::ExceptionKeyError);
-    EXPECT_THROW(this->to_.GetFeatureData("Foo"),     sem::ExceptionKeyError);
-    EXPECT_THROW(this->to_.GetFeatureData("FOO"),     sem::ExceptionKeyError);
+    EXPECT_THROW(this->to_.GetFeatureData("wrong"),   elm::ExceptionKeyError);
+    EXPECT_THROW(this->to_.GetFeatureData("Foo"),     elm::ExceptionKeyError);
+    EXPECT_THROW(this->to_.GetFeatureData("FOO"),     elm::ExceptionKeyError);
 
     EXPECT_SIZE(2, this->to_.GetFeatureData("foo"));
     EXPECT_SIZE(1, this->to_.GetFeatureData("bar"));
@@ -125,9 +125,9 @@ TYPED_TEST_P(Signal_TP_, GetFeatures)
 
 TYPED_TEST_P(Signal_TP_, MostRecent_Invalid)
 {
-    EXPECT_THROW(this->to_.MostRecent("wrong"), sem::ExceptionKeyError);
-    EXPECT_THROW(this->to_.MostRecent("Foo"), sem::ExceptionKeyError);
-    EXPECT_THROW(this->to_.MostRecent("FOO"), sem::ExceptionKeyError);
+    EXPECT_THROW(this->to_.MostRecent("wrong"), elm::ExceptionKeyError);
+    EXPECT_THROW(this->to_.MostRecent("Foo"), elm::ExceptionKeyError);
+    EXPECT_THROW(this->to_.MostRecent("FOO"), elm::ExceptionKeyError);
 }
 
 TYPED_TEST_P(Signal_TP_, Append)
@@ -199,4 +199,4 @@ REGISTER_TYPED_TEST_CASE_P(Signal_TP_,
                            MostRecent_after_Append
                            ); ///< register additional typed_test_p (i.e. unit test) routines here
 
-#endif // SEM_TS_SIGNAL_TP__H_
+#endif // ELM_TS_SIGNAL_TP__H_

@@ -1,13 +1,13 @@
 /** @file template utility definitions that have to be defined inline
   */
-#ifndef SEM_CORE_MAT_UTILS_INL_H__
-#define SEM_CORE_MAT_UTILS_INL_H__
+#ifndef ELM_CORE_MAT_UTILS_INL_H__
+#define ELM_CORE_MAT_UTILS_INL_H__
 
 #include "sem/core/cv/typedefs_fwd.h"
 #include "sem/core/defs.h"
 #include "sem/core/exception.h"
 
-namespace sem {
+namespace elm {
 
 /**
  * @brief get first index of element with a specific value in matrix
@@ -25,10 +25,10 @@ bool find_first_of(const cv::Mat &m, const T &value, int &index=sem::NA_IDX)
 {
     if(!m.empty()) {
 
-        if(m.channels() != 1) { SEM_THROW_BAD_DIMS("Only single-channel matrices supported for now."); }
-        if(!m.isContinuous()) { SEM_THROW_TYPE_ERROR("Only continuous matrices supported for now."); }
+        if(m.channels() != 1) { ELM_THROW_BAD_DIMS("Only single-channel matrices supported for now."); }
+        if(!m.isContinuous()) { ELM_THROW_TYPE_ERROR("Only continuous matrices supported for now."); }
     }
-    else if(m.channels() > 1) { SEM_THROW_BAD_DIMS("Only single-channel matrices supported for now."); }
+    else if(m.channels() > 1) { ELM_THROW_BAD_DIMS("Only single-channel matrices supported for now."); }
 
     for(int r=0; r < m.rows; r++) {
 
@@ -58,7 +58,7 @@ cv::Mat_<T> ARange_(T start, T stop, T step)
 
     if((diff > 0 && step < 0) || (diff < 0 && step > 0)) {
 
-        SEM_THROW_VALUE_ERROR("step incompatible with start and stop.");
+        ELM_THROW_VALUE_ERROR("step incompatible with start and stop.");
     }
 
     int cols;
@@ -91,6 +91,6 @@ cv::Mat_<T> ARange_(T start, T stop, T step)
     return m;
 }
 
-} // sem namespace
+} // elm namespace
 
-#endif // SEM_CORE_MAT_UTILS_INL_H__
+#endif // ELM_CORE_MAT_UTILS_INL_H__

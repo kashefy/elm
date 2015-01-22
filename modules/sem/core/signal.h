@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_SIGNAL_H_
-#define SEM_CORE_SIGNAL_H_
+#ifndef ELM_CORE_SIGNAL_H_
+#define ELM_CORE_SIGNAL_H_
 
 #include "sem/core/typedefs_sfwd.h" // VecMat
 
@@ -23,7 +23,7 @@ public:
      * @return vector of features found under key represented as Mat objects
      * @todo Deprecate?
      */
-    sem::VecMat operator [](const std::string &name) const;
+    elm::VecMat operator [](const std::string &name) const;
 
     /** @brief Get most recent feature under a given name, short-circuit to returning Mat
       * @param name
@@ -36,4 +36,4 @@ protected:
 
 };
 
-#endif // SEM_CORE_SIGNAL_H_
+#endif // ELM_CORE_SIGNAL_H_

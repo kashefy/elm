@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_REGISTOR_H_
-#define SEM_CORE_REGISTOR_H_
+#ifndef ELM_CORE_REGISTOR_H_
+#define ELM_CORE_REGISTOR_H_
 
 #include <map>
 #include <memory>
@@ -40,7 +40,7 @@ public:
 
             std::stringstream s;
             s << "\"" << type << "\" is not a registered type.";
-            SEM_THROW_TYPE_ERROR(s.str());
+            ELM_THROW_TYPE_ERROR(s.str());
         }
         return ptr;
     }
@@ -64,4 +64,4 @@ public:
     }
 };
 
-#endif // SEM_CORE_REGISTOR_H_
+#endif // ELM_CORE_REGISTOR_H_

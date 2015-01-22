@@ -1,7 +1,7 @@
 /**@file OpenCV Mat Assertions
   */
-#ifndef SEM_TS_MAT_ASSERTIONS_H_
-#define SEM_TS_MAT_ASSERTIONS_H_
+#ifndef ELM_TS_MAT_ASSERTIONS_H_
+#define ELM_TS_MAT_ASSERTIONS_H_
 
 #include "gtest/gtest.h"
 
@@ -111,4 +111,4 @@ template <typename T>
 // EXPECT_EMPTY macro already defined in ts/contrainer.h
 // Should we use define guard?
 
-#endif // SEM_TS_MAT_ASSERTIONS_H_
+#endif // ELM_TS_MAT_ASSERTIONS_H_

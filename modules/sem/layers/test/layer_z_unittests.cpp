@@ -19,7 +19,7 @@
 
 using namespace std;
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 // name of keys in signal
 const string NAME_INPUT_SPIKES   = "in";        ///< no. of afferent spikes
@@ -560,7 +560,7 @@ TEST_F(LayerZLearnTest, Learn)
         int spiking_neuron_index;
 
         // Spiking in the WTA circuit is probabilistic, so we want to go through the checks at least once.
-        if( sem::find_first_of(spikes_out > 0, static_cast<uchar>(255), spiking_neuron_index) ) {
+        if( elm::find_first_of(spikes_out > 0, static_cast<uchar>(255), spiking_neuron_index) ) {
 
             ASSERT_GE( spiking_neuron_index, 0 );
 

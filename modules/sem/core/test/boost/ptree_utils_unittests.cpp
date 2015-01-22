@@ -7,7 +7,7 @@
 using namespace std;
 using namespace boost::property_tree;
 
-using namespace sem;
+using namespace elm;
 
 /**
  * @brief test class around printing property trees

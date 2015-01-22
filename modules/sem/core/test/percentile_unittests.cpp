@@ -32,10 +32,10 @@ protected:
  */
 TEST_F(PercentileTest, Empty) {
 
-    EXPECT_THROW(to_.CalcPercentile(Mat1f(), 0.5f), sem::ExceptionBadDims);
-    EXPECT_THROW(to_.CalcPercentile(Mat1f(1, 0), 0.5f), sem::ExceptionBadDims);
-    EXPECT_THROW(to_.CalcPercentile(Mat1f(0, 1), 0.5f), sem::ExceptionBadDims);
-    EXPECT_THROW(to_.CalcPercentile(Mat1f(0, 0), 0.5f), sem::ExceptionBadDims);
+    EXPECT_THROW(to_.CalcPercentile(Mat1f(), 0.5f), elm::ExceptionBadDims);
+    EXPECT_THROW(to_.CalcPercentile(Mat1f(1, 0), 0.5f), elm::ExceptionBadDims);
+    EXPECT_THROW(to_.CalcPercentile(Mat1f(0, 1), 0.5f), elm::ExceptionBadDims);
+    EXPECT_THROW(to_.CalcPercentile(Mat1f(0, 0), 0.5f), elm::ExceptionBadDims);
 }
 
 /**
@@ -43,8 +43,8 @@ TEST_F(PercentileTest, Empty) {
  */
 TEST_F(PercentileTest, Invalid) {
 
-    EXPECT_THROW(to_.CalcPercentile(data_, -0.01f), sem::ExceptionValueError);
-    EXPECT_THROW(to_.CalcPercentile(data_, 1.01f), sem::ExceptionValueError);
+    EXPECT_THROW(to_.CalcPercentile(data_, -0.01f), elm::ExceptionValueError);
+    EXPECT_THROW(to_.CalcPercentile(data_, 1.01f), elm::ExceptionValueError);
 
     EXPECT_NO_THROW(to_.CalcPercentile(data_, 1.f));
     EXPECT_NO_THROW(to_.CalcPercentile(data_, 0.f));

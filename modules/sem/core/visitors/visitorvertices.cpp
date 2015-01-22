@@ -7,7 +7,7 @@
 #include "sem/core/pcl/cloud_.h"
 
 using namespace pcl;
-using namespace sem;
+using namespace elm;
 
 void VisitorVecVertices::Reset()
 {

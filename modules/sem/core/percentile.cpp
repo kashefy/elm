@@ -12,12 +12,12 @@ float Percentile::CalcPercentile(const Mat1f &in, float percentile) const
 {
     if(in.empty()) {
 
-        SEM_THROW_BAD_DIMS("Input is empty.");
+        ELM_THROW_BAD_DIMS("Input is empty.");
     }
 
     if(percentile > 1.f || percentile < 0.f) {
 
-        SEM_THROW_VALUE_ERROR("Requested percentile must be within the [0, 1] range.");
+        ELM_THROW_VALUE_ERROR("Requested percentile must be within the [0, 1] range.");
     }
 
     Mat1f dst;

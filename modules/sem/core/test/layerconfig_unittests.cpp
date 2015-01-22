@@ -4,7 +4,7 @@
 #include "sem/core/exception.h"
 
 using namespace std;
-using namespace sem;
+using namespace elm;
 
 class LayerIOTest : public testing::Test
 {

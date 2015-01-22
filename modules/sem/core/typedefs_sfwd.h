@@ -1,16 +1,16 @@
-/** @file define semi-forwarded typedef. Fully defined STL types + fwd. declared other types
+/** @file define elmi-forwarded typedef. Fully defined STL types + fwd. declared other types
  */
-#ifndef SEM_CORE_TYPEDEFS_SFWD_H_
-#define SEM_CORE_TYPEDEFS_SFWD_H_
+#ifndef ELM_CORE_TYPEDEFS_SFWD_H_
+#define ELM_CORE_TYPEDEFS_SFWD_H_
 
 #include "sem/core/typedefs_fwd.h"
 #include "sem/core/stl/typedefs.h"
 
-namespace sem {
+namespace elm {
 
 typedef std::vector< cv::Mat1f > VecMat1f;  ///< Convinience typedef for vector of single channel float matrices
 typedef std::vector< cv::Mat > VecMat;      ///< Convinience typedef for vector of matrices
 
-} // namespace sem
+} // namespace elm
 
-#endif // SEM_CORE_TYPEDEFS_SFWD_H_
+#endif // ELM_CORE_TYPEDEFS_SFWD_H_

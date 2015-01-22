@@ -87,7 +87,7 @@ TEST_F(RegistorTest, CreateSharedPtr)
 
 TEST_F(RegistorTest, CreateSharedPtr_WrongType)
 {
-    EXPECT_THROW(DummyRegistor::CreatePtrShared(g_dummyRegistry, "Blahbla"), sem::ExceptionTypeError);
+    EXPECT_THROW(DummyRegistor::CreatePtrShared(g_dummyRegistry, "Blahbla"), elm::ExceptionTypeError);
 }
 
 TEST_F(RegistorTest, CreateSharedPtr_UniqueInstancesSameType)

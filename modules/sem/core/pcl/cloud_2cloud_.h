@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_PCL_CLOUD__2CLOUD__H_
-#define SEM_CORE_PCL_CLOUD__2CLOUD__H_
+#ifndef ELM_CORE_PCL_CLOUD__2CLOUD__H_
+#define ELM_CORE_PCL_CLOUD__2CLOUD__H_
 
 #ifdef __WITH_PCL // the template class definitions require PCL support
 
@@ -10,7 +10,7 @@
 #include "sem/core/pcl/point_traits.h"
 #include "sem/core/pcl/typedefs_fwd.h"
 
-namespace sem {
+namespace elm {
 /**
  * @brief class for Point Cloud conversion of different point types
  */
@@ -30,7 +30,7 @@ public:
      *
      * @param[in] src cloud
      * @param[out] dst point cloud
-     * @throws sem::ExceptionNotImpl when src and dst point types have have different footprints
+     * @throws elm::ExceptionNotImpl when src and dst point types have have different footprints
      */
     static void Convert(CloudTPSrcPtr &src, CloudTPDstPtr &dst)
     {
@@ -42,7 +42,7 @@ public:
 
         if(nb_floats_src != nb_floats_dst) { // truncate
 
-            SEM_THROW_NOT_IMPLEMENTED;
+            ELM_THROW_NOT_IMPLEMENTED;
         }
         else {
 
@@ -67,10 +67,10 @@ void Cloud_2Cloud_<pcl::PointNormal, pcl::Normal>::Convert(
         boost::shared_ptr<pcl::PointCloud<pcl::Normal > > &dst
         );
 
-} // namespace sem
+} // namespace elm
 
 #else // __WITH_PCL
     #warning "Unable to define cloud 2 cloud converter without PCL support."
 #endif // __WITH_PCL
 
-#endif // SEM_CORE_PCL_CLOUD__2CLOUD__H_
+#endif // ELM_CORE_PCL_CLOUD__2CLOUD__H_

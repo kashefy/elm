@@ -7,7 +7,7 @@
 #include "sem/core/layerconfig.h"
 
 using namespace std;
-using namespace sem;
+using namespace elm;
 
 /** class for deriving from base Layer for test purposes
   */

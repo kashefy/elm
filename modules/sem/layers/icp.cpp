@@ -13,7 +13,7 @@
 using namespace std;
 using namespace cv;
 using namespace pcl;
-using namespace sem;
+using namespace elm;
 
 typedef IterativeClosestPoint<PointXYZ, PointXYZ > ICPXYZ;
 

@@ -24,7 +24,7 @@ using namespace std;
 namespace bfs=boost::filesystem;
 using namespace cv;
 using namespace pcl;
-using namespace sem;
+using namespace elm;
 
 namespace {
 

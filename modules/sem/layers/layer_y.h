@@ -1,5 +1,5 @@
-#ifndef SEM_LAYERS_LAYERY_H_
-#define SEM_LAYERS_LAYERY_H_
+#ifndef ELM_LAYERS_LAYERY_H_
+#define ELM_LAYERS_LAYERY_H_
 
 #include <string>
 

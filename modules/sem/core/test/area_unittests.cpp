@@ -4,7 +4,7 @@
 #include "sem/core/exception.h"
 
 using cv::Mat1f;
-using namespace sem;
+using namespace elm;
 
 class TrapzTest : public testing::Test
 {

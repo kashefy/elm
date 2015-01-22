@@ -6,7 +6,7 @@
 
 using namespace std;
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 INSTANTIATE_TYPED_TEST_CASE_P(SignalTP_FtData_Tests, Signal_TP_, FeatureData);
 

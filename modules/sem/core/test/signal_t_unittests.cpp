@@ -6,7 +6,7 @@
 
 using namespace std;
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 typedef ::testing::Types<int, cv::Mat1f, float> SignalFeatType;
 INSTANTIATE_TYPED_TEST_CASE_P(SignalTPTests, Signal_TP_, SignalFeatType);

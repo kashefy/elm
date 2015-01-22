@@ -1,12 +1,12 @@
 /** Non-template utility definitions
  * For template inline definitions see *_inl*
   */
-#ifndef SEM_CORE_CV_MAT_UTILS_H_
-#define SEM_CORE_CV_MAT_UTILS_H_
+#ifndef ELM_CORE_CV_MAT_UTILS_H_
+#define ELM_CORE_CV_MAT_UTILS_H_
 
 #include "sem/core/typedefs_fwd.h"
 
-namespace sem {
+namespace elm {
 
 /**
  * @brief Converts matrix to 8U and scales elements
@@ -38,7 +38,7 @@ cv::Mat1i Point2Mat(const cv::Point2i& p);
  * @brief Convert matrix of integers into a  2-dimensional point
  * @param matrix (only first two elements will be considered)
  * @return point of matrix' first 2 elements
- * @throws sem::ExceptionBadDims if matrix contains less than 2 elements
+ * @throws elm::ExceptionBadDims if matrix contains less than 2 elements
  */
 cv::Point2i Mat2Point2i(const cv::Mat1i &m);
 
@@ -46,11 +46,11 @@ cv::Point2i Mat2Point2i(const cv::Mat1i &m);
  * @brief Convert matrix of T (int or float) into a 3-dimensional point
  * @param matrix (only first 3 elements will be considered)
  * @return point of matrix' first 3 elements
- * @throws sem::ExceptionBadDims if matrix contains less than 3 elements
+ * @throws elm::ExceptionBadDims if matrix contains less than 3 elements
  */
 template <typename T>
 cv::Point3_<T> Mat2Point3_(const cv::Mat_<T> &m);
 
-} // sem namespace
+} // elm namespace
 
-#endif // SEM_CORE_CV_MAT_UTILS_H_
+#endif // ELM_CORE_CV_MAT_UTILS_H_

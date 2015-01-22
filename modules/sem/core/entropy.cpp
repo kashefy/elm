@@ -4,10 +4,10 @@
 
 using namespace cv;
 
-float sem::CondEntropy(InputArray pdf)
+float elm::CondEntropy(InputArray pdf)
 {
     if(countNonZero(pdf) < static_cast<int>(pdf.total())) {
-        SEM_THROW_VALUE_ERROR("Failed to compute cond. entropy with zero in prob. vector");
+        ELM_THROW_VALUE_ERROR("Failed to compute cond. entropy with zero in prob. vector");
     }
 
     if(pdf.total() == 0) { return 0.f; }

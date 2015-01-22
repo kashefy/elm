@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_SIGNAL__H_
-#define SEM_CORE_SIGNAL__H_
+#ifndef ELM_CORE_SIGNAL__H_
+#define ELM_CORE_SIGNAL__H_
 
 #include <map>
 
@@ -55,7 +55,7 @@ public:
     bool Exists(const std::string &name) const
     {
         VecFeat_ tmp;
-        return sem::Find(signals_, name, tmp);
+        return elm::Find(signals_, name, tmp);
     }
 
     /**
@@ -89,7 +89,7 @@ public:
         else {
             std::stringstream s;
             s << "Feature \'" << name << "\' does not exist.";
-            SEM_THROW_KEY_ERROR(s.str());
+            ELM_THROW_KEY_ERROR(s.str());
         }
     }
 
@@ -110,13 +110,13 @@ public:
             else {
                 std::stringstream s;
                 s << "Feature \'" << name << "\' is empty.";
-                SEM_THROW_BAD_DIMS(s.str());
+                ELM_THROW_BAD_DIMS(s.str());
             }
         }
         else {
             std::stringstream s;
             s << "Feature \'" << name << "\' does not exist.";
-            SEM_THROW_KEY_ERROR(s.str());
+            ELM_THROW_KEY_ERROR(s.str());
         }
     }
 
@@ -124,4 +124,4 @@ protected:
     MapSVecFeat_ signals_; ///< encapuslated signal features
 };
 
-#endif // SEM_CORE_SIGNAL__H_
+#endif // ELM_CORE_SIGNAL__H_

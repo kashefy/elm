@@ -6,7 +6,7 @@
 #include "sem/core/stl/typedefs.h"
 
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 TEST(CondEntropyTest, Empty)
 {

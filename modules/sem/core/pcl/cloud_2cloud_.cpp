@@ -8,7 +8,7 @@ typedef boost::shared_ptr<pcl::PointCloud<PointXYZ > > CloudXYZPtr;
 typedef boost::shared_ptr<pcl::PointCloud<PointNormal > > CloudPointNrmlPtr;
 typedef boost::shared_ptr<pcl::PointCloud<Normal > > CloudNrmlPtr;
 
-namespace sem {
+namespace elm {
 
 template <class TPointSrc, class TPointDst>
 void CloudTruncate(CloudPointNrmlPtr &src, CloudXYZPtr &dst)
@@ -36,7 +36,7 @@ void CloudTruncate(CloudPointNrmlPtr &src, CloudXYZPtr &dst)
  *
  * Involves a deep copy of point data.
  *
- * @todo: make this the template implementation instead of throwing sem::ExceptionNotImpl?
+ * @todo: make this the template implementation instead of throwing elm::ExceptionNotImpl?
  *
  */
 template<>

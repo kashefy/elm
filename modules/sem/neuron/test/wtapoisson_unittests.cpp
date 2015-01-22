@@ -6,7 +6,7 @@
 
 using namespace std;
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 class WTAPoissonTest : public testing::Test
 {

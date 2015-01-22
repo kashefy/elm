@@ -56,11 +56,11 @@ void base_LayerNotSupported::Response(Signal &signal)
 void base_LayerNotSupported::ThrowException() const
 {
     if(msg_.length() == 0) {
-        SEM_THROW_NOT_IMPLEMENTED_WMSG(
+        ELM_THROW_NOT_IMPLEMENTED_WMSG(
                     string("This layer is not supported, please check the layer definition for requirements.")
                     );
     }
     else {
-        SEM_THROW_NOT_IMPLEMENTED_WMSG(msg_);
+        ELM_THROW_NOT_IMPLEMENTED_WMSG(msg_);
     }
 }

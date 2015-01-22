@@ -1,11 +1,11 @@
-#ifndef SEM_CORE_PCL_POINT_TRAITS_H_
-#define SEM_CORE_PCL_POINT_TRAITS_H_
+#ifndef ELM_CORE_PCL_POINT_TRAITS_H_
+#define ELM_CORE_PCL_POINT_TRAITS_H_
 
 #ifdef __WITH_PCL // the following traits require PCL support
 
 #include <pcl/common/io.h>      // getFields()
 
-namespace  sem {
+namespace  elm {
 
 /**
  * @brief template class to for wrapping PCL point traits
@@ -44,10 +44,10 @@ public:
     }
 };
 
-} // namespace sem
+} // namespace elm
 
 #else // __WITH_PCL
     #warning "Unable to define additional point_traits without PCL support."
 #endif // __WITH_PCL
 
-#endif // SEM_CORE_PCL_POINT_TRAITS_H_
+#endif // ELM_CORE_PCL_POINT_TRAITS_H_

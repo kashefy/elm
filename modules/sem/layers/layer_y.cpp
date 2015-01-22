@@ -41,13 +41,13 @@ void LayerY::Reconfigure(const LayerConfig &config)
     PTree params = config.Params();
     float frequency = params.get<float>(PARAM_FREQ);
     if(frequency < 0) {
-        SEM_THROW_VALUE_ERROR("Poisson frequency must be >= 0 Hz");
+        ELM_THROW_VALUE_ERROR("Poisson frequency must be >= 0 Hz");
     }
     // todo: log warning if f == 0
 
     float dt_msec = params.get<float>(PARAM_DELTA_T_MSEC);
     if(dt_msec <= 0) {
-        SEM_THROW_VALUE_ERROR("dt must be > 0 milliseconds");
+        ELM_THROW_VALUE_ERROR("dt must be > 0 milliseconds");
     }
 
     VecS unused_keys;
@@ -60,7 +60,7 @@ void LayerY::Reconfigure(const LayerConfig &config)
         for( VecS::const_iterator itr=unused_keys.begin(); itr != unused_keys.end(); ++itr)
             s << *itr << ",";
         s << ")";
-        SEM_THROW_KEY_ERROR(s.str());
+        ELM_THROW_KEY_ERROR(s.str());
     }
 
     init(frequency, dt_msec);
@@ -94,7 +94,7 @@ cv::Mat1i LayerY::State(cv::Mat1f state)
             spikes(i) = poisson_.Sample();
         }
         else if(state_at_i != 0) {
-            SEM_THROW_NOT_IMPLEMENTED_WMSG("Analog state not supported.");
+            ELM_THROW_NOT_IMPLEMENTED_WMSG("Analog state not supported.");
         }
     }
 

@@ -16,7 +16,7 @@
 using namespace std;
 using namespace cv;
 
-using namespace sem;
+using namespace elm;
 
 /** Define paramter names and IO keys
   */
@@ -59,7 +59,7 @@ void SaliencyItti::Reset(const LayerConfig &config)
     VecF theta = Mat_ToVec_<float>(theta_range_);
 
     gabors_.reset(new GaborFilterBank());
-    SEM_DYN_CAST(GaborFilterBank, gabors_)->Reset(DEFAULT_RADIUS,
+    ELM_DYN_CAST(GaborFilterBank, gabors_)->Reset(DEFAULT_RADIUS,
                                                   DEFAULT_SIGMA,
                                                   theta,
                                                   DEFAULT_LAMBDA,

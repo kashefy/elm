@@ -1,5 +1,5 @@
-#ifndef SEM_CORE_VISITORCLOUD__H_
-#define SEM_CORE_VISITORCLOUD__H_
+#ifndef ELM_CORE_VISITORCLOUD__H_
+#define ELM_CORE_VISITORCLOUD__H_
 
 #ifdef __WITH_PCL // the following visitor derived template class definitions require PCL support
 
@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-namespace sem {
+namespace elm {
 
 /**
  * @brief A template visitor class for converting to pcl point clouds,
@@ -56,7 +56,7 @@ public:
     /**
      * @todo avoid double deep copy
      */
-    CloudTPDstPtr operator()(const sem::VecVertices &vv) {
+    CloudTPDstPtr operator()(const elm::VecVertices &vv) {
 
         if(!bool(c_)) {
 
@@ -72,9 +72,9 @@ public:
             std::stringstream s;
             s << "Cannot convert scalar to point" <<
                  PCLPointTraits_<TPointDst>::FieldCount() << " fields required.";
-            SEM_THROW_TYPE_ERROR(s.str());
+            ELM_THROW_TYPE_ERROR(s.str());
         }
-        SEM_THROW_NOT_IMPLEMENTED;
+        ELM_THROW_NOT_IMPLEMENTED;
     }
 
     CloudTPDstPtr operator()(int n) {
@@ -84,9 +84,9 @@ public:
             std::stringstream s;
             s << "Cannot convert scalar to point" <<
                  PCLPointTraits_<TPointDst>::FieldCount() << " fields required.";
-            SEM_THROW_TYPE_ERROR(s.str());
+            ELM_THROW_TYPE_ERROR(s.str());
         }
-        SEM_THROW_NOT_IMPLEMENTED;
+        ELM_THROW_NOT_IMPLEMENTED;
     }
 
     CloudTPDstPtr operator()(uchar c) {
@@ -96,12 +96,12 @@ public:
             std::stringstream s;
             s << "Cannot convert scalar to point" <<
                  PCLPointTraits_<TPointDst>::FieldCount() << " fields required.";
-            SEM_THROW_TYPE_ERROR(s.str());
+            ELM_THROW_TYPE_ERROR(s.str());
         }
-        SEM_THROW_NOT_IMPLEMENTED;
+        ELM_THROW_NOT_IMPLEMENTED;
     }
 
-    CloudTPDstPtr operator()(const sem::Mat_f &m) {
+    CloudTPDstPtr operator()(const elm::Mat_f &m) {
 
         if(!bool(c_)) {
 
@@ -115,10 +115,10 @@ protected:
 };
 
 
-} // namespace sem
+} // namespace elm
 
 #else // __WITH_PCL
     #warning "Unable to define VisitorCloud_ visitor without PCL support."
 #endif // __WITH_PCL
 
-#endif // SEM_CORE_VISITORCLOUD__H_
+#endif // ELM_CORE_VISITORCLOUD__H_

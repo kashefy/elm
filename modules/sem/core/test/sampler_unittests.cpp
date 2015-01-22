@@ -224,7 +224,7 @@ TEST(ExponentialPDFTest, Sample)
         hist1(sampled_index)++;
 
         // collect samples drawn from exp. sampling function into a second histogram
-        float v = sem::randexp(LAMBDA);
+        float v = elm::randexp(LAMBDA);
         int bin = static_cast<int>(v*SIZE/PDF_END); // find the right bin for it
         if(bin < SIZE) {
             hist2(bin)++;
@@ -261,7 +261,7 @@ TEST(ExponentialPDFTest, Lambda)
         hists.push_back(Mat1f::zeros(1, SIZE)); // initialize histogram counts
         for(int i=0; i<N; i++) {
 
-            float v = sem::randexp(lambda);
+            float v = elm::randexp(lambda);
             int bin = static_cast<int>(v*PDF_SCALE_FACTOR); // find the right bin for it
             if(bin < SIZE) {
                 hists[hist_index](bin)++;
@@ -310,7 +310,7 @@ TEST(ExponentialPDFTest, PDFArea)
         hists.push_back(Mat1f::zeros(1, SIZE)); // initialize histogram counts
         for(int i=0; i<N; i++) {
 
-            float v = sem::randexp(lambda);
+            float v = elm::randexp(lambda);
             int bin = static_cast<int>(v*PDF_SCALE_FACTOR); // find the right bin for it
             if(bin < SIZE) {
                 hists[hist_index](bin)++;

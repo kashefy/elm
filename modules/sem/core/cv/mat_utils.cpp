@@ -5,7 +5,7 @@
 using namespace std;
 using namespace cv;
 
-Mat_<uchar> sem::ConvertTo8U(const Mat &src)
+Mat_<uchar> elm::ConvertTo8U(const Mat &src)
 {
     double min_val, max_val;
     int max_idx[2] = {-1, -1};
@@ -23,7 +23,7 @@ Mat_<uchar> sem::ConvertTo8U(const Mat &src)
     return dst;
 }
 
-void sem::CumSum(const Mat1f &src, Mat1f &dst)
+void elm::CumSum(const Mat1f &src, Mat1f &dst)
 {
     if(dst.total() < src.total() && src.total() > 0) {
 
@@ -38,7 +38,7 @@ void sem::CumSum(const Mat1f &src, Mat1f &dst)
     }
 }
 
-Mat1i sem::Point2Mat(const Point2i &p)
+Mat1i elm::Point2Mat(const Point2i &p)
 {
     Mat1i m(1, 2);
     m(0) = p.x;
@@ -46,21 +46,21 @@ Mat1i sem::Point2Mat(const Point2i &p)
     return m;
 }
 
-Point2i sem::Mat2Point2i(const Mat1i &m)
+Point2i elm::Mat2Point2i(const Mat1i &m)
 {
     if(m.total() < 2) {
-        SEM_THROW_BAD_DIMS("Too few matrix elements for extracting x,y coordinates. Must have at least 2 elements");
+        ELM_THROW_BAD_DIMS("Too few matrix elements for extracting x,y coordinates. Must have at least 2 elements");
     }
     return Point2i(m(0), m(1));
 }
 
-namespace sem
+namespace elm
 {
 template<>
 Point3i Mat2Point3_(const Mat1i &m)
 {
     if(m.total() < 3) {
-        SEM_THROW_BAD_DIMS("Too few matrix elements for extracting x,y,z coordinates. Must have at least 3 elements");
+        ELM_THROW_BAD_DIMS("Too few matrix elements for extracting x,y,z coordinates. Must have at least 3 elements");
     }
     return Point3i(m(0), m(1), m(2));
 }
@@ -69,10 +69,10 @@ template<>
 Point3f Mat2Point3_(const Mat1f &m)
 {
     if(m.total() < 3) {
-        SEM_THROW_BAD_DIMS("Too few matrix elements for extracting x,y,z coordinates. Must have at least 3 elements");
+        ELM_THROW_BAD_DIMS("Too few matrix elements for extracting x,y,z coordinates. Must have at least 3 elements");
     }
     return Point3f(m(0), m(1), m(2));
 }
 
-} //namespace sem
+} //namespace elm
 

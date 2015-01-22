@@ -111,8 +111,8 @@ TEST_F(SaliencyIttiTest, Activate)
         sampled_saliency(loc_mat(1), loc_mat(0))++;
     }
 
-//    imshow("sal", sem::ConvertTo8U(signal.MostRecent(NAME_SALIENCY_)));
-//    imshow("sam", sem::ConvertTo8U(sampled_saliency));
+//    imshow("sal", elm::ConvertTo8U(signal.MostRecent(NAME_SALIENCY_)));
+//    imshow("sam", elm::ConvertTo8U(sampled_saliency));
 //    waitKey();
 }
 
@@ -131,7 +131,7 @@ TEST_F(SaliencyIttiTest, DISABLED_DisplayApplyMNIST)
     to_.Activate(signal);
     to_.Response(signal);
 
-    imshow("sal", sem::ConvertTo8U(signal.MostRecentMat(NAME_SALIENCY_)));
+    imshow("sal", elm::ConvertTo8U(signal.MostRecentMat(NAME_SALIENCY_)));
 
     Mat1i loc_mat = signal.MostRecentMat(NAME_LOC_);
     cout<<loc_mat<<endl;

@@ -5,7 +5,7 @@
 #include "sem/ts/ts.h"
 
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 class DiffOfGaussians2dSqTest : public ::testing::Test
 {

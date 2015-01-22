@@ -13,7 +13,7 @@ using std::string;
 
 using cv::Mat1f;
 
-using namespace sem;
+using namespace elm;
 
 const string base_PopulationCode::KEY_INPUT_STIMULUS   = "in";
 const string base_PopulationCode::KEY_OUTPUT_POP_CODE  = "pc";
@@ -39,7 +39,7 @@ void base_PopulationCode::Clear()
 
 void base_PopulationCode::Reconfigure(const LayerConfig &config)
 {
-    SEM_THROW_NOT_IMPLEMENTED;
+    ELM_THROW_NOT_IMPLEMENTED;
 }
 
 void base_PopulationCode::Reset(const LayerConfig &config)

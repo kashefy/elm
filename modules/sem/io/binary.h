@@ -1,5 +1,5 @@
-#ifndef SEM_IO_BINARY_H_
-#define SEM_IO_BINARY_H_
+#ifndef ELM_IO_BINARY_H_
+#define ELM_IO_BINARY_H_
 
 #include <algorithm>
 #include <limits.h>
@@ -30,7 +30,7 @@ static const union { unsigned char bytes[4]; uint32_t value; } o32_host_order =
 #define IS_32_ENDIAN(x) O32_HOST_ORDER == x
 #define IS_32_LITTLE_ENDIAN O32_HOST_ORDER == O32_LITTLE_ENDIAN
 
-namespace sem
+namespace elm
 {
 
 /**
@@ -49,6 +49,6 @@ void SwapEndian(T *p)
     std::reverse(mem, mem + sizeof(T));
 }
 
-} // namespace sem
+} // namespace elm
 
-#endif // SEM_IO_BINARY_H_
+#endif // ELM_IO_BINARY_H_

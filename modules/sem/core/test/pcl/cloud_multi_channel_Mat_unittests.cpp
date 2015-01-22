@@ -9,14 +9,14 @@
 using namespace std;
 using namespace cv;
 using namespace pcl;
-using namespace sem;
-using namespace sem::ts;
+using namespace elm;
+using namespace elm::ts;
 
 namespace {
 
-SEM_SET_EXPECTED_POINT_ATTR(pcl::PointXYZ,    3,  4);  // x, y, z
-SEM_SET_EXPECTED_POINT_ATTR(pcl::Normal,      4,  8);  // n1, n2, n3, curvature
-SEM_SET_EXPECTED_POINT_ATTR(pcl::PointNormal, 7, 12);  // PointXYZ + Normal = 4+3
+ELM_SET_EXPECTED_POINT_ATTR(pcl::PointXYZ,    3,  4);  // x, y, z
+ELM_SET_EXPECTED_POINT_ATTR(pcl::Normal,      4,  8);  // n1, n2, n3, curvature
+ELM_SET_EXPECTED_POINT_ATTR(pcl::PointNormal, 7, 12);  // PointXYZ + Normal = 4+3
 
 /**
  * @brief test Mat to Point cloud conversion with multi-channel Mat input.

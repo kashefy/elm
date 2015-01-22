@@ -1,9 +1,9 @@
-#ifndef SEM_CORE_CV_NEIGHBORHOOD_H_
-#define SEM_CORE_CV_NEIGHBORHOOD_H_
+#ifndef ELM_CORE_CV_NEIGHBORHOOD_H_
+#define ELM_CORE_CV_NEIGHBORHOOD_H_
 
 #include <opencv2/core.hpp>
 
-namespace sem
+namespace elm
 {
 
 /**
@@ -22,6 +22,6 @@ namespace sem
 void NeighMeanVar(const cv::Mat1f& m, int radius, cv::Mat1f &neigh_mean, cv::Mat1f &neigh_var,
                   int border_type=cv::BORDER_REPLICATE, const cv::Scalar &value=cv::Scalar());
 
-} // namespace sem
+} // namespace elm
 
-#endif // SEM_CORE_CV_NEIGHBORHOOD_H_
+#endif // ELM_CORE_CV_NEIGHBORHOOD_H_

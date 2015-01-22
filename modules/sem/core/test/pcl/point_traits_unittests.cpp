@@ -6,8 +6,8 @@
 #include "sem/ts/ts.h"
 
 using namespace pcl;
-using namespace sem;
-using namespace sem::ts;
+using namespace elm;
+using namespace elm::ts;
 
 namespace {
 

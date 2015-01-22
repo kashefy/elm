@@ -6,7 +6,7 @@
 #include "sem/core/pcl/vertices.h"
 
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 Mat_f VisitorMat_f::operator()(const Mat &m) const
 {

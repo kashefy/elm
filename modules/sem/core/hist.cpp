@@ -18,7 +18,7 @@ Hist1Ch::Hist1Ch()
 //TODO: throw when size==0?
 void Hist1Ch::Reconfigure(int size, const std::pair<float, float> &range, bool do_uniform, bool do_accumulate)
 {
-    if(size < 0) { SEM_THROW_VALUE_ERROR("size must be >= 0"); }
+    if(size < 0) { ELM_THROW_VALUE_ERROR("size must be >= 0"); }
     size_ = size;
 
     range_ = range;
@@ -35,15 +35,15 @@ Mat1f Hist1Ch::Compute(const cv::Mat &in, InputArray mask)
         std::stringstream s;
         s << "Only single-channel input supported for now for histogram calculcation.";
         s << "Encountered input with " << in.channels() << " channels.";
-        SEM_THROW_BAD_DIMS(s.str());
+        ELM_THROW_BAD_DIMS(s.str());
     }
 
     uchar depth = in.type() & CV_MAT_DEPTH_MASK;
     switch ( depth ) {
-    case CV_8S:  SEM_THROW_TYPE_ERROR("Caluclating histogram from CV_8S matrices not yet supported"); break;
-    case CV_16S:  SEM_THROW_TYPE_ERROR("Caluclating histogram from CV_16S matrices not yet supported"); break;
-    case CV_32S:  SEM_THROW_TYPE_ERROR("Caluclating histogram from CV_32S matrices not yet supported"); break;
-    case CV_64F:  SEM_THROW_TYPE_ERROR("Caluclating histogram from CV_64F matrices not yet supported"); break;
+    case CV_8S:  ELM_THROW_TYPE_ERROR("Caluclating histogram from CV_8S matrices not yet supported"); break;
+    case CV_16S:  ELM_THROW_TYPE_ERROR("Caluclating histogram from CV_16S matrices not yet supported"); break;
+    case CV_32S:  ELM_THROW_TYPE_ERROR("Caluclating histogram from CV_32S matrices not yet supported"); break;
+    case CV_64F:  ELM_THROW_TYPE_ERROR("Caluclating histogram from CV_64F matrices not yet supported"); break;
       default: break;
     }
 

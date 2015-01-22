@@ -11,7 +11,7 @@
 
 using namespace std;
 using namespace cv;
-using namespace sem;
+using namespace elm;
 
 class WeightedSumTest : public ::testing::Test
 {

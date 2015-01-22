@@ -5,7 +5,7 @@
 using namespace std;
 using namespace cv;
 
-string sem::MatTypeToString(const Mat& m)
+string elm::MatTypeToString(const Mat& m)
 {
     string type_name;
     uchar depth = m.type() & CV_MAT_DEPTH_MASK;

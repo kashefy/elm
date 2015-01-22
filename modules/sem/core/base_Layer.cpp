@@ -19,7 +19,7 @@ base_Layer::base_Layer(const LayerConfig &config)
 
 void base_Layer::Reset(const LayerConfig &config)
 {
-    SEM_THROW_NOT_IMPLEMENTED;
+    ELM_THROW_NOT_IMPLEMENTED;
 }
 
 base_LearningLayer::~base_LearningLayer()
