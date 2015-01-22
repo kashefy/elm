@@ -12,6 +12,7 @@ project(${ROOT_PROJECT})
 set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules) # enforce includes to start with project's parent dir (e.g. #include <sem/core/core.h>)
 set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
+set(${ROOT_PROJECT}_CONFIG cmake/SEMConfig.cmake)
 
 # ----------------------------------------------------------------------------
 # Set default behavior
@@ -222,6 +223,20 @@ if(BUILD_TESTS)
     endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/testdata")
 
 endif(BUILD_TESTS)
+
+#----------------------------------------------------------------------------
+# Copy instructions
+#----------------------------------------------------------------------------
+
+file(COPY ${${ROOT_PROJECT}_CONFIG} DESTINATION ${CMAKE_BINARY_DIR})
+
+
+
+#----------------------------------------------------------------------------
+# installation targets that aren't already performed on the module level
+#----------------------------------------------------------------------------
+
+install(FILES ${${ROOT_PROJECT}_CONFIG} DESTINATION share/${ROOT_PROJECT}/)
 
 
 # ----------------------------------------------------------------------------
