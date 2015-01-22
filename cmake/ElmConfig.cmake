@@ -42,13 +42,13 @@ message(STATUS "PARENT_DIR= ${PARENT_DIR}")
 # Are we in install prefix or in a build directory?
 if(EXISTS ${PARENT_DIR}/modules AND IS_DIRECTORY ${PARENT_DIR}/modules)
 	
-	# install prefix
+	#build directory
 	set(Elm_INCLUDE_DIRS ${PARENT_DIR}/modules)
 	set(Elm_LIB_DIR ${PARENT_DIR}/lib)
 	
 elseif(EXISTS ${PARENT_DIR}/../include AND IS_DIRECTORY ${PARENT_DIR}/../include)
 	
-	#build directory
+	# install prefix
 	set(Elm_INCLUDE_DIRS ${PARENT_DIR}/../include)
 	set(Elm_LIB_DIR ${PARENT_DIR}/../lib)
 
