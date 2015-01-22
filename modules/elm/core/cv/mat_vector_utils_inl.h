@@ -1,3 +1,10 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, Elm Library Project
+// 3-clause BSD License
+//
+//M*/
 /** @file template utility definitions using STL vectors that have to be defined inline
   */
 #ifndef ELM_CORE_MAT_VECTOR_UTILS_INL_H_

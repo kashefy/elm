@@ -1,3 +1,10 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, Elm Library Project
+// 3-clause BSD License
+//
+//M*/
 /**@file OpenCV Mat Assertions
   */
 #ifndef ELM_TS_MAT_ASSERTIONS_H_

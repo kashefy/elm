@@ -1,3 +1,10 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, Elm Library Project
+// 3-clause BSD License
+//
+//M*/
 /** @file define routines involving STL vectors of Mat objects
   */
 #ifndef ELM_CORE_CV_MAT_VECTOR_UTILS_H_

@@ -1,3 +1,10 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, Elm Library Project
+// 3-clause BSD License
+//
+//M*/
 /**
  * @file Define variant visitor classes around Mat <-> X type conversions
  * @todo switchelm::Mat_f to basic Mat

@@ -1,3 +1,10 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, Elm Library Project
+// 3-clause BSD License
+//
+//M*/
 #include "elm/ts/mat_assertions.h"
 
 #include "elm/core/cv/mat_type_utils.h"

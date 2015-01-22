@@ -1,3 +1,10 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, Elm Library Project
+// 3-clause BSD License
+//
+//M*/
 #include "elm/core/pcl/cloud_2cloud_.h"
 
 #ifdef __WITH_PCL // conversions from one point cloud to another require PCL support

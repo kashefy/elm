@@ -1,3 +1,10 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, Elm Library Project
+// 3-clause BSD License
+//
+//M*/
 /** @file utilitites for setting up typed tests using PCL Point
   */
 #ifndef ELM_TS_PCL_POINT_TYPED_TESTS_H_

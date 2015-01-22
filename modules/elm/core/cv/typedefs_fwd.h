@@ -1,3 +1,10 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, Elm Library Project
+// 3-clause BSD License
+//
+//M*/
 /** forward typedef of OpenCV data types
  */
 #ifndef ELM_CORE_OPENCV_TYPEDEFS_FWD_H_

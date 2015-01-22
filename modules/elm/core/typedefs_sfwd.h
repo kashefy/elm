@@ -1,3 +1,10 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, Elm Library Project
+// 3-clause BSD License
+//
+//M*/
 /** @file define elmi-forwarded typedef. Fully defined STL types + fwd. declared other types
  */
 #ifndef ELM_CORE_TYPEDEFS_SFWD_H_
