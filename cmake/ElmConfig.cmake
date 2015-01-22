@@ -38,24 +38,23 @@ get_filename_component(Elm_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH CACHE)
 
 get_filename_component(PARENT_DIR ${Elm_CMAKE_DIR} PATH)
 
-message(STATUS "PARENT_DIR= ${PARENT_DIR}")
 # Are we in install prefix or in a build directory?
-if(EXISTS ${PARENT_DIR}/modules AND IS_DIRECTORY ${PARENT_DIR}/modules)
+if(EXISTS ${Elm_CMAKE_DIR}/modules AND IS_DIRECTORY ${Elm_CMAKE_DIR}/modules)
 	
 	#build directory
-	set(Elm_INCLUDE_DIRS ${PARENT_DIR}/modules)
-	set(Elm_LIB_DIR ${PARENT_DIR}/lib)
+	#message(AUTHOR_WARNING "build directory")
+	set(Elm_INCLUDE_DIRS ${Elm_CMAKE_DIR}/modules)
+	set(Elm_LIB_DIR ${Elm_CMAKE_DIR}/lib)
 	
 elseif(EXISTS ${PARENT_DIR}/../include AND IS_DIRECTORY ${PARENT_DIR}/../include)
 	
 	# install prefix
+	#message(AUTHOR_WARNING "install prefix")
 	set(Elm_INCLUDE_DIRS ${PARENT_DIR}/../include)
 	set(Elm_LIB_DIR ${PARENT_DIR}/../lib)
 
 else()
-
-	message(STATUS "???")
-
+	#message(STATUS "???")
 endif()
  
 file(GLOB Elm_LIBS "${Elm_LIB_DIR}/*.a")
