@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-#  Root CMake file for SEM
+#  Root CMake file for the elm project
 # ----------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 2.8.7)
@@ -7,12 +7,12 @@ cmake_minimum_required(VERSION 2.8.7)
 # ----------------------------------------------------------------------------
 # Define root variables
 # ----------------------------------------------------------------------------
-set(ROOT_PROJECT sem)
+set(ROOT_PROJECT elm)
 project(${ROOT_PROJECT})
-set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules) # enforce includes to start with project's parent dir (e.g. #include <sem/core/core.h>)
+set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules) # enforce includes to start with project's parent dir (e.g. #include <elm/core/core.h>)
 set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
-set(${ROOT_PROJECT}_CONFIG cmake/SEMConfig.cmake)
+set(${ROOT_PROJECT}_CONFIG cmake/ElmConfig.cmake)
 
 # ----------------------------------------------------------------------------
 # Set default behavior
