@@ -3,11 +3,11 @@ If you do not agree to this license, do not download, install,
 copy or use the software.
 
                           License Agreement
-                           For Elm Library
+                           For ELM Library
                        (3-clause BSD License)
                        
 Copyright (c) 2015, Youssef Kashef
-Copyright (c) 2015, Elm Library Project
+Copyright (c) 2015, ELM Library Project
 All rights reserved.
 Third party copyrights are property of their respective owners.
 
@@ -21,7 +21,7 @@ modification, are permitted provided that the following conditions are met:
   this list of conditions and the following disclaimer in the documentation
   and/or other materials provided with the distribution.
 
-* Neither the name of the Elm library nor the names of its
+* Neither the name of the ELM library nor the names of its
   contributors may be used to endorse or promote products derived from
   this software without specific prior written permission.
 
