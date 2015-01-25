@@ -1,7 +1,7 @@
 # The ELM framework #
 
 This started off as a a C++ implementation of a Spike-based Expectation Maximization (SEM) model, a biologically inspired model for object detection and recognition.
-It then grew into a more generic framework called Elm to support experimenting with as many models as possible, providing an interface for adding custom algorithms and methods.
+It then grew into a more generic framework called ELM to support experimenting with as many models as possible, providing an interface for adding custom algorithms and methods.
 Whoever said coding in C++ couldn't be done as smoothly as scripting languages?
 
 # Background #
