@@ -15,7 +15,7 @@ before_install:
   - cd gtest-1.7.0
   - cmake .
   - make
-  - cd ~/elm
+  - cd ../../elm
   - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
   - sudo apt-get update -qq
