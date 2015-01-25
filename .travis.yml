@@ -1,0 +1,24 @@
+language: cpp
+compiler: gcc
+before_install:
+  - git clone https://github.com/Itseez/opencv.git
+  - cd opencv
+  - mkdir build
+  - cd build
+  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF ..
+  - make -j
+  - cd ../..
+  - sudo apt-get update -qq
+  - sudo apt-get install -y libgtest-dev
+  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev
+  - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
+  - sudo apt-get update -qq
+  - sudo apt-get install -y libpcl-all
+before_script:
+  - mkdir build
+  - cd build
+  - cmake -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build ..
+script: make
+after_script:
+  - cd build/bin
+  - ./run_unittests
