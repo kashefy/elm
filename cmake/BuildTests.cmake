@@ -27,12 +27,12 @@ FUNCTION(build_tests test_project filter)
             add_definitions(-DPYTHON_USE_NUMPY=1)
             add_dependencies( ${test_project} python )
             include_directories( ${BIND_PYTHON_INCLUDE_DIRS} )
-            target_link_libraries(${test_project} ${${ROOT_PROJECT}_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} ts ${BIND_PYTHON_LIBS} python)
+            target_link_libraries(${test_project} ${${ROOT_PROJECT}_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} ${BIND_PYTHON_LIBS} python)
 
         else(BUILD_python)
 
             add_dependencies(${test_project} ${${ROOT_PROJECT}_MODULES})
-            set(${test_project}_LIBS ${${ROOT_PROJECT}_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} ts ${${ROOT_PROJECT}_MODULES})
+            set(${test_project}_LIBS ${${ROOT_PROJECT}_LIBS} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} ${${ROOT_PROJECT}_MODULES})
             list(REMOVE_DUPLICATES ${test_project}_LIBS)
             target_link_libraries(${test_project} ${${test_project}_LIBS})
 
