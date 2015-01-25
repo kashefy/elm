@@ -131,7 +131,7 @@ endif(DEFINED OpenCV_DIR)
 # ----------------------------------------------------------------------------
 # Force the user to tell us which OpenCV they want (otherwise find_package can find the wrong one, cache it and changes to OpenCV_DIR are ignored)
 
-set(BOOST_MIN_VERSION "1.56.0" CACHE STRING "Minimum version of boost to link against (e.g. C:/BOOST_1_56_0 is 1.56.0")
+set(BOOST_MIN_VERSION "1.46.0" CACHE STRING "Minimum version of boost to link against (e.g. C:/BOOST_1_56_0 is 1.56.0")
 
 # Don't forget to include 'system'
 set(BOOST_COMPONENTS system filesystem serialization)
