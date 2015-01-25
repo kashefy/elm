@@ -12,7 +12,6 @@ project(${ROOT_PROJECT})
 set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules) # enforce includes to start with project's parent dir (e.g. #include <elm/core/core.h>)
 set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
-set(${ROOT_PROJECT}_CONFIG cmake/ElmConfig.cmake)
 
 # ----------------------------------------------------------------------------
 # Set default behavior
@@ -228,16 +227,26 @@ endif(BUILD_TESTS)
 # Copy instructions
 #----------------------------------------------------------------------------
 
-file(COPY ${${ROOT_PROJECT}_CONFIG} DESTINATION ${CMAKE_BINARY_DIR})
+#----------------------------------------------------------------------------
+# file configurations
+#----------------------------------------------------------------------------
 
+# variable substitutions
+set(ROOT_PROJECT_CONFIG ElmConfig.cmake)
 
+# Set full-name variables for suffix variables, otherwise config won't substitute them:
+set(ROOT_PROJECT_INCLUDE_DIRS ${${ROOT_PROJECT}_INCLUDE_DIRS})
+
+set(ROOT_PROJECT_MODULES ${${ROOT_PROJECT}_MODULES})
+set(ROOT_PROJECT_DEPS ${${ROOT_PROJECT}_LIBS})
+
+configure_file(cmake/${ROOT_PROJECT_CONFIG}.in ${ROOT_PROJECT_CONFIG} @ONLY)
 
 #----------------------------------------------------------------------------
 # installation targets that aren't already performed on the module level
 #----------------------------------------------------------------------------
 
-install(FILES ${${ROOT_PROJECT}_CONFIG} DESTINATION share/${ROOT_PROJECT}/)
-
+install(FILES ${CMAKE_BINARY_DIR}/${ROOT_PROJECT_CONFIG} DESTINATION share/${ROOT_PROJECT}/)
 
 # ----------------------------------------------------------------------------
 # Done configuring the build.
@@ -276,7 +285,7 @@ status("Optional Dependencies:")
 status("")
 status("    PCL:  "   PCL_FOUND THEN YES (${PCL_VERSION}) ELSE NO)
 status("        lib Dir.:  "      PCL_FOUND THEN "${PCL_LIBRARY_DIRS}" ELSE "-")
-status("        components.:  "   PCL_FOUND THEN "${PCL_COMPONENTS_REQ}" ELSE "-")
+status("        components :  "   PCL_FOUND THEN "${PCL_COMPONENTS_REQ}" ELSE "-")
 
 status("")
 

@@ -28,7 +28,7 @@ class LayerFactoryStaticTest : public ::testing::Test
 TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared)
 {
     {
-        shared_ptr<base_Layer> ptr = LayerFactory::CreateShared("LayerZ");
+        shared_ptr<base_Layer> ptr = LayerFactory::CreateShared("LayerY");
         EXPECT_TRUE(bool(ptr));
     }
     {

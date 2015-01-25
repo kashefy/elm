@@ -18,7 +18,6 @@
 #include "elm/core/cv/neighborhood.h"
 #include "elm/core/percentile.h"
 #include "elm/core/signal.h"
-#include "elm/encoding/orientation.h"
 
 using namespace std;
 using namespace cv;
