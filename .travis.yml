@@ -28,7 +28,7 @@ before_script:
   - pwd
   - mkdir build
   - cd build
-  - cmake -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install ..
+  - cmake -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=./opencv/build -DGTEST_ROOT=gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install ..
 script: make
 after_script:
   - cd build/bin
