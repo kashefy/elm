@@ -6,7 +6,7 @@ before_install:
   - cd opencv
   - mkdir build
   - cd build
-  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF ..
+  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF ..
   - make -j
   - cd ../..
   - sudo apt-get update -qq
