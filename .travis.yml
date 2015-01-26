@@ -26,7 +26,7 @@ before_script:
   - mkdir build
   - cd build
   - cmake -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install ..
-script: make -j
+script: make -j2
 after_script:
   - cd ./bin
   - ./run_unittests
