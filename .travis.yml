@@ -2,7 +2,7 @@ language: cpp
 compiler: gcc
 before_install:
   - cd ..
-  - git clone https://github.com/Itseez/opencv.git
+  - git clone --depth=1 https://github.com/Itseez/opencv.git
   - cd opencv
   - mkdir build
   - cd build
