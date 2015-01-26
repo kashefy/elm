@@ -1,0 +1,32 @@
+language: cpp
+compiler: gcc
+before_install:
+  - sudo apt-get update -qq
+  - cd ..
+  - git clone --depth=1 https://github.com/Itseez/opencv.git
+  - cd opencv
+  - mkdir build
+  - cd build
+  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF ..
+  - make -j
+  - cd ../..
+  - wget https://googletest.googlecode.com/files/gtest-1.7.0.zip
+  - unzip gtest-1.7.0.zip
+  - cd gtest-1.7.0
+  - cmake .
+  - make
+  - pwd
+  - cd ../elm
+  - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
+  - sudo apt-get update -qq
+install:
+  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libpcl-all
+before_script:
+  - pwd
+  - mkdir build
+  - cd build
+  - cmake -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install ..
+script:
+  - make -j2
+  - cd ./bin
+  - ./run_unittests

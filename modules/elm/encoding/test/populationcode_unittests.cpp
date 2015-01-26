@@ -132,7 +132,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
         img.convertTo(in_, CV_32FC1, 1./255.);
         to_.State(in_, kernels_);
 
-        const int N=10;
+        const int N=25;
         Mat1f counts = Mat1f::zeros(1, static_cast<int>(in_.total())*NB_KERNELS_);
         for(int i=0; i<N; i++) {
 
