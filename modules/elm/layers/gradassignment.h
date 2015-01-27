@@ -14,6 +14,9 @@ namespace elm {
 
 /**
  * @brief Layer for implementing Graduated Assignment algorithm for graph matching
+ *
+ * Assuming symmetrical graph adjacency matrices
+ *
  * @cite Gold1996
  */
 class GradAssignment : public base_Layer
@@ -50,6 +53,30 @@ public:
     virtual void Response(Signal &signal);
 
 protected:
+    /**
+     * @brief calculate compatibility matrix C_aibj Eq. (2) from \cite Gold1996
+     *
+     * Assuming symmetrical graph adjacency matrices
+     *
+     * @param g_ab adjacency matrix
+     * @param g_ij adjacency matrix
+     * @return compatibility matrix
+     */
+    cv::Mat1f CompatibilityMat(const cv::Mat1f &g_ab, const cv::Mat1f &g_ij) const;
+
+    /**
+     * @brief compatibility function for populating compatibility matrix C_aibj Eq. (2) from \cite Gold1996
+     *
+     * if either wieght is "NULL" c=0, otherwise 1-3*|w1-w2|
+     *
+     * @param w1 weight form frist graph
+     * @param w2 weight from second graph
+     * @return compatibility score
+     */
+    float CompatibilityFunc(float w1, float w2) const;
+
+    static const float EPSILON; ///< small no. epsilon
+
     std::string name_g_ab_;     ///< name of graph ab adj. matrix in signal object
     std::string name_g_ij_;     ///< name of graph ij adj. matrix in signal object
     std::string name_out_m_;    ///< desintation name for match matrix
@@ -61,7 +88,10 @@ protected:
     int max_iter_per_beta_; ///< max. no. of iterations allowed per beta value
     int max_iter_sinkhorn_; ///< max. no. of iterations allowed for Sinkhorn's balancing method
 
-    cv::Mat1f m_;       ///< match matrix variables
+    int A;                 /// no. of vertices in graph g_ab
+    int I;                 /// no. of vertices in graph g_ij
+
+    cv::Mat1f m_ai;       ///< match matrix variables
 };
 
 } // namespace elm
