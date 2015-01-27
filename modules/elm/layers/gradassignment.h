@@ -62,7 +62,7 @@ protected:
      * @param g_ij adjacency matrix
      * @return compatibility matrix
      */
-    cv::Mat1f Compatibility(const cv::Mat1f &g_ab, const cv::Mat1f &g_ij) const;
+    virtual cv::Mat1f Compatibility(const cv::Mat1f &g_ab, const cv::Mat1f &g_ij) const;
 
     /**
      * @brief compatibility function for populating compatibility matrix C_aibj Eq. (2) from \cite Gold1996
@@ -73,7 +73,7 @@ protected:
      * @param w2 weight from second graph
      * @return compatibility score
      */
-    float Compatibility(float w1, float w2) const;
+    virtual float Compatibility(float w1, float w2) const;
 
     static const float EPSILON; ///< small no. epsilon
 
