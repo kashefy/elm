@@ -111,46 +111,16 @@ void GradAssignment::Activate(const Signal &signal)
         nb_iterations_0 = 0;
         while(!is_m_converged && nb_iterations_0 < max_iter_per_beta_) { // B
 
-            //std::cout<<"B"<<nb_iterations_0<<std::endl;
             Mat1f q_ai;      ///< partial derivative of Ewg with respect to M_ai
-
-            // c_aibj
-//            Mat1f c_aibj;
-//            Mat1f i_sigma_g_ab_over_b;
-//            reduce(g_ab, i_sigma_g_ab_over_b, 0, cv::REDUCE_SUM);
-//            i_sigma_g_ab_over_b *= I;
-
-//            Mat1f a_sigma_g_ij_over_j;
-//            reduce(g_ij, a_sigma_g_ij_over_j, 1, cv::REDUCE_SUM);
-//            a_sigma_g_ij_over_j *= A;
-
-//            c_aibj = a_sigma_g_ij_over_j*i_sigma_g_ab_over_b;
-//            std::cout<<"c_aibj="<<std::endl<<c_aibj<<std::endl;
-            // c_aibj
-
-            // sum_bj_Mbj
             float sum_bj_Mbj = cv::sum(m_ai)[0];
-            //reduce(m_ai, sum_bj_Mbj, 1, cv::REDUCE_SUM);
-
-            // sum_bj_Mbj
-            // q_ai
-            //cv::multiply(c_aibj, sum_bj_Mbj, q_ai);
             cv::multiply(c_ai, sum_bj_Mbj, q_ai);
 
-            //std::cout<<"h1"<<std::endl;
-            // q_ai
             // softassign
             Mat1f m_ai0;
             cv::exp(beta*q_ai, m_ai0);
 
-            //Mat1f m_ai_hat0 = m_ai_hat.clone();    ///< match matrix variables including the slacks
-
-            //is_m_hat_converged = false;
             nb_iterations_1 = 0;
-            //while(!is_m_hat_converged && nb_iterations_1 < MAX_ITERATIONS_1) { // C
             while(!is_m_converged && nb_iterations_1 < max_iter_sinkhorn_) { // C
-
-                //std::cout<<"C"<<nb_iterations_1<<std::endl;
 
                 // update m by normalizing across all rows
                 Mat1f row_sums_i;
@@ -165,11 +135,6 @@ void GradAssignment::Activate(const Signal &signal)
                 m_ai0 = m_ai1/col_sums_i;
 
                 nb_iterations_1++;
-
-//                std::cout<<"m_ai"<<std::endl;
-//                std::cout<<m_ai<<std::endl;
-//                std::cout<<"m_ai0"<<std::endl;
-//                std::cout<<m_ai0<<std::endl;
                 is_m_converged = cv::sum(abs(m_ai-m_ai0))[0] < EPSILON;
 
                 m_ai = m_ai0;
@@ -178,20 +143,10 @@ void GradAssignment::Activate(const Signal &signal)
 
             nb_iterations_0++;
 
-//            std::cout<<"m_ai"<<std::endl;
-//            std::cout<<m_ai<<std::endl;
-//            std::cout<<"m_ai0"<<std::endl;
-//            std::cout<<m_ai0<<std::endl;
-            //is_m_converged = cv::sum(abs(m_ai-m_ai0))[0] < epislon;
-
         } // end B
 
         beta *= beta_rate_;
     } // end A
-
-    std::cout<<"m_ai"<<std::endl;
-    std::cout<<m_ai<<std::endl;
-
 }
 
 void GradAssignment::Response(Signal &signal)
