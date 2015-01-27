@@ -35,6 +35,18 @@ cv::Mat1f ElementsAt(const VecMat1f &v, int row, int col);
  */
 cv::Mat1f Reshape(const VecMat1f &v);
 
+/**
+ * @brief lower triangular part of matrix
+ *
+ * Diagonal excluded.
+ *
+ * @param src
+ * @param dst
+ * @return total no. of elements extracted
+ * @see tril_flat()
+ */
+int tril(const cv::Mat1f &src, std::vector<cv::Mat1f > &dst);
+
 } // elm namespace
 
 #endif // ELM_CORE_CV_MAT_VECTOR_UTILS_H_

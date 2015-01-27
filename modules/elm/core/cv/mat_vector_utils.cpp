@@ -70,3 +70,22 @@ Mat1f elm::Reshape(const VecMat1f &v)
 
     return dst;
 }
+
+int elm::tril(const Mat1f &src, vector<Mat1f > &dst)
+{
+    int nb_ab = 0;
+
+    if(!src.empty()) {
+
+        dst.clear();
+        dst.reserve(src.rows);
+
+        for(int r=1; r<src.rows; r++) {
+
+            dst.push_back(src.row(r).colRange(0, r));
+            nb_ab += r;
+        }
+    }
+
+    return nb_ab;
+}
