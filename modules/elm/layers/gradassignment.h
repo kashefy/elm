@@ -62,7 +62,7 @@ protected:
      * @param g_ij adjacency matrix
      * @return compatibility matrix
      */
-    cv::Mat1f CompatibilityMat(const cv::Mat1f &g_ab, const cv::Mat1f &g_ij) const;
+    cv::Mat1f Compatibility(const cv::Mat1f &g_ab, const cv::Mat1f &g_ij) const;
 
     /**
      * @brief compatibility function for populating compatibility matrix C_aibj Eq. (2) from \cite Gold1996
@@ -73,7 +73,7 @@ protected:
      * @param w2 weight from second graph
      * @return compatibility score
      */
-    float CompatibilityFunc(float w1, float w2) const;
+    float Compatibility(float w1, float w2) const;
 
     static const float EPSILON; ///< small no. epsilon
 
@@ -88,10 +88,10 @@ protected:
     int max_iter_per_beta_; ///< max. no. of iterations allowed per beta value
     int max_iter_sinkhorn_; ///< max. no. of iterations allowed for Sinkhorn's balancing method
 
-    int A;                 /// no. of vertices in graph g_ab
-    int I;                 /// no. of vertices in graph g_ij
+    int A_;                 /// no. of vertices in graph g_ab
+    int I_;                 /// no. of vertices in graph g_ij
 
-    cv::Mat1f m_ai;       ///< match matrix variables
+    cv::Mat1f m_ai_;       ///< match matrix variables
 };
 
 } // namespace elm

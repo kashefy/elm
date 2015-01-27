@@ -55,28 +55,28 @@ protected:
         const int I=A;  ///< no. of nodes in g
 
         // generate random adjacency matrices
-        g_ab = Mat1f(A, A);
+        g_ab_ = Mat1f(A, A);
         Mat1i tmp(A, A);
         int s = 1000;
         randu(tmp, 0, s);
-        g_ab = tmp/static_cast<float>(s);
+        g_ab_ = tmp/static_cast<float>(s);
 
         // distance from node to itself is 0
-        for(int r=0; r<g_ab.rows; r++) {
+        for(int r=0; r<g_ab_.rows; r++) {
 
-            g_ab(r, r) = 0.f;
+            g_ab_(r, r) = 0.f;
         }
         // make symmetrical
-        for(int r=0; r<g_ab.rows; r++) {
+        for(int r=0; r<g_ab_.rows; r++) {
 
-            for(int c=0; c<g_ab.rows; c++) {
+            for(int c=0; c<g_ab_.rows; c++) {
 
-                g_ab(r, c) = g_ab(c, r);
+                g_ab_(r, c) = g_ab_(c, r);
             }
         }
 
         Mat1f g_ij(I, I);
-        g_ij = g_ab.clone();    // make them equal
+        g_ij = g_ab_.clone();    // make them equal
         Mat1f noise(g_ij.size());
         randn(noise, 0.f, 0.5f);
         g_ij += noise;
@@ -93,7 +93,7 @@ protected:
         }
 
         // add test graphs to signal
-        sig_.Append(NAME_GRAPH_AB, g_ab);
+        sig_.Append(NAME_GRAPH_AB, g_ab_);
         sig_.Append(NAME_GRAPH_IJ, g_ij);
     }
 
@@ -104,8 +104,8 @@ protected:
 
     std::shared_ptr<base_Layer> to_; ///< ptr to test object
 
-    Mat1f g_ab;                 ///< adj. matrix for test graph
-    Mat1f g_ij;                 ///< adj. matrix for test graph
+    Mat1f g_ab_;                 ///< adj. matrix for test graph
+    Mat1f g_ij_;                 ///< adj. matrix for test graph
 
     Signal sig_;
 };
@@ -114,5 +114,7 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
 {
     to_->Activate(sig_);
     to_->Response(sig_);
+
+    cout<<sig_.MostRecentMat(NAME_M)<<endl;
 
 }

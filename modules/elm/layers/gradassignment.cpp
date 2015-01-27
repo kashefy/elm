@@ -39,7 +39,7 @@ GradAssignment::GradAssignment(const LayerConfig &cfg)
 
 void GradAssignment::Clear()
 {
-    m_ai = Mat1f();
+    m_ai_ = Mat1f();
 }
 
 void GradAssignment::Reset(const LayerConfig &config)
@@ -92,15 +92,15 @@ void GradAssignment::Activate(const Signal &signal)
         ELM_THROW_BAD_DIMS("G_ij's adjacency matrix is not a square matrix.");
     }
 
-    A = g_ab.rows; ///< no. of vertices in G_ab graph
-    I = g_ij.rows; ///< no. of vertices in G_ij graph
+    A_ = g_ab.rows; ///< no. of vertices in G_ab graph
+    I_ = g_ij.rows; ///< no. of vertices in G_ij graph
 
-    Mat1f c_ai = CompatibilityMat(g_ab, g_ij);
+    Mat1f c_ai = Compatibility(g_ab, g_ij);
 
     bool is_m_converged = false;
 
 
-    m_ai = Mat1f(A, I, 1.f+EPSILON);
+    m_ai_ = Mat1f(A_, I_, 1.f+EPSILON);
     float beta = beta_0_;
 
     int nb_iterations_0 = 0;
@@ -112,7 +112,7 @@ void GradAssignment::Activate(const Signal &signal)
         while(!is_m_converged && nb_iterations_0 < max_iter_per_beta_) { // B
 
             Mat1f q_ai;      ///< partial derivative of Ewg with respect to M_ai
-            float sum_bj_Mbj = cv::sum(m_ai)[0];
+            float sum_bj_Mbj = cv::sum(m_ai_)[0];
             cv::multiply(c_ai, sum_bj_Mbj, q_ai);
 
             // softassign
@@ -135,9 +135,9 @@ void GradAssignment::Activate(const Signal &signal)
                 m_ai0 = m_ai1/col_sums_i;
 
                 nb_iterations_1++;
-                is_m_converged = cv::sum(abs(m_ai-m_ai0))[0] < EPSILON;
+                is_m_converged = cv::sum(abs(m_ai_-m_ai0))[0] < EPSILON;
 
-                m_ai = m_ai0;
+                m_ai_ = m_ai0;
 
             } // end C
 
@@ -151,16 +151,16 @@ void GradAssignment::Activate(const Signal &signal)
 
 void GradAssignment::Response(Signal &signal)
 {
-    signal.Append(name_out_m_, m_ai);
+    signal.Append(name_out_m_, m_ai_);
 }
 
-Mat1f GradAssignment::CompatibilityMat(const Mat1f &g_ab, const Mat1f &g_ij) const
+Mat1f GradAssignment::Compatibility(const Mat1f &g_ab, const Mat1f &g_ij) const
 {
-    Mat1f c_ai(A, I, 0.f);
-    for(int a=0; a<A; a++) {
+    Mat1f c_ai(A_, I_, 0.f);
+    for(int a=0; a<A_; a++) {
 
         Mat1f g_ab_row = g_ab.row(a);
-        for(int i=0; i<I; i++) {
+        for(int i=0; i<I_; i++) {
 
             Mat1f g_ij_row = g_ij.row(i);
 
@@ -169,7 +169,7 @@ Mat1f GradAssignment::CompatibilityMat(const Mat1f &g_ab, const Mat1f &g_ij) con
 
                 for(size_t j=0; j<g_ij_row.total(); j++) {
 
-                    sigma_c_aibj_over_bj += CompatibilityFunc(g_ab_row(b), g_ij_row(j));
+                    sigma_c_aibj_over_bj += Compatibility(g_ab_row(b), g_ij_row(j));
                 }
             }
 
@@ -180,7 +180,7 @@ Mat1f GradAssignment::CompatibilityMat(const Mat1f &g_ab, const Mat1f &g_ij) con
     return c_ai;
 }
 
-float GradAssignment::CompatibilityFunc(float w1, float w2) const
+float GradAssignment::Compatibility(float w1, float w2) const
 {
     float c;
     if(w1 == 0.f || w2 == 0.f) {
