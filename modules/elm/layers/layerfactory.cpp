@@ -16,6 +16,7 @@
  *  2. Add it to the initialization of g_layerRegistry map.
  */
 #include "elm/layers/attentionwindow.h"
+#include "elm/layers/gradassignment.h"
 #include "elm/layers/icp.h"
 #include "elm/layers/layer_y.h"
 #include "elm/encoding/populationcode.h"
@@ -24,6 +25,7 @@
 #include "elm/layers/weightedsum.h"
 
 using boost::assign::map_list_of;
+using namespace elm;
 
 typedef Registor_<base_Layer> LayerRegistor;
 typedef Registor_<base_Layer>::Registry LayerRegistry;
@@ -36,6 +38,7 @@ typedef Registor_<base_Layer>::Registry LayerRegistry;
 
 LayerRegistry g_layerRegistry = map_list_of
         LAYER_REGISTRY_PAIR( AttentionWindow )
+        LAYER_REGISTRY_PAIR( GradAssignment )
         LAYER_REGISTRY_PAIR( ICP )
         LAYER_REGISTRY_PAIR( LayerY )
         LAYER_REGISTRY_PAIR( MutexPopulationCode )
