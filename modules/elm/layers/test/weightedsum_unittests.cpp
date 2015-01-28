@@ -14,11 +14,16 @@
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
-#include "elm/ts/ts.h"
+#include "elm/ts/layer_assertions.h"
 
 using namespace std;
 using namespace cv;
 using namespace elm;
+
+namespace {
+
+// run standard/generalized layer tests
+INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_WeightedSum_Test, Layer_TP_, WeightedSum);
 
 class WeightedSumTest : public ::testing::Test
 {
@@ -83,3 +88,5 @@ TEST_F(WeightedSumTest, Activate)
         EXPECT_EQ(a+b, response(r));
     }
 }
+
+} // annonymous namespace for test cases and fixtures

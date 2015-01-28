@@ -10,16 +10,30 @@
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
+#include "elm/ts/layer_assertions.h"
 
 using namespace std;
 using namespace cv;
+using namespace elm;
 
 /** Define parameters and I/O keys
   */
 const std::string WeightedSum::PARAM_A              = "a";
 const std::string WeightedSum::PARAM_B              = "b";
+
 const std::string WeightedSum::KEY_INPUT_STIMULUS   = "in";
 const std::string WeightedSum::KEY_OUTPUT_RESPONSE  =  "out";
+
+/** @todo why does define guard lead to undefined reference error?
+ */
+//#ifdef __WITH_GTEST
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<WeightedSum>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_INPUT_PAIR(WeightedSum::KEY_INPUT_STIMULUS)
+        ELM_ADD_OUTPUT_PAIR(WeightedSum::KEY_OUTPUT_RESPONSE)
+        ;
+//#endif
 
 void WeightedSum::Clear()
 {
