@@ -100,7 +100,7 @@ void GradAssignment::IONames(const LayerIONames &config)
 void GradAssignment::Activate(const Signal &signal)
 {
     Mat1f g_ab = signal.MostRecentMat(name_g_ab_);
-    Mat1f g_ij = signal.MostRecentMat(name_g_ab_);
+    Mat1f g_ij = signal.MostRecentMat(name_g_ij_);
 
     if(g_ab.rows != g_ab.cols) {
 

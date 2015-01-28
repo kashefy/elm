@@ -141,5 +141,67 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
     }
 }
 
+TEST_F(GradAssignmentTest, MoreNoise)
+{
+    Mat1f diag_prev;
+    g_ij_ = g_ab_.clone();    // make them equal
+
+    const int N=20;
+    for(int i=0; i<N; i++) {
+
+        Mat1f noise(g_ij_.size());
+        randn(noise, 0.f, 0.1f);
+        g_ij_ += noise;
+        g_ij_.setTo(0.f, g_ij_ < 0.f);
+        g_ij_.setTo(1.f, g_ij_ > 1.f);
+
+        for(int r=0; r<g_ij_.rows; r++) {
+
+            g_ij_(r, r) = 0.f;
+            for(int c=0; c<g_ij_.cols; c++) {
+
+                g_ij_(r, c) = g_ij_(c, r);
+            }
+        }
+
+        //cout<<g_ij_<<endl;
+
+        // add noisy test graphs to signal
+        sig_.Append(NAME_GRAPH_IJ, g_ij_);
+
+        to_->Activate(sig_);
+        to_->Response(sig_);
+
+        Mat1f m = sig_.MostRecentMat(NAME_M);
+
+
+        Mat mn, s;
+        meanStdDev(m, mn, s);
+        std::cout<<s.at<double>(0, 0)<<std::endl;
+
+        //cout<<m<<std::endl;
+
+        EXPECT_MAT_DIMS_EQ(m, Size2i(g_ab_.rows, g_ij_.rows)) << "Match matrix should be of size (A, I)";
+
+        // get diagonal values
+        Mat1f diag(1, m.rows);
+        for(int r=0; r<m.rows; r++) {
+
+            diag(r) = m(r, r);
+        }
+
+        if(i > 0) {
+
+            // compare with previous diagonal that had less noise
+//            EXPECT_LT(cv::sum(diag)[0], cv::sum(diag_prev)[0])
+//                    << "noise not affecting match matrix. where diag[i] ="
+//                    << diag << ", diag[i-1]=" << diag_prev;
+            //std::cout<<cv::sum(diag)[0] << std::endl;
+        }
+
+        diag_prev = diag.clone();
+    }
+}
+
 } // annonymous namespace for test cases and fixtures
 
