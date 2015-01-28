@@ -18,6 +18,7 @@
 #include "elm/core/cv/neighborhood.h"
 #include "elm/core/percentile.h"
 #include "elm/core/signal.h"
+#include "elm/ts/layer_assertions.h"
 
 using namespace std;
 using namespace cv;
@@ -35,6 +36,18 @@ const float SaliencyItti::DEFAULT_LAMBDA        = 10.f;
 const float SaliencyItti::DEFAULT_GAMMA         = 0.02f;
 const float SaliencyItti::DEFAULT_PS            = 0.f;    ///< [radians]
 const float SaliencyItti::DEFAULT_ORIENT_RESPONSE_PERCENTILE = 0.7f;
+
+/** @todo why does define guard lead to undefined reference error?
+ */
+//#ifdef __WITH_GTEST
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<SaliencyItti>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_INPUT_PAIR(SaliencyItti::KEY_INPUT_SCENE)
+        ELM_ADD_OUTPUT_PAIR(SaliencyItti::KEY_OUTPUT_SALIENCY)
+        ELM_ADD_OUTPUT_PAIR(SaliencyItti::KEY_OUTPUT_SALIENT_LOC)
+        ;
+//#endif
 
 SaliencyItti::~SaliencyItti()
 {

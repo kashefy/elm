@@ -16,6 +16,7 @@
 #include "elm/encoding/orientation.h"
 #include "elm/encoding/populationcode.h"
 
+namespace elm {
 /**
  * @brief Implement Itti et al.'s boottom-up saliency measure
  * @todo fix contribution of orientation conspicuty, overshadowed by intensity contrast in saliency map
@@ -78,5 +79,7 @@ protected:
 
     float percentile_orientation_response_; ///< percentile for masking low orientation responses
 };
+
+} // namespace elm
 
 #endif // ELM_LAYERS_SALIENCYITTI_H_
