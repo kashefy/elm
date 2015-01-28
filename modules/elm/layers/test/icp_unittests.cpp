@@ -22,12 +22,15 @@
 #include "elm/core/stl/stl.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layer_assertions.h"
-#include "elm/ts/ts.h"
 
 using namespace std;
 using namespace cv;
 using namespace pcl;
 using namespace elm;
+
+// run standard/generalized layer tests
+INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_ICP_Test, Layer_TP_, ICP);
+
 
 namespace {
 
@@ -67,7 +70,6 @@ protected:
 
 TEST_F(ICPInitTest, Constructor)
 {
-    EXPECT_NO_THROW(ICP to);
     EXPECT_NO_THROW(ICP to(cfg_));
 }
 
@@ -79,22 +81,6 @@ TEST_F(ICPInitTest, MissingParams)
     ICP to;
     EXPECT_NO_THROW(to.Reset(cfg_));
     EXPECT_NO_THROW(to.Reconfigure(cfg_));
-}
-
-TEST_F(ICPInitTest, MissingRequiredIONames)
-{
-    shared_ptr<base_Layer> to_ptr(new ICP()); // pointer to test object
-
-    EXPECT_THROW(to_ptr->IONames(LayerIONames()), ExceptionKeyError);
-
-    map<string, pair<bool, string> > io_pairs; // false for input, true for output
-    io_pairs[ICP::KEY_INPUT_POINT_CLOUD_SRC    ] = make_pair(0, NAME_INPUT_POINT_CLOUD_SRC);
-    io_pairs[ICP::KEY_INPUT_POINT_CLOUD_TARGET ] = make_pair(0, NAME_INPUT_POINT_CLOUD_TARGET);
-    io_pairs[ICP::KEY_OUTPUT_CONVERGENCE       ] = make_pair(1, NAME_OUTPUT_CONVERGENCE);
-    io_pairs[ICP::KEY_OUTPUT_SCORE             ] = make_pair(1, NAME_OUTPUT_SCORE);
-    io_pairs[ICP::KEY_OUTPUT_TRANSFORMATION    ] = make_pair(1, NAME_OUTPUT_TRANSFORMATION);
-
-    ValidateRequiredIONames(io_pairs, to_ptr);
 }
 
 TEST_F(ICPInitTest, CreateWithFactory)

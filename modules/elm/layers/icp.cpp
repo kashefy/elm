@@ -16,6 +16,7 @@
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
+#include "elm/ts/layer_assertions.h"
 
 using namespace std;
 using namespace cv;
@@ -29,6 +30,20 @@ const string ICP::KEY_INPUT_POINT_CLOUD_TARGET  = "target";
 const string ICP::KEY_OUTPUT_CONVERGENCE        = "convergence";
 const string ICP::KEY_OUTPUT_SCORE              = "score";
 const string ICP::KEY_OUTPUT_TRANSFORMATION     = "transformation";
+
+/** @todo why does define guard lead to undefined reference error?
+ */
+//#ifdef __WITH_GTEST
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<ICP>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_INPUT_PAIR(ICP::KEY_INPUT_POINT_CLOUD_SRC)
+        ELM_ADD_INPUT_PAIR(ICP::KEY_INPUT_POINT_CLOUD_TARGET)
+        ELM_ADD_OUTPUT_PAIR(ICP::KEY_OUTPUT_CONVERGENCE)
+        ELM_ADD_OUTPUT_PAIR(ICP::KEY_OUTPUT_SCORE)
+        ELM_ADD_OUTPUT_PAIR(ICP::KEY_OUTPUT_TRANSFORMATION)
+        ;
+//#endif
 
 ICP::ICP()
 {
