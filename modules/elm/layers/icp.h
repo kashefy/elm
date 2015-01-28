@@ -20,6 +20,8 @@
 
 #include "elm/core/base_Layer.h"
 
+namespace elm {
+
 /**
  * @brief class for an iterative-closest-point layer
  * This is basciallly a wrapper around PCL's ICP implementation
@@ -68,6 +70,9 @@ protected:
     float fitness_score_;               ///< fitness score to most recent stimuli
     cv::Mat1f transformation_;          ///< final estimated transformation matrix
 };
+
+} // namespace elm
+
 #endif  // __WITH_PCL
 
 #endif // ELM_LAYERS_ICP_H_
