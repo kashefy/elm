@@ -11,14 +11,27 @@
 #include "elm/core/layerconfig.h"
 #include "elm/core/boost/ptree_utils.h"
 #include "elm/core/signal.h"
+#include "elm/ts/layer_assertions.h"
 
 using std::string;
+using namespace elm;
 
 const string LayerY::PARAM_DELTA_T_MSEC = "dt";
 const string LayerY::PARAM_FREQ         = "f";
 
 const string LayerY::KEY_INPUT_STIMULUS = "stimulus";
 const string LayerY::KEY_OUTPUT_SPIKES  = "spikes";
+
+/** @todo why does define guard lead to undefined reference error?
+ */
+//#ifdef __WITH_GTEST
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<LayerY>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_INPUT_PAIR(LayerY::KEY_INPUT_STIMULUS)
+        ELM_ADD_OUTPUT_PAIR(LayerY::KEY_OUTPUT_SPIKES)
+        ;
+//#endif
 
 LayerY::LayerY()
     : base_Layer(),
