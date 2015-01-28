@@ -43,7 +43,7 @@ protected:
 
         to_ = LayerFactory::CreateShared("SinkhornBalancing", cfg, io);
 
-        m_ = Mat1f(3, 4);
+        m_ = Mat1f(4, 3);
         randn(m_, 0.f, 1.f);
         m_ = abs(m_);
 
@@ -61,13 +61,67 @@ protected:
     Signal sig_;
 };
 
+TEST_F(SinkhornBalancingTest, Dims)
+{
+    for(int r=0; r<11; r++) {
+
+        for(int c=0; c<11; c++) {
+
+            m_ = Mat1f::ones(r, c);
+
+            sig_.Append(NAME_IN_M, m_);
+
+            to_->Activate(sig_);
+            to_->Response(sig_);
+
+            Mat1f out = sig_.MostRecentMat(NAME_OUT_M);
+
+            EXPECT_MAT_DIMS_EQ(out, m_) << "Output's dims should match those of input.";
+        }
+    }
+}
+
+TEST_F(SinkhornBalancingTest, Empty)
+{
+    sig_.Append(NAME_IN_M, Mat1f());
+    to_->Activate(sig_);
+    to_->Response(sig_);
+
+    Mat1f out = sig_.MostRecentMat(NAME_OUT_M);
+    EXPECT_TRUE(out.empty());
+    EXPECT_FALSE(static_cast<bool>(sig_.MostRecentMat(NAME_OUT_CONVERGENCE)(0)));
+}
+
+TEST_F(SinkhornBalancingTest, OutputSum)
+{
+    for(int r=1; r<11; r++) {
+
+        for(int c=1; c<11; c++) {
+
+            m_ = Mat1f(r, c);
+            randn(m_, 0.f, 1.f);
+            m_ = abs(m_);
+
+            sig_.Append(NAME_IN_M, m_);
+
+            to_->Activate(sig_);
+            to_->Response(sig_);
+
+            Mat1f out = sig_.MostRecentMat(NAME_OUT_M);
+
+            EXPECT_FLOAT_EQ(c, sum(out)[0]);
+        }
+    }
+}
+
 TEST_F(SinkhornBalancingTest, ActivateAndResponse)
 {
     to_->Activate(sig_);
     to_->Response(sig_);
 
+    Mat1f out = sig_.MostRecentMat(NAME_OUT_M);
 
-
+    EXPECT_FLOAT_EQ(m_.cols, sum(out)[0]) << "output did not some up to expected value.";
 }
 
 

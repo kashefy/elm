@@ -77,8 +77,13 @@ void SinkhornBalancing::Activate(const Signal &signal)
     m_ = signal.MostRecentMat(name_in_m_);
 
     is_converged = false;
-    int i = 0;
 
+    if(m_.empty()) {
+
+        return;
+    }
+
+    int i = 0;
     // begin C
     while(!is_converged && i < max_iter_) {
 
