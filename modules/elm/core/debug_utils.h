@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+namespace elm {
+
 /** @brief Macro for easy printing.
  * Prints:
  * <variable name>:newline
@@ -17,5 +19,7 @@
  * @param[in] variable to print.
   */
 #define COUT_VAR(x) std::cout << #x << ":" << std::endl << x << std::endl;
+
+} // namespace elm
 
 #endif // ELM_CORE_DEBUG_UTILS_H_
