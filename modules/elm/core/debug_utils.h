@@ -20,6 +20,11 @@ namespace elm {
   */
 #define COUT_VAR(x) std::cout << #x << ":" << std::endl << x << std::endl;
 
+/** @brief Macro to print two variables/expressions in one call.
+ * A little something for the lazy.
+ */
+#define COUT_VAR(x, y) COUT_VAR(x); COUT_VAR(y)
+
 } // namespace elm
 
 #endif // ELM_CORE_DEBUG_UTILS_H_
