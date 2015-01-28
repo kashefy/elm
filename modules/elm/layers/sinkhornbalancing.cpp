@@ -94,6 +94,8 @@ bool SinkhornBalancing::RowColNormalization(Mat1f &m, int max_iter, float epsilo
         return is_m_converged;
     }
 
+    Mat1f m_ai1 = m;
+
     int i = 0;
 
     // begin C
@@ -101,19 +103,20 @@ bool SinkhornBalancing::RowColNormalization(Mat1f &m, int max_iter, float epsilo
 
         // update m by normalizing across all rows
         Mat1f row_sums_i;
-        reduce(m, row_sums_i, 1, REDUCE_SUM);
-        row_sums_i = repeat(row_sums_i, 1, m.cols);
-        Mat1f m_ai1 = m/row_sums_i;
+        reduce(m_ai1, row_sums_i, 1, REDUCE_SUM);
+        row_sums_i = repeat(row_sums_i, 1, m_ai1.cols);
+\
+        m_ai1 /= row_sums_i;
 
         // update m by normalizing across all columns
         Mat1f col_sums_i;
         reduce(m_ai1, col_sums_i, 0, REDUCE_SUM);
         col_sums_i = repeat(col_sums_i, m_ai1.rows, 1);
 
-        Mat1f tmp = m_ai1/col_sums_i;
+        m_ai1 /= col_sums_i;
 
-        is_m_converged = sum(abs(tmp-m))[0] < epsilon;
-        m = tmp;
+        is_m_converged = sum(abs(m_ai1-m))[0] < epsilon;
+        m = m_ai1;
 
         i++;
     } // end C
