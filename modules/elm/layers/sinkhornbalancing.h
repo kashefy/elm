@@ -48,6 +48,13 @@ public:
 
     virtual void Response(Signal &signal);
 
+    /**
+     * @brief Apply Sinkhorn's balancing algroithm for iterative row-col normalization
+     * @param m_ai0 modified in-place
+     * @return true on convergence
+     */
+    static bool RowColNormalization(cv::Mat1f &m, int max_iter, float epsilon);
+
 protected:
     std::string name_in_m_;     ///< name of input in signal object
     std::string name_out_m_;    ///< destination name for output

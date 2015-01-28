@@ -76,35 +76,7 @@ void SinkhornBalancing::Activate(const Signal &signal)
 {
     m_ = signal.MostRecentMat(name_in_m_);
 
-    is_converged = false;
-
-    if(m_.empty()) {
-
-        return;
-    }
-
-    int i = 0;
-    // begin C
-    while(!is_converged && i < max_iter_) {
-
-        // update m by normalizing across all rows
-        Mat1f row_sums_i;
-        reduce(m_, row_sums_i, 1, REDUCE_SUM);
-        row_sums_i = repeat(row_sums_i, 1, m_.cols);
-        Mat1f m1 = m_/row_sums_i;
-
-        // update m by normalizing across all columns
-        Mat1f col_sums_i;
-        reduce(m1, col_sums_i, 0, REDUCE_SUM);
-        col_sums_i = repeat(col_sums_i, m1.rows, 1);
-
-        Mat1f tmp = m1/col_sums_i;
-
-        is_converged = sum(abs(tmp-m_))[0] < epsilon_;
-        m_ = tmp;
-
-        i++;
-    } // end C
+    is_converged = RowColNormalization(m_, max_iter_, epsilon_);
 }
 
 void SinkhornBalancing::Response(Signal &signal)
@@ -113,4 +85,38 @@ void SinkhornBalancing::Response(Signal &signal)
     signal.Append(name_out_convergence_, Mat1f(1, 1, static_cast<float>(is_converged)));
 }
 
+bool SinkhornBalancing::RowColNormalization(Mat1f &m, int max_iter, float epsilon)
+{
+    bool is_m_converged = false;
 
+    if(m.empty()) {
+
+        return is_m_converged;
+    }
+
+    int i = 0;
+
+    // begin C
+    while(!is_m_converged && i < max_iter) {
+
+        // update m by normalizing across all rows
+        Mat1f row_sums_i;
+        reduce(m, row_sums_i, 1, REDUCE_SUM);
+        row_sums_i = repeat(row_sums_i, 1, m.cols);
+        Mat1f m_ai1 = m/row_sums_i;
+
+        // update m by normalizing across all columns
+        Mat1f col_sums_i;
+        reduce(m_ai1, col_sums_i, 0, REDUCE_SUM);
+        col_sums_i = repeat(col_sums_i, m_ai1.rows, 1);
+
+        Mat1f tmp = m_ai1/col_sums_i;
+
+        is_m_converged = sum(abs(tmp-m))[0] < epsilon;
+        m = tmp;
+
+        i++;
+    } // end C
+
+    return is_m_converged;
+}

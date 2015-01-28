@@ -11,6 +11,7 @@
 
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
+#include "elm/layers/sinkhornbalancing.h"
 #include "elm/ts/layerattr_.h"
 
 using namespace std;
@@ -121,8 +122,10 @@ void GradAssignment::Activate(const Signal &signal)
 
     bool is_m_converged = false;
 
+    Mat1f m_ai_hat = Mat1f(A_+1, I_+1, 1.f+EPSILON); // add slack variables to be more robust to outliers
 
-    m_ai_ = Mat1f(A_, I_, 1.f+EPSILON);
+    m_ai_ = m_ai_hat(Rect2i(0, 0, A_, I_));
+
     float beta = beta_0_;
 
     int nb_iterations_0 = 0;
@@ -132,17 +135,20 @@ void GradAssignment::Activate(const Signal &signal)
         nb_iterations_0 = 0;
         while(!is_m_converged && nb_iterations_0 < max_iter_per_beta_) { // B
 
-            Mat1f q_ai;      ///< partial derivative of Ewg with respect to M_ai
-            multiply(c_ai, sum(m_ai_), q_ai);
+            Mat1f m_ai_hat_0 = m_ai_hat.clone();
+
+            Mat1f q_ai(A_, I_); ///< partial derivative of E_wg with respect to M_ai
+
+            multiply(c_ai, m_ai_, q_ai);
 
             // softassign
-            Mat1f m_ai0;
-            cv::exp(beta*q_ai, m_ai0);
+            exp(beta*q_ai, m_ai_);
 
-            is_m_converged = SinkhornBalancing(m_ai); // C
+            is_m_converged = SinkhornBalancing::RowColNormalization(m_ai_hat, max_iter_sinkhorn_, EPSILON); // C
+
+            is_m_converged = sum(abs(m_ai_hat_0-m_ai_hat_0))[0] < EPSILON;
 
             nb_iterations_0++;
-
         } // end B
 
         beta *= beta_rate_;
@@ -167,9 +173,15 @@ Mat1f GradAssignment::Compatibility(const Mat1f &g_ab, const Mat1f &g_ij) const
             float sigma_c_aibj_over_bj = 0.f;
             for(size_t b=0; b<g_ab_row.total(); b++) {
 
-                for(size_t j=0; j<g_ij_row.total(); j++) {
+                float g_ab_row_at_b = g_ab_row(b);
 
-                    sigma_c_aibj_over_bj += Compatibility(g_ab_row(b), g_ij_row(j));
+                // skip for zero-weighted edges.
+                if(g_ab_row_at_b != 0.f) {
+
+                    for(size_t j=0; j<g_ij_row.total(); j++) {
+
+                        sigma_c_aibj_over_bj += Compatibility(g_ab_row_at_b, g_ij_row(j));
+                    }
                 }
             }
 
@@ -191,34 +203,4 @@ float GradAssignment::Compatibility(float w1, float w2) const
         c = 1-3.f*abs(w1-w2);
     }
     return c;
-}
-
-bool GradAssignment::SinkhornBalancing(Mat1f &m_ai0) const
-{
-    bool is_m_converged = false;
-    int i = 0;
-
-    // begin C
-    while(!is_m_converged && i < max_iter_sinkhorn_) {
-
-        // update m by normalizing across all rows
-        Mat1f row_sums_i;
-        reduce(m_ai0, row_sums_i, 1, REDUCE_SUM);
-        row_sums_i = repeat(row_sums_i, 1, m_ai0.cols);
-        Mat1f m_ai1 = m_ai0/row_sums_i;
-
-        // update m by normalizing across all columns
-        Mat1f col_sums_i;
-        reduce(m_ai1, col_sums_i, 0, REDUCE_SUM);
-        col_sums_i = repeat(col_sums_i, m_ai0.rows, 1);
-
-        Mat1f tmp = m_ai1/col_sums_i;
-
-        is_m_converged = sum(abs(tmp-m_ai0))[0] < EPSILON;
-        m_ai0 = tmp;
-
-        i++;
-    } // end C
-
-    return is_m_converged;
 }
