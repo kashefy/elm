@@ -21,6 +21,7 @@
 #include "elm/layers/layer_y.h"
 #include "elm/encoding/populationcode.h"
 #include "elm/layers/saliencyitti.h"
+#include "elm/layers/sinkhornbalancing.h"
 #include "elm/layers/triangulation.h"
 #include "elm/layers/weightedsum.h"
 
@@ -43,6 +44,7 @@ LayerRegistry g_layerRegistry = map_list_of
         LAYER_REGISTRY_PAIR( LayerY )
         LAYER_REGISTRY_PAIR( MutexPopulationCode )
         LAYER_REGISTRY_PAIR( SaliencyItti )
+        LAYER_REGISTRY_PAIR( SinkhornBalancing )
         LAYER_REGISTRY_PAIR( Triangulation )
         LAYER_REGISTRY_PAIR( WeightedSum )
         ; ///< <-- add new layer to registry here

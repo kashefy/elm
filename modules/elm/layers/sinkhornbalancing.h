@@ -1,0 +1,66 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, Elm Library Project
+// 3-clause BSD License
+//
+//M*/
+#ifndef ELM_LAYERS_SINKHORNBALANCING_H_
+#define ELM_LAYERS_SINKHORNBALANCING_H_
+
+#include <string>
+
+#include <opencv2/core.hpp>
+
+#include "elm/core/base_Layer.h"
+
+namespace elm {
+/**
+ * @brief Layer for implementing Singhorn's balancing algorithm
+ * @todo find lighter representation, a full layer is overkill
+ * @cites inkhorn1964
+ */
+class SinkhornBalancing : public base_Layer
+{
+public:
+    // params
+    static const std::string PARAM_EPSILON;     ///< upper excl. convergence threshold
+    static const std::string PARAM_MAX_ITER;    ///< max. no. of iterations allowed for Sinkhorn's balancing method
+
+    // I/O Names
+    static const std::string KEY_INPUT_MAT;             ///< key to input mat
+    static const std::string KEY_OUTPUT_MAT_BALANCED;   ///< key to output mat
+    static const std::string KEY_OUTPUT_IS_CONVERGED;   ///< key to convergence result
+
+    SinkhornBalancing();
+
+    SinkhornBalancing(const LayerConfig &cfg);
+
+    virtual void Clear();
+
+    virtual void Reset(const LayerConfig &config);
+
+    virtual void Reconfigure(const LayerConfig &config);
+
+    virtual void IONames(const LayerIONames &io);
+
+    virtual void Activate(const Signal &signal);
+
+    virtual void Response(Signal &signal);
+
+protected:
+    std::string name_in_m_;     ///< name of input in signal object
+    std::string name_out_m_;    ///< destination name for output
+    std::string name_out_convergence_;    ///< destination name for convergence result
+
+    cv::Mat1f m_;
+
+    bool is_converged;  ///< convergence result
+
+    float epsilon_; ///< @see PARAM_EPSILON
+    int max_iter_;  ///< @see PARAM_MAX_ITER
+};
+
+} // namespace elm
+
+#endif // ELM_LAYERS_SINKHORNBALANCING_H_
