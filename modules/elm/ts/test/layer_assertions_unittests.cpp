@@ -42,12 +42,6 @@ TEST(LayerAssertionsNoReqIONamesTest, EmptyIONames)
     EXPECT_NO_THROW(to_ptr->IONames(LayerIONames()));
 }
 
-TEST(LayerAssertionsReqIONamesTest, NoRequiredIONames)
-{
-    shared_ptr<base_Layer> to_ptr(new DummyChildLayer());
-    ValidateRequiredIONames(MapIONamesB(), to_ptr);
-}
-
 const string NAME_IN        = "i";
 const string NAME_OUT       = "o";
 const string NAME_OPT_OUT   = "oo";
@@ -78,35 +72,17 @@ const string DummyChildLayerWithReqIONames::KEY_INPUT_IN        = "in";
 const string DummyChildLayerWithReqIONames::KEY_OUTPUT_OUT      = "out";
 const string DummyChildLayerWithReqIONames::KEY_OUTPUT_OPT_OUT  = "optout";
 
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<DummyChildLayerWithReqIONames>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_INPUT_PAIR(DummyChildLayerWithReqIONames::KEY_INPUT_IN)
+        ELM_ADD_OUTPUT_PAIR(DummyChildLayerWithReqIONames::KEY_OUTPUT_OUT)
+        ;
+
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(DummyChildLayerWithReqIONames);
 
 TEST(LayerAssertionsReqIONamesTest, EmptyIONames)
 {
     shared_ptr<base_Layer> to_ptr(new DummyChildLayerWithReqIONames());
     EXPECT_THROW(to_ptr->IONames(LayerIONames()), ExceptionKeyError);
-}
-
-TEST(LayerAssertionsReqIONamesTest, RequiredIONames)
-{
-    shared_ptr<base_Layer> to_ptr(new DummyChildLayerWithReqIONames());
-
-    map<string, pair<bool, string> > io_pairs; // false for input, true for output
-    io_pairs[DummyChildLayerWithReqIONames::KEY_INPUT_IN    ] = make_pair(0, NAME_IN);
-    io_pairs[DummyChildLayerWithReqIONames::KEY_OUTPUT_OUT ] = make_pair(1, NAME_OUT);
-
-    ValidateRequiredIONames(io_pairs, to_ptr);
-}
-
-/**
- * @brief test with required + optional IO names
- */
-TEST(LayerAssertionsReqIONamesTest, AllIONames)
-{
-    shared_ptr<base_Layer> to_ptr(new DummyChildLayerWithReqIONames());
-
-    map<string, pair<bool, string> > io_pairs; // false for input, true for output
-    io_pairs[DummyChildLayerWithReqIONames::KEY_INPUT_IN    ] = make_pair(0, NAME_IN);
-    io_pairs[DummyChildLayerWithReqIONames::KEY_OUTPUT_OUT  ] = make_pair(1, NAME_OUT);
-    io_pairs[DummyChildLayerWithReqIONames::KEY_OUTPUT_OPT_OUT ] = make_pair(1, NAME_OPT_OUT);
-
-    ValidateRequiredIONames(MapIONamesB(), to_ptr);
 }

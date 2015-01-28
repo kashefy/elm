@@ -11,7 +11,7 @@
 #include "elm/core/layerconfig.h"
 #include "elm/core/boost/ptree_utils.h"
 #include "elm/core/signal.h"
-#include "elm/ts/layer_assertions.h"
+#include "elm/ts/layerattr_.h"
 
 using std::string;
 using namespace elm;

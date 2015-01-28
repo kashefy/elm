@@ -10,7 +10,7 @@
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
-#include "elm/ts/layer_assertions.h"
+#include "elm/ts/layerattr_.h"
 
 using namespace std;
 using namespace cv;
