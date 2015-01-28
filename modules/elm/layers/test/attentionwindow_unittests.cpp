@@ -16,6 +16,7 @@
 namespace bpt=boost::property_tree;
 using namespace std;
 using namespace cv;
+using namespace elm;
 
 namespace {
 

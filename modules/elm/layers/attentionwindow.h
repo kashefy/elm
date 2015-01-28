@@ -15,6 +15,7 @@
 #include "elm/core/base_Layer.h"
 #include "elm/core/layerconfig.h"
 
+namespace elm {
 /**
  * @brief layer for sampling patch around attended location (e.g. salient location)
  * @todo Figure out where inhibition of return goes.
@@ -71,5 +72,7 @@ protected:
     cv::Mat1f   window_;        ///< window of attention
     cv::Point2i tl_;     ///< window's top-left corner
 };
+
+} // namespace elm
 
 #endif // ELM_LAYERS_ATTENTIONWINDOW_H_

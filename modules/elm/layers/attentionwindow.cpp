@@ -14,6 +14,7 @@
 
 using namespace cv;
 using namespace std;
+using namespace elm;
 
 const string AttentionWindow::PARAM_WIN_COLS = "cols";
 const string AttentionWindow::PARAM_WIN_ROWS = "rows";
