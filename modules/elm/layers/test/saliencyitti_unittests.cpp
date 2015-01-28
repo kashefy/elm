@@ -22,9 +22,7 @@ using namespace elm;
 
 namespace {
 
-// run standard/generalized layer tests
-INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_SaliencyItti_Test, Layer_TP_, SaliencyItti);
-
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(SaliencyItti);
 
 /**
  * @brief class for drawing L shapes to use as simple test data

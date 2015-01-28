@@ -25,8 +25,7 @@ const string NAME_LOC   = "loc";
 const string NAME_TL    = "tl";
 const string NAME_WIN   = "win";
 
-// run standard/generalized layer tests
-INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_AttentionWindow_Test, Layer_TP_, AttentionWindow);
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(AttentionWindow);
 
 /**
  * @brief testing fixture class around AttentionWindow layer initiaization

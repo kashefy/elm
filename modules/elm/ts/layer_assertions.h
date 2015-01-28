@@ -146,4 +146,8 @@ REGISTER_TYPED_TEST_CASE_P(Layer_TP_,
                            RequiredIONamesValidation
                            ); ///< register additional typed_test_p (i.e. unit test) routines here
 
+/** Macro for easier registration for subscribing layers for executing standard/generalized layer tests
+ */
+#define ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(Layer) INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_ ## Layer ## _Test, Layer_TP_, Layer)
+
 #endif // ELM_TS_LAYER_UTILS_H_

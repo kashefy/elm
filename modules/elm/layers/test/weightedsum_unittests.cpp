@@ -22,8 +22,7 @@ using namespace elm;
 
 namespace {
 
-// run standard/generalized layer tests
-INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_WeightedSum_Test, Layer_TP_, WeightedSum);
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(WeightedSum);
 
 class WeightedSumTest : public ::testing::Test
 {

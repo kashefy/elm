@@ -35,8 +35,7 @@ using namespace elm;
 
 namespace {
 
-// run standard/generalized layer tests
-INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_Triangulation_Test, Layer_TP_, Triangulation);
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(Triangulation);
 
 const bfs::path TEST_DIR("testdata");
 const bfs::path TEST_PATH_PCD = TEST_DIR/"bun0.pcd";

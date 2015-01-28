@@ -27,8 +27,7 @@ const string NAME_M        = "m";
 
 namespace {
 
-// run standard/generalized layer tests
-INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_GradAssignment_Test, Layer_TP_, GradAssignment);
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(GradAssignment);
 
 class GradAssignmentTest : public ::testing::Test
 {

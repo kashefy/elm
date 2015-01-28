@@ -30,8 +30,7 @@ using namespace elm;
 
 namespace {
 
-// run standard/generalized layer tests
-INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_ICP_Test, Layer_TP_, ICP);
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(ICP);
 
 const string NAME_INPUT_POINT_CLOUD_SRC     = "src";    ///< key to source cloud
 const string NAME_INPUT_POINT_CLOUD_TARGET  = "target"; ///< key to target cloud

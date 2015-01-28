@@ -18,8 +18,7 @@ using boost::property_tree::ptree_bad_path;
 
 namespace {
 
-// run standard/generalized layer tests
-INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_LayerY_Test, Layer_TP_, LayerY);
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(LayerY);
 
 const std::string NAME_STIMULUS = "in";
 const std::string NAME_SPIKES   = "out";
