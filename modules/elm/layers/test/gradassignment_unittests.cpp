@@ -25,6 +25,8 @@ const string NAME_GRAPH_AB = "G_ab";
 const string NAME_GRAPH_IJ = "g_ij";
 const string NAME_M        = "m";
 
+namespace {
+
 // run standard/generalized layer tests
 INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_GradAssignment_Test, Layer_TP_, GradAssignment);
 
@@ -131,5 +133,7 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
             }
         }
     }
-
 }
+
+} // annonymous namespace for test cases and fixtures
+
