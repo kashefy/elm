@@ -22,6 +22,8 @@
 
 #include "elm/core/base_Layer.h"
 
+namespace elm {
+
 /**
  * @brief The triangulation layer wraps around the greedy projection algorithm usign pcl @cite Marton09ICRA
  */
@@ -76,6 +78,8 @@ protected:
     cv::Mat1f vertices_;            ///< populated with vertices of reconstructed triangular mesh
     pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;   ///< greedy projection triangulation from point cloud
 };
+
+} // namespace elm
 
 #endif // __WITH_PCL
 

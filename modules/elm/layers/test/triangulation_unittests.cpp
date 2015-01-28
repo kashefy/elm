@@ -35,6 +35,9 @@ using namespace elm;
 
 namespace {
 
+// run standard/generalized layer tests
+INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_Triangulation_Test, Layer_TP_, Triangulation);
+
 const bfs::path TEST_DIR("testdata");
 const bfs::path TEST_PATH_PCD = TEST_DIR/"bun0.pcd";
 
@@ -68,7 +71,6 @@ protected:
 
 TEST_F(TriangulationInitTest, Constructor)
 {
-    EXPECT_NO_THROW(Triangulation to);
     EXPECT_NO_THROW(Triangulation to(cfg_));
 }
 
@@ -82,26 +84,12 @@ TEST_F(TriangulationInitTest, MissingParams)
     EXPECT_NO_THROW(to.Reconfigure(cfg_));
 }
 
-TEST_F(TriangulationInitTest, MissingRequiredIONames)
-{
-    shared_ptr<base_Layer> to_ptr(new Triangulation()); // pointer to test object
-
-    EXPECT_THROW(to_ptr->IONames(LayerIONames()), ExceptionKeyError);
-
-    map<string, pair<bool, string> > io_pairs; // false for input, true for output
-    io_pairs[Triangulation::KEY_INPUT_POINT_CLOUD]  = make_pair(0, NAME_INPUT_POINT_CLOUD);
-    io_pairs[Triangulation::KEY_OUTPUT_VERTICES]    = make_pair(1, NAME_OUTPUT_VERTICES);
-
-    ValidateRequiredIONames(io_pairs, to_ptr);
-}
-
 TEST_F(TriangulationInitTest, CreateWithFactory)
 {
     shared_ptr<base_Layer> to_ptr = LayerFactory::CreateShared("Triangulation", cfg_, io_names_);
 
     EXPECT_TRUE(bool(to_ptr));
 }
-
 
 /**
  * @brief Test the live methods assuming a sucessful initialization

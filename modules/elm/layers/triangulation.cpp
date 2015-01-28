@@ -23,6 +23,7 @@
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
+#include "elm/ts/layer_assertions.h"
 
 using namespace std;
 using namespace cv;
@@ -50,6 +51,17 @@ const bool  Triangulation::DEFAULT_IS_NORMAL_CONSISTENCY    = false;
 // initialize I/O names
 const string Triangulation::KEY_INPUT_POINT_CLOUD   = "cloud";
 const string Triangulation::KEY_OUTPUT_VERTICES     = "vertices";
+
+/** @todo why does define guard lead to undefined reference error?
+ */
+//#ifdef __WITH_GTEST
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<Triangulation>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_INPUT_PAIR(Triangulation::KEY_INPUT_POINT_CLOUD)
+        ELM_ADD_OUTPUT_PAIR(Triangulation::KEY_OUTPUT_VERTICES)
+        ;
+//#endif
 
 Triangulation::Triangulation()
     : base_Layer()
