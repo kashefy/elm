@@ -82,6 +82,13 @@ protected:
      */
     virtual float Compatibility(float w1, float w2) const;
 
+    /**
+     * @brief Apply Sinkhorn's baancing algroithm for iterative row-col normalization
+     * @param m_ai0 modified in-place
+     * @return true on convergence
+     */
+    virtual bool SinkhornBalancing(cv::Mat1f &m_ai0) const;
+
     static const float EPSILON; ///< small no. epsilon
 
     std::string name_g_ab_;     ///< name of graph ab adj. matrix in signal object

@@ -9,7 +9,9 @@
 
 #include <gtest/gtest.h>
 
-#include <boost/graph/adjacency_list.hpp>
+//#include <boost/graph/adjacency_list.hpp>
+
+#include <opencv2/highgui.hpp>
 
 #include "elm/core/signal.h"
 #include "elm/core/layerconfig.h"
@@ -20,7 +22,7 @@ using namespace std;
 using namespace boost;
 using namespace cv;
 using namespace elm;
-namespace bg=boost::graph;
+//namespace bg=boost::graph;
 
 const float BETA            = 0.5f;
 const float BETA_MAX        = 10.f;
@@ -140,7 +142,6 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
         }
     }
 }
-
 TEST_F(GradAssignmentTest, MoreNoise)
 {
     Mat1f diag_prev;
@@ -180,6 +181,9 @@ TEST_F(GradAssignmentTest, MoreNoise)
         std::cout<<s.at<double>(0, 0)<<std::endl;
 
         //cout<<m<<std::endl;
+
+        cv::imshow("m", m*255);
+        cv::waitKey();
 
         EXPECT_MAT_DIMS_EQ(m, Size2i(g_ab_.rows, g_ij_.rows)) << "Match matrix should be of size (A, I)";
 

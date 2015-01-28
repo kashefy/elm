@@ -7,6 +7,8 @@
 //M*/
 #include "elm/layers/gradassignment.h"
 
+#include <iostream>
+
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layerattr_.h"
@@ -124,7 +126,6 @@ void GradAssignment::Activate(const Signal &signal)
     float beta = beta_0_;
 
     int nb_iterations_0 = 0;
-    int nb_iterations_1 = 0;
 
     while(beta < beta_max_) { // A
 
@@ -132,34 +133,13 @@ void GradAssignment::Activate(const Signal &signal)
         while(!is_m_converged && nb_iterations_0 < max_iter_per_beta_) { // B
 
             Mat1f q_ai;      ///< partial derivative of Ewg with respect to M_ai
-            float sum_bj_Mbj = cv::sum(m_ai_)[0];
-            cv::multiply(c_ai, sum_bj_Mbj, q_ai);
+            multiply(c_ai, sum(m_ai_), q_ai);
 
             // softassign
             Mat1f m_ai0;
             cv::exp(beta*q_ai, m_ai0);
 
-            nb_iterations_1 = 0;
-            while(!is_m_converged && nb_iterations_1 < max_iter_sinkhorn_) { // C
-
-                // update m by normalizing across all rows
-                Mat1f row_sums_i;
-                reduce(m_ai0, row_sums_i, 1, cv::REDUCE_SUM);
-                row_sums_i = cv::repeat(row_sums_i, 1, m_ai0.cols);
-                Mat1f m_ai1 = m_ai0/row_sums_i;
-
-                // update m by normalizing across all columns
-                Mat1f col_sums_i;
-                reduce(m_ai1, col_sums_i, 0, cv::REDUCE_SUM);
-                col_sums_i = cv::repeat(col_sums_i, m_ai0.rows, 1);
-                m_ai0 = m_ai1/col_sums_i;
-
-                nb_iterations_1++;
-                is_m_converged = cv::sum(abs(m_ai_-m_ai0))[0] < EPSILON;
-
-                m_ai_ = m_ai0;
-
-            } // end C
+            is_m_converged = SinkhornBalancing(m_ai); // C
 
             nb_iterations_0++;
 
@@ -211,4 +191,34 @@ float GradAssignment::Compatibility(float w1, float w2) const
         c = 1-3.f*abs(w1-w2);
     }
     return c;
+}
+
+bool GradAssignment::SinkhornBalancing(Mat1f &m_ai0) const
+{
+    bool is_m_converged = false;
+    int i = 0;
+
+    // begin C
+    while(!is_m_converged && i < max_iter_sinkhorn_) {
+
+        // update m by normalizing across all rows
+        Mat1f row_sums_i;
+        reduce(m_ai0, row_sums_i, 1, REDUCE_SUM);
+        row_sums_i = repeat(row_sums_i, 1, m_ai0.cols);
+        Mat1f m_ai1 = m_ai0/row_sums_i;
+
+        // update m by normalizing across all columns
+        Mat1f col_sums_i;
+        reduce(m_ai1, col_sums_i, 0, REDUCE_SUM);
+        col_sums_i = repeat(col_sums_i, m_ai0.rows, 1);
+
+        Mat1f tmp = m_ai1/col_sums_i;
+
+        is_m_converged = sum(abs(tmp-m_ai0))[0] < EPSILON;
+        m_ai0 = tmp;
+
+        i++;
+    } // end C
+
+    return is_m_converged;
 }
