@@ -2,7 +2,6 @@
 
 #include <gtest/gtest.h>
 
-#include <boost/assign/list_of.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
 #include "elm/core/signal.h"
@@ -15,7 +14,6 @@ using namespace boost;
 using namespace cv;
 using namespace elm;
 namespace bg=boost::graph;
-using boost::assign::map_list_of;
 
 const float BETA            = 0.5f;
 const float BETA_MAX        = 10.f;
@@ -26,9 +24,6 @@ const int MAX_ITER_SINKHORN = 30;
 const string NAME_GRAPH_AB = "G_ab";
 const string NAME_GRAPH_IJ = "g_ij";
 const string NAME_M        = "m";
-
-template<>
-elm::MapIONames LayerAttr_<elm::GradAssignment >::io_pairs;
 
 // run standard/generalized layer tests
 INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_GradAssignment_Test, Layer_TP_, GradAssignment);

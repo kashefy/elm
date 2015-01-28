@@ -71,8 +71,8 @@ struct LayerAttr_
 
 /** Macros for populating LayerAttr_::io_pairs member by client layer in its respective unittest source file
  */
-#define ELM_ADD_INPUT_PAIR(key)   ( key, std::make_pair(LayerIOKeyType::INPUT, "n"+key) )
-#define ELM_ADD_OUTPUT_PAIR(key)  ( key, std::make_pair(LayerIOKeyType::OUTPUT, "n"+key) )
+#define ELM_ADD_INPUT_PAIR(key)   ( key, std::make_pair(elm::LayerIOKeyType::INPUT, "n"+key) )
+#define ELM_ADD_OUTPUT_PAIR(key)  ( key, std::make_pair(elm::LayerIOKeyType::OUTPUT, "n"+key) )
 
 /**
  * @brief A type-parameterized test case for repeating tests with different layer types
