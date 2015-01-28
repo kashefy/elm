@@ -7,17 +7,10 @@
 //M*/
 #include "elm/ts/layer_assertions.h"
 
-#include "gtest/gtest.h"
-
-#include "elm/core/base_Layer.h"
-#include "elm/core/exception.h"
-#include "elm/core/layerconfig.h"
-#include "elm/core/stl/stl.h"
-
 using namespace std;
 using namespace elm;
 
-void elm::ValidateRequiredIONames(const MapIONames &io_pairs, shared_ptr<base_Layer> &layer_ptr)
+void elm::ValidateRequiredIONames(const MapIONamesB &io_pairs, shared_ptr<base_Layer> &layer_ptr)
 {
     VecS keys = Keys(io_pairs);
 
@@ -52,3 +45,5 @@ void elm::ValidateRequiredIONames(const MapIONames &io_pairs, shared_ptr<base_La
         } while ( next_permutation(subset.begin(), subset.end()) );
     }
 }
+
+

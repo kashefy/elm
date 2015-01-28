@@ -2,6 +2,7 @@
 
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
+#include "elm/ts/layer_assertions.h"
 
 using namespace std;
 using namespace cv;
@@ -20,6 +21,18 @@ const string GradAssignment::KEY_INPUT_GRAPH_IJ = "g_ij";
 const string GradAssignment::KEY_OUTPUT_M       = "m";
 
 const float GradAssignment::EPSILON = 1e-2;
+
+/** @todo why does define guard lead to undefined reference error?
+ */
+//#ifdef __WITH_GTEST
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<GradAssignment>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_INPUT_PAIR(GradAssignment::KEY_INPUT_GRAPH_AB)
+        ELM_ADD_INPUT_PAIR(GradAssignment::KEY_INPUT_GRAPH_IJ)
+        ELM_ADD_OUTPUT_PAIR(GradAssignment::KEY_OUTPUT_M)
+        ;
+//#endif
 
 GradAssignment::~GradAssignment()
 {

@@ -2,20 +2,20 @@
 
 #include <gtest/gtest.h>
 
+#include <boost/assign/list_of.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
-#include <opencv2/core.hpp>
-
-#include "elm/core/cv/mat_utils_inl.h"
+#include "elm/core/signal.h"
 #include "elm/core/layerconfig.h"
 #include "elm/layers/layerfactory.h"
-#include "elm/core/signal.h"
+#include "elm/ts/layer_assertions.h"
 
 using namespace std;
 using namespace boost;
 using namespace cv;
 using namespace elm;
 namespace bg=boost::graph;
+using boost::assign::map_list_of;
 
 const float BETA            = 0.5f;
 const float BETA_MAX        = 10.f;
@@ -26,6 +26,12 @@ const int MAX_ITER_SINKHORN = 30;
 const string NAME_GRAPH_AB = "G_ab";
 const string NAME_GRAPH_IJ = "g_ij";
 const string NAME_M        = "m";
+
+template<>
+elm::MapIONames LayerAttr_<elm::GradAssignment >::io_pairs;
+
+// run standard/generalized layer tests
+INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_GradAssignment_Test, Layer_TP_, GradAssignment);
 
 class GradAssignmentTest : public ::testing::Test
 {
@@ -75,26 +81,26 @@ protected:
             }
         }
 
-        Mat1f g_ij(I, I);
-        g_ij = g_ab_.clone();    // make them equal
-        Mat1f noise(g_ij.size());
+        g_ij_ = Mat1f(I, I);
+        g_ij_ = g_ab_.clone();    // make them equal
+        Mat1f noise(g_ij_.size());
         randn(noise, 0.f, 0.5f);
-        g_ij += noise;
-        g_ij.setTo(0.f, g_ij < 0.f);
-        g_ij.setTo(1.f, g_ij > 1.f);
+        g_ij_ += noise;
+        g_ij_.setTo(0.f, g_ij_ < 0.f);
+        g_ij_.setTo(1.f, g_ij_ > 1.f);
 
-        for(int r=0; r<g_ij.rows; r++) {
+        for(int r=0; r<g_ij_.rows; r++) {
 
-            g_ij(r, r) = 0.f;
-            for(int c=0; c<g_ij.cols; c++) {
+            g_ij_(r, r) = 0.f;
+            for(int c=0; c<g_ij_.cols; c++) {
 
-                g_ij(r, c) = g_ij(c, r);
+                g_ij_(r, c) = g_ij_(c, r);
             }
         }
 
         // add test graphs to signal
         sig_.Append(NAME_GRAPH_AB, g_ab_);
-        sig_.Append(NAME_GRAPH_IJ, g_ij);
+        sig_.Append(NAME_GRAPH_IJ, g_ij_);
     }
 
     virtual void TearDown()
@@ -115,6 +121,20 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    cout<<sig_.MostRecentMat(NAME_M)<<endl;
+    Mat1f m = sig_.MostRecentMat(NAME_M);
+
+    EXPECT_MAT_DIMS_EQ(m, Size2i(g_ab_.rows, g_ij_.rows)) << "Match matrix should be of size (A, I)";
+
+    // check we have a dominante diagonal
+    for(int r=0; r<m.rows; r++) {
+
+        for(int c=0; c<m.cols; c++) {
+
+            if(r!=c) {
+
+                EXPECT_LT(m(r, c), m(r, r)) << "Values > diagonal.";
+            }
+        }
+    }
 
 }

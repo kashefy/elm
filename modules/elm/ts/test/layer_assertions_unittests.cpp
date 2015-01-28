@@ -45,7 +45,7 @@ TEST(LayerAssertionsNoReqIONamesTest, EmptyIONames)
 TEST(LayerAssertionsReqIONamesTest, NoRequiredIONames)
 {
     shared_ptr<base_Layer> to_ptr(new DummyChildLayer());
-    ValidateRequiredIONames(MapIONames(), to_ptr);
+    ValidateRequiredIONames(MapIONamesB(), to_ptr);
 }
 
 const string NAME_IN        = "i";
@@ -108,5 +108,5 @@ TEST(LayerAssertionsReqIONamesTest, AllIONames)
     io_pairs[DummyChildLayerWithReqIONames::KEY_OUTPUT_OUT  ] = make_pair(1, NAME_OUT);
     io_pairs[DummyChildLayerWithReqIONames::KEY_OUTPUT_OPT_OUT ] = make_pair(1, NAME_OPT_OUT);
 
-    ValidateRequiredIONames(MapIONames(), to_ptr);
+    ValidateRequiredIONames(MapIONamesB(), to_ptr);
 }
