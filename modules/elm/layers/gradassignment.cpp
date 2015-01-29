@@ -186,7 +186,7 @@ Mat1f GradAssignment::Compatibility(const Mat1f &g_ab, const Mat1f &g_ij) const
         }
     }
 
-    c_ai /= static_cast<float>(max(A_, I_));
+    //c_ai /= static_cast<float>(max(A_, I_));
 
     return c_ai;
 }
