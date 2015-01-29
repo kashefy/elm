@@ -160,7 +160,7 @@ void Triangulation::Activate(const Signal &signal)
     std::vector<Vertices > vertices;
     gp3.reconstruct(vertices);
 
-    vertices_ = VecVertices2Mat(vertices, true);
+    vertices_ = VecVertices2Mat(vertices, false);
 }
 
 void Triangulation::Response(Signal &signal)
