@@ -144,6 +144,55 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
     }
 }
 
+TEST_F(GradAssignmentTest, Dims)
+{
+    for(int A=1; A<50; A++) {
+
+        for(int I=1; I<50; I++) {
+
+            // initialize test graphs
+            const int A=4;  ///< no. of nodes in G
+            const int I=A;  ///< no. of nodes in g
+
+            // generate random adjacency matrices
+            g_ab_ = Mat1f(A, A);
+            Mat1i tmp(A, A);
+            int stddev = 1000;
+            randu(tmp, 0, stddev);
+            g_ab_ = tmp/static_cast<float>(stddev);
+
+            // distance from node to itself is 0
+            for(int r=0; r<g_ab_.rows; r++) {
+
+                g_ab_(r, r) = 0.f;
+            }
+            // make symmetrical
+            for(int r=0; r<g_ab_.rows; r++) {
+
+                for(int c=0; c<g_ab_.rows; c++) {
+
+                    g_ab_(r, c) = g_ab_(c, r);
+                }
+            }
+
+            g_ij_ = Mat1f(I, I);
+            g_ij_ = g_ab_.clone();    // make them equal
+
+            Signal sig;
+            // add test graphs to signal
+            sig.Append(NAME_GRAPH_AB, g_ab_);
+            sig.Append(NAME_GRAPH_IJ, g_ij_);
+
+            to_->Activate(sig);
+            to_->Response(sig);
+
+            EXPECT_MAT_DIMS_EQ(sig.MostRecentMat(NAME_M),
+                               Size2i(g_ab_.rows, g_ij_.rows))
+                    << "Match matrix should be of size (A, I)";
+        }
+    }
+}
+
 /**
  * @brief Test that incrasing noise leads to deteriorated matching matrix
  */
@@ -151,7 +200,7 @@ TEST_F(GradAssignmentTest, MoreNoise)
 {
     g_ij_ = g_ab_.clone();    // start with equal graphs
 
-    const int N=10;
+    const int N=5;
 
     std::vector<float> m_stddev(N);
     std::vector<float> m_stddev_row_sum(N);
@@ -187,7 +236,7 @@ TEST_F(GradAssignmentTest, MoreNoise)
 
         // add more noise to g_ij_ for next iteration
         Mat1f noise(g_ij_.size());
-        randn(noise, 0.f, 0.25f);
+        randn(noise, 0.f, 0.2f);
         g_ij_ += noise;
         g_ij_.setTo(0.f, g_ij_ < 0.f);
         g_ij_.setTo(1.f, g_ij_ > 1.f);
