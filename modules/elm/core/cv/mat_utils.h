@@ -47,6 +47,16 @@ void CumSum(const cv::Mat1f &src, cv::Mat1f &dst);
 int tril_flat(const cv::Mat1f &src, cv::Mat1f &dst);
 
 /**
+ * @brief n-th order discrete forward diff along an axis.
+ * @param src Mat
+ * @param n no. of times values are differenced
+ * @param axis along which to perform forward difference
+ * @return resulting difference
+ * @todo implement
+ */
+cv::Mat1f diff(const cv::Mat1f &src, int n=1, int axis=-1);
+
+/**
   * @brief Convert 2d point of integers to single channel Mat of integers
   * @param 2d point of integers
   * @return single channel row-matrix of integers [x, y]

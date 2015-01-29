@@ -68,6 +68,19 @@ int elm::tril_flat(const Mat1f &src, Mat1f &dst)
     return nb_ab;
 }
 
+Mat1f elm::diff(const Mat1f &src, int n, int axis)
+{
+    Mat1f d(src.size());
+
+    if(!src.empty()) {
+
+    }
+
+    ELM_THROW_NOT_IMPLEMENTED;
+
+    return d;
+}
+
 Mat1i elm::Point2Mat(const Point2i &p)
 {
     Mat1i m(1, 2);
