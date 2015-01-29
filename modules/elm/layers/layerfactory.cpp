@@ -55,12 +55,13 @@ LayerFactory::LayerFactory()
 
 LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateShared(const LayerType &type)
 {
+    static_assert(std::is_same<LayerRegistor::RegisteredTypeSharedPtr, LayerShared >(), "Mismatching shared_ptr types.");
     return LayerRegistor::CreatePtrShared(g_layerRegistry, type);
 }
 
 LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateShared(const LayerType &type,
-                                                                          const LayerConfig &config,
-                                                                          const LayerIONames &io)
+                                                                  const LayerConfig &config,
+                                                                  const LayerIONames &io)
 {
     LayerRegistor::RegisteredTypeSharedPtr ptr = LayerFactory::CreateShared(type);
     ptr->Reset(config);
