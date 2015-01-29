@@ -9,7 +9,10 @@
 
 //#include <boost/graph/adjacency_list.hpp>
 
-#include <opencv2/highgui.hpp>
+#include "opencv2/imgproc/imgproc.hpp"
+
+
+#include "elm/core/debug_utils.h"
 
 #include "elm/core/signal.h"
 #include "elm/core/layerconfig.h"
@@ -87,8 +90,8 @@ protected:
         g_ij_ = Mat1f(I, I);
         g_ij_ = g_ab_.clone();    // make them equal
         Mat1f noise(g_ij_.size());
-        randn(noise, 0.f, 0.5f);
-        //g_ij_ += noise;
+        randn(noise, 0.f, 0.05f);
+        g_ij_ += noise;
         g_ij_.setTo(0.f, g_ij_ < 0.f);
         g_ij_.setTo(1.f, g_ij_ > 1.f);
 
@@ -128,9 +131,6 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
 
     EXPECT_MAT_DIMS_EQ(m, Size2i(g_ab_.rows, g_ij_.rows)) << "Match matrix should be of size (A, I)";
 
-    cout<<"m"<<endl;
-    cout<<m<<endl;
-
     // check we have a dominante diagonal
     for(int r=0; r<m.rows; r++) {
 
@@ -138,35 +138,27 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
 
             if(r!=c) {
 
-                //EXPECT_LT(m(r, c), m(r, r)) << "Values > diagonal.";
+                EXPECT_LT(m(r, c), m(r, r)) << "Values > diagonal at r=" << r << ", c=" << c;
             }
         }
     }
 }
-TEST_F(GradAssignmentTest, DISABLED_MoreNoise)
+
+/**
+ * @brief Test that incrasing noise leads to deteriorated matching matrix
+ */
+TEST_F(GradAssignmentTest, MoreNoise)
 {
-    Mat1f diag_prev;
-    g_ij_ = g_ab_.clone();    // make them equal
+    g_ij_ = g_ab_.clone();    // start with equal graphs
 
-    const int N=20;
+    const int N=10;
+
+    std::vector<float> m_stddev(N);
+    std::vector<float> m_stddev_row_sum(N);
+
+    Mat _mean, _stddev;
+
     for(int i=0; i<N; i++) {
-
-        Mat1f noise(g_ij_.size());
-        randn(noise, 0.f, 0.1f);
-        g_ij_ += noise;
-        g_ij_.setTo(0.f, g_ij_ < 0.f);
-        g_ij_.setTo(1.f, g_ij_ > 1.f);
-
-        for(int r=0; r<g_ij_.rows; r++) {
-
-            g_ij_(r, r) = 0.f;
-            for(int c=0; c<g_ij_.cols; c++) {
-
-                g_ij_(r, c) = g_ij_(c, r);
-            }
-        }
-
-        //cout<<g_ij_<<endl;
 
         // add noisy test graphs to signal
         sig_.Append(NAME_GRAPH_IJ, g_ij_);
@@ -176,36 +168,53 @@ TEST_F(GradAssignmentTest, DISABLED_MoreNoise)
 
         Mat1f m = sig_.MostRecentMat(NAME_M);
 
-
-        Mat mn, s;
-        meanStdDev(m, mn, s);
-        std::cout<<s.at<double>(0, 0)<<std::endl;
-
-        //cout<<m<<std::endl;
-
-//        cv::imshow("m", m*255);
-//        cv::waitKey();
-
         EXPECT_MAT_DIMS_EQ(m, Size2i(g_ab_.rows, g_ij_.rows)) << "Match matrix should be of size (A, I)";
 
+        meanStdDev(m, _mean, _stddev);
+
+        m_stddev[i] = static_cast<float>(_stddev.at<double>(0, 0));
+
         // get diagonal values
+        m_stddev_row_sum[i] = 0.f;
         Mat1f diag(1, m.rows);
         for(int r=0; r<m.rows; r++) {
 
             diag(r) = m(r, r);
+
+            meanStdDev(m.row(r), _mean, _stddev);
+            m_stddev_row_sum[i] += static_cast<float>(_stddev.at<double>(0, 0));
         }
 
-        if(i > 0) {
+        // add more noise to g_ij_ for next iteration
+        Mat1f noise(g_ij_.size());
+        randn(noise, 0.f, 0.25f);
+        g_ij_ += noise;
+        g_ij_.setTo(0.f, g_ij_ < 0.f);
+        g_ij_.setTo(1.f, g_ij_ > 1.f);
 
-            // compare with previous diagonal that had less noise
-//            EXPECT_LT(cv::sum(diag)[0], cv::sum(diag_prev)[0])
-//                    << "noise not affecting match matrix. where diag[i] ="
-//                    << diag << ", diag[i-1]=" << diag_prev;
-            //std::cout<<cv::sum(diag)[0] << std::endl;
+        // keep symmetric
+        for(int r=0; r<g_ij_.rows; r++) {
+
+            g_ij_(r, r) = 0.f;
+            for(int c=0; c<g_ij_.cols; c++) {
+
+                g_ij_(r, c) = g_ij_(c, r);
+            }
         }
-
-        diag_prev = diag.clone();
     }
+
+    // Calculate mean slope to dermine if variance decreases with noise.
+    Mat1f deriv1;
+    Sobel(m_stddev, deriv1, CV_32F, 1, 0, 3);
+    meanStdDev(deriv1, _mean, _stddev);
+
+    EXPECT_LT(_mean.at<double>(), 0.) << "Std. dev. of match matrix not decreasing with added noise." << Mat1f(m_stddev).t();
+
+    Sobel(m_stddev_row_sum, deriv1, CV_32F, 1, 0, 3);
+    meanStdDev(deriv1, _mean, _stddev);
+
+    EXPECT_LT(_mean.at<double>(), 0.) << "Sum of std. dev. across match matrix rows not decreasing with added noise." << Mat1f(m_stddev).t();
+
 }
 
 } // annonymous namespace for test cases and fixtures

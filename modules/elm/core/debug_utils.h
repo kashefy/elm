@@ -12,6 +12,7 @@
 
 namespace elm {
 
+
 /** @brief Macro for easy printing.
  * Prints:
  * <variable name>:newline
@@ -19,11 +20,6 @@ namespace elm {
  * @param[in] variable to print.
   */
 #define COUT_VAR(x) std::cout << #x << ":" << std::endl << x << std::endl;
-
-/** @brief Macro to print two variables/expressions in one call.
- * A little something for the lazy.
- */
-#define COUT_VAR(x, y) COUT_VAR(x); COUT_VAR(y)
 
 } // namespace elm
 
