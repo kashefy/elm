@@ -8,8 +8,8 @@
 #include "elm/layers/gradassignment.h"
 
 //#include <boost/graph/adjacency_list.hpp>
-
-#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
 
 
 #include "elm/core/debug_utils.h"
@@ -69,6 +69,7 @@ protected:
         // generate random adjacency matrices
         g_ab_ = Mat1f(A, A);
         Mat1i tmp(A, A);
+
         int s = 1000;
         randu(tmp, 0, s);
         g_ab_ = tmp/static_cast<float>(s);
@@ -144,15 +145,93 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
     }
 }
 
+TEST_F(GradAssignmentTest, ActivateAndResponse_large_graphs)
+{
+    // initialize test graphs
+    const int A=70;  ///< no. of nodes in G
+    const int I=A;  ///< no. of nodes in g
+
+    // generate random adjacency matrices
+    g_ab_ = Mat1f(A, A);
+    Mat1i tmp(A, A);
+    int s = 1000;
+    randu(tmp, 0, s);
+    g_ab_ = tmp/static_cast<float>(s);
+
+    // distance from node to itself is 0
+    for(int r=0; r<g_ab_.rows; r++) {
+
+        g_ab_(r, r) = 0.f;
+    }
+    // make symmetrical
+    for(int r=0; r<g_ab_.rows; r++) {
+
+        for(int c=0; c<g_ab_.rows; c++) {
+
+            g_ab_(r, c) = g_ab_(c, r);
+        }
+    }
+
+    // remove edges, large graphs are not expected to be fully connected, leads to overflow anyway.
+    const int NB_NULL = static_cast<int>(0.5*A*A);
+    for(int i=0; i<NB_NULL; i++) {
+
+        int r = abs(randu<int>()) % A;
+        int c = abs(randu<int>()) % A;
+        g_ab_(r, c) = g_ab_(c, r) = 0.f;
+    }
+
+    g_ij_ = Mat1f(I, I);
+    g_ij_ = g_ab_.clone();    // make them equal
+    Mat1f noise(g_ij_.size());
+    randn(noise, 0.f, 0.01f);
+    //g_ij_ += noise;
+    g_ij_.setTo(0.f, g_ij_ < 0.f);
+    g_ij_.setTo(1.f, g_ij_ > 1.f);
+
+    for(int r=0; r<g_ij_.rows; r++) {
+
+        g_ij_(r, r) = 0.f;
+        for(int c=0; c<g_ij_.cols; c++) {
+
+            g_ij_(r, c) = g_ij_(c, r);
+        }
+    }
+
+    // add test graphs to signal
+    sig_.Append(NAME_GRAPH_AB, g_ab_);
+    sig_.Append(NAME_GRAPH_IJ, g_ij_);
+
+    to_->Activate(sig_);
+    to_->Response(sig_);
+
+    Mat1f m = sig_.MostRecentMat(NAME_M);
+
+    cout<<cv::format(m, cv::Formatter::FMT_NUMPY)<<std::endl;
+
+    cv::imshow("m/sum(m)", elm::ConvertTo8U(m/sum(m)[0]));
+    cv::waitKey();
+
+    EXPECT_MAT_DIMS_EQ(m, Size2i(g_ab_.rows, g_ij_.rows)) << "Match matrix should be of size (A, I)";
+
+    // check we have a dominante diagonal
+    for(int r=0; r<m.rows; r++) {
+
+        for(int c=0; c<m.cols; c++) {
+
+            if(r!=c) {
+
+                //EXPECT_LT(m(r, c), m(r, r)) << "Values > diagonal at r=" << r << ", c=" << c;
+            }
+        }
+    }
+}
+
 TEST_F(GradAssignmentTest, Dims)
 {
-    for(int A=1; A<50; A++) {
+    for(int A=3; A<50; A++) {
 
-        for(int I=1; I<50; I++) {
-
-            // initialize test graphs
-            const int A=4;  ///< no. of nodes in G
-            const int I=A;  ///< no. of nodes in g
+        for(int I=3; I<50; I++) {
 
             // generate random adjacency matrices
             g_ab_ = Mat1f(A, A);

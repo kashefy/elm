@@ -7,8 +7,6 @@
 //M*/
 #include "elm/layers/gradassignment.h"
 
-#include <iostream>
-
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/layers/sinkhornbalancing.h"
@@ -140,13 +138,12 @@ void GradAssignment::Activate(const Signal &signal)
             Mat1f q_ai(A_, I_); ///< partial derivative of E_wg with respect to M_ai
 
             multiply(c_ai, m_ai_, q_ai);
-
             // softassign
             exp(beta*q_ai, m_ai_);
 
             is_m_converged = SinkhornBalancing::RowColNormalization(m_ai_hat, max_iter_sinkhorn_, EPSILON); // C
 
-            is_m_converged = sum(abs(m_ai_hat_0-m_ai_hat_0))[0] < EPSILON;
+            is_m_converged = sum(abs(m_ai_hat-m_ai_hat_0))[0] < EPSILON;
 
             nb_iterations_0++;
         } // end B
@@ -189,6 +186,8 @@ Mat1f GradAssignment::Compatibility(const Mat1f &g_ab, const Mat1f &g_ij) const
         }
     }
 
+    c_ai /= static_cast<float>(max(A_, I_));
+
     return c_ai;
 }
 
@@ -200,7 +199,8 @@ float GradAssignment::Compatibility(float w1, float w2) const
         c = 0.f;
     }
     else {
-        c = 1-3.f*abs(w1-w2);
+        //c = w1*w2;
+        c = 1.f-3.f*abs(w1-w2);
     }
     return c;
 }
