@@ -207,10 +207,9 @@ TEST_F(GradAssignmentTest, ActivateAndResponse_large_graphs)
 
     Mat1f m = sig_.MostRecentMat(NAME_M);
 
-    cout<<cv::format(m, cv::Formatter::FMT_NUMPY)<<std::endl;
-
-    cv::imshow("m/sum(m)", elm::ConvertTo8U(m/sum(m)[0]));
-    cv::waitKey();
+//    cout<<cv::format(m, cv::Formatter::FMT_NUMPY)<<std::endl;
+//    cv::imshow("m/sum(m)", elm::ConvertTo8U(m/sum(m)[0]));
+//    cv::waitKey();
 
     EXPECT_MAT_DIMS_EQ(m, Size2i(g_ab_.rows, g_ij_.rows)) << "Match matrix should be of size (A, I)";
 
