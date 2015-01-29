@@ -209,9 +209,13 @@ status("Configure test projects:")
 
 if(BUILD_TESTS)
 
-    status("    Configure unittest project")
     include(cmake/BuildTests.cmake)
+    status("    Configure unittest project")
     build_tests("run_unittests" "*unittest*")
+
+    status("    Configure integrationtest project")
+    build_tests("run_integrationtests" "*int*test*")
+
     add_definitions(-D__WITH_GTEST) # Useful in case test class needs to be friend of class under test
 
     # Copy over test data (if it exists)
