@@ -228,9 +228,9 @@ TEST_F(GradAssignmentTest, ActivateAndResponse_large_graphs)
 
 TEST_F(GradAssignmentTest, Dims)
 {
-    for(int A=3; A<50; A++) {
+    for(int A=1; A<10; A++) {
 
-        for(int I=3; I<50; I++) {
+        for(int I=1; I<10; I++) {
 
             // generate random adjacency matrices
             g_ab_ = Mat1f(A, A);
