@@ -94,18 +94,18 @@ bool SinkhornBalancing::RowColNormalization(Mat1f &m, int max_iter, float epsilo
         return is_m_converged;
     }
 
-    Mat1f m_ai1 = m;
-
     int i = 0;
 
     // begin C
     while(!is_m_converged && i < max_iter) {
 
+        Mat1f m_ai1 = m.clone();
+
         // update m by normalizing across all rows
         Mat1f row_sums_i;
         reduce(m_ai1, row_sums_i, 1, REDUCE_SUM);
+
         row_sums_i = repeat(row_sums_i, 1, m_ai1.cols);
-\
         m_ai1 /= row_sums_i;
 
         // update m by normalizing across all columns
