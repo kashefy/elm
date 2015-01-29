@@ -214,7 +214,7 @@ if(BUILD_TESTS)
     build_tests("run_unittests" "*unittest*")
 
     status("    Configure integrationtest project")
-    build_tests("run_integrationtests" "*int*test*")
+    build_tests("run_integrationtests" "*integ*test*")
 
     add_definitions(-D__WITH_GTEST) # Useful in case test class needs to be friend of class under test
 
