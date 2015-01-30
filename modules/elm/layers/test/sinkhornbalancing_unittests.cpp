@@ -124,5 +124,20 @@ TEST_F(SinkhornBalancingTest, ActivateAndResponse)
     EXPECT_FLOAT_EQ(m_.cols, sum(out)[0]) << "output did not some up to expected value.";
 }
 
+TEST_F(SinkhornBalancingTest, PreserveReference)
+{
+    uchar *m_data_ptr = m_.data;
+    Mat1f m0 = m_.clone();
+    Mat1f m_tl = m_(Rect2i(0, 0, m_.cols-1, m_.rows-1));
+
+    SinkhornBalancing::RowColNormalization(m_tl, 3, 0.0001f);
+
+    EXPECT_EQ(m_data_ptr, m_.data) << "Data now pointing somewhere else.";
+    EXPECT_EQ(m_tl.data, m_.data) << "Data now pointing somewhere else.";
+
+    EXPECT_MAT_DIMS_EQ(m_tl.clone(), m_(Rect2i(0, 0, m_.cols-1, m_.rows-1))) << "Unexpected mismatch, verify routine is not changing argument reference.";
+    EXPECT_MAT_DIMS_EQ(m_tl.clone(), m0(Rect2i(0, 0, m_.cols-1, m_.rows-1))) << "Unexpected mismatch.";
+}
+
 
 } // annonymous namespace for test cases and fixtures
