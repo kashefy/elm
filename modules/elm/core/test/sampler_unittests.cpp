@@ -48,7 +48,7 @@ TEST(Sampler1DTest, Uniform) {
 
 TEST(Sampler1DTest, Gaussian) {
 
-    const int SIZE = 10, N=2e3;
+    const int SIZE = 10, N=3e3;
     const float MEAN = 5.f, STD_DEV = 2.f;
 
     // generate gaussian pdf
