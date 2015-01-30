@@ -273,17 +273,21 @@ TEST_F(GradAssignmentTest, Dims)
 
 /**
  * @brief Test that incrasing noise leads to deteriorated matching matrix
+ *
+ * For multiple iterations:
+ *
+ *  Measure difference between diagonal and other match variables.
+ *  Sum difference across rows
+ *
+ * Measure slope across iterations, and see diagonal dominance decreasing
+ *
  */
 TEST_F(GradAssignmentTest, MoreNoise)
 {
     g_ij_ = g_ab_.clone();    // start with equal graphs
 
     const int N=5;
-
-    std::vector<float> m_stddev(N);
-    std::vector<float> m_stddev_row_sum(N);
-
-    Mat _mean, _stddev;
+    std::vector<float> diag_sum_diff(N);
 
     for(int i=0; i<N; i++) {
 
@@ -295,22 +299,14 @@ TEST_F(GradAssignmentTest, MoreNoise)
 
         Mat1f m = sig_.MostRecentMat(NAME_M);
 
-        EXPECT_MAT_DIMS_EQ(m, Size2i(g_ab_.rows, g_ij_.rows)) << "Match matrix should be of size (A, I)";
-
-        meanStdDev(m, _mean, _stddev);
-
-        m_stddev[i] = static_cast<float>(_stddev.at<double>(0, 0));
-
         // get diagonal values
-        m_stddev_row_sum[i] = 0.f;
-        Mat1f diag(1, m.rows);
+        Mat1f diag(m.rows, 1);
         for(int r=0; r<m.rows; r++) {
 
             diag(r) = m(r, r);
-
-            meanStdDev(m.row(r), _mean, _stddev);
-            m_stddev_row_sum[i] += static_cast<float>(_stddev.at<double>(0, 0));
         }
+
+        diag_sum_diff[i] = sum(repeat(diag, 1, m.cols)-m)[0];
 
         // add more noise to g_ij_ for next iteration
         Mat1f noise(g_ij_.size());
@@ -330,18 +326,14 @@ TEST_F(GradAssignmentTest, MoreNoise)
         }
     }
 
-    // Calculate mean slope to dermine if variance decreases with noise.
+    Mat _mean, _stddev;
+
+    // Calculate mean slope to dermine if diagonals dominate less with noise.
     Mat1f deriv1;
-    Sobel(m_stddev, deriv1, CV_32F, 1, 0, 3);
+    Sobel(diag_sum_diff, deriv1, CV_32F, 1, 0, 3);
     meanStdDev(deriv1, _mean, _stddev);
 
-    EXPECT_LT(_mean.at<double>(), 0.) << "Std. dev. of match matrix not decreasing with added noise." << Mat1f(m_stddev).t();
-
-    Sobel(m_stddev_row_sum, deriv1, CV_32F, 1, 0, 3);
-    meanStdDev(deriv1, _mean, _stddev);
-
-    EXPECT_LT(_mean.at<double>(), 0.) << "Sum of std. dev. across match matrix rows not decreasing with added noise." << Mat1f(m_stddev).t();
-
+    EXPECT_LT(_mean.at<double>(), 0.) << "Diagonal dominance not decreasing with added noise." << Mat1f(diag_sum_diff).t();
 }
 
 } // annonymous namespace for test cases and fixtures
