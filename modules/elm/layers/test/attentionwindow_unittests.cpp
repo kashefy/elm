@@ -11,11 +11,12 @@
 #include "elm/core/cv/mat_utils.h"
 #include "elm/core/signal.h"
 #include "elm/layers/layerfactory.h"
-#include "elm/ts/ts.h"
+#include "elm/ts/layer_assertions.h"
 
 namespace bpt=boost::property_tree;
 using namespace std;
 using namespace cv;
+using namespace elm;
 
 namespace {
 
@@ -23,6 +24,8 @@ const string NAME_SCENE = "in";
 const string NAME_LOC   = "loc";
 const string NAME_TL    = "tl";
 const string NAME_WIN   = "win";
+
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(AttentionWindow);
 
 /**
  * @brief testing fixture class around AttentionWindow layer initiaization
@@ -76,21 +79,6 @@ TEST_F(AttentionWindowInitTest, MissingParams)
 TEST_F(AttentionWindowInitTest, Reset_ParamsPresent)
 {
     EXPECT_NO_THROW(AttentionWindow().Reset(cfg_)) << "Any required paramters missing?";
-}
-
-TEST_F(AttentionWindowInitTest, IONames)
-{
-    LayerIONames io_names;
-    EXPECT_THROW(AttentionWindow().IONames(io_names), std::exception);
-
-    io_names.Input(AttentionWindow::KEY_INPUT_SCENE, NAME_SCENE);
-    EXPECT_THROW(AttentionWindow().IONames(io_names), std::exception) << "still missing required io names";
-
-    io_names.Input(AttentionWindow::KEY_INPUT_LOC, NAME_LOC);
-    EXPECT_THROW(AttentionWindow().IONames(io_names), std::exception) << "still missing required outputs";
-
-    io_names.Output(AttentionWindow::KEY_OUTPUT_WIN, NAME_WIN);
-    EXPECT_NO_THROW(AttentionWindow().IONames(io_names)) << "Are all required IO names present?";
 }
 
 /**

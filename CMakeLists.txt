@@ -120,6 +120,7 @@ endif(DEFINED OpenCV_DIR)
 #
 # File system operations
 # serialization
+# graph representation
 #
 # platform independence
 #
@@ -134,7 +135,7 @@ endif(DEFINED OpenCV_DIR)
 set(BOOST_MIN_VERSION "1.46.0" CACHE STRING "Minimum version of boost to link against (e.g. C:/BOOST_1_56_0 is 1.56.0")
 
 # Don't forget to include 'system'
-set(BOOST_COMPONENTS system filesystem serialization)
+set(BOOST_COMPONENTS system filesystem serialization graph)
 status("")
 find_package(Boost ${BOOST_MIN_VERSION} REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 if(Boost_FOUND)
@@ -208,9 +209,13 @@ status("Configure test projects:")
 
 if(BUILD_TESTS)
 
-    status("    Configure unittest project")
     include(cmake/BuildTests.cmake)
+    status("    Configure unittest project")
     build_tests("run_unittests" "*unittest*")
+
+    status("    Configure integrationtest project")
+    build_tests("run_integrationtests" "*integ*test*")
+
     add_definitions(-D__WITH_GTEST) # Useful in case test class needs to be friend of class under test
 
     # Copy over test data (if it exists)

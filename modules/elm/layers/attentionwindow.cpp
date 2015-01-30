@@ -10,9 +10,11 @@
 #include "elm/core/exception.h"
 #include "elm/core/cv/mat_utils.h"
 #include "elm/core/signal.h"
+#include "elm/ts/layerattr_.h"
 
 using namespace cv;
 using namespace std;
+using namespace elm;
 
 const string AttentionWindow::PARAM_WIN_COLS = "cols";
 const string AttentionWindow::PARAM_WIN_ROWS = "rows";
@@ -21,6 +23,18 @@ const string AttentionWindow::KEY_INPUT_LOC      = "loc";
 const string AttentionWindow::KEY_INPUT_SCENE    = "scene";
 const string AttentionWindow::KEY_OUTPUT_WIN     = "window";
 const string AttentionWindow::KEY_OUTPUT_OPT_TL = "loc_new";
+
+/** @todo why does define guard lead to undefined reference error?
+ */
+//#ifdef __WITH_GTEST
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<AttentionWindow>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_INPUT_PAIR(AttentionWindow::KEY_INPUT_LOC)
+        ELM_ADD_INPUT_PAIR(AttentionWindow::KEY_INPUT_SCENE)
+        ELM_ADD_OUTPUT_PAIR(AttentionWindow::KEY_OUTPUT_WIN)
+        ;
+//#endif
 
 AttentionWindow::~AttentionWindow()
 {

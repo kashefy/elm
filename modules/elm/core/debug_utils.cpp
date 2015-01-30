@@ -5,10 +5,6 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/ts/layer_assertions.h"
-
-using namespace std;
-using namespace elm;
-
+#include "elm/core/debug_utils.h"
 
 

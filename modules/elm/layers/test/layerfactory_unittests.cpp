@@ -15,6 +15,7 @@
 #include "elm/ts/ts.h"
 
 using std::shared_ptr;
+using namespace elm;
 
 namespace {
 

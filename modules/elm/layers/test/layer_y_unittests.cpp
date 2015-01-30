@@ -11,12 +11,14 @@
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/layers/layerfactory.h"
-#include "elm/ts/ts.h"
+#include "elm/ts/layer_assertions.h"
 
 using namespace elm;
 using boost::property_tree::ptree_bad_path;
 
 namespace {
+
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(LayerY);
 
 const std::string NAME_STIMULUS = "in";
 const std::string NAME_SPIKES   = "out";
@@ -97,39 +99,6 @@ TEST_F(LayerYInitTest, ParamsMissing)
         LayerConfig cfg;
         cfg.Params(p);
         EXPECT_THROW(LayerY to(cfg), ptree_bad_path);
-    }
-}
-
-TEST_F(LayerYInitTest, IONamesValid)
-{
-    LayerY to;
-    to.Reset(config_);
-    LayerIONames io;
-    io.Input(LayerY::KEY_INPUT_STIMULUS, NAME_STIMULUS);
-    io.Output(LayerY::KEY_OUTPUT_SPIKES, NAME_SPIKES);
-    EXPECT_NO_THROW(to.IONames(io));
-}
-
-TEST_F(LayerYInitTest, IONamesMissing)
-{
-    {
-        LayerY to;
-        to.Reset(config_);
-        EXPECT_THROW(to.IONames(LayerIONames()), ExceptionKeyError);
-    }
-    {
-        LayerY to;
-        to.Reset(config_);
-        LayerIONames io;
-        io.Input(LayerY::KEY_INPUT_STIMULUS, NAME_STIMULUS);
-        EXPECT_THROW(to.IONames(io), ExceptionKeyError);
-    }
-    {
-        LayerY to;
-        to.Reset(config_);
-        LayerIONames io;
-        io.Output(LayerY::KEY_OUTPUT_SPIKES, NAME_SPIKES);
-        EXPECT_THROW(to.IONames(io), ExceptionKeyError);
     }
 }
 

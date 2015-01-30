@@ -230,6 +230,73 @@ TEST(ReshapeVecMatTest, Values)
 }
 
 /**
+ * @brief test utility function for extracting lower triangular part of matrix
+ */
+class TrilTest : public ::testing::Test
+{
+protected:
+};
+
+TEST_F(TrilTest, Empty)
+{
+    VecMat1f vec_mat;
+
+    int n;
+    n = tril(Mat1f(), vec_mat);
+    EXPECT_SIZE(0, vec_mat);
+    EXPECT_EQ(0, n);
+
+    n = tril(Mat1f(0, 0), vec_mat);
+    EXPECT_SIZE(0, vec_mat);
+    EXPECT_EQ(0, n);
+
+    n = tril(Mat1f(0, 3), vec_mat);
+    EXPECT_SIZE(0, vec_mat);
+    EXPECT_EQ(0, n);
+
+    n = tril(Mat1f(3, 0), vec_mat);
+    EXPECT_SIZE(0, vec_mat);
+    EXPECT_EQ(0, n);
+}
+
+TEST_F(TrilTest, Dims)
+{
+    int n_expected = 0;
+    for(int i=1; i<10; i++) {
+
+        Mat1f m(i, i, i);
+        VecMat1f vec_mat;
+        int n = tril(m, vec_mat);
+
+        EXPECT_EQ(n_expected, n);
+
+        EXPECT_EQ(vec_mat.size(), size_t(i-1));
+        for(size_t r=0; r<vec_mat.size(); r++) {
+
+            EXPECT_MAT_DIMS_EQ(vec_mat[r], Size2i(r+1, 1));
+        }
+
+        n_expected += i;
+    }
+}
+
+TEST_F(TrilTest, Values)
+{
+    Mat1f m(4, 4);
+    randn(m, 0.f, 100.f);
+
+    VecMat1f vec_mat;
+    int n = tril(m, vec_mat);
+    EXPECT_EQ(vec_mat.size(), size_t(m.rows-1));
+    EXPECT_EQ(6, n);
+
+    for(size_t r=0; r<vec_mat.size(); r++) {
+
+        EXPECT_MAT_EQ(vec_mat[r], m.row(r+1).colRange(0, r+1));
+    }
+}
+
+/**
  * @brief Typed tests around Vector routines with POD types
  */
 template <class T>

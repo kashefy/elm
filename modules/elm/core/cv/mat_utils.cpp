@@ -45,6 +45,42 @@ void elm::CumSum(const Mat1f &src, Mat1f &dst)
     }
 }
 
+int elm::tril_flat(const Mat1f &src, Mat1f &dst)
+{
+    int nb_ab = 0;
+    if(!src.empty()) {
+
+        for(int i=src.rows; i>0; i--) {
+            nb_ab += i;
+        }
+
+        dst = Mat1f(1, nb_ab);
+
+        int i=0;
+        for(int r=0; r<src.rows; r++) {
+            for(int c=0; c<=r; c++) {
+
+                dst(i++) = src(r, c);
+            }
+        }
+    }
+
+    return nb_ab;
+}
+
+Mat1f elm::diff(const Mat1f &src, int n, int axis)
+{
+    Mat1f d(src.size());
+
+    if(!src.empty()) {
+
+    }
+
+    ELM_THROW_NOT_IMPLEMENTED;
+
+    return d;
+}
+
 Mat1i elm::Point2Mat(const Point2i &p)
 {
     Mat1i m(1, 2);

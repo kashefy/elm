@@ -162,6 +162,73 @@ TEST(MatUtilsTest, CumSum_empty) {
 }
 
 /**
+ * @brief test utility function for extracting lower triangular part of matrix
+ */
+class TrilFlatTest : public ::testing::Test
+{
+protected:
+};
+
+TEST_F(TrilFlatTest, Empty)
+{
+    Mat1f dst;
+
+    int n;
+    n = tril_flat(Mat1f(), dst);
+    EXPECT_EQ(size_t(0), dst.total());
+    EXPECT_EQ(0, n);
+
+    n = tril_flat(Mat1f(0, 0), dst);
+    EXPECT_EQ(size_t(0), dst.total());
+    EXPECT_EQ(0, n);
+
+    n = tril_flat(Mat1f(0, 3), dst);
+    EXPECT_EQ(size_t(0), dst.total());
+    EXPECT_EQ(0, n);
+
+    n = tril_flat(Mat1f(3, 0), dst);
+    EXPECT_EQ(size_t(0), dst.total());
+    EXPECT_EQ(0, n);
+}
+
+TEST_F(TrilFlatTest, Dims)
+{
+    int n_expected = 0;
+    for(int i=1; i<10; i++) {
+
+        n_expected += i;
+
+        Mat1f m(i, i, i);
+        Mat1f dst;
+        int n = tril_flat(m,  dst);
+        EXPECT_EQ(n_expected, n);
+
+        EXPECT_MAT_DIMS_EQ(dst, Size2i(n_expected, 1));
+        EXPECT_MAT_EQ(dst, Mat1f(1, n_expected, i));
+    }
+}
+
+TEST_F(TrilFlatTest, Values)
+{
+    Mat1f m(4, 4);
+    randn(m, 0.f, 100.f);
+
+    Mat1f dst;
+    int n = tril_flat(m, dst);
+    EXPECT_EQ(10, n);
+    EXPECT_MAT_DIMS_EQ(dst, Size2i(10, 1));
+
+    int i=0;
+    for(int r=0; r<m.rows; r++) {
+
+        for(int c=0; c<=r; c++) {
+
+            EXPECT_FLOAT_EQ(m(r, c), dst(i++));
+        }
+    }
+}
+
+/**
  * @brief test ARange initialization with empty range
  */
 TEST(MatARangeTest, Empty)

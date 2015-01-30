@@ -16,14 +16,17 @@
  *  2. Add it to the initialization of g_layerRegistry map.
  */
 #include "elm/layers/attentionwindow.h"
+#include "elm/layers/gradassignment.h"
 #include "elm/layers/icp.h"
 #include "elm/layers/layer_y.h"
 #include "elm/encoding/populationcode.h"
 #include "elm/layers/saliencyitti.h"
+#include "elm/layers/sinkhornbalancing.h"
 #include "elm/layers/triangulation.h"
 #include "elm/layers/weightedsum.h"
 
 using boost::assign::map_list_of;
+using namespace elm;
 
 typedef Registor_<base_Layer> LayerRegistor;
 typedef Registor_<base_Layer>::Registry LayerRegistry;
@@ -36,10 +39,12 @@ typedef Registor_<base_Layer>::Registry LayerRegistry;
 
 LayerRegistry g_layerRegistry = map_list_of
         LAYER_REGISTRY_PAIR( AttentionWindow )
+        LAYER_REGISTRY_PAIR( GradAssignment )
         LAYER_REGISTRY_PAIR( ICP )
         LAYER_REGISTRY_PAIR( LayerY )
         LAYER_REGISTRY_PAIR( MutexPopulationCode )
         LAYER_REGISTRY_PAIR( SaliencyItti )
+        LAYER_REGISTRY_PAIR( SinkhornBalancing )
         LAYER_REGISTRY_PAIR( Triangulation )
         LAYER_REGISTRY_PAIR( WeightedSum )
         ; ///< <-- add new layer to registry here
@@ -50,12 +55,13 @@ LayerFactory::LayerFactory()
 
 LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateShared(const LayerType &type)
 {
+    static_assert(std::is_same<LayerRegistor::RegisteredTypeSharedPtr, LayerShared >(), "Mismatching shared_ptr types.");
     return LayerRegistor::CreatePtrShared(g_layerRegistry, type);
 }
 
 LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateShared(const LayerType &type,
-                                                                          const LayerConfig &config,
-                                                                          const LayerIONames &io)
+                                                                  const LayerConfig &config,
+                                                                  const LayerIONames &io)
 {
     LayerRegistor::RegisteredTypeSharedPtr ptr = LayerFactory::CreateShared(type);
     ptr->Reset(config);

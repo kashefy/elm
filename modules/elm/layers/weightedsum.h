@@ -14,6 +14,8 @@
 
 #include "elm/core/base_Layer.h"
 
+namespace elm {
+
 /** class to implement base layer methods
   * Yields weighted sum of stimulus with 2 elements
   * Simple example on how to derive from base Layer class
@@ -59,5 +61,7 @@ protected:
 
     cv::Mat1f response_;        ///< most recent response
 };
+
+} // namespace elm
 
 #endif // ELM_LAYERS_WEIGHTEDSUM_H_

@@ -13,6 +13,8 @@
 #include "elm/core/base_Layer.h"
 #include "elm/neuron/neuron.h"
 
+namespace elm {
+
 /**
  * @brief The LayerY class
  */
@@ -54,5 +56,7 @@ protected:
 
     cv::Mat1i state_; ///< neuron state from which we determin spiking activity
 };
+
+} // namespace elm
 
 #endif // LAYERY_H

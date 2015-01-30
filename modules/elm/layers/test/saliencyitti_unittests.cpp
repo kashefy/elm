@@ -14,10 +14,15 @@
 #include "elm/core/signal.h"
 #include "elm/io/synth.h"
 #include "elm/io/readmnist.h"
-#include "elm/ts/ts.h"
+#include "elm/ts/layer_assertions.h"
 
 using namespace cv;
 using namespace std;
+using namespace elm;
+
+namespace {
+
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(SaliencyItti);
 
 /**
  * @brief class for drawing L shapes to use as simple test data
@@ -145,3 +150,5 @@ TEST_F(SaliencyIttiTest, DISABLED_DisplayApplyMNIST)
 
     waitKey();
 }
+
+} // annonymous namespace for test cases and fixtures
