@@ -8,8 +8,8 @@
 /** A collection of routines to facilitate working with PCL data types.
  * Only defined if PCL support exists.
  */
-#ifndef ELM_CORE_PCL_UTILS_H_
-#define ELM_CORE_PCL_UTILS_H_
+#ifndef _ELM_CORE_PCL_UTILS_H_
+#define _ELM_CORE_PCL_UTILS_H_
 
 #ifndef __WITH_PCL
     #warning "Skipping pcl utilities since PCL support is disabled."
@@ -50,4 +50,4 @@ cv::Mat1f VecVertices2Mat(const VecVertices& vv, bool do_row_mat=true);
 
 #endif // __WITH_PCL
 
-#endif // ELM_CORE_PCL_UTILS_H_
+#endif // _ELM_CORE_PCL_UTILS_H_

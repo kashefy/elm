@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_IO_BINARY_H_
-#define ELM_IO_BINARY_H_
+#ifndef _ELM_IO_BINARY_H_
+#define _ELM_IO_BINARY_H_
 
 #include <algorithm>
 #include <limits.h>
@@ -58,4 +58,4 @@ void SwapEndian(T *p)
 
 } // namespace elm
 
-#endif // ELM_IO_BINARY_H_
+#endif // _ELM_IO_BINARY_H_

@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_LAYERS_LAYERNOTSUPPORTED_H_
-#define ELM_LAYERS_LAYERNOTSUPPORTED_H_
+#ifndef _ELM_LAYERS_LAYERNOTSUPPORTED_H_
+#define _ELM_LAYERS_LAYERNOTSUPPORTED_H_
 
 #include <string>
 
@@ -76,4 +76,4 @@ protected:
     TDERIVED(const LayerConfig &config, const std::string message=msg) : base_LayerNotSupported(config, msg) {} \
                                                                        }
 
-#endif // ELM_LAYERS_LAYERNOTSUPPORTED_H_
+#endif // _ELM_LAYERS_LAYERNOTSUPPORTED_H_

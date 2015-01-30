@@ -7,8 +7,8 @@
 //M*/
 /** forward typedef of OpenCV data types
  */
-#ifndef ELM_CORE_OPENCV_TYPEDEFS_FWD_H_
-#define ELM_CORE_OPENCV_TYPEDEFS_FWD_H_
+#ifndef _ELM_CORE_OPENCV_TYPEDEFS_FWD_H_
+#define _ELM_CORE_OPENCV_TYPEDEFS_FWD_H_
 
 namespace cv {
 
@@ -40,4 +40,4 @@ typedef Point3_<double> Point3d;    ///< convinience typedef for 3d point of dou
 
 } // fake namespace cv for fwd declaration
 
-#endif // ELM_CORE_OPENCV_TYPEDEFS_FWD_H_
+#endif // _ELM_CORE_OPENCV_TYPEDEFS_FWD_H_

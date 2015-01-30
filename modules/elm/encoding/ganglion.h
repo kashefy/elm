@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_ENCODING_GANGLION_H_
-#define ELM_ENCODING_GANGLION_H_
+#ifndef _ELM_ENCODING_GANGLION_H_
+#define _ELM_ENCODING_GANGLION_H_
 
 #include <opencv2/core.hpp>
 
@@ -62,4 +62,4 @@ protected:
     int size_;
 };
 
-#endif // ELM_ENCODING_GANGLION_H_
+#endif // _ELM_ENCODING_GANGLION_H_

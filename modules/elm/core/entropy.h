@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_ENTROPY_H_
-#define ELM_CORE_ENTROPY_H_
+#ifndef _ELM_CORE_ENTROPY_H_
+#define _ELM_CORE_ENTROPY_H_
 
 #include <opencv2/core.hpp>
 
@@ -22,4 +22,4 @@ float CondEntropy(cv::InputArray &pdf);
 
 } // namespace elm
 
-#endif // ELM_CORE_ENTROPY_H_
+#endif // _ELM_CORE_ENTROPY_H_

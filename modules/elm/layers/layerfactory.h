@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_LAYERFACTORY_H_
+#ifndef _ELM_LAYERFACTORY_H_
 #define ELM_LAYERFACTORY_H_
 
 #include <memory>
@@ -48,4 +48,4 @@ public:
                                        const LayerIONames &io);
 };
 
-#endif // ELM_LAYERFACTORY_H_
+#endif // _ELM_LAYERFACTORY_H_

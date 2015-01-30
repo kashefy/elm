@@ -8,8 +8,8 @@
 /** Non-template utility definitions
  * For template inline definitions see *_inl*
   */
-#ifndef ELM_CORE_CV_MAT_UTILS_H_
-#define ELM_CORE_CV_MAT_UTILS_H_
+#ifndef _ELM_CORE_CV_MAT_UTILS_H_
+#define _ELM_CORE_CV_MAT_UTILS_H_
 
 #include "elm/core/typedefs_fwd.h"
 
@@ -82,4 +82,4 @@ cv::Point3_<T> Mat2Point3_(const cv::Mat_<T> &m);
 
 } // elm namespace
 
-#endif // ELM_CORE_CV_MAT_UTILS_H_
+#endif // _ELM_CORE_CV_MAT_UTILS_H_

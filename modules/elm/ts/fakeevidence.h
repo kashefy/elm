@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_TS_FAKEEVIDENCE_H_
-#define ELM_TS_FAKEEVIDENCE_H_
+#ifndef _ELM_TS_FAKEEVIDENCE_H_
+#define _ELM_TS_FAKEEVIDENCE_H_
 
 #include <opencv2/core.hpp>
 
@@ -36,4 +36,4 @@ public:
     int nb_features_;
 };
 
-#endif // ELM_TS_FAKEEVIDENCE_H_
+#endif // _ELM_TS_FAKEEVIDENCE_H_

@@ -9,8 +9,8 @@
  * @file Define variant visitor classes around Mat <-> X type conversions
  * @todo switchelm::Mat_f to basic Mat
  */
-#ifndef ELM_CORE_VISITORMAT__H_
-#define ELM_CORE_VISITORMAT__H_
+#ifndef _ELM_CORE_VISITORMAT__H_
+#define _ELM_CORE_VISITORMAT__H_
 
 #include "elm/core/typedefs_fwd.h"
 #include "elm/core/visitors/visitor_.h"
@@ -47,4 +47,4 @@ public:
 #endif // __WITH_PCL
 };
 
-#endif // ELM_CORE_VISITORMAT__H_
+#endif // _ELM_CORE_VISITORMAT__H_
