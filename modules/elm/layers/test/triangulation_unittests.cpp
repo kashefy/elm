@@ -196,7 +196,7 @@ TEST_F(TriangulationTest, ActivateAndResponse)
     int nb_vertices = static_cast<int>(vertices_vec.size());
     int sz_vertex = static_cast<int>(vertices_vec[0].vertices.size());
 
-    EXPECT_MAT_DIMS_EQ(vertices_mat, Size2i(nb_vertices*sz_vertex, 1)) << "Dimensions do not match.";
+    EXPECT_MAT_DIMS_EQ(vertices_mat, Size2i(sz_vertex, nb_vertices)) << "Dimensions do not match.";
 
     int k=0;
     for(int i=0; i<nb_vertices; i++) {
