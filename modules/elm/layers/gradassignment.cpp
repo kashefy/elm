@@ -150,6 +150,7 @@ void GradAssignment::Activate(const Signal &signal)
 
         beta *= beta_rate_;
     } // end A
+
 }
 
 void GradAssignment::Response(Signal &signal)
