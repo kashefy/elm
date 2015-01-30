@@ -47,6 +47,8 @@ typedef boost::shared_ptr<CloudPtNrml > CloudPtNrmlPtr;
 
 typedef std::vector<pcl::Vertices > VecVertices;
 
+typedef VecVertices Triangles;
+
 } // namespace elm
 
 #endif // __WITH_PCL
