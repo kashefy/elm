@@ -3,8 +3,6 @@
 
 #include <string>
 
-#include <boost/property_tree/ptree.hpp>
-
 namespace elm {
 
 class InputName
@@ -12,7 +10,10 @@ class InputName
 public:
     InputName(const std::string &name);
 
-    InputName(const boost::property_tree::ptree &p);
+    operator std::string() const;
+
+protected:
+    std::string name_;  ///< input name
 };
 
 } // namespace elm
