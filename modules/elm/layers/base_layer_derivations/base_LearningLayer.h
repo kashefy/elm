@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef _ELM_CORE_BASE_LEARNINGLAYER_H_
-#define _ELM_CORE_BASE_LEARNINGLAYER_H_
+#ifndef _ELM_CORE_BASE_LAYER_DERIVS_LEARNINGLAYER_H_
+#define _ELM_CORE_BASE_LAYER_DERIVS_LEARNINGLAYER_H_
 
 #include "elm/core/base_Layer.h"
 
@@ -41,4 +41,4 @@ protected:
 
 } // namespace elm
 
-#endif // _ELM_CORE_BASE_LEARNINGLAYER_H_
+#endif // _ELM_CORE_BASE_LAYER_DERIVS_LEARNINGLAYER_H_

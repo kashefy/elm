@@ -7,6 +7,8 @@
 //M*/
 #include "elm/layers/base_layer_derivations/base_tivlayer.h"
 
+using namespace elm;
+
 base_TIVLayer::base_TIVLayer()
 {
 }
