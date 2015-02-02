@@ -16,9 +16,10 @@
 #include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
 
+#include "elm/core/boost/typedefs_fwd.h"
+
 namespace elm
 {
-typedef boost::property_tree::ptree PTree;
 
 /**
  * @brief Print a ptree to standard out in xml format
