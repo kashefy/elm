@@ -8,11 +8,12 @@
 #ifndef _ELM_CORE_LAYERCONFIG_H_
 #define _ELM_CORE_LAYERCONFIG_H_
 
-#include <string>
 #include <vector>
 #include <map>
 
 #include <boost/property_tree/ptree.hpp>
+
+#include "elm/core/inputname.h"
 
 typedef boost::property_tree::ptree PTree;
 typedef boost::optional<std::string> OptS;

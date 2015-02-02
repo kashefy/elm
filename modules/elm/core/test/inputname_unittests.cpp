@@ -14,4 +14,19 @@ TEST(InputNameTest, Constructor)
     EXPECT_EQ("bar", string(InputName("bar")));
 }
 
+TEST(InputNameTest, AssignToString)
+{
+    string s;
+    {
+        s = InputName("foo");
+    }
+    EXPECT_EQ("foo", s);
+
+    {
+        InputName in("bar");
+        s = in;
+    }
+    EXPECT_EQ("bar", s);
+}
+
 } // annonymoys namespsace for unit tests
