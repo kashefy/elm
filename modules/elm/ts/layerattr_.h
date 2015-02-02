@@ -11,9 +11,9 @@
 #include <map>
 #include <string>
 
-class base_Layer;
-
  namespace elm {
+
+ class base_Layer;
 
 enum LayerIOKeyType
 {

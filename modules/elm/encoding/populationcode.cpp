@@ -9,8 +9,6 @@
 
 #include <string>
 
-#include <boost/foreach.hpp> ///< for iterating through param kernels
-
 #include <opencv2/features2d.hpp>
 #include <opencv2/imgproc.hpp>
 

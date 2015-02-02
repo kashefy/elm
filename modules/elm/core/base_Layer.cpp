@@ -9,6 +9,8 @@
 
 #include "elm/core/exception.h"
 
+using namespace elm;
+
 base_Layer::~base_Layer()
 {
 }

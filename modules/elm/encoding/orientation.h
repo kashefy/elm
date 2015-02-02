@@ -11,6 +11,8 @@
 #include "elm/core/typedefs.h"
 #include "elm/encoding/base_filterbank.h"
 
+namespace elm {
+
 class GaborFilterBank : public base_FilterBank
 {
 public:
@@ -71,5 +73,7 @@ protected:
     void Rectify(cv::Mat1f &response);
 
 }; // GaborFilterBank
+
+} // namespace elm
 
 #endif // _ELM_ENCODING_ORIENTATION_H_

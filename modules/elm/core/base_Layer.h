@@ -8,6 +8,8 @@
 #ifndef _ELM_CORE_BASE_LAYER_H_
 #define _ELM_CORE_BASE_LAYER_H_
 
+namespace elm {
+
 class LayerConfig;
 class LayerIONames;
 class Signal;
@@ -98,5 +100,7 @@ protected:
      */
     base_LearningLayer(const LayerConfig& config);
 };
+
+} // namespace elm {
 
 #endif // _ELM_CORE_BASE_LAYER_H_

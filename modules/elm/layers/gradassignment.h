@@ -14,10 +14,10 @@
 
 #include "elm/core/base_Layer.h"
 
+namespace elm {
+
 class LayerConfig;
 class Signal;
-
-namespace elm {
 
 /**
  * @brief Layer for implementing Graduated Assignment algorithm for graph matching

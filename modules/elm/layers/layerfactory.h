@@ -14,6 +14,8 @@
 #include "elm/core/base_Layer.h"
 #include "elm/core/exception.h"
 
+namespace elm {
+
 /**
  * @brief class for implementing layer related factory methods
  * Such as instantiation and sequencing of multiple layer applications (e.g. pipeline)
@@ -47,5 +49,7 @@ public:
                                     const LayerConfig &config,
                                     const LayerIONames &io);
 };
+
+} // namesapce elm
 
 #endif // _ELM_LAYERS_LAYERFACTORY_H_

@@ -18,9 +18,9 @@
 #include "elm/core/layerconfig.h"
 #include "elm/core/typedefs_sfwd.h"
 
-class base_FilterBank;
-
 namespace elm {
+
+class base_FilterBank;
 
 /**
  * @brief The base class for population codes
@@ -164,6 +164,6 @@ protected:
 
 };
 
-// namespace elm
+} // namespace elm
 
 #endif // _ELM_ENCODING_POPULATIONCODE_H_

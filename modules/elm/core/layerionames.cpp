@@ -7,6 +7,9 @@
 //M*/
 #include "elm/core/layerionames.h"
 
+#include <boost/optional.hpp>
+
+#include "elm/core/stl/stl.h"
 #include "elm/core/exception.h"
 
 using namespace std;
