@@ -16,6 +16,7 @@
 #include "elm/core/signal.h"
 
 using namespace std;
+using std::shared_ptr;
 using std::unique_ptr;
 using namespace cv;
 using namespace elm;
@@ -48,10 +49,16 @@ protected:
         to_.reset(new DummyChildLayer());
     }
 
-    unique_ptr<base_Layer> to_; ///< test object
+    shared_ptr<base_Layer> to_; ///< test object
 };
 
 TEST_F(LayerTest, Reset)
 {
+    EXPECT_THROW(to_->Reset(LayerConfig()), ExceptionNotImpl);
+}
+
+TEST_F(LayerTest, Reset_unique_ptr)
+{
+    unique_ptr<base_Layer> to(new DummyChildLayer());
     EXPECT_THROW(to_->Reset(LayerConfig()), ExceptionNotImpl);
 }
