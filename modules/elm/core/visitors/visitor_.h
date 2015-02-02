@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_VISITOR__H_
-#define ELM_CORE_VISITOR__H_
+#ifndef _ELM_CORE_VISITOR__H_
+#define _ELM_CORE_VISITOR__H_
 
 #include <boost/variant/static_visitor.hpp>
 
@@ -47,4 +47,4 @@ class VisitorVoid :
 {
 };
 
-#endif // ELM_CORE_VISITOR__H_
+#endif // _ELM_CORE_VISITOR__H_

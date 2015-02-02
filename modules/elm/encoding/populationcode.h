@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_ENCODING_POPULATIONCODE_H_
-#define ELM_ENCODING_POPULATIONCODE_H_
+#ifndef _ELM_ENCODING_POPULATIONCODE_H_
+#define _ELM_ENCODING_POPULATIONCODE_H_
 
 #include <memory>
 
@@ -160,4 +160,4 @@ protected:
 
 };
 
-#endif // ELM_ENCODING_POPULATIONCODE_H_
+#endif // _ELM_ENCODING_POPULATIONCODE_H_

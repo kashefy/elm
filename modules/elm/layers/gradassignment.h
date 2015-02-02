@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_LAYERS_GRADASSIGNMENT_H_
-#define ELM_LAYERS_GRADASSIGNMENT_H_
+#ifndef _ELM_LAYERS_GRADASSIGNMENT_H_
+#define _ELM_LAYERS_GRADASSIGNMENT_H_
 
 #include <string>
 
@@ -103,4 +103,4 @@ protected:
 
 } // namespace elm
 
-#endif // ELM_LAYERS_GRADASSIGNMENT_H_
+#endif // _ELM_LAYERS_GRADASSIGNMENT_H_

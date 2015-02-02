@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_NEURON_H_
-#define ELM_NEURON_H_
+#ifndef _ELM_NEURON_H_
+#define _ELM_NEURON_H_
 
 #include "elm/core/sampler.h"
 
@@ -41,4 +41,4 @@ protected:
     PoissonProcess poisson_;
 };
 
-#endif // ELM_NEURON_H_
+#endif // _ELM_NEURON_H_

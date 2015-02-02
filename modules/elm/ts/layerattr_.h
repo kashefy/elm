@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_TS_LAYERATTR__H_
-#define ELM_TS_LAYERATTR__H_
+#ifndef _ELM_TS_LAYERATTR__H_
+#define _ELM_TS_LAYERATTR__H_
 
 #include <map>
 #include <string>
@@ -56,4 +56,4 @@ struct LayerAttr_
 
 } // namespace elm
 
-#endif // ELM_TS_LAYERATTR__H_
+#endif // _ELM_TS_LAYERATTR__H_

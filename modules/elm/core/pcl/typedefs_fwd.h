@@ -7,8 +7,8 @@
 //M*/
 /** forward declarations of pcl data types
  */
-#ifndef ELM_CORE_PCL_TYPEDEFS_FWD_H_
-#define ELM_CORE_PCL_TYPEDEFS_FWD_H_
+#ifndef _ELM_CORE_PCL_TYPEDEFS_FWD_H_
+#define _ELM_CORE_PCL_TYPEDEFS_FWD_H_
 
 #ifndef __WITH_PCL
     #warning "Skipping pcl utilities since PCL support is disabled."
@@ -53,4 +53,4 @@ typedef VecVertices Triangles;
 
 #endif // __WITH_PCL
 
-#endif // ELM_CORE_PCL_TYPEDEFS_FWD_H_
+#endif // _ELM_CORE_PCL_TYPEDEFS_FWD_H_

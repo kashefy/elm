@@ -7,8 +7,8 @@
 //M*/
 /**@file Synthetic data generator
   */
-#ifndef ELM_IO_SYNTH_H_
-#define ELM_IO_SYNTH_H_
+#ifndef _ELM_IO_SYNTH_H_
+#define _ELM_IO_SYNTH_H_
 
 #include "elm/core/cv/typedefs_fwd.h"
 
@@ -74,4 +74,4 @@ protected:
     float delta_;   ///< no. of orientation variations
 };
 
-#endif // ELM_IO_SYNTH_H_
+#endif // _ELM_IO_SYNTH_H_

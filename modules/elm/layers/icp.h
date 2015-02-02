@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_LAYERS_ICP_H_
-#define ELM_LAYERS_ICP_H_
+#ifndef _ELM_LAYERS_ICP_H_
+#define _ELM_LAYERS_ICP_H_
 
 #include <string>
 
@@ -75,4 +75,4 @@ protected:
 
 #endif  // __WITH_PCL
 
-#endif // ELM_LAYERS_ICP_H_
+#endif // _ELM_LAYERS_ICP_H_

@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_NEURON_COMPETITION_H_
-#define ELM_NEURON_COMPETITION_H_
+#ifndef _ELM_NEURON_COMPETITION_H_
+#define _ELM_NEURON_COMPETITION_H_
 
 #include <vector>
 #include <memory>
@@ -56,4 +56,4 @@ protected:
     float delta_t_sec_;    ///< time resolution in seconds
 };
 
-#endif // ELM_NEURON_COMPETITION_H_
+#endif // _ELM_NEURON_COMPETITION_H_

@@ -7,8 +7,8 @@
 //M*/
 /**@file interval assertions
   */
-#ifndef ELM_TS_INTERVAL_H_
-#define ELM_TS_INTERVAL_H_
+#ifndef _ELM_TS_INTERVAL_H_
+#define _ELM_TS_INTERVAL_H_
 
 #include "gtest/gtest.h"
 
@@ -24,4 +24,4 @@
 ::testing::AssertionResult InLClosedROpen(float x, float a, float b);
 #define EXPECT_IN_LCLOSED_ROPEN(x, a, b) EXPECT_TRUE( InLClosedROpen(x, a, b) )
 
-#endif // ELM_TS_INTERVAL_H_
+#endif // _ELM_TS_INTERVAL_H_

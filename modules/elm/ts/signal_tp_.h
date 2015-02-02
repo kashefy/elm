@@ -24,8 +24,8 @@
  *
  *  for more details, please see: https://code.google.com/p/googletest/wiki/AdvancedGuide#Type-Parameterized_Tests
  */
-#ifndef ELM_TS_SIGNAL_TP__H_
-#define ELM_TS_SIGNAL_TP__H_
+#ifndef _ELM_TS_SIGNAL_TP__H_
+#define _ELM_TS_SIGNAL_TP__H_
 
 #include "gtest/gtest.h"
 
@@ -206,4 +206,4 @@ REGISTER_TYPED_TEST_CASE_P(Signal_TP_,
                            MostRecent_after_Append
                            ); ///< register additional typed_test_p (i.e. unit test) routines here
 
-#endif // ELM_TS_SIGNAL_TP__H_
+#endif // _ELM_TS_SIGNAL_TP__H_

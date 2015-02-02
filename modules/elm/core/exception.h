@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_EXCEPTION_H_
-#define ELM_CORE_EXCEPTION_H_
+#ifndef _ELM_CORE_EXCEPTION_H_
+#define _ELM_CORE_EXCEPTION_H_
 
 #include <string>
 #include <opencv2/core.hpp>
@@ -68,4 +68,4 @@ public:
 
 } // namespace elm
 
-#endif // ELM_CORE_EXCEPTION_H_
+#endif // _ELM_CORE_EXCEPTION_H_

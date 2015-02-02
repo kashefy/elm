@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_LAYERS_TRIANGULATION_H_
-#define ELM_LAYERS_TRIANGULATION_H_
+#ifndef _ELM_LAYERS_TRIANGULATION_H_
+#define _ELM_LAYERS_TRIANGULATION_H_
 
 #ifndef __WITH_PCL
     #warning "Disabling Triangulation layer due to no PCL support and defining it as a non-supported"
@@ -83,4 +83,4 @@ protected:
 
 #endif // __WITH_PCL
 
-#endif // ELM_LAYERS_TRIANGULATION_H_
+#endif // _ELM_LAYERS_TRIANGULATION_H_
