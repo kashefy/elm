@@ -9,20 +9,12 @@
 
 #include <algorithm>
 
-#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace std;
 using namespace elm;
 
 using namespace boost::property_tree;
-
-void elm::PrintXML(const PTree &pt,
-                std::basic_ostream<
-                typename PTree::key_type::value_type
-                > &stream)
-{
-    xml_parser::write_xml(stream, pt);
-}
 
 bool elm::UnusedNodes(const PTree &p, const vector<string> &keys_used, vector<string> &keys_unused)
 {

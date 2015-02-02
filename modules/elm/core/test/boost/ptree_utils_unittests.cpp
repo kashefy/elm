@@ -6,6 +6,7 @@
 //
 //M*/
 #include "elm/core/boost/ptree_utils.h"
+#include "elm/core/boost/ptree_utils_inl.h"
 
 #include "elm/core/exception.h"
 #include "elm/core/stl/typedefs.h"
