@@ -34,8 +34,6 @@ public:
 
     virtual void Activate(const Signal &signal) {}
 
-    virtual void Apply() {}
-
     virtual void Response(Signal &signal) {}
 
     DummyChildLayer() {}
