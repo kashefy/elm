@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_NEURON_BASE_LEARNER_H_
-#define ELM_NEURON_BASE_LEARNER_H_
+#ifndef _ELM_NEURON_BASE_LEARNER_H_
+#define _ELM_NEURON_BASE_LEARNER_H_
 
 #include <opencv2/core.hpp>
 
@@ -46,4 +46,4 @@ protected:
     base_Learner();
 };
 
-#endif // ELM_NEURON_BASE_LEARNER_H_
+#endif // _ELM_NEURON_BASE_LEARNER_H_

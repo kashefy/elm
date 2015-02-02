@@ -8,8 +8,8 @@
 /** @file define a few macros and constants here
  *  @todo how to suppress "defined but unused" warning of NA_IDX
  */
-#ifndef ELM_CORE_DEFS_H_
-#define ELM_CORE_DEFS_H_
+#ifndef _ELM_CORE_DEFS_H_
+#define _ELM_CORE_DEFS_H_
 
 #define ELM_PI2   1.57079632679
 
@@ -24,4 +24,4 @@ extern int NA_IDX;  ///< = -1; non-applicable index
 
 }
 
-#endif // ELM_CORE_DEFS_H_
+#endif // _ELM_CORE_DEFS_H_

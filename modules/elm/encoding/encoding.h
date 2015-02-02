@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_ENCODING_H_
-#define ELM_ENCODING_H_
+#ifndef _ELM_ENCODING_H_
+#define _ELM_ENCODING_H_
 
 
-#endif // ELM_ENCODING_H_
+#endif // _ELM_ENCODING_H_

@@ -7,8 +7,8 @@
 //M*/
 /** @file define routines involving STL vectors of Mat objects
   */
-#ifndef ELM_CORE_CV_MAT_VECTOR_UTILS_H_
-#define ELM_CORE_CV_MAT_VECTOR_UTILS_H_
+#ifndef _ELM_CORE_CV_MAT_VECTOR_UTILS_H_
+#define _ELM_CORE_CV_MAT_VECTOR_UTILS_H_
 
 #include "elm/core/typedefs_sfwd.h"
 
@@ -49,4 +49,4 @@ int tril(const cv::Mat1f &src, std::vector<cv::Mat1f > &dst);
 
 } // elm namespace
 
-#endif // ELM_CORE_CV_MAT_VECTOR_UTILS_H_
+#endif // _ELM_CORE_CV_MAT_VECTOR_UTILS_H_

@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_SIGNAL__H_
-#define ELM_CORE_SIGNAL__H_
+#ifndef _ELM_CORE_SIGNAL__H_
+#define _ELM_CORE_SIGNAL__H_
 
 #include <map>
 
@@ -131,4 +131,4 @@ protected:
     MapSVecFeat_ signals_; ///< encapuslated signal features
 };
 
-#endif // ELM_CORE_SIGNAL__H_
+#endif // _ELM_CORE_SIGNAL__H_

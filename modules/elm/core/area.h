@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_AREA_H_
-#define ELM_CORE_AREA_H_
+#ifndef _ELM_CORE_AREA_H_
+#define _ELM_CORE_AREA_H_
 
 #include "elm/core/cv/typedefs_fwd.h"
 
@@ -32,4 +32,4 @@ protected:
     float Trapezoidal(float x1, float x2, float y1, float y2) const;
 };
 
-#endif // ELM_CORE_AREA_H_
+#endif // _ELM_CORE_AREA_H_

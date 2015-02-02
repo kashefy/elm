@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_CV_NEIGHBORHOOD_H_
-#define ELM_CORE_CV_NEIGHBORHOOD_H_
+#ifndef _ELM_CORE_CV_NEIGHBORHOOD_H_
+#define _ELM_CORE_CV_NEIGHBORHOOD_H_
 
 #include <opencv2/core.hpp>
 
@@ -31,4 +31,4 @@ void NeighMeanVar(const cv::Mat1f& m, int radius, cv::Mat1f &neigh_mean, cv::Mat
 
 } // namespace elm
 
-#endif // ELM_CORE_CV_NEIGHBORHOOD_H_
+#endif // _ELM_CORE_CV_NEIGHBORHOOD_H_

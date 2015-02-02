@@ -8,8 +8,8 @@
 /** @file near-fwd declarations for convinience typedefs
  * Not fully forward due to STL types.
  */
-#ifndef ELM_CORE_TYPEDEFS_FWD_H_
-#define ELM_CORE_TYPEDEFS_FWD_H_
+#ifndef _ELM_CORE_TYPEDEFS_FWD_H_
+#define _ELM_CORE_TYPEDEFS_FWD_H_
 
 #include "elm/core/cv/typedefs_fwd.h"
 
@@ -21,4 +21,4 @@ typedef cv::Mat_<float> Mat_f;   ///< convinience forward typedef for Mat of flo
 
 } // namespace elm
 
-#endif // ELM_CORE_TYPEDEFS_FWD_H_
+#endif // _ELM_CORE_TYPEDEFS_FWD_H_

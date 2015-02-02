@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_INTERVAL_H_
-#define ELM_CORE_INTERVAL_H_
+#ifndef _ELM_CORE_INTERVAL_H_
+#define _ELM_CORE_INTERVAL_H_
 
 /**
  * @brief Base class for intervals of real numbers
@@ -69,4 +69,4 @@ public:
     bool In(float x) const;
 };
 
-#endif // ELM_CORE_INTERVAL_H_
+#endif // _ELM_CORE_INTERVAL_H_

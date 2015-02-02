@@ -7,8 +7,8 @@
 //M*/
 /** @file template utility definitions using STL vectors that have to be defined inline
   */
-#ifndef ELM_CORE_MAT_VECTOR_UTILS_INL_H_
-#define ELM_CORE_MAT_VECTOR_UTILS_INL_H_
+#ifndef _ELM_CORE_MAT_VECTOR_UTILS_INL_H_
+#define _ELM_CORE_MAT_VECTOR_UTILS_INL_H_
 
 #include <vector>
 
@@ -60,4 +60,4 @@ cv::Mat_<T> Vec_ToRowMat_(std::vector<T> &v)
 
 }
 
-#endif // ELM_CORE_MAT_VECTOR_UTILS_INL_H_
+#endif // _ELM_CORE_MAT_VECTOR_UTILS_INL_H_

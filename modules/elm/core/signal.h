@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_SIGNAL_H_
-#define ELM_CORE_SIGNAL_H_
+#ifndef _ELM_CORE_SIGNAL_H_
+#define _ELM_CORE_SIGNAL_H_
 
 #include "elm/core/typedefs_sfwd.h" // VecMat
 
@@ -43,4 +43,4 @@ protected:
 
 };
 
-#endif // ELM_CORE_SIGNAL_H_
+#endif // _ELM_CORE_SIGNAL_H_

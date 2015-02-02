@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_LAYERS_SINKHORNBALANCING_H_
-#define ELM_LAYERS_SINKHORNBALANCING_H_
+#ifndef _ELM_LAYERS_SINKHORNBALANCING_H_
+#define _ELM_LAYERS_SINKHORNBALANCING_H_
 
 #include <string>
 
@@ -70,4 +70,4 @@ protected:
 
 } // namespace elm
 
-#endif // ELM_LAYERS_SINKHORNBALANCING_H_
+#endif // _ELM_LAYERS_SINKHORNBALANCING_H_

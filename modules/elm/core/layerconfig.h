@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_LAYERCONFIG_H_
-#define ELM_CORE_LAYERCONFIG_H_
+#ifndef _ELM_CORE_LAYERCONFIG_H_
+#define _ELM_CORE_LAYERCONFIG_H_
 
 #include <string>
 #include <vector>
@@ -98,4 +98,4 @@ private:
     PTree params_;
 };
 
-#endif // ELM_CORE_LAYERCONFIG_H_
+#endif // _ELM_CORE_LAYERCONFIG_H_

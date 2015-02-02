@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_EVAL_REVERSECORR_H_
-#define ELM_EVAL_REVERSECORR_H_
+#ifndef _ELM_EVAL_REVERSECORR_H_
+#define _ELM_EVAL_REVERSECORR_H_
 
 #include <opencv2/core.hpp>
 
@@ -56,4 +56,4 @@ private:
     int nb_samples_;    ///< no. of accumulated evidence
 };
 
-#endif // ELM_EVAL_REVERSECORR_H_
+#endif // _ELM_EVAL_REVERSECORR_H_

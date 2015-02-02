@@ -7,8 +7,8 @@
 //M*/
 /**@file collection of STL utility/convinience functions
  */
-#ifndef ELM_CORE_STL_H_
-#define ELM_CORE_STL_H_
+#ifndef _ELM_CORE_STL_H_
+#define _ELM_CORE_STL_H_
 
 #include <map>
 #include <string>
@@ -69,4 +69,4 @@ namespace elm {
     }
 }
 
-#endif // ELM_CORE_STL_H_
+#endif // _ELM_CORE_STL_H_

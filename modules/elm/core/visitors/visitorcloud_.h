@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_VISITORCLOUD__H_
-#define ELM_CORE_VISITORCLOUD__H_
+#ifndef _ELM_CORE_VISITORCLOUD__H_
+#define _ELM_CORE_VISITORCLOUD__H_
 
 #ifdef __WITH_PCL // the following visitor derived template class definitions require PCL support
 
@@ -128,4 +128,4 @@ protected:
     #warning "Unable to define VisitorCloud_ visitor without PCL support."
 #endif // __WITH_PCL
 
-#endif // ELM_CORE_VISITORCLOUD__H_
+#endif // _ELM_CORE_VISITORCLOUD__H_

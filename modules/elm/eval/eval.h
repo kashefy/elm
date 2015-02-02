@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_EVAL_H_
-#define ELM_EVAL_H_
+#ifndef _ELM_EVAL_H_
+#define _ELM_EVAL_H_
 
 
-#endif // ELM_EVAL_H_
+#endif // _ELM_EVAL_H_

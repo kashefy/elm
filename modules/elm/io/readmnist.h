@@ -8,8 +8,8 @@
 /** Classes for reading MNIST database files
  *  source: http://yann.lecun.com/exdb/mnist/
  */
-#ifndef ELM_IO_READMNIST_H_
-#define ELM_IO_READMNIST_H_
+#ifndef _ELM_IO_READMNIST_H_
+#define _ELM_IO_READMNIST_H_
 
 #include <string>
 #include <fstream>
@@ -124,4 +124,4 @@ protected:
     cv::Point2i current_loc_;    ///< top-left of most recent location
 };
 
-#endif // ELM_IO_READMNIST_H_
+#endif // _ELM_IO_READMNIST_H_

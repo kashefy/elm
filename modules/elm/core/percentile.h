@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_PERCENTILE_H_
-#define ELM_CORE_PERCENTILE_H_
+#ifndef _ELM_CORE_PERCENTILE_H_
+#define _ELM_CORE_PERCENTILE_H_
 
 #include <opencv2/core.hpp>
 
@@ -27,4 +27,4 @@ public:
     float CalcPercentile(const cv::Mat1f &in, float percentile) const;
 };
 
-#endif // ELM_CORE_PERCENTILE_H_
+#endif // _ELM_CORE_PERCENTILE_H_

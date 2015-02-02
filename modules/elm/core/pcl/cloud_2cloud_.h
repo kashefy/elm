@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_PCL_CLOUD__2CLOUD__H_
-#define ELM_CORE_PCL_CLOUD__2CLOUD__H_
+#ifndef _ELM_CORE_PCL_CLOUD__2CLOUD__H_
+#define _ELM_CORE_PCL_CLOUD__2CLOUD__H_
 
 #ifdef __WITH_PCL // the template class definitions require PCL support
 
@@ -80,4 +80,4 @@ void Cloud_2Cloud_<pcl::PointNormal, pcl::Normal>::Convert(
     #warning "Unable to define cloud 2 cloud converter without PCL support."
 #endif // __WITH_PCL
 
-#endif // ELM_CORE_PCL_CLOUD__2CLOUD__H_
+#endif // _ELM_CORE_PCL_CLOUD__2CLOUD__H_

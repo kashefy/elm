@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_ENCODING_ORIENTATION_H_
-#define ELM_ENCODING_ORIENTATION_H_
+#ifndef _ELM_ENCODING_ORIENTATION_H_
+#define _ELM_ENCODING_ORIENTATION_H_
 
 #include "elm/core/typedefs.h"
 #include "elm/encoding/base_filterbank.h"
@@ -72,4 +72,4 @@ protected:
 
 }; // GaborFilterBank
 
-#endif // ELM_ENCODING_ORIENTATION_H_
+#endif // _ELM_ENCODING_ORIENTATION_H_
