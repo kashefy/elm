@@ -15,9 +15,9 @@
 using namespace std;
 using namespace elm;
 
-void LayerIONames::Input(const string &key, const string &name)
+void LayerIONames::Input(const string &key, const InputName &name)
 {
-   inputs_[key] = name;
+    inputs_[key] = name;
 }
 
 void LayerIONames::Output(const string &key, const string &name)
@@ -25,7 +25,7 @@ void LayerIONames::Output(const string &key, const string &name)
     outputs_[key] = name;
 }
 
-string LayerIONames::Input(const string &key) const
+InputName LayerIONames::Input(const string &key) const
 {
     string name;
     if(!Find<string>(inputs_, key, name)) {

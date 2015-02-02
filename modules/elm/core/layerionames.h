@@ -30,7 +30,7 @@ public:
      * @param key of feature required by layer
      * @param name und which the feature exists
      */
-    void Input(const std::string &key, const std::string &name);
+    void Input(const std::string &key, const InputName &name);
 
     /**
      * @brief Set output key-name-pair. Overwrite if key exists.
@@ -45,7 +45,7 @@ public:
      * @return name
      * @throw Key Error if key does not exist.
      */
-    std::string Input(const std::string &key) const;
+    InputName Input(const std::string &key) const;
 
     /**
      * @brief Get name to optional input feature key
