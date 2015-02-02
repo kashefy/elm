@@ -44,8 +44,8 @@ public:
      * @throws ExceptionTypeError on unrecognized layer type
      */
     static LayerShared CreateShared(const LayerType &type,
-                                       const LayerConfig &config,
-                                       const LayerIONames &io);
+                                    const LayerConfig &config,
+                                    const LayerIONames &io);
 };
 
 #endif // _ELM_LAYERS_LAYERFACTORY_H_
