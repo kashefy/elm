@@ -10,6 +10,8 @@
 
 #include <memory>
 
+#include <boost/optional.hpp>
+
 #include <opencv2/core.hpp>
 
 #include "elm/core/base_Layer.h"
@@ -17,6 +19,8 @@
 #include "elm/core/typedefs_sfwd.h"
 
 class base_FilterBank;
+
+namespace elm {
 
 /**
  * @brief The base class for population codes
@@ -154,10 +158,12 @@ protected:
      */
     virtual void Normalize(elm::VecMat1f &response) const;
 
-    elm::VecMat1f state_;            ///< internal state
-    elm::VecMat1f response_distr_;   ///< response distribution
+    VecMat1f state_;            ///< internal state
+    VecMat1f response_distr_;   ///< response distribution
     int fan_out_;               ///< dimensions of state per node (e.g. no. of kernels)
 
 };
+
+// namespace elm
 
 #endif // _ELM_ENCODING_POPULATIONCODE_H_
