@@ -7,8 +7,8 @@
 //M*/
 /** @file define elmi-forwarded typedef. Fully defined STL types + fwd. declared other types
  */
-#ifndef ELM_CORE_TYPEDEFS_SFWD_H_
-#define ELM_CORE_TYPEDEFS_SFWD_H_
+#ifndef _ELM_CORE_TYPEDEFS_SFWD_H_
+#define _ELM_CORE_TYPEDEFS_SFWD_H_
 
 #include "elm/core/typedefs_fwd.h"
 #include "elm/core/stl/typedefs.h"
@@ -20,4 +20,4 @@ typedef std::vector< cv::Mat > VecMat;      ///< Convinience typedef for vector 
 
 } // namespace elm
 
-#endif // ELM_CORE_TYPEDEFS_SFWD_H_
+#endif // _ELM_CORE_TYPEDEFS_SFWD_H_

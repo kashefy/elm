@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_HIST_H_
-#define ELM_CORE_HIST_H_
+#ifndef _ELM_CORE_HIST_H_
+#define _ELM_CORE_HIST_H_
 
 #include <opencv2/core.hpp>
 
@@ -51,4 +51,4 @@ protected:
     cv::Mat1f hist_;                  ///< computed histogram
 };
 
-#endif // ELM_CORE_HIST_H_
+#endif // _ELM_CORE_HIST_H_

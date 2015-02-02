@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_PCL_POINT_TRAITS_H_
-#define ELM_CORE_PCL_POINT_TRAITS_H_
+#ifndef _ELM_CORE_PCL_POINT_TRAITS_H_
+#define _ELM_CORE_PCL_POINT_TRAITS_H_
 
 #ifdef __WITH_PCL // the following traits require PCL support
 
@@ -57,4 +57,4 @@ public:
     #warning "Unable to define additional point_traits without PCL support."
 #endif // __WITH_PCL
 
-#endif // ELM_CORE_PCL_POINT_TRAITS_H_
+#endif // _ELM_CORE_PCL_POINT_TRAITS_H_

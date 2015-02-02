@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_BASE_LAYER_H_
-#define ELM_CORE_BASE_LAYER_H_
+#ifndef _ELM_CORE_BASE_LAYER_H_
+#define _ELM_CORE_BASE_LAYER_H_
 
 class LayerConfig;
 class LayerIONames;
@@ -99,4 +99,4 @@ protected:
     base_LearningLayer(const LayerConfig& config);
 };
 
-#endif // ELM_CORE_BASE_LAYER_H_
+#endif // _ELM_CORE_BASE_LAYER_H_

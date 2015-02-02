@@ -7,8 +7,8 @@
 //M*/
 /** @file utilitites for setting up typed tests using PCL Point
   */
-#ifndef ELM_TS_PCL_POINT_TYPED_TESTS_H_
-#define ELM_TS_PCL_POINT_TYPED_TESTS_H_
+#ifndef _ELM_TS_PCL_POINT_TYPED_TESTS_H_
+#define _ELM_TS_PCL_POINT_TYPED_TESTS_H_
 
 #ifdef __WITH_PCL // the following definition require PCL support
 
@@ -67,4 +67,4 @@ ELM_DECLARE_SPECIALIZATION_EXPECTED_POINT_ATTR(pcl::PointNormal);
 
 #endif // __WITH_PCL
 
-#endif // ELM_TS_PCL_POINT_TYPED_TESTS_H_
+#endif // _ELM_TS_PCL_POINT_TYPED_TESTS_H_

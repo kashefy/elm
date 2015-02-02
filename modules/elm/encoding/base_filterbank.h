@@ -8,8 +8,8 @@
 /** @file Define classes for encapsulating, applying filter banks
  * and different response iterators (per kernel, per element across kernels).
  */
-#ifndef ELM_ENCODING_BASE_FILTERBANK_H_
-#define ELM_ENCODING_BASE_FILTERBANK_H_
+#ifndef _ELM_ENCODING_BASE_FILTERBANK_H_
+#define _ELM_ENCODING_BASE_FILTERBANK_H_
 
 #include <string>
 #include <vector>
@@ -84,4 +84,4 @@ protected:
     elm::VecMat1f response_; ///< response per kernel for most recent input
 };
 
-#endif // ELM_ENCODING_BASE_FILTERBANK_H_
+#endif // _ELM_ENCODING_BASE_FILTERBANK_H_

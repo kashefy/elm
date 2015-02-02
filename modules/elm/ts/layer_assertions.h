@@ -7,8 +7,8 @@
 //M*/
 /** @file routines to help test layer functionality
   */
-#ifndef ELM_TS_LAYER_UTILS_H_
-#define ELM_TS_LAYER_UTILS_H_
+#ifndef _ELM_TS_LAYER_UTILS_H_
+#define _ELM_TS_LAYER_UTILS_H_
 
 #include <memory>
 
@@ -109,4 +109,4 @@ REGISTER_TYPED_TEST_CASE_P(Layer_TP_,
 
 } // namespace elm
 
-#endif // ELM_TS_LAYER_UTILS_H_
+#endif // _ELM_TS_LAYER_UTILS_H_

@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_FEATUREDATA_H_
-#define ELM_CORE_FEATUREDATA_H_
+#ifndef _ELM_CORE_FEATUREDATA_H_
+#define _ELM_CORE_FEATUREDATA_H_
 
 #include <memory>
 
@@ -107,4 +107,4 @@ protected:
 
 std::ostream& operator<<(std::ostream& os, FeatureData& obj);
 
-#endif // ELM_CORE_FEATUREDATA_H_
+#endif // _ELM_CORE_FEATUREDATA_H_

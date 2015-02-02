@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_NEURON_SPIKINGHISTORY_H_
-#define ELM_NEURON_SPIKINGHISTORY_H_
+#ifndef _ELM_NEURON_SPIKINGHISTORY_H_
+#define _ELM_NEURON_SPIKINGHISTORY_H_
 
 #include <opencv2/core.hpp>
 
@@ -84,4 +84,4 @@ protected:
     cv::Mat1i history_;  ///< input history
 };
 
-#endif // ELM_NEURON_SPIKINGHISTORY_H_
+#endif // _ELM_NEURON_SPIKINGHISTORY_H_

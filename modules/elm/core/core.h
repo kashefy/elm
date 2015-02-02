@@ -5,12 +5,12 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_H_
-#define ELM_CORE_H_
+#ifndef _ELM_CORE_H_
+#define _ELM_CORE_H_
 
-#ifndef ELM_VERSION
+#ifndef _ELM_VERSION
 #define ELM_VERSION "Development"
-#endif // ELM_VERSION
+#endif // _ELM_VERSION
 
 namespace elm {
 
@@ -18,4 +18,4 @@ const char* GetVersion();
 
 }
 
-#endif // ELM_CORE_H_
+#endif // _ELM_CORE_H_

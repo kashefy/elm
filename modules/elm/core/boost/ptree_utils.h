@@ -7,8 +7,8 @@
 //M*/
 /** @file utilities around boost property tree
  */
-#ifndef ELM_CORE_PTREE_UTILS_H_
-#define ELM_CORE_PTREE_UTILS_H_
+#ifndef _ELM_CORE_PTREE_UTILS_H_
+#define _ELM_CORE_PTREE_UTILS_H_
 
 #include <iostream>
 #include <vector>
@@ -58,4 +58,4 @@ bool UnusedNodes(const PTree &p, const std::vector<std::string> &keys_used, std:
 
 }
 
-#endif // ELM_CORE_PTREE_UTILS_H_
+#endif // _ELM_CORE_PTREE_UTILS_H_

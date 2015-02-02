@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_ENCODING_INTENSITYCONTRAST_H_
-#define ELM_ENCODING_INTENSITYCONTRAST_H_
+#ifndef _ELM_ENCODING_INTENSITYCONTRAST_H_
+#define _ELM_ENCODING_INTENSITYCONTRAST_H_
 
 #include <memory>
 
@@ -68,4 +68,4 @@ private:
     cv::Mat1f state_;
 };
 
-#endif // ELM_ENCODING_INTENSITYCONTRAST_H_
+#endif // _ELM_ENCODING_INTENSITYCONTRAST_H_

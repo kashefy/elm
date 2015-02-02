@@ -7,8 +7,8 @@
 //M*/
 /** @file template utility definitions that have to be defined inline
   */
-#ifndef ELM_CORE_MAT_UTILS_INL_H__
-#define ELM_CORE_MAT_UTILS_INL_H__
+#ifndef _ELM_CORE_MAT_UTILS_INL_H__
+#define _ELM_CORE_MAT_UTILS_INL_H__
 
 #include "elm/core/cv/typedefs_fwd.h"
 #include "elm/core/defs.h"
@@ -100,4 +100,4 @@ cv::Mat_<T> ARange_(T start, T stop, T step)
 
 } // elm namespace
 
-#endif // ELM_CORE_MAT_UTILS_INL_H__
+#endif // _ELM_CORE_MAT_UTILS_INL_H__

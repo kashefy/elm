@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_SAMPLER_H_
-#define ELM_CORE_SAMPLER_H_
+#ifndef _ELM_CORE_SAMPLER_H_
+#define _ELM_CORE_SAMPLER_H_
 
 #include <opencv2/core/mat.hpp>
 
@@ -93,4 +93,4 @@ float randexp(float lambda);
 
 }
 
-#endif // ELM_CORE_SAMPLER_H_
+#endif // _ELM_CORE_SAMPLER_H_

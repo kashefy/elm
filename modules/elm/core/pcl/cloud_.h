@@ -8,8 +8,8 @@
 /** A collection of routines to facilitate working with PCL data types.
  * Only defined if PCL support exists.
  */
-#ifndef ELM_CORE_PCL_CLOUD__H_
-#define ELM_CORE_PCL_CLOUD__H_
+#ifndef _ELM_CORE_PCL_CLOUD__H_
+#define _ELM_CORE_PCL_CLOUD__H_
 
 #ifndef __WITH_PCL
     #warning "Skipping pcl utilities since PCL support is disabled."
@@ -60,4 +60,4 @@ cv::Mat1f PointCloud2Mat_(boost::shared_ptr<pcl::PointCloud<TPoint > > &cloud_pt
 
 #endif // __WITH_PCL
 
-#endif // ELM_CORE_PCL_CLOUD__H_
+#endif // _ELM_CORE_PCL_CLOUD__H_

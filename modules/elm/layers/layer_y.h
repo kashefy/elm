@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_LAYERS_LAYERY_H_
-#define ELM_LAYERS_LAYERY_H_
+#ifndef _ELM_LAYERS_LAYERY_H_
+#define _ELM_LAYERS_LAYERY_H_
 
 #include <string>
 

@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_CV_MAT_TYPE_UTILS_H_
-#define ELM_CORE_CV_MAT_TYPE_UTILS_H_
+#ifndef _ELM_CORE_CV_MAT_TYPE_UTILS_H_
+#define _ELM_CORE_CV_MAT_TYPE_UTILS_H_
 
 #include "elm/core/stl/typedefs.h"
 #include "elm/core/cv/typedefs_fwd.h"
@@ -22,4 +22,4 @@ std::string MatTypeToString(const cv::Mat& m);
 
 } // namespace elm
 
-#endif // ELM_CORE_CV_MAT_TYPE_UTILS_H_
+#endif // _ELM_CORE_CV_MAT_TYPE_UTILS_H_

@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef ELM_CORE_PCL_CLOUD_IMPL__H_
-#define ELM_CORE_PCL_CLOUD_IMPL__H_
+#ifndef _ELM_CORE_PCL_CLOUD_IMPL__H_
+#define _ELM_CORE_PCL_CLOUD_IMPL__H_
 
 #ifdef __WITH_PCL // the following template Converter Cloud Mat class requires PCL support
 
@@ -253,4 +253,4 @@ public:
     #warning "Unable to define template Converter Cloud Mat without PCL support."
 #endif // __WITH_PCL
 
-#endif // ELM_CORE_PCL_CLOUD_IMPL__H_
+#endif // _ELM_CORE_PCL_CLOUD_IMPL__H_
