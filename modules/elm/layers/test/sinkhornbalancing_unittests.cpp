@@ -37,7 +37,7 @@ protected:
         cfg.Params(p);
 
         LayerIONames io;
-        io.Input(SinkhornBalancing::KEY_INPUT_MAT, NAME_IN_M);
+        io.Input(SinkhornBalancing::KEY_INPUT_STIMULUS, NAME_IN_M);
         io.Output(SinkhornBalancing::KEY_OUTPUT_MAT_BALANCED, NAME_OUT_M);
         io.Output(SinkhornBalancing::KEY_OUTPUT_IS_CONVERGED, NAME_OUT_CONVERGENCE);
 

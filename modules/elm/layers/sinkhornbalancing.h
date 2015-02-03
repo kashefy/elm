@@ -12,15 +12,17 @@
 
 #include <opencv2/core.hpp>
 
-#include "elm/core/base_Layer.h"
+#include "elm/layers/base_layer_derivations/base_singleinputfeaturelayer.h"
 
 namespace elm {
 /**
  * @brief Layer for implementing Singhorn's balancing algorithm
  * @todo find lighter representation, a full layer is overkill
  * @cites inkhorn1964
+ *
+ * key to input mat defined in parent
  */
-class SinkhornBalancing : public base_Layer
+class SinkhornBalancing : public base_SingleInputFeatureLayer
 {
 public:
     // params
@@ -28,7 +30,6 @@ public:
     static const std::string PARAM_MAX_ITER;    ///< max. no. of iterations allowed for Sinkhorn's balancing method
 
     // I/O Names
-    static const std::string KEY_INPUT_MAT;             ///< key to input mat
     static const std::string KEY_OUTPUT_MAT_BALANCED;   ///< key to output mat
     static const std::string KEY_OUTPUT_IS_CONVERGED;   ///< key to convergence result
 
@@ -56,7 +57,6 @@ public:
     static bool RowColNormalization(cv::Mat1f &m, int max_iter, float epsilon);
 
 protected:
-    std::string name_in_m_;     ///< name of input in signal object
     std::string name_out_m_;    ///< destination name for output
     std::string name_out_convergence_;    ///< destination name for convergence result
 
