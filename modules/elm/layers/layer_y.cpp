@@ -19,28 +19,25 @@ using namespace elm;
 const string LayerY::PARAM_DELTA_T_MSEC = "dt";
 const string LayerY::PARAM_FREQ         = "f";
 
-const string LayerY::KEY_INPUT_STIMULUS = "stimulus";
-const string LayerY::KEY_OUTPUT_SPIKES  = "spikes";
-
 /** @todo why does define guard lead to undefined reference error?
  */
 //#ifdef __WITH_GTEST
 #include <boost/assign/list_of.hpp>
 template <>
 elm::MapIONames LayerAttr_<LayerY>::io_pairs = boost::assign::map_list_of
-        ELM_ADD_INPUT_PAIR(LayerY::KEY_INPUT_STIMULUS)
-        ELM_ADD_OUTPUT_PAIR(LayerY::KEY_OUTPUT_SPIKES)
+        ELM_ADD_INPUT_PAIR(detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS)
+        ELM_ADD_OUTPUT_PAIR(detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
         ;
 //#endif
 
 LayerY::LayerY()
-    : base_Layer(),
+    : base_FeatureTransformationLayer(),
       YNeuron()
 {
 }
 
 LayerY::LayerY(const LayerConfig &config)
-    : base_Layer(config),
+    : base_FeatureTransformationLayer(config),
       YNeuron()
 {
     Reset(config);
@@ -86,20 +83,9 @@ void LayerY::Reconfigure(const LayerConfig &config)
     init(frequency, dt_msec);
 }
 
-void LayerY::IONames(const LayerIONames &config)
-{
-    name_stimulus_ = config.Input(KEY_INPUT_STIMULUS);
-    name_spikes_ = config.Output(KEY_OUTPUT_SPIKES);
-}
-
 void LayerY::Activate(const Signal &signal)
 {
-    state_ = State(signal.MostRecentMat(name_stimulus_));
-}
-
-void LayerY::Response(Signal &signal)
-{
-    signal.Append(name_spikes_, static_cast<cv::Mat1f>(state_));
+    m_ = static_cast<cv::Mat1f>(State(signal.MostRecentMat(name_input_)));
 }
 
 cv::Mat1i LayerY::State(cv::Mat1f state)
