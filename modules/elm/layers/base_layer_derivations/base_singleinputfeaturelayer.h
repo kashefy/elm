@@ -25,7 +25,7 @@ const std::string BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT = "input";   ///< d
 /**
  * @brief base class for layer assuming single feature input, an intermediate layer implementation
  */
-class base_SingleInputFeatureLayer : public base_Layer
+class base_SingleInputFeatureLayer : virtual public base_Layer
 {
 public:
     static const std::string KEY_INPUT;

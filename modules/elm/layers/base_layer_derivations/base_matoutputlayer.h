@@ -21,7 +21,7 @@ const std::string BASE_MATOUTPUT_LAYER__KEY_OUTPUT = "m";   ///< define string h
  * @brief class for time-invariant layer
  * @todo generalize to FeatureOutputLayer, or maybe keep this (compiles faster)
  */
-class base_MatOutputLayer : public base_Layer
+class base_MatOutputLayer : virtual public base_Layer
 {
 public:
     static const std::string KEY_OUTPUT_M;
