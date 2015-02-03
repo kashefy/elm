@@ -30,3 +30,9 @@ void base_Layer::Reset(const LayerConfig &config)
 {
     ELM_THROW_NOT_IMPLEMENTED;
 }
+
+void base_Layer::IONames(const LayerIONames &io)
+{
+    InputNames(io);
+    OutputNames(io);
+}

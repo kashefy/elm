@@ -44,10 +44,25 @@ public:
     virtual void Reconfigure(const LayerConfig& config) = 0;
 
     /**
-      * @brief Set layer input output keys
+      * @brief Set layer input and output names
+      *
+      * Calls InputNames() and OutputNames() methods implemented by derived classes.
+      *
       * @param new I/O configuration
       */
-    virtual void IONames(const LayerIONames& config) = 0;
+    virtual void IONames(const LayerIONames& io);
+
+    /**
+      * @brief Set layer input names
+      * @param new I/O configuration
+      */
+    virtual void InputNames(const LayerIONames& io) = 0;
+
+    /**
+      * @brief Set layer output names
+      * @param new I/O configuration
+      */
+    virtual void OutputNames(const LayerIONames& io) = 0;
 
     /**
      * @brief Activate layer computations to most recent stimuli
