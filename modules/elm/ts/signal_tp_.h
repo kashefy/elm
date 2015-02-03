@@ -35,6 +35,8 @@
 
 // define some helper routines and classes
 
+namespace elm {
+
 /**
  * @brief the struct below, is a helper struct.
  * It enables defining values to be used inside the tests
@@ -205,5 +207,7 @@ REGISTER_TYPED_TEST_CASE_P(Signal_TP_,
                            Append,
                            MostRecent_after_Append
                            ); ///< register additional typed_test_p (i.e. unit test) routines here
+
+} // namespace elm
 
 #endif // _ELM_TS_SIGNAL_TP__H_

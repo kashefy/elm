@@ -12,6 +12,8 @@
 
 #include "elm/core/base_Layer.h"
 
+namespace elm {
+
 /**
  * @brief This is not an ordinary layer implementation
  * This derived layer only aids in conditionally defined layers
@@ -70,10 +72,12 @@ protected:
 
 /** Macros to quickly implement a layer as not implemented
  */
-#define ELM_LAYER_NOT_SUPPORTED(TDERIVED, msg) base_LayerNotSupported  {        \
+#define ELM_LAYER_NOT_SUPPORTED(TDerived, msg) base_LayerNotSupported  {        \
     public:                                                                     \
-    TDERIVED(const std::string message=msg) : base_LayerNotSupported(msg) {}    \
-    TDERIVED(const LayerConfig &config, const std::string message=msg) : base_LayerNotSupported(config, msg) {} \
+    TDerived(const std::string message=msg) : base_LayerNotSupported(msg) {}    \
+    TDerived(const LayerConfig &config, const std::string message=msg) : base_LayerNotSupported(config, msg) {} \
                                                                        }
+
+} // namespace elm
 
 #endif // _ELM_LAYERS_LAYERNOTSUPPORTED_H_

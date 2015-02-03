@@ -19,7 +19,7 @@ namespace elm {
  * <value>newline
  * @param[in] variable to print.
   */
-#define COUT_VAR(x) std::cout << #x << ":" << std::endl << x << std::endl;
+#define ELM_COUT_VAR(x) std::cout << #x << ":" << std::endl << x << std::endl;
 
 } // namespace elm
 

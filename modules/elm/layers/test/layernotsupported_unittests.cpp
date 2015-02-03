@@ -15,7 +15,7 @@
 #include "elm/layers/layerfactory.h"
 
 using std::string;
-using elm::ExceptionNotImpl;
+using namespace elm;
 
 namespace {
 

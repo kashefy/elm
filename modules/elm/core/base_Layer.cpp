@@ -9,6 +9,8 @@
 
 #include "elm/core/exception.h"
 
+using namespace elm;
+
 base_Layer::~base_Layer()
 {
 }
@@ -27,18 +29,4 @@ base_Layer::base_Layer(const LayerConfig &config)
 void base_Layer::Reset(const LayerConfig &config)
 {
     ELM_THROW_NOT_IMPLEMENTED;
-}
-
-base_LearningLayer::~base_LearningLayer()
-{
-}
-
-base_LearningLayer::base_LearningLayer()
-    : base_Layer()
-{
-}
-
-base_LearningLayer::base_LearningLayer(const LayerConfig &config)
-    : base_Layer(config)
-{
 }

@@ -11,6 +11,8 @@
 
 using std::string;
 
+using namespace elm;
+
 base_LayerNotSupported::base_LayerNotSupported(const string &message)
     : base_Layer(),
       msg_(message)

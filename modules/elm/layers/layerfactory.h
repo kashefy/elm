@@ -14,6 +14,8 @@
 #include "elm/core/base_Layer.h"
 #include "elm/core/exception.h"
 
+namespace elm {
+
 /**
  * @brief class for implementing layer related factory methods
  * Such as instantiation and sequencing of multiple layer applications (e.g. pipeline)
@@ -44,8 +46,10 @@ public:
      * @throws ExceptionTypeError on unrecognized layer type
      */
     static LayerShared CreateShared(const LayerType &type,
-                                       const LayerConfig &config,
-                                       const LayerIONames &io);
+                                    const LayerConfig &config,
+                                    const LayerIONames &io);
 };
+
+} // namesapce elm
 
 #endif // _ELM_LAYERS_LAYERFACTORY_H_

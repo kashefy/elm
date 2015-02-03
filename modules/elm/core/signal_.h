@@ -14,6 +14,8 @@
 #include "elm/core/stl/stl.h"
 #include "elm/core/stl/typedefs.h"
 
+namespace elm {
+
 /**
  * @brief The template Signal class, a class for holding single and multiple samples of features
  */
@@ -130,5 +132,7 @@ public:
 protected:
     MapSVecFeat_ signals_; ///< encapuslated signal features
 };
+
+} // namespace elm
 
 #endif // _ELM_CORE_SIGNAL__H_

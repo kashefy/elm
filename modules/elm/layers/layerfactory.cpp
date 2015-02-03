@@ -17,6 +17,7 @@
  */
 #include "elm/layers/attentionwindow.h"
 #include "elm/layers/gradassignment.h"
+#include "elm/layers/graphcompatibility.h"
 #include "elm/layers/icp.h"
 #include "elm/layers/layer_y.h"
 #include "elm/encoding/populationcode.h"
@@ -40,6 +41,7 @@ typedef Registor_<base_Layer>::Registry LayerRegistry;
 LayerRegistry g_layerRegistry = map_list_of
         LAYER_REGISTRY_PAIR( AttentionWindow )
         LAYER_REGISTRY_PAIR( GradAssignment )
+        LAYER_REGISTRY_PAIR( GraphCompatibility )
         LAYER_REGISTRY_PAIR( ICP )
         LAYER_REGISTRY_PAIR( LayerY )
         LAYER_REGISTRY_PAIR( MutexPopulationCode )

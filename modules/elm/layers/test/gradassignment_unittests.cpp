@@ -11,11 +11,11 @@
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 
-
 #include "elm/core/debug_utils.h"
 
 #include "elm/core/signal.h"
 #include "elm/core/layerconfig.h"
+#include "elm/layers/graphcompatibility.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layer_assertions.h"
 
@@ -35,32 +35,47 @@ const float BETA_RATE       = 1.075f;
 const int MAX_ITER_PER_BETA = 4;
 const int MAX_ITER_SINKHORN = 30;
 
-const string NAME_GRAPH_AB = "G_ab";
-const string NAME_GRAPH_IJ = "g_ij";
-const string NAME_M        = "m";
+const string NAME_GRAPH_AB          = "G_ab";
+const string NAME_GRAPH_IJ          = "g_ij";
+const string NAME_COMPATIBILITY_MAT = "c";
+const string NAME_M                 = "m";
 
 class GradAssignmentTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
-        LayerConfig cfg;
+        {
+            LayerConfig cfg;
+            LayerIONames io;
+            io.Input(GraphCompatibility::KEY_INPUT_GRAPH_AB, NAME_GRAPH_AB);
+            io.Input(GraphCompatibility::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
+            io.Output(GraphCompatibility::KEY_OUTPUT_M, NAME_COMPATIBILITY_MAT);
 
-        PTree p;
-        p.put(GradAssignment::PARAM_BETA, BETA);
-        p.put(GradAssignment::PARAM_BETA_MAX, BETA_MAX);
-        p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
-        p.put(GradAssignment::PARAM_MAX_ITER_PER_BETA, MAX_ITER_PER_BETA);
-        p.put(GradAssignment::PARAM_MAX_ITER_SINKHORN, MAX_ITER_SINKHORN);
+            graph_compatibility_= LayerFactory::CreateShared("GraphCompatibility", cfg, io);
+        }
 
-        cfg.Params(p);
+        {
+            LayerConfig cfg;
 
-        LayerIONames io;
-        io.Input(GradAssignment::KEY_INPUT_GRAPH_AB, NAME_GRAPH_AB);
-        io.Input(GradAssignment::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
-        io.Output(GradAssignment::KEY_OUTPUT_M, NAME_M);
+            PTree p;
+            p.put(GradAssignment::PARAM_BETA, BETA);
+            p.put(GradAssignment::PARAM_BETA_MAX, BETA_MAX);
+            p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
+            p.put(GradAssignment::PARAM_MAX_ITER_PER_BETA, MAX_ITER_PER_BETA);
+            p.put(GradAssignment::PARAM_MAX_ITER_SINKHORN, MAX_ITER_SINKHORN);
 
-        to_ = LayerFactory::CreateShared("GradAssignment", cfg, io);
+            cfg.Params(p);
+
+            LayerIONames io;
+            io.Input(GradAssignment::KEY_INPUT_GRAPH_AB, NAME_GRAPH_AB);
+            io.Input(GradAssignment::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
+            io.Input(GradAssignment::KEY_INPUT_MAT_COMPATIBILITY, NAME_COMPATIBILITY_MAT);
+
+            io.Output(GradAssignment::KEY_OUTPUT_M, NAME_M);
+
+            to_ = LayerFactory::CreateShared("GradAssignment", cfg, io);
+        }
 
         // initialize test graphs
         const int A=4;  ///< no. of nodes in G
@@ -108,6 +123,9 @@ protected:
         // add test graphs to signal
         sig_.Append(NAME_GRAPH_AB, g_ab_);
         sig_.Append(NAME_GRAPH_IJ, g_ij_);
+
+        graph_compatibility_->Activate(sig_);
+        graph_compatibility_->Response(sig_);
     }
 
     virtual void TearDown()
@@ -115,7 +133,8 @@ protected:
         sig_.Clear();
     }
 
-    std::shared_ptr<base_Layer> to_; ///< ptr to test object
+    LayerFactory::LayerShared to_; ///< ptr to test object
+    LayerFactory::LayerShared graph_compatibility_;
 
     Mat1f g_ab_;                 ///< adj. matrix for test graph
     Mat1f g_ij_;                 ///< adj. matrix for test graph
@@ -202,6 +221,9 @@ TEST_F(GradAssignmentTest, ActivateAndResponse_large_graphs)
     sig_.Append(NAME_GRAPH_AB, g_ab_);
     sig_.Append(NAME_GRAPH_IJ, g_ij_);
 
+    graph_compatibility_->Activate(sig_);
+    graph_compatibility_->Response(sig_);
+
     to_->Activate(sig_);
     to_->Response(sig_);
 
@@ -256,15 +278,18 @@ TEST_F(GradAssignmentTest, Dims)
             g_ij_ = Mat1f(I, I);
             g_ij_ = g_ab_.clone();    // make them equal
 
-            Signal sig;
+            sig_.Clear();
             // add test graphs to signal
-            sig.Append(NAME_GRAPH_AB, g_ab_);
-            sig.Append(NAME_GRAPH_IJ, g_ij_);
+            sig_.Append(NAME_GRAPH_AB, g_ab_);
+            sig_.Append(NAME_GRAPH_IJ, g_ij_);
 
-            to_->Activate(sig);
-            to_->Response(sig);
+            graph_compatibility_->Activate(sig_);
+            graph_compatibility_->Response(sig_);
 
-            EXPECT_MAT_DIMS_EQ(sig.MostRecentMat(NAME_M),
+            to_->Activate(sig_);
+            to_->Response(sig_);
+
+            EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_M),
                                Size2i(g_ab_.rows, g_ij_.rows))
                     << "Match matrix should be of size (A, I)";
         }
@@ -293,6 +318,9 @@ TEST_F(GradAssignmentTest, MoreNoise)
 
         // add noisy test graphs to signal
         sig_.Append(NAME_GRAPH_IJ, g_ij_);
+
+        graph_compatibility_->Activate(sig_);
+        graph_compatibility_->Response(sig_);
 
         to_->Activate(sig_);
         to_->Response(sig_);

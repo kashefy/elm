@@ -13,6 +13,8 @@
 #include "elm/core/featuredata.h"
 #include "elm/core/signal_.h"
 
+namespace elm {
+
 typedef Signal_<FeatureData >::VecFeat_ VecFeatData; ///< convinience typedef for vector of FeatureData objects
 
 /**
@@ -42,5 +44,7 @@ protected:
     typedef Signal_<FeatureData >::MapSVecFeat_ MapSVecFD; ///< convinience typedef for a map with string keys and VecFeatData values
 
 };
+
+} // namespace elm
 
 #endif // _ELM_CORE_SIGNAL_H_

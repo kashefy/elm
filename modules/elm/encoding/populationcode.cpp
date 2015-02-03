@@ -7,7 +7,7 @@
 //M*/
 #include "elm/encoding/populationcode.h"
 
-#include <boost/foreach.hpp> ///< for iterating through param kernels
+#include <string>
 
 #include <opencv2/features2d.hpp>
 #include <opencv2/imgproc.hpp>

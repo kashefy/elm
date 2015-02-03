@@ -19,6 +19,8 @@
 #include "elm/core/exception.h"
 #include "elm/core/typedefs_sfwd.h"
 
+namespace elm {
+
 /**
  * @brief base class for filter banks
  *  The interface should aid in iterating through response
@@ -83,5 +85,7 @@ protected:
     elm::VecMat1f kernels_;  ///< individual kernels
     elm::VecMat1f response_; ///< response per kernel for most recent input
 };
+
+} // namespace elm
 
 #endif // _ELM_ENCODING_BASE_FILTERBANK_H_

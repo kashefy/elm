@@ -5,21 +5,10 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/core/layerconfig.h"
+#include "elm/layers/base_layer_derivations/base_tivlayer.h"
 
 using namespace elm;
 
-LayerConfig::LayerConfig()
-    : LayerIONames()
+base_TIVLayer::base_TIVLayer()
 {
-}
-
-void LayerConfig::Params(const PTree &params)
-{
-    params_ = params;
-}
-
-PTree LayerConfig::Params() const
-{
-    return params_;
 }

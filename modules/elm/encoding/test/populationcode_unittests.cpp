@@ -132,12 +132,13 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
         img.convertTo(in_, CV_32FC1, 1./255.);
         to_.State(in_, kernels_);
 
-        const int N=25;
+        const int N=30;
         Mat1f counts = Mat1f::zeros(1, static_cast<int>(in_.total())*NB_KERNELS_);
         for(int i=0; i<N; i++) {
 
             cv::Mat pop_code = to_.PopCode();
-            EXPECT_MAT_DIMS_EQ(pop_code, counts);
+            EXPECT_MAT_DIMS_EQ(pop_code, counts)
+                    << "Expecting pop. code. to match total input elements * no. of kernels.";
             EXPECT_LE(cv::sum(pop_code)(0), in_.total())
                     << "Encountered oversampling for same input element.";
             cv::add(pop_code, counts, counts);
@@ -145,19 +146,17 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
 
         counts = counts.reshape(1, in_.total());
 
-        // for which did the bar respond the most?
-        cv::Mat1i col_sums(1, NB_KERNELS_);
-        for(int i=0; i<counts.cols; i++) {
-
-            col_sums(i) = static_cast<int>(cv::sum(counts.col(i))(0));
-        }
+        // which kernel responded the most to the oriented bar?
+        cv::Mat1f col_sums(1, NB_KERNELS_);
+        cv::reduce(counts, col_sums, 0, cv::REDUCE_SUM);
 
         double min_val;
         int min_idx[2] = {-1, -1};
         int max_idx[2] = {-1, -1};
         cv::minMaxIdx(col_sums, &min_val, 0, min_idx, max_idx);
 
-        EXPECT_EQ(expected_index, max_idx[1]);
+        EXPECT_EQ(expected_index, max_idx[1])
+                << "Found max response or unexpected kernel" << col_sums;
         EXPECT_NE(min_idx[1], max_idx[1]);
 
         angle += THETA_STEP_/CV_PI*180.;
