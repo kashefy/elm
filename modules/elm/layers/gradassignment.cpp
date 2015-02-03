@@ -26,6 +26,7 @@ const string GradAssignment::PARAM_MAX_ITER_SINKHORN    = "max_iter_sinkhorn";
 // I/O Names
 const string GradAssignment::KEY_INPUT_GRAPH_AB = "G_ab";
 const string GradAssignment::KEY_INPUT_GRAPH_IJ = "g_ij";
+const string GradAssignment::KEY_INPUT_MAT_COMPATIBILITY = "c_aibj";
 const string GradAssignment::KEY_OUTPUT_M       = "m";
 
 const float GradAssignment::EPSILON = 1e-2;
@@ -38,6 +39,7 @@ template <>
 elm::MapIONames LayerAttr_<GradAssignment>::io_pairs = boost::assign::map_list_of
         ELM_ADD_INPUT_PAIR(GradAssignment::KEY_INPUT_GRAPH_AB)
         ELM_ADD_INPUT_PAIR(GradAssignment::KEY_INPUT_GRAPH_IJ)
+        ELM_ADD_INPUT_PAIR(GradAssignment::KEY_INPUT_MAT_COMPATIBILITY)
         ELM_ADD_OUTPUT_PAIR(GradAssignment::KEY_OUTPUT_M)
         ;
 //#endif
@@ -91,15 +93,18 @@ void GradAssignment::Reconfigure(const LayerConfig &config)
     max_iter_sinkhorn_ = params.get<int>(PARAM_MAX_ITER_PER_BETA);
 }
 
-void GradAssignment::IONames(const LayerIONames &config)
+void GradAssignment::IONames(const LayerIONames &io)
 {
-    name_g_ab_ = config.Input(KEY_INPUT_GRAPH_AB);
-    name_g_ij_ = config.Input(KEY_INPUT_GRAPH_IJ);
-    name_out_m_ = config.Output(KEY_OUTPUT_M);
+    name_g_ab_ = io.Input(KEY_INPUT_GRAPH_AB);
+    name_g_ij_ = io.Input(KEY_INPUT_GRAPH_IJ);
+    name_c_ai_ = io.Input(KEY_INPUT_MAT_COMPATIBILITY);
+
+    name_out_m_ = io.Output(KEY_OUTPUT_M);
 }
 
 void GradAssignment::Activate(const Signal &signal)
 {
+    // get inputs
     Mat1f g_ab = signal.MostRecentMat(name_g_ab_);
     Mat1f g_ij = signal.MostRecentMat(name_g_ij_);
 
@@ -110,14 +115,25 @@ void GradAssignment::Activate(const Signal &signal)
 
     if(g_ij.rows != g_ij.cols) {
 
-        ELM_THROW_BAD_DIMS("G_ij's adjacency matrix is not a square matrix.");
+        ELM_THROW_BAD_DIMS("g_ij's adjacency matrix is not a square matrix.");
     }
 
     A_ = g_ab.rows; ///< no. of vertices in G_ab graph
     I_ = g_ij.rows; ///< no. of vertices in G_ij graph
 
-    Mat1f c_ai = Compatibility(g_ab, g_ij);
+    Mat1f c_ai = signal.MostRecentMat(name_c_ai_);//Compatibility(g_ab, g_ij);
 
+    if(c_ai.rows != A_) {
+
+        ELM_THROW_BAD_DIMS("No. of rows in compatibility matrix must match dimension of adj. matrix G_ab.");
+    }
+
+    if(c_ai.cols != I_) {
+
+        ELM_THROW_BAD_DIMS("No. of rows in compatibility matrix must match dimension of adj. matrix g_ij.");
+    }
+
+    // got all inputs now go go go
     bool is_m_converged = false;
 
     Mat1f m_ai_hat = Mat1f(A_+1, I_+1, 1.f+EPSILON); // add slack variables to be more robust to outliers
@@ -158,50 +174,3 @@ void GradAssignment::Response(Signal &signal)
     signal.Append(name_out_m_, m_ai_);
 }
 
-Mat1f GradAssignment::Compatibility(const Mat1f &g_ab, const Mat1f &g_ij) const
-{
-    Mat1f c_ai(A_, I_, 0.f);
-    for(int a=0; a<A_; a++) {
-
-        Mat1f g_ab_row = g_ab.row(a);
-        for(int i=0; i<I_; i++) {
-
-            Mat1f g_ij_row = g_ij.row(i);
-
-            float sigma_c_aibj_over_bj = 0.f;
-            for(size_t b=0; b<g_ab_row.total(); b++) {
-
-                float g_ab_row_at_b = g_ab_row(b);
-
-                // skip for zero-weighted edges.
-                if(g_ab_row_at_b != 0.f) {
-
-                    for(size_t j=0; j<g_ij_row.total(); j++) {
-
-                        sigma_c_aibj_over_bj += Compatibility(g_ab_row_at_b, g_ij_row(j));
-                    }
-                }
-            }
-
-            c_ai(a, i) = sigma_c_aibj_over_bj;
-        }
-    }
-
-    //c_ai /= static_cast<float>(max(A_, I_));
-
-    return c_ai;
-}
-
-float GradAssignment::Compatibility(float w1, float w2) const
-{
-    float c;
-    if(w1 == 0.f || w2 == 0.f) {
-
-        c = 0.f;
-    }
-    else {
-        //c = w1*w2;
-        c = 1.f-3.f*abs(w1-w2);
-    }
-    return c;
-}
