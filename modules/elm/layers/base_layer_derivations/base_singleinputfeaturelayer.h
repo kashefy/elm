@@ -18,7 +18,7 @@ class Signal;
 
 namespace detail {
 
-const std::string BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT = "input";   ///< define string here to ensure early initialization for test purposes
+const std::string BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS = "input";   ///< define string here to ensure early initialization for test purposes
 
 }
 
@@ -28,7 +28,7 @@ const std::string BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT = "input";   ///< d
 class base_SingleInputFeatureLayer : virtual public base_Layer
 {
 public:
-    static const std::string KEY_INPUT;
+    static const std::string KEY_INPUT_STIMULUS;
 
     virtual ~base_SingleInputFeatureLayer();
 

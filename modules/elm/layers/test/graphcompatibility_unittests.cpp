@@ -35,7 +35,7 @@ protected:
         LayerIONames io;
         io.Input(GraphCompatibility::KEY_INPUT_GRAPH_AB, NAME_GRAPH_AB);
         io.Input(GraphCompatibility::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
-        io.Output(GraphCompatibility::KEY_OUTPUT_M, NAME_M);
+        io.Output(GraphCompatibility::KEY_OUTPUT_RESPONSE, NAME_M);
 
         to_ = LayerFactory::CreateShared("GraphCompatibility", cfg, io);
 

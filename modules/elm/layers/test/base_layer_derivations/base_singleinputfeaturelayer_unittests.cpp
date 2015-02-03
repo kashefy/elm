@@ -68,7 +68,7 @@ protected:
         to_.reset(new DummySingleInputFeatureLayer());
 
         LayerIONames io;
-        io.Input(DummySingleInputFeatureLayer::KEY_INPUT, NAME_IN_M);
+        io.Input(DummySingleInputFeatureLayer::KEY_INPUT_STIMULUS, NAME_IN_M);
         io.Output(DummySingleInputFeatureLayer::KEY_OUTPUT_M, NAME_OUT_M);
 
         to_->IONames(io);
@@ -89,8 +89,8 @@ protected:
 
 TEST_F(SingleInputFeatureLayerTest, Sanity)
 {
-    EXPECT_EQ(base_SingleInputFeatureLayer::KEY_INPUT,
-              DummySingleInputFeatureLayer::KEY_INPUT);
+    EXPECT_EQ(base_SingleInputFeatureLayer::KEY_INPUT_STIMULUS,
+              DummySingleInputFeatureLayer::KEY_INPUT_STIMULUS);
 }
 
 TEST_F(SingleInputFeatureLayerTest, ActivateAndResponse)

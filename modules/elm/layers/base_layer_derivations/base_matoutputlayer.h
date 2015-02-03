@@ -13,7 +13,7 @@ class Signal;
 
 namespace detail {
 
-const std::string BASE_MATOUTPUT_LAYER__KEY_OUTPUT = "m";   ///< define string here to ensure early initialization for test purposes
+const std::string BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE = "m";   ///< define string here to ensure early initialization for test purposes
 
 }
 
@@ -24,7 +24,7 @@ const std::string BASE_MATOUTPUT_LAYER__KEY_OUTPUT = "m";   ///< define string h
 class base_MatOutputLayer : virtual public base_Layer
 {
 public:
-    static const std::string KEY_OUTPUT_M;
+    static const std::string KEY_OUTPUT_RESPONSE;
 
     virtual ~base_MatOutputLayer();
 

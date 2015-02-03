@@ -6,7 +6,7 @@
 using namespace std;
 using namespace elm;
 
-const string base_SingleInputFeatureLayer::KEY_INPUT = detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT;
+const string base_SingleInputFeatureLayer::KEY_INPUT_STIMULUS = detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS;
 
 base_SingleInputFeatureLayer::~base_SingleInputFeatureLayer()
 {
@@ -24,6 +24,6 @@ base_SingleInputFeatureLayer::base_SingleInputFeatureLayer(const LayerConfig &cf
 
 void base_SingleInputFeatureLayer::IONames(const LayerIONames &io)
 {
-    name_input_ = io.Input(KEY_INPUT);
+    name_input_ = io.Input(KEY_INPUT_STIMULUS);
 }
 

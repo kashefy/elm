@@ -80,7 +80,7 @@ protected:
             LayerIONames io;
             io.Input(GradAssignment::KEY_INPUT_GRAPH_AB, NAME_GRAPH_AB);
             io.Input(GradAssignment::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
-            io.Output(GradAssignment::KEY_OUTPUT_M, NAME_M);
+            io.Output(GradAssignment::KEY_OUTPUT_RESPONSE, NAME_M);
 
             layers_.push_back(LayerFactory::CreateShared("GradAssignment", cfg, io));
         }
