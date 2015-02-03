@@ -12,7 +12,7 @@
 
 #include <opencv2/core.hpp>
 
-#include "elm/core/base_Layer.h"
+#include "elm/layers/base_layer_derivations/base_matoutputlayer.h"
 
 namespace elm {
 
@@ -26,7 +26,7 @@ class Signal;
  *
  * @cite Gold1996
  */
-class GradAssignment : public base_Layer
+class GradAssignment : public base_MatOutputLayer
 {
 public:
     // params
@@ -40,7 +40,7 @@ public:
     static const std::string KEY_INPUT_GRAPH_AB;        ///< key to graph ab's adjacency matrix
     static const std::string KEY_INPUT_GRAPH_IJ;        ///< key to graph ij's adjacency matrix
     static const std::string KEY_INPUT_MAT_COMPATIBILITY; ///< key to compatibility matrix between both graphs
-    static const std::string KEY_OUTPUT_M;              ///< match matrix variables
+    // output key defined in parent layer and represents match matrix variables
 
     virtual ~GradAssignment();
 
@@ -58,15 +58,12 @@ public:
 
     virtual void Activate(const Signal &signal);
 
-    virtual void Response(Signal &signal);
-
 protected:
     static const float EPSILON; ///< small no. epsilon
 
     std::string name_g_ab_;     ///< name of graph ab adj. matrix in signal object
     std::string name_g_ij_;     ///< name of graph ij adj. matrix in signal object
     std::string name_c_ai_;     ///< name of compatibility matrix in signal object
-    std::string name_out_m_;    ///< desintation name for match matrix
 
     float beta_0_;      ///< initial value for control param. beta
     float beta_max_;    ///< max. value for control param.
@@ -77,8 +74,6 @@ protected:
 
     int A_;                 /// no. of vertices in graph g_ab
     int I_;                 /// no. of vertices in graph g_ij
-
-    cv::Mat1f m_ai_;       ///< match matrix variables
 };
 
 } // namespace elm

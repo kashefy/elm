@@ -27,7 +27,6 @@ const string GradAssignment::PARAM_MAX_ITER_SINKHORN    = "max_iter_sinkhorn";
 const string GradAssignment::KEY_INPUT_GRAPH_AB = "G_ab";
 const string GradAssignment::KEY_INPUT_GRAPH_IJ = "g_ij";
 const string GradAssignment::KEY_INPUT_MAT_COMPATIBILITY = "c_aibj";
-const string GradAssignment::KEY_OUTPUT_M       = "m";
 
 const float GradAssignment::EPSILON = 1e-2;
 
@@ -40,7 +39,7 @@ elm::MapIONames LayerAttr_<GradAssignment>::io_pairs = boost::assign::map_list_o
         ELM_ADD_INPUT_PAIR(GradAssignment::KEY_INPUT_GRAPH_AB)
         ELM_ADD_INPUT_PAIR(GradAssignment::KEY_INPUT_GRAPH_IJ)
         ELM_ADD_INPUT_PAIR(GradAssignment::KEY_INPUT_MAT_COMPATIBILITY)
-        ELM_ADD_OUTPUT_PAIR(GradAssignment::KEY_OUTPUT_M)
+        ELM_ADD_OUTPUT_PAIR(detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT)
         ;
 //#endif
 
@@ -49,20 +48,20 @@ GradAssignment::~GradAssignment()
 }
 
 GradAssignment::GradAssignment()
-    : base_Layer()
+    : base_MatOutputLayer()
 {
     Clear();
 }
 
 GradAssignment::GradAssignment(const LayerConfig &cfg)
-    : base_Layer(cfg)
+    : base_MatOutputLayer(cfg)
 {
     Reset(cfg);
 }
 
 void GradAssignment::Clear()
 {
-    m_ai_ = Mat1f();
+    m_ = Mat1f();
 }
 
 void GradAssignment::Reset(const LayerConfig &config)
@@ -95,11 +94,11 @@ void GradAssignment::Reconfigure(const LayerConfig &config)
 
 void GradAssignment::IONames(const LayerIONames &io)
 {
+    base_MatOutputLayer::IONames(io);
+
     name_g_ab_ = io.Input(KEY_INPUT_GRAPH_AB);
     name_g_ij_ = io.Input(KEY_INPUT_GRAPH_IJ);
     name_c_ai_ = io.Input(KEY_INPUT_MAT_COMPATIBILITY);
-
-    name_out_m_ = io.Output(KEY_OUTPUT_M);
 }
 
 void GradAssignment::Activate(const Signal &signal)
@@ -138,7 +137,7 @@ void GradAssignment::Activate(const Signal &signal)
 
     Mat1f m_ai_hat = Mat1f(A_+1, I_+1, 1.f+EPSILON); // add slack variables to be more robust to outliers
 
-    m_ai_ = m_ai_hat(Rect2i(0, 0, A_, I_));
+    m_ = m_ai_hat(Rect2i(0, 0, A_, I_)); // initialize match matrix variables.
 
     float beta = beta_0_;
 
@@ -153,9 +152,9 @@ void GradAssignment::Activate(const Signal &signal)
 
             Mat1f q_ai(A_, I_); ///< partial derivative of E_wg with respect to M_ai
 
-            multiply(c_ai, m_ai_, q_ai);
+            multiply(c_ai, m_, q_ai);
             // softassign
-            exp(beta*q_ai, m_ai_);
+            exp(beta*q_ai, m_);
 
             is_m_converged = SinkhornBalancing::RowColNormalization(m_ai_hat, max_iter_sinkhorn_, EPSILON); // C
 
@@ -167,10 +166,5 @@ void GradAssignment::Activate(const Signal &signal)
         beta *= beta_rate_;
     } // end A
 
-}
-
-void GradAssignment::Response(Signal &signal)
-{
-    signal.Append(name_out_m_, m_ai_);
 }
 
