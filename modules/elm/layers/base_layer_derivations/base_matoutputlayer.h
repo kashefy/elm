@@ -11,6 +11,12 @@ namespace elm {
 
 class Signal;
 
+namespace detail {
+
+const std::string BASE_MATOUTPUT_LAYER__KEY_OUTPUT = "m";   ///< define string here to ensure early initialization for test purposes
+
+}
+
 /**
  * @brief class for time-invariant layer
  * @todo generalize to FeatureOutputLayer, or maybe keep this (compiles faster)
@@ -32,7 +38,7 @@ protected:
     base_MatOutputLayer(const LayerConfig& cfg);
 
     // members
-    std::string name_out_m_;    ///< destination name in signal object
+    std::string name_output_;    ///< destination name in signal object
 
     cv::Mat1f m_;   ///< output Mat object
 };
