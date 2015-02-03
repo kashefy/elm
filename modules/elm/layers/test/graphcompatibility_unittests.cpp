@@ -131,21 +131,150 @@ TEST_F(GraphCompatibilityTest, Dims)
             g_ij_ = Mat1f(I, I);
             g_ij_ = g_ab_.clone();    // make them equal
 
-            Signal sig;
+            sig_.Clear();
             // add test graphs to signal
-            sig.Append(NAME_GRAPH_AB, g_ab_);
-            sig.Append(NAME_GRAPH_IJ, g_ij_);
+            sig_.Append(NAME_GRAPH_AB, g_ab_);
+            sig_.Append(NAME_GRAPH_IJ, g_ij_);
 
             to_->Clear();
-            to_->Activate(sig);
-            to_->Response(sig);
+            to_->Activate(sig_);
+            to_->Response(sig_);
 
-            EXPECT_MAT_DIMS_EQ(sig.MostRecentMat(NAME_M),
+            EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_M),
                                Size2i(g_ab_.rows, g_ij_.rows))
                     << "Match matrix should be of size (A, I)";
         }
     }
 }
 
+/**
+ * @brief graph without any connections should yield all-zero compatibility
+ */
+TEST_F(GraphCompatibilityTest, NoConnections)
+{
+    g_ab_ = Mat1f::zeros(5, 5);
+    g_ij_ = g_ab_.clone();    // make them equal
+
+    // add test graphs to signal
+    sig_.Append(NAME_GRAPH_AB, g_ab_);
+    sig_.Append(NAME_GRAPH_IJ, g_ij_);
+
+    to_->Activate(sig_);
+    to_->Response(sig_);
+
+    EXPECT_MAT_EQ(sig_.MostRecentMat(NAME_M),
+                  Mat1f::zeros(g_ab_.rows, g_ij_.rows));
+}
+
+/**
+ * @brief zero-compatibility for node without edges
+ */
+TEST_F(GraphCompatibilityTest, NoConnections_for_one_node_in_g_ab)
+{
+    int vertex_idx = abs(randu<int>()) % g_ab_.rows;
+
+    g_ab_.row(vertex_idx).setTo(0.f);
+    g_ab_.col(vertex_idx).setTo(0.f);
+
+    // add test graphs to signal
+    sig_.Append(NAME_GRAPH_AB, g_ab_);
+    sig_.Append(NAME_GRAPH_IJ, g_ij_);
+
+    to_->Activate(sig_);
+    to_->Response(sig_);
+
+    Mat1f c_ai = sig_.MostRecentMat(NAME_M);
+
+    EXPECT_MAT_EQ(c_ai.row(vertex_idx), Mat1f::zeros(1, g_ab_.cols))
+            << "Expecting all-zero row for row i=" << vertex_idx
+            << " since that vertex doesn't have any edges";
+}
+
+/**
+ * @brief zero-compatibility for node without edges
+ */
+TEST_F(GraphCompatibilityTest, NoConnections_for_one_node_in_g_ij)
+{
+    int vertex_idx = abs(randu<int>()) % g_ij_.rows;
+
+    g_ij_.row(vertex_idx).setTo(0.f);
+    g_ij_.col(vertex_idx).setTo(0.f);
+
+    // add test graphs to signal
+    sig_.Append(NAME_GRAPH_AB, g_ab_);
+    sig_.Append(NAME_GRAPH_IJ, g_ij_);
+
+    to_->Activate(sig_);
+    to_->Response(sig_);
+
+    Mat1f c_ai = sig_.MostRecentMat(NAME_M);
+
+    EXPECT_MAT_EQ(c_ai.col(vertex_idx), Mat1f::zeros(g_ij_.rows, 1))
+            << "Expecting all-zero row for row i=" << vertex_idx
+            << " since that vertex doesn't have any edges";
+}
+
+/**
+ * @brief Make weights of two vertices very compatible and compare their
+ * their compatibility score with that of other nodes.
+ * This test does not assume that both adjacency graphs share the same dimensions.
+ */
+TEST_F(GraphCompatibilityTest, Compatibility)
+{
+    // sanity check
+    ASSERT_GT(g_ab_.rows, 1) << "this test requires adjacency graphs for graphs with > 1 vertex";
+    ASSERT_GT(g_ij_.rows, 1) << "this test requires adjacency graphs for graphs with > 1 vertex";
+
+    const int MIN_DIM = static_cast<int>(min(g_ab_.rows, g_ij_.rows));
+
+    const int N=5; // do this for multiple vertices
+    for(int i=0; i<N; i++) {
+
+        // make two vertices in both graph very compatible
+
+        int vertex_compat_idx = abs(randu<int>()) % MIN_DIM;
+
+        // actual weight value doesn't matter
+        // it only matters that the edges in both graphs appear similar for a pair of vertices.
+        int rand_value = static_cast<float>(abs(randu<int>()) % 100);
+        float weight = rand_value/100.f;
+
+        g_ab_.row(vertex_compat_idx).setTo(weight);
+        g_ab_.col(vertex_compat_idx).setTo(weight);
+        g_ab_(vertex_compat_idx, vertex_compat_idx) = 0.f;
+        g_ij_.row(vertex_compat_idx).setTo(weight);
+        g_ij_.col(vertex_compat_idx).setTo(weight);
+        g_ij_(vertex_compat_idx, vertex_compat_idx) = 0.f;
+
+        // make two other vertices in both graph very un-compatible
+        int vertex_non_compat_idx = (vertex_compat_idx + 1) % MIN_DIM;
+
+        g_ab_.row(vertex_non_compat_idx).setTo(weight);
+        g_ab_.col(vertex_non_compat_idx).setTo(weight);
+
+        // select second weight to be different from first for vertices to seem less compatible
+        float weight2 = static_cast<float>(rand_value+30 % 100)/100.f;
+
+        // sanity check
+        ASSERT_GT(abs(weight-weight2), 0.25f) << "Difference between weights not large enough";
+
+        g_ij_.row(vertex_non_compat_idx).setTo(weight2);
+        g_ab_(vertex_non_compat_idx, vertex_non_compat_idx) = 0.f;
+        g_ij_.col(vertex_non_compat_idx).setTo(weight2);
+        g_ij_(vertex_non_compat_idx, vertex_non_compat_idx) = 0.f;
+
+        // add test graphs to signal
+        sig_.Append(NAME_GRAPH_AB, g_ab_);
+        sig_.Append(NAME_GRAPH_IJ, g_ij_);
+
+        to_->Activate(sig_);
+        to_->Response(sig_);
+
+        Mat1f c_ai = sig_.MostRecentMat(NAME_M);
+
+        EXPECT_GT(c_ai(vertex_compat_idx, vertex_compat_idx), c_ai(vertex_non_compat_idx, vertex_non_compat_idx))
+                << "Score of compatible vertex should exceed that of non-compatible one.";
+    }
+}
 
 } // annonymous namespace for test cases and fixtures

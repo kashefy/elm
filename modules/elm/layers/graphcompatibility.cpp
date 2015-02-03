@@ -97,6 +97,7 @@ Mat1f GraphCompatibility::Compatibility(const Mat1f &g_ab, const Mat1f &g_ij) co
     for(int a=0; a<A_; a++) {
 
         Mat1f g_ab_row = g_ab.row(a);
+
         for(int i=0; i<I_; i++) {
 
             Mat1f g_ij_row = g_ij.row(i);
