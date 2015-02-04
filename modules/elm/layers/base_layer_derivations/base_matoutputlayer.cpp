@@ -6,7 +6,7 @@
 using namespace std;
 using namespace elm;
 
-const string base_MatOutputLayer::KEY_OUTPUT_M = detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT;
+const string base_MatOutputLayer::KEY_OUTPUT_RESPONSE = detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE;
 
 base_MatOutputLayer::~base_MatOutputLayer()
 {
@@ -24,7 +24,7 @@ base_MatOutputLayer::base_MatOutputLayer(const LayerConfig &cfg)
 
 void base_MatOutputLayer::IONames(const LayerIONames &io)
 {
-    name_output_ = io.Output(KEY_OUTPUT_M);
+    name_output_ = io.Output(KEY_OUTPUT_RESPONSE);
 }
 
 void base_MatOutputLayer::Response(Signal &signal)

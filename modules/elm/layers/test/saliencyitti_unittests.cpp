@@ -82,7 +82,7 @@ protected:
         config.Params(params);
 
         // IO
-        config.Input(SaliencyItti::KEY_INPUT_SCENE, NAME_SCENE_);
+        config.Input(SaliencyItti::KEY_INPUT_STIMULUS, NAME_SCENE_);
         config.Output(SaliencyItti::KEY_OUTPUT_SALIENCY, NAME_SALIENCY_);
         config.Output(SaliencyItti::KEY_OUTPUT_SALIENT_LOC, NAME_LOC_);
 

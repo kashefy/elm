@@ -10,21 +10,23 @@
 
 #include <memory>
 
-#include "elm/core/base_Layer.h"
 #include "elm/core/sampler.h"
 #include "elm/encoding/intensitycontrast.h"
 #include "elm/encoding/orientation.h"
 #include "elm/encoding/populationcode.h"
+#include "elm/layers/base_layer_derivations/base_singleinputfeaturelayer.h"
 
 namespace elm {
 /**
  * @brief Implement Itti et al.'s boottom-up saliency measure
+ *
+ * key to visual scene stimulus defined in parent
+ *
  * @todo fix contribution of orientation conspicuty, overshadowed by intensity contrast in saliency map
  */
-class SaliencyItti : public base_Layer
+class SaliencyItti : public base_SingleInputFeatureLayer
 {
 public:
-    static const std::string KEY_INPUT_SCENE;           ///< key to visual scene stimulus
     static const std::string KEY_OUTPUT_SALIENCY;       ///< key to saliency measure
     static const std::string KEY_OUTPUT_SALIENT_LOC;    ///< key to most recently attended location
 
@@ -55,14 +57,13 @@ public:
 
     virtual void Reconfigure(const LayerConfig &config);
 
-    virtual void IONames(const LayerIONames &config);
+    virtual void IONames(const LayerIONames &io);
 
     virtual void Activate(const Signal &signal);
 
     virtual void Response(Signal &signal);
 
 protected:
-    std::string name_scene_;        ///< name of scene in signal
     std::string name_saliency_;     ///< name of saliency map in signal
     std::string name_salient_loc_;  ///< name of salient loc in signal
 

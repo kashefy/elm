@@ -18,7 +18,6 @@ using namespace elm;
 const string SinkhornBalancing::PARAM_EPSILON   = "epsilon";
 const string SinkhornBalancing::PARAM_MAX_ITER  = "max_iter";
 
-const string SinkhornBalancing::KEY_INPUT_MAT           = "mat_in";
 const string SinkhornBalancing::KEY_OUTPUT_MAT_BALANCED = "mat_balanced";
 const string SinkhornBalancing::KEY_OUTPUT_IS_CONVERGED = "convergence";
 
@@ -28,7 +27,7 @@ const string SinkhornBalancing::KEY_OUTPUT_IS_CONVERGED = "convergence";
 #include <boost/assign/list_of.hpp>
 template <>
 elm::MapIONames LayerAttr_<SinkhornBalancing>::io_pairs = boost::assign::map_list_of
-        ELM_ADD_INPUT_PAIR(SinkhornBalancing::KEY_INPUT_MAT)
+        ELM_ADD_INPUT_PAIR(detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS)
         ELM_ADD_OUTPUT_PAIR(SinkhornBalancing::KEY_OUTPUT_MAT_BALANCED)
         ELM_ADD_OUTPUT_PAIR(SinkhornBalancing::KEY_OUTPUT_IS_CONVERGED)
         ;
@@ -67,14 +66,14 @@ void SinkhornBalancing::Reconfigure(const LayerConfig &config)
 
 void SinkhornBalancing::IONames(const LayerIONames &io)
 {
-    name_in_m_              = io.Input(KEY_INPUT_MAT);
+    base_SingleInputFeatureLayer::IONames(io);
     name_out_convergence_   = io.Output(KEY_OUTPUT_IS_CONVERGED);
     name_out_m_             = io.Output(KEY_OUTPUT_MAT_BALANCED);
 }
 
 void SinkhornBalancing::Activate(const Signal &signal)
 {
-    m_ = signal.MostRecentMat(name_in_m_);
+    m_ = signal.MostRecentMat(name_input_);
 
     is_converged = RowColNormalization(m_, max_iter_, epsilon_);
 }

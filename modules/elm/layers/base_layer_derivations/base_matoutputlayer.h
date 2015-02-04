@@ -13,7 +13,7 @@ class Signal;
 
 namespace detail {
 
-const std::string BASE_MATOUTPUT_LAYER__KEY_OUTPUT = "m";   ///< define string here to ensure early initialization for test purposes
+const std::string BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE = "m";   ///< define string here to ensure early initialization for test purposes
 
 }
 
@@ -21,10 +21,10 @@ const std::string BASE_MATOUTPUT_LAYER__KEY_OUTPUT = "m";   ///< define string h
  * @brief class for time-invariant layer
  * @todo generalize to FeatureOutputLayer, or maybe keep this (compiles faster)
  */
-class base_MatOutputLayer : public base_Layer
+class base_MatOutputLayer : virtual public base_Layer
 {
 public:
-    static const std::string KEY_OUTPUT_M;
+    static const std::string KEY_OUTPUT_RESPONSE;
 
     virtual ~base_MatOutputLayer();
 
@@ -40,7 +40,7 @@ protected:
     // members
     std::string name_output_;    ///< destination name in signal object
 
-    cv::Mat1f m_;   ///< output Mat object
+    cv::Mat1f m_;   ///< most recent response/output
 };
 
 } // namespace elm
