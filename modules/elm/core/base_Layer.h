@@ -53,13 +53,13 @@ public:
     void IONames(const LayerIONames& io);
 
     /**
-      * @brief Set layer input names
+      * @brief Set layer stimuli/input names
       * @param new I/O configuration
       */
     virtual void InputNames(const LayerIONames& io) = 0;
 
     /**
-      * @brief Set layer output names
+      * @brief Set layer response/output names
       * @param new I/O configuration
       */
     virtual void OutputNames(const LayerIONames& io) = 0;
