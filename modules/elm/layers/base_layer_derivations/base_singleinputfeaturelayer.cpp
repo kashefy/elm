@@ -1,5 +1,6 @@
 #include "elm/layers/base_layer_derivations/base_singleinputfeaturelayer.h"
 
+#include "elm/core/inputname.h"
 #include "elm/core/layerionames.h"
 #include "elm/core/signal.h"
 

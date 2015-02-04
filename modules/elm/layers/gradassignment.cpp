@@ -7,6 +7,7 @@
 //M*/
 #include "elm/layers/gradassignment.h"
 
+#include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/layers/sinkhornbalancing.h"

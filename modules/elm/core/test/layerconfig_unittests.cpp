@@ -8,7 +8,9 @@
 #include "elm/core/layerconfig.h"
 
 #include "gtest/gtest.h"
+
 #include "elm/core/exception.h"
+#include "elm/core/inputname.h"
 
 using namespace std;
 using namespace elm;

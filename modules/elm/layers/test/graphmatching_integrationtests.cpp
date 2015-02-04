@@ -8,6 +8,7 @@
 #include <pcl/io/pcd_io.h>
 
 #include "elm/core/exception.h"
+#include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/vertices.h"

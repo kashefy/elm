@@ -13,6 +13,7 @@
 #include <memory>
 
 #include "elm/core/exception.h"
+#include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/stl/stl.h"
 #include "elm/layers/layerfactory.h"

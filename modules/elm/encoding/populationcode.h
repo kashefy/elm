@@ -16,6 +16,7 @@
 
 #include "elm/core/base_Layer.h"
 #include "elm/core/layerconfig.h"
+#include "elm/core/inputname.h"
 #include "elm/core/typedefs_sfwd.h"
 
 namespace elm {

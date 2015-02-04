@@ -10,11 +10,9 @@
 
 #include <map>
 
-#include "elm/core/inputname.h"
 #include "elm/core/layerinputnames.h"
 
 namespace elm {
-
 
 /**
  * @brief class for encapsulating layer IO key-name pairs
@@ -23,33 +21,11 @@ class LayerIONames : public LayerInputNames
 {
 public:
     /**
-     * @brief Set input key-name-pair. Overwrite if key exists.
-     * @param key of feature required by layer
-     * @param name und which the feature exists
-     */
-    void Input(const std::string &key, const InputName &name);
-
-    /**
      * @brief Set output key-name-pair. Overwrite if key exists.
      * @param key of feature required by layer
      * @param name und which the feature exists
      */
     void Output(const std::string &key, const std::string &name);
-
-    /**
-     * @brief Get name to input feature key
-     * @param input feature key
-     * @return name
-     * @throw Key Error if key does not exist.
-     */
-    InputName Input(const std::string &key) const;
-
-    /**
-     * @brief Get name to optional input feature key
-     * @param input feature key
-     * @return name if exists, check existence using bool() and retrieve content via .get()
-     */
-    OptS InputOpt(const std::string &key) const;
 
     /**
      * @brief Get name to output feature key
