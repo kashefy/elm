@@ -48,8 +48,9 @@ TEST_F(LayerIONamesTest, Input_WrongKey) {
 TEST_F(LayerIONamesTest, InputOpt) {
 
     EXPECT_THROW(to_.Input("k1"), ExceptionKeyError);
-    to_.Output("k1", "n1");
-    EXPECT_TRUE(to_.InputOpt("k1") != 0);
+    EXPECT_FALSE(bool(to_.InputOpt("k1")));
+    to_.Input("k1", "n1");
+    EXPECT_TRUE(bool(to_.InputOpt("k1")));
     EXPECT_EQ("n1", to_.InputOpt("k1").get());
 
     EXPECT_THROW(to_.Input("k2"), ExceptionKeyError);
