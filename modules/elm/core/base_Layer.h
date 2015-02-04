@@ -50,7 +50,7 @@ public:
       *
       * @param new I/O configuration
       */
-    virtual void IONames(const LayerIONames& io);
+    void IONames(const LayerIONames& io);
 
     /**
       * @brief Set layer input names
