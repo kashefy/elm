@@ -10,19 +10,16 @@
 
 #include <map>
 
-#include <boost/optional/optional_fwd.hpp>
-
 #include "elm/core/inputname.h"
+#include "elm/core/layerinputnames.h"
 
 namespace elm {
 
-typedef boost::optional<std::string> OptS;
-typedef std::map<std::string, std::string> MapSS;
 
 /**
  * @brief class for encapsulating layer IO key-name pairs
  */
-class LayerIONames
+class LayerIONames : public LayerInputNames
 {
 public:
     /**
@@ -70,7 +67,6 @@ public:
     OptS OutputOpt(const std::string &key) const;
 
 private:
-    MapSS inputs_;
     MapSS outputs_;
 };
 
