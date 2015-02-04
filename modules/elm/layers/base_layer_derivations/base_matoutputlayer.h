@@ -40,7 +40,7 @@ protected:
     // members
     std::string name_output_;    ///< destination name in signal object
 
-    cv::Mat1f m_;   ///< output Mat object
+    cv::Mat1f m_;   ///< most recent response/output
 };
 
 } // namespace elm
