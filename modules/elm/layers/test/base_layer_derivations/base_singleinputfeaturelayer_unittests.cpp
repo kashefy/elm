@@ -35,7 +35,7 @@ public:
 
     void Reconfigure(const LayerConfig &config) {}
 
-    void OutputNames(const LayerIONames &io) {
+    void OutputNames(const LayerOutputNames &io) {
 
         name_out_ = io.Output(KEY_OUTPUT_M);
     }

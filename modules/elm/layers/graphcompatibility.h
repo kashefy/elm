@@ -32,7 +32,7 @@ public:
 
     virtual void Reconfigure(const LayerConfig &config);
 
-    virtual void InputNames(const LayerIONames &io);
+    virtual void InputNames(const LayerInputNames &io);
 
     virtual void Activate(const Signal &signal);
 

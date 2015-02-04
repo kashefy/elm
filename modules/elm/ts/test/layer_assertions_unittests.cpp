@@ -25,9 +25,9 @@ public:
 
     void Reconfigure(const LayerConfig &config) {}
 
-    virtual void InputNames(const LayerIONames &config) {}
+    virtual void InputNames(const LayerInputNames &io) {}
 
-    virtual void OutputNames(const LayerIONames &config) {}
+    virtual void OutputNames(const LayerOutputNames &io) {}
 
     void Activate(const Signal &signal) {}
 
@@ -54,15 +54,15 @@ public:
     static const string KEY_OUTPUT_OUT;
     static const string KEY_OUTPUT_OPT_OUT;
 
-    virtual void InputNames(const LayerIONames &config) {
+    virtual void InputNames(const LayerInputNames &io) {
 
-        name_in_    = config.Input(KEY_INPUT_IN);
+        name_in_    = io.Input(KEY_INPUT_IN);
     }
 
-    virtual void OutputNames(const LayerIONames &config) {
+    virtual void OutputNames(const LayerOutputNames &io) {
 
-        name_out_   = config.Output(KEY_OUTPUT_OUT);
-        name_opt_out_ = config.OutputOpt(KEY_OUTPUT_OPT_OUT);
+        name_out_   = io.Output(KEY_OUTPUT_OUT);
+        name_opt_out_ = io.OutputOpt(KEY_OUTPUT_OPT_OUT);
     }
 
     DummyChildLayerWithReqIONames() : DummyChildLayer() {}

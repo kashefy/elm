@@ -43,7 +43,7 @@ public:
 
     virtual void Reconfigure(const LayerConfig &config);
 
-    virtual void OutputNames(const LayerIONames &io);
+    virtual void OutputNames(const LayerOutputNames &io);
 
     virtual void Activate(const Signal &signal);
 

@@ -23,7 +23,7 @@ base_SingleInputFeatureLayer::base_SingleInputFeatureLayer(const LayerConfig &cf
 {
 }
 
-void base_SingleInputFeatureLayer::InputNames(const LayerIONames &io)
+void base_SingleInputFeatureLayer::InputNames(const LayerInputNames &io)
 {
     name_input_ = io.Input(KEY_INPUT_STIMULUS);
 }

@@ -64,7 +64,7 @@ void GraphCompatibility::Reconfigure(const LayerConfig &config)
 {
 }
 
-void GraphCompatibility::InputNames(const LayerIONames &io)
+void GraphCompatibility::InputNames(const LayerInputNames &io)
 {
     name_g_ab_ = io.Input(KEY_INPUT_GRAPH_AB);
     name_g_ij_ = io.Input(KEY_INPUT_GRAPH_IJ);

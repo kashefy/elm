@@ -58,9 +58,9 @@ public:
 
     virtual void Reset(const LayerConfig &config);
 
-    virtual void InputNames(const LayerIONames &config);
+    virtual void InputNames(const LayerInputNames &config);
 
-    virtual void OutputNames(const LayerIONames &config);
+    virtual void OutputNames(const LayerOutputNames &config);
 
     /**
      * @brief compute state and population code

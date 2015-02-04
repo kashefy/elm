@@ -54,12 +54,12 @@ void base_PopulationCode::Reset(const LayerConfig &config)
     Clear();
 }
 
-void base_PopulationCode::InputNames(const LayerIONames &config)
+void base_PopulationCode::InputNames(const LayerInputNames &config)
 {
     name_stimulus_ = config.Input(KEY_INPUT_STIMULUS);
 }
 
-void base_PopulationCode::OutputNames(const LayerIONames &config)
+void base_PopulationCode::OutputNames(const LayerOutputNames &config)
 {
     name_pop_code_ = config.Output(KEY_OUTPUT_POP_CODE);
 }

@@ -35,7 +35,7 @@ public:
 
     void Reconfigure(const LayerConfig &config) {}
 
-    void InputNames(const LayerIONames &io) {
+    void InputNames(const LayerInputNames &io) {
 
         name_in_ = io.Input(KEY_INPUT_M);
     }

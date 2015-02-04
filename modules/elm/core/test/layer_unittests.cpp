@@ -30,9 +30,9 @@ public:
 
     void Reconfigure(const LayerConfig &config) {}
 
-    void InputNames(const LayerIONames &io) {}
+    void InputNames(const LayerInputNames &io) {}
 
-    void OutputNames(const LayerIONames &io);
+    void OutputNames(const LayerOutputNames &io);
 
     void Activate(const Signal &signal) {}
 

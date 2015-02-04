@@ -8,6 +8,7 @@
 #include "elm/core/base_Layer.h"
 
 #include "elm/core/exception.h"
+#include "elm/core/layerionames.h"
 
 using namespace elm;
 

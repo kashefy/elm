@@ -35,7 +35,7 @@ public:
 
     virtual ~base_MatOutputLayer();
 
-    virtual void OutputNames(const LayerIONames &io);
+    virtual void OutputNames(const LayerOutputNames &io);
 
     virtual void Response(Signal &signal);
 

@@ -11,6 +11,8 @@
 namespace elm {
 
 class LayerConfig;
+class LayerInputNames;
+class LayerOutputNames;
 class LayerIONames;
 class Signal;
 
@@ -56,13 +58,13 @@ public:
       * @brief Set layer stimuli/input names
       * @param new I/O configuration
       */
-    virtual void InputNames(const LayerIONames& io) = 0;
+    virtual void InputNames(const LayerInputNames& io) = 0;
 
     /**
       * @brief Set layer response/output names
       * @param new I/O configuration
       */
-    virtual void OutputNames(const LayerIONames& io) = 0;
+    virtual void OutputNames(const LayerOutputNames& io) = 0;
 
     /**
      * @brief Activate layer computations to most recent stimuli
