@@ -73,12 +73,15 @@ void AttentionWindow::Reconfigure(const LayerConfig &config)
     Reset(config);
 }
 
-void AttentionWindow::IONames(const LayerIONames &config)
+void AttentionWindow::InputNames(const LayerIONames &config)
 {
     name_in_loc_ = config.Input(KEY_INPUT_LOC);
     name_in_scene_ = config.Input(KEY_INPUT_SCENE);
     name_out_win_ = config.Output(KEY_OUTPUT_WIN);
+}
 
+void AttentionWindow::OutputNames(const LayerIONames &config)
+{
     name_out_tl_ = config.OutputOpt(KEY_OUTPUT_OPT_TL);
 }
 

@@ -73,13 +73,14 @@ void ICP::Reset(const LayerConfig &cfg)
 
 }
 
-void ICP::IONames(const LayerIONames &io)
+void ICP::InputNames(const LayerIONames &io)
 {
-    // input names
     name_src_cloud_     = io.Input(KEY_INPUT_POINT_CLOUD_SRC);
     name_target_cloud_  = io.Input(KEY_INPUT_POINT_CLOUD_TARGET);
+}
 
-    // output names
+void ICP::OutputNames(const LayerIONames &io)
+{
     name_convergence_   = io.Output(KEY_OUTPUT_CONVERGENCE);
     name_score_         = io.Output(KEY_OUTPUT_SCORE);
     name_transf_        = io.Output(KEY_OUTPUT_TRANSFORMATION);

@@ -22,7 +22,7 @@ base_MatOutputLayer::base_MatOutputLayer(const LayerConfig &cfg)
 {
 }
 
-void base_MatOutputLayer::IONames(const LayerIONames &io)
+void base_MatOutputLayer::OutputNames(const LayerIONames &io)
 {
     name_output_ = io.Output(KEY_OUTPUT_RESPONSE);
 }

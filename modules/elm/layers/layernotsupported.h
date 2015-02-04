@@ -41,7 +41,12 @@ public:
     /** @throws elm::ExceptionNotImpl when called
      * Arguments are completely ignored.
      */
-    void IONames(const LayerIONames& config);
+    void InputNames(const LayerIONames &io);
+
+    /** @throws elm::ExceptionNotImpl when called
+     * Arguments are completely ignored.
+     */
+    void OutputNames(const LayerIONames &io);
 
     /** @throws elm::ExceptionNotImpl when called
      * Arguments are completely ignored.

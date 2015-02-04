@@ -54,9 +54,13 @@ void base_PopulationCode::Reset(const LayerConfig &config)
     Clear();
 }
 
-void base_PopulationCode::IONames(const LayerIONames &config)
+void base_PopulationCode::InputNames(const LayerIONames &config)
 {
     name_stimulus_ = config.Input(KEY_INPUT_STIMULUS);
+}
+
+void base_PopulationCode::OutputNames(const LayerIONames &config)
+{
     name_pop_code_ = config.Output(KEY_OUTPUT_POP_CODE);
 }
 
@@ -114,9 +118,9 @@ void base_StatefulPopulationCode::Clear()
     state_ = Mat1f();
 }
 
-void base_StatefulPopulationCode::IONames(const LayerIONames &config)
+void base_StatefulPopulationCode::OutputNames(const LayerIONames &config)
 {
-    base_PopulationCode::IONames(config);
+    base_PopulationCode::OutputNames(config);
     name_state_ = config.OutputOpt(KEY_OUTPUT_OPT_STATE);
 }
 

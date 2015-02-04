@@ -53,7 +53,9 @@ public:
 
     void Reconfigure(const LayerConfig &cfg);
 
-    void IONames(const LayerIONames &config);
+    void InputNames(const LayerIONames &config);
+
+    void OutputNames(const LayerIONames &config);
 
     void Activate(const Signal &signal);
 

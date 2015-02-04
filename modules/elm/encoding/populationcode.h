@@ -57,7 +57,9 @@ public:
 
     virtual void Reset(const LayerConfig &config);
 
-    virtual void IONames(const LayerIONames &config);
+    virtual void InputNames(const LayerIONames &config);
+
+    virtual void OutputNames(const LayerIONames &config);
 
     /**
      * @brief compute state and population code
@@ -108,7 +110,7 @@ public:
 protected:
     virtual void Clear();
 
-    virtual void IONames(const LayerIONames &config);
+    virtual void OutputNames(const LayerIONames &config);
 
     virtual void Response(Signal &signal);
 

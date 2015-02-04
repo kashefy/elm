@@ -115,9 +115,13 @@ void Triangulation::Reconfigure(const LayerConfig &cfg)
     gp3.setNormalConsistency(is_normal_consistency);
 }
 
-void Triangulation::IONames(const LayerIONames &io)
+void Triangulation::InputNames(const LayerIONames &io)
 {
     name_src_cloud_ = io.Input(KEY_INPUT_POINT_CLOUD);
+}
+
+void Triangulation::OutputNames(const LayerIONames &io)
+{
     name_vertices_  = io.Output(KEY_OUTPUT_VERTICES);
 }
 

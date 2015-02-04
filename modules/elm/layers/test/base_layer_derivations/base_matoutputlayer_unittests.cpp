@@ -31,17 +31,16 @@ class DummyMatOutputLayer : public base_MatOutputLayer
 public:
     static const string KEY_INPUT_M;
 
-    virtual void Clear() {}
+    void Clear() {}
 
-    virtual void Reconfigure(const LayerConfig &config) {}
+    void Reconfigure(const LayerConfig &config) {}
 
-    virtual void IONames(const LayerIONames &io) {
+    void InputNames(const LayerIONames &io) {
 
         name_in_ = io.Input(KEY_INPUT_M);
-        base_MatOutputLayer::IONames(io);
     }
 
-    virtual void Activate(const Signal &signal) {
+    void Activate(const Signal &signal) {
 
         m_ = signal.MostRecentMat(name_in_)*2.f;
     }

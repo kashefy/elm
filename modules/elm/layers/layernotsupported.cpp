@@ -47,7 +47,12 @@ void base_LayerNotSupported::Reconfigure(const LayerConfig& config)
     ThrowException();
 }
 
-void base_LayerNotSupported::IONames(const LayerIONames& config)
+void base_LayerNotSupported::InputNames(const LayerIONames& io)
+{
+    ThrowException();
+}
+
+void base_LayerNotSupported::OutputNames(const LayerIONames& io)
 {
     ThrowException();
 }

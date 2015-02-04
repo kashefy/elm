@@ -95,9 +95,8 @@ void SaliencyItti::Reconfigure(const LayerConfig &config)
     Reset(config);
 }
 
-void SaliencyItti::IONames(const LayerIONames &io)
+void SaliencyItti::OutputNames(const LayerIONames &io)
 {
-    base_SingleInputFeatureLayer::IONames(io);
     name_saliency_  = io.Output(KEY_OUTPUT_SALIENCY);
     name_salient_loc_ = io.Output(KEY_OUTPUT_SALIENT_LOC);
 }

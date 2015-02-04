@@ -92,10 +92,8 @@ void GradAssignment::Reconfigure(const LayerConfig &config)
     max_iter_sinkhorn_ = params.get<int>(PARAM_MAX_ITER_PER_BETA);
 }
 
-void GradAssignment::IONames(const LayerIONames &io)
+void GradAssignment::InputNames(const LayerIONames &io)
 {
-    base_MatOutputLayer::IONames(io);
-
     name_g_ab_ = io.Input(KEY_INPUT_GRAPH_AB);
     name_g_ij_ = io.Input(KEY_INPUT_GRAPH_IJ);
     name_c_ai_ = io.Input(KEY_INPUT_MAT_COMPATIBILITY);

@@ -45,7 +45,9 @@ public:
 
     virtual void Reconfigure(const LayerConfig &config);
 
-    virtual void IONames(const LayerIONames &config);
+    virtual void InputNames(const LayerIONames &config);
+
+    virtual void OutputNames(const LayerIONames &config);
 
     virtual void Activate(const Signal &signal);
 
