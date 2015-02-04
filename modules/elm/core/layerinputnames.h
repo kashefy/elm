@@ -6,7 +6,7 @@
 //
 //M*/
 #ifndef _ELM_CORE_LAYERINPUTNAMES_H_
-#define LAYERINPUTNAMES_H
+#define _ELM_CORE_LAYERINPUTNAMES_H_
 
 #include "elm/core/typedefs_sfwd.h"
 

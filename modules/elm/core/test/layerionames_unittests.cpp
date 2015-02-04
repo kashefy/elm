@@ -57,21 +57,3 @@ TEST_F(LayerIONamesTest, Output) {
     EXPECT_THROW(to_.Input("k1"), ExceptionKeyError) << "Output mixing with input";
     EXPECT_THROW(to_.Input("k2"), ExceptionKeyError) << "Output mixing with input";
 }
-
-TEST_F(LayerIONamesTest, Output_WrongKey) {
-
-    EXPECT_THROW(to_.Output("k1"), ExceptionKeyError);
-    to_.Output("k1", "n1");
-    EXPECT_EQ("n1", to_.Output("k1"));
-}
-
-TEST_F(LayerIONamesTest, OutputOpt) {
-
-    EXPECT_THROW(to_.Output("k1"), ExceptionKeyError);
-    to_.Output("k1", "n1");
-    EXPECT_TRUE(to_.OutputOpt("k1") != 0);
-    EXPECT_EQ("n1", to_.OutputOpt("k1").get());
-
-    EXPECT_THROW(to_.Output("k2"), ExceptionKeyError);
-    EXPECT_FALSE(to_.OutputOpt("k2"));
-}
