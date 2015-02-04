@@ -11,6 +11,7 @@
 #ifndef _ELM_CORE_TYPEDEFS_FWD_H_
 #define _ELM_CORE_TYPEDEFS_FWD_H_
 
+#include "elm/core/boost/typedefs_fwd.h"
 #include "elm/core/cv/typedefs_fwd.h"
 
 typedef unsigned char uchar;
