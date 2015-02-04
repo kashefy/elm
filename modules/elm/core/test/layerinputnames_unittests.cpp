@@ -5,10 +5,12 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/core/layerinputnames.h"
+//#include "elm/core/layerinputnames.h"
 #include "elm/core/layerionames.h"
 
 #include "gtest/gtest.h"
+
+#include <boost/optional.hpp>
 
 #include "elm/core/exception.h"
 #include "elm/core/inputname.h"
