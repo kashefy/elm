@@ -10,10 +10,6 @@
 #ifndef _ELM_CORE_PTREE_UTILS_H_
 #define _ELM_CORE_PTREE_UTILS_H_
 
-#include <iosfwd>
-#include <iostream>
-#include <vector>
-
 #include "elm/core/typedefs_sfwd.h"
 
 namespace elm
