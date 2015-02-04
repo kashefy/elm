@@ -8,7 +8,7 @@
 #ifndef _ELM_CORE_TYPEDEFS_H_
 #define _ELM_CORE_TYPEDEFS_H_
 
-#include "elm/core/stl/typedefs.h"
+#include "elm/core/typedefs_sfwd.h"
 
 namespace elm {
 

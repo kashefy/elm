@@ -20,6 +20,8 @@ namespace elm {
 
 typedef cv::Mat_<float> Mat_f;   ///< convinience forward typedef for Mat of floats without constraints on no. of channels
 
+typedef boost::property_tree::ptree PTree;
+
 } // namespace elm
 
 #endif // _ELM_CORE_TYPEDEFS_FWD_H_

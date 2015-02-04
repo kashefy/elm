@@ -16,7 +16,7 @@
 #include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
 
-#include "elm/core/boost/typedefs_fwd.h"
+#include "elm/core/typedefs_fwd.h"
 
 namespace elm
 {

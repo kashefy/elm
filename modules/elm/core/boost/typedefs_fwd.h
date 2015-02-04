@@ -20,12 +20,4 @@ template <typename T> class optional;
 
 } // fake namespace boost for fwd declarations
 
-namespace elm {
-
-typedef boost::property_tree::ptree PTree;
-
-typedef boost::optional<std::string> OptS;
-
-} // namespace elm
-
 #endif // _ELM_CORE_PCL_TYPEDEFS_FWD_H_

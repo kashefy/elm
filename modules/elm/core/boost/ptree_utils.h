@@ -14,7 +14,7 @@
 #include <iostream>
 #include <vector>
 
-#include "elm/core/boost/typedefs_fwd.h"
+#include "elm/core/typedefs_fwd.h"
 
 namespace elm
 {
