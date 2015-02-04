@@ -50,7 +50,7 @@ protected:
             LayerIONames io;
             io.Input(GraphCompatibility::KEY_INPUT_GRAPH_AB, NAME_GRAPH_AB);
             io.Input(GraphCompatibility::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
-            io.Output(GraphCompatibility::KEY_OUTPUT_M, NAME_COMPATIBILITY_MAT);
+            io.Output(GraphCompatibility::KEY_OUTPUT_RESPONSE, NAME_COMPATIBILITY_MAT);
 
             graph_compatibility_= LayerFactory::CreateShared("GraphCompatibility", cfg, io);
         }
@@ -72,7 +72,7 @@ protected:
             io.Input(GradAssignment::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
             io.Input(GradAssignment::KEY_INPUT_MAT_COMPATIBILITY, NAME_COMPATIBILITY_MAT);
 
-            io.Output(GradAssignment::KEY_OUTPUT_M, NAME_M);
+            io.Output(GradAssignment::KEY_OUTPUT_RESPONSE, NAME_M);
 
             to_ = LayerFactory::CreateShared("GradAssignment", cfg, io);
         }

@@ -27,7 +27,6 @@ using namespace elm;
 
 /** Define paramter names and IO keys
   */
-const std::string SaliencyItti::KEY_INPUT_SCENE         = "scene";          ///< key to visual scene stimulus
 const std::string SaliencyItti::KEY_OUTPUT_SALIENCY     = "saliency";       ///< key to saliency measure
 const std::string SaliencyItti::KEY_OUTPUT_SALIENT_LOC  = "salient_loc";    ///< key to most recently attended location
 
@@ -43,7 +42,7 @@ const float SaliencyItti::DEFAULT_ORIENT_RESPONSE_PERCENTILE = 0.7f;
 #include <boost/assign/list_of.hpp>
 template <>
 elm::MapIONames LayerAttr_<SaliencyItti>::io_pairs = boost::assign::map_list_of
-        ELM_ADD_INPUT_PAIR(SaliencyItti::KEY_INPUT_SCENE)
+        ELM_ADD_INPUT_PAIR(detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS)
         ELM_ADD_OUTPUT_PAIR(SaliencyItti::KEY_OUTPUT_SALIENCY)
         ELM_ADD_OUTPUT_PAIR(SaliencyItti::KEY_OUTPUT_SALIENT_LOC)
         ;
@@ -96,16 +95,16 @@ void SaliencyItti::Reconfigure(const LayerConfig &config)
     Reset(config);
 }
 
-void SaliencyItti::IONames(const LayerIONames &config)
+void SaliencyItti::IONames(const LayerIONames &io)
 {
-    name_scene_     = config.Input(KEY_INPUT_SCENE);
-    name_saliency_  = config.Output(KEY_OUTPUT_SALIENCY);
-    name_salient_loc_ = config.Output(KEY_OUTPUT_SALIENT_LOC);
+    base_SingleInputFeatureLayer::IONames(io);
+    name_saliency_  = io.Output(KEY_OUTPUT_SALIENCY);
+    name_salient_loc_ = io.Output(KEY_OUTPUT_SALIENT_LOC);
 }
 
 void SaliencyItti::Activate(const Signal &signal)
 {
-    Mat1f stimulus = signal.MostRecentMat(name_scene_);
+    Mat1f stimulus = signal.MostRecentMat(name_input_);
     pop_code_orient_.State(stimulus, gabors_);
 
     Mat orientation_spikes = pop_code_orient_.PopCode();
@@ -126,7 +125,8 @@ void SaliencyItti::Activate(const Signal &signal)
         minMaxIdx(orientation_spikes.colRange(j, j+j_step), &min_val, 0, 0, max_idx);
         orientation_index(i) = max_idx[1];
 
-        mask_low_orientation_response(i) = orientation_response_flat(j+max_idx[1]) <= low_orientation_response_percentile;
+        mask_low_orientation_response(i) =
+                orientation_response_flat(j+max_idx[1]) <= low_orientation_response_percentile;
     }
 
     // shift indices to be zero-centered.

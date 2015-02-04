@@ -106,7 +106,7 @@ TEST_F(LayerYInitTest, Create)
 {
     LayerIONames io;
     io.Input(LayerY::KEY_INPUT_STIMULUS, NAME_STIMULUS);
-    io.Output(LayerY::KEY_OUTPUT_SPIKES, NAME_SPIKES);
+    io.Output(LayerY::KEY_OUTPUT_RESPONSE, NAME_SPIKES);
     std::shared_ptr<base_Layer> ptr = LayerFactory::CreateShared(
                 "LayerY",
                 config_,
@@ -122,7 +122,7 @@ protected:
         LayerYInitTest::SetUp();
 
         io_.Input(LayerY::KEY_INPUT_STIMULUS, NAME_STIMULUS);
-        io_.Output(LayerY::KEY_OUTPUT_SPIKES, NAME_SPIKES);
+        io_.Output(LayerY::KEY_OUTPUT_RESPONSE, NAME_SPIKES);
 
         to_ = LayerFactory::CreateShared("LayerY", config_, io_);
     }

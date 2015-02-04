@@ -39,7 +39,7 @@ elm::MapIONames LayerAttr_<GradAssignment>::io_pairs = boost::assign::map_list_o
         ELM_ADD_INPUT_PAIR(GradAssignment::KEY_INPUT_GRAPH_AB)
         ELM_ADD_INPUT_PAIR(GradAssignment::KEY_INPUT_GRAPH_IJ)
         ELM_ADD_INPUT_PAIR(GradAssignment::KEY_INPUT_MAT_COMPATIBILITY)
-        ELM_ADD_OUTPUT_PAIR(detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT)
+        ELM_ADD_OUTPUT_PAIR(detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
         ;
 //#endif
 

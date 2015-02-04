@@ -62,7 +62,7 @@ protected:
 
         LayerIONames io;
         io.Input(DummyMatOutputLayer::KEY_INPUT_M, NAME_IN_M);
-        io.Output(DummyMatOutputLayer::KEY_OUTPUT_M, NAME_OUT_M);
+        io.Output(DummyMatOutputLayer::KEY_OUTPUT_RESPONSE, NAME_OUT_M);
 
         to_->IONames(io);
 
@@ -82,8 +82,8 @@ protected:
 
 TEST_F(MatOutputLayerTest, Sanity)
 {
-    EXPECT_EQ(base_MatOutputLayer::KEY_OUTPUT_M,
-              DummyMatOutputLayer::KEY_OUTPUT_M);
+    EXPECT_EQ(base_MatOutputLayer::KEY_OUTPUT_RESPONSE,
+              DummyMatOutputLayer::KEY_OUTPUT_RESPONSE);
 }
 
 TEST_F(MatOutputLayerTest, ActivateAndResponse)
