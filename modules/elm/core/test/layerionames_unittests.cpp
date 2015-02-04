@@ -5,9 +5,11 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/core/layerconfig.h"
+#include "elm/core/layerionames.h"
 
 #include "gtest/gtest.h"
+
+#include <boost/optional.hpp>
 
 #include "elm/core/exception.h"
 #include "elm/core/inputname.h"
@@ -26,37 +28,24 @@ protected:
     LayerIONames to_; ///< test object
 };
 
+/**
+ * @brief Test that input is not mixed as output
+ */
 TEST_F(LayerIONamesTest, Input) {
 
-    to_.Input("k1", "n1");
-    to_.Input("k2", "n2");
-    to_.Input("k2", "n22");
+    this->to_.Input("k1", "n1");
+    this->to_.Input("k2", "n2");
+    this->to_.Input("k2", "n22");
 
-    EXPECT_EQ("n1", to_.Input("k1").to_string());
-    EXPECT_EQ("n22", to_.Input("k2").to_string());
-    EXPECT_THROW(to_.Output("k1"), ExceptionKeyError) << "Output mixing with input";
-    EXPECT_THROW(to_.Output("k2"), ExceptionKeyError) << "Output mixing with input";
+    EXPECT_EQ("n1", this->to_.Input("k1").to_string());
+    EXPECT_EQ("n22", this->to_.Input("k2").to_string());
+    EXPECT_THROW(this->to_.Output("k1"), ExceptionKeyError) << "Output mixing with input";
+    EXPECT_THROW(this->to_.Output("k2"), ExceptionKeyError) << "Output mixing with input";
 }
 
-TEST_F(LayerIONamesTest, Input_WrongKey) {
-
-    EXPECT_THROW(to_.Input("k1"), ExceptionKeyError);
-    to_.Input("k1", "n1");
-    EXPECT_EQ("n1", to_.Input("k1").to_string());
-}
-
-TEST_F(LayerIONamesTest, InputOpt) {
-
-    EXPECT_THROW(to_.Input("k1"), ExceptionKeyError);
-    EXPECT_FALSE(bool(to_.InputOpt("k1")));
-    to_.Input("k1", "n1");
-    EXPECT_TRUE(bool(to_.InputOpt("k1")));
-    EXPECT_EQ("n1", to_.InputOpt("k1").get());
-
-    EXPECT_THROW(to_.Input("k2"), ExceptionKeyError);
-    EXPECT_FALSE(to_.InputOpt("k2"));
-}
-
+/**
+ * @brief Test that output is not mixed as input
+ */
 TEST_F(LayerIONamesTest, Output) {
 
     to_.Output("k1", "n1");
