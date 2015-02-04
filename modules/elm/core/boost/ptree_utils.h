@@ -7,8 +7,8 @@
 //M*/
 /** @file utilities around boost property tree
  */
-#ifndef _ELM_CORE_PTREE_UTILS_H_
-#define _ELM_CORE_PTREE_UTILS_H_
+#ifndef _ELM_CORE_BOOST_PTREE_UTILS_H_
+#define _ELM_CORE_BOOST_PTREE_UTILS_H_
 
 #include "elm/core/typedefs_sfwd.h"
 
@@ -27,4 +27,4 @@ bool UnusedNodes(const PTree &p, const VecS &keys_used, VecS &keys_unused);
 
 }
 
-#endif // _ELM_CORE_PTREE_UTILS_H_
+#endif // _ELM_CORE_BOOST_PTREE_UTILS_H_

@@ -8,8 +8,8 @@
 /** @file utilities around boost property tree with inline definitions
  * or that need full type specification
  */
-#ifndef _ELM_CORE_PTREE_UTILS_INL_H_
-#define _ELM_CORE_PTREE_UTILS_INL_H_
+#ifndef _ELM_CORE_BOOST_PTREE_UTILS_INL_H_
+#define _ELM_CORE_BOOST_PTREE_UTILS_INL_H_
 
 #include <vector>
 
@@ -49,4 +49,4 @@ void push_back_child(const PTree &p, const std::string &key, std::vector<T> &v)
 
 } // namespace elm
 
-#endif // _ELM_CORE_PTREE_UTILS_INL_H_
+#endif // _ELM_CORE_BOOST_PTREE_UTILS_INL_H_

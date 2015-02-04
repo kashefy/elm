@@ -20,4 +20,4 @@ template <typename T> class optional;
 
 } // fake namespace boost for fwd declarations
 
-#endif // _ELM_CORE_PCL_TYPEDEFS_FWD_H_
+#endif // _ELM_CORE_BOOST_TYPEDEFS_FWD_H_
