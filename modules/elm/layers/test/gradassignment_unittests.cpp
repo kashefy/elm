@@ -1,7 +1,7 @@
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright (c) 2015, Youssef Kashef
-// Copyright (c) 2015, Elm Library Project
+// Copyright (c) 2015, ELM Library Project
 // 3-clause BSD License
 //
 //M*/
@@ -106,7 +106,7 @@ protected:
         g_ij_ = Mat1f(I, I);
         g_ij_ = g_ab_.clone();    // make them equal
         Mat1f noise(g_ij_.size());
-        randn(noise, 0.f, 0.02f);
+        randn(noise, 0.f, 0.018f);
         g_ij_ += noise;
         g_ij_.setTo(0.f, g_ij_ < 0.f);
         g_ij_.setTo(1.f, g_ij_ > 1.f);
