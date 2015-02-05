@@ -9,7 +9,7 @@
 #define _ELM_CORE_VISITORCLOUD__H_
 
 #ifdef __WITH_PCL // the following visitor derived template class definitions require PCL support
-
+#include "elm/core/debug_utils.h"
 #include "elm/core/pcl/cloud_2cloud_.h"
 #include "elm/core/pcl/vertices.h"
 #include "elm/core/cv/typedefs_fwd.h"
@@ -109,11 +109,11 @@ public:
     }
 
     CloudTPDstPtr operator()(const elm::Mat_f &m) {
-
+        ELM_COUT_VAR(m);
         if(!bool(c_)) {
 
             c_ = Mat2PointCloud_<TPointDst >(m);
-        }
+        }ELM_COUT_VAR(PointCloud2Mat_(c_));
         return c_;
     }
 

@@ -45,6 +45,7 @@ boost::shared_ptr<pcl::PointCloud<TPoint > > Mat2PointCloud_(const cv::Mat1f &m)
  * @brief Convert point cloud to OpenCV's single-channel Mat of floats.
  *
  * No deep copy involved, ownership of underlying data remains with point cloud.
+ * CAUTION: output Mat data becomes invalid if source cloud goes out of scope.
  *
  * Types for which specializations exist:
  * pcl::PointXYZ, pcl::Normal, pcl::PointNormal

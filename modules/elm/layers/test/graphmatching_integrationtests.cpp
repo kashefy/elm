@@ -7,7 +7,10 @@
 
 #include <pcl/io/pcd_io.h>
 
+#include "elm/core/debug_utils.h"
+
 #include "elm/core/exception.h"
+#include "elm/core/graph/adjacency.h"
 #include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/pcl/cloud_.h"
@@ -41,6 +44,7 @@ const int MAX_ITER_SINKHORN = 30;
 // Names for Grad. assignment I/O
 const string NAME_GRAPH_AB = "G_ab";
 const string NAME_GRAPH_IJ = "g_ij";
+const string NAME_GRAPH_COMPAT = "c_ai";
 const string NAME_M        = "m_ga";
 
 /**
@@ -81,6 +85,7 @@ protected:
             LayerIONames io;
             io.Input(GradAssignment::KEY_INPUT_GRAPH_AB, NAME_GRAPH_AB);
             io.Input(GradAssignment::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
+            io.Input(GradAssignment::KEY_INPUT_MAT_COMPATIBILITY, NAME_GRAPH_COMPAT);
             io.Output(GradAssignment::KEY_OUTPUT_RESPONSE, NAME_M);
 
             layers_.push_back(LayerFactory::CreateShared("GradAssignment", cfg, io));
@@ -91,7 +96,21 @@ protected:
         PCLPointCloud2 cloud_blob;
         pcl::io::loadPCDFile(TEST_PATH_PCD.string(), cloud_blob);
         fromPCLPointCloud2(cloud_blob, *cloud_in);
-        sig_.Append(NAME_INPUT_POINT_CLOUD, PointCloud2Mat_<PointXYZ>(cloud_in));
+
+        /* CAUTION: When appending point cloud to signal, verify ownership is transfered also.
+         *
+         * Scenario a) where ownership is not transfered and the signal data becomes invalid:
+         *
+         * sig_.Append(NAME_INPUT_POINT_CLOUD, PointCloud2Mat_(cloud_in));
+         *
+         * Scenario b) where owenership is transfered through explicit deep copy AND increment of reference count (of Mat object):
+         * sig_.Append(NAME_INPUT_POINT_CLOUD, PointCloud2Mat_(cloud_in));
+         *
+         * Scenario c) where data is preserved through increment of reference count (of cloud object): (used below)
+         * sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in);
+         */
+        sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in);
+
     }
 
     virtual void TearDown()
@@ -107,15 +126,17 @@ protected:
 
 TEST_F(GraphMatchingTest, GraphMatching)
 {
-//    for(size_t i=0; i<layers_.size()-1; i++) {
+    CloudXYZPtr cld = sig_.MostRecent(NAME_INPUT_POINT_CLOUD);
+    ELM_COUT_VAR(PointCloud2Mat_(cld));
+    for(size_t i=0; i<layers_.size()-1; i++) {
 
-//        LayerFactory::LayerShared l = layers_[i];
-//        l->Activate(sig_);
-//        l->Response(sig_);
+        LayerFactory::LayerShared l = layers_[i];
+        l->Activate(sig_);
+        l->Response(sig_);
 
-//        VecVertices vv = sig_.MostRecent(NAME_OUTPUT_VERTICES).get<VecVertices>();
-//        std::cout<<format(sig_.MostRecentMat(NAME_OUTPUT_VERTICES), Formatter::FMT_NUMPY)<<std::endl;
-//    }
+        VecVertices vv = sig_.MostRecent(NAME_OUTPUT_VERTICES).get<VecVertices>();
+        std::cout<<format(sig_.MostRecentMat(NAME_OUTPUT_VERTICES), Formatter::FMT_NUMPY)<<std::endl;
+    }
 
 }
 
