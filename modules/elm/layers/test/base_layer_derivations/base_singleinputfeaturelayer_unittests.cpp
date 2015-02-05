@@ -35,10 +35,9 @@ public:
 
     void Reconfigure(const LayerConfig &config) {}
 
-    void IONames(const LayerIONames &io) {
+    void OutputNames(const LayerOutputNames &io) {
 
         name_out_ = io.Output(KEY_OUTPUT_M);
-        base_SingleInputFeatureLayer::IONames(io);
     }
 
     void Activate(const Signal &signal) {

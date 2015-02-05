@@ -1,3 +1,10 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, ELM Library Project
+// 3-clause BSD License
+//
+//M*/
 #ifndef _ELM_CORE_BASE_LAYER_DERIVS_BASE_MATOUTPUTLAYER_H
 #define _ELM_CORE_BASE_LAYER_DERIVS_BASE_MATOUTPUTLAYER_H
 
@@ -28,7 +35,7 @@ public:
 
     virtual ~base_MatOutputLayer();
 
-    virtual void IONames(const LayerIONames &io);
+    virtual void OutputNames(const LayerOutputNames &io);
 
     virtual void Response(Signal &signal);
 

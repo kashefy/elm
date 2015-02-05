@@ -26,15 +26,17 @@ using namespace elm;
 class DummyChildLayer : public base_Layer
 {
 public:
-    virtual void Clear() {}
+    void Clear() {}
 
-    virtual void Reconfigure(const LayerConfig &config) {}
+    void Reconfigure(const LayerConfig &config) {}
 
-    virtual void IONames(const LayerIONames &config) {}
+    void InputNames(const LayerInputNames &io) {}
 
-    virtual void Activate(const Signal &signal) {}
+    void OutputNames(const LayerOutputNames &io);
 
-    virtual void Response(Signal &signal) {}
+    void Activate(const Signal &signal) {}
+
+    void Response(Signal &signal) {}
 
     DummyChildLayer() {}
 };

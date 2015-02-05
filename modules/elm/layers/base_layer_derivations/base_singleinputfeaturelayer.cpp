@@ -1,5 +1,6 @@
 #include "elm/layers/base_layer_derivations/base_singleinputfeaturelayer.h"
 
+#include "elm/core/inputname.h"
 #include "elm/core/layerionames.h"
 #include "elm/core/signal.h"
 
@@ -22,7 +23,7 @@ base_SingleInputFeatureLayer::base_SingleInputFeatureLayer(const LayerConfig &cf
 {
 }
 
-void base_SingleInputFeatureLayer::IONames(const LayerIONames &io)
+void base_SingleInputFeatureLayer::InputNames(const LayerInputNames &io)
 {
     name_input_ = io.Input(KEY_INPUT_STIMULUS);
 }

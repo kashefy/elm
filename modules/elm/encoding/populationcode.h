@@ -16,6 +16,7 @@
 
 #include "elm/core/base_Layer.h"
 #include "elm/core/layerconfig.h"
+#include "elm/core/inputname.h"
 #include "elm/core/typedefs_sfwd.h"
 
 namespace elm {
@@ -57,7 +58,9 @@ public:
 
     virtual void Reset(const LayerConfig &config);
 
-    virtual void IONames(const LayerIONames &config);
+    virtual void InputNames(const LayerInputNames &config);
+
+    virtual void OutputNames(const LayerOutputNames &config);
 
     /**
      * @brief compute state and population code
@@ -108,7 +111,7 @@ public:
 protected:
     virtual void Clear();
 
-    virtual void IONames(const LayerIONames &config);
+    virtual void OutputNames(const LayerIONames &config);
 
     virtual void Response(Signal &signal);
 

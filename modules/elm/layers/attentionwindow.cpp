@@ -7,8 +7,9 @@
 //M*/
 #include "elm/layers/attentionwindow.h"
 
-#include "elm/core/exception.h"
 #include "elm/core/cv/mat_utils.h"
+#include "elm/core/exception.h"
+#include "elm/core/inputname.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layerattr_.h"
 
@@ -73,12 +74,15 @@ void AttentionWindow::Reconfigure(const LayerConfig &config)
     Reset(config);
 }
 
-void AttentionWindow::IONames(const LayerIONames &config)
+void AttentionWindow::InputNames(const LayerInputNames &config)
 {
     name_in_loc_ = config.Input(KEY_INPUT_LOC);
     name_in_scene_ = config.Input(KEY_INPUT_SCENE);
-    name_out_win_ = config.Output(KEY_OUTPUT_WIN);
+}
 
+void AttentionWindow::OutputNames(const LayerOutputNames &config)
+{
+    name_out_win_ = config.Output(KEY_OUTPUT_WIN);
     name_out_tl_ = config.OutputOpt(KEY_OUTPUT_OPT_TL);
 }
 

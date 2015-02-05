@@ -64,9 +64,8 @@ void SinkhornBalancing::Reconfigure(const LayerConfig &config)
     max_iter_ = params.get<int>(PARAM_MAX_ITER);
 }
 
-void SinkhornBalancing::IONames(const LayerIONames &io)
+void SinkhornBalancing::OutputNames(const LayerOutputNames &io)
 {
-    base_SingleInputFeatureLayer::IONames(io);
     name_out_convergence_   = io.Output(KEY_OUTPUT_IS_CONVERGED);
     name_out_m_             = io.Output(KEY_OUTPUT_MAT_BALANCED);
 }

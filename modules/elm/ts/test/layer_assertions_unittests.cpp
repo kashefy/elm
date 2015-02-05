@@ -21,15 +21,17 @@ using namespace elm;
 class DummyChildLayer : public base_Layer
 {
 public:
-    virtual void Clear() {}
+    void Clear() {}
 
-    virtual void Reconfigure(const LayerConfig &config) {}
+    void Reconfigure(const LayerConfig &config) {}
 
-    virtual void IONames(const LayerIONames &config) {}
+    virtual void InputNames(const LayerInputNames &io) {}
 
-    virtual void Activate(const Signal &signal) {}
+    virtual void OutputNames(const LayerOutputNames &io) {}
 
-    virtual void Response(Signal &signal) {}
+    void Activate(const Signal &signal) {}
+
+    void Response(Signal &signal) {}
 
     DummyChildLayer() {}
 };
@@ -52,11 +54,15 @@ public:
     static const string KEY_OUTPUT_OUT;
     static const string KEY_OUTPUT_OPT_OUT;
 
-    virtual void IONames(const LayerIONames &config) {
+    virtual void InputNames(const LayerInputNames &io) {
 
-        name_in_    = config.Input(KEY_INPUT_IN);
-        name_out_   = config.Output(KEY_OUTPUT_OUT);
-        name_opt_out_ = config.OutputOpt(KEY_OUTPUT_OPT_OUT);
+        name_in_    = io.Input(KEY_INPUT_IN);
+    }
+
+    virtual void OutputNames(const LayerOutputNames &io) {
+
+        name_out_   = io.Output(KEY_OUTPUT_OUT);
+        name_opt_out_ = io.OutputOpt(KEY_OUTPUT_OPT_OUT);
     }
 
     DummyChildLayerWithReqIONames() : DummyChildLayer() {}

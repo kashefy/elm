@@ -21,6 +21,7 @@
 
 #include "elm/core/defs.h"
 #include "elm/core/exception.h"
+#include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layerattr_.h"
@@ -115,9 +116,13 @@ void Triangulation::Reconfigure(const LayerConfig &cfg)
     gp3.setNormalConsistency(is_normal_consistency);
 }
 
-void Triangulation::IONames(const LayerIONames &io)
+void Triangulation::InputNames(const LayerInputNames &io)
 {
     name_src_cloud_ = io.Input(KEY_INPUT_POINT_CLOUD);
+}
+
+void Triangulation::OutputNames(const LayerOutputNames &io)
+{
     name_vertices_  = io.Output(KEY_OUTPUT_VERTICES);
 }
 

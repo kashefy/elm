@@ -7,6 +7,7 @@
 //M*/
 #include "elm/layers/graphcompatibility.h"
 
+#include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/layers/sinkhornbalancing.h"
@@ -63,9 +64,8 @@ void GraphCompatibility::Reconfigure(const LayerConfig &config)
 {
 }
 
-void GraphCompatibility::IONames(const LayerIONames &io)
+void GraphCompatibility::InputNames(const LayerInputNames &io)
 {
-    base_MatOutputLayer::IONames(io);
     name_g_ab_ = io.Input(KEY_INPUT_GRAPH_AB);
     name_g_ij_ = io.Input(KEY_INPUT_GRAPH_IJ);
 }

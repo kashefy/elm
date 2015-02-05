@@ -14,6 +14,7 @@
 #include <opencv2/core/eigen.hpp> // for eigen2cv(), must be preceeded definitio of Eigen either PCL or #include <Eigen/Dense>
 
 #include "elm/core/exception.h"
+#include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layerattr_.h"
@@ -73,13 +74,14 @@ void ICP::Reset(const LayerConfig &cfg)
 
 }
 
-void ICP::IONames(const LayerIONames &io)
+void ICP::InputNames(const LayerInputNames &io)
 {
-    // input names
     name_src_cloud_     = io.Input(KEY_INPUT_POINT_CLOUD_SRC);
     name_target_cloud_  = io.Input(KEY_INPUT_POINT_CLOUD_TARGET);
+}
 
-    // output names
+void ICP::OutputNames(const LayerOutputNames &io)
+{
     name_convergence_   = io.Output(KEY_OUTPUT_CONVERGENCE);
     name_score_         = io.Output(KEY_OUTPUT_SCORE);
     name_transf_        = io.Output(KEY_OUTPUT_TRANSFORMATION);

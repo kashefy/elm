@@ -7,14 +7,10 @@
 //M*/
 /** @file utilities around boost property tree
  */
-#ifndef _ELM_CORE_PTREE_UTILS_H_
-#define _ELM_CORE_PTREE_UTILS_H_
+#ifndef _ELM_CORE_BOOST_PTREE_UTILS_H_
+#define _ELM_CORE_BOOST_PTREE_UTILS_H_
 
-#include <iosfwd>
-#include <iostream>
-#include <vector>
-
-#include "elm/core/boost/typedefs_fwd.h"
+#include "elm/core/typedefs_sfwd.h"
 
 namespace elm
 {
@@ -27,8 +23,8 @@ namespace elm
  * @param[in] unused keys, keys found in addition to expected set of keys
  * @return true if unusued keys found
  */
-bool UnusedNodes(const PTree &p, const std::vector<std::string> &keys_used, std::vector<std::string> &keys_unused);
+bool UnusedNodes(const PTree &p, const VecS &keys_used, VecS &keys_unused);
 
 }
 
-#endif // _ELM_CORE_PTREE_UTILS_H_
+#endif // _ELM_CORE_BOOST_PTREE_UTILS_H_

@@ -36,7 +36,7 @@ public:
      * @brief sets name_input_ with feature name
      * @param io
      */
-    virtual void IONames(const LayerIONames &io);
+    virtual void InputNames(const LayerInputNames &io);
 
 protected:
     base_SingleInputFeatureLayer();
