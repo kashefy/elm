@@ -127,15 +127,22 @@ protected:
 TEST_F(GraphMatchingTest, GraphMatching)
 {
     CloudXYZPtr cld = sig_.MostRecent(NAME_INPUT_POINT_CLOUD);
-    ELM_COUT_VAR(PointCloud2Mat_(cld));
     for(size_t i=0; i<layers_.size()-1; i++) {
 
         LayerFactory::LayerShared l = layers_[i];
         l->Activate(sig_);
         l->Response(sig_);
 
-        VecVertices vv = sig_.MostRecent(NAME_OUTPUT_VERTICES).get<VecVertices>();
-        std::cout<<format(sig_.MostRecentMat(NAME_OUTPUT_VERTICES), Formatter::FMT_NUMPY)<<std::endl;
+        Triangles t = sig_.MostRecent(NAME_OUTPUT_VERTICES).get<VecVertices>();
+
+        ELM_COUT_VAR(PointCloud2Mat_(cld));
+
+        std::cout<<format(VecVertices2Mat(t, false), Formatter::FMT_NUMPY)<<std::endl;
+
+        Mat1f m;
+        elm::TriangulatedCloudToAdjacencyX(cld, t, m);
+
+        ELM_COUT_VAR(format(m, Formatter::FMT_NUMPY));
     }
 
 }
