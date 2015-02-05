@@ -8,8 +8,6 @@
 #ifndef _ELM_CORE_FEATUREDATA_H_
 #define _ELM_CORE_FEATUREDATA_H_
 
-#include <memory>
-
 #include <boost/variant.hpp>
 
 #include "elm/core/visitors/visitors.h"
