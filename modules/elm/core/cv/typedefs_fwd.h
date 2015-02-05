@@ -16,6 +16,7 @@ namespace cv {
 class Mat;
 
 template <typename T> class Mat_;
+template <typename T> class SparseMat_;
 
 typedef Mat_<float> Mat1f;  ///< convinience typedef for Mat of floats without constraints on no. of channels
 typedef Mat_<int> Mat1i;    ///< convinience typedef for Mat of integers
