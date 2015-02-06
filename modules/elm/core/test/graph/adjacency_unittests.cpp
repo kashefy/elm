@@ -32,19 +32,43 @@ class AdjacencyTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-
+        cld_.reset(new CloudXYZ);
+        tri_.clear();
     }
 
     // members
-
+    CloudXYZPtr cld_;
+    Triangles tri_;
 };
 
-TEST_F(AdjacencyTest, DummyTest)
+TEST_F(AdjacencyTest, Empty)
 {
-    CloudXYZPtr cld;
-    Triangles tri;
+    // both cloud and vertices empty
+    cld_->clear();
+    tri_.clear();
+
     cv::Mat1f adj;
-    EXPECT_THROW(TriangulatedCloudToAdjacencyX(cld, tri, adj), ExceptionNotImpl);
+    EXPECT_NO_THROW(TriangulatedCloudToAdjacencyX(cld_, tri_, adj));
+    EXPECT_TRUE(adj.empty());
+
+    // cloud empty
+    cld_->clear();
+
+    Vertices v;
+    v.vertices.push_back(uint32_t(1));
+    v.vertices.push_back(uint32_t(2));
+    v.vertices.push_back(uint32_t(3));
+    tri_.push_back(v);
+
+    EXPECT_THROW(TriangulatedCloudToAdjacencyX(cld_, tri_, adj), ExceptionKeyError);
+
+
+    // triangles empty
+    cld_->push_back(PointXYZ(1.f, 2.f, 3.f));
+
+    tri_.clear();
+    EXPECT_NO_THROW(TriangulatedCloudToAdjacencyX(cld_, tri_, adj));
+    EXPECT_MAT_DIMS_EQ(adj, Size2i(1, 1));
 }
 
 typedef boost::property<boost::edge_weight_t, float> EdgeWeightProperty;
@@ -98,13 +122,10 @@ void TriangulatedCloudToAdjacencyX(const CloudXYZPtr &cld, const Triangles &t, G
 
 TEST_F(AdjacencyTest, AdjacencyBoostGraph)
 {
-    CloudXYZPtr cld;
-    Triangles tri;
-
-    int nb_vertices = static_cast<int>(cld->size());
+    int nb_vertices = static_cast<int>(cld_->size());
     Graph g(nb_vertices);
 
-    TriangulatedCloudToAdjacencyX(cld, tri, g);
+    TriangulatedCloudToAdjacencyX(cld_, tri_, g);
 }
 
 } // annonymous namespace for tests

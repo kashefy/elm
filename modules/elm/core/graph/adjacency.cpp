@@ -44,6 +44,11 @@ void elm::TriangulatedCloudToAdjacencyX(const CloudXYZPtr &cld, const Triangles 
         uint32_t v1 = V.vertices[1];
         uint32_t v2 = V.vertices[2];
 
+        if(v0 >= nb_vertices || v1 >= nb_vertices || v2 >= nb_vertices) {
+
+            ELM_THROW_KEY_ERROR("Triangle vertex outside point cloud.");
+        }
+
         Mat1f e_triangle = TriangleEdges(cld->points.at(v0),
                                          cld->points.at(v1),
                                          cld->points.at(v2));
