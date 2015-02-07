@@ -140,7 +140,7 @@ TEST_F(GraphMatchingTest, GraphMatching)
         std::cout<<format(VecVertices2Mat(t, false), Formatter::FMT_NUMPY)<<std::endl;
 
         Mat1f m;
-        elm::TriangulatedCloudToAdjacencyX(cld, t, m);
+        elm::TriangulatedCloudToAdjacency(cld, t, m);
 
         ELM_COUT_VAR(format(m, Formatter::FMT_NUMPY));
     }

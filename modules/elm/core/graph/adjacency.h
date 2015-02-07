@@ -13,6 +13,8 @@
 
 namespace elm {
 
+class Graph;
+
 #ifdef __WITH_PCL
 
 /**
@@ -23,7 +25,7 @@ namespace elm {
  * @throws elm::ExceptionBadDims if verticies don't add up to form triangle
  * @todo figure out speed difference between dense and sparse overload
  */
-void TriangulatedCloudToAdjacencyX(const CloudXYZPtr &cld, const Triangles &t, cv::Mat1f &dst);
+void TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &t, cv::Mat1f &dst);
 
 /**
  * @brief Get Adjacency matrix for triangulated point cloud
@@ -33,7 +35,7 @@ void TriangulatedCloudToAdjacencyX(const CloudXYZPtr &cld, const Triangles &t, c
  * @throws elm::ExceptionBadDims if verticies don't add up to form triangle
  * @todo figure out speed difference between dense and sparse overload
  */
-void TriangulatedCloudToAdjacencyX(const CloudXYZPtr &cld, const Triangles &t, elm::SparseMat1f &dst);
+void TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &t, elm::SparseMat1f &dst);
 
 #endif // __WITH_PCL
 
