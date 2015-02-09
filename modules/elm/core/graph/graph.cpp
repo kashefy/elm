@@ -28,7 +28,7 @@ Graph::Graph(int nb_vertices)
 
 size_t Graph::num_vertices() const
 {
-    return impl->num_vertices();
+    return static_cast<size_t>(boost::num_vertices(impl->g));
 }
 
 #ifdef __WITH_PCL

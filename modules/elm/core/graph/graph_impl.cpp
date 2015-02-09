@@ -33,11 +33,6 @@ Graph_Impl::Graph_Impl(int nb_vertices)
 {
 }
 
-size_t Graph_Impl::num_vertices() const
-{
-    return static_cast<size_t>(boost::num_vertices(g));
-}
-
 #ifdef __WITH_PCL
 
 Graph_Impl::Graph_Impl(const CloudXYZPtr &cld, const Triangles &t)

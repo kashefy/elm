@@ -40,8 +40,6 @@ struct Graph_Impl
      */
     Graph_Impl(int nb_vertices);
 
-    size_t num_vertices() const;
-
 #ifdef __WITH_PCL
 
     /**
