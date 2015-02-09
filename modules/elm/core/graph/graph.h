@@ -51,12 +51,20 @@ public:
 
     /**
      * @brief Get adjacency matrix for this graph
+     *
+     * A new Mat object will only be constructed if not previously alocated
+     * or allocated dimensions are not sufficient.
+     *
      * @param[out] Dense adjacency matrix
      */
     void AdjacencyMat(cv::Mat1f &adj) const;
 
     /**
      * @brief Get adjacency matrix for this graph
+     *
+     * A new SparseMat object will only be constructed if not previously alocated
+     * or allocated dimensions are not sufficient.
+     *
      * @param[out] Sparse adjacency matrix
      */
     void AdjacencyMat(SparseMat1f &adj) const;

@@ -19,6 +19,10 @@ class Graph;
 
 /**
  * @brief Get Adjacency matrix for triangulated point cloud
+ *
+ * A new Mat object will only be constructed if not previously alocated
+ * or allocated dimensions are not sufficient.
+ *
  * @param cld point cloud
  * @param t vertices of point cloud triangulation
  * @param dst dense adjacency matrix
@@ -30,6 +34,10 @@ void TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &t, cv
 
 /**
  * @brief Get Adjacency matrix for triangulated point cloud
+ *
+ * A new SpareMat object will only be constructed if not previously alocated
+ * or allocated dimensions are not sufficient.
+ *
  * @param cld point cloud
  * @param t vertices of point cloud triangulation
  * @param dst sparse adjacency matrix
