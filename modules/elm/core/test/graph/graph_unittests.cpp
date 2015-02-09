@@ -353,6 +353,24 @@ TEST_F(GraphTriangulatedTest, AdjacencyMatDense)
     }
 }
 
+TEST_F(GraphTriangulatedTest, AdjacencyMatDense_ref)
+{
+    Graph to(cld_, tri_);
+    EXPECT_EQ(cld_->size(), to.num_vertices())
+            << "Unexpected no. of vertices for graph constructed from triangulated point cloud.";
+    ASSERT_GT(to.num_vertices(), size_t(0));
+
+    Mat1f adj;
+    uchar* data_ptr = adj.data;
+    to.AdjacencyMat(adj);
+
+    EXPECT_NE(data_ptr, adj.data) << "pointer to data has not changed.";
+
+    data_ptr = adj.data;
+    to.AdjacencyMat(adj);
+    EXPECT_EQ(data_ptr, adj.data) << "pointer to data changed.";
+}
+
 TEST_F(GraphTriangulatedTest, AdjacencyMatSparse)
 {
     Graph to(cld_, tri_);
