@@ -43,6 +43,7 @@ const bfs::path TEST_PATH_PCD = TEST_DIR/"bun0.pcd";
 // Names for I/O
 const string NAME_INPUT_POINT_CLOUD = "in";   ///< name of input point cloud
 const string NAME_OUTPUT_VERTICES   = "v";    ///< name of output vertices
+const string NAME_OUTPUT_OPT_ADJ    = "adj";  ///< name of optional output adjacency matrix
 
 class TriangulationInitTest : public ::testing::Test
 {
@@ -51,7 +52,6 @@ protected:
     {
         cfg_ = LayerConfig();
         cfg_.Params(params_);
-        io_names_ = LayerIONames();
 
         io_names_.Input(Triangulation::KEY_INPUT_POINT_CLOUD,   NAME_INPUT_POINT_CLOUD);
         io_names_.Output(Triangulation::KEY_OUTPUT_VERTICES,     NAME_OUTPUT_VERTICES);
@@ -60,6 +60,7 @@ protected:
     virtual void TearDown()
     {
         params_.clear();
+        io_names_ = LayerIONames();
     }
 
     // members
@@ -207,6 +208,44 @@ TEST_F(TriangulationTest, ActivateAndResponse)
             EXPECT_FLOAT_EQ(static_cast<float>(tmp[j]), vertices_mat(k++)) << "Vertex mismatch.";
         }
     }
+}
+
+class TriangulationAdjacencyTest : public TriangulationTest
+{
+protected:
+    virtual void SetUp()
+    {
+        io_names_.Output(Triangulation::KEY_OUTPUT_OPT_ADJACENCY, NAME_OUTPUT_OPT_ADJ);
+        TriangulationTest::SetUp();
+    }
+};
+
+TEST_F(TriangulationAdjacencyTest, NoAdjacency)
+{
+    LayerIONames io_names;
+    io_names.Input(Triangulation::KEY_INPUT_POINT_CLOUD,    NAME_INPUT_POINT_CLOUD);
+    io_names.Output(Triangulation::KEY_OUTPUT_VERTICES,     NAME_OUTPUT_VERTICES);
+
+    to_ = LayerFactory::CreateShared("Triangulation", cfg_, io_names);
+
+    to_->Activate(sig_);
+    to_->Response(sig_);
+
+    EXPECT_FALSE(sig_.Exists(NAME_OUTPUT_OPT_ADJ));
+}
+
+TEST_F(TriangulationAdjacencyTest, Adjacency)
+{
+    to_->Activate(sig_);
+    to_->Response(sig_);
+
+    EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_OPT_ADJ));
+
+    Mat1f adj = sig_.MostRecent(NAME_OUTPUT_OPT_ADJ).get<Mat1f>();
+
+    EXPECT_MAT_DIMS_EQ(adj, Size2i(cloud_in_->size(), cloud_in_->size())) << "Expecting no. of vertices to match no. of points in the cloud.";
+
+    EXPECT_MAT_EQ(adj, adj.t()) << "Expecting symmetric adjacency matrix.";
 }
 
 } // annonymous namespace for test fixtures
