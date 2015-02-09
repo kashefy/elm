@@ -263,7 +263,69 @@ TEST_F(GraphTriangulatedTest, AccessEdgeWeight)
 TEST_F(GraphTriangulatedTest, AdjacencyMat)
 {
     Graph to(cld_, tri_);
-    EXPECT_EQ(cld_->size(), to.num_vertices());
+    EXPECT_EQ(cld_->size(), to.num_vertices())
+            << "Unexpected no. of vertices for graph constructed from triangulated point cloud.";
+
+    const int NB_VERTICES = static_cast<int>(to.num_vertices());
+    // check adjacency matrix is symmetric
+    for(int i=0; i<NB_VERTICES; i++) {
+
+        for(int j=0; j<NB_VERTICES; j++) {
+
+            EXPECT_FLOAT_EQ(to(i, j), to(j, i))
+                    << "Non-symmetric edge weight between vertices (" << i << ", " << j << ")";
+        }
+    }
+
+    // check edges are all positive
+    for(int i=0; i<NB_VERTICES; i++) {
+
+        for(int j=0; j<NB_VERTICES; j++) {
+
+            EXPECT_GE(to(i, j), 0) << "Edge weights must be >=0.";
+        }
+    }
+
+    // check edge values
+    for(int i=0; i<NB_VERTICES; i++) {
+
+        PointXYZ pi = cld_->at(i);
+
+        for(int j=0; j<NB_VERTICES; j++) {
+
+            if(i==j) {
+                EXPECT_FLOAT_EQ(0.f, to(i, j)) << "Self connection found for vertex i=" << i;
+            }
+            else if(to(i, j) == 0.f) {
+
+                // verify that this edge does not exist
+                // does edge exist?
+
+                for(Triangles::const_iterator itr=tri_.begin(); itr!=tri_.end(); ++itr) {
+
+                    std::vector<uint32_t> verts = (*itr).vertices;
+                    std::vector<uint32_t>::iterator itr_i = find(verts.begin(), verts.end(), static_cast<uint32_t>(i));
+                    std::vector<uint32_t>::iterator itr_j = find(verts.begin(), verts.end(), static_cast<uint32_t>(j));
+
+                    EXPECT_FALSE((itr_i != verts.end()) && (itr_j != verts.end()) && itr_i != itr_j)
+                            << "Zero weight for existing edge between vertices "
+                            << "i=" << i << ", j=" << j;
+                }
+            }
+            else {
+
+                // verify edge weight
+                PointXYZ pj = cld_->at(j);
+
+                // calculate distance between two points
+                PointXYZ diff(pj.x-pi.x, pj.y-pi.y, pj.z-pi.z);
+                PointXYZ diff_sq(diff.x*diff.x, diff.y*diff.y, diff.z*diff.z);
+
+                EXPECT_FLOAT_EQ(sqrt(diff_sq.x+diff_sq.y+diff_sq.z), to(i, j))
+                        << "Unexpected edge value.";
+            }
+        }
+    }
 }
 
 #endif // __WITH_PCL
