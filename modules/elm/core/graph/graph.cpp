@@ -13,7 +13,7 @@ using namespace elm;
 
 Graph::~Graph()
 {
-    delete impl;
+    impl.reset();
 }
 
 Graph::Graph()

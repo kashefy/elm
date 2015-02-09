@@ -45,7 +45,7 @@ public:
 
 #endif // __WITH_PCL
 
-    Graph_Impl *impl;
+    std::shared_ptr<Graph_Impl> impl;
 };
 
 } // namespace elm
