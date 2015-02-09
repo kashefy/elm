@@ -349,10 +349,12 @@ TEST_F(AdjacencySparseTest, Dims)
         Triangles tri;
 
         {
-            Mat1f adj;
+            SparseMat1f adj;
             EXPECT_NO_THROW(TriangulatedCloudToAdjacency(cld, tri, adj));
-            EXPECT_MAT_DIMS_EQ(adj, Size2i(i, i))
-                    << "Unexpected dimensions for adjacency matrix from triangulated point cloud.";
+            EXPECT_EQ(i, adj.size()[0])
+                    << "Unexpected no. of rows for sparse adjacency matrix from triangulated point cloud.";
+            EXPECT_EQ(i, adj.size()[1])
+                    << "Unexpected no. of columns for sparse adjacency matrix from triangulated point cloud.";
         }
 
         // fake triangles:
@@ -371,10 +373,13 @@ TEST_F(AdjacencySparseTest, Dims)
         }
 
         {
-            Mat1f adj;
+            SparseMat1f adj;
             EXPECT_NO_THROW(TriangulatedCloudToAdjacency(cld, tri, adj));
-            EXPECT_MAT_DIMS_EQ(adj, Size2i(i, i))
-                    << "Unexpected dimensions for adjacency matrix from triangulated point cloud."
+            EXPECT_EQ(i, adj.size()[0])
+                    << "Unexpected no. of rows for sparse adjacency matrix from triangulated point cloud."
+                    << " After adding triangles.";
+            EXPECT_EQ(i, adj.size()[1])
+                    << "Unexpected no. of columns for sparse adjacency matrix from triangulated point cloud."
                     << " After adding triangles.";
         }
     }
@@ -409,8 +414,12 @@ TEST_F(AdjacencySparseTest, AdjacencyMatValues)
         tri_.push_back(v);
     }
 
+    SparseMat1f adj_tmp;
+    TriangulatedCloudToAdjacency(cld_, tri_, adj_tmp);
+
     Mat1f adj;
-    TriangulatedCloudToAdjacency(cld_, tri_, adj);
+    adj_tmp.convertTo(adj, CV_32FC1);
+
     EXPECT_MAT_DIMS_EQ(adj, Size2i(NB_VERTICES, NB_VERTICES))
             << "Unexpected dimensions for adjacency matrix from triangulated point cloud.";
 
