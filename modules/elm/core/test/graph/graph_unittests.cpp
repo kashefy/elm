@@ -9,6 +9,8 @@
 
 #include "gtest/gtest.h"
 
+#include <opencv2/core.hpp>
+
 #ifdef __WITH_PCL
 
 #include <pcl/point_types.h>
@@ -18,7 +20,9 @@
 #endif // __WITH_PCL
 
 #include "elm/core/exception.h"
+#include "elm/core/cv/mat_utils_inl.h"
 
+using namespace cv;
 using namespace elm;
 
 namespace {
@@ -66,7 +70,6 @@ protected:
     // members
     CloudXYZPtr cld_;   ///< point cloud
     Triangles tri_;     ///< triangulated vertices
-    Graph to_;   ///< test object
 };
 
 TEST_F(GraphTriangulatedConstructTest, Invalid_too_few_vertices)
@@ -191,6 +194,49 @@ TEST_F(GraphTriangulatedConstructTest, Dims)
     }
 }
 
-} // annonymous namespace for unit tests
+class GraphTriangulatedTest : public GraphTriangulatedConstructTest
+{
+protected:
+    virtual void SetUp()
+    {
+        GraphTriangulatedConstructTest::SetUp();
+
+        const int NB_VERTICES = 5;
+        const int NB_TRIANGLES = NB_VERTICES-1;
+
+        // generate fake points
+        for(int i=0; i<NB_VERTICES; i++) {
+
+            float x = randu<float>();
+            float y = randu<float>();
+            float z = randu<float>();
+
+            cld_->push_back(PointXYZ(x, y, z));
+        }
+
+        // fake triangles around fake cloud
+        Mat1i v_range = ARange_<int>(0, NB_VERTICES, 1);
+        for(int i=0; i<NB_TRIANGLES; i++) {
+
+            randShuffle(v_range);
+            Vertices v;
+            for(int j=0; j<3; j++) {
+
+                v.vertices.push_back(static_cast<uint32_t>(v_range(j)));
+            }
+
+            tri_.push_back(v);
+        }
+    }
+};
+
+TEST_F(GraphTriangulatedTest, AdjacencyMat)
+{
+    Graph to(cld_, tri_);
+    EXPECT_EQ(cld_->size(), to.num_vertices());
+}
 
 #endif // __WITH_PCL
+
+} // annonymous namespace for unit tests
+
