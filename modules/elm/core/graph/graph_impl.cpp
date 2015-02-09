@@ -33,11 +33,18 @@ Graph_Impl::Graph_Impl(int nb_vertices)
 {
 }
 
+size_t Graph_Impl::num_vertices() const
+{
+    return static_cast<size_t>(boost::num_vertices(g));
+}
+
 #ifdef __WITH_PCL
 
 Graph_Impl::Graph_Impl(const CloudXYZPtr &cld, const Triangles &t)
 {
     using namespace pcl;
+    uint32_t nb_vertices_uint = static_cast<uint32_t>(cld->size());
+    g = GraphType(static_cast<int>(cld->size()));
 
     for(Triangles::const_iterator itr=t.begin(); itr!=t.end(); ++itr) {
 
@@ -53,6 +60,11 @@ Graph_Impl::Graph_Impl(const CloudXYZPtr &cld, const Triangles &t)
         uint32_t v1 = V.vertices[1];
         uint32_t v2 = V.vertices[2];
 
+        if(v0 >= nb_vertices_uint || v1 >= nb_vertices_uint || v2 >= nb_vertices_uint) {
+
+            ELM_THROW_KEY_ERROR("Triangle vertex outside point cloud.");
+        }
+
         Mat1f e_triangle = TriangleEdges(cld->points.at(v0),
                                          cld->points.at(v1),
                                          cld->points.at(v2));
@@ -66,7 +78,6 @@ Graph_Impl::Graph_Impl(const CloudXYZPtr &cld, const Triangles &t)
         e = e_triangle(2);
         add_edge(v1, v2, e, g);
     }
-
 }
 
 #endif // __WITH_PCL

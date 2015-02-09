@@ -26,6 +26,11 @@ Graph::Graph(int nb_vertices)
 {
 }
 
+size_t Graph::num_vertices() const
+{
+    return impl->num_vertices();
+}
+
 #ifdef __WITH_PCL
 
 Graph::Graph(const CloudXYZPtr &cld, const Triangles &t)

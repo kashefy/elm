@@ -32,6 +32,8 @@ public:
      */
     Graph(int nb_vertices);
 
+    size_t num_vertices() const;
+
 #ifdef __WITH_PCL
 
     /**
