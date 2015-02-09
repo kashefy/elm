@@ -97,9 +97,9 @@ void elm::TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &
         Mat1f e_triangle = TriangleEdges(cld->points.at(v0),
                                          cld->points.at(v1),
                                          cld->points.at(v2));
-        dst.ref(v0, v1) = e_triangle(0);
-        dst.ref(v0, v2) = e_triangle(1);
-        dst.ref(v1, v2) = e_triangle(2);
+        dst.ref(v0, v1) = dst.ref(v1, v0) = e_triangle(0);
+        dst.ref(v0, v2) = dst.ref(v2, v0) = e_triangle(1);
+        dst.ref(v1, v2) = dst.ref(v2, v1) = e_triangle(2);
     }
 }
 
