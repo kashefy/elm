@@ -47,7 +47,6 @@ protected:
 
 TEST_F(AdjacencyDenseTest, Invalid_too_few_vertices)
 {
-    // both cloud and vertices empty
     cld_->clear();
     cld_->push_back(PointXYZ(0.f, 0.f, 0.f));
     cld_->push_back(PointXYZ(1.f, 1.f, 1.f));
@@ -78,7 +77,6 @@ TEST_F(AdjacencyDenseTest, Invalid_too_few_vertices)
 
 TEST_F(AdjacencyDenseTest, Invalid_vertices_out_of_bounds)
 {
-    // both cloud and vertices empty
     cld_->clear();
     cld_->push_back(PointXYZ(0.f, 0.f, 0.f));
     cld_->push_back(PointXYZ(1.f, 1.f, 1.f));
