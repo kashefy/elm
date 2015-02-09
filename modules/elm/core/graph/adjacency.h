@@ -23,6 +23,7 @@ class Graph;
  * @param t vertices of point cloud triangulation
  * @param dst dense adjacency matrix
  * @throws elm::ExceptionBadDims if verticies don't add up to form triangle
+ * @throws elm::ExceptionKeyError if a triangle vertex is beyond cloud points
  * @todo figure out speed difference between dense and sparse overload
  */
 void TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &t, cv::Mat1f &dst);
@@ -33,6 +34,7 @@ void TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &t, cv
  * @param t vertices of point cloud triangulation
  * @param dst sparse adjacency matrix
  * @throws elm::ExceptionBadDims if verticies don't add up to form triangle
+ * @throws elm::ExceptionKeyError if a triangle vertex is beyond cloud points
  * @todo figure out speed difference between dense and sparse overload
  */
 void TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &t, elm::SparseMat1f &dst);

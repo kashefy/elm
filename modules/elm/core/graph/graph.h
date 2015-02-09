@@ -44,8 +44,22 @@ public:
      * @param idx_u index of vertex u
      * @param idx_v index of vertex v
      * @return edge weight between vertices u and v
+     * @throws elm::ExceptionBadDims if verticies don't add up to form triangle
+     * @throws elm::ExceptionKeyError if a triangle vertex is beyond cloud points
      */
     float operator()(int idx_u, int idx_v) const;
+
+    /**
+     * @brief Get adjacency matrix for this graph
+     * @param[out] Dense adjacency matrix
+     */
+    void AdjacencyMat(cv::Mat1f &adj) const;
+
+    /**
+     * @brief Get adjacency matrix for this graph
+     * @param[out] Sparse adjacency matrix
+     */
+    void AdjacencyMat(SparseMat1f &adj) const;
 
 #ifdef __WITH_PCL
 
