@@ -19,6 +19,7 @@
 
 #endif // __WITH_PCL
 
+#include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
 #include "elm/core/cv/mat_utils_inl.h"
 
@@ -229,6 +230,35 @@ protected:
         }
     }
 };
+
+TEST_F(GraphTriangulatedTest, AccessEdgeWeight)
+{
+    cld_->clear();
+    tri_.clear();
+
+    {
+        cld_->push_back(PointXYZ(0.f, 0.f, 0.f));
+        cld_->push_back(PointXYZ(1.f, 1.f, 1.f));
+        cld_->push_back(PointXYZ(2.f, 2.f, 2.f));
+        cld_->push_back(PointXYZ(3.f, 3.f, 3.f));
+    }
+    {
+        Vertices v;
+        v.vertices.push_back(u_int32_t(0));
+        v.vertices.push_back(u_int32_t(1));
+        v.vertices.push_back(u_int32_t(2));
+        tri_.push_back(v);
+    }
+
+    Graph to(cld_, tri_);
+    EXPECT_EQ(size_t(4), to.num_vertices());
+
+    EXPECT_FLOAT_EQ(0.f, to(0, 3)) << "this vertex does not have any connections.";
+
+    EXPECT_FLOAT_EQ(to(0, 1), static_cast<float>(sqrt(3.)));
+    EXPECT_FLOAT_EQ(to(0, 2), static_cast<float>(2.*sqrt(3.)));
+    EXPECT_FLOAT_EQ(to(1, 2), to(0, 1));
+}
 
 TEST_F(GraphTriangulatedTest, AdjacencyMat)
 {

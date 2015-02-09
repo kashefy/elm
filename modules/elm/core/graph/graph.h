@@ -14,6 +14,7 @@
 namespace elm {
 
 class Graph_Impl;
+class MatrixGraph;
 
 /**
  * @brief class for exposing public interface of Graph_Impl
@@ -32,7 +33,19 @@ public:
      */
     Graph(int nb_vertices);
 
+    /**
+     * @brief get no. of vertices in graph
+     * @return no. of vertices in graph
+     */
     size_t num_vertices() const;
+
+    /**
+     * @brief get edge weight between two vertices
+     * @param idx_u index of vertex u
+     * @param idx_v index of vertex v
+     * @return edge weight between vertices u and v
+     */
+    float operator()(int idx_u, int idx_v) const;
 
 #ifdef __WITH_PCL
 

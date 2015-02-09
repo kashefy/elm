@@ -22,7 +22,8 @@ namespace elm {
 
 typedef boost::property<boost::edge_weight_t, float> EdgeWeightProperty;
 typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, EdgeWeightProperty> GraphType;
-typedef boost::graph_traits<GraphType>::edge_iterator edge_iter;
+typedef boost::graph_traits<GraphType> GraphTraits;
+typedef GraphTraits::edge_iterator edge_iter;
 
 /**
  * @brief full Graph implementation class
