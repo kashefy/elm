@@ -32,7 +32,11 @@ void elm::TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &
 {
     uint32_t nb_vertices_uint = static_cast<uint32_t>(cld->size());
     int nb_vertices = static_cast<int>(nb_vertices_uint);
-    dst = Mat1f::zeros(nb_vertices, nb_vertices);
+
+    if(dst.rows < nb_vertices || dst.cols < nb_vertices) {
+
+        dst = Mat1f::zeros(nb_vertices, nb_vertices);
+    }
 
     for(Triangles::const_iterator itr=t.begin(); itr!=t.end(); ++itr) {
 
@@ -68,11 +72,14 @@ void elm::TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &
     uint32_t nb_vertices_uint = static_cast<uint32_t>(cld->size());
     int nb_vertices = static_cast<int>(nb_vertices_uint);
 
-    int dims = 2;
-    const int _sizes[2] = {nb_vertices, nb_vertices};
-    if(nb_vertices > 0) {
+    if((dst.size() == 0) || (nb_vertices < dst.size()[0]) || (nb_vertices < dst.size()[1])) {
 
-        dst = SparseMat1f(dims, _sizes);
+        int dims = 2;
+        const int _sizes[2] = {nb_vertices, nb_vertices};
+        if(nb_vertices > 0) {
+
+            dst = SparseMat1f(dims, _sizes);
+        }
     }
 
     for(Triangles::const_iterator itr=t.begin(); itr!=t.end(); ++itr) {
@@ -97,9 +104,16 @@ void elm::TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &
         Mat1f e_triangle = TriangleEdges(cld->points.at(v0),
                                          cld->points.at(v1),
                                          cld->points.at(v2));
-        dst.ref(v0, v1) = dst.ref(v1, v0) = e_triangle(0);
-        dst.ref(v0, v2) = dst.ref(v2, v0) = e_triangle(1);
-        dst.ref(v1, v2) = dst.ref(v2, v1) = e_triangle(2);
+
+        // force symmetry
+        dst.ref(v0, v1) = e_triangle(0);
+        dst.ref(v1, v0) = e_triangle(0);
+
+        dst.ref(v0, v2) = e_triangle(1);
+        dst.ref(v2, v0) = e_triangle(1);
+
+        dst.ref(v1, v2) = e_triangle(2);
+        dst.ref(v2, v1) = e_triangle(2);
     }
 }
 
