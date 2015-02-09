@@ -13,8 +13,6 @@
 #include <pcl/point_cloud.h>
 #include <pcl/Vertices.h>
 
-#include "elm/core/debug_utils.h"
-
 #include "elm/core/exception.h"
 #include "elm/core/cv/mat_utils_inl.h"
 #include "elm/core/graph/graph.h"
