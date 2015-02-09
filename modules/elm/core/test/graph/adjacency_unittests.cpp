@@ -45,6 +45,56 @@ protected:
     Triangles tri_;
 };
 
+TEST_F(AdjacencyDenseTest, Invalid_too_few_vertices)
+{
+    // both cloud and vertices empty
+    cld_->clear();
+    cld_->push_back(PointXYZ(0.f, 0.f, 0.f));
+    cld_->push_back(PointXYZ(1.f, 1.f, 1.f));
+    cld_->push_back(PointXYZ(2.f, 2.f, 2.f));
+
+
+    for(uint32_t i=0; i<5; i++) {
+
+        tri_.clear();
+        Vertices v;
+        for(uint32_t j=0; j<i; j++) {
+
+            v.vertices.push_back(i%static_cast<uint32_t>(cld_->size()));
+        }
+        tri_.push_back(v);
+
+        cv::Mat1f adj;
+        if(i < 3) {
+
+            EXPECT_THROW(TriangulatedCloudToAdjacency(cld_, tri_, adj), ExceptionBadDims);
+        }
+        else {
+
+            EXPECT_NO_THROW(TriangulatedCloudToAdjacency(cld_, tri_, adj));
+        }
+    }
+}
+
+TEST_F(AdjacencyDenseTest, Invalid_vertices_out_of_bounds)
+{
+    // both cloud and vertices empty
+    cld_->clear();
+    cld_->push_back(PointXYZ(0.f, 0.f, 0.f));
+    cld_->push_back(PointXYZ(1.f, 1.f, 1.f));
+    cld_->push_back(PointXYZ(2.f, 2.f, 2.f));
+
+    tri_.clear();
+    Vertices v;
+    v.vertices.push_back(uint32_t(0));
+    v.vertices.push_back(uint32_t(1));
+    v.vertices.push_back(static_cast<uint32_t>(cld_->size()));
+    tri_.push_back(v);
+
+    cv::Mat1f adj;
+    EXPECT_THROW(TriangulatedCloudToAdjacency(cld_, tri_, adj), ExceptionKeyError);
+}
+
 TEST_F(AdjacencyDenseTest, Empty)
 {
     // both cloud and vertices empty
@@ -209,6 +259,56 @@ TEST_F(AdjacencyDenseTest, AdjacencyMatValues)
 class AdjacencySparseTest : public AdjacencyDenseTest
 {
 };
+
+TEST_F(AdjacencySparseTest, Invalid_too_few_vertices)
+{
+    // both cloud and vertices empty
+    cld_->clear();
+    cld_->push_back(PointXYZ(0.f, 0.f, 0.f));
+    cld_->push_back(PointXYZ(1.f, 1.f, 1.f));
+    cld_->push_back(PointXYZ(2.f, 2.f, 2.f));
+
+
+    for(uint32_t i=0; i<5; i++) {
+
+        tri_.clear();
+        Vertices v;
+        for(uint32_t j=0; j<i; j++) {
+
+            v.vertices.push_back(i%static_cast<uint32_t>(cld_->size()));
+        }
+        tri_.push_back(v);
+
+        SparseMat1f adj;
+        if(i < 3) {
+
+            EXPECT_THROW(TriangulatedCloudToAdjacency(cld_, tri_, adj), ExceptionBadDims);
+        }
+        else {
+
+            EXPECT_NO_THROW(TriangulatedCloudToAdjacency(cld_, tri_, adj));
+        }
+    }
+}
+
+TEST_F(AdjacencySparseTest, Invalid_vertices_out_of_bounds)
+{
+    // both cloud and vertices empty
+    cld_->clear();
+    cld_->push_back(PointXYZ(0.f, 0.f, 0.f));
+    cld_->push_back(PointXYZ(1.f, 1.f, 1.f));
+    cld_->push_back(PointXYZ(2.f, 2.f, 2.f));
+
+    tri_.clear();
+    Vertices v;
+    v.vertices.push_back(uint32_t(0));
+    v.vertices.push_back(uint32_t(1));
+    v.vertices.push_back(static_cast<uint32_t>(cld_->size()));
+    tri_.push_back(v);
+
+    SparseMat1f adj;
+    EXPECT_THROW(TriangulatedCloudToAdjacency(cld_, tri_, adj), ExceptionKeyError);
+}
 
 TEST_F(AdjacencySparseTest, Empty)
 {
