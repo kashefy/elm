@@ -6,9 +6,13 @@
 //
 //M*/
 #include "elm/core/graph/graph.h"
+
+#include <opencv2/core.hpp>
+
 #include "elm/core/debug_utils.h"
 #include "elm/core/graph/graph_impl.h"
 
+using namespace cv;
 using namespace elm;
 
 Graph::~Graph()
@@ -47,6 +51,47 @@ float Graph::operator ()(int idx_u, int idx_v) const
 }
 
 #ifdef __WITH_PCL
+
+void Graph::AdjacencyMat(Mat1f &adj) const
+{
+    int nb_vertices = static_cast<int>(num_vertices());
+    if(adj.rows < nb_vertices || adj.cols < nb_vertices) {
+
+        adj = Mat1f(nb_vertices, nb_vertices);
+    }
+
+    for(int idx_u=0; idx_u<nb_vertices; idx_u++) {
+
+        for(int idx_v=0; idx_v<nb_vertices; idx_v++) {
+
+            adj(idx_u, idx_v) = operator ()(idx_u, idx_v);
+        }
+    }
+}
+
+void Graph::AdjacencyMat(SparseMat1f &adj) const
+{
+    int nb_vertices = static_cast<int>(num_vertices());
+
+    if((adj.size() == 0) || (nb_vertices < adj.size()[0]) || (nb_vertices < adj.size()[1])) {
+
+        int dims = 2;
+        const int _sizes[2] = {nb_vertices, nb_vertices};
+        if(nb_vertices > 0) {
+
+            adj = SparseMat1f(dims, _sizes);
+        }
+    }
+
+    for(int idx_u=0; idx_u<nb_vertices; idx_u++) {
+
+        for(int idx_v=0; idx_v<nb_vertices; idx_v++) {
+
+            adj.ref(idx_u, idx_v) = operator ()(idx_u, idx_v);
+        }
+    }
+}
+
 
 Graph::Graph(const CloudXYZPtr &cld, const Triangles &t)
     : impl(new Graph_Impl(cld, t))

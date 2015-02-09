@@ -22,6 +22,7 @@
 #include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
 #include "elm/core/cv/mat_utils_inl.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace cv;
 using namespace elm;
@@ -260,7 +261,7 @@ TEST_F(GraphTriangulatedTest, AccessEdgeWeight)
     EXPECT_FLOAT_EQ(to(1, 2), to(0, 1));
 }
 
-TEST_F(GraphTriangulatedTest, AdjacencyMat)
+TEST_F(GraphTriangulatedTest, Adjacency)
 {
     Graph to(cld_, tri_);
     EXPECT_EQ(cld_->size(), to.num_vertices())
@@ -324,6 +325,54 @@ TEST_F(GraphTriangulatedTest, AdjacencyMat)
                 EXPECT_FLOAT_EQ(sqrt(diff_sq.x+diff_sq.y+diff_sq.z), to(i, j))
                         << "Unexpected edge value.";
             }
+        }
+    }
+}
+
+TEST_F(GraphTriangulatedTest, AdjacencyMatDense)
+{
+    Graph to(cld_, tri_);
+    EXPECT_EQ(cld_->size(), to.num_vertices())
+            << "Unexpected no. of vertices for graph constructed from triangulated point cloud.";
+
+    const int NB_VERTICES = static_cast<int>(to.num_vertices());
+
+    Mat1f adj;
+    to.AdjacencyMat(adj);
+
+    EXPECT_MAT_DIMS_EQ(adj, Size2i(NB_VERTICES, NB_VERTICES));
+
+    // check adjacency matrix is symmetric
+    for(int i=0; i<NB_VERTICES; i++) {
+
+        for(int j=0; j<NB_VERTICES; j++) {
+
+            EXPECT_FLOAT_EQ(to(i, j), adj(i, j))
+                    << "Non-symmetric edge weight between vertices (" << i << ", " << j << ")";
+        }
+    }
+}
+
+TEST_F(GraphTriangulatedTest, AdjacencyMatSparse)
+{
+    Graph to(cld_, tri_);
+    EXPECT_EQ(cld_->size(), to.num_vertices())
+            << "Unexpected no. of vertices for graph constructed from triangulated point cloud.";
+
+    const int NB_VERTICES = static_cast<int>(to.num_vertices());
+
+    SparseMat1f adj;
+    to.AdjacencyMat(adj);
+    EXPECT_EQ(NB_VERTICES, adj.size()[0]);
+    EXPECT_EQ(NB_VERTICES, adj.size()[1]);
+
+    // check adjacency matrix is symmetric
+    for(int i=0; i<NB_VERTICES; i++) {
+
+        for(int j=0; j<NB_VERTICES; j++) {
+
+            EXPECT_FLOAT_EQ(to(i, j), adj.ref(i, j))
+                    << "Non-symmetric edge weight between vertices (" << i << ", " << j << ")";
         }
     }
 }
