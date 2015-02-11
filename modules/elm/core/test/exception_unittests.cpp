@@ -36,3 +36,9 @@ TEST(ExceptionTest, NotImplementedMsg)
     }
 }
 
+TEST(ExceptionTest, ThrowOnTrue)
+{
+    EXPECT_THROW(ELM_THROW_BAD_DIMS_IF(true, "bad dims"), ExceptionBadDims);
+    EXPECT_NO_THROW(ELM_THROW_BAD_DIMS_IF(false, "bad dims"));
+}
+
