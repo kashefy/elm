@@ -14,6 +14,8 @@
 
 using namespace elm;
 
+namespace {
+
 TEST(ExceptionTest, Throw)
 {
     EXPECT_THROW(ELM_THROW_BAD_DIMS("bad dims"), ExceptionBadDims);
@@ -42,3 +44,4 @@ TEST(ExceptionTest, ThrowOnTrue)
     EXPECT_NO_THROW(ELM_THROW_BAD_DIMS_IF(false, "bad dims"));
 }
 
+} // annonymous namespace for unit tests
