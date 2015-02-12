@@ -48,7 +48,7 @@ TYPED_TEST_P(VisitorPOD_Test, Invalid_Mat) {
     EXPECT_THROW(to(Mat_f(2, 1, 3.f)), ExceptionBadDims);
 }
 
-TYPED_TEST_P(VisitorPOD_Test, Value)
+TYPED_TEST_P(VisitorPOD_Test, Value_FromMat_f)
 {
     VisitorPOD_<TypeParam > to;
 
@@ -56,6 +56,66 @@ TYPED_TEST_P(VisitorPOD_Test, Value)
     while(--_v >= 0.f) {
 
         EXPECT_EQ(static_cast<TypeParam >(_v), to(Mat_f(1, 1, _v))) << "Value mismatch.";
+    }
+}
+
+TYPED_TEST_P(VisitorPOD_Test, Invalid_SparseMat1f) {
+
+    VisitorPOD_<TypeParam > to;
+
+    // empty
+    EXPECT_THROW(to(SparseMat1f()), ExceptionBadDims);
+
+    // multiple elements
+    {
+        int sz[1] = {2};
+        EXPECT_THROW(to(SparseMat1f(1, sz)), ExceptionBadDims);
+    }
+    {
+        int sz[2] = {2, 1};
+        EXPECT_THROW(to(SparseMat1f(2, sz)), ExceptionBadDims);
+    }
+    {
+        int sz[2] = {1, 2};
+        EXPECT_THROW(to(SparseMat1f(2, sz)), ExceptionBadDims);
+    }
+}
+
+TYPED_TEST_P(VisitorPOD_Test, Value_FromSparseMat1f)
+{
+    VisitorPOD_<TypeParam > to;
+
+    float _v = 256.f; // to cover a range of values common between all of our PODs
+    while(--_v >= 0.f) {
+
+        EXPECT_EQ(static_cast<TypeParam >(_v), to(SparseMat1f(Mat_f(1, 1, _v)))) << "Value mismatch.";
+    }
+}
+
+TYPED_TEST_P(VisitorPOD_Test, Value_FromSparseMat1f_ndims)
+{
+    VisitorPOD_<TypeParam > to;
+
+    float _v = 256.f; // to cover a range of values common between all of our PODs
+    while(--_v >= 0.f) {
+
+        for(int d=1; d<5; d++) {
+
+            int *sz = new int[d];
+            int *idx = new int[d];
+            for(int i=0; i<d; i++) {
+                sz[i] = 1;
+                idx[i] = 0;
+            }
+
+            SparseMat1f m(d, sz);
+            m.ref(idx) = _v;
+
+            EXPECT_EQ(static_cast<TypeParam >(_v), to(m)) << "Value mismatch.";
+
+            delete [] sz;
+        }
+
     }
 }
 
@@ -160,7 +220,10 @@ TYPED_TEST_P(VisitorPOD_Test, Invalid_VecVertices)
  */
 REGISTER_TYPED_TEST_CASE_P(VisitorPOD_Test,
                            Invalid_Mat,
-                           Value,
+                           Value_FromMat_f,
+                           Invalid_SparseMat1f,
+                           Value_FromSparseMat1f,
+                           Value_FromSparseMat1f_ndims,
                            Value_FromVecVertices,
                            Invalid_Cloud,
                            Invalid_VecVertices

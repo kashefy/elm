@@ -33,6 +33,16 @@ Mat_f VisitorMat_f::operator()(const Mat_f &m) const
     return m;
 }
 
+Mat_f VisitorMat_f::operator()(const SparseMat1f &m) const
+{
+    Mat1f dense;
+    if(m.size()!=0) {
+
+        m.convertTo(dense, dense.type());
+    }
+    return dense;
+}
+
 Mat_f VisitorMat_f::operator()(float f) const
 {
     return Mat_f(1, 1, f);

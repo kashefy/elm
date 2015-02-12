@@ -65,6 +65,34 @@ TEST_F(VisitorMat_fTest, FromMat_f)
     }
 }
 
+TEST_F(VisitorMat_fTest, EmptySparseMat1f)
+{
+    EXPECT_TRUE(to_(SparseMat1f()).empty());
+
+    SparseMat m(Mat1f(1, 1, 1.f));
+    m.clear();  // clearing is equivalent to setting elements to zero
+    EXPECT_FALSE(to_(m).empty());
+}
+
+TEST_F(VisitorMat_fTest, FromSparseMat1f)
+{
+    int N=5;
+
+    while(N--) {
+
+        const int MAT_ROWS = abs(randu<int>()) % 10 + 1;
+        const int MAT_COLS = abs(randu<int>()) % 100 + 1;
+
+        Mat_f m(MAT_ROWS, MAT_COLS);
+        randn(m, 0.f, 100.f);
+
+        Mat_f m2 = to_(SparseMat1f(m));
+
+        EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
+        EXPECT_NE(m.data, m2.data) << "Mats are not pointing to the same data in memory. Expecting shared copy.";
+    }
+}
+
 TEST_F(VisitorMat_fTest, Reset)
 {
     EXPECT_NO_THROW(to_.Reset());

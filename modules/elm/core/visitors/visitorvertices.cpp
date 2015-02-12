@@ -84,4 +84,18 @@ VecVertices VisitorVecVertices::operator()(const Mat_f &m)
     return vv_;
 }
 
+VecVertices VisitorVecVertices::operator()(const SparseMat1f &m)
+{
+    if(vv_.empty()) {
+
+        cv::Mat1f dense;
+        if(m.size()!=0) {
+
+            m.convertTo(dense, dense.type());
+        }
+        vv_ = Mat2VecVertices(dense);
+    }
+    return vv_;
+}
+
 #endif // __WITH_PCL

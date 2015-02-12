@@ -91,8 +91,9 @@ template<> const float Twos_<float>::val    = 2.f;
 template<> const int Twos_<int>::val        = 2;
 template<> const uchar Twos_<uchar>::val    = 2;
 template<> const Mat1f Twos_<Mat1f>::val    = Mat1f(1, 1, 2.f);
+template<> const SparseMat1f Twos_<SparseMat1f>::val = SparseMat1f(Mat1f(1, 1, 2.f));
 
-typedef ::testing::Types<Mat1f, float, int, uchar> VisitorTypes;
+typedef ::testing::Types<Mat1f, SparseMat1f, float, int, uchar> VisitorTypes;
 TYPED_TEST_CASE(VisitorVecVerticesTypedTest, VisitorTypes);
 
 TYPED_TEST(VisitorVecVerticesTypedTest, Twos)
@@ -109,6 +110,4 @@ TYPED_TEST(VisitorVecVerticesTypedTest, Twos)
 
 } // annonymous namespace for VecVertices visitors' test fixtures
 
-#else // __WITH_PCL
-    #warning "Skipping building VecVertices visitor unit tests due to no pcl support."
 #endif // __WITH_PCL

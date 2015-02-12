@@ -12,9 +12,12 @@
 
 #include "elm/core/exception.h"
 #include "elm/core/cv/mat_utils.h"
+#include "elm/core/cv/sparsemat_utils.h"
 #include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/vertices.h"
 #include "elm/core/typedefs_fwd.h"
+
+namespace elm {
 
 /**
  * @brief template class for scalar POD static visitors
@@ -36,6 +39,44 @@ public:
         }
         else {
             return static_cast<T>(m(0));
+        }
+    }
+
+    T operator()(const elm::SparseMat1f &m) const
+    {
+        size_t n = elm::total(m);
+        if(n != 1) {
+
+            std::stringstream s;
+            s << "Cannot convert " << n << "-element Mat to Scalar.";
+            ELM_THROW_BAD_DIMS(s.str());
+        }
+        else {
+
+            T value;
+            const int D = m.dims();
+            switch(D){
+
+            case 1:
+                value = static_cast<T>(m(0));
+                break;
+            case 2:
+                value = static_cast<T>(m(0, 0));
+                break;
+            case 3:
+                value = static_cast<T>(m(0, 0, 0));
+                break;
+            default:
+                int *idx = new int[D];
+                for(int i=0; i<D; i++) {
+                    idx[i] = 0;
+                }
+
+                value = static_cast<T>(m(idx));
+
+                delete[] idx;
+            }
+            return value;
         }
     }
 
@@ -71,5 +112,7 @@ public:
     }
 #endif // __WITH_PCL
 };
+
+} // namespace elm
 
 #endif // _ELM_CORE_VISITORPOD__H_

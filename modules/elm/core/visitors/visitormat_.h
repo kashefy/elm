@@ -17,6 +17,7 @@
 
 #include "elm/core/pcl/typedefs_fwd.h"
 
+namespace elm {
 /**
  * @brief visitor class for converting to Mat of floats
  */
@@ -27,6 +28,8 @@ public:
    elm::Mat_f operator()(const cv::Mat &m) const;
 
    elm::Mat_f operator()(const elm::Mat_f &m) const;
+
+   elm::Mat_f operator()(const elm::SparseMat1f &m) const;
 
    elm::Mat_f operator()(float f) const;
 
@@ -46,5 +49,7 @@ public:
 
 #endif // __WITH_PCL
 };
+
+} // namespace elm
 
 #endif // _ELM_CORE_VISITORMAT__H_
