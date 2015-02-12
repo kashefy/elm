@@ -32,7 +32,7 @@ VecMat Signal::operator [](const string &name) const
         VecMat v;
         for(size_t i=0; i < vf.size(); i++) {
 
-            Mat_f m = vf[i].get<Mat_f>();
+            Mat1f m = vf[i].get<Mat1f>();
             v.push_back(m);
         }
         return v;
@@ -44,8 +44,8 @@ VecMat Signal::operator [](const string &name) const
     }
 }
 
-Mat1f Signal::MostRecentMat(const string &name) const
+Mat1f Signal::MostRecentMat1f(const string &name) const
 {
-    return static_cast<FeatureData>(MostRecent(name)).get<Mat_f>();
+    return static_cast<FeatureData>(MostRecent(name)).get<Mat1f>();
 }
 

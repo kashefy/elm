@@ -140,7 +140,7 @@ TEST_F(GraphCompatibilityTest, Dims)
             to_->Activate(sig_);
             to_->Response(sig_);
 
-            EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_M),
+            EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat1f(NAME_M),
                                Size2i(g_ab_.rows, g_ij_.rows))
                     << "Match matrix should be of size (A, I)";
         }
@@ -162,7 +162,7 @@ TEST_F(GraphCompatibilityTest, NoConnections)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    EXPECT_MAT_EQ(sig_.MostRecentMat(NAME_M),
+    EXPECT_MAT_EQ(sig_.MostRecentMat1f(NAME_M),
                   Mat1f::zeros(g_ab_.rows, g_ij_.rows));
 }
 
@@ -183,7 +183,7 @@ TEST_F(GraphCompatibilityTest, NoConnections_for_one_node_in_g_ab)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    Mat1f c_ai = sig_.MostRecentMat(NAME_M);
+    Mat1f c_ai = sig_.MostRecentMat1f(NAME_M);
 
     EXPECT_MAT_EQ(c_ai.row(vertex_idx), Mat1f::zeros(1, g_ab_.cols))
             << "Expecting all-zero row for row i=" << vertex_idx
@@ -207,7 +207,7 @@ TEST_F(GraphCompatibilityTest, NoConnections_for_one_node_in_g_ij)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    Mat1f c_ai = sig_.MostRecentMat(NAME_M);
+    Mat1f c_ai = sig_.MostRecentMat1f(NAME_M);
 
     EXPECT_MAT_EQ(c_ai.col(vertex_idx), Mat1f::zeros(g_ij_.rows, 1))
             << "Expecting all-zero row for row i=" << vertex_idx
@@ -270,7 +270,7 @@ TEST_F(GraphCompatibilityTest, Compatibility)
         to_->Activate(sig_);
         to_->Response(sig_);
 
-        Mat1f c_ai = sig_.MostRecentMat(NAME_M);
+        Mat1f c_ai = sig_.MostRecentMat1f(NAME_M);
 
         EXPECT_GT(c_ai(vertex_compat_idx, vertex_compat_idx), c_ai(vertex_non_compat_idx, vertex_non_compat_idx))
                 << "Score of compatible vertex should exceed that of non-compatible one.";

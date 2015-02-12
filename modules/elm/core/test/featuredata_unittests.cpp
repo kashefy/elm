@@ -27,22 +27,22 @@ class FeatureDataTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        mat_ = Mat_f(4, 3);
+        mat_ = Mat1f(4, 3);
         randn(mat_, 0.f, 100.f);
     }
 
-    Mat_f mat_;
+    Mat1f mat_;
 };
 
 
 /**
  * @brief Initialize test object with Mat object, then call getters.
  */
-TEST_F(FeatureDataTest, Init_Mat_f)
+TEST_F(FeatureDataTest, Init_Mat1f)
 {
     FeatureData to(mat_);
 
-    Mat_f m = to.get<Mat_f>();
+    Mat1f m = to.get<Mat1f>();
 
     EXPECT_MAT_EQ(m, mat_);
 }
@@ -52,7 +52,7 @@ TEST_F(FeatureDataTest, InitWithSparseMat1f)
     SparseMat1f m_sparse(mat_);
     FeatureData to(m_sparse);
 
-    Mat_f m = to.get<Mat_f>();
+    Mat1f m = to.get<Mat1f>();
 
     EXPECT_MAT_EQ(m, mat_);
 }
@@ -64,7 +64,7 @@ TEST_F(FeatureDataTest, Same_Mat)
 {
     FeatureData to(mat_);
 
-    Mat_f m = to.get<Mat_f>();
+    Mat1f m = to.get<Mat1f>();
     EXPECT_MAT_EQ(m, mat_);
     EXPECT_EQ(m.data, mat_.data) << "Both Mats are not pointing to the same memory location.";
     ASSERT_NE(m.clone().data, mat_.data) << "Cannot still be pointing to the same memory chunk after cloning.";
@@ -99,7 +99,7 @@ protected:
         mat_ = PointCloud2Mat_(cld_).clone();
     }
 
-    Mat_f mat_;
+    Mat1f mat_;
     boost::shared_ptr<pcl::PointCloud<TPoint > > cld_;
 };
 
@@ -114,7 +114,7 @@ TYPED_TEST(FeatureDataCloud_Test, InitWithCloud)
 
     FeatureData to(this->cld_);
 
-    Mat_f m = to.get<Mat_f>();
+    Mat1f m = to.get<Mat1f>();
     CloudTPPtr cld = to.get<CloudTPPtr >();
 
     EXPECT_MAT_EQ(m, this->mat_);
@@ -127,7 +127,7 @@ TYPED_TEST(FeatureDataCloud_Test, InitWithCloud)
 /**
  * @brief Initialize test object with Mat object, then call cloud getters.
  */
-TYPED_TEST(FeatureDataCloud_Test, InitWithMat_f)
+TYPED_TEST(FeatureDataCloud_Test, InitWithMat1f)
 {
     typedef boost::shared_ptr<pcl::PointCloud< TypeParam > > CloudTPPtr;
 
@@ -191,23 +191,23 @@ TYPED_TEST_CASE(FeatureDataPOD_Test, PODTypes);
 TYPED_TEST(FeatureDataPOD_Test, FromMat_Invalid)
 {
     // empty
-    EXPECT_THROW(FeatureData(Mat_f()).get<TypeParam >(), ExceptionBadDims);
-    EXPECT_THROW(FeatureData(Mat_f(0, 0)).get<TypeParam >(), ExceptionBadDims);
-    EXPECT_THROW(FeatureData(Mat_f(1, 0)).get<TypeParam >(), ExceptionBadDims);
-    EXPECT_THROW(FeatureData(Mat_f(0, 1)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat1f()).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat1f(0, 0)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat1f(1, 0)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat1f(0, 1)).get<TypeParam >(), ExceptionBadDims);
 
     // multiple elements
-    EXPECT_THROW(FeatureData(Mat_f(2, 1)).get<TypeParam >(), ExceptionBadDims);
-    EXPECT_THROW(FeatureData(Mat_f(1, 2)).get<TypeParam >(), ExceptionBadDims);
-    EXPECT_THROW(FeatureData(Mat_f(2, 2)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat1f(2, 1)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat1f(1, 2)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat1f(2, 2)).get<TypeParam >(), ExceptionBadDims);
 
     // multiple elements + initialized with scalar
-    EXPECT_THROW(FeatureData(Mat_f(2, 1, 1.f)).get<TypeParam >(), ExceptionBadDims);
-    EXPECT_THROW(FeatureData(Mat_f(1, 2, 0.f)).get<TypeParam >(), ExceptionBadDims);
-    EXPECT_THROW(FeatureData(Mat_f(2, 2, 3.f)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat1f(2, 1, 1.f)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat1f(1, 2, 0.f)).get<TypeParam >(), ExceptionBadDims);
+    EXPECT_THROW(FeatureData(Mat1f(2, 2, 3.f)).get<TypeParam >(), ExceptionBadDims);
 }
 
-TYPED_TEST(FeatureDataPOD_Test, FromMat_f)
+TYPED_TEST(FeatureDataPOD_Test, FromMat1f)
 {
     float _v = 256.f; // to cover a range of values common between all of our PODs
     while(--_v >= 0.f) {
@@ -277,7 +277,7 @@ TYPED_TEST(FeatureDataPOD_Test, FromPOD)
         EXPECT_EQ( static_cast<int >(_v),    to.get<int>()   )  << "Value mismatch while getting int.";
         EXPECT_EQ( static_cast<uchar >(_v),  to.get<uchar>() )  << "Value mismatch while getting uchar.";
 
-        EXPECT_MAT_EQ( Mat_f(1, 1, static_cast<float >(_v)), to.get<Mat_f >()) << "Value mismatch while getting Mat_f.";
+        EXPECT_MAT_EQ( Mat1f(1, 1, static_cast<float >(_v)), to.get<Mat1f >()) << "Value mismatch while getting Mat1f.";
 
 #ifdef __WITH_PCL
 

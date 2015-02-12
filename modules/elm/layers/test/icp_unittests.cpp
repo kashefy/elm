@@ -164,18 +164,18 @@ TEST_F(ICPTest, ActivateAndResponse) {
     // check response
     // convergence:
     ASSERT_TRUE(icp.hasConverged()) << "this test needs to converge";
-    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_OUTPUT_CONVERGENCE), Size2i(1, 1)) << "Expecting Mat of single element for convergence.";
-    EXPECT_EQ(sig_.MostRecentMat(NAME_OUTPUT_CONVERGENCE).at<float>(0)==1.f, icp.hasConverged()) << "Mismatched convergence.";
+    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat1f(NAME_OUTPUT_CONVERGENCE), Size2i(1, 1)) << "Expecting Mat of single element for convergence.";
+    EXPECT_EQ(sig_.MostRecentMat1f(NAME_OUTPUT_CONVERGENCE).at<float>(0)==1.f, icp.hasConverged()) << "Mismatched convergence.";
 
     // fitness score
-    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_OUTPUT_SCORE), Size2i(1, 1)) << "Expecting Mat of single element for fitness score.";
-    EXPECT_FLOAT_EQ(sig_.MostRecentMat(NAME_OUTPUT_SCORE).at<float>(0), static_cast<float>(icp.getFitnessScore())) << "Mismatched fitness score.";
+    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat1f(NAME_OUTPUT_SCORE), Size2i(1, 1)) << "Expecting Mat of single element for fitness score.";
+    EXPECT_FLOAT_EQ(sig_.MostRecentMat1f(NAME_OUTPUT_SCORE).at<float>(0), static_cast<float>(icp.getFitnessScore())) << "Mismatched fitness score.";
 
     // final transformation matrix estimated by registration method
     Mat1f transformation_expected;
     eigen2cv(icp.getFinalTransformation(), transformation_expected);
 
-    Mat1f transformation_actual = sig_.MostRecentMat(NAME_OUTPUT_TRANSFORMATION);
+    Mat1f transformation_actual = sig_.MostRecentMat1f(NAME_OUTPUT_TRANSFORMATION);
     EXPECT_MAT_EQ(transformation_expected, transformation_actual) << "Mismatch in final transformation";
 
     // more detailed check of transformation matrix
@@ -206,10 +206,10 @@ TEST_F(ICPTest, NoConvergence)
 
     // check response
     // convergence:
-    EXPECT_FALSE(sig_.MostRecentMat(NAME_OUTPUT_CONVERGENCE).at<float>(0)==1.f) << "Not expecting convergence.";
+    EXPECT_FALSE(sig_.MostRecentMat1f(NAME_OUTPUT_CONVERGENCE).at<float>(0)==1.f) << "Not expecting convergence.";
 
     // fitness score
-    EXPECT_MAT_EQ(sig_.MostRecentMat(NAME_OUTPUT_SCORE), Mat1f(1, 1, 0.f)) << "Expecting zero score.";
+    EXPECT_MAT_EQ(sig_.MostRecentMat1f(NAME_OUTPUT_SCORE), Mat1f(1, 1, 0.f)) << "Expecting zero score.";
 
     // more detailed check of transformation matrix, expecting a diagonal matrix
     Mat1f diagonal(4, 4, 0.f);
@@ -218,7 +218,7 @@ TEST_F(ICPTest, NoConvergence)
         diagonal(i, i) = 1.f;
     }
 
-    EXPECT_MAT_EQ(sig_.MostRecentMat(NAME_OUTPUT_TRANSFORMATION), diagonal) << "Expecting diagonal matrix when convergence fails.";
+    EXPECT_MAT_EQ(sig_.MostRecentMat1f(NAME_OUTPUT_TRANSFORMATION), diagonal) << "Expecting diagonal matrix when convergence fails.";
 }
 
 } // annonymous namespace for test fixtures

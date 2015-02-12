@@ -163,7 +163,7 @@ TEST_F(LayerYTest, Zero)
 
         ASSERT_TRUE(s.Exists(NAME_SPIKES)) << "Response missing";
 
-        EXPECT_MAT_EQ(s.MostRecentMat(NAME_SPIKES), x);
+        EXPECT_MAT_EQ(s.MostRecentMat1f(NAME_SPIKES), x);
     }
 }
 
@@ -202,7 +202,7 @@ TEST_F(LayerYTest, Freq_Inf)
         to_->Activate(s);
         to_->Response(s);
 
-        EXPECT_MAT_DIMS_EQ(s.MostRecentMat(NAME_SPIKES), st);
+        EXPECT_MAT_DIMS_EQ(s.MostRecentMat1f(NAME_SPIKES), st);
     }
 }
 
@@ -223,7 +223,7 @@ TEST_F(LayerYTest, Freq_Zero)
         to_->Activate(s);
         to_->Response(s);
 
-        EXPECT_MAT_DIMS_EQ(s.MostRecentMat(NAME_SPIKES), cv::Mat1f::zeros(st.size()));
+        EXPECT_MAT_DIMS_EQ(s.MostRecentMat1f(NAME_SPIKES), cv::Mat1f::zeros(st.size()));
     }
 }
 
@@ -239,7 +239,7 @@ TEST_F(LayerYTest, Activate_Empty)
     to_->Activate(s);
     to_->Response(s);
 
-    EXPECT_TRUE(s.MostRecentMat(NAME_SPIKES).empty());
+    EXPECT_TRUE(s.MostRecentMat1f(NAME_SPIKES).empty());
 }
 
 TEST_F(LayerYTest, Response_Dims)
@@ -263,7 +263,7 @@ TEST_F(LayerYTest, Response_Dims)
             to_->Activate(s);
             to_->Response(s);
 
-            EXPECT_MAT_DIMS_EQ(s.MostRecentMat(NAME_SPIKES), st.size());
+            EXPECT_MAT_DIMS_EQ(s.MostRecentMat1f(NAME_SPIKES), st.size());
         }
 
         s.Clear();

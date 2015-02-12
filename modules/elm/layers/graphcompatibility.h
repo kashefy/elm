@@ -8,6 +8,7 @@
 #ifndef _ELM_LAYERS_GRAPHCOMPATIBILITY_H_
 #define _ELM_LAYERS_GRAPHCOMPATIBILITY_H_
 
+#include "elm/core/typedefs_fwd.h"
 #include "elm/layers/base_layer_derivations/base_matoutputlayer.h"
 
 namespace elm {
@@ -44,9 +45,9 @@ protected:
      *
      * @param g_ab adjacency matrix
      * @param g_ij adjacency matrix
-     * @return compatibility matrix
+     * @return sparse compatibility matrix
      */
-    virtual cv::Mat1f Compatibility(const cv::Mat1f &g_ab, const cv::Mat1f &g_ij) const;
+    virtual elm::SparseMat1f Compatibility(const cv::Mat1f &g_ab, const cv::Mat1f &g_ij) const;
 
     /**
      * @brief compatibility function for populating compatibility matrix C_aibj Eq. (2) from \cite Gold1996

@@ -33,29 +33,29 @@ TYPED_TEST_P(VisitorPOD_Test, Invalid_Mat) {
     VisitorPOD_<TypeParam > to;
 
     // empty
-    EXPECT_THROW(to(Mat_f()), ExceptionBadDims);
-    EXPECT_THROW(to(Mat_f(0, 0)), ExceptionBadDims);
-    EXPECT_THROW(to(Mat_f(1, 0)), ExceptionBadDims);
-    EXPECT_THROW(to(Mat_f(0, 1)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat1f()), ExceptionBadDims);
+    EXPECT_THROW(to(Mat1f(0, 0)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat1f(1, 0)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat1f(0, 1)), ExceptionBadDims);
 
     // multiple elements
-    EXPECT_THROW(to(Mat_f(2, 1)), ExceptionBadDims);
-    EXPECT_THROW(to(Mat_f(1, 2)), ExceptionBadDims);
-    EXPECT_THROW(to(Mat_f(2, 2)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat1f(2, 1)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat1f(1, 2)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat1f(2, 2)), ExceptionBadDims);
 
-    EXPECT_THROW(to(Mat_f(2, 1, 1.f)), ExceptionBadDims);
-    EXPECT_THROW(to(Mat_f(1, 2, 0.f)), ExceptionBadDims);
-    EXPECT_THROW(to(Mat_f(2, 1, 3.f)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat1f(2, 1, 1.f)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat1f(1, 2, 0.f)), ExceptionBadDims);
+    EXPECT_THROW(to(Mat1f(2, 1, 3.f)), ExceptionBadDims);
 }
 
-TYPED_TEST_P(VisitorPOD_Test, Value_FromMat_f)
+TYPED_TEST_P(VisitorPOD_Test, Value_FromMat1f)
 {
     VisitorPOD_<TypeParam > to;
 
     float _v = 256.f; // to cover a range of values common between all of our PODs
     while(--_v >= 0.f) {
 
-        EXPECT_EQ(static_cast<TypeParam >(_v), to(Mat_f(1, 1, _v))) << "Value mismatch.";
+        EXPECT_EQ(static_cast<TypeParam >(_v), to(Mat1f(1, 1, _v))) << "Value mismatch.";
     }
 }
 
@@ -88,7 +88,7 @@ TYPED_TEST_P(VisitorPOD_Test, Value_FromSparseMat1f)
     float _v = 256.f; // to cover a range of values common between all of our PODs
     while(--_v >= 0.f) {
 
-        EXPECT_EQ(static_cast<TypeParam >(_v), to(SparseMat1f(Mat_f(1, 1, _v)))) << "Value mismatch.";
+        EXPECT_EQ(static_cast<TypeParam >(_v), to(SparseMat1f(Mat1f(1, 1, _v)))) << "Value mismatch.";
     }
 }
 
@@ -219,7 +219,7 @@ TYPED_TEST_P(VisitorPOD_Test, Invalid_VecVertices)
  */
 REGISTER_TYPED_TEST_CASE_P(VisitorPOD_Test,
                            Invalid_Mat,
-                           Value_FromMat_f,
+                           Value_FromMat1f,
                            Invalid_SparseMat1f,
                            Value_FromSparseMat1f,
                            Value_FromSparseMat1f_ndims,

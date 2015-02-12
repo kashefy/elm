@@ -18,7 +18,6 @@ typedef unsigned char uchar;
 
 namespace elm {
 
-typedef cv::Mat_<float> Mat_f;   ///< convinience forward typedef for Mat of floats without constraints on no. of channels
 typedef cv::SparseMat_<float> SparseMat1f;   ///< convinience forward typedef for Mat of floats without constraints on no. of channels
 
 typedef boost::property_tree::ptree PTree;

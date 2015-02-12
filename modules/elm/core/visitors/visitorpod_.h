@@ -28,7 +28,7 @@ class VisitorPOD_ :
         public base_ConversionCache
 {
 public:
-    T operator()(const elm::Mat_f &m) const
+    T operator()(const cv::Mat1f &m) const
     {
         size_t n = m.total();
         if(n != 1) {

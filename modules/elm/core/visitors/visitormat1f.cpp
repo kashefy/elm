@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/core/visitors/visitormat_.h"
+#include "elm/core/visitors/visitormat1f.h"
 
 #include <opencv2/core.hpp>
 
@@ -15,7 +15,7 @@
 using namespace cv;
 using namespace elm;
 
-Mat_f VisitorMat_f::operator()(const Mat &m) const
+Mat1f VisitorMat1f::operator()(const Mat &m) const
 {
     if((m.type() & CV_MAT_DEPTH_MASK) != (CV_32F & CV_MAT_DEPTH_MASK)) {
 
@@ -28,12 +28,12 @@ Mat_f VisitorMat_f::operator()(const Mat &m) const
     }
 }
 
-Mat_f VisitorMat_f::operator()(const Mat_f &m) const
+Mat1f VisitorMat1f::operator()(const Mat1f &m) const
 {
     return m;
 }
 
-Mat_f VisitorMat_f::operator()(const SparseMat1f &m) const
+Mat1f VisitorMat1f::operator()(const SparseMat1f &m) const
 {
     Mat1f dense;
     if(m.size()!=0) {
@@ -43,39 +43,39 @@ Mat_f VisitorMat_f::operator()(const SparseMat1f &m) const
     return dense;
 }
 
-Mat_f VisitorMat_f::operator()(float f) const
+Mat1f VisitorMat1f::operator()(float f) const
 {
-    return Mat_f(1, 1, f);
+    return Mat1f(1, 1, f);
 }
 
-Mat_f VisitorMat_f::operator()(int n) const
+Mat1f VisitorMat1f::operator()(int n) const
 {
-    return Mat_f(1, 1, static_cast<float>(n));
+    return Mat1f(1, 1, static_cast<float>(n));
 }
 
-Mat_f VisitorMat_f::operator()(uchar c) const
+Mat1f VisitorMat1f::operator()(uchar c) const
 {
-    return Mat_f(1, 1, static_cast<float>(c));
+    return Mat1f(1, 1, static_cast<float>(c));
 }
 
 #ifdef __WITH_PCL // definitions below require PCL support
 
-Mat_f VisitorMat_f::operator()(const VecVertices &vv) const
+Mat1f VisitorMat1f::operator()(const VecVertices &vv) const
 {
     return VecVertices2Mat(vv, false);
 }
 
-Mat_f VisitorMat_f::operator()(CloudXYZPtr &c) const
+Mat1f VisitorMat1f::operator()(CloudXYZPtr &c) const
 {
     return PointCloud2Mat_<pcl::PointXYZ>(c);
 }
 
-Mat_f VisitorMat_f::operator()(CloudNrmlPtr &c) const
+Mat1f VisitorMat1f::operator()(CloudNrmlPtr &c) const
 {
     return PointCloud2Mat_<pcl::Normal>(c);
 }
 
-Mat_f VisitorMat_f::operator()(CloudPtNrmlPtr &c) const
+Mat1f VisitorMat1f::operator()(CloudPtNrmlPtr &c) const
 {
     return PointCloud2Mat_<pcl::PointNormal>(c);
 }

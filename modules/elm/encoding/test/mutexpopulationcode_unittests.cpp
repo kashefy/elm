@@ -120,7 +120,7 @@ protected:
 
 TEST_F(MutexPopulationCodeLayerTest, IONames_Wrong) {
 
-    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_POP_CODE), cv::Size2i(in_.cols*2, in_.rows));
+    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat1f(NAME_POP_CODE), cv::Size2i(in_.cols*2, in_.rows));
 
     in_ = Mat1f::ones(3, 2);
     sig_.Append(NAME_STIMULUS, in_);
@@ -128,12 +128,12 @@ TEST_F(MutexPopulationCodeLayerTest, IONames_Wrong) {
     to_ptr_->Response(sig_);
     to_.State(in_);
 
-    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_POP_CODE), cv::Size2i(in_.cols*2, in_.rows));
+    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat1f(NAME_POP_CODE), cv::Size2i(in_.cols*2, in_.rows));
 }
 
 TEST_F(MutexPopulationCodeLayerTest, Response_dims) {
 
-    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_POP_CODE), cv::Size2i(in_.cols*2, in_.rows));
+    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat1f(NAME_POP_CODE), cv::Size2i(in_.cols*2, in_.rows));
 
     in_ = Mat1f::ones(3, 2);
     sig_.Append(NAME_STIMULUS, in_);
@@ -141,12 +141,12 @@ TEST_F(MutexPopulationCodeLayerTest, Response_dims) {
     to_ptr_->Response(sig_);
     to_.State(in_);
 
-    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_POP_CODE), cv::Size2i(in_.cols*2, in_.rows));
+    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat1f(NAME_POP_CODE), cv::Size2i(in_.cols*2, in_.rows));
 }
 
 TEST_F(MutexPopulationCodeLayerTest, PopCode_ones) {
 
-    Mat1f pc = sig_.MostRecentMat(NAME_POP_CODE);
+    Mat1f pc = sig_.MostRecentMat1f(NAME_POP_CODE);
     for(int i=0; i<pc.rows; i++) {
 
         EXPECT_FLOAT_EQ(pc(i), i%2==0? 0.f : 1.f);
@@ -163,7 +163,7 @@ TEST_F(MutexPopulationCodeLayerTest, PopCode_zeros) {
     to_.State(in_);
 
     to_.State(in_);
-    Mat1f pc = sig_.MostRecentMat(NAME_POP_CODE);
+    Mat1f pc = sig_.MostRecentMat1f(NAME_POP_CODE);
 
     for(int i=0; i<pc.rows; i++) {
 

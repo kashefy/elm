@@ -8,7 +8,7 @@
 /** @file test out Mat_ visitors,
  * some fixtures may be scattered somewhat awkwardly in this file due to conditional support (e.g. PCL support)
  */
-#include "elm/core/visitors/visitormat_.h"
+#include "elm/core/visitors/visitormat1f.h"
 
 #include "elm/core/exception.h"
 #include "elm/core/pcl/cloud_.h"
@@ -22,31 +22,31 @@ using namespace elm;
 namespace {
 
 /**
- * @brief test class around VisitorMat_f
+ * @brief test class around VisitorMat1f
  */
-class VisitorMat_fTest : public ::testing::Test
+class VisitorMat1fTest : public ::testing::Test
 {
 protected:
-    VisitorMat_f to_;    ///< test object
+    VisitorMat1f to_;    ///< test object
 };
 
-TEST_F(VisitorMat_fTest, EmptyMat)
+TEST_F(VisitorMat1fTest, EmptyMat)
 {
-    EXPECT_TRUE(to_(Mat_f()).empty());
-    EXPECT_TRUE(to_(Mat_f(0, 0)).empty());
-    EXPECT_TRUE(to_(Mat_f(1, 0)).empty());
-    EXPECT_TRUE(to_(Mat_f(0, 1)).empty());
+    EXPECT_TRUE(to_(Mat1f()).empty());
+    EXPECT_TRUE(to_(Mat1f(0, 0)).empty());
+    EXPECT_TRUE(to_(Mat1f(1, 0)).empty());
+    EXPECT_TRUE(to_(Mat1f(0, 1)).empty());
 }
 
-TEST_F(VisitorMat_fTest, EmptyMatSize)
+TEST_F(VisitorMat1fTest, EmptyMatSize)
 {
-    EXPECT_MAT_DIMS_EQ(to_(Mat_f()), Size2i(0, 0));
-    EXPECT_MAT_DIMS_EQ(to_(Mat_f(0, 0)), Size2i(0, 0));
-    EXPECT_MAT_DIMS_EQ(to_(Mat_f(1, 0)), Size2i(0, 1));
-    EXPECT_MAT_DIMS_EQ(to_(Mat_f(0, 1)), Size2i(1, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat1f()), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat1f(0, 0)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat1f(1, 0)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat1f(0, 1)), Size2i(1, 0));
 }
 
-TEST_F(VisitorMat_fTest, FromMat_f)
+TEST_F(VisitorMat1fTest, FromMat1f)
 {
     int N=5;
 
@@ -55,17 +55,17 @@ TEST_F(VisitorMat_fTest, FromMat_f)
         const int MAT_ROWS = abs(randu<int>()) % 10 + 1;
         const int MAT_COLS = abs(randu<int>()) % 100 + 1;
 
-        Mat_f m(MAT_ROWS, MAT_COLS);
+        Mat1f m(MAT_ROWS, MAT_COLS);
         randn(m, 0.f, 100.f);
 
-        Mat_f m2 = to_(m);
+        Mat1f m2 = to_(m);
 
         EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
         EXPECT_EQ(m.data, m2.data) << "Mats are not pointing to the same data in memory. Expecting shared copy.";
     }
 }
 
-TEST_F(VisitorMat_fTest, EmptySparseMat1f)
+TEST_F(VisitorMat1fTest, EmptySparseMat1f)
 {
     EXPECT_TRUE(to_(SparseMat1f()).empty());
 
@@ -74,7 +74,7 @@ TEST_F(VisitorMat_fTest, EmptySparseMat1f)
     EXPECT_FALSE(to_(m).empty());
 }
 
-TEST_F(VisitorMat_fTest, FromSparseMat1f)
+TEST_F(VisitorMat1fTest, FromSparseMat1f)
 {
     int N=5;
 
@@ -83,24 +83,24 @@ TEST_F(VisitorMat_fTest, FromSparseMat1f)
         const int MAT_ROWS = abs(randu<int>()) % 10 + 1;
         const int MAT_COLS = abs(randu<int>()) % 100 + 1;
 
-        Mat_f m(MAT_ROWS, MAT_COLS);
+        Mat1f m(MAT_ROWS, MAT_COLS);
         randn(m, 0.f, 100.f);
 
-        Mat_f m2 = to_(SparseMat1f(m));
+        Mat1f m2 = to_(SparseMat1f(m));
 
         EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
         EXPECT_NE(m.data, m2.data) << "Mats are not pointing to the same data in memory. Expecting shared copy.";
     }
 }
 
-TEST_F(VisitorMat_fTest, Reset)
+TEST_F(VisitorMat1fTest, Reset)
 {
     EXPECT_NO_THROW(to_.Reset());
 
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
 
-    Mat_f m2 = to_(m);
+    Mat1f m2 = to_(m);
     EXPECT_NO_THROW(to_.Reset());
 }
 
@@ -108,39 +108,39 @@ TEST_F(VisitorMat_fTest, Reset)
     #warning "Disabling unit tests that require PCL support."
 #else // __WITH_PCL
 
-TEST_F(VisitorMat_fTest, EmptyCLoud)
+TEST_F(VisitorMat1fTest, EmptyCLoud)
 {
     CloudXYZPtr cld(new CloudXYZ);
     EXPECT_TRUE(to_(cld).empty());
 }
 
-TEST_F(VisitorMat_fTest, EmptyCloudSize)
+TEST_F(VisitorMat1fTest, EmptyCloudSize)
 {
     CloudXYZPtr cld(new CloudXYZ);
     EXPECT_MAT_DIMS_EQ(to_(cld), Size2i(0, 0));
 }
 
-TEST_F(VisitorMat_fTest, FromCloud)
+TEST_F(VisitorMat1fTest, FromCloud)
 {
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
     CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
 
-    Mat_f m2 = to_(cloud);
+    Mat1f m2 = to_(cloud);
     hconcat(m, Mat1f(m.rows, 1, 1), m);
 
     EXPECT_MAT_EQ(m, m2);
     EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
 }
 
-TEST_F(VisitorMat_fTest, Reset_with_cloud)
+TEST_F(VisitorMat1fTest, Reset_with_cloud)
 {
     EXPECT_NO_THROW(to_.Reset());
 
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
 
-    Mat_f m2 = to_(m);
+    Mat1f m2 = to_(m);
     EXPECT_NO_THROW(to_.Reset());
 
     CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
@@ -153,17 +153,17 @@ TEST_F(VisitorMat_fTest, Reset_with_cloud)
 
 // fixtures for VecVertices
 
-TEST_F(VisitorMat_fTest, Empty_VecVertices)
+TEST_F(VisitorMat1fTest, Empty_VecVertices)
 {
     EXPECT_TRUE(to_(VecVertices()).empty());
 }
 
-TEST_F(VisitorMat_fTest, Empty_VecVertices_Size)
+TEST_F(VisitorMat1fTest, Empty_VecVertices_Size)
 {
     EXPECT_MAT_DIMS_EQ(to_(VecVertices()), Size2i(0, 0));
 }
 
-TEST_F(VisitorMat_fTest, From_VecVertices)
+TEST_F(VisitorMat1fTest, From_VecVertices)
 {
     Mat1f m(4, 3);
     for(size_t i=0; i<m.total(); i++) {
@@ -172,20 +172,20 @@ TEST_F(VisitorMat_fTest, From_VecVertices)
     }
     VecVertices vv = Mat2VecVertices(m.clone());
 
-    Mat_f m2 = to_(vv);
+    Mat1f m2 = to_(vv);
 
     EXPECT_MAT_EQ(m, m2);
     EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
 }
 
-TEST_F(VisitorMat_fTest, DISABLED_Reset_with_VecVertices)
+TEST_F(VisitorMat1fTest, DISABLED_Reset_with_VecVertices)
 {
 //    EXPECT_NO_THROW(to_.Reset());
 
 //    Mat1f m(4, 3);
 //    randn(m, 0.f, 100.f);
 
-//    Mat_f m2 = to_(m);
+//    Mat1f m2 = to_(m);
 //    EXPECT_NO_THROW(to_.Reset());
 
 //    CloudXYZPtr cloud = Mat2PointCloud(m);

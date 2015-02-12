@@ -7,6 +7,10 @@
 //M*/
 #include "elm/layers/gradassignment.h"
 
+#include <opencv2/highgui.hpp>
+
+#include "elm/core/debug_utils.h"
+
 #include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
@@ -100,11 +104,75 @@ void GradAssignment::InputNames(const LayerInputNames &io)
     name_c_ai_ = io.Input(KEY_INPUT_MAT_COMPATIBILITY);
 }
 
+float Compatibility(float w1, float w2)
+{
+    float c;
+    if(w1 == 0.f || w2 == 0.f) {
+
+        c = 0.f;
+    }
+    else {
+        //c = w1*w2;
+        c = 1.f-3.f*abs(w1-w2);
+    }
+    return c;
+}
+
+Mat1f Q(const Mat1f &g_ab, const Mat1f &g_ij, const Mat1f &m) {
+
+    int A_ = g_ab.rows;
+    int I_ = g_ij.rows;
+
+    Mat1f q_ai(A_, I_, 0.f);
+
+    for(int a=0; a<A_; a++) {
+
+        Mat1f g_ab_row = g_ab.row(a);
+
+        for(int i=0; i<I_; i++) {
+
+            Mat1f g_ij_row = g_ij.row(i);
+//            if(a==145 && i==145) {
+//                ELM_COUT_VAR(g_ab_row);
+//                ELM_COUT_VAR(g_ij_row);
+//            }
+
+            float sigma_c_aibj_over_bj = 0.f;
+            int count_s = 0;
+            for(size_t b=0; b<g_ab_row.total(); b++) {
+
+                float g_ab_row_at_b = g_ab_row(b);
+
+                // skip for zero-weighted edges.
+                if(g_ab_row_at_b != 0.f) {
+
+                    for(size_t j=0; j<g_ij_row.total(); j++) {
+
+                        float g_ij_row_at_j = g_ij_row(j);
+                        if(g_ij_row_at_j != 0.f) {
+
+                            sigma_c_aibj_over_bj += Compatibility(g_ab_row_at_b, g_ij_row_at_j)*m(b, j);
+                            count_s++;
+                        }
+                    }
+                }
+            }
+
+            q_ai(a, i) = sigma_c_aibj_over_bj;
+            //ELM_COUT_VAR(a<<" "<<i<<" "<<count_s);
+        }
+    }
+
+    return q_ai;
+}
+
+
+
 void GradAssignment::Activate(const Signal &signal)
 {
     // get inputs
-    Mat1f g_ab = signal.MostRecentMat(name_g_ab_);
-    Mat1f g_ij = signal.MostRecentMat(name_g_ij_);
+    Mat1f g_ab = signal.MostRecentMat1f(name_g_ab_);
+    Mat1f g_ij = signal.MostRecentMat1f(name_g_ij_);
 
     if(g_ab.rows != g_ab.cols) {
 
@@ -119,17 +187,17 @@ void GradAssignment::Activate(const Signal &signal)
     A_ = g_ab.rows; ///< no. of vertices in G_ab graph
     I_ = g_ij.rows; ///< no. of vertices in G_ij graph
 
-    Mat1f c_ai = signal.MostRecentMat(name_c_ai_);//Compatibility(g_ab, g_ij);
+//    Mat1f c_ai = signal.MostRecentMat1f(name_c_ai_);//Compatibility(g_ab, g_ij);
 
-    if(c_ai.rows != A_) {
+//    if(c_ai.rows != A_) {
 
-        ELM_THROW_BAD_DIMS("No. of rows in compatibility matrix must match dimension of adj. matrix G_ab.");
-    }
+//        ELM_THROW_BAD_DIMS("No. of rows in compatibility matrix must match dimension of adj. matrix G_ab.");
+//    }
 
-    if(c_ai.cols != I_) {
+//    if(c_ai.cols != I_) {
 
-        ELM_THROW_BAD_DIMS("No. of rows in compatibility matrix must match dimension of adj. matrix g_ij.");
-    }
+//        ELM_THROW_BAD_DIMS("No. of rows in compatibility matrix must match dimension of adj. matrix g_ij.");
+//    }
 
     // got all inputs now go go go
     bool is_m_converged = false;
@@ -140,8 +208,9 @@ void GradAssignment::Activate(const Signal &signal)
 
     float beta = beta_0_;
 
-    int nb_iterations_0 = 0;
+    int nb_iterations_0;
 
+    //ELM_COUT_VAR(cv::format(c_ai, Formatter::FMT_NUMPY));
     while(beta < beta_max_) { // A
 
         nb_iterations_0 = 0;
@@ -149,15 +218,24 @@ void GradAssignment::Activate(const Signal &signal)
 
             Mat1f m_ai_hat_0 = m_ai_hat.clone();
 
-            Mat1f q_ai(A_, I_); ///< partial derivative of E_wg with respect to M_ai
+            //ELM_COUT_VAR(m_ai_hat_0);
+//            Mat1f q_ai = q_ai(A_, I_); ///< partial derivative of E_wg with respect to M_ai
 
-            multiply(c_ai, m_, q_ai);
+//            multiply(c_ai, m_, q_ai);
+            Mat1f q_ai = Q(g_ab, g_ij, m_);
+
+            imshow("m", ConvertTo8U(m_));
+            cv::waitKey();
+
+            //ELM_COUT_VAR(q_ai);
             // softassign
             exp(beta*q_ai, m_);
+            //ELM_COUT_VAR(m_);
 
-            is_m_converged = SinkhornBalancing::RowColNormalization(m_ai_hat, max_iter_sinkhorn_, EPSILON); // C
+            is_m_converged = SinkhornBalancing::RowColNormalization(m_ai_hat, max_iter_sinkhorn_, 0.05f); // C
 
-            is_m_converged = sum(abs(m_ai_hat-m_ai_hat_0))[0] < EPSILON;
+            //ELM_COUT_VAR(m_ai_hat);
+            is_m_converged = sum(abs(m_-m_ai_hat_0(Rect2i(0, 0, A_, I_))))[0] < 0.5f;
 
             nb_iterations_0++;
         } // end B

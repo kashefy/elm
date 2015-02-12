@@ -22,7 +22,7 @@ using namespace elm;
 namespace {
 
 /**
- * @brief test class around VisitorMat_f
+ * @brief test class around VisitorMat1f
  */
 class VisitorSparseMat1fTest : public ::testing::Test
 {
@@ -38,10 +38,10 @@ TEST_F(VisitorSparseMat1fTest, EmptySparseMat1f)
 
 TEST_F(VisitorSparseMat1fTest, EmptyMat)
 {
-    EXPECT_EQ(0, to_(Mat_f()).size());
-    EXPECT_EQ(0, to_(Mat_f(0, 0)).size());
-    EXPECT_EQ(0, to_(Mat_f(1, 0)).size());
-    EXPECT_EQ(0, to_(Mat_f(0, 1)).size());
+    EXPECT_EQ(0, to_(Mat1f()).size());
+    EXPECT_EQ(0, to_(Mat1f(0, 0)).size());
+    EXPECT_EQ(0, to_(Mat1f(1, 0)).size());
+    EXPECT_EQ(0, to_(Mat1f(0, 1)).size());
 }
 
 TEST_F(VisitorSparseMat1fTest, FromSparseMat1f)
@@ -53,11 +53,11 @@ TEST_F(VisitorSparseMat1fTest, FromSparseMat1f)
         const int MAT_ROWS = abs(randu<int>()) % 10 + 1;
         const int MAT_COLS = abs(randu<int>()) % 100 + 1;
 
-        Mat_f tmp(MAT_ROWS, MAT_COLS);
+        Mat1f tmp(MAT_ROWS, MAT_COLS);
         randn(tmp, 0.f, 100.f);
         SparseMat1f m(tmp);
 
-        Mat_f m2;
+        Mat1f m2;
         to_(m).convertTo(m2, CV_32FC1);
 
         EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
@@ -73,10 +73,10 @@ TEST_F(VisitorSparseMat1fTest, FromDenseMat1f)
         const int MAT_ROWS = abs(randu<int>()) % 10 + 1;
         const int MAT_COLS = abs(randu<int>()) % 100 + 1;
 
-        Mat_f m(MAT_ROWS, MAT_COLS);
+        Mat1f m(MAT_ROWS, MAT_COLS);
         randn(m, 0.f, 100.f);
 
-        Mat_f m2;
+        Mat1f m2;
         to_(m).convertTo(m2, CV_32FC1);
 
         EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
@@ -91,7 +91,7 @@ TEST_F(VisitorSparseMat1fTest, Reset)
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
 
-    Mat_f m2;
+    Mat1f m2;
     to_(m).convertTo(m2, CV_32FC1);
     EXPECT_NO_THROW(to_.Reset());
 }
@@ -110,7 +110,7 @@ TEST_F(VisitorSparseMat1fTest, FromCloud)
     randn(m, 0.f, 100.f);
     CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
 
-    Mat_f m2;
+    Mat1f m2;
     to_(cloud).convertTo(m2, CV_32FC1);
 
     hconcat(m, Mat1f(m.rows, 1, 1), m);
@@ -126,7 +126,7 @@ TEST_F(VisitorSparseMat1fTest, Reset_with_cloud)
     Mat1f m(4, 3);
     randn(m, 0.f, 100.f);
 
-    Mat_f m2;
+    Mat1f m2;
     to_(m).convertTo(m2, CV_32FC1);
     EXPECT_NO_THROW(to_.Reset());
 
@@ -159,7 +159,7 @@ TEST_F(VisitorSparseMat1fTest, From_VecVertices)
     }
     VecVertices vv = Mat2VecVertices(m.clone());
 
-    Mat_f m2;
+    Mat1f m2;
     to_(vv).convertTo(m2, CV_32FC1);
 
     EXPECT_MAT_EQ(m, m2);

@@ -75,7 +75,7 @@ VecVertices VisitorVecVertices::operator()(uchar c)
     return vv_;
 }
 
-VecVertices VisitorVecVertices::operator()(const Mat_f &m)
+VecVertices VisitorVecVertices::operator()(const cv::Mat1f &m)
 {
     if(vv_.empty()) {
 

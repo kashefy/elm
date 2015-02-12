@@ -47,10 +47,10 @@ TYPED_TEST(VisitorCloud_PointTypedTest, Empty)
 {
     typedef boost::shared_ptr<PointCloud<TypeParam > > CloudTPPtr;
 
-    EXPECT_TRUE(this->to_(Mat_f())->empty());
-    EXPECT_TRUE(this->to_(Mat_f(0, 0))->empty());
-    EXPECT_TRUE(this->to_(Mat_f(1, 0))->empty());
-    EXPECT_TRUE(this->to_(Mat_f(0, 1))->empty());
+    EXPECT_TRUE(this->to_(Mat1f())->empty());
+    EXPECT_TRUE(this->to_(Mat1f(0, 0))->empty());
+    EXPECT_TRUE(this->to_(Mat1f(1, 0))->empty());
+    EXPECT_TRUE(this->to_(Mat1f(0, 1))->empty());
 
     CloudTPPtr cld(new PointCloud<TypeParam >());
     EXPECT_TRUE(this->to_(cld)->empty());
@@ -60,16 +60,16 @@ TYPED_TEST(VisitorCloud_PointTypedTest, EmptySize)
 {
     typedef boost::shared_ptr<PointCloud<TypeParam > > CloudTPPtr;
 
-    EXPECT_EQ(size_t(0), this->to_(Mat_f())->size());
-    EXPECT_EQ(size_t(0), this->to_(Mat_f(0, 0))->size());
-    EXPECT_EQ(size_t(0), this->to_(Mat_f(1, 0))->size());
-    EXPECT_EQ(size_t(0), this->to_(Mat_f(0, 1))->size());
+    EXPECT_EQ(size_t(0), this->to_(Mat1f())->size());
+    EXPECT_EQ(size_t(0), this->to_(Mat1f(0, 0))->size());
+    EXPECT_EQ(size_t(0), this->to_(Mat1f(1, 0))->size());
+    EXPECT_EQ(size_t(0), this->to_(Mat1f(0, 1))->size());
 
     CloudTPPtr cld(new PointCloud<TypeParam >());
     EXPECT_EQ(size_t(0), this->to_(cld)->size());
 }
 
-TYPED_TEST(VisitorCloud_PointTypedTest, FromMat_f)
+TYPED_TEST(VisitorCloud_PointTypedTest, FromMat1f)
 {
     typedef boost::shared_ptr<PointCloud<TypeParam > > CloudTPPtr;
 

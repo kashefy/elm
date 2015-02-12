@@ -43,7 +43,7 @@ public:
 
     elm::VecVertices operator()(uchar c);
 
-    elm::VecVertices operator()(const elm::Mat_f &m);
+    elm::VecVertices operator()(const cv::Mat1f &m);
 
     elm::VecVertices operator()(const elm::SparseMat1f &m);
 

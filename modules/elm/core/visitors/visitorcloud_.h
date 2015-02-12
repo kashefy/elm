@@ -106,7 +106,7 @@ public:
         ELM_THROW_NOT_IMPLEMENTED;
     }
 
-    CloudTPDstPtr operator()(const elm::Mat_f &m) {
+    CloudTPDstPtr operator()(const cv::Mat1f &m) {
 
         if(!bool(c_)) {
 
