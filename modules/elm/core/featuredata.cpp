@@ -27,6 +27,12 @@ Mat_<float> FeatureData::get()
     return var_.apply_visitor(visitor_mat_);
 }
 
+template<>
+SparseMat1f FeatureData::get()
+{
+    return var_.apply_visitor(visitor_sparse_mat_);
+}
+
 #ifdef __WITH_PCL // PCL support required
 template<>
 CloudXYZPtr FeatureData::get()

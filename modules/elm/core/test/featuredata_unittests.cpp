@@ -47,6 +47,16 @@ TEST_F(FeatureDataTest, Init_Mat_f)
     EXPECT_MAT_EQ(m, mat_);
 }
 
+TEST_F(FeatureDataTest, InitWithSparseMat1f)
+{
+    SparseMat1f m_sparse(mat_);
+    FeatureData to(m_sparse);
+
+    Mat_f m = to.get<Mat_f>();
+
+    EXPECT_MAT_EQ(m, mat_);
+}
+
 /**
  * @brief Verify initializing with Mat and getting a mat only involves a shared copy
  */
@@ -129,6 +139,20 @@ TYPED_TEST(FeatureDataCloud_Test, InitWithMat_f)
 }
 
 /**
+ * @brief Initialize test object with Mat object, then call cloud getters.
+ */
+TYPED_TEST(FeatureDataCloud_Test, InitWithSparseMat1f)
+{
+    typedef boost::shared_ptr<pcl::PointCloud< TypeParam > > CloudTPPtr;
+
+    FeatureData to(SparseMat1f(this->mat_));
+
+    CloudTPPtr cld = to.get<CloudTPPtr >();
+
+    EXPECT_MAT_EQ(PointCloud2Mat_<TypeParam >(cld), this->mat_);
+}
+
+/**
  * @brief Test caching of cloud reference
  * by comparing what the pointers are pointing at and verifying the use count increased by 1 after calling get
  */
@@ -183,13 +207,39 @@ TYPED_TEST(FeatureDataPOD_Test, FromMat_Invalid)
     EXPECT_THROW(FeatureData(Mat_f(2, 2, 3.f)).get<TypeParam >(), ExceptionBadDims);
 }
 
-TYPED_TEST(FeatureDataPOD_Test, FromMat)
+TYPED_TEST(FeatureDataPOD_Test, FromMat_f)
 {
-    float _v = 256; // to cover a range of values common between all of our PODs
-    while(--_v >= 0) {
+    float _v = 256.f; // to cover a range of values common between all of our PODs
+    while(--_v >= 0.f) {
 
         FeatureData to(Mat1f(1, 1, _v));
         EXPECT_EQ(static_cast<TypeParam >(_v), to.get<TypeParam >()) << "Value mismatch.";
+    }
+}
+
+TYPED_TEST(FeatureDataPOD_Test, FromSparseMat1f)
+{
+    float _v = 256.f; // to cover a range of values common between all of our PODs
+    while(--_v >= 0.f) {
+
+        for(int d=1; d<5; d++) {
+
+            int *sz = new int[d];
+            int *idx = new int[d];
+            for(int i=0; i<d; i++) {
+                sz[i] = 1;
+                idx[i] = 0;
+            }
+
+            SparseMat1f m(d, sz);
+            m.ref(idx) = _v;
+
+            FeatureData to(m);
+
+            EXPECT_EQ(static_cast<TypeParam >(_v), to.get<TypeParam >()) << "Value mismatch.";
+
+            delete [] sz;
+        }
     }
 }
 

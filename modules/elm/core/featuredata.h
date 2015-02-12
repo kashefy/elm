@@ -82,6 +82,7 @@ protected:
     boost::variant
     <
     cv::Mat1f,
+    elm::SparseMat1f,
     elm::CloudXYZPtr,
     elm::CloudNrmlPtr,
     elm::CloudPtNrmlPtr,
@@ -104,7 +105,8 @@ protected:
     VisitorVoid visitor_vv_;            ///< place holder visitor that does nothing
 #endif // __WITH_PCL
 
-    VisitorMat_f visitor_mat_;      ///< visitor for converting to Mat objects
+    VisitorMat_f visitor_mat_;      ///< visitor for converting to Mat1f objects
+    VisitorSparseMat1f visitor_sparse_mat_; ///< visitor for converting to SparseMat1f objects
 };
 
 std::ostream& operator<<(std::ostream& os, FeatureData& obj);

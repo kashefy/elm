@@ -115,7 +115,6 @@ TYPED_TEST_P(VisitorPOD_Test, Value_FromSparseMat1f_ndims)
 
             delete [] sz;
         }
-
     }
 }
 
