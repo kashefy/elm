@@ -7,9 +7,12 @@
 //M*/
 #include "elm/core/featuredata.h"
 
+#include <iostream>
+
 using namespace std;
 using namespace cv;
-using namespace elm;
+
+namespace elm {
 
 FeatureData::FeatureData()
 {
@@ -77,3 +80,6 @@ std::ostream& operator<<(std::ostream& os, FeatureData& obj)
     os << obj.get<Mat_<float> >();
     return os;
 }
+
+} // namespace elm
+

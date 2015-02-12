@@ -8,9 +8,13 @@
 #ifndef _ELM_CORE_FEATUREDATA_H_
 #define _ELM_CORE_FEATUREDATA_H_
 
+#include <iosfwd>
+
 #include <boost/variant.hpp>
 
 #include "elm/core/visitors/visitors.h"
+
+namespace elm {
 
 /**
  * @brief The Feature data class.
@@ -104,5 +108,8 @@ protected:
 };
 
 std::ostream& operator<<(std::ostream& os, FeatureData& obj);
+
+} // namespace elm
+
 
 #endif // _ELM_CORE_FEATUREDATA_H_
