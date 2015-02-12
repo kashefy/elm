@@ -167,7 +167,7 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
 TEST_F(GradAssignmentTest, ActivateAndResponse_large_graphs)
 {
     // initialize test graphs
-    const int A=70;  ///< no. of nodes in G
+    const int A=30;  ///< no. of nodes in G
     const int I=A;  ///< no. of nodes in g
 
     // generate random adjacency matrices
