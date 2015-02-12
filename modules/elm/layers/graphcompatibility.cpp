@@ -30,7 +30,7 @@ template <>
 elm::MapIONames LayerAttr_<GraphCompatibility>::io_pairs = boost::assign::map_list_of
         ELM_ADD_INPUT_PAIR(GraphCompatibility::KEY_INPUT_GRAPH_AB)
         ELM_ADD_INPUT_PAIR(GraphCompatibility::KEY_INPUT_GRAPH_IJ)
-        ELM_ADD_OUTPUT_PAIR(detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
+        ELM_ADD_OUTPUT_PAIR(detail::BASE_SPARSEMATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
         ;
 //#endif
 
@@ -39,13 +39,13 @@ GraphCompatibility::~GraphCompatibility()
 }
 
 GraphCompatibility::GraphCompatibility()
-    : base_MatOutputLayer()
+    : base_SparseMatOutputLayer()
 {
     Clear();
 }
 
 GraphCompatibility::GraphCompatibility(const LayerConfig &cfg)
-    : base_MatOutputLayer(cfg)
+    : base_SparseMatOutputLayer(cfg)
 {
     Reset(cfg);
 }
@@ -89,23 +89,11 @@ void GraphCompatibility::Activate(const Signal &signal)
     A_ = g_ab.rows; ///< no. of vertices in G_ab graph
     I_ = g_ij.rows; ///< no. of vertices in G_ij graph
 
-    Compatibility(g_ab, g_ij).convertTo(m_, CV_32FC1);
+    m_ = Compatibility(g_ab, g_ij);
 }
 
 SparseMat1f GraphCompatibility::Compatibility(const Mat1f &g_ab, const Mat1f &g_ij) const
 {
-    bool with_node_match = false;//!node_match.empty();
-
-//    if(with_node_match) {
-
-//        ELM_THROW_BAD_DIMS_IF(node_match.rows != A_,
-//                              "No. of rows in node match must match no. of vertices in 1st graph.");
-//        ELM_THROW_BAD_DIMS_IF(node_match.cols != A_,
-//                              "No. of cols in node match must match no. of vertices in 2nd graph.");
-
-//    }
-
-    Mat1f c_ai(A_, I_, 0.f);
     const int DIMS = 4;
     int _size[DIMS] = {A_, I_, A_, I_};
     SparseMat1f c_aibj(DIMS, _size);
@@ -122,7 +110,6 @@ SparseMat1f GraphCompatibility::Compatibility(const Mat1f &g_ab, const Mat1f &g_
             idx[1] = i;
             Mat1f g_ij_row = g_ij.row(i);
 
-            float sigma_c_aibj_over_bj = 0.f;
             for(size_t b=0; b<g_ab_row.total(); b++) {
 
                 idx[2] = b;
@@ -140,65 +127,15 @@ SparseMat1f GraphCompatibility::Compatibility(const Mat1f &g_ab, const Mat1f &g_
                         if(g_ij_row_at_j != 0.f) {
 
                             float compatibility = Compatibility(g_ab_row_at_b, g_ij_row_at_j);
-
-//                            if(with_node_match) {
-
-//                                compatibility *= node_match(b, j);
-//                            }
-
-                            sigma_c_aibj_over_bj += compatibility;
                             c_aibj.ref(idx) = compatibility;
                         }
                     }
                 }
             }
-
-            c_ai(a, i) = sigma_c_aibj_over_bj;
         }
     }
 
-    for(int a=0; a<A_; a++) {
-
-        idx[0] = a;
-        Mat1f g_ab_row = g_ab.row(a);
-
-        for(int i=0; i<I_; i++) {
-
-            idx[1] = i;
-            Mat1f g_ij_row = g_ij.row(i);
-
-            float sigma_c_aibj_over_bj = 0.f;
-            for(size_t b=0; b<g_ab_row.total(); b++) {
-
-                idx[2] = b;
-                float g_ab_row_at_b = g_ab_row(b);
-
-                // skip for zero-weighted edges.
-                if(g_ab_row_at_b != 0.f) {
-
-                    for(size_t j=0; j<g_ij_row.total(); j++) {
-
-                        idx[3] = j;
-                        float g_ij_row_at_j = g_ij_row(j);
-
-                        // skip for zero-weighted edges.
-                        if(g_ij_row_at_j != 0.f) {
-
-                            //sigma_c_aibj_over_bj += Compatibility(g_ab_row_at_b, g_ij_row_at_j) * node_match(b, j);
-                            bool is_equal = c_aibj.ref(idx) == Compatibility(g_ab_row_at_b, g_ij_row_at_j);
-
-                            sigma_c_aibj_over_bj += c_aibj.ref(idx);
-                        }
-                    }
-                }
-            }
-
-            bool is_equal_cai = c_ai(a, i) == sigma_c_aibj_over_bj;
-            ELM_COUT_VAR(is_equal_cai);
-        }
-    }
-
-    return c_ai;
+    return c_aibj;
 }
 
 float GraphCompatibility::Compatibility(float w1, float w2) const
