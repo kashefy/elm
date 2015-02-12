@@ -101,12 +101,6 @@ TEST_F(VisitorSparseMat1fTest, Reset)
 TEST_F(VisitorSparseMat1fTest, EmptyCLoud)
 {
     CloudXYZPtr cld(new CloudXYZ);
-    //EXPECT_TRUE(to_(cld).empty());
-}
-
-TEST_F(VisitorSparseMat1fTest, EmptyCloudSize)
-{
-    CloudXYZPtr cld(new CloudXYZ);
     EXPECT_EQ(0, to_(cld).size());
 }
 
