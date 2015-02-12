@@ -10,9 +10,11 @@
  */
 #include "elm/ts/ts.h"
 
+#include "elm/core/exception.h"
 #include "elm/core/typedefs.h"
 
 using namespace cv;
+using namespace elm;
 
 namespace {
 
@@ -266,6 +268,314 @@ TEST(MatAssertionsTest, Mat_NotEqDimsAllZeros_size) {
     EXPECT_FALSE( EqualDims(a, Size2i(3, 2)) );
     EXPECT_FALSE( EqualDims(a, a.t().size()) );
     EXPECT_FALSE( Equal(a, a.t()) );
+}
+
+/**
+ * @brief Test SparseMat assertions
+ */
+TEST(SparseMatAssertionsTest, Mat1fEq) {
+
+    const int R = 3;
+    const int C = 2;
+    SparseMat a(Mat::zeros(R, C, CV_32FC1));
+    Mat b = Mat::zeros(R, C, CV_32FC1);
+
+    EXPECT_EQ(a.size(0), R) << "No. of rows do not match.";
+    EXPECT_EQ(a.size(1), C) << "No. of columns do not match.";
+    EXPECT_EQ(a.size(0), b.rows) << "No. of rows do not match.";
+    EXPECT_EQ(a.size(1), b.cols) << "No. of columns do not match.";
+    EXPECT_EQ(static_cast<size_t>(a.size(0)*a.size(1)), b.total()) << "No. of elements do not match.";
+    EXPECT_EQ(a.size(0)*a.size(1), R*C) << "No. of elements do not match.";
+    EXPECT_TRUE( EqualDims(a, b) );
+    EXPECT_TRUE( EqualDims(b, a) );
+    EXPECT_MAT_DIMS_EQ(a, b);
+    EXPECT_MAT_DIMS_EQ(b, a);
+    EXPECT_MAT_DIMS_EQ(a, b.size());
+    EXPECT_MAT_DIMS_EQ(a, Size2i(C, R));
+
+    for(int r=0; r<R; r++) {
+        for(int c=0; c<C; c++) {
+
+            EXPECT_FLOAT_EQ(a.ref<float>(r, c), 0.f);
+            EXPECT_FLOAT_EQ(b.at<float>(r, c), 0.f);
+            EXPECT_FLOAT_EQ(a.ref<float>(r, c), b.at<float>(r, c));
+        }
+    }
+    EXPECT_TRUE( Equal(a, b) );
+    EXPECT_TRUE( Equal(b, a) );
+    EXPECT_MAT_EQ(a, b);
+    EXPECT_MAT_EQ(b, a);
+}
+
+TEST(SparseMatAssertionsTest, SparseMat1fEq) {
+
+    const int R = 3;
+    const int C = 2;
+    SparseMat a(Mat::ones(R, C, CV_32FC1));
+    SparseMat b(Mat::ones(R, C, CV_32FC1));
+
+    EXPECT_EQ(a.dims(), 2) << "Dims do not match.";
+    EXPECT_EQ(a.dims(), b.dims()) << "Dims do not match.";
+    EXPECT_EQ(a.size(0), R) << "No. of rows do not match.";
+    EXPECT_EQ(a.size(1), C) << "No. of columns do not match.";
+    EXPECT_EQ(a.size(0), b.size(0)) << "No. of rows do not match.";
+    EXPECT_EQ(a.size(1), b.size(1)) << "No. of columns do not match.";
+    EXPECT_EQ(a.size(0)*a.size(1), b.size(0)*b.size(1)) << "No. of elements do not match.";
+    EXPECT_EQ(a.size(0)*a.size(1), R*C) << "No. of elements do not match.";
+    EXPECT_TRUE( EqualDims(a, b) );
+    EXPECT_MAT_DIMS_EQ(a, b);
+    EXPECT_MAT_DIMS_EQ(a, Size2i(C, R));
+
+    for(int r=0; r<R; r++) {
+        for(int c=0; c<C; c++) {
+
+            EXPECT_FLOAT_EQ(a.ref<float>(r, c), 1.f);
+            EXPECT_FLOAT_EQ(b.ref<float>(r, c), 1.f);
+            EXPECT_FLOAT_EQ(a.ref<float>(r, c), b.ref<float>(r, c));
+        }
+    }
+    EXPECT_TRUE( Equal(a, b) );
+    EXPECT_MAT_EQ(a, b);
+}
+
+TEST(SparseMatAssertionsTest, NDims) {
+
+    const int N = 10;
+
+    for(int n=1; n<N; n++) {
+
+        int dims = n;
+        int *sz = new int[dims];
+        for(int i=0; i<dims; i++) {
+
+            sz[i] = i+1;
+        }
+
+        SparseMat a(dims, sz, CV_32FC1);
+        SparseMat b(dims, sz, CV_32FC1);
+        Mat d(dims, sz, CV_32FC1);
+
+
+        // c has different dims
+        sz[n-1]++;
+        SparseMat c(dims, sz, CV_32FC1);
+
+        EXPECT_TRUE( EqualDims(a, b) );
+        EXPECT_MAT_DIMS_EQ(a, b);
+        EXPECT_FALSE( EqualDims(a, c) );
+
+        if(n>2) {
+
+            EXPECT_THROW( EqualDims(a, d), ExceptionNotImpl) << "update test if this is no longer applicable.";
+            EXPECT_THROW( EqualDims(d, a), ExceptionNotImpl) << "update test if this is no longer applicable.";
+        }
+        else if(n==2) { // dims always >= 2 for dense Mat
+
+            EXPECT_TRUE( EqualDims(a, d) );
+            EXPECT_TRUE( EqualDims(d, a) );
+            EXPECT_FALSE( EqualDims(c, d) );
+            EXPECT_FALSE( EqualDims(d, c) );
+        }
+
+        delete []sz;
+    }
+}
+
+TEST(SparseMatAssertionsTest, BadDims) {
+
+    {
+        int sz[1] = {3};
+        SparseMat a(1, sz, CV_32FC1);
+        EXPECT_THROW( EqualDims(a, Size2i(1, sz[0])), ExceptionBadDims);
+        EXPECT_THROW( EqualDims(a, Size2i(sz[0], 1)), ExceptionBadDims);
+    }
+    {
+        int sz[3] = {3, 4, 5};
+        SparseMat a(1, sz, CV_32FC1);
+        EXPECT_THROW( EqualDims(a, Size2i(sz[0], sz[1])), ExceptionBadDims);
+        EXPECT_THROW( EqualDims(a, Size2i(sz[1], sz[0])), ExceptionBadDims);
+        EXPECT_THROW( EqualDims(a, Size2i(sz[2], sz[1])), ExceptionBadDims);
+        EXPECT_THROW( EqualDims(a, Size2i(sz[1], sz[2])), ExceptionBadDims);
+        EXPECT_THROW( EqualDims(a, Size2i(sz[2], sz[0])), ExceptionBadDims);
+        EXPECT_THROW( EqualDims(a, Size2i(sz[0], sz[2])), ExceptionBadDims);
+    }
+}
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims, non-equal elem. values)
+ */
+TEST(SparseMatAssertionsTest, Mat1fNotEq) {
+
+    const int R=3, C=2;
+    SparseMat a(Mat::zeros(R, C, CV_32FC1));
+    Mat b = Mat::ones(R, C, CV_32FC1);
+
+    EXPECT_MAT_DIMS_EQ(a, b);
+    EXPECT_MAT_DIMS_EQ(a, b.size());
+    EXPECT_MAT_DIMS_EQ(a, Size2i(C, R));
+    EXPECT_FALSE( Equal(a, b) );
+    EXPECT_FALSE( Equal(b, a) );
+}
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims, single value different)
+ */
+TEST(SparseMatAssertionsTest, Mat1fNotEqSingleEl) {
+
+    const int R=3, C=2;
+    Mat tmp = Mat::ones(R, C, CV_32FC1);
+    SparseMat a(tmp);
+
+    for(int r=0; r<R; r++) {
+        for(int c=0; c<C; c++) {
+
+            Mat b = tmp.clone();
+            EXPECT_MAT_DIMS_EQ(a, b);
+            EXPECT_MAT_DIMS_EQ(b, a);
+            EXPECT_MAT_DIMS_EQ(a, b.size());
+            EXPECT_MAT_DIMS_EQ(a, Size2i(C, R));
+            EXPECT_MAT_EQ(a, b);
+            EXPECT_MAT_EQ(b, a);
+            b.at<float>(r, c) += 123;
+            EXPECT_FALSE( Equal(a, b) );
+            EXPECT_FALSE( Equal(b, a) );
+        }
+    }
+}
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (non-equal dims, non-equal elem. values)
+ */
+TEST(SparseMatAssertionsTest, Mat1fNotEqDims) {
+
+    SparseMat a(Mat::zeros(3, 2, CV_32FC1));
+    Mat b = Mat::ones(2, 3, CV_32FC1);
+
+    EXPECT_FALSE( EqualDims(a, b) );
+    EXPECT_FALSE( EqualDims(b, a) );
+    EXPECT_FALSE( Equal(a, b) );
+    EXPECT_FALSE( Equal(b, a) );
+}
+
+/**
+ * @brief repeat Mat1fNotEqDims test with cv::Size overload
+ */
+TEST(SparseMatAssertionsTest, Mat1fNotEqDims_size) {
+
+    SparseMat a(Mat::zeros(3, 2, CV_32FC1));
+    Size2i s(3, 2);
+    Mat b = Mat::ones(s, CV_32FC1);
+
+    EXPECT_FALSE( EqualDims(a, s) );
+    EXPECT_FALSE( EqualDims(a, b.size()) );
+    EXPECT_FALSE( Equal(a, b) );
+    EXPECT_FALSE( Equal(b, a) );
+}
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (non-equal dims, equal elem. values)
+ */
+TEST(SparseMatAssertionsTest, Mat1fNotEqDimsAllZeros) {
+
+    Mat tmp = Mat::zeros(3, 2, CV_32FC1);
+    SparseMat a(tmp);
+
+    EXPECT_FALSE( EqualDims(a, tmp.t()) );
+    EXPECT_FALSE( Equal(a, tmp.t()) );
+}
+
+
+/**
+ * @brief repeat Mat1fNotEqDimsAllZeros test with cv::Size overload
+ */
+TEST(SparseMatAssertionsTest, Mat1fNotEqDimsAllZeros_size) {
+
+    Mat tmp = Mat::zeros(3, 2, CV_32FC1);
+    SparseMat a(tmp);
+
+    EXPECT_FALSE( EqualDims(a, Size2i(3, 2)) );
+    EXPECT_FALSE( EqualDims(a, tmp.t().size()) );
+    EXPECT_FALSE( Equal(a, tmp.t()) );
+}
+
+/**
+ * @brief test EqualDims with empty sparse matrix
+ */
+TEST(SparseMatAssertionsTest, MatEqDimsEmpty) {
+
+    EXPECT_TRUE( EqualDims(SparseMat(), Size2i(0, 0)) );
+    EXPECT_TRUE( EqualDims(SparseMat(), Mat()) );
+    EXPECT_TRUE( EqualDims(SparseMat(), Mat().size()) );
+}
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (equal dims, single value different)
+ */
+TEST(SparseMatAssertionsTest, Mat_NotEqSingleEl) {
+
+    const int R=3, C=2;
+    SparseMat1f a(Mat1f::ones(R, C));
+
+    for(int r=0; r<R; r++) {
+        for(int c=0; c<C; c++) {
+
+            Mat1f b;
+            a.convertTo(b, CV_32FC1);
+
+            EXPECT_MAT_DIMS_EQ(a, b);
+            EXPECT_MAT_DIMS_EQ(b, a);
+            EXPECT_MAT_DIMS_EQ(a, b.size());
+            EXPECT_MAT_DIMS_EQ(a, Size2i(C, R));
+            EXPECT_MAT_EQ(a, b);
+            EXPECT_MAT_EQ(b, a);
+            b.at<float>(r, c) += 123;
+            EXPECT_FALSE( Equal(a, b) );
+            EXPECT_FALSE( Equal(b, a) );
+        }
+    }
+}
+
+/**
+ * @brief test OpenCV Mat Assertions with 2 Mats of float (non-equal dims, non-equal elem. values)
+ */
+TEST(SparseMatAssertionsTest, Mat_NotEqDims) {
+
+    SparseMat1f a(Mat1f::zeros(3, 2));
+    Mat1i b = Mat1i::ones(2, 3);
+
+    EXPECT_FALSE( EqualDims(a, b) );
+    EXPECT_FALSE( EqualDims(b, a) );
+    EXPECT_FALSE( Equal(a, b) );
+    EXPECT_FALSE( Equal(b, a) );
+}
+
+/**
+ * @brief repeat Mat1fNotEqDims test with cv::Size overload
+ */
+TEST(SparseMatAssertionsTest, Mat_NotEqDims_size) {
+
+    SparseMat1f a(Mat1f::zeros(3, 2));
+    Size2i s(3, 2);
+    Mat1i b = Mat1i::ones(s);
+
+    EXPECT_FALSE( EqualDims(a, s) );
+    EXPECT_FALSE( EqualDims(a, b.size()) );
+    EXPECT_FALSE( Equal(a, b) );
+}
+
+TEST(SparseMatAssertionsTest, Mat_NotEqDimsAllZeros) {
+
+    Mat1f a = Mat1f::zeros(3, 2);
+    SparseMat1f b(a);
+
+    EXPECT_FALSE( EqualDims(b, a.t()) );
+}
+
+TEST(SparseMatAssertionsTest, Mat_NotEqDimsAllZeros_size) {
+
+    SparseMat1f a(Mat1f::zeros(3, 2));
+
+    EXPECT_FALSE( EqualDims(a, Size2i(3, 2)) );
 }
 
 /**

@@ -7,6 +7,7 @@
 //M*/
 #include "elm/ts/mat_assertions.h"
 
+#include "elm/core/exception.h"
 #include "elm/core/cv/mat_type_utils.h"
 
 using namespace std;
@@ -44,6 +45,99 @@ AssertionResult EqualDims(const Mat &a, const Size2i &s) {
                                                       s.height << ")";
     if(a.cols != s.width) return AssertionFailure() << "No. of columns do not match (" <<
                                                       a.cols << ") (" <<
+                                                      s.width << ")";
+    return AssertionSuccess();
+}
+
+AssertionResult EqualDims(const Mat &a, const SparseMat &b) {
+
+    if(a.dims > 2 || b.dims() > 2) {
+
+        ELM_THROW_NOT_IMPLEMENTED_WMSG("Assertion with > 2 dimensional Mat not yet supported.");
+    }
+
+    if(a.dims != b.dims()) {
+
+        return AssertionFailure() << "No. of dimensions do not match (" <<
+                                     a.dims << ") (" <<
+                                     b.dims() << ")";
+    }
+
+    return EqualDims(a, Size2i(b.size(1), b.size(0)));
+}
+
+AssertionResult EqualDims(const SparseMat &a, const Mat &b)
+{
+    if(a.dims() > 2 || b.dims > 2) {
+
+        ELM_THROW_NOT_IMPLEMENTED_WMSG("Assertion with > 2 dimensional Mat not yet supported.");
+    }
+
+    if(a.dims() != b.dims) {
+
+        return AssertionFailure() << "No. of dimensions do not match (" <<
+                                     a.dims() << ") (" <<
+                                     b.dims << ")";
+    }
+
+    return EqualDims(a, Size2i(b.cols, b.rows));
+}
+
+AssertionResult EqualDims(const SparseMat &a, const SparseMat &b)
+{
+    if(a.dims() != b.dims()) {
+
+        return AssertionFailure() << "No. of dimensions do not match (" <<
+                                     a.dims() << ") (" <<
+                                     b.dims() << ")";
+    }
+
+    for(int d=0; d<a.dims(); d++) {
+
+        if(a.size(d) != b.size(d)) {
+
+            stringstream d_str;
+            switch(d) {
+
+            case 0:
+                d_str << "rows";
+                break;
+            case 1:
+                d_str << "cols";
+                break;
+            default:
+                d_str << "dim-" << d;
+            }
+
+            return AssertionFailure() << d_str.str() << " does not match (" <<
+                                         a.size(d) << ") (" <<
+                                         b.size(d) << ")";
+        }
+    }
+
+    return AssertionSuccess();
+}
+
+AssertionResult EqualDims(const SparseMat &a, const Size2i &s)
+{
+    if(a.size()==NULL) {
+
+        if(0 != s.height) return AssertionFailure() << "No. of rows do not match (" <<
+                                                          0 << ") (" <<
+                                                          s.height << ")";
+        if(0 != s.width) return AssertionFailure() << "No. of columns do not match (" <<
+                                                          0 << ") (" <<
+                                                          s.width << ")";
+        return AssertionSuccess();
+    }
+
+    ELM_THROW_BAD_DIMS_IF(a.dims() != 2, "Assertion only applicable to 2-dimensional SparseMat.");
+
+    if(a.size(0) != s.height) return AssertionFailure() << "No. of rows do not match (" <<
+                                                      a.size(0) << ") (" <<
+                                                      s.height << ")";
+    if(a.size(1) != s.width) return AssertionFailure() << "No. of columns do not match (" <<
+                                                      a.size(1) << ") (" <<
                                                       s.width << ")";
     return AssertionSuccess();
 }
@@ -120,6 +214,27 @@ AssertionResult Equal(const Mat& a, const Mat& b) {
     else {
         return AssertionFailure() << MatFailureMessageNonZero(a, b, cmp_out);
     }
+}
+
+AssertionResult Equal(const SparseMat& a, const Mat& b) {
+
+    Mat a_dense;
+    a.convertTo(a_dense, a.type());
+    return Equal(a_dense, b);
+}
+
+AssertionResult Equal(const Mat &a, const SparseMat &b)
+{
+    Mat b_dense;
+    b.convertTo(b_dense, a.type());
+    return Equal(a, b_dense);
+}
+
+AssertionResult Equal(const SparseMat &a, const SparseMat &b)
+{
+    Mat a_dense;
+    a.convertTo(a_dense, a.type());
+    return Equal(a_dense, b);
 }
 
 AssertionResult Near(const Mat& a, const Mat& b, float tolerance) {

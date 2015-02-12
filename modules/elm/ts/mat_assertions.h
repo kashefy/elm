@@ -29,6 +29,10 @@ std::string MatTypeFailureMessage(const cv::Mat& a, int mat_type);
   */
 ::testing::AssertionResult EqualDims(const cv::Mat& a, const cv::Mat& b);
 ::testing::AssertionResult EqualDims(const cv::Mat& a, const cv::Size2i& s);
+::testing::AssertionResult EqualDims(const cv::Mat& a, const cv::SparseMat& b);
+::testing::AssertionResult EqualDims(const cv::SparseMat& a, const cv::Mat& b);
+::testing::AssertionResult EqualDims(const cv::SparseMat& a, const cv::SparseMat& b);
+::testing::AssertionResult EqualDims(const cv::SparseMat& a, const cv::Size2i& s);
 #define EXPECT_MAT_DIMS_EQ(a, b) EXPECT_TRUE( EqualDims(a, b) )
 
 /**
@@ -50,7 +54,15 @@ std::string MatFailureMessageNonZero(const cv::Mat& a, const cv::Mat& b, const c
  */
 std::string MatFailureMessageNonZero(const cv::Mat& a, const cv::Mat& cmp);
 
+/** @brief assert all elements in two Mat objects are equal.
+  */
 ::testing::AssertionResult Equal(const cv::Mat& a, const cv::Mat& b);
+
+::testing::AssertionResult Equal(const cv::SparseMat& a, const cv::Mat& b);
+
+::testing::AssertionResult Equal(const cv::Mat& a, const cv::SparseMat& b);
+
+::testing::AssertionResult Equal(const cv::SparseMat& a, const cv::SparseMat& b);
 
 /** Compare two template Mat of different types.
  *  Requires per-element comparison instead, since we cannot call cv::compare with Mats of different types
