@@ -37,6 +37,14 @@ public:
 
     virtual void Activate(const Signal &signal);
 
+    /**
+     * @brief Integrate over b and j (taking partial derivative of Ewg(M))
+     * @param c_aibj
+     * @param m weight values  (e.g. match matrix variables)
+     * @return integration of compatibility matrix over b and j multiplied by m
+     */
+    static cv::Mat1f Integrate(SparseMat1f &c_aibj, cv::Mat1f m);
+
 protected:
     /**
      * @brief calculate compatibility matrix C_aibj Eq. (2) from \cite Gold1996

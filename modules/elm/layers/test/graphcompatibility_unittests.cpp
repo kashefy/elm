@@ -108,28 +108,9 @@ TEST_F(GraphCompatibilityTest, Dims)
         for(int I=1; I<10; I++) {
 
             // generate random adjacency matrices
-            g_ab_ = Mat1f(A, A);
-            Mat1i tmp(A, A);
-            int stddev = 1000;
-            randu(tmp, 0, stddev);
-            g_ab_ = tmp/static_cast<float>(stddev);
+            g_ab_ = Mat1f(A, A, 1.f);
 
-            // distance from node to itself is 0
-            for(int r=0; r<g_ab_.rows; r++) {
-
-                g_ab_(r, r) = 0.f;
-            }
-            // make symmetrical
-            for(int r=0; r<g_ab_.rows; r++) {
-
-                for(int c=0; c<g_ab_.rows; c++) {
-
-                    g_ab_(r, c) = g_ab_(c, r);
-                }
-            }
-
-            g_ij_ = Mat1f(I, I);
-            g_ij_ = g_ab_.clone();    // make them equal
+            g_ij_ = Mat1f(I, I, 1.f);
 
             sig_.Clear();
             // add test graphs to signal
@@ -140,9 +121,13 @@ TEST_F(GraphCompatibilityTest, Dims)
             to_->Activate(sig_);
             to_->Response(sig_);
 
-            EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat1f(NAME_M),
-                               Size2i(g_ab_.rows, g_ij_.rows))
-                    << "Match matrix should be of size (A, I)";
+            SparseMat1f c_aibj = sig_.MostRecent(NAME_M).get<SparseMat1f>();
+            ASSERT_EQ(4, c_aibj.dims()) << "Match matrix should be of size (A, I, A, I)";
+
+            EXPECT_EQ(A, c_aibj.size(0)) << "Match matrix should be of size (A, I, A, I)";
+            EXPECT_EQ(I, c_aibj.size(1)) << "Match matrix should be of size (A, I, A, I)";
+            EXPECT_EQ(A, c_aibj.size(2)) << "Match matrix should be of size (A, I, A, I)";
+            EXPECT_EQ(I, c_aibj.size(3)) << "Match matrix should be of size (A, I, A, I)";
         }
     }
 }
@@ -152,7 +137,8 @@ TEST_F(GraphCompatibilityTest, Dims)
  */
 TEST_F(GraphCompatibilityTest, NoConnections)
 {
-    g_ab_ = Mat1f::zeros(5, 5);
+    const int NB_VERTICES = 5;
+    g_ab_ = Mat1f::zeros(NB_VERTICES, NB_VERTICES);
     g_ij_ = g_ab_.clone();    // make them equal
 
     // add test graphs to signal
@@ -162,8 +148,15 @@ TEST_F(GraphCompatibilityTest, NoConnections)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    EXPECT_MAT_EQ(sig_.MostRecentMat1f(NAME_M),
-                  Mat1f::zeros(g_ab_.rows, g_ij_.rows));
+    SparseMat1f c_aibj = sig_.MostRecent(NAME_M).get<SparseMat1f>();
+    ASSERT_EQ(4, c_aibj.dims()) << "Match matrix should be of size (A, I, A, I)";
+
+    EXPECT_EQ(NB_VERTICES, c_aibj.size(0)) << "Match matrix should be of size (A, I, A, I)";
+    EXPECT_EQ(NB_VERTICES, c_aibj.size(1)) << "Match matrix should be of size (A, I, A, I)";
+    EXPECT_EQ(NB_VERTICES, c_aibj.size(2)) << "Match matrix should be of size (A, I, A, I)";
+    EXPECT_EQ(NB_VERTICES, c_aibj.size(3)) << "Match matrix should be of size (A, I, A, I)";
+
+    EXPECT_EQ(static_cast<size_t>(0), c_aibj.nzcount());
 }
 
 /**
@@ -183,11 +176,21 @@ TEST_F(GraphCompatibilityTest, NoConnections_for_one_node_in_g_ab)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    Mat1f c_ai = sig_.MostRecentMat1f(NAME_M);
+    SparseMat1f c_aibj = sig_.MostRecent(NAME_M).get<SparseMat1f>();
 
-    EXPECT_MAT_EQ(c_ai.row(vertex_idx), Mat1f::zeros(1, g_ab_.cols))
-            << "Expecting all-zero row for row i=" << vertex_idx
-            << " since that vertex doesn't have any edges";
+    for(int i=0; i<g_ij_.rows; i++) {
+
+        for(int b=0; b<g_ab_.rows; b++) {
+
+            for(int j=0; j<g_ij_.rows; j++) {
+
+                int idx[4] = {vertex_idx, i, b, j};
+                EXPECT_FLOAT_EQ(0.f, c_aibj.ref(idx))
+                        << "Expecting all-zero row for slice a=" << vertex_idx
+                        << " since this vertex doesn't have any edges";
+            }
+        }
+    }
 }
 
 /**
@@ -207,19 +210,29 @@ TEST_F(GraphCompatibilityTest, NoConnections_for_one_node_in_g_ij)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    Mat1f c_ai = sig_.MostRecentMat1f(NAME_M);
+    SparseMat1f c_aibj = sig_.MostRecent(NAME_M).get<SparseMat1f>();
 
-    EXPECT_MAT_EQ(c_ai.col(vertex_idx), Mat1f::zeros(g_ij_.rows, 1))
-            << "Expecting all-zero row for row i=" << vertex_idx
-            << " since that vertex doesn't have any edges";
+    for(int a=0; a<g_ij_.rows; a++) {
+
+        for(int b=0; b<g_ab_.rows; b++) {
+
+            for(int j=0; j<g_ij_.rows; j++) {
+
+                int idx[4] = {a, vertex_idx, b, j};
+                EXPECT_FLOAT_EQ(0.f, c_aibj.ref(idx))
+                        << "Expecting all-zero row for slice i=" << vertex_idx
+                        << " since this vertex doesn't have any edges";
+            }
+        }
+    }
 }
 
 /**
- * @brief Make weights of two vertices very compatible and compare their
+ * @brief Make weights of two vertices very compatible and compare
  * their compatibility score with that of other nodes.
  * This test does not assume that both adjacency graphs share the same dimensions.
  */
-TEST_F(GraphCompatibilityTest, Compatibility)
+TEST_F(GraphCompatibilityTest, CompatibilityIntegration)
 {
     // sanity check
     ASSERT_GT(g_ab_.rows, 1) << "this test requires adjacency graphs for graphs with > 1 vertex";
@@ -270,7 +283,8 @@ TEST_F(GraphCompatibilityTest, Compatibility)
         to_->Activate(sig_);
         to_->Response(sig_);
 
-        Mat1f c_ai = sig_.MostRecentMat1f(NAME_M);
+        SparseMat1f c_aibj = sig_.MostRecent(NAME_M).get<SparseMat1f>();
+        Mat1f c_ai = GraphCompatibility::Integrate(c_aibj, Mat1f(g_ab_.rows, g_ij_.rows, 1.f));
 
         EXPECT_GT(c_ai(vertex_compat_idx, vertex_compat_idx), c_ai(vertex_non_compat_idx, vertex_non_compat_idx))
                 << "Score of compatible vertex should exceed that of non-compatible one.";

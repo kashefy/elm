@@ -52,7 +52,7 @@ GraphCompatibility::GraphCompatibility(const LayerConfig &cfg)
 
 void GraphCompatibility::Clear()
 {
-    m_ = Mat1f();
+    m_.clear();
 }
 
 void GraphCompatibility::Reset(const LayerConfig &config)
@@ -92,6 +92,48 @@ void GraphCompatibility::Activate(const Signal &signal)
     m_ = Compatibility(g_ab, g_ij);
 }
 
+Mat1f GraphCompatibility::Integrate(SparseMat1f &c_aibj, Mat1f m)
+{
+    int A = c_aibj.size(0);
+    int I = c_aibj.size(1);
+
+    ELM_THROW_BAD_DIMS_IF(m.rows != A,
+                          "No. of mat. rows must match 1st dimension in compat. matrix.");
+
+    ELM_THROW_BAD_DIMS_IF(m.cols != I,
+                          "No. of mat. cols must match 2nd dimension in compat. matrix.");
+
+    const int DIMS = 4;
+    Mat1f c_ai(A, I);
+
+    int idx[DIMS];
+    int &a = idx[0];
+    int &i = idx[1];
+    int &b = idx[2];
+    int &j = idx[3];
+
+    for(a=0; a<A; a++) {
+
+        for(i=0; i<I; i++) {
+
+            float sigma_over_bj = 0.f;
+
+            for(b=0; b<A; b++) {
+
+                // skip for zero-weighted edges.
+                for(j=0; j<I; j++) {
+
+                    sigma_over_bj += c_aibj.ref(idx) * m(a, i);
+                } // j
+            } // b
+
+            c_ai(a, i) = sigma_over_bj;
+        } // i
+    } // a
+
+    return c_ai;
+}
+
 SparseMat1f GraphCompatibility::Compatibility(const Mat1f &g_ab, const Mat1f &g_ij) const
 {
     const int DIMS = 4;
@@ -99,28 +141,28 @@ SparseMat1f GraphCompatibility::Compatibility(const Mat1f &g_ab, const Mat1f &g_
     SparseMat1f c_aibj(DIMS, _size);
 
     int idx[DIMS];
+    int &a = idx[0];
+    int &i = idx[1];
+    int &b = idx[2];
+    int &j = idx[3];
 
-    for(int a=0; a<A_; a++) {
+    for(a=0; a<A_; a++) {
 
-        idx[0] = a;
         Mat1f g_ab_row = g_ab.row(a);
 
-        for(int i=0; i<I_; i++) {
+        for(i=0; i<I_; i++) {
 
-            idx[1] = i;
             Mat1f g_ij_row = g_ij.row(i);
 
-            for(size_t b=0; b<g_ab_row.total(); b++) {
+            for(b=0; b<A_; b++) {
 
-                idx[2] = b;
                 float g_ab_row_at_b = g_ab_row(b);
 
                 // skip for zero-weighted edges.
                 if(g_ab_row_at_b != 0.f) {
 
-                    for(size_t j=0; j<g_ij_row.total(); j++) {
+                    for(j=0; j<I_; j++) {
 
-                        idx[3] = j;
                         float g_ij_row_at_j = g_ij_row(j);
 
                         // skip for zero-weighted edges.
@@ -129,11 +171,11 @@ SparseMat1f GraphCompatibility::Compatibility(const Mat1f &g_ab, const Mat1f &g_
                             float compatibility = Compatibility(g_ab_row_at_b, g_ij_row_at_j);
                             c_aibj.ref(idx) = compatibility;
                         }
-                    }
+                    } // j
                 }
-            }
-        }
-    }
+            } // b
+        } // i
+    } // a
 
     return c_aibj;
 }
