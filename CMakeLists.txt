@@ -168,7 +168,7 @@ endif(BUILD_TESTS)
 #----------------------------------------------------------------------------
 
 # variable substitutions
-set(ROOT_PROJECT_CONFIG elm-Config.cmake)
+set(ROOT_PROJECT_CONFIG elm-config.cmake)
 
 # Set full-name variables for suffix variables, otherwise config won't substitute them:
 set(ROOT_PROJECT_INCLUDE_DIRS ${${ROOT_PROJECT}_INCLUDE_DIRS})
