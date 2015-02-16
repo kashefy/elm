@@ -12,7 +12,7 @@ before_install:
   - mkdir build
   - cd build
   - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF ..
-  - make -j
+  - make -j2
   - cd ../..
   - wget https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - unzip gtest-1.7.0.zip
