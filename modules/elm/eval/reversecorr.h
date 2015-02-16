@@ -8,7 +8,7 @@
 #ifndef _ELM_EVAL_REVERSECORR_H_
 #define _ELM_EVAL_REVERSECORR_H_
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 /**
  * @brief base class for Reverse correlation algorithms

@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/graph/adjacency.h"
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #include "elm/core/exception.h"
 

@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/cv/sparsemat_utils.h"
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 size_t elm::total(const cv::SparseMat &m)
 {

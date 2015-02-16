@@ -7,8 +7,6 @@
 //M*/
 #include "elm/layers/saliencyitti.h"
 
-#include <opencv2/imgproc.hpp>
-
 #include "elm/core/defs.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/cv/mat_utils.h"          // Point conversions

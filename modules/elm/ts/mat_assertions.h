@@ -13,7 +13,7 @@
 #include "gtest/gtest.h"
 
 #include <string>
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 ::testing::AssertionResult IsType(const cv::Mat& a, int mat_type);
 #define EXPECT_MAT_TYPE(a, mat_type) EXPECT_TRUE( IsType(a, mat_type) )

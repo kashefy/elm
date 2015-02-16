@@ -9,7 +9,7 @@
 
 #include <vector>
 
-#include <opencv2/imgproc.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "elm/core/exception.h"
 #include "elm/core/cv/mat_utils_inl.h"
@@ -19,7 +19,7 @@
 using namespace cv;
 using namespace elm;
 
-/** @brief class for testing single-channe histogram wrapper
+/** @brief class for testing single-channel histogram wrapper
  */
 class HistCh1Test : public ::testing::Test
 {

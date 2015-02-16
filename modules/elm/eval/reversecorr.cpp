@@ -7,7 +7,7 @@
 //M*/
 #include "elm/eval/reversecorr.h"
 
-#include <opencv2/imgproc.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "elm/core/exception.h"
 
@@ -36,7 +36,8 @@ void STA::Add(InputArray in)
             ELM_THROW_BAD_DIMS("Initial input is empty.");
         }
         else {
-            sta_ = Mat1f::zeros(in.rows(), in.cols());
+            Size sz = in.size();
+            sta_ = Mat1f::zeros(sz.height, sz.width);
         }
     }
     else if(sta_.size() != in.size())

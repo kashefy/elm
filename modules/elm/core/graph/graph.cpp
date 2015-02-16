@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/graph/graph.h"
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #include "elm/core/debug_utils.h"
 #include "elm/core/graph/graph_impl.h"

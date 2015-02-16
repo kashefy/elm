@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/visitors/visitormat1f.h"
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/vertices.h"

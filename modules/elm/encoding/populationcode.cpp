@@ -9,8 +9,8 @@
 
 #include <string>
 
-#include <opencv2/features2d.hpp>
-#include <opencv2/imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "elm/core/sampler.h"
 #include "elm/core/signal.h"

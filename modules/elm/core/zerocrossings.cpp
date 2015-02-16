@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/zerocrossings.h"
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 using namespace cv;
 

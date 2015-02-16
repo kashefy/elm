@@ -16,7 +16,7 @@
     class ICP : public ELM_LAYER_NOT_SUPPORTED(ICP, "Building with PCL is required for supporting ICP layer.");
 #else   // __WITH_PCL
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #include "elm/core/base_Layer.h"
 

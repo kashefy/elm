@@ -1,6 +1,6 @@
 #include "elm/encoding/populationcode.h"
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 #include "elm/core/cv/mat_utils.h"
 #include "elm/core/layerconfig.h"

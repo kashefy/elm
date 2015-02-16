@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/graph/graph_impl.h"
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #ifdef __WITH_PCL
 

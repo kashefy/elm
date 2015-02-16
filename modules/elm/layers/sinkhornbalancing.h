@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #include "elm/layers/base_layer_derivations/base_singleinputfeaturelayer.h"
 

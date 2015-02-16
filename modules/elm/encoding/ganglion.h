@@ -8,7 +8,7 @@
 #ifndef _ELM_ENCODING_GANGLION_H_
 #define _ELM_ENCODING_GANGLION_H_
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 /**
  * @brief base class for modeling retinal ganglion cells

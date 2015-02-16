@@ -7,8 +7,6 @@
 //M*/
 #include "elm/layers/gradassignment.h"
 
-#include <opencv2/highgui.hpp>
-
 #include "elm/core/debug_utils.h"
 
 #include "elm/core/inputname.h"

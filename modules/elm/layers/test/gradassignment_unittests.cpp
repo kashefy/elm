@@ -8,8 +8,8 @@
 #include "elm/layers/gradassignment.h"
 
 //#include <boost/graph/adjacency_list.hpp>
-#include "opencv2/highgui.hpp"
-#include "opencv2/imgproc.hpp"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "elm/core/debug_utils.h"
 

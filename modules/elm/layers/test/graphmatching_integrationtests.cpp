@@ -185,7 +185,7 @@ TEST_F(GraphMatchingTest, GraphMatching)
 
             minMaxIdx(adj, &min_val, &max_val);
 
-            ELM_COUT_VAR(format(adj, Formatter::FMT_NUMPY));
+            //ELM_COUT_VAR(format(adj, Formatter::FMT_NUMPY));
 
             sig_.Append(NAME_GRAPH_IJ, adj);
             is_g_ij_added = true;
@@ -194,7 +194,7 @@ TEST_F(GraphMatchingTest, GraphMatching)
 
     ASSERT_TRUE(sig_.Exists(NAME_M));
 
-    ELM_COUT_VAR(format(sig_.MostRecentMat1f(NAME_M), Formatter::FMT_NUMPY));
+    //ELM_COUT_VAR(format(sig_.MostRecentMat1f(NAME_M), Formatter::FMT_NUMPY));
 
 }
 

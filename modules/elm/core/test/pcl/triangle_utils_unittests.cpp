@@ -11,7 +11,7 @@
 
 #ifdef __WITH_PCL
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 #include <pcl/point_types.h>
 
 #include "elm/core/debug_utils.h"

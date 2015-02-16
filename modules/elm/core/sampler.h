@@ -8,7 +8,7 @@
 #ifndef _ELM_CORE_SAMPLER_H_
 #define _ELM_CORE_SAMPLER_H_
 
-#include <opencv2/core/mat.hpp>
+#include <opencv2/core/core.hpp>
 
 /**
  * @brief base class for sampling from a distribution

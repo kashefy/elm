@@ -41,6 +41,11 @@ typedef Point3_<int> Point3i;       ///< convinience typedef for 3d point of int
 typedef Point3_<float> Point3f;     ///< convinience typedef for 3d point of floats
 typedef Point3_<double> Point3d;    ///< convinience typedef for 3d point of doubles - not preferred
 
+template<typename _Tp> class Rect_; ///< convinience typedef for rectangle
+
+typedef Rect_<int> Rect2i;       ///< convinience typedef for rectangle of integers
+typedef Rect_<float> Rect2f;       ///< convinience typedef for rectangle of floats
+
 } // fake namespace cv for fwd declaration
 
 #endif // _ELM_CORE_OPENCV_TYPEDEFS_FWD_H_

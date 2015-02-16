@@ -8,7 +8,7 @@
 #ifndef _ELM_CORE_ENTROPY_H_
 #define _ELM_CORE_ENTROPY_H_
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 namespace elm {
 

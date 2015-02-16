@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/pcl/triangle_utils.h"
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #ifdef __WITH_PCL
 

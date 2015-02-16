@@ -16,7 +16,7 @@
 
 #include "boost/optional.hpp"
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #include <pcl/surface/gp3.h>
 

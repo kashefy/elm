@@ -7,7 +7,7 @@
 //M*/
 #include "elm/layers/saliencyitti.h"
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 #include "elm/core/layerconfig.h"
 #include "elm/core/cv/mat_utils.h"

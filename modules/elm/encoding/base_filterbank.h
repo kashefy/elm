@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #include "elm/core/exception.h"
 #include "elm/core/typedefs_sfwd.h"
