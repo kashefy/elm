@@ -6,6 +6,7 @@ before_install:
   - cd ..
   - git clone --depth=1 https://github.com/Itseez/opencv.git
   - cd opencv
+  - git branch -a
   - git checkout 2.4
   - mkdir build
   - cd build
