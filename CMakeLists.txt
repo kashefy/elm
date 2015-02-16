@@ -28,6 +28,7 @@ include(cmake/MessageUtils.cmake)
 # ----------------------------------------------------------------------------
 # Print all warnings and enable C++11 support
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
+set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 set(CMAKE_VERBOSE ON CACHE BOOL "Verbose mode")
 
 # Setup build and install locations
