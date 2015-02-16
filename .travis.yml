@@ -5,8 +5,8 @@ before_install:
   - sudo apt-get update -qq
   - cd ..
   - git clone --depth=1 https://github.com/Itseez/opencv.git
-  - git checkout 2.4
   - cd opencv
+  - git checkout 2.4
   - mkdir build
   - cd build
   - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF ..
