@@ -1,9 +1,11 @@
+
 language: cpp
 compiler: gcc
 before_install:
   - sudo apt-get update -qq
   - cd ..
   - git clone --depth=1 https://github.com/Itseez/opencv.git
+  - git checkout 2.4
   - cd opencv
   - mkdir build
   - cd build
