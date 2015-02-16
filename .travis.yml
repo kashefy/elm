@@ -4,8 +4,9 @@ compiler: gcc
 before_install:
   - sudo apt-get update -qq
   - cd ..
-  - git clone --depth=100 https://github.com/Itseez/opencv.git
+  - git clone https://github.com/Itseez/opencv.git
   - cd opencv
+  - git fetch
   - git branch -a
   - git checkout 2.4
   - mkdir build
