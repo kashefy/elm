@@ -73,5 +73,9 @@ void MedianBlur::Reconfigure(const LayerConfig &config)
 
 void MedianBlur::Activate(const Signal &signal)
 {
-    cv::medianBlur(signal.MostRecentMat1f(name_input_), m_, ksize_);
+    Mat in;
+    signal.MostRecentMat1f(name_input_).convertTo(in, CV_8UC1);
+    Mat tmp(in.size(), CV_8UC1);
+    medianBlur(in, tmp, ksize_); // OpenCV: it can only be CV_8U...
+    m_ = tmp;
 }

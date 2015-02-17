@@ -114,4 +114,50 @@ TEST_F(MedianBlurTest, Response_dims)
     }
 }
 
+TEST_F(MedianBlurTest, Response_const_valued_input)
+{
+    for(float v=-3.f; v<=3.f; v+=1.5f) {
+
+        Signal sig;
+
+        Mat1f in(10, 10, v);
+        sig.Append(NAME_IN, in);
+
+        to_->Activate(sig);
+        to_->Response(sig);
+
+        Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
+
+        if(v < 0.f) {
+
+            EXPECT_MAT_EQ(Mat1f::zeros(in.rows, in.cols), blurred);
+        }
+        else {
+
+            EXPECT_MAT_EQ(Mat1f(in.rows, in.cols, round(v)), blurred);
+        }
+    }
+}
+
+/**
+ * @brief Inspect values of blurred image
+ */
+TEST_F(MedianBlurTest, Response_blurred_values)
+{
+    Signal sig;
+
+    // impulse as stimulus
+    Mat1f in(10, 10, 90.f);
+    in.colRange(5, 10).setTo(100.f);
+    sig.Append(NAME_IN, in);
+
+    to_->Activate(sig);
+    to_->Response(sig);
+
+    Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
+
+    std::cout<<in<<std::endl;
+    std::cout<<blurred<<std::endl;
+}
+
 } // annonymous namespace for test fixtures and test cases
