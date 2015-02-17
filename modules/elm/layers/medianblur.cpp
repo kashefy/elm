@@ -43,6 +43,7 @@ MedianBlur::MedianBlur(const LayerConfig config)
     : base_FeatureTransformationLayer(config)
 {
     Reset(config);
+    IONames(config);
 }
 
 void MedianBlur::Clear()
