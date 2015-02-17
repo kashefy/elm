@@ -62,11 +62,11 @@ TEST_F(MedianBlurTest, Param_invalid)
         params.add(MedianBlur::PARAM_APERTURE_SIZE, ksize);
         config_.Params(params);
 
-        if(ksize < 0.f) {
+        if(ksize <= 1.f) {
 
             EXPECT_THROW(to_.reset(new MedianBlur(config_)), ExceptionValueError);
         }
-        else if(ksize % 2 == 0) {
+        else if(ksize % 2 != 0) {
 
             EXPECT_NO_THROW(to_.reset(new MedianBlur(config_)));
         }
