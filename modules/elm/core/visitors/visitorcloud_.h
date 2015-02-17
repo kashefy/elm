@@ -16,8 +16,6 @@
 #include "elm/core/typedefs_fwd.h"
 #include "elm/core/visitors/visitor_.h"
 
-#include <iostream>
-
 namespace elm {
 
 /**
@@ -108,11 +106,25 @@ public:
         ELM_THROW_NOT_IMPLEMENTED;
     }
 
-    CloudTPDstPtr operator()(const elm::Mat_f &m) {
+    CloudTPDstPtr operator()(const cv::Mat1f &m) {
 
         if(!bool(c_)) {
 
             c_ = Mat2PointCloud_<TPointDst >(m);
+        }
+        return c_;
+    }
+
+    CloudTPDstPtr operator()(const elm::SparseMat1f &m) {
+
+        if(!bool(c_)) {
+
+            cv::Mat1f dense;
+            if(m.size()!=0) {
+
+                m.convertTo(dense, dense.type());
+            }
+            c_ = Mat2PointCloud_<TPointDst >(dense);
         }
         return c_;
     }

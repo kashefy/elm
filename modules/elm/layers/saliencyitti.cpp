@@ -7,8 +7,6 @@
 //M*/
 #include "elm/layers/saliencyitti.h"
 
-#include <opencv2/imgproc.hpp>
-
 #include "elm/core/defs.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/cv/mat_utils.h"          // Point conversions
@@ -103,7 +101,7 @@ void SaliencyItti::OutputNames(const LayerOutputNames &io)
 
 void SaliencyItti::Activate(const Signal &signal)
 {
-    Mat1f stimulus = signal.MostRecentMat(name_input_);
+    Mat1f stimulus = signal.MostRecentMat1f(name_input_);
     pop_code_orient_.State(stimulus, gabors_);
 
     Mat orientation_spikes = pop_code_orient_.PopCode();

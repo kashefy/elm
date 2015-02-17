@@ -8,8 +8,8 @@
 #include "elm/layers/gradassignment.h"
 
 //#include <boost/graph/adjacency_list.hpp>
-#include "opencv2/highgui.hpp"
-#include "opencv2/imgproc.hpp"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "elm/core/debug_utils.h"
 
@@ -106,7 +106,7 @@ protected:
         g_ij_ = Mat1f(I, I);
         g_ij_ = g_ab_.clone();    // make them equal
         Mat1f noise(g_ij_.size());
-        randn(noise, 0.f, 0.018f);
+        randn(noise, 0.f, 0.015f);
         g_ij_ += noise;
         g_ij_.setTo(0.f, g_ij_ < 0.f);
         g_ij_.setTo(1.f, g_ij_ > 1.f);
@@ -147,7 +147,7 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    Mat1f m = sig_.MostRecentMat(NAME_M);
+    Mat1f m = sig_.MostRecentMat1f(NAME_M);
 
     EXPECT_MAT_DIMS_EQ(m, Size2i(g_ab_.rows, g_ij_.rows)) << "Match matrix should be of size (A, I)";
 
@@ -167,7 +167,7 @@ TEST_F(GradAssignmentTest, ActivateAndResponse)
 TEST_F(GradAssignmentTest, ActivateAndResponse_large_graphs)
 {
     // initialize test graphs
-    const int A=70;  ///< no. of nodes in G
+    const int A=30;  ///< no. of nodes in G
     const int I=A;  ///< no. of nodes in g
 
     // generate random adjacency matrices
@@ -227,7 +227,7 @@ TEST_F(GradAssignmentTest, ActivateAndResponse_large_graphs)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    Mat1f m = sig_.MostRecentMat(NAME_M);
+    Mat1f m = sig_.MostRecentMat1f(NAME_M);
 
 //    cout<<cv::format(m, cv::Formatter::FMT_NUMPY)<<std::endl;
 //    cv::imshow("m/sum(m)", elm::ConvertTo8U(m/sum(m)[0]));
@@ -289,7 +289,7 @@ TEST_F(GradAssignmentTest, Dims)
             to_->Activate(sig_);
             to_->Response(sig_);
 
-            EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_M),
+            EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat1f(NAME_M),
                                Size2i(g_ab_.rows, g_ij_.rows))
                     << "Match matrix should be of size (A, I)";
         }
@@ -325,7 +325,7 @@ TEST_F(GradAssignmentTest, MoreNoise)
         to_->Activate(sig_);
         to_->Response(sig_);
 
-        Mat1f m = sig_.MostRecentMat(NAME_M);
+        Mat1f m = sig_.MostRecentMat1f(NAME_M);
 
         // get diagonal values
         Mat1f diag(m.rows, 1);

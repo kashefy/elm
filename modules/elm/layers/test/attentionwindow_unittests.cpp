@@ -166,7 +166,7 @@ TEST_F(AttentionWindowTest, MissingInputFeature)
     Signal s;
     EXPECT_THROW(to_->Activate(s), elm::ExceptionKeyError);
 
-    s.Append(NAME_SCENE, sig_.MostRecentMat(NAME_SCENE));
+    s.Append(NAME_SCENE, sig_.MostRecentMat1f(NAME_SCENE));
     EXPECT_THROW(to_->Activate(s), elm::ExceptionKeyError);
 
     EXPECT_NO_THROW(to_->Activate(sig_)) << "Still missing input features?";
@@ -189,13 +189,13 @@ TEST_F(AttentionWindowTest, WinSize)
     EXPECT_TRUE(sig_.Exists(NAME_TL));
     EXPECT_TRUE(sig_.Exists(NAME_WIN));
 
-    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_WIN), Size2i(4, 3));
+    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat1f(NAME_WIN), Size2i(4, 3));
 }
 
 TEST_F(AttentionWindowTest, Window)
 {
     const int N=10;
-    const Mat1f scene = sig_.MostRecentMat(NAME_SCENE);
+    const Mat1f scene = sig_.MostRecentMat1f(NAME_SCENE);
     for(int i=0; i<N; i++) {
 
         Point2i loc;
@@ -208,9 +208,9 @@ TEST_F(AttentionWindowTest, Window)
         EXPECT_TRUE(sig_.Exists(NAME_TL));
         EXPECT_TRUE(sig_.Exists(NAME_WIN));
 
-        Point2i tl = elm::Mat2Point2i(sig_.MostRecentMat(NAME_TL));
+        Point2i tl = elm::Mat2Point2i(sig_.MostRecentMat1f(NAME_TL));
 
-        Mat1f window = sig_.MostRecentMat(NAME_WIN);
+        Mat1f window = sig_.MostRecentMat1f(NAME_WIN);
         EXPECT_MAT_DIMS_EQ(window, Size2i(4, 3));
 
         EXPECT_MAT_EQ(scene(Rect(tl, window.size())), window);
@@ -219,7 +219,7 @@ TEST_F(AttentionWindowTest, Window)
 
 TEST_F(AttentionWindowTest, Loc_NoRectify)
 {
-    const Mat1f scene = sig_.MostRecentMat(NAME_SCENE);
+    const Mat1f scene = sig_.MostRecentMat1f(NAME_SCENE);
     const int WIN_ROWS=3;
     const int WIN_COLS=4;
     const Size2i WIN_SIZE(WIN_COLS, WIN_ROWS);
@@ -236,7 +236,7 @@ TEST_F(AttentionWindowTest, Loc_NoRectify)
             to_->Response(sig_);
 
             EXPECT_TRUE(sig_.Exists(NAME_TL));
-            Point2i tl_actual = elm::Mat2Point2i(sig_.MostRecentMat(NAME_TL));
+            Point2i tl_actual = elm::Mat2Point2i(sig_.MostRecentMat1f(NAME_TL));
 
             EXPECT_EQ(tl_expected, tl_actual);
         }
@@ -245,7 +245,7 @@ TEST_F(AttentionWindowTest, Loc_NoRectify)
 
 TEST_F(AttentionWindowTest, Loc_Borders)
 {
-    const Mat1f scene = sig_.MostRecentMat(NAME_SCENE);
+    const Mat1f scene = sig_.MostRecentMat1f(NAME_SCENE);
     const int WIN_ROWS=3;
     const int WIN_COLS=4;
     const Size2i WIN_SIZE(WIN_COLS, WIN_ROWS);
@@ -264,7 +264,7 @@ TEST_F(AttentionWindowTest, Loc_Borders)
         to_->Response(sig_);
 
         EXPECT_TRUE(sig_.Exists(NAME_TL));
-        EXPECT_EQ(tl_expected, elm::Mat2Point2i(sig_.MostRecentMat(NAME_TL)));
+        EXPECT_EQ(tl_expected, elm::Mat2Point2i(sig_.MostRecentMat1f(NAME_TL)));
     }
 
     // left
@@ -281,7 +281,7 @@ TEST_F(AttentionWindowTest, Loc_Borders)
         to_->Response(sig_);
 
         EXPECT_TRUE(sig_.Exists(NAME_TL));
-        EXPECT_EQ(tl_expected, elm::Mat2Point2i(sig_.MostRecentMat(NAME_TL)));
+        EXPECT_EQ(tl_expected, elm::Mat2Point2i(sig_.MostRecentMat1f(NAME_TL)));
     }
 
     // right
@@ -299,7 +299,7 @@ TEST_F(AttentionWindowTest, Loc_Borders)
         to_->Response(sig_);
 
         EXPECT_TRUE(sig_.Exists(NAME_TL));
-        EXPECT_EQ(tl_expected, elm::Mat2Point2i(sig_.MostRecentMat(NAME_TL)));
+        EXPECT_EQ(tl_expected, elm::Mat2Point2i(sig_.MostRecentMat1f(NAME_TL)));
     }
 
     // bottom
@@ -317,7 +317,7 @@ TEST_F(AttentionWindowTest, Loc_Borders)
         to_->Response(sig_);
 
         EXPECT_TRUE(sig_.Exists(NAME_TL));
-        EXPECT_EQ(tl_expected, elm::Mat2Point2i(sig_.MostRecentMat(NAME_TL)));
+        EXPECT_EQ(tl_expected, elm::Mat2Point2i(sig_.MostRecentMat1f(NAME_TL)));
     }
 }
 
@@ -327,10 +327,10 @@ TEST_F(AttentionWindowTest, Clear)
     to_->Response(sig_);
 
     EXPECT_TRUE(sig_.Exists(NAME_WIN));
-    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat(NAME_WIN), Size2i(4, 3));
+    EXPECT_MAT_DIMS_EQ(sig_.MostRecentMat1f(NAME_WIN), Size2i(4, 3));
 
     EXPECT_TRUE(sig_.Exists(NAME_TL));
-    EXPECT_EQ(Point2i(-1, -1), elm::Mat2Point2i(sig_.MostRecentMat(NAME_TL)));
+    EXPECT_EQ(Point2i(-1, -1), elm::Mat2Point2i(sig_.MostRecentMat1f(NAME_TL)));
 }
 
 } // anonnymous namespace around test fixtures

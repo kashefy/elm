@@ -9,7 +9,7 @@
 #define _ELM_CORE_EXCEPTION_H_
 
 #include <string>
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 /** Preprocessor macros for throwing types of Exceptions with custom error messages
  */
@@ -20,6 +20,11 @@
 #define ELM_THROW_VALUE_ERROR(msg) throw elm::ExceptionValueError(msg)
 #define ELM_THROW_KEY_ERROR(msg) throw elm::ExceptionKeyError(msg)
 #define ELM_THROW_TYPE_ERROR(msg) throw elm::ExceptionTypeError(msg)
+
+/** Preprocessor macros for throwing types of Exceptions with custom error messages
+ *  on condition evaluating to true
+ */
+#define ELM_THROW_BAD_DIMS_IF(condition, msg) if(condition) ELM_THROW_BAD_DIMS(msg)
 
 namespace elm {
 

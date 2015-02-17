@@ -12,6 +12,8 @@
 
 #include <pcl/common/io.h>      // getFields()
 
+#include "elm/core/exception.h"
+
 namespace  elm {
 
 /**
@@ -46,15 +48,13 @@ public:
      */
     static size_t NbFloats()
     {
-        static_assert(sizeof(TPoint) % sizeof(float) == 0, "This point type has non-float components");
+        ELM_THROW_BAD_DIMS_IF(sizeof(TPoint) % sizeof(float) != 0, "This point type has non-float components");
         return sizeof(TPoint) / sizeof(float);
     }
 };
 
 } // namespace elm
 
-#else // __WITH_PCL
-    #warning "Unable to define additional point_traits without PCL support."
 #endif // __WITH_PCL
 
 #endif // _ELM_CORE_PCL_POINT_TRAITS_H_

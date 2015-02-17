@@ -8,11 +8,13 @@
 #ifndef _ELM_CORE_FEATUREDATA_H_
 #define _ELM_CORE_FEATUREDATA_H_
 
-#include <memory>
+#include <iosfwd>
 
 #include <boost/variant.hpp>
 
 #include "elm/core/visitors/visitors.h"
+
+namespace elm {
 
 /**
  * @brief The Feature data class.
@@ -80,6 +82,7 @@ protected:
     boost::variant
     <
     cv::Mat1f,
+    elm::SparseMat1f,
     elm::CloudXYZPtr,
     elm::CloudNrmlPtr,
     elm::CloudPtNrmlPtr,
@@ -102,9 +105,13 @@ protected:
     VisitorVoid visitor_vv_;            ///< place holder visitor that does nothing
 #endif // __WITH_PCL
 
-    VisitorMat_f visitor_mat_;      ///< visitor for converting to Mat objects
+    VisitorMat1f visitor_mat_;      ///< visitor for converting to Mat1f objects
+    VisitorSparseMat1f visitor_sparse_mat_; ///< visitor for converting to SparseMat1f objects
 };
 
 std::ostream& operator<<(std::ostream& os, FeatureData& obj);
+
+} // namespace elm
+
 
 #endif // _ELM_CORE_FEATUREDATA_H_

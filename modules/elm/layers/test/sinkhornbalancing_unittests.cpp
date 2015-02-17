@@ -74,7 +74,7 @@ TEST_F(SinkhornBalancingTest, Dims)
             to_->Activate(sig_);
             to_->Response(sig_);
 
-            Mat1f out = sig_.MostRecentMat(NAME_OUT_M);
+            Mat1f out = sig_.MostRecentMat1f(NAME_OUT_M);
 
             EXPECT_MAT_DIMS_EQ(out, m_) << "Output's dims should match those of input.";
         }
@@ -87,9 +87,9 @@ TEST_F(SinkhornBalancingTest, Empty)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    Mat1f out = sig_.MostRecentMat(NAME_OUT_M);
+    Mat1f out = sig_.MostRecentMat1f(NAME_OUT_M);
     EXPECT_TRUE(out.empty());
-    EXPECT_FALSE(static_cast<bool>(sig_.MostRecentMat(NAME_OUT_CONVERGENCE)(0)));
+    EXPECT_FALSE(static_cast<bool>(sig_.MostRecentMat1f(NAME_OUT_CONVERGENCE)(0)));
 }
 
 TEST_F(SinkhornBalancingTest, OutputSum)
@@ -107,7 +107,7 @@ TEST_F(SinkhornBalancingTest, OutputSum)
             to_->Activate(sig_);
             to_->Response(sig_);
 
-            Mat1f out = sig_.MostRecentMat(NAME_OUT_M);
+            Mat1f out = sig_.MostRecentMat1f(NAME_OUT_M);
 
             EXPECT_FLOAT_EQ(c, sum(out)[0]);
         }
@@ -119,7 +119,7 @@ TEST_F(SinkhornBalancingTest, ActivateAndResponse)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    Mat1f out = sig_.MostRecentMat(NAME_OUT_M);
+    Mat1f out = sig_.MostRecentMat1f(NAME_OUT_M);
 
     EXPECT_FLOAT_EQ(m_.cols, sum(out)[0]) << "output did not some up to expected value.";
 }

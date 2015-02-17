@@ -15,6 +15,8 @@
 #include "elm/core/typedefs_fwd.h"
 #include "elm/core/visitors/visitor_.h"
 
+namespace elm {
+
 /**
  * @brief visitor class for converting to STL vector of PCL vertices
  * And keeping track of when a heavy conversion (involving deep copy) occured
@@ -41,7 +43,9 @@ public:
 
     elm::VecVertices operator()(uchar c);
 
-    elm::VecVertices operator()(const elm::Mat_f &m);
+    elm::VecVertices operator()(const cv::Mat1f &m);
+
+    elm::VecVertices operator()(const elm::SparseMat1f &m);
 
 protected:
     template <typename TScalar>
@@ -56,9 +60,8 @@ protected:
     elm::VecVertices vv_;   ///< internal copy for caching most recent conversion result
 };
 
-#else // __WITH_PCL
-    #warning "Unable to define VisitorVecVertices visitor without PCL support."
 #endif // __WITH_PCL
 
+} // namespace elm
 
 #endif // _ELM_CORE_VISITORVERTICES_H_

@@ -85,7 +85,7 @@ void LayerY::Reconfigure(const LayerConfig &config)
 
 void LayerY::Activate(const Signal &signal)
 {
-    m_ = static_cast<cv::Mat1f>(State(signal.MostRecentMat(name_input_)));
+    m_ = static_cast<cv::Mat1f>(State(signal.MostRecentMat1f(name_input_)));
 }
 
 cv::Mat1i LayerY::State(cv::Mat1f state)

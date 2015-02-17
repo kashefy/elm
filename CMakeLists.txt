@@ -28,6 +28,7 @@ include(cmake/MessageUtils.cmake)
 # ----------------------------------------------------------------------------
 # Print all warnings and enable C++11 support
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
+set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 set(CMAKE_VERBOSE ON CACHE BOOL "Verbose mode")
 
 # Setup build and install locations
@@ -168,7 +169,7 @@ endif(BUILD_TESTS)
 #----------------------------------------------------------------------------
 
 # variable substitutions
-set(ROOT_PROJECT_CONFIG elm-Config.cmake)
+set(ROOT_PROJECT_CONFIG elm-config.cmake)
 
 # Set full-name variables for suffix variables, otherwise config won't substitute them:
 set(ROOT_PROJECT_INCLUDE_DIRS ${${ROOT_PROJECT}_INCLUDE_DIRS})
@@ -204,7 +205,8 @@ status("")
 status("    GTest:    "   GTEST_FOUND THEN ${GTEST_ROOT} ELSE NO)
 status("")
 status("    OpenCV:    "   OpenCV_FOUND THEN "${OpenCV_VERSION_MAJOR}.${OpenCV_VERSION_MINOR}.${OpenCV_VERSION_PATCH} (${OpenCV_VERSION})" ELSE NO)
-status("        lib Dir.:  "   OpenCV_FOUND THEN "${OpenCV_DIR}/lib" ELSE "-")
+status("        lib Dir.:      "   OpenCV_FOUND THEN "${OpenCV_DIR}/lib" ELSE "-")
+status("        include Dir.:  "   OpenCV_FOUND THEN "${OpenCV_INCLUDE_DIRS}" ELSE "-")
 set(OpenCV_MODULES ${OpenCV_LIBS})
 convert_to_lib_name(OpenCV_MODULES ${OpenCV_MODULES})
 status("        modules :  "      OpenCV_FOUND THEN ${OpenCV_MODULES} ELSE "-")

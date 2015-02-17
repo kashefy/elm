@@ -10,9 +10,11 @@
 #include <string>
 
 #include "gtest/gtest.h"
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 using namespace elm;
+
+namespace {
 
 TEST(ExceptionTest, Throw)
 {
@@ -36,3 +38,10 @@ TEST(ExceptionTest, NotImplementedMsg)
     }
 }
 
+TEST(ExceptionTest, ThrowOnTrue)
+{
+    EXPECT_THROW(ELM_THROW_BAD_DIMS_IF(true, "bad dims"), ExceptionBadDims);
+    EXPECT_NO_THROW(ELM_THROW_BAD_DIMS_IF(false, "bad dims"));
+}
+
+} // annonymous namespace for unit tests

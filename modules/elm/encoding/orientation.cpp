@@ -7,7 +7,7 @@
 //M*/
 #include "elm/encoding/orientation.h"
 
-#include <opencv2/imgproc.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "elm/core/defs.h"
 #include "elm/core/exception.h"

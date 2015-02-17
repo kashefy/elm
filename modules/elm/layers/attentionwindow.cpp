@@ -88,8 +88,8 @@ void AttentionWindow::OutputNames(const LayerOutputNames &config)
 
 void AttentionWindow::Activate(const Signal &signal)
 {
-    Mat1i loc_mat = signal.MostRecentMat(name_in_loc_);
-    Mat1f scene = signal.MostRecentMat(name_in_scene_);
+    Mat1i loc_mat = signal.MostRecentMat1f(name_in_loc_);
+    Mat1f scene = signal.MostRecentMat1f(name_in_scene_);
 
     if(scene.rows < window_.rows || scene.cols < window_.cols) {
 

@@ -7,6 +7,9 @@
 //M*/
 #include "elm/layers/sinkhornbalancing.h"
 
+#include <opencv2/core/core_c.h>    // CV_REDUCE_SUM
+
+#include "elm/core/debug_utils.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layerattr_.h"
@@ -72,7 +75,7 @@ void SinkhornBalancing::OutputNames(const LayerOutputNames &io)
 
 void SinkhornBalancing::Activate(const Signal &signal)
 {
-    m_ = signal.MostRecentMat(name_input_);
+    m_ = signal.MostRecentMat1f(name_input_);
 
     is_converged = RowColNormalization(m_, max_iter_, epsilon_);
 }
@@ -101,17 +104,25 @@ bool SinkhornBalancing::RowColNormalization(Mat1f &m, int max_iter, float epsilo
 
         // update m by normalizing across all rows
         Mat1f row_sums_i;
-        reduce(m, row_sums_i, 1, REDUCE_SUM);
+        reduce(m, row_sums_i, 1, CV_REDUCE_SUM);
+        //ELM_COUT_VAR(row_sums_i.t());
 
         row_sums_i = repeat(row_sums_i, 1, m.cols);
         m /= row_sums_i;
 
+
+        //ELM_COUT_VAR(m);
+
         // update m by normalizing across all columns
         Mat1f col_sums_i;
-        reduce(m, col_sums_i, 0, REDUCE_SUM);
+        reduce(m, col_sums_i, 0, CV_REDUCE_SUM);
         col_sums_i = repeat(col_sums_i, m.rows, 1);
 
+        //ELM_COUT_VAR(col_sums_i);
+
         m /= col_sums_i;
+
+        //ELM_COUT_VAR(m);
 
         is_m_converged = sum(abs(m-m_ai1))[0] < epsilon;
 

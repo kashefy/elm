@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/hist.h"
 
-#include <opencv2/imgproc.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "elm/core/exception.h"
 

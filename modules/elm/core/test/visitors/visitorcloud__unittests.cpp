@@ -47,10 +47,10 @@ TYPED_TEST(VisitorCloud_PointTypedTest, Empty)
 {
     typedef boost::shared_ptr<PointCloud<TypeParam > > CloudTPPtr;
 
-    EXPECT_TRUE(this->to_(Mat_f())->empty());
-    EXPECT_TRUE(this->to_(Mat_f(0, 0))->empty());
-    EXPECT_TRUE(this->to_(Mat_f(1, 0))->empty());
-    EXPECT_TRUE(this->to_(Mat_f(0, 1))->empty());
+    EXPECT_TRUE(this->to_(Mat1f())->empty());
+    EXPECT_TRUE(this->to_(Mat1f(0, 0))->empty());
+    EXPECT_TRUE(this->to_(Mat1f(1, 0))->empty());
+    EXPECT_TRUE(this->to_(Mat1f(0, 1))->empty());
 
     CloudTPPtr cld(new PointCloud<TypeParam >());
     EXPECT_TRUE(this->to_(cld)->empty());
@@ -60,20 +60,34 @@ TYPED_TEST(VisitorCloud_PointTypedTest, EmptySize)
 {
     typedef boost::shared_ptr<PointCloud<TypeParam > > CloudTPPtr;
 
-    EXPECT_EQ(size_t(0), this->to_(Mat_f())->size());
-    EXPECT_EQ(size_t(0), this->to_(Mat_f(0, 0))->size());
-    EXPECT_EQ(size_t(0), this->to_(Mat_f(1, 0))->size());
-    EXPECT_EQ(size_t(0), this->to_(Mat_f(0, 1))->size());
+    EXPECT_EQ(size_t(0), this->to_(Mat1f())->size());
+    EXPECT_EQ(size_t(0), this->to_(Mat1f(0, 0))->size());
+    EXPECT_EQ(size_t(0), this->to_(Mat1f(1, 0))->size());
+    EXPECT_EQ(size_t(0), this->to_(Mat1f(0, 1))->size());
 
     CloudTPPtr cld(new PointCloud<TypeParam >());
     EXPECT_EQ(size_t(0), this->to_(cld)->size());
 }
 
-TYPED_TEST(VisitorCloud_PointTypedTest, FromMat_f)
+TYPED_TEST(VisitorCloud_PointTypedTest, FromMat1f)
 {
     typedef boost::shared_ptr<PointCloud<TypeParam > > CloudTPPtr;
 
     CloudTPPtr cld = this->to_(this->m_);
+    Mat1f m2 = PointCloud2Mat_<TypeParam >(cld);
+
+    int padding = static_cast<int>(PCLPointTraits_<TypeParam>::NbFloats()-PCLPointTraits_<TypeParam>::FieldCount());
+    EXPECT_MAT_DIMS_EQ(m2, Size2i(this->m_.cols+padding, this->m_.rows));
+
+    EXPECT_MAT_EQ(this->m_, m2.colRange(0, this->m_.cols));
+    EXPECT_NE(this->m_.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
+}
+
+TYPED_TEST(VisitorCloud_PointTypedTest, FromSparseMat1f)
+{
+    typedef boost::shared_ptr<PointCloud<TypeParam > > CloudTPPtr;
+
+    CloudTPPtr cld = this->to_(SparseMat1f(this->m_));
     Mat1f m2 = PointCloud2Mat_<TypeParam >(cld);
 
     int padding = static_cast<int>(PCLPointTraits_<TypeParam>::NbFloats()-PCLPointTraits_<TypeParam>::FieldCount());

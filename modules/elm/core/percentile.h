@@ -8,7 +8,7 @@
 #ifndef _ELM_CORE_PERCENTILE_H_
 #define _ELM_CORE_PERCENTILE_H_
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 /**
  * @brief class for calculating percentile in a matrix

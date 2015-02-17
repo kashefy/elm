@@ -42,7 +42,7 @@ public:
 
     void Activate(const Signal &signal) {
 
-        m_ = signal.MostRecentMat(name_in_)*2.f;
+        m_ = signal.MostRecentMat1f(name_in_)*2.f;
     }
 
     DummyMatOutputLayer() {}
@@ -90,8 +90,8 @@ TEST_F(MatOutputLayerTest, ActivateAndResponse)
     to_->Activate(sig_);
     to_->Response(sig_);
 
-    EXPECT_MAT_EQ(sig_.MostRecentMat(NAME_IN_M)*2,
-                  sig_.MostRecentMat(NAME_OUT_M));
+    EXPECT_MAT_EQ(sig_.MostRecentMat1f(NAME_IN_M)*2,
+                  sig_.MostRecentMat1f(NAME_OUT_M));
 }
 
 } // annonymous namespace for test cases and test fixtures

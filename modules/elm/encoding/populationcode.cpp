@@ -9,8 +9,8 @@
 
 #include <string>
 
-#include <opencv2/features2d.hpp>
-#include <opencv2/imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "elm/core/sampler.h"
 #include "elm/core/signal.h"
@@ -66,7 +66,7 @@ void base_PopulationCode::OutputNames(const LayerOutputNames &config)
 
 void base_PopulationCode::Activate(const Signal &signal)
 {
-    State(signal.MostRecentMat(name_stimulus_), VecMat1f());
+    State(signal.MostRecentMat1f(name_stimulus_), VecMat1f());
     pop_code_ = PopCode();
 }
 

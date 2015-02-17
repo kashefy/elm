@@ -7,8 +7,8 @@
 //M*/
 #include "elm/core/sampler.h"
 
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "elm/core/area.h"
 #include "elm/io/synth.h"

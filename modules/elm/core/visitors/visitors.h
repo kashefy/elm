@@ -5,13 +5,14 @@
 // 3-clause BSD License
 //
 //M*/
-/** @file Collect available visitors
+/** @file Collect available visitors, avoid if you're only interested in a few
   */
 #ifndef _ELM_CORE_VISITORS_H_
 #define _ELM_CORE_VISITORS_H_
 
 #include "elm/core/visitors/visitorcloud_.h"
-#include "elm/core/visitors/visitormat_.h"
+#include "elm/core/visitors/visitormat1f.h"
+#include "elm/core/visitors/visitorsparsemat1f.h"
 #include "elm/core/visitors/visitorpod_.h"
 #include "elm/core/visitors/visitorvertices.h"
 

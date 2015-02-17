@@ -917,16 +917,16 @@ TEST_F(MatOverloadCallPrecedenceTest, SanityCheck)
     ASSERT_NE(_MAT, _1I);
     ASSERT_NE(_1I, _TF);
 
-    EXPECT_EQ(foo(Mat1f(), Mat1f()), foo(Mat_f(), Mat_f()));
-    EXPECT_NE(foo(Mat1i(), Mat1f()), foo(Mat_f(), Mat_f()));
+    EXPECT_EQ(foo(Mat1f(), Mat1f()), foo(Mat1f(), Mat1f()));
+    EXPECT_NE(foo(Mat1i(), Mat1f()), foo(Mat1f(), Mat1f()));
 
     /* comment those out unless you want to see the warning:
         warning: ISO C++ says that these are ambiguous,
         even though the worst conversion for the first
         is better than the worst conversion for the second: [enabled by default]
         */
-//    EXPECT_NE(foo(Mat1i(), Mat1f()), foo(Mat(), Mat_f()));
-//    EXPECT_NE(foo(Mat1i(), Mat1i()), foo(Mat_f(), Mat()));
+//    EXPECT_NE(foo(Mat1i(), Mat1f()), foo(Mat(), Mat1f()));
+//    EXPECT_NE(foo(Mat1i(), Mat1i()), foo(Mat1f(), Mat()));
 
 }
 
@@ -938,7 +938,7 @@ TEST_F(MatOverloadCallPrecedenceTest, CheckId)
 
     EXPECT_EQ(_MAT, foo(Mat(), Mat()));
 
-    EXPECT_EQ(_TF, foo(Mat_f(), Mat_f()));
+    EXPECT_EQ(_TF, foo(Mat1f(), Mat1f()));
     EXPECT_EQ(_1I, foo(Mat1i(), Mat1f()));
     EXPECT_EQ(_TI, foo(Mat1i(), Mat1i()));
     EXPECT_EQ(_TF, foo(Mat1f(), Mat1f()));
@@ -949,7 +949,7 @@ TEST_F(MatOverloadCallPrecedenceTest, CheckId)
         even though the worst conversion for the first
         is better than the worst conversion for the second: [enabled by default]
         */
-//    EXPECT_EQ(_MAT, foo(Mat(), Mat_f()));
-//    EXPECT_EQ(_MAT, foo(Mat_f(), Mat()));
+//    EXPECT_EQ(_MAT, foo(Mat(), Mat1f()));
+//    EXPECT_EQ(_MAT, foo(Mat1f(), Mat()));
 
 }

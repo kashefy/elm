@@ -62,16 +62,16 @@ TEST_F(SignalTest, GetFeatures)
 
 TEST_F(SignalTest, MostRecentMat)
 {
-    EXPECT_THROW(to_.MostRecentMat("wrong"), ExceptionKeyError);
-    EXPECT_THROW(to_.MostRecentMat("Foo"), ExceptionKeyError);
-    EXPECT_THROW(to_.MostRecentMat("FOO"), ExceptionKeyError);
+    EXPECT_THROW(to_.MostRecentMat1f("wrong"), ExceptionKeyError);
+    EXPECT_THROW(to_.MostRecentMat1f("Foo"), ExceptionKeyError);
+    EXPECT_THROW(to_.MostRecentMat1f("FOO"), ExceptionKeyError);
 
     for(int i=0; i<3; i++) {
 
         EXPECT_SIZE(2+i, to_["foo"]);
         to_.Append("foo", Mat1f::ones(1, 1)+i);
         EXPECT_SIZE(2+i+1, to_["foo"]);
-        EXPECT_MAT_EQ(to_.MostRecentMat("foo"), Mat1f::ones(1, 1)+i);
+        EXPECT_MAT_EQ(to_.MostRecentMat1f("foo"), Mat1f::ones(1, 1)+i);
     }
 }
 

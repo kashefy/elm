@@ -1,6 +1,6 @@
 #include "elm/encoding/populationcode.h"
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core/core_c.h>
 
 #include "elm/core/cv/mat_utils_inl.h"
 #include "elm/core/layerconfig.h"
@@ -148,7 +148,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
 
         // which kernel responded the most to the oriented bar?
         cv::Mat1f col_sums(1, NB_KERNELS_);
-        cv::reduce(counts, col_sums, 0, cv::REDUCE_SUM);
+        cv::reduce(counts, col_sums, 0, CV_REDUCE_SUM);
 
         double min_val;
         int min_idx[2] = {-1, -1};

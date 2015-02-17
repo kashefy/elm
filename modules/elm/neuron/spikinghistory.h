@@ -8,7 +8,7 @@
 #ifndef _ELM_NEURON_SPIKINGHISTORY_H_
 #define _ELM_NEURON_SPIKINGHISTORY_H_
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 /**
  * @brief Class for tracking spiking history

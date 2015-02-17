@@ -17,6 +17,9 @@ class Mat;
 
 template <typename T> class Mat_;
 
+class SparseMat;
+template <typename T> class SparseMat_;
+
 typedef Mat_<float> Mat1f;  ///< convinience typedef for Mat of floats without constraints on no. of channels
 typedef Mat_<int> Mat1i;    ///< convinience typedef for Mat of integers
 
@@ -37,6 +40,11 @@ template<typename _Tp> class Point3_;
 typedef Point3_<int> Point3i;       ///< convinience typedef for 3d point of integers
 typedef Point3_<float> Point3f;     ///< convinience typedef for 3d point of floats
 typedef Point3_<double> Point3d;    ///< convinience typedef for 3d point of doubles - not preferred
+
+template<typename _Tp> class Rect_; ///< convinience typedef for rectangle
+
+typedef Rect_<int> Rect2i;       ///< convinience typedef for rectangle of integers
+typedef Rect_<float> Rect2f;       ///< convinience typedef for rectangle of floats
 
 } // fake namespace cv for fwd declaration
 

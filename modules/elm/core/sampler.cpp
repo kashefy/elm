@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/sampler.h"
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #include "elm/core/cv/mat_utils.h"
 

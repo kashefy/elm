@@ -8,11 +8,12 @@
 #ifndef _ELM_LAYERS_GRAPHCOMPATIBILITY_H_
 #define _ELM_LAYERS_GRAPHCOMPATIBILITY_H_
 
-#include "elm/layers/base_layer_derivations/base_matoutputlayer.h"
+#include "elm/core/typedefs_fwd.h"
+#include "elm/layers/base_layer_derivations/base_sparsematoutputlayer.h"
 
 namespace elm {
 
-class GraphCompatibility : public base_MatOutputLayer
+class GraphCompatibility : public base_SparseMatOutputLayer
 {
 public:
     // I/O Names
@@ -36,6 +37,14 @@ public:
 
     virtual void Activate(const Signal &signal);
 
+    /**
+     * @brief Integrate over b and j (taking partial derivative of Ewg(M))
+     * @param c_aibj
+     * @param m weight values  (e.g. match matrix variables)
+     * @return integration of compatibility matrix over b and j multiplied by m
+     */
+    static cv::Mat1f Integrate(SparseMat1f &c_aibj, cv::Mat1f m);
+
 protected:
     /**
      * @brief calculate compatibility matrix C_aibj Eq. (2) from \cite Gold1996
@@ -44,9 +53,9 @@ protected:
      *
      * @param g_ab adjacency matrix
      * @param g_ij adjacency matrix
-     * @return compatibility matrix
+     * @return sparse compatibility matrix
      */
-    virtual cv::Mat1f Compatibility(const cv::Mat1f &g_ab, const cv::Mat1f &g_ij) const;
+    virtual elm::SparseMat1f Compatibility(const cv::Mat1f &g_ab, const cv::Mat1f &g_ij) const;
 
     /**
      * @brief compatibility function for populating compatibility matrix C_aibj Eq. (2) from \cite Gold1996

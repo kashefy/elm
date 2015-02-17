@@ -8,7 +8,7 @@
 #ifndef _ELM_TS_FAKEEVIDENCE_H_
 #define _ELM_TS_FAKEEVIDENCE_H_
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 /**
  * @brief Class for generating one dimensional fake evidence/feature vectors

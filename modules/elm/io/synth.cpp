@@ -7,7 +7,7 @@
 //M*/
 #include "elm/io/synth.h"
 
-#include <opencv2/imgproc.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "elm/core/exception.h"
 
@@ -58,7 +58,7 @@ void SynthBars::Draw(float angle_deg, Mat &img) const
     a += centre;
 
     img = Mat1b::zeros(rows_, cols_);
-    line(img, a, centre-b, Scalar_<uchar>(255), 3, LINE_8);
+    line(img, a, centre-b, Scalar_<uchar>(255), 3, 8);
 }
 
 float SynthBars::IndexToDeg(unsigned int index) const

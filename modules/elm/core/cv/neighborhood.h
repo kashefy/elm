@@ -8,7 +8,8 @@
 #ifndef _ELM_CORE_CV_NEIGHBORHOOD_H_
 #define _ELM_CORE_CV_NEIGHBORHOOD_H_
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 namespace elm
 {

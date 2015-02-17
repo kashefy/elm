@@ -7,11 +7,11 @@
 //M*/
 #include "elm/io/synth.h"
 
+#include <opencv2/highgui/highgui.hpp>  // disabled display test
+
 #include "elm/ts/ts.h"
 
 #include "elm/core/exception.h"
-
-#include <opencv2/highgui.hpp>
 
 using namespace std;
 using namespace elm;

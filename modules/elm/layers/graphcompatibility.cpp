@@ -7,6 +7,7 @@
 //M*/
 #include "elm/layers/graphcompatibility.h"
 
+#include "elm/core/debug_utils.h"
 #include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
@@ -29,7 +30,7 @@ template <>
 elm::MapIONames LayerAttr_<GraphCompatibility>::io_pairs = boost::assign::map_list_of
         ELM_ADD_INPUT_PAIR(GraphCompatibility::KEY_INPUT_GRAPH_AB)
         ELM_ADD_INPUT_PAIR(GraphCompatibility::KEY_INPUT_GRAPH_IJ)
-        ELM_ADD_OUTPUT_PAIR(detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
+        ELM_ADD_OUTPUT_PAIR(detail::BASE_SPARSEMATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
         ;
 //#endif
 
@@ -38,20 +39,20 @@ GraphCompatibility::~GraphCompatibility()
 }
 
 GraphCompatibility::GraphCompatibility()
-    : base_MatOutputLayer()
+    : base_SparseMatOutputLayer()
 {
     Clear();
 }
 
 GraphCompatibility::GraphCompatibility(const LayerConfig &cfg)
-    : base_MatOutputLayer(cfg)
+    : base_SparseMatOutputLayer(cfg)
 {
     Reset(cfg);
 }
 
 void GraphCompatibility::Clear()
 {
-    m_ = Mat1f();
+    m_.clear();
 }
 
 void GraphCompatibility::Reset(const LayerConfig &config)
@@ -72,8 +73,8 @@ void GraphCompatibility::InputNames(const LayerInputNames &io)
 
 void GraphCompatibility::Activate(const Signal &signal)
 {
-    Mat1f g_ab = signal.MostRecentMat(name_g_ab_);
-    Mat1f g_ij = signal.MostRecentMat(name_g_ij_);
+    Mat1f g_ab = signal.MostRecentMat1f(name_g_ab_);
+    Mat1f g_ij = signal.MostRecentMat1f(name_g_ij_);
 
     if(g_ab.rows != g_ab.cols) {
 
@@ -91,39 +92,92 @@ void GraphCompatibility::Activate(const Signal &signal)
     m_ = Compatibility(g_ab, g_ij);
 }
 
-Mat1f GraphCompatibility::Compatibility(const Mat1f &g_ab, const Mat1f &g_ij) const
+Mat1f GraphCompatibility::Integrate(SparseMat1f &c_aibj, Mat1f m)
 {
-    Mat1f c_ai(A_, I_, 0.f);
-    for(int a=0; a<A_; a++) {
+    int A = c_aibj.size(0);
+    int I = c_aibj.size(1);
+
+    ELM_THROW_BAD_DIMS_IF(m.rows != A,
+                          "No. of mat. rows must match 1st dimension in compat. matrix.");
+
+    ELM_THROW_BAD_DIMS_IF(m.cols != I,
+                          "No. of mat. cols must match 2nd dimension in compat. matrix.");
+
+    const int DIMS = 4;
+    Mat1f c_ai(A, I);
+
+    int idx[DIMS];
+    int &a = idx[0];
+    int &i = idx[1];
+    int &b = idx[2];
+    int &j = idx[3];
+
+    for(a=0; a<A; a++) {
+
+        for(i=0; i<I; i++) {
+
+            float sigma_over_bj = 0.f;
+
+            for(b=0; b<A; b++) {
+
+                // skip for zero-weighted edges.
+                for(j=0; j<I; j++) {
+
+                    sigma_over_bj += c_aibj.ref(idx) * m(a, i);
+                } // j
+            } // b
+
+            c_ai(a, i) = sigma_over_bj;
+        } // i
+    } // a
+
+    return c_ai;
+}
+
+SparseMat1f GraphCompatibility::Compatibility(const Mat1f &g_ab, const Mat1f &g_ij) const
+{
+    const int DIMS = 4;
+    int _size[DIMS] = {A_, I_, A_, I_};
+    SparseMat1f c_aibj(DIMS, _size);
+
+    int idx[DIMS];
+    int &a = idx[0];
+    int &i = idx[1];
+    int &b = idx[2];
+    int &j = idx[3];
+
+    for(a=0; a<A_; a++) {
 
         Mat1f g_ab_row = g_ab.row(a);
 
-        for(int i=0; i<I_; i++) {
+        for(i=0; i<I_; i++) {
 
             Mat1f g_ij_row = g_ij.row(i);
 
-            float sigma_c_aibj_over_bj = 0.f;
-            for(size_t b=0; b<g_ab_row.total(); b++) {
+            for(b=0; b<A_; b++) {
 
                 float g_ab_row_at_b = g_ab_row(b);
 
                 // skip for zero-weighted edges.
                 if(g_ab_row_at_b != 0.f) {
 
-                    for(size_t j=0; j<g_ij_row.total(); j++) {
+                    for(j=0; j<I_; j++) {
 
-                        sigma_c_aibj_over_bj += Compatibility(g_ab_row_at_b, g_ij_row(j));
-                    }
+                        float g_ij_row_at_j = g_ij_row(j);
+
+                        // skip for zero-weighted edges.
+                        if(g_ij_row_at_j != 0.f) {
+
+                            float compatibility = Compatibility(g_ab_row_at_b, g_ij_row_at_j);
+                            c_aibj.ref(idx) = compatibility;
+                        }
+                    } // j
                 }
-            }
+            } // b
+        } // i
+    } // a
 
-            c_ai(a, i) = sigma_c_aibj_over_bj;
-        }
-    }
-
-    //c_ai /= static_cast<float>(max(A_, I_));
-
-    return c_ai;
+    return c_aibj;
 }
 
 float GraphCompatibility::Compatibility(float w1, float w2) const

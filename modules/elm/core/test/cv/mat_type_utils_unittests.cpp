@@ -9,7 +9,7 @@
 
 #include "gtest/gtest.h"
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 using namespace std;
 using namespace cv;

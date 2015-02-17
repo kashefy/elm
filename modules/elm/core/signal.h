@@ -38,7 +38,7 @@ public:
       * @param name
       * @return most recent feature found under key
       */
-    cv::Mat1f MostRecentMat(const std::string& name) const;
+    cv::Mat1f MostRecentMat1f(const std::string& name) const;
 
 protected:
     typedef Signal_<FeatureData >::MapSVecFeat_ MapSVecFD; ///< convinience typedef for a map with string keys and VecFeatData values

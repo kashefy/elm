@@ -7,9 +7,12 @@
 //M*/
 #include "elm/layers/gradassignment.h"
 
+#include "elm/core/debug_utils.h"
+
 #include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
+#include "elm/layers/graphcompatibility.h"
 #include "elm/layers/sinkhornbalancing.h"
 #include "elm/ts/layerattr_.h"
 
@@ -103,8 +106,8 @@ void GradAssignment::InputNames(const LayerInputNames &io)
 void GradAssignment::Activate(const Signal &signal)
 {
     // get inputs
-    Mat1f g_ab = signal.MostRecentMat(name_g_ab_);
-    Mat1f g_ij = signal.MostRecentMat(name_g_ij_);
+    Mat1f g_ab = signal.MostRecentMat1f(name_g_ab_);
+    Mat1f g_ij = signal.MostRecentMat1f(name_g_ij_);
 
     if(g_ab.rows != g_ab.cols) {
 
@@ -119,19 +122,23 @@ void GradAssignment::Activate(const Signal &signal)
     A_ = g_ab.rows; ///< no. of vertices in G_ab graph
     I_ = g_ij.rows; ///< no. of vertices in G_ij graph
 
-    Mat1f c_ai = signal.MostRecentMat(name_c_ai_);//Compatibility(g_ab, g_ij);
+    SparseMat1f c_aibj = signal.MostRecentMat1f(name_c_ai_);//Compatibility(g_ab, g_ij);
 
-    if(c_ai.rows != A_) {
+    ELM_THROW_BAD_DIMS_IF(c_aibj.dims() != 4, "Expecting a 4-dim compatibility matrix for 2 graphs.");
 
-        ELM_THROW_BAD_DIMS("No. of rows in compatibility matrix must match dimension of adj. matrix G_ab.");
-    }
+    ELM_THROW_BAD_DIMS_IF(c_aibj.size(0) != A_,
+                          "Size of 1st dim. != no. of vertices in 1st graph.");
 
-    if(c_ai.cols != I_) {
+    ELM_THROW_BAD_DIMS_IF(c_aibj.size(2) != A_,
+                          "Size of 3rd dim. != no. of vertices in 1st graph.");
 
-        ELM_THROW_BAD_DIMS("No. of rows in compatibility matrix must match dimension of adj. matrix g_ij.");
-    }
+    ELM_THROW_BAD_DIMS_IF(c_aibj.size(1) != I_,
+                          "Size of 2nd dim. != no. of vertices in 2nd graph.");
 
-    // got all inputs now go go go
+    ELM_THROW_BAD_DIMS_IF(c_aibj.size(3) != I_,
+                          "Size of 4th dim. != no. of vertices in 2nd graph.");
+
+    // got all inputs, now go go go
     bool is_m_converged = false;
 
     Mat1f m_ai_hat = Mat1f(A_+1, I_+1, 1.f+EPSILON); // add slack variables to be more robust to outliers
@@ -140,8 +147,9 @@ void GradAssignment::Activate(const Signal &signal)
 
     float beta = beta_0_;
 
-    int nb_iterations_0 = 0;
+    int nb_iterations_0;
 
+    //ELM_COUT_VAR(cv::format(c_ai, Formatter::FMT_NUMPY));
     while(beta < beta_max_) { // A
 
         nb_iterations_0 = 0;
@@ -149,15 +157,24 @@ void GradAssignment::Activate(const Signal &signal)
 
             Mat1f m_ai_hat_0 = m_ai_hat.clone();
 
-            Mat1f q_ai(A_, I_); ///< partial derivative of E_wg with respect to M_ai
+            //ELM_COUT_VAR(m_ai_hat_0);
+//            Mat1f q_ai = q_ai(A_, I_); ///< partial derivative of E_wg with respect to M_ai
 
-            multiply(c_ai, m_, q_ai);
+//            multiply(c_ai, m_, q_ai);
+            Mat1f q_ai = GraphCompatibility::Integrate(c_aibj, m_);
+
+            //imshow("m", ConvertTo8U(m_));
+            //cv::waitKey();
+
+            //ELM_COUT_VAR(q_ai);
             // softassign
             exp(beta*q_ai, m_);
+            //ELM_COUT_VAR(m_);
 
-            is_m_converged = SinkhornBalancing::RowColNormalization(m_ai_hat, max_iter_sinkhorn_, EPSILON); // C
+            is_m_converged = SinkhornBalancing::RowColNormalization(m_ai_hat, max_iter_sinkhorn_, 0.05f); // C
 
-            is_m_converged = sum(abs(m_ai_hat-m_ai_hat_0))[0] < EPSILON;
+            //ELM_COUT_VAR(m_ai_hat);
+            is_m_converged = sum(abs(m_-m_ai_hat_0(Rect2i(0, 0, A_, I_))))[0] < 0.5f;
 
             nb_iterations_0++;
         } // end B

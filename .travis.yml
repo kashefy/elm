@@ -1,14 +1,18 @@
+
 language: cpp
 compiler: gcc
 before_install:
   - sudo apt-get update -qq
   - cd ..
-  - git clone --depth=1 https://github.com/Itseez/opencv.git
+  - git clone https://github.com/Itseez/opencv.git
   - cd opencv
+  - git fetch
+  - git branch -a
+  - git checkout 2.4
   - mkdir build
   - cd build
   - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF ..
-  - make -j
+  - make -j2
   - cd ../..
   - wget https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - unzip gtest-1.7.0.zip

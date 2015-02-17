@@ -212,6 +212,9 @@ TEST(PCLUtilsPointCloud_2MatTEST, Values)
     EXPECT_MAT_EQ(m, m2);
 }
 
+/**
+ * @brief Verify that data ownership remains with source point cloud
+ */
 TEST(PCLUtilsPointCloud_2MatTEST, Owner)
 {
     // organized point cloud

@@ -7,9 +7,12 @@
 //M*/
 #include "elm/core/featuredata.h"
 
+#include <iostream>
+
 using namespace std;
 using namespace cv;
-using namespace elm;
+
+namespace elm {
 
 FeatureData::FeatureData()
 {
@@ -22,6 +25,12 @@ template<>
 Mat_<float> FeatureData::get()
 {
     return var_.apply_visitor(visitor_mat_);
+}
+
+template<>
+SparseMat1f FeatureData::get()
+{
+    return var_.apply_visitor(visitor_sparse_mat_);
 }
 
 #ifdef __WITH_PCL // PCL support required
@@ -77,3 +86,6 @@ std::ostream& operator<<(std::ostream& os, FeatureData& obj)
     os << obj.get<Mat_<float> >();
     return os;
 }
+
+} // namespace elm
+

@@ -9,7 +9,7 @@
 
 #ifdef __WITH_PCL // definitions below require PCL support
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #include "elm/core/pcl/cloud_.h"
 
@@ -75,11 +75,25 @@ VecVertices VisitorVecVertices::operator()(uchar c)
     return vv_;
 }
 
-VecVertices VisitorVecVertices::operator()(const Mat_f &m)
+VecVertices VisitorVecVertices::operator()(const cv::Mat1f &m)
 {
     if(vv_.empty()) {
 
         vv_ = Mat2VecVertices(m);
+    }
+    return vv_;
+}
+
+VecVertices VisitorVecVertices::operator()(const SparseMat1f &m)
+{
+    if(vv_.empty()) {
+
+        cv::Mat1f dense;
+        if(m.size()!=0) {
+
+            m.convertTo(dense, dense.type());
+        }
+        vv_ = Mat2VecVertices(dense);
     }
     return vv_;
 }

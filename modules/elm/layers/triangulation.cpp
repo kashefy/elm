@@ -11,8 +11,6 @@
 
 #ifdef __WITH_PCL   // the layer is otherwise implemented as unsupported
 
-#include <iostream>
-
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/kdtree/kdtree_flann.h>
@@ -21,6 +19,7 @@
 
 #include "elm/core/defs.h"
 #include "elm/core/exception.h"
+#include "elm/core/graph/adjacency.h"
 #include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
@@ -52,6 +51,7 @@ const bool  Triangulation::DEFAULT_IS_NORMAL_CONSISTENCY    = false;
 // initialize I/O names
 const string Triangulation::KEY_INPUT_POINT_CLOUD   = "cloud";
 const string Triangulation::KEY_OUTPUT_VERTICES     = "vertices";
+const string Triangulation::KEY_OUTPUT_OPT_ADJACENCY = "adjacency";
 
 /** @todo why does define guard lead to undefined reference error?
  */
@@ -124,6 +124,7 @@ void Triangulation::InputNames(const LayerInputNames &io)
 void Triangulation::OutputNames(const LayerOutputNames &io)
 {
     name_vertices_  = io.Output(KEY_OUTPUT_VERTICES);
+    name_opt_adj_   = io.OutputOpt(KEY_OUTPUT_OPT_ADJACENCY);
 }
 
 void Triangulation::Activate(const Signal &signal)
@@ -166,6 +167,11 @@ void Triangulation::Activate(const Signal &signal)
     gp3.reconstruct(vertices);
 
     vertices_ = VecVertices2Mat(vertices, false);
+
+    if(name_opt_adj_) {
+
+        TriangulatedCloudToAdjacency(cld_in, vertices, adj_);
+    }
 }
 
 void Triangulation::Response(Signal &signal)
@@ -175,6 +181,11 @@ void Triangulation::Response(Signal &signal)
 //    vector<int> states = gp3.getPointStates();
 
     signal.Append(name_vertices_, vertices_);
+
+    if(name_opt_adj_) {
+
+        signal.Append(name_opt_adj_.get(), adj_);
+    }
 }
 
 #endif // __WITH_PCL

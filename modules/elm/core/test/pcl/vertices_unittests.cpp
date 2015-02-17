@@ -24,11 +24,11 @@ namespace {
 
 TEST(PCLUtilsMat2VecVerticesTest, Empty)
 {
-    EXPECT_TRUE(Mat2VecVertices(Mat_f()).empty());
-    EXPECT_TRUE(Mat2VecVertices(Mat_f(1, 0)).empty());
-    EXPECT_TRUE(Mat2VecVertices(Mat_f(0, 1)).empty());
-    EXPECT_TRUE(Mat2VecVertices(Mat_f(0, 0)).empty());
-    EXPECT_TRUE(Mat2VecVertices(Mat_f(3, 0)).empty());
+    EXPECT_TRUE(Mat2VecVertices(Mat1f()).empty());
+    EXPECT_TRUE(Mat2VecVertices(Mat1f(1, 0)).empty());
+    EXPECT_TRUE(Mat2VecVertices(Mat1f(0, 1)).empty());
+    EXPECT_TRUE(Mat2VecVertices(Mat1f(0, 0)).empty());
+    EXPECT_TRUE(Mat2VecVertices(Mat1f(3, 0)).empty());
 
     for(int ch=1; ch<4; ch++) {
 
