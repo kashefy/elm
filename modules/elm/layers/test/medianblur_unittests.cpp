@@ -9,8 +9,11 @@
 
 #include <memory>
 
+#include "elm/core/debug_utils.h"
+
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
+#include "elm/core/percentile.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layer_assertions.h"
 
@@ -128,36 +131,83 @@ TEST_F(MedianBlurTest, Response_const_valued_input)
 
         Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
 
-        if(v < 0.f) {
-
-            EXPECT_MAT_EQ(Mat1f::zeros(in.rows, in.cols), blurred);
-        }
-        else {
-
-            EXPECT_MAT_EQ(Mat1f(in.rows, in.cols, round(v)), blurred);
-        }
+        EXPECT_MAT_EQ(Mat1f(in.rows, in.cols, v), blurred);
     }
 }
 
 /**
- * @brief Inspect values of blurred image
+ * @brief Inspect values of blurred image, when aperture size
+ * is large (e.g. kszie > 5)
+ * and we expect a truncation to CV_8U
  */
-TEST_F(MedianBlurTest, Response_blurred_values)
+TEST_F(MedianBlurTest, Response_blurred_values_8u)
 {
-    Signal sig;
+    const int NB_KSZIE_VALUES = 2;
+    int ksize_values[NB_KSZIE_VALUES] = {7, 9};
 
-    // impulse as stimulus
-    Mat1f in(10, 10, 90.f);
-    in.colRange(5, 10).setTo(100.f);
-    sig.Append(NAME_IN, in);
+    for(int i=0; i<NB_KSZIE_VALUES; i++) {
 
-    to_->Activate(sig);
-    to_->Response(sig);
+        int ksize = ksize_values[i];
+        ASSERT_GT(ksize, 5); // sanity check
 
-    Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
+        PTree params;
+        params.add(MedianBlur::PARAM_APERTURE_SIZE, ksize);
+        config_.Params(params);
+        to_.reset(new MedianBlur(config_));
 
-    std::cout<<in<<std::endl;
-    std::cout<<blurred<<std::endl;
+        Mat1b tmp(ksize, ksize);
+        randn(tmp, 125.f, 125.f);
+        Mat1f in = tmp;
+
+        Signal sig;
+        sig.Append(NAME_IN, in);
+
+        to_->Activate(sig);
+        to_->Response(sig);
+
+        Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
+
+        float median = Percentile().CalcPercentile(in.reshape(1, 1), 0.5f);
+
+        EXPECT_FLOAT_EQ(median, blurred(ksize/2, ksize/2))
+                << "Unexpected value at the centre of blurred image with ksize=" << ksize;
+    }
+}
+
+/**
+ * @brief Inspect values of blurred image when input matches apertrue size
+ * Ignore off-center elements
+ */
+TEST_F(MedianBlurTest, Response_blurred_values_median_center)
+{
+    const int NB_KSZIE_VALUES = 2;
+    int ksize_values[NB_KSZIE_VALUES] = {3, 5};
+
+    for(int i=0; i<NB_KSZIE_VALUES; i++) {
+
+        int ksize = ksize_values[i];
+
+        PTree params;
+        params.add(MedianBlur::PARAM_APERTURE_SIZE, ksize);
+        config_.Params(params);
+        to_.reset(new MedianBlur(config_));
+
+        Mat1f in(ksize, ksize);
+        randn(in, 0.f, 100.f);
+
+        Signal sig;
+        sig.Append(NAME_IN, in);
+
+        to_->Activate(sig);
+        to_->Response(sig);
+
+        Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
+
+        float median = Percentile().CalcPercentile(in.reshape(1, 1), 0.5f);
+
+        EXPECT_FLOAT_EQ(median, blurred(ksize/2, ksize/2))
+                << "Unexpected value at the centre of blurred image with ksize=" << ksize;
+    }
 }
 
 } // annonymous namespace for test fixtures and test cases

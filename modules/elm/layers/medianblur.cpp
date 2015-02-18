@@ -73,9 +73,22 @@ void MedianBlur::Reconfigure(const LayerConfig &config)
 
 void MedianBlur::Activate(const Signal &signal)
 {
-    Mat in;
-    signal.MostRecentMat1f(name_input_).convertTo(in, CV_8UC1);
-    Mat tmp(in.size(), CV_8UC1);
-    medianBlur(in, tmp, ksize_); // OpenCV: it can only be CV_8U...
-    m_ = tmp;
+    Mat src, dst;
+
+    /* from OpneCV's docs:
+     * when ksize is 3 or 5,
+     * the image depth should be CV_8U, CV_16U, or CV_32F,
+     * for larger aperture sizes, it can only be CV_8U
+     **/
+    if(ksize_ > 5) {
+
+        signal.MostRecentMat1f(name_input_).convertTo(src, CV_8U);
+    }
+    else {
+
+        src = signal.MostRecentMat1f(name_input_);
+    }
+
+    medianBlur(src, dst, ksize_);
+    m_ = dst;
 }

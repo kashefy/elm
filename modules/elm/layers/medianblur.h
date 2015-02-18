@@ -15,7 +15,13 @@ namespace elm {
 /**
  * @brief Wrap layer around median blur
  * input and output keys defined by parent
- */
+ *
+ * from OpneCV's docs:
+ * when ksize is 3 or 5,
+ * the image depth should be CV_8U, CV_16U, or CV_32F,
+ * for larger aperture sizes, it can only be CV_8U
+ *
+ **/
 class MedianBlur : public base_FeatureTransformationLayer
 {
 public:
