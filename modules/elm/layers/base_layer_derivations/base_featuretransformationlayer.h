@@ -5,13 +5,14 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef _ELM_CORE_BASE_LAYER_DERIVS_BASE_FEATURETRANSFORMATIONLAYER_H_
-#define _ELM_CORE_BASE_LAYER_DERIVS_BASE_FEATURETRANSFORMATIONLAYER_H_
+#ifndef _ELM_LAYERS_BASE_LAYER_DERIVS_BASE_FEATURETRANSFORMATIONLAYER_H_
+#define _ELM_LAYERS_BASE_LAYER_DERIVS_BASE_FEATURETRANSFORMATIONLAYER_H_
 
 #include "elm/layers/base_layer_derivations/base_singleinputfeaturelayer.h"
 #include "elm/layers/base_layer_derivations/base_matoutputlayer.h"
 
 namespace elm {
+
 /**
  * @brief An intermediate base class for prviding a layer interface involving
  * a transformation of a single input feature into a single output feature
@@ -24,13 +25,15 @@ class base_FeatureTransformationLayer:
         public base_MatOutputLayer
 {
 public:
+    void IONames(const LayerIONames &io);
+
+protected:
     base_FeatureTransformationLayer();
 
     base_FeatureTransformationLayer(const LayerConfig &config);
 
-    void IONames(const LayerIONames &io);
 };
 
 } // namespace elm
 
-#endif // _ELM_CORE_BASE_LAYER_DERIVS_BASE_FEATURETRANSFORMATIONLAYER_H_
+#endif // _ELM_LAYERS_BASE_LAYER_DERIVS_BASE_FEATURETRANSFORMATIONLAYER_H_
