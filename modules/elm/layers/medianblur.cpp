@@ -17,11 +17,6 @@
 using namespace cv;
 using namespace elm;
 
-/** Define parameters, defaults and I/O keys
-  */
-// paramters
-const std::string MedianBlur::PARAM_APERTURE_SIZE = "aperture_size";
-
 /** @todo why does define guard lead to undefined reference error?
  */
 //#ifdef __WITH_GTEST
@@ -34,33 +29,21 @@ elm::MapIONames LayerAttr_<MedianBlur>::io_pairs = boost::assign::map_list_of
 //#endif
 
 MedianBlur::MedianBlur()
-    : base_FeatureTransformationLayer()
+    : base_SmoothLayer()
 {
     Clear();
 }
 
-MedianBlur::MedianBlur(const LayerConfig config)
-    : base_FeatureTransformationLayer(config)
+MedianBlur::MedianBlur(const LayerConfig &config)
+    : base_SmoothLayer(config)
 {
     Reset(config);
     IONames(config);
 }
 
-void MedianBlur::Clear()
-{
-    m_ = Mat1f();
-}
-
-void MedianBlur::Reset(const LayerConfig &config)
-{
-    Clear();
-    Reconfigure(config);
-}
-
 void MedianBlur::Reconfigure(const LayerConfig &config)
 {
-    PTree p = config.Params();
-    ksize_ = p.get<int>(PARAM_APERTURE_SIZE);
+    base_SmoothLayer::Reconfigure(config);
 
     if(ksize_ <= 1 || ksize_ % 2 == 0) {
 

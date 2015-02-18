@@ -8,7 +8,7 @@
 #ifndef _ELM_LAYERS_MEDIANBLUR_H_
 #define _ELM_LAYERS_MEDIANBLUR_H_
 
-#include "elm/layers/base_layer_derivations/base_featuretransformationlayer.h"
+#include "elm/layers/base_layer_derivations/base_smoothlayer.h"
 
 namespace elm {
 
@@ -22,18 +22,12 @@ namespace elm {
  * for larger aperture sizes, it can only be CV_8U
  *
  **/
-class MedianBlur : public base_FeatureTransformationLayer
+class MedianBlur : public base_SmoothLayer
 {
 public:
-    static const std::string PARAM_APERTURE_SIZE;   ///< aperture linear size; it must be odd and greater than 1, for example: 3, 5, 7 ...
-
     MedianBlur();
 
-    MedianBlur(const LayerConfig config);
-
-    void Clear();
-
-    void Reset(const LayerConfig &config);
+    MedianBlur(const LayerConfig &config);
 
     void Reconfigure(const LayerConfig &config);
 
@@ -41,7 +35,6 @@ public:
 
 protected:
     // members
-    int ksize_; ///< aperture linear size
 };
 
 } // namespace elm
