@@ -11,9 +11,7 @@
 #ifndef _ELM_CORE_PCL_CLOUD__H_
 #define _ELM_CORE_PCL_CLOUD__H_
 
-#ifndef __WITH_PCL
-    #warning "Skipping pcl utilities since PCL support is disabled."
-#else // __WITH_PCL
+#ifdef __WITH_PCL
 
 // any user will need complete type definitions, so let's provide them
 #include <pcl/point_types.h>

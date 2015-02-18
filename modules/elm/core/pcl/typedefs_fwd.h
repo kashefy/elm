@@ -10,9 +10,7 @@
 #ifndef _ELM_CORE_PCL_TYPEDEFS_FWD_H_
 #define _ELM_CORE_PCL_TYPEDEFS_FWD_H_
 
-#ifndef __WITH_PCL
-    #warning "Skipping pcl utilities since PCL support is disabled."
-#else // __WITH_PCL
+#ifdef __WITH_PCL
 
 #include "elm/core/boost/typedefs_fwd.h"
 #include "elm/core/stl/typedefs.h"
