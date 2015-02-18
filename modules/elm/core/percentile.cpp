@@ -10,6 +10,9 @@
 #include "elm/core/exception.h"
 
 using namespace cv;
+using namespace elm;
+
+const float Percentile::MEDIAN = 0.5f;
 
 Percentile::Percentile()
 {
@@ -30,7 +33,20 @@ float Percentile::CalcPercentile(const Mat1f &in, float percentile) const
     Mat1f dst;
     // sort and extract
     cv::sort(in, dst, SORT_EVERY_ROW+SORT_ASCENDING);
-    int pos = static_cast<int>(percentile*in.total()); // equivalent to flooring, should we round?
 
-    return dst(pos);
+    int sz_total = static_cast<int>(in.total());
+
+    int pos = static_cast<int>(percentile*sz_total); // equivalent to flooring
+
+    float result;
+
+    if(percentile == MEDIAN && sz_total % 2 == 0) {
+
+        result = (dst(pos-1) + dst(pos))/2.f;
+    }
+    else {
+        result = dst(pos);
+    }
+
+    return result;
 }

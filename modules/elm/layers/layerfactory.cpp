@@ -20,6 +20,7 @@
 #include "elm/layers/graphcompatibility.h"
 #include "elm/layers/icp.h"
 #include "elm/layers/layer_y.h"
+#include "elm/layers/medianblur.h"
 #include "elm/encoding/populationcode.h"
 #include "elm/layers/saliencyitti.h"
 #include "elm/layers/sinkhornbalancing.h"
@@ -44,6 +45,7 @@ LayerRegistry g_layerRegistry = map_list_of
         LAYER_REGISTRY_PAIR( GraphCompatibility )
         LAYER_REGISTRY_PAIR( ICP )
         LAYER_REGISTRY_PAIR( LayerY )
+        LAYER_REGISTRY_PAIR( MedianBlur )
         LAYER_REGISTRY_PAIR( MutexPopulationCode )
         LAYER_REGISTRY_PAIR( SaliencyItti )
         LAYER_REGISTRY_PAIR( SinkhornBalancing )

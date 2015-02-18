@@ -84,7 +84,7 @@ if(${ELM_NB_LIBS})
 	set(ELM_FOUND TRUE)
 else(${ELM_NB_LIBS})
 	set(ELM_FOUND FALSE)
-    message (FATAL_ERROR "Identified ${ELM_NB_LIBS} ELM libs.")
+    message(FATAL_ERROR "Identified ${ELM_NB_LIBS} ELM libs.")
 endif(${ELM_NB_LIBS})
 
 # reorder them from depdendent to independent modules
@@ -103,6 +103,12 @@ list(REVERSE ELM_LIBS)
 
 # Dependency libs:
 set(ELM_DEPS_LIBS @ROOT_PROJECT_DEPS@)
+
+# Dependency preprocessor macros
+if(@PCL_FOUND@)
+    message(STATUS "ELM with PCL support.")
+    add_definitions(-D__WITH_PCL)
+endif()
 
 # Dependencies...Done.
 #----------------------------------------------------------------------------

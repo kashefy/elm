@@ -11,7 +11,9 @@
 #include "elm/ts/ts.h"
 
 using namespace cv;
+using namespace elm;
 
+namespace {
 /**
  * @brief class for testing percentile calculation
  */
@@ -64,7 +66,12 @@ TEST_F(PercentileTest, Invalid) {
 TEST_F(PercentileTest, Percentile_OneDim) {
 
     for(float p=0.f; p<=1.f; p+=0.1f) {
-        EXPECT_FLOAT_EQ(p*10.f, to_.CalcPercentile(data_, p));
+
+        if(p!=Percentile::MEDIAN) {
+
+            // skip median case, test elsewhere
+            EXPECT_FLOAT_EQ(p*10.f, to_.CalcPercentile(data_, p));
+        }
     }
 }
 
@@ -75,7 +82,12 @@ TEST_F(PercentileTest, Percentile_TwoDim) {
 
     repeat(data_, 3, 1);
     for(float p=0.f; p<=1.f; p+=0.1f) {
-        EXPECT_FLOAT_EQ(p*10.f, to_.CalcPercentile(data_, p));
+
+        if(p!=Percentile::MEDIAN) {
+
+            // skip median case, test elsewhere
+            EXPECT_FLOAT_EQ(p*10.f, to_.CalcPercentile(data_, p));
+        }
     }
 }
 
@@ -88,3 +100,20 @@ TEST_F(PercentileTest, DuplicateValues) {
     data_(1) = 10.f;
     EXPECT_FLOAT_EQ(10.f, to_.CalcPercentile(data_, 0.9f));
 }
+
+TEST_F(PercentileTest, Median)
+{
+    const int SZ=7;
+    float data[SZ] = {-162.7595f, -223.1261f, 38.5718f, 44.6554f, 135.1045f, 41.2215f, 50.f};
+
+    Mat1f in;
+    in = Mat1f(1, SZ-1, data).clone();    // ignore last element
+
+    EXPECT_FLOAT_EQ((38.5718f+41.2215f)/2.f, to_.CalcPercentile(in, Percentile::MEDIAN));
+
+    in = Mat1f(1, SZ, data).clone();    // include last element
+
+    EXPECT_FLOAT_EQ(41.2215f, to_.CalcPercentile(in, Percentile::MEDIAN));
+}
+
+} // annonymus namespace for test cases and their fixtures
