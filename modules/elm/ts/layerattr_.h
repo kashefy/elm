@@ -11,9 +11,9 @@
 #include <map>
 #include <string>
 
- namespace elm {
+namespace elm {
 
- class base_Layer;
+class base_Layer;
 
 enum LayerIOKeyType
 {
@@ -29,10 +29,10 @@ typedef std::map< std::string, std::pair<LayerIOKeyType, std::string> > MapIONam
 
 
 /**
- * @brief Layer Attributes struct, a helper struct for lyaer p-typed test cases.
+ * @brief Layer Attributes struct, a helper struct for layer p-typed test cases.
  * It enables defining values to be used inside the tests
  *
- * Caution when defining members for you layer type:
+ * Caution when defining members for your layer type:
  *
  * - statc members such as io_pairs depend on static initializations in the layer.
  *   Initilizing them in the layer's unittest source file, leads to a "static initialization order fiasco"
@@ -52,7 +52,6 @@ struct LayerAttr_
  */
 #define ELM_ADD_INPUT_PAIR(key)   ( key, std::make_pair(elm::LayerIOKeyType::INPUT, "n"+key) )
 #define ELM_ADD_OUTPUT_PAIR(key)  ( key, std::make_pair(elm::LayerIOKeyType::OUTPUT, "n"+key) )
-
 
 } // namespace elm
 
