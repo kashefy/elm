@@ -11,9 +11,9 @@
 #include <map>
 #include <string>
 
- namespace elm {
+namespace elm {
 
- class base_Layer;
+class base_Layer;
 
 enum LayerIOKeyType
 {
@@ -52,7 +52,6 @@ struct LayerAttr_
  */
 #define ELM_ADD_INPUT_PAIR(key)   ( key, std::make_pair(elm::LayerIOKeyType::INPUT, "n"+key) )
 #define ELM_ADD_OUTPUT_PAIR(key)  ( key, std::make_pair(elm::LayerIOKeyType::OUTPUT, "n"+key) )
-
 
 } // namespace elm
 
