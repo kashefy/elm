@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef _ELM_CORE_GRAPH_GRAPH_IMPL_H_
-#define _ELM_CORE_GRAPH_GRAPH_IMPL_H_
+#ifndef _ELM_CORE_GRAPH_GRAPHMAP_IMPL_H_
+#define _ELM_CORE_GRAPH_GRAPHMAP_IMPL_H_
 
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -42,4 +42,4 @@ struct GraphMap_Impl
 
 } // namespace elm
 
-#endif // _ELM_CORE_GRAPH_GRAPH_IMPL_H_
+#endif // _ELM_CORE_GRAPH_GRAPHMAP_IMPL_H_
