@@ -11,6 +11,7 @@
 #define _ELM_TS_LAYER_FEAT_TRANSF_ASSERTIONS_H_
 
 #include "elm/ts/layer_assertions.h"
+#include "elm/core/signal.h"
 
 #include <opencv2/core/core.hpp>
 
