@@ -8,7 +8,6 @@
 #include "elm/core/graph/graphattr.h"
 
 #include <boost/thread/thread.hpp>
-#include <boost/make_shared.hpp>
 
 #include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
@@ -144,13 +143,6 @@ Mat1f GraphAttr::applyVertexToMap(float vtx_id, Mat1f (*func)(const Mat1f &img, 
     }
 
     return vtx_result;
-}
-
-
-
-void noop_del(VecMat1f *)
-{
-    return;
 }
 
 VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat1b &mask)) const
