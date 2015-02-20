@@ -31,7 +31,7 @@ public:
      * @param map
      * @param mask for excluding invalid elements
      */
-    GraphMap(const cv::Mat1f &map_img, const cv::Mat &mask);
+    GraphMap(const cv::Mat1f &map_img, const cv::Mat1b &mask);
 
     /**
      * @brief get no. of vertices in graph

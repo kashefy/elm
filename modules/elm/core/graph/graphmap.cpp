@@ -26,7 +26,7 @@ GraphMap::GraphMap()
 {
 }
 
-GraphMap::GraphMap(const Mat1f &map_img, const Mat &mask)
+GraphMap::GraphMap(const Mat1f &map_img, const Mat1b &mask)
     : impl(new GraphMap_Impl(map_img, mask))
 {
 }

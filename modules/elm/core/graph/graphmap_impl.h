@@ -37,7 +37,7 @@ struct GraphMap_Impl
      * @param map
      * @param mask for excluding invalid elements (set to false to exclude)
      */
-    GraphMap_Impl(const cv::Mat1f &map_img, const cv::Mat &mask);
+    GraphMap_Impl(const cv::Mat1f &map_img, const cv::Mat1b &mask);
 
     // public members
     GraphMapType g;    ///< underlying graph object

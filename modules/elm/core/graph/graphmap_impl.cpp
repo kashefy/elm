@@ -20,7 +20,7 @@ GraphMap_Impl::GraphMap_Impl()
 {
 }
 
-GraphMap_Impl::GraphMap_Impl(const cv::Mat1f &map_img, const Mat &mask)
+GraphMap_Impl::GraphMap_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
 {
     ELM_THROW_BAD_DIMS_IF(map_img.total()==static_cast<size_t>(1),
                           "Cannot create graph out of single element map.");
@@ -29,13 +29,20 @@ GraphMap_Impl::GraphMap_Impl(const cv::Mat1f &map_img, const Mat &mask)
                           (mask.rows != map_img.rows || mask.cols != map_img.cols),
                           "non-empty mask does not match input map.");
 
-    g = GraphMapType(); // no. vertices unknown yet
+    g = GraphMapType(); // no. of vertices unknown yet
+
+    bool is_masked = !mask.empty();
 
     EdgeWeightProperty EDGE_CONNECTED = 1;
 
     for(int r=0; r<map_img.rows; r++) {
 
         for(int c=0; c<map_img.cols; c++) {
+
+            if(is_masked && !mask(r, c)) {
+
+                continue; // skip iteration at masked element;
+            }
 
             // Property accessors
             boost::property_map<GraphMapType, boost::vertex_color_t>::type
@@ -47,27 +54,33 @@ GraphMap_Impl::GraphMap_Impl(const cv::Mat1f &map_img, const Mat &mask)
 
             if(c < map_img.cols-1) {
 
-                float value = map_img(r, c+1);
-                VtxDescriptor right = retrieveVtxDescriptor(value);
-                vertex_color_id[right] = static_cast<int>(value);
+                if(!is_masked || mask(r, c+1)) {
 
-                if(cur != right) {
+                    float value = map_img(r, c+1);
+                    VtxDescriptor right = retrieveVtxDescriptor(value);
+                    vertex_color_id[right] = static_cast<int>(value);
 
-                    add_edge(cur, right, EDGE_CONNECTED, g);
-                }
-            }
+                    if(cur != right) {
+
+                        add_edge(cur, right, EDGE_CONNECTED, g);
+                    }
+                } // skip right?
+            } // not last column
 
             if(r < map_img.rows-1) {
 
-                float value = map_img(r+1, c);
-                VtxDescriptor down = retrieveVtxDescriptor(value);
-                vertex_color_id[down] = static_cast<int>(value);
+                if(!is_masked || mask(r+1, c)) {
 
-                if(cur != down) {
+                    float value = map_img(r+1, c);
+                    VtxDescriptor down = retrieveVtxDescriptor(value);
+                    vertex_color_id[down] = static_cast<int>(value);
 
-                    add_edge(cur, down, EDGE_CONNECTED, g);
-                }
-            }
+                    if(cur != down) {
+
+                        add_edge(cur, down, EDGE_CONNECTED, g);
+                    }
+                } // skip down?
+            } // not last row
         } // column
     } // row
 }

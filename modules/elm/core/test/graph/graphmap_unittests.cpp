@@ -323,18 +323,12 @@ TEST_F(GraphMapConstructTest, VerticesIds_masked)
     cv::bitwise_or(m < 2, m == 9, exclude);
     cv::bitwise_not(exclude, mask);
 
-    ELM_COUT_VAR(m);
-
-    ELM_COUT_VAR(mask);
-
     GraphMap to(m, mask);
     const int nb_vertices = static_cast<int>(to.num_vertices());
-    EXPECT_EQ(6, nb_vertices);
+    EXPECT_EQ(4, nb_vertices);
 
     Mat1f adj;
     to.AdjacencyMat(adj);
-
-    ELM_COUT_VAR(adj);
 
     EXPECT_MAT_DIMS_EQ(adj, Size2i(nb_vertices, nb_vertices));
     EXPECT_MAT_EQ(adj, adj.t()) << "Expecting adj. matrix symmetric around diagonal";
@@ -347,16 +341,28 @@ TEST_F(GraphMapConstructTest, VerticesIds_masked)
     // verify vertices vector
     VecF vtx_ids = to.VerticesIds();
     EXPECT_SIZE(nb_vertices, vtx_ids);
-    for(int i=0; i<adj.rows; i++) {
-        std::cout<<vtx_ids[i] << " ";
-    }
-    std::cout<<std::endl;
 
     // verify vertex ids and their order
-
+    EXPECT_FLOAT_EQ(2, vtx_ids[0]);
+    EXPECT_FLOAT_EQ(6, vtx_ids[1]);
+    EXPECT_FLOAT_EQ(3, vtx_ids[2]);
+    EXPECT_FLOAT_EQ(11, vtx_ids[3]);
 
     // verify individual connections
 
+    EXPECT_FLOAT_EQ(1.f, cv::sum(adj.row(0))[0]);
+    EXPECT_FLOAT_EQ(1.f, adj(2, 1));
+
+    EXPECT_FLOAT_EQ(3.f, cv::sum(adj.row(1))[0]);
+    EXPECT_FLOAT_EQ(1.f, adj(0, 1));
+    EXPECT_FLOAT_EQ(1.f, adj(2, 1));
+    EXPECT_FLOAT_EQ(1.f, adj(3, 1));
+
+    EXPECT_FLOAT_EQ(1.f, cv::sum(adj.row(2))[0]);
+    EXPECT_FLOAT_EQ(1.f, adj(1, 2));
+
+    EXPECT_FLOAT_EQ(1.f, cv::sum(adj.row(3))[0]);
+    EXPECT_FLOAT_EQ(1.f, adj(1, 3));
 }
 
 } // annonymous namespace for test cases and fixtures
