@@ -209,16 +209,12 @@ TEST_F(GraphAttrConstructTest, VerticesIds)
                            9, 9, 11};
     Mat1i m = Mat1i(ROWS, COLS, data).clone();
 
-    ELM_COUT_VAR(m);
-
     GraphAttr to(m, Mat());
     const int nb_vertices = static_cast<int>(to.num_vertices());
     EXPECT_EQ(6, nb_vertices);
 
     Mat1f adj;
     to.AdjacencyMat(adj);
-
-    ELM_COUT_VAR(adj);
 
     EXPECT_MAT_DIMS_EQ(adj, Size2i(nb_vertices, nb_vertices));
     EXPECT_MAT_EQ(adj, adj.t()) << "Expecting adj. matrix symmetric around diagonal";
@@ -376,10 +372,62 @@ TEST_F(GraphAttrConstructTest, AddAttributes_empty_graph)
     }
 }
 
-
 TEST_F(GraphAttrConstructTest, AddAttributes_invalid_vtx_id)
 {
+    const int ROWS=3;
+    const int COLS=3;
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
 
+    GraphAttr to(m, Mat1b());
+
+    EXPECT_THROW(to.addAttributes(-1.f, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(-1.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+
+    EXPECT_THROW(to.addAttributes(0.f, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(0.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+
+    EXPECT_THROW(to.addAttributes(5.f, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(5.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+
+    EXPECT_THROW(to.addAttributes(11.2f, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(11.2, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+
+    EXPECT_NO_THROW(to.addAttributes(9.f, Mat1f()));
+    EXPECT_NO_THROW(to.addAttributes(9.f, Mat1f(2, 3, 1.f)));
+}
+
+TEST_F(GraphAttrConstructTest, AddAttributes_invalid_vtx_id_masked)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
+
+    Mat1b exclude, mask;
+    cv::bitwise_or(m < 2, m == 9, exclude);
+    cv::bitwise_not(exclude, mask);
+
+    GraphAttr to(m, mask);
+
+    EXPECT_THROW(to.addAttributes(-1.f, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(-1.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+
+    EXPECT_THROW(to.addAttributes(0.f, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(0.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+
+    EXPECT_THROW(to.addAttributes(5.f, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(5.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+
+    EXPECT_THROW(to.addAttributes(11.2f, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(11.2, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+
+    EXPECT_THROW(to.addAttributes(9.f, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(9.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
 }
 
 } // annonymous namespace for test cases and fixtures
