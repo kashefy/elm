@@ -114,3 +114,4 @@ bool GraphAttr_Impl::findVtxDescriptor(float vtx_id, VtxDescriptor &vtx_descript
 
     return found;
 }
+

@@ -87,6 +87,8 @@ public:
      */
     cv::Mat1f getAttributes(float vtx_id) const;
 
+    cv::Mat1f applyVertexToMap(float vtx_id, cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
+
     VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
     // members

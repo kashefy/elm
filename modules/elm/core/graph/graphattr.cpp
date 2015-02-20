@@ -122,6 +122,29 @@ Mat1f GraphAttr::getAttributes(float vtx_id) const
     }
 }
 
+Mat1f GraphAttr::applyVertexToMap(float vtx_id, Mat1f (*func)(const Mat1f &img, const Mat1b &mask)) const
+{
+    Mat1f vtx_result;
+
+    VtxDescriptor vtx_descriptor;
+    if(impl->findVtxDescriptor(vtx_id, vtx_descriptor)) {
+
+        property_map<GraphAttrType, vertex_color_t>::type
+                vertex_color_id = get(vertex_color, impl->g);
+
+        float vtx_color = vertex_color_id[vtx_descriptor];
+        Mat1b _mask = impl->src_map_img == vtx_color;
+        vtx_result = func(impl->src_map_img, _mask);
+    }
+    else {
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_id << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    return vtx_result;
+}
+
 VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat1b &mask)) const
 {
     std::vector<Mat1f > results(num_vertices());
