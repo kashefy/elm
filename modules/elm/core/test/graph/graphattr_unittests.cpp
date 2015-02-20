@@ -357,6 +357,48 @@ TEST_F(GraphAttrConstructTest, VerticesIds_masked)
     EXPECT_FLOAT_EQ(1.f, adj(1, 3));
 }
 
+/**
+ * @brief test that vertex ids are unique and no id is repeated
+ */
+TEST_F(GraphAttrConstructTest, VerticesIds_masked_unique)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    float data[ROWS*COLS] = {1.1f, 1.1f, 2.0f,
+                             3.0f, 6.0f, 6.0f,
+                             9.2f, 9.02f, 11.0f};
+    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+
+    Mat1b mask = m >= 2;
+
+    GraphAttr to(m, mask);
+    const int nb_vertices = static_cast<int>(to.num_vertices());
+    EXPECT_EQ(6, nb_vertices);
+
+    Mat1f adj;
+    to.AdjacencyMat(adj);
+
+    EXPECT_MAT_DIMS_EQ(adj, Size2i(nb_vertices, nb_vertices));
+    EXPECT_MAT_EQ(adj, adj.t()) << "Expecting adj. matrix symmetric around diagonal";
+
+    // verify we have no self-connections
+    for(int r=0; r<adj.rows; r++) {
+        EXPECT_EQ(0.f, adj(r, r)) << "Unexpected self-connection.";
+    }
+
+    // verify vertices vector
+    VecF vtx_ids = to.VerticesIds();
+    EXPECT_SIZE(nb_vertices, vtx_ids);
+
+    for(int i=0; i<nb_vertices; i++) {
+        for(int j=i+1; j<nb_vertices; j++) {
+
+            EXPECT_NE(vtx_ids[i], vtx_ids[j]) << "Encountered repeated vertex id.";
+        }
+    }
+}
+
+
 TEST_F(GraphAttrConstructTest, AddAttributes_empty_graph)
 {
     Mat1f x;
@@ -432,6 +474,122 @@ TEST_F(GraphAttrConstructTest, AddAttributes_invalid_vtx_id_masked)
 
     EXPECT_THROW(to.addAttributes(9.f, Mat1f()), ExceptionKeyError);
     EXPECT_THROW(to.addAttributes(9.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+}
+
+TEST_F(GraphAttrConstructTest, GetAttributes_empty_graph)
+{
+    Mat1f x;
+    GraphAttr to(x, Mat());
+    EXPECT_EQ(static_cast<size_t>(0), to.num_vertices());
+
+    float vtx_id = -10.f;
+    while(++vtx_id <= 10.f) {
+
+        EXPECT_THROW(to.getAttributes(++vtx_id), ExceptionKeyError);
+    }
+}
+
+TEST_F(GraphAttrConstructTest, GetAttributes_invalid_vtx_id)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
+
+    GraphAttr to(m, Mat1b());
+
+    ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    EXPECT_THROW(to.getAttributes(-1.f), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(0.f), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(12.f), ExceptionKeyError);
+
+    EXPECT_THROW(to.getAttributes(4.f), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(5.f), ExceptionKeyError);
+
+    for(size_t i=0; i<m.total(); i++) {
+
+        EXPECT_NO_THROW(to.getAttributes(m(i)));
+        EXPECT_THROW(to.getAttributes(m(i)+0.2f), ExceptionKeyError);
+        EXPECT_THROW(to.getAttributes(m(i)-0.2f), ExceptionKeyError);
+        EXPECT_THROW(to.getAttributes(m(i)+0.8f), ExceptionKeyError);
+        EXPECT_THROW(to.getAttributes(m(i)-0.8f), ExceptionKeyError);
+    }
+}
+
+TEST_F(GraphAttrConstructTest, GetAttributes_invalid_vtx_id_masked)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
+
+    Mat1b exclude, mask;
+    cv::bitwise_or(m < 2, m == 9, exclude);
+    cv::bitwise_not(exclude, mask);
+
+    GraphAttr to(m, mask);
+
+    ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    EXPECT_THROW(to.getAttributes(-1.f), ExceptionKeyError);
+
+    EXPECT_THROW(to.getAttributes(0.f), ExceptionKeyError);
+
+    EXPECT_THROW(to.getAttributes(5.f), ExceptionKeyError);
+
+    EXPECT_THROW(to.getAttributes(11.2f), ExceptionKeyError);
+
+    EXPECT_THROW(to.getAttributes(9.f), ExceptionKeyError);
+
+    for(size_t i=0; i<m.total(); i++) {
+
+        if(mask(i)) {
+            EXPECT_NO_THROW(to.getAttributes(m(i)));
+            EXPECT_THROW(to.getAttributes(m(i)+0.2f), ExceptionKeyError);
+            EXPECT_THROW(to.getAttributes(m(i)-0.2f), ExceptionKeyError);
+            EXPECT_THROW(to.getAttributes(m(i)+0.8f), ExceptionKeyError);
+            EXPECT_THROW(to.getAttributes(m(i)-0.8f), ExceptionKeyError);
+        }
+        else {
+            EXPECT_THROW(to.getAttributes(m(i)), ExceptionKeyError);
+        }
+    }
+}
+
+TEST_F(GraphAttrConstructTest, Add_and_getAttributes_masked)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    float data[ROWS*COLS] = {1, 1, 2.2,
+                             3, 6, 6,
+                             9, 9.5, 11};
+    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+
+    Mat1b exclude, mask;
+    cv::bitwise_or(m < 2, m == 9, exclude);
+    cv::bitwise_not(exclude, mask);
+
+    GraphAttr to(m, mask);
+
+    ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    VecF vtx_ids = to.VerticesIds();
+
+    // populate vertex attributes with arbitrary values
+    for(size_t i=0; i<vtx_ids.size(); i++) {
+
+        to.addAttributes(vtx_ids[i], Mat1f(1, static_cast<int>(vtx_ids[i])+1, vtx_ids[i]*2.f));
+    }
+
+    for(size_t i=0; i<vtx_ids.size(); i++) {
+
+        EXPECT_MAT_EQ(to.getAttributes(vtx_ids[i]), Mat1f(1, static_cast<int>(vtx_ids[i])+1, vtx_ids[i]*2.f));
+    }
 }
 
 } // annonymous namespace for test cases and fixtures

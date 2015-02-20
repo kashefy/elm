@@ -49,6 +49,8 @@ struct GraphAttr_Impl
     // public members
     GraphAttrType g;    ///< underlying graph object
 
+    cv::Mat1f map_img;  ///< source map image for this graph
+
 protected:
     // typedefs
     typedef std::map<float, VtxDescriptor > MapVtxDescriptor;

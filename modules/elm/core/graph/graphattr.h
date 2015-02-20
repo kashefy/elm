@@ -70,7 +70,23 @@ public:
      */
     VecF VerticesIds() const;
 
+    /**
+     * @brief add Attributes to vertex
+     * @param vtx_id vertex identifier using primary vertex property
+     * @param attr
+     * @throws elm::ExceptionKeyError for non-existing vertex id
+     */
     void addAttributes(float vtx_id, const cv::Mat1f &attr);
+
+    /**
+     * @brief get Attributes to vertex
+     * @param vtx_id vertex identifier using primary vertex property
+     *
+     * @return attributes represented in secondary vertex index property
+     *
+     * @throws elm::ExceptionKeyError for non-existing vertex id
+     */
+    cv::Mat1f getAttributes(float vtx_id) const;
 
     // members
     std::shared_ptr<GraphAttr_Impl> impl;

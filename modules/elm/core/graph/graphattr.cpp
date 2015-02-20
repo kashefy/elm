@@ -91,7 +91,10 @@ void GraphAttr::addAttributes(float vtx_id, const Mat1f &attr)
     VtxDescriptor descriptor;
     if(impl->findVtxDescriptor(vtx_id, descriptor)) {
 
+        property_map<GraphAttrType, vertex_index2_t>::type
+                vertex_attributes = get(vertex_index2, impl->g);
 
+        vertex_attributes[descriptor] = attr;
     }
     else {
         std::stringstream s;
@@ -100,3 +103,19 @@ void GraphAttr::addAttributes(float vtx_id, const Mat1f &attr)
     }
 }
 
+Mat1f GraphAttr::getAttributes(float vtx_id) const
+{
+    VtxDescriptor descriptor;
+    if(impl->findVtxDescriptor(vtx_id, descriptor)) {
+
+        property_map<GraphAttrType, vertex_index2_t>::type
+                vertex_attributes = get(vertex_index2, impl->g);
+
+        return vertex_attributes[descriptor];
+    }
+    else {
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_id << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+}
