@@ -33,7 +33,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
 
     bool is_masked = !mask.empty();
 
-    EdgeWeightProperty EDGE_CONNECTED = 1;
+    EdgeWeightProp EDGE_CONNECTED = 1.f;
 
     for(int r=0; r<map_img.rows; r++) {
 

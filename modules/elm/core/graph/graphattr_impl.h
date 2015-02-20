@@ -13,11 +13,15 @@
 
 #include "elm/core/typedefs_fwd.h"
 
+#include <opencv2/core/core.hpp>
+
 namespace elm {
 
-typedef boost::property<boost::edge_weight_t, int> EdgeWeightProperty;
-typedef boost::property<boost::vertex_color_t, float> VtxProperty;
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VtxProperty, EdgeWeightProperty> GraphAttrType;
+typedef boost::property<boost::edge_weight_t, float> EdgeWeightProp;
+typedef boost::property<boost::vertex_color_t, float,
+        boost::property<boost::vertex_index2_t, cv::Mat1f > >
+        VtxProp;
+typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VtxProp, EdgeWeightProp> GraphAttrType;
 typedef boost::graph_traits<GraphAttrType> GraphAttrTraits;
 typedef GraphAttrTraits::edge_iterator edge_iter;
 
