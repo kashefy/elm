@@ -50,7 +50,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
 
             float value_cur = map_img(r, c);
             VtxDescriptor cur = retrieveVtxDescriptor(value_cur);
-            vertex_color_id[cur] = static_cast<int>(value_cur);
+            vertex_color_id[cur] = value_cur;
 
             if(c < map_img.cols-1) {
 
@@ -58,7 +58,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
 
                     float value = map_img(r, c+1);
                     VtxDescriptor right = retrieveVtxDescriptor(value);
-                    vertex_color_id[right] = static_cast<int>(value);
+                    vertex_color_id[right] = value;
 
                     if(cur != right) {
 
@@ -73,7 +73,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
 
                     float value = map_img(r+1, c);
                     VtxDescriptor down = retrieveVtxDescriptor(value);
-                    vertex_color_id[down] = static_cast<int>(value);
+                    vertex_color_id[down] = value;
 
                     if(cur != down) {
 
