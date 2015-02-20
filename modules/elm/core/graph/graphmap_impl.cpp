@@ -10,48 +10,83 @@
 #include <opencv2/core/core.hpp>
 
 #include "elm/core/exception.h"
+#include "elm/core/stl/stl.h"
 
-using cv::Mat1f;
+using namespace std;
+using namespace cv;
 using namespace elm;
 
 GraphMap_Impl::GraphMap_Impl()
 {
 }
 
-GraphMap_Impl::GraphMap_Impl(const cv::Mat1f &map_img)
+GraphMap_Impl::GraphMap_Impl(const cv::Mat1f &map_img, const Mat &mask)
 {
-    //    g = GraphType(static_cast<int>(cld->size()));
+    ELM_THROW_BAD_DIMS_IF(map_img.total()==static_cast<size_t>(1),
+                          "Cannot create graph out of single element map.");
 
-    //    for(Triangles::const_iterator itr=t.begin(); itr!=t.end(); ++itr) {
+    ELM_THROW_BAD_DIMS_IF(!mask.empty() &&
+                          (mask.rows != map_img.rows || mask.cols != map_img.cols),
+                          "non-empty mask does not match input map.");
 
-    //        const Vertices V = *itr;
+    g = GraphMapType(); // no. vertices unknown yet
 
-    //        if(V.vertices.size() < size_t(3)) {
+    EdgeWeightProperty EDGE_CONNECTED = 1;
 
-    //            ELM_THROW_BAD_DIMS("triangle with less than 3 vertices.");
-    //        }
+    for(int r=0; r<map_img.rows; r++) {
 
-    //        //foreach vertex
-    //        uint32_t v0 = V.vertices[0];
-    //        uint32_t v1 = V.vertices[1];
-    //        uint32_t v2 = V.vertices[2];
+        for(int c=0; c<map_img.cols; c++) {
 
-    //        if(v0 >= nb_vertices_uint || v1 >= nb_vertices_uint || v2 >= nb_vertices_uint) {
+            // Property accessors
+            boost::property_map<GraphMapType, boost::vertex_color_t>::type
+                    vertex_color_id = get(boost::vertex_color, g);
 
-    //            ELM_THROW_KEY_ERROR("Triangle vertex outside point cloud.");
-    //        }
+            float value_cur = map_img(r, c);
+            VtxDescriptor cur = retrieveVtxDescriptor(value_cur);
+            vertex_color_id[cur] = static_cast<int>(value_cur);
 
-    //        Mat1f e_triangle = TriangleEdges(cld->points.at(v0),
-    //                                         cld->points.at(v1),
-    //                                         cld->points.at(v2));
+            if(c < map_img.cols-1) {
 
-    //        EdgeWeightProperty e = e_triangle(0);
-    //        add_edge(v0, v1, e, g);
+                float value = map_img(r, c+1);
+                VtxDescriptor right = retrieveVtxDescriptor(value);
+                vertex_color_id[right] = static_cast<int>(value);
 
-    //        e = e_triangle(1);
-    //        add_edge(v0, v2, e, g);
+                if(cur != right) {
 
-    //        e = e_triangle(2);
-    //        add_edge(v1, v2, e, g);
-    //    }
+                    add_edge(cur, right, EDGE_CONNECTED, g);
+                }
+            }
+
+            if(r < map_img.rows-1) {
+
+                float value = map_img(r+1, c);
+                VtxDescriptor down = retrieveVtxDescriptor(value);
+                vertex_color_id[down] = static_cast<int>(value);
+
+                if(cur != down) {
+
+                    add_edge(cur, down, EDGE_CONNECTED, g);
+                }
+            }
+        } // column
+    } // row
+}
+
+GraphMap_Impl::VtxDescriptor GraphMap_Impl::retrieveVtxDescriptor(float value)
+{
+    VtxDescriptor descriptor;
+    MapVtxDescriptor::const_iterator itr = vtx_descriptor_cache_.find(value);
+    bool found = itr != vtx_descriptor_cache_.end();
+    if(found) {
+
+        descriptor = itr->second; // get cached descriptor
+    }
+    else {
+        descriptor = boost::add_vertex(value, g); // get new descriptor
+
+        // cache new descriptor
+        vtx_descriptor_cache_[value] = descriptor;
+    }
+
+    return descriptor;
 }

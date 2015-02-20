@@ -12,6 +12,7 @@
 #include "elm/core/debug_utils.h"
 #include "elm/core/graph/graphmap_impl.h"
 
+using namespace boost;
 using namespace cv;
 using namespace elm;
 
@@ -25,8 +26,8 @@ GraphMap::GraphMap()
 {
 }
 
-GraphMap::GraphMap(const Mat1f &map_img)
-    : impl(new GraphMap_Impl(map_img))
+GraphMap::GraphMap(const Mat1f &map_img, const Mat &mask)
+    : impl(new GraphMap_Impl(map_img, mask))
 {
 }
 
@@ -37,13 +38,13 @@ size_t GraphMap::num_vertices() const
 
 float GraphMap::operator ()(int idx_u, int idx_v) const
 {
-    GraphTraits::vertex_descriptor u(idx_u);
-    GraphTraits::vertex_descriptor v(idx_v);
+    GraphMapTraits::vertex_descriptor u(idx_u);
+    GraphMapTraits::vertex_descriptor v(idx_v);
 
-    typename boost::property_map < GraphType, boost::edge_weight_t >::type
+    typename boost::property_map < GraphMapType, boost::edge_weight_t >::type
             weight = get(boost::edge_weight, impl->g);
 
-    GraphTraits::edge_descriptor e;
+    GraphMapTraits::edge_descriptor e;
     bool found;
 
     boost::tie(e, found) = edge(u, v, impl->g);
@@ -67,26 +68,22 @@ void GraphMap::AdjacencyMat(Mat1f &adj) const
     }
 }
 
-void GraphMap::AdjacencyMat(SparseMat1f &adj) const
+VecF GraphMap::VerticesIds() const
 {
-    int nb_vertices = static_cast<int>(num_vertices());
+    VecF vtx_ids(num_vertices());
 
-    if((adj.size() == 0) || (nb_vertices < adj.size()[0]) || (nb_vertices < adj.size()[1])) {
+    property_map<GraphMapType, vertex_color_t>::type
+            vertex_color_id = get(vertex_color, impl->g);
 
-        int dims = 2;
-        const int _sizes[2] = {nb_vertices, nb_vertices};
-        if(nb_vertices > 0) {
+    GraphMapTraits::vertex_iterator vi, vi_end, next;
+    tie(vi, vi_end) = vertices(impl->g);
+    int i=0;
+    for (next = vi; vi != vi_end; vi = next) {
 
-            adj = SparseMat1f(dims, _sizes);
-        }
+        ++next;
+        vtx_ids[i++] = vertex_color_id[*vi];
     }
 
-    for(int idx_u=0; idx_u<nb_vertices; idx_u++) {
-
-        for(int idx_v=0; idx_v<nb_vertices; idx_v++) {
-
-            adj.ref(idx_u, idx_v) = operator ()(idx_u, idx_v);
-        }
-    }
+    return vtx_ids;
 }
 

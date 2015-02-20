@@ -9,7 +9,7 @@
 #define _ELM_CORE_GRAPH_GRAPHMAP_H_
 
 #include "elm/core/typedefs_fwd.h"
-#include "elm/core/pcl/typedefs_fwd.h"
+#include "elm/core/stl/typedefs.h"
 
 namespace elm {
 
@@ -29,8 +29,9 @@ public:
     /**
      * @brief Construct Graph from map representing image
      * @param map
+     * @param mask for excluding invalid elements
      */
-    GraphMap(const cv::Mat1f &map_img);
+    GraphMap(const cv::Mat1f &map_img, const cv::Mat &mask);
 
     /**
      * @brief get no. of vertices in graph
@@ -59,14 +60,13 @@ public:
     void AdjacencyMat(cv::Mat1f &adj) const;
 
     /**
-     * @brief Get adjacency matrix for this graph
+     * @brief get list of vertex ids represented by their primary unique property
      *
-     * A new SparseMat object will only be constructed if not previously alocated
-     * or allocated dimensions are not sufficient.
+     * The ordering matches occurrence in adjacency matrix
      *
-     * @param[out] Sparse adjacency matrix
+     * @return list vertex ids
      */
-    void AdjacencyMat(SparseMat1f &adj) const;
+    VecF VerticesIds() const;
 
     // members
     std::shared_ptr<GraphMap_Impl> impl;

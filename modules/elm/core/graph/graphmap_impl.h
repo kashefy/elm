@@ -15,13 +15,15 @@
 
 namespace elm {
 
-typedef boost::property<boost::edge_weight_t, float> EdgeWeightProperty;
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, EdgeWeightProperty> GraphType;
-typedef boost::graph_traits<GraphType> GraphTraits;
-typedef GraphTraits::edge_iterator edge_iter;
+typedef boost::property<boost::edge_weight_t, int> EdgeWeightProperty;
+typedef boost::property<boost::vertex_color_t, float> VtxProperty;
+typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VtxProperty, EdgeWeightProperty> GraphMapType;
+typedef boost::graph_traits<GraphMapType> GraphMapTraits;
+typedef GraphMapTraits::edge_iterator edge_iter;
 
 /**
  * @brief full GraphMap implementation class
+ * Enforces a list of unique vertices accroding to their main property
  */
 struct GraphMap_Impl
 {
@@ -33,11 +35,26 @@ struct GraphMap_Impl
     /**
      * @brief Construct Graph from map representing image
      * @param map
+     * @param mask for excluding invalid elements (set to false to exclude)
      */
-    GraphMap_Impl(const cv::Mat1f &map_img);
+    GraphMap_Impl(const cv::Mat1f &map_img, const cv::Mat &mask);
 
-    // members
-    GraphType g;    ///< underlying graph object
+    // public members
+    GraphMapType g;    ///< underlying graph object
+
+protected:
+    // typedefs
+    typedef GraphMapTraits::vertex_descriptor VtxDescriptor;
+    typedef std::map<float, VtxDescriptor > MapVtxDescriptor;
+
+    /**
+     * @brief retrieves vertex_descriptor of an existing or new vertex
+     * @param value primary vertex identifying property (e.g. map img value)
+     * @return vertex descriptor
+     */
+    VtxDescriptor retrieveVtxDescriptor(float value);
+
+    MapVtxDescriptor vtx_descriptor_cache_;   ///< cache vertex descriptors
 };
 
 } // namespace elm
