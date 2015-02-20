@@ -22,6 +22,7 @@ template <typename T> class SparseMat_;
 
 typedef Mat_<float> Mat1f;  ///< convinience typedef for Mat of floats without constraints on no. of channels
 typedef Mat_<int> Mat1i;    ///< convinience typedef for Mat of integers
+typedef Mat_<unsigned char> Mat1b;    ///< convinience typedef for Mat of unsigned chars
 
 template <typename T, int cn> class Vec; ///< convinience typedef for Vec used in multi-channel pixel representation
 

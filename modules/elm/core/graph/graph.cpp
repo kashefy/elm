@@ -50,8 +50,6 @@ float Graph::operator ()(int idx_u, int idx_v) const
     return found? get(weight, e) : 0.f;
 }
 
-#ifdef __WITH_PCL
-
 void Graph::AdjacencyMat(Mat1f &adj) const
 {
     int nb_vertices = static_cast<int>(num_vertices());
@@ -92,6 +90,7 @@ void Graph::AdjacencyMat(SparseMat1f &adj) const
     }
 }
 
+#ifdef __WITH_PCL
 
 Graph::Graph(const CloudXYZPtr &cld, const Triangles &t)
     : impl(new Graph_Impl(cld, t))
