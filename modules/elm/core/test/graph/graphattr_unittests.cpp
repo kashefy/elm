@@ -383,7 +383,7 @@ TEST_F(GraphAttrConstructTest, AddAttributes_invalid_vtx_id)
 
     GraphAttr to(m, Mat1b());
 
-    ASSERT_GT(static_cast<size_t>(0), to.num_vertices()) << "this test requires a non-empty graph";
+    ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
     EXPECT_THROW(to.addAttributes(-1.f, Mat1f()), ExceptionKeyError);
     EXPECT_THROW(to.addAttributes(-1.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
@@ -416,7 +416,7 @@ TEST_F(GraphAttrConstructTest, AddAttributes_invalid_vtx_id_masked)
 
     GraphAttr to(m, mask);
 
-    ASSERT_GT(static_cast<size_t>(0), to.num_vertices()) << "this test requires a non-empty graph";
+    ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
     EXPECT_THROW(to.addAttributes(-1.f, Mat1f()), ExceptionKeyError);
     EXPECT_THROW(to.addAttributes(-1.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
