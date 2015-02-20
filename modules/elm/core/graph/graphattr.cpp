@@ -158,9 +158,7 @@ VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat
     thread_group group;
 
     int i=0;
-    for (next = vi; vi != vi_end; vi = next) {
-
-        ++next;
+    for (next = vi; vi != vi_end; vi = ++next) {
 
         float vtx_color = vertex_color_id[*vi];
 
@@ -169,7 +167,6 @@ VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat
                                         vtx_color, impl->src_map_img, boost::ref(results[i++]))
                             );
     }
-
     group.join_all();
 
     return results;
