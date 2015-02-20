@@ -592,4 +592,47 @@ TEST_F(GraphAttrConstructTest, Add_and_getAttributes_masked)
     }
 }
 
+/**
+ * @brief toy function that returns an image with non-masked pixels zero'ed out
+ * @param img
+ * @param mask
+ * @return masked_img
+ */
+Mat1f masked_img(const cv::Mat1f &img, const cv::Mat1b &mask) {
+
+    return img.clone().setTo(0.f, mask == 0);
+}
+
+TEST_F(GraphAttrConstructTest, ApplyVerticesToMap_masked_img)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    float data[ROWS*COLS] = {1, 1, 2.2,
+                             3, 6, 6,
+                             9, 9.5, 11};
+    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+
+    Mat1b exclude, mask;
+    cv::bitwise_or(m < 2, m == 9, exclude);
+    cv::bitwise_not(exclude, mask);
+
+    GraphAttr to(m, mask);
+
+    ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    VecF vtx_ids = to.VerticesIds();
+
+    VecMat1f results = to.applyVerticesToMap(masked_img);
+
+    EXPECT_EQ(vtx_ids.size(), results.size()) << "Expecting exactly 1 item per vertex.";
+
+    for(size_t i=0; i<vtx_ids.size(); i++) {
+
+        float vtx_id = vtx_ids[i];
+
+        EXPECT_MAT_EQ(m.clone().setTo(0.f, m != vtx_id), results[i]);
+
+    }
+}
+
 } // annonymous namespace for test cases and fixtures

@@ -8,8 +8,7 @@
 #ifndef _ELM_CORE_GRAPH_GRAPHATTR_H_
 #define _ELM_CORE_GRAPH_GRAPHATTR_H_
 
-#include "elm/core/typedefs_fwd.h"
-#include "elm/core/stl/typedefs.h"
+#include "elm/core/typedefs_sfwd.h"
 
 namespace elm {
 
@@ -87,6 +86,8 @@ public:
      * @throws elm::ExceptionKeyError for non-existing vertex id
      */
     cv::Mat1f getAttributes(float vtx_id) const;
+
+    VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
     // members
     std::shared_ptr<GraphAttr_Impl> impl;

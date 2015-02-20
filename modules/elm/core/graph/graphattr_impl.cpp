@@ -21,6 +21,7 @@ GraphAttr_Impl::GraphAttr_Impl()
 }
 
 GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
+    : src_map_img(map_img)
 {
     ELM_THROW_BAD_DIMS_IF(map_img.total()==static_cast<size_t>(1),
                           "Cannot create graph out of single element map.");

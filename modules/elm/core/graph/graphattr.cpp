@@ -7,6 +7,8 @@
 //M*/
 #include "elm/core/graph/graphattr.h"
 
+#include <boost/graph/depth_first_search.hpp>
+
 #include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
 #include "elm/core/graph/graphattr_impl.h"
@@ -119,3 +121,27 @@ Mat1f GraphAttr::getAttributes(float vtx_id) const
         ELM_THROW_KEY_ERROR(s.str());
     }
 }
+
+VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat1b &mask)) const
+{
+    std::vector<Mat1f > results(num_vertices());
+
+    property_map<GraphAttrType, vertex_color_t>::type
+            vertex_color_id = get(vertex_color, impl->g);
+
+    GraphAttrTraits::vertex_iterator vi, vi_end, next;
+    tie(vi, vi_end) = vertices(impl->g);
+    int i=0;
+    for (next = vi; vi != vi_end; vi = next) {
+
+        ++next;
+        float vtx_color = vertex_color_id[*vi];
+        Mat1b _mask = impl->src_map_img == vtx_color;
+        Mat1f vtx_result = func(impl->src_map_img, _mask);
+        results[i++] = vtx_result;
+    }
+
+    return results;
+}
+
+

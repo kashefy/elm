@@ -49,7 +49,7 @@ struct GraphAttr_Impl
     // public members
     GraphAttrType g;    ///< underlying graph object
 
-    cv::Mat1f map_img;  ///< source map image for this graph
+    cv::Mat1f src_map_img;  ///< source map image for this graph
 
 protected:
     // typedefs
