@@ -209,16 +209,12 @@ TEST_F(GraphMapConstructTest, VerticesIds)
                            9, 9, 11};
     Mat1i m = Mat1i(ROWS, COLS, data).clone();
 
-    ELM_COUT_VAR(m);
-
     GraphMap to(m, Mat());
     const int nb_vertices = static_cast<int>(to.num_vertices());
     EXPECT_EQ(6, nb_vertices);
 
     Mat1f adj;
     to.AdjacencyMat(adj);
-
-    ELM_COUT_VAR(adj);
 
     EXPECT_MAT_DIMS_EQ(adj, Size2i(nb_vertices, nb_vertices));
     EXPECT_MAT_EQ(adj, adj.t()) << "Expecting adj. matrix symmetric around diagonal";
