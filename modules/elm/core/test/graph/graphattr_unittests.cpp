@@ -361,4 +361,25 @@ TEST_F(GraphAttrConstructTest, VerticesIds_masked)
     EXPECT_FLOAT_EQ(1.f, adj(1, 3));
 }
 
+TEST_F(GraphAttrConstructTest, AddAttributes_empty_graph)
+{
+    Mat1f x;
+    GraphAttr to(x, Mat());
+    EXPECT_EQ(static_cast<size_t>(0), to.num_vertices());
+
+    float vtx_id = -10.f;
+    while(++vtx_id <= 10.f) {
+
+        EXPECT_THROW(to.addAttributes(++vtx_id, Mat1f()), ExceptionKeyError);
+
+        EXPECT_THROW(to.addAttributes(++vtx_id, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+    }
+}
+
+
+TEST_F(GraphAttrConstructTest, AddAttributes_invalid_vtx_id)
+{
+
+}
+
 } // annonymous namespace for test cases and fixtures

@@ -7,9 +7,8 @@
 //M*/
 #include "elm/core/graph/graphattr.h"
 
-#include <opencv2/core/core.hpp>
-
 #include "elm/core/debug_utils.h"
+#include "elm/core/exception.h"
 #include "elm/core/graph/graphattr_impl.h"
 
 using namespace boost;
@@ -90,6 +89,14 @@ VecF GraphAttr::VerticesIds() const
 void GraphAttr::addAttributes(float vtx_id, const Mat1f &attr)
 {
     VtxDescriptor descriptor;
-    impl->findVtxDescriptor(vtx_id, descriptor);
+    if(impl->findVtxDescriptor(vtx_id, descriptor)) {
+
+
+    }
+    else {
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_id << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
 }
 
