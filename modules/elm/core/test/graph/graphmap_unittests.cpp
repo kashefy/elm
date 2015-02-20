@@ -231,10 +231,6 @@ TEST_F(GraphMapConstructTest, VerticesIds)
     // verify vertices vector
     VecF vtx_ids = to.VerticesIds();
     EXPECT_SIZE(nb_vertices, vtx_ids);
-    for(int i=0; i<adj.rows; i++) {
-        std::cout<<vtx_ids[i] << " ";
-    }
-    std::cout<<std::endl;
 
     // verify vertex ids and their order
     EXPECT_FLOAT_EQ(1.f, vtx_ids[0]);
