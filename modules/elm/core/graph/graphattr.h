@@ -70,6 +70,8 @@ public:
      */
     VecF VerticesIds() const;
 
+    void addAttributes(float vtx_id, const cv::Mat1f &attr);
+
     // members
     std::shared_ptr<GraphAttr_Impl> impl;
 };

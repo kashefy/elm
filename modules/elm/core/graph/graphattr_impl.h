@@ -24,6 +24,7 @@ typedef boost::property<boost::vertex_color_t, float,
 typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VtxProp, EdgeWeightProp> GraphAttrType;
 typedef boost::graph_traits<GraphAttrType> GraphAttrTraits;
 typedef GraphAttrTraits::edge_iterator edge_iter;
+typedef GraphAttrTraits::vertex_descriptor VtxDescriptor;
 
 /**
  * @brief full GraphAttr implementation class
@@ -43,12 +44,13 @@ struct GraphAttr_Impl
      */
     GraphAttr_Impl(const cv::Mat1f &map_img, const cv::Mat1b &mask);
 
+    bool findVtxDescriptor(float vtx_id, VtxDescriptor &vtx_descriptor) const;
+
     // public members
     GraphAttrType g;    ///< underlying graph object
 
 protected:
     // typedefs
-    typedef GraphAttrTraits::vertex_descriptor VtxDescriptor;
     typedef std::map<float, VtxDescriptor > MapVtxDescriptor;
 
     /**
@@ -56,7 +58,7 @@ protected:
      * @param value primary vertex identifying property (e.g. map img value)
      * @return vertex descriptor
      */
-    VtxDescriptor retrieveVtxDescriptor(float value);
+    VtxDescriptor retrieveVtxDescriptor(float vtx_id);
 
     MapVtxDescriptor vtx_descriptor_cache_;   ///< cache vertex descriptors
 };

@@ -87,3 +87,9 @@ VecF GraphAttr::VerticesIds() const
     return vtx_ids;
 }
 
+void GraphAttr::addAttributes(float vtx_id, const Mat1f &attr)
+{
+    VtxDescriptor descriptor;
+    impl->findVtxDescriptor(vtx_id, descriptor);
+}
+

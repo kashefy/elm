@@ -85,21 +85,31 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
     } // row
 }
 
-GraphAttr_Impl::VtxDescriptor GraphAttr_Impl::retrieveVtxDescriptor(float value)
+VtxDescriptor GraphAttr_Impl::retrieveVtxDescriptor(float vtx_id)
 {
     VtxDescriptor descriptor;
-    MapVtxDescriptor::const_iterator itr = vtx_descriptor_cache_.find(value);
-    bool found = itr != vtx_descriptor_cache_.end();
-    if(found) {
 
-        descriptor = itr->second; // get cached descriptor
-    }
-    else {
-        descriptor = boost::add_vertex(value, g); // get new descriptor
+    // if found, return cached descriptor
+    if(!findVtxDescriptor(vtx_id, descriptor)) {
+
+        // otherwise, request new descriptor
+        descriptor = boost::add_vertex(vtx_id, g);
 
         // cache new descriptor
-        vtx_descriptor_cache_[value] = descriptor;
+        vtx_descriptor_cache_[vtx_id] = descriptor;
     }
 
     return descriptor;
+}
+
+bool GraphAttr_Impl::findVtxDescriptor(float vtx_id, VtxDescriptor &vtx_descriptor) const
+{
+    MapVtxDescriptor::const_iterator itr = vtx_descriptor_cache_.find(vtx_id);
+    bool found = itr != vtx_descriptor_cache_.end();
+    if(found) {
+
+        vtx_descriptor = itr->second; // get cached descriptor
+    }
+
+    return found;
 }
