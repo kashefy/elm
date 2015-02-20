@@ -95,6 +95,17 @@ public:
     std::shared_ptr<GraphAttr_Impl> impl;
 };
 
+/**
+ * @brief apply function to image after masking it by color (mask := img == color)
+ * @param color
+ * @param img
+ * @param dst
+ */
+void apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
+                  float color,
+                  const cv::Mat1f &img,
+                  cv::Mat1f &dst);
+
 } // namespace elm
 
 #endif // _ELM_CORE_GRAPH_GRAPHATTR_H_

@@ -7,7 +7,8 @@
 //M*/
 #include "elm/core/graph/graphattr.h"
 
-#include <boost/graph/depth_first_search.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/make_shared.hpp>
 
 #include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
@@ -145,26 +146,51 @@ Mat1f GraphAttr::applyVertexToMap(float vtx_id, Mat1f (*func)(const Mat1f &img, 
     return vtx_result;
 }
 
+
+
+void noop_del(VecMat1f *)
+{
+    return;
+}
+
 VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat1b &mask)) const
 {
-    std::vector<Mat1f > results(num_vertices());
+    VecMat1f results(num_vertices());
 
     property_map<GraphAttrType, vertex_color_t>::type
             vertex_color_id = get(vertex_color, impl->g);
 
     GraphAttrTraits::vertex_iterator vi, vi_end, next;
     tie(vi, vi_end) = vertices(impl->g);
+
+    thread_group group;
+
     int i=0;
     for (next = vi; vi != vi_end; vi = next) {
 
         ++next;
+
         float vtx_color = vertex_color_id[*vi];
-        Mat1b _mask = impl->src_map_img == vtx_color;
-        Mat1f vtx_result = func(impl->src_map_img, _mask);
-        results[i++] = vtx_result;
+
+        group.create_thread(boost::bind(&elm::apply_masked,
+                                        func,
+                                        vtx_color, impl->src_map_img, boost::ref(results[i++]))
+                            );
     }
+
+    group.join_all();
 
     return results;
 }
 
+// non member functions
+
+void elm::apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
+                       float color,
+                       const Mat1f &img,
+                       Mat1f &dst)
+{
+    Mat1b _mask = img == color;
+    dst = func(img, _mask);
+}
 
