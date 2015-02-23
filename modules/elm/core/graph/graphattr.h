@@ -87,8 +87,20 @@ public:
      */
     cv::Mat1f getAttributes(float vtx_id) const;
 
+    /**
+     * @brief apply function to source image map masked by vertex
+     * @param func point to function to apply on masked image
+     * @param vtx_id for mapping source map image
+     * @return result of function application
+     */
     cv::Mat1f applyVertexToMap(float vtx_id, cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
+    /**
+     * @brief apply function to source image map masked by vertex for each vertex
+     * @param func point to function to apply on masked image
+     * @param vtx_id for mapping source map image
+     * @return result of function application for each vertex
+     */
     VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
     // members
