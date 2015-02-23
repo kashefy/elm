@@ -794,28 +794,51 @@ TEST_F(GraphAttrMaskedTest, VertexIndex_graph_without_vertices)
     EXPECT_THROW(to.VertexIndex(9.f), ExceptionKeyError);
 }
 
-TEST_F(GraphAttrMaskedTest, RemoveEdges)
+/**
+ * @brief Remove edge between two vertices that weren't connected
+ * in the first place.
+ */
+TEST_F(GraphAttrMaskedTest, RemoveEdges_no_edge)
 {
-    VecF vtx_ids = to_.VerticesIds();
-    ELM_COUT_VAR(to_string(vtx_ids));
-
     Mat1f adj0;
     to_.AdjacencyMat(adj0);
 
-    ELM_COUT_VAR(adj0);
-
-    to_.removeEdges(2.2f, 11.0f); // no edge
+    float u = 2.2f;
+    float v = 11.0f;
+    to_.removeEdges(u, v); // no edge
 
     Mat1f adj;
     to_.AdjacencyMat(adj);
 
-    EXPECT_MAT_EQ(adj0, adj);
+    ASSERT_EQ(0.f, adj(to_.VertexIndex(u), to_.VertexIndex(v)))
+            << "test requires two vertices that are not connected. to one another.";
+    ASSERT_EQ(0.f, adj(to_.VertexIndex(v), to_.VertexIndex(u)))
+            << "test requires two vertices that are not connected. to one another.";
 
-    to_.removeEdges(2.2f, 6.0f);
+    EXPECT_MAT_EQ(adj0, adj) << "Adjacency matrix changed after redge rmeoval.";
+}
 
+TEST_F(GraphAttrMaskedTest, RemoveEdges)
+{
+    float u = 2.2f;
+    float v = 6.0f;
+
+    int u_idx = to_.VertexIndex(u);
+    int v_idx = to_.VertexIndex(v);
+
+    Mat1f adj0;
+    to_.AdjacencyMat(adj0);
+
+    ASSERT_GT(adj0(u_idx, v_idx), 0.f) << "test assumes edge between vertices exists.";
+    ASSERT_GT(adj0(v_idx, u_idx), 0.f) << "test assumes edge between vertices exists.";
+
+    to_.removeEdges(u, v);
+
+    Mat1f adj;
     to_.AdjacencyMat(adj);
 
-    ELM_COUT_VAR(adj);
+    EXPECT_EQ(0.f, adj(u_idx, v_idx));
+    EXPECT_EQ(0.f, adj(v_idx, u_idx));
 }
 
 } // annonymous namespace for test cases and fixtures
