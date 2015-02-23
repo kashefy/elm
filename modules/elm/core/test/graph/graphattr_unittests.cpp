@@ -706,4 +706,82 @@ TEST_F(GraphAttrConstructTest, ApplyVertexToMap_masked_img_invalid_vtx_id)
     }
 }
 
+/**
+ * @brief testing GraphAttr methods after sucessful construction
+ * form masked image map
+ */
+class GraphAttrMaskedTest : public ::testing::Test
+{
+protected:
+    virtual void SetUp()
+    {
+        const int ROWS=3;
+        const int COLS=3;
+        float data[ROWS*COLS] = {1.f, 1.0f, 2.2f,
+                                 3.f, 6.0f, 6.0f,
+                                 9.f, 9.5f, 11.f};
+        map_ = Mat1f(ROWS, COLS, data).clone();
+
+        Mat1b exclude;
+        cv::bitwise_or(map_ < 2.f, map_ == 9.f, exclude);
+        cv::bitwise_not(exclude, mask_);
+
+        to_ = GraphAttr(map_, mask_);
+    }
+
+    // members
+    GraphAttr to_;  ///< test object
+    Mat1f map_;
+    Mat1b mask_;
+};
+
+TEST_F(GraphAttrMaskedTest, ApplyVertexToMap_masked_img_invalid_vtx_id)
+{
+    ASSERT_GT(to_.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    EXPECT_THROW(to_.applyVertexToMap(-1.f, func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(0.f, func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(5.f, func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(11.2f, func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(9.f, func_masked_img), ExceptionKeyError);
+
+    for(size_t i=0; i<map_.total(); i++) {
+
+        if(mask_(i)) {
+            EXPECT_NO_THROW(to_.applyVertexToMap(map_(i), func_masked_img));
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)+0.2f, func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)-0.2f, func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)+0.7f, func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)-0.7f, func_masked_img), ExceptionKeyError);
+        }
+        else {
+            EXPECT_THROW(to_.applyVertexToMap(map_(i), func_masked_img), ExceptionKeyError);
+        }
+    }
+}
+
+TEST_F(GraphAttrMaskedTest, RemoveEdges)
+{
+    VecF vtx_ids = to_.VerticesIds();
+
+
+    Mat1f adj0;
+    to_.AdjacencyMat(adj0);
+
+    to_.removeEdges(1.f, 9.0f); // no edge
+
+    Mat1f adj;
+    to_.AdjacencyMat(adj);
+
+    EXPECT_MAT_EQ(adj0, adj);
+
+    to_.removeEdges(1.f, 6.0f);
+
+    to_.AdjacencyMat(adj);
+}
+
 } // annonymous namespace for test cases and fixtures

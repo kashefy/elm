@@ -8,7 +8,7 @@
 #include "elm/core/cv/mat_vector_utils.h"
 #include "elm/core/cv/mat_vector_utils_inl.h"
 
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 #include "elm/ts/ts.h"
 
 using namespace std;

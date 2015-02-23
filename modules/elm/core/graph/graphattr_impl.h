@@ -46,6 +46,8 @@ struct GraphAttr_Impl
 
     bool findVtxDescriptor(float vtx_id, VtxDescriptor &vtx_descriptor) const;
 
+    void removeEdges(const VtxDescriptor &u, const VtxDescriptor &v);
+
     // public members
     GraphAttrType g;    ///< underlying graph object
 

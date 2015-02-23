@@ -104,13 +104,24 @@ public:
      */
     VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
+
+    void removeEdges(float vtx_u, float vtx_v);
+
     /**
      * @brief contract edges/merge two vertices
+     *
+     * remove (u, v) and (v, u) edges
+     * merge all u and v out-edges with common targets
+     * merge all u and v in-edges with common sources
+     * move the rest of u out-edges to v
+     * move the rest of u in-edges to v
+     *
      * @param idx_u index to vertex u
      * @param idx_v index to vertex v
+     * @return index of merged vertex (idx_v)
      * @throws elm::ExceptionKeyError for invalid vertex index
      */
-    void ContractEdges(int idx_u, int idx_v);
+    int contractEdges(float vtx_u, float vtx_v);
 
 
 

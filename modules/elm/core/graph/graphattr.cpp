@@ -172,6 +172,61 @@ VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat
     return results;
 }
 
+int GraphAttr::contractEdges(float vtx_u, float vtx_v)
+{
+    VtxDescriptor u;
+    if(!impl->findVtxDescriptor(vtx_u, u)) {
+
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_u << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    VtxDescriptor v;
+    if(!impl->findVtxDescriptor(vtx_v, v)) {
+
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_v << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    int idx_z = vtx_v;
+
+    // remove (u, v) and (v, u) edges;
+    GraphAttrTraits::edge_descriptor e;
+    bool found;
+
+    boost::tie(e, found) = edge(u, v, impl->g);
+
+    if(found) {
+
+        remove_edge(e, impl->g);
+    }
+
+    return idx_z;
+}
+
+void GraphAttr::removeEdges(float vtx_u, float vtx_v)
+{
+    VtxDescriptor u;
+    if(!impl->findVtxDescriptor(vtx_u, u)) {
+
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_u << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    VtxDescriptor v;
+    if(!impl->findVtxDescriptor(vtx_v, v)) {
+
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_v << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    return impl->removeEdges(u, v);
+}
+
 // non member functions
 
 void elm::apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),

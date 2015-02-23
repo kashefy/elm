@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/featuredata.h"
 
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 #include "elm/core/exception.h"
 #include "elm/ts/pcl_point_typed_tests.h"
 #include "elm/ts/ts.h"

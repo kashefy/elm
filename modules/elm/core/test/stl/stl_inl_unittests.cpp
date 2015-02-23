@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 
 #include "elm/ts/ts.h"
 

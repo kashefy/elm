@@ -10,7 +10,7 @@
 #include <opencv2/core/core.hpp>
 
 #include "elm/core/exception.h"
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 
 using namespace std;
 using namespace cv;
@@ -115,3 +115,15 @@ bool GraphAttr_Impl::findVtxDescriptor(float vtx_id, VtxDescriptor &vtx_descript
     return found;
 }
 
+void GraphAttr_Impl::removeEdges(const VtxDescriptor &u, const VtxDescriptor &v)
+{
+    GraphAttrTraits::edge_descriptor e;
+    bool found;
+
+    boost::tie(e, found) = edge(u, v, g);
+
+    if(found) {
+
+        remove_edge(e, g);
+    }
+}

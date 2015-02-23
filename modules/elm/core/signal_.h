@@ -11,7 +11,7 @@
 #include <map>
 
 #include "elm/core/exception.h"
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 #include "elm/core/stl/typedefs.h"
 
 namespace elm {
