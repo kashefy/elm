@@ -92,6 +92,7 @@ public:
      * @param func point to function to apply on masked image
      * @param vtx_id for mapping source map image
      * @return result of function application
+     * @throws elm::ExceptionKeyError for invalid vertex index
      */
     cv::Mat1f applyVertexToMap(float vtx_id, cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
