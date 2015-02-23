@@ -103,6 +103,16 @@ public:
      */
     VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
+    /**
+     * @brief contract edges/merge two vertices
+     * @param idx_u index to vertex u
+     * @param idx_v index to vertex v
+     * @throws elm::ExceptionKeyError for invalid vertex index
+     */
+    void ContractEdges(int idx_u, int idx_v);
+
+
+
     // members
     std::shared_ptr<GraphAttr_Impl> impl;
 };
