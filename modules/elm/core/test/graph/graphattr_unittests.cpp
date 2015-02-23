@@ -717,7 +717,7 @@ protected:
     {
         const int ROWS=3;
         const int COLS=3;
-        float data[ROWS*COLS] = {1.f, 1.0f, 2.2f,
+        float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
                                  3.f, 6.0f, 6.0f,
                                  9.f, 9.5f, 11.f};
         map_ = Mat1f(ROWS, COLS, data).clone();
@@ -839,6 +839,28 @@ TEST_F(GraphAttrMaskedTest, RemoveEdges)
 
     EXPECT_EQ(0.f, adj(u_idx, v_idx));
     EXPECT_EQ(0.f, adj(v_idx, u_idx));
+}
+
+TEST_F(GraphAttrMaskedTest, ContractEdges_merge_neighbors)
+{
+    ELM_COUT_VAR(to_string(to_.VerticesIds()));
+    float u = 6.0f;
+    float v = 9.5f;
+
+    int u_idx = to_.VertexIndex(u);
+    int v_idx = to_.VertexIndex(v);
+
+    Mat1f adj0;
+    to_.AdjacencyMat(adj0);
+
+    ELM_COUT_VAR(adj0);
+    to_.contractEdges(u, v);
+
+    ELM_COUT_VAR(to_string(to_.VerticesIds()));
+    Mat1f adj;
+    to_.AdjacencyMat(adj);
+
+    ELM_COUT_VAR(adj);
 }
 
 } // annonymous namespace for test cases and fixtures

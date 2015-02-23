@@ -124,16 +124,16 @@ public:
      * move the rest of u out-edges to v
      * move the rest of u in-edges to v
      *
-     * @param idx_u index to vertex u
-     * @param idx_v index to vertex v
+     * @param id_u id for vertex u (e.g. color)
+     * @param id_v id for vertex v (e.g. color)
      * @return index of merged vertex (idx_v)
      * @throws elm::ExceptionKeyError for invalid vertex index
      */
-    int contractEdges(float vtx_u, float vtx_v);
+    float contractEdges(float id_u, float id_v);
 
 
 
-    // members
+    // public members
     std::shared_ptr<GraphAttr_Impl> impl;
 };
 

@@ -9,6 +9,7 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
 #include "elm/core/stl/stl_inl.h"
 
@@ -62,6 +63,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
                     vertex_color_id[right] = value;
 
                     if(cur != right) {
+                        ELM_COUT_VAR("add e("<<vertex_color_id[cur]<<","<<vertex_color_id[right]<<")");
 
                         add_edge(cur, right, EDGE_CONNECTED, g);
                     }
@@ -77,6 +79,8 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
                     vertex_color_id[down] = value;
 
                     if(cur != down) {
+
+                        ELM_COUT_VAR("add e("<<vertex_color_id[cur]<<","<<vertex_color_id[down]<<")");
 
                         add_edge(cur, down, EDGE_CONNECTED, g);
                     }
@@ -126,4 +130,31 @@ void GraphAttr_Impl::removeEdges(const VtxDescriptor &u, const VtxDescriptor &v)
 
         remove_edge(e, g);
     }
+}
+
+void GraphAttr_Impl::removeEdges(float vtx_u, float vtx_v, VtxDescriptor &u, VtxDescriptor &v)
+{ELM_COUT_VAR("remove edge(" << vtx_u << "," <<vtx_v << ")");
+    if(!findVtxDescriptor(vtx_u, u)) {
+
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_u << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    if(!findVtxDescriptor(vtx_v, v)) {
+
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_v << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    return removeEdges(u, v);
+}
+
+void GraphAttr_Impl::removeVertex(float vtx_id, const VtxDescriptor &vtx)
+{
+    boost::remove_vertex(vtx_descriptor_cache_[vtx_id], g);
+
+    // remove from cache
+    vtx_descriptor_cache_.erase(vtx_id);
 }
