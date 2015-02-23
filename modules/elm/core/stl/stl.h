@@ -12,6 +12,7 @@
 
 #include <map>
 #include <string>
+#include <sstream>
 #include <vector>
 
 namespace elm {
@@ -66,6 +67,22 @@ namespace elm {
 
             v.push_back(static_cast<T>(rand()));
         }
+    }
+
+    template <typename T>
+    std::string to_string(const std::vector<T> &v, const std::string &delim=", ")
+    {
+        std::stringstream s;
+        for(size_t i=0; i<v.size(); i++) {
+
+            s << v[i];
+            if(i < v.size()-1) {
+
+                s << delim;
+            }
+        }
+
+        return s.str();
     }
 }
 
