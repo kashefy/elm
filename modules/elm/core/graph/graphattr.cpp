@@ -227,6 +227,31 @@ void GraphAttr::removeEdges(float vtx_u, float vtx_v)
     return impl->removeEdges(u, v);
 }
 
+int GraphAttr::VertexIndex(float vtx_id) const
+{
+    VtxDescriptor v;
+    if(!impl->findVtxDescriptor(vtx_id, v)) {
+
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_id << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    VecF ids = VerticesIds();
+    bool found = false;
+    int idx = -1;
+    for(int i=0; i < static_cast<int>(ids.size()) && !found; i++) {
+
+        if(ids[i] == vtx_id) {
+
+            idx = i;
+            found = true;
+        }
+    }
+
+    return idx;
+}
+
 // non member functions
 
 void elm::apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),

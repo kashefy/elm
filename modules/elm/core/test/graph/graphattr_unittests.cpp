@@ -764,24 +764,58 @@ TEST_F(GraphAttrMaskedTest, ApplyVertexToMap_masked_img_invalid_vtx_id)
     }
 }
 
+TEST_F(GraphAttrMaskedTest, RemoveEdges_invalid)
+{
+    EXPECT_THROW(to_.removeEdges(2.2f, 9.0f), ExceptionKeyError);
+    EXPECT_THROW(to_.removeEdges(9.0f, 2.2f), ExceptionKeyError);
+}
+
+TEST_F(GraphAttrMaskedTest, VertexIndex)
+{
+    VecF vtx_ids = to_.VerticesIds();
+    for(size_t i=0; i<vtx_ids.size(); i++) {
+
+        EXPECT_EQ(static_cast<int>(i), to_.VertexIndex(vtx_ids[i]));
+
+        EXPECT_THROW(to_.VertexIndex(vtx_ids[i]+100.f), ExceptionKeyError);
+    }
+}
+
+TEST_F(GraphAttrMaskedTest, VertexIndex_graph_without_vertices)
+{
+    GraphAttr to;
+    VecF vtx_ids = to.VerticesIds();
+
+    ASSERT_EQ(size_t(0), vtx_ids.size()) << "Expecting empty graph, without vertices";
+
+    EXPECT_THROW(to.VertexIndex(0.f), ExceptionKeyError);
+    EXPECT_THROW(to.VertexIndex(2.2f), ExceptionKeyError);
+    EXPECT_THROW(to.VertexIndex(6.f), ExceptionKeyError);
+    EXPECT_THROW(to.VertexIndex(9.f), ExceptionKeyError);
+}
+
 TEST_F(GraphAttrMaskedTest, RemoveEdges)
 {
     VecF vtx_ids = to_.VerticesIds();
-
+    ELM_COUT_VAR(to_string(vtx_ids));
 
     Mat1f adj0;
     to_.AdjacencyMat(adj0);
 
-    to_.removeEdges(1.f, 9.0f); // no edge
+    ELM_COUT_VAR(adj0);
+
+    to_.removeEdges(2.2f, 11.0f); // no edge
 
     Mat1f adj;
     to_.AdjacencyMat(adj);
 
     EXPECT_MAT_EQ(adj0, adj);
 
-    to_.removeEdges(1.f, 6.0f);
+    to_.removeEdges(2.2f, 6.0f);
 
     to_.AdjacencyMat(adj);
+
+    ELM_COUT_VAR(adj);
 }
 
 } // annonymous namespace for test cases and fixtures
