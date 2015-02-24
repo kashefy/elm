@@ -57,36 +57,6 @@ void base_FilterBankLayer::Activate(const Signal &signal)
 void base_FilterBankLayer::Response(Signal &signal)
 {
     signal.Append(name_out_, response_);
+
 }
 
-VecMat1f base_FilterBankLayer::Convolve(const cv::Mat1f &stimulus)
-{
-    response_.clear();
-    response_.reserve(kernels_.size());
-
-    for(VecMat1f::const_iterator itr=kernels_.begin();
-        itr != kernels_.end();
-        itr++) {
-
-        Mat1f r;
-        filter2D(stimulus, r, -1, *itr, Point(-1, -1), 0, BORDER_REPLICATE);
-        Rectify(r);
-        response_.push_back(r);
-    }
-    return response_;
-}
-
-void base_FilterBankLayer::Rectify(Mat1f &response)
-{
-// default is to do nothing and leave response as is
-}
-
-Mat1f base_FilterBankLayer::ElementResponse(int r, int c) const
-{
-    return elm::ElementsAt(response_, r, c);
-}
-
-size_t base_FilterBankLayer::size() const
-{
-    return Kernels().size();
-}
