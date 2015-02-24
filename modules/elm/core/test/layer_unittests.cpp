@@ -54,11 +54,11 @@ protected:
 
 TEST_F(LayerTest, Reset)
 {
-    EXPECT_THROW(to_->Reset(LayerConfig()), ExceptionNotImpl);
+    EXPECT_NO_THROW(to_->Reset(LayerConfig()));
 }
 
 TEST_F(LayerTest, Reset_unique_ptr)
 {
     unique_ptr<base_Layer> to(new DummyChildLayer());
-    EXPECT_THROW(to_->Reset(LayerConfig()), ExceptionNotImpl);
+    EXPECT_NO_THROW(to_->Reset(LayerConfig()));
 }
