@@ -90,6 +90,19 @@ TEST_F(VisitorSparseMat1fTest, FromVecMat1f_empty)
     EXPECT_EQ(0, to_(VecMat1f(0)).size());\
 }
 
+TEST_F(VisitorSparseMat1fTest, FromVecMat1f_empty_elements)
+{
+    EXPECT_EQ(0, to_(VecMat1f(1)).size());
+    EXPECT_EQ(0, to_(VecMat1f(1, Mat1f())).size());
+    EXPECT_EQ(0, to_(VecMat1f(3, Mat1f())).size());
+    EXPECT_EQ(0, to_(VecMat1f(3, Mat1f(1, 0))).size());
+    EXPECT_EQ(0, to_(VecMat1f(3, Mat1f(0, 1))).size());
+}
+
+TEST_F(VisitorSparseMat1fTest, FromVecMat1f_multiple_elements)
+{
+}
+
 TEST_F(VisitorSparseMat1fTest, Reset)
 {
     EXPECT_NO_THROW(to_.Reset());
