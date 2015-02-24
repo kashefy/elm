@@ -5,18 +5,18 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef _ELM_ENCODING_ORIENTATION_H_
-#define _ELM_ENCODING_ORIENTATION_H_
+#ifndef _ELM_ENCODING_GABORS_H_
+#define _ELM_ENCODING_GABORS_H_
 
 #include "elm/core/typedefs.h"
 #include "elm/encoding/base_filterbank.h"
 
 namespace elm {
 
-class GaborFilterBank : public base_FilterBank
+class Gabors : public base_FilterBank
 {
 public:
-    GaborFilterBank();
+    Gabors();
 
     int Reset(int radius,
               float sigma,
@@ -72,8 +72,8 @@ protected:
      */
     void Rectify(cv::Mat1f &response);
 
-}; // GaborFilterBank
+}; // Gabors
 
 } // namespace elm
 
-#endif // _ELM_ENCODING_ORIENTATION_H_
+#endif // _ELM_ENCODING_GABORS_H_

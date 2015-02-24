@@ -74,13 +74,13 @@ void SaliencyItti::Reset(const LayerConfig &config)
     theta_range_ = ARange_<float>(0.f, CV_PI, 90.*CV_PI/180.);
     VecF theta = Mat_ToVec_<float>(theta_range_);
 
-    gabors_.reset(new GaborFilterBank());
-    ELM_DYN_CAST(GaborFilterBank, gabors_)->Reset(DEFAULT_RADIUS,
-                                                  DEFAULT_SIGMA,
-                                                  theta,
-                                                  DEFAULT_LAMBDA,
-                                                  DEFAULT_GAMMA,
-                                                  DEFAULT_PS);
+    gabors_.reset(new Gabors());
+    ELM_DYN_CAST(Gabors, gabors_)->Reset(DEFAULT_RADIUS,
+                                         DEFAULT_SIGMA,
+                                         theta,
+                                         DEFAULT_LAMBDA,
+                                         DEFAULT_GAMMA,
+                                         DEFAULT_PS);
 
     // intensity contrast
     intensity_constrast_.Init(DEFAULT_RADIUS, 1.f);

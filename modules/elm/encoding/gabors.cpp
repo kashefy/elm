@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/encoding/orientation.h"
+#include "elm/encoding/gabors.h"
 
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -15,12 +15,12 @@
 using namespace cv;
 using namespace elm;
 
-GaborFilterBank::GaborFilterBank()
+Gabors::Gabors()
     : base_FilterBank()
 {
 }
 
-int GaborFilterBank::Reset(int radius,
+int Gabors::Reset(int radius,
                            float sigma,
                            const VecF &theta_rad,
                            float lambd,
@@ -36,7 +36,7 @@ int GaborFilterBank::Reset(int radius,
     return static_cast<int>(kernels_.size());
 }
 
-Mat1f GaborFilterBank::CreateKernel(int radius,
+Mat1f Gabors::CreateKernel(int radius,
                   float sigma,
                   float theta_rad,
                   float lambd,
@@ -53,7 +53,7 @@ Mat1f GaborFilterBank::CreateKernel(int radius,
     return kernel;
 }
 
-VecMat1f GaborFilterBank::CreateKernels(int radius,
+VecMat1f Gabors::CreateKernels(int radius,
                                         float sigma,
                                         const VecF &theta_rad,
                                         float lambd,
@@ -72,12 +72,12 @@ VecMat1f GaborFilterBank::CreateKernels(int radius,
     return filter_bank;
 }
 
-VecMat1f GaborFilterBank::Kernels() const
+VecMat1f Gabors::Kernels() const
 {
     return kernels_;
 }
 
-void GaborFilterBank::Rectify(Mat1f &response)
+void Gabors::Rectify(Mat1f &response)
 {
     pow(response, 2., response);
 }

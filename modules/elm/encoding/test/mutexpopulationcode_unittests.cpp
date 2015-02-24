@@ -6,7 +6,6 @@
 #include "elm/core/layerconfig.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/core/signal.h"
-#include "elm/encoding/orientation.h"
 #include "elm/io/synth.h"
 #include "elm/ts/ts.h"
 

@@ -1,4 +1,4 @@
-#include "elm/encoding/orientation.h"
+#include "elm/encoding/gabors.h"
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -22,12 +22,12 @@ const float PS      = 0;        ///< phase shift
 
 TEST(GaborKernelTest, KernelSize)
 {
-    EXPECT_THROW(GaborFilterBank::CreateKernel(-10, 1., 0., 1., 1., 0.), ExceptionValueError);
-    EXPECT_THROW(GaborFilterBank::CreateKernel(0, 1., 0., 1., 1., 0.), ExceptionValueError);
+    EXPECT_THROW(Gabors::CreateKernel(-10, 1., 0., 1., 1., 0.), ExceptionValueError);
+    EXPECT_THROW(Gabors::CreateKernel(0, 1., 0., 1., 1., 0.), ExceptionValueError);
 
     for(int radius=1; radius<10; radius+=3) {
 
-        Mat kernel = GaborFilterBank::CreateKernel(radius, 1., 0., 1., 1., 0.);
+        Mat kernel = Gabors::CreateKernel(radius, 1., 0., 1., 1., 0.);
         EXPECT_MAT_DIMS_EQ(kernel, Mat(radius*2+1, radius*2+1, CV_32F));
         EXPECT_EQ(kernel.rows, kernel.cols) << "kernel not a square.";
     }
@@ -35,7 +35,7 @@ TEST(GaborKernelTest, KernelSize)
 
 TEST(GaborKernelTest, KernelMat)
 {
-    Mat kernel = GaborFilterBank::CreateKernel(3, 1., 0., 1., 1., 0.);
+    Mat kernel = Gabors::CreateKernel(3, 1., 0., 1., 1., 0.);
     EXPECT_MAT_TYPE(kernel, CV_32F);
 }
 
@@ -43,9 +43,9 @@ TEST(GaborKernelTest, KernelRotated)
 {
     for(float angle=0.f; angle<=360.f; angle+=45.f) {
 
-        Mat kernel0 = GaborFilterBank::CreateKernel(RADIUS, SIGMA, angle*CV_PI/180.0f, _LAMBDA, _GAMMA, PS);
-        Mat kernel90 = GaborFilterBank::CreateKernel(RADIUS, SIGMA, (angle+90)*CV_PI/180.0f, _LAMBDA, _GAMMA, PS);
-        Mat kernel180 = GaborFilterBank::CreateKernel(RADIUS, SIGMA, (angle+180)*CV_PI/180.0f, _LAMBDA, _GAMMA, PS);
+        Mat kernel0 = Gabors::CreateKernel(RADIUS, SIGMA, angle*CV_PI/180.0f, _LAMBDA, _GAMMA, PS);
+        Mat kernel90 = Gabors::CreateKernel(RADIUS, SIGMA, (angle+90)*CV_PI/180.0f, _LAMBDA, _GAMMA, PS);
+        Mat kernel180 = Gabors::CreateKernel(RADIUS, SIGMA, (angle+180)*CV_PI/180.0f, _LAMBDA, _GAMMA, PS);
 
         EXPECT_MAT_NEAR(kernel0, kernel180, 1e-7);
 
@@ -59,7 +59,7 @@ TEST(GaborKernelTest, Response)
 {
     for(float angle=0.f; angle<=180.f; angle+=45.f) {
 
-        Mat kernel = GaborFilterBank::CreateKernel(RADIUS, SIGMA, angle*CV_PI/180.0f, _LAMBDA, _GAMMA, PS);
+        Mat kernel = Gabors::CreateKernel(RADIUS, SIGMA, angle*CV_PI/180.0f, _LAMBDA, _GAMMA, PS);
 
         SynthBars bars;
         bars.Reset(28, 28, 1);
@@ -106,7 +106,7 @@ TEST(GaborKernelTest, DISABLED_DisplayKernel)
     for(float angle=0.f; angle<=360.f; angle+=45.f) {
 
         const float theta = angle * CV_PI / 180.0f;
-        Mat kernel = GaborFilterBank::CreateKernel(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
+        Mat kernel = Gabors::CreateKernel(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
 
         std::stringstream s;
         s << "angle="<<angle;
@@ -125,7 +125,7 @@ TEST(GaborKernelTest, FilterBankVector)
 
     for(size_t i=0; i<N; i++) {
 
-        VecMat1f filter_bank = GaborFilterBank::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
+        VecMat1f filter_bank = Gabors::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
 
         EXPECT_EQ(filter_bank.size(), i);
 
@@ -150,14 +150,14 @@ TEST(GaborKernelTest, FilterBankKernels)
     const float* p = theta_range.ptr<float>(0);
     VecF theta(p, p+theta_range.cols);
 
-    VecMat1f filter_bank = GaborFilterBank::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
+    VecMat1f filter_bank = Gabors::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
     EXPECT_EQ(filter_bank.size(), theta_range.total());
 
     float angle=0.f;
     int i=0;
     while(angle < THETA_STOP) {
 
-        Mat1f kernel = GaborFilterBank::CreateKernel(RADIUS, SIGMA, angle, _LAMBDA, _GAMMA, PS);
+        Mat1f kernel = Gabors::CreateKernel(RADIUS, SIGMA, angle, _LAMBDA, _GAMMA, PS);
         EXPECT_MAT_EQ(filter_bank[i], kernel);
         i++;
         angle += THETA_STEP;
@@ -178,7 +178,7 @@ class GaborFilterBankTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        to_ = GaborFilterBank();
+        to_ = Gabors();
 
         const float THETA_STOP=CV_PI;
         const float THETA_STEP=45.*CV_PI/180.;
@@ -186,11 +186,11 @@ protected:
 
         to_.Reset(RADIUS, SIGMA, theta_range_, _LAMBDA, _GAMMA, PS);
 
-        kernels_ = GaborFilterBank::CreateKernels(RADIUS, SIGMA, theta_range_, _LAMBDA, _GAMMA, PS);
+        kernels_ = Gabors::CreateKernels(RADIUS, SIGMA, theta_range_, _LAMBDA, _GAMMA, PS);
 
     }
 
-    GaborFilterBank to_;    ///< test object
+    Gabors to_;    ///< test object
     VecMat1f kernels_;      ///< reference kernels
     Mat1f theta_range_;      ///< range of kernel orientations
 };
@@ -207,7 +207,7 @@ TEST_F(GaborFilterBankTest, ResetKernels)
             const float THETA_STOP=CV_PI;
             const float THETA_STEP=delta*CV_PI/180.f;
             Mat1f theta_range = ARange_<float>(0.f, THETA_STOP, THETA_STEP);
-            VecMat1f expected_kernels = GaborFilterBank::CreateKernels(radius, SIGMA, theta_range, _LAMBDA, _GAMMA, PS);
+            VecMat1f expected_kernels = Gabors::CreateKernels(radius, SIGMA, theta_range, _LAMBDA, _GAMMA, PS);
 
             to_.Reset(radius, SIGMA, theta_range, _LAMBDA, _GAMMA, PS);
 
@@ -301,7 +301,7 @@ TEST_F(GaborFilterBankTest, Compute)
             EXPECT_EQ(i, j_max) << "Unexpected index for kernel yielding highest response";
 
             Mat1f response_single_expected;
-            Mat kernel = GaborFilterBank::CreateKernel(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
+            Mat kernel = Gabors::CreateKernel(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
 
             filter2D(stimulus, response_single_expected, -1, kernel, Point(-1, -1), 0, cv::BORDER_REPLICATE);
             pow(response_single_expected, 2., response_single_expected);

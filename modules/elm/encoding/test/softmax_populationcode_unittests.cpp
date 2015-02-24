@@ -5,7 +5,7 @@
 #include "elm/core/cv/mat_utils_inl.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
-#include "elm/encoding/orientation.h"
+#include "elm/encoding/gabors.h"
 #include "elm/io/synth.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/ts.h"
@@ -36,11 +36,11 @@ protected:
         const float* p = theta_range.ptr<float>(0);
         VecF theta(p, p+theta_range.cols);
 
-        kernels_ = GaborFilterBank::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
+        kernels_ = Gabors::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
         NB_KERNELS_ = static_cast<int>(kernels_.size());
 
-        gabors_.reset(new GaborFilterBank());
-        dynamic_cast<GaborFilterBank*>(gabors_.get())->Reset(RADIUS, SIGMA, theta_range, _LAMBDA, _GAMMA, PS);
+        gabors_.reset(new Gabors());
+        dynamic_cast<Gabors*>(gabors_.get())->Reset(RADIUS, SIGMA, theta_range, _LAMBDA, _GAMMA, PS);
     }
 
     void virtual SetUp()
