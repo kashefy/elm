@@ -12,7 +12,9 @@
 
 #include "elm/core/exception.h"
 #include "elm/core/pcl/cloud_.h"
+#include "elm/core/pcl/point_traits.h"
 #include "elm/core/pcl/vertices.h"
+#include "elm/ts/pcl_point_typed_tests.h"
 #include "elm/ts/ts.h"
 
 using namespace std;
@@ -128,47 +130,74 @@ TEST_F(VisitorVecMat1fTest, Reset)
 
 #ifdef __WITH_PCL
 
-TEST_F(VisitorVecMat1fTest, FromCLoud_empty)
+template <class TPoint>
+class VisitorVecMat1fCloudTest : public VisitorVecMat1fTest
 {
-    CloudXYZPtr cld(new CloudXYZ);
-    EXPECT_TRUE(to_(cld).empty());
+protected:
+    virtual void SetUp()
+    {
+        typedef PCLPointTraits_<TPoint > PTraits;
+
+        field_count = static_cast<int>(PTraits::FieldCount());
+        to_.Reset();
+    }
+
+    int field_count;
+};
+
+TYPED_TEST_CASE(VisitorVecMat1fCloudTest, PCLPointTypes);
+
+TYPED_TEST(VisitorVecMat1fCloudTest, FromCLoud_empty)
+{
+    typename pcl::PointCloud<TypeParam >::Ptr cld(new pcl::PointCloud<TypeParam>());
+    EXPECT_TRUE(this->to_(cld).empty());
 }
 
-TEST_F(VisitorVecMat1fTest, FromCloud)
+TYPED_TEST(VisitorVecMat1fCloudTest, FromCloud)
 {
-    Mat1f m(4, 3);
+    Mat1f m(4, this->field_count);
     randn(m, 0.f, 100.f);
-    CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
 
-    VecMat1f v = to_(cloud);
+    typename pcl::PointCloud<TypeParam >::Ptr cloud;
+    cloud = Mat2PointCloud_<TypeParam >(m);
+    m = PointCloud2Mat_(cloud); // already accounts for padding
+
+    VecMat1f v = this->to_(cloud);
     EXPECT_SIZE(m.rows, v);
-
-    hconcat(m, Mat1f(m.rows, 1, 1), m); // account for padding
 
     for(size_t i=0; i<v.size(); i++) {
 
         Mat1f m2 = v[i];
 
         EXPECT_MAT_EQ(m.row(i), m2);
-        EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
+        if(i==0) {
+            EXPECT_EQ(m.data, m2.data);
+        }
+        else {
+            EXPECT_NE(m.data, m2.data);
+        }
     }
 }
 
-TEST_F(VisitorVecMat1fTest, Reset_with_cloud)
+TYPED_TEST(VisitorVecMat1fCloudTest, Reset_with_cloud)
 {
-    EXPECT_NO_THROW(to_.Reset());
+    EXPECT_NO_THROW(this->to_.Reset());
+    EXPECT_NO_THROW(this->to_.Reset());
 
-    Mat1f m(4, 3, 1.f);
+    Mat1f m(4, this->field_count, 1.f);
 
-    VecMat1f v = to_(m);
-    EXPECT_NO_THROW(to_.Reset());
+    VecMat1f v = this->to_(m);
+    EXPECT_NO_THROW(this->to_.Reset());
 
-    CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
-    v = to_(cloud);
-    EXPECT_NO_THROW(to_.Reset());
+    typename pcl::PointCloud<TypeParam >::Ptr cloud;
+    cloud = Mat2PointCloud_<TypeParam >(m);
 
-    v = to_(m);
-    EXPECT_NO_THROW(to_.Reset());
+    v = this->to_(cloud);
+    EXPECT_NO_THROW(this->to_.Reset());
+
+    v = this->to_(m);
+    EXPECT_NO_THROW(this->to_.Reset());
+    EXPECT_NO_THROW(this->to_.Reset());
 }
 
 //// fixtures for VecVertices
