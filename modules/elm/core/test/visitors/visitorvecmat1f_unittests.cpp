@@ -130,6 +130,51 @@ TEST_F(VisitorVecMat1fTest, Reset)
 
 #ifdef __WITH_PCL
 
+//// fixtures for VecVertices
+
+//TEST_F(VisitorVecMat1fTest, Empty_VecVertices)
+//{
+//    EXPECT_TRUE(to_(VecVertices()).empty());
+//}
+
+//TEST_F(VisitorVecMat1fTest, Empty_VecVertices_Size)
+//{
+//    EXPECT_MAT_DIMS_EQ(to_(VecVertices()), Size2i(0, 0));
+//}
+
+//TEST_F(VisitorVecMat1fTest, From_VecVertices)
+//{
+//    Mat1f m(4, 3);
+//    for(size_t i=0; i<m.total(); i++) {
+
+//        m(i) = static_cast<float>(randu<uint32_t>() % 256);
+//    }
+//    VecVertices vv = Mat2VecVertices(m.clone());
+
+//    Mat1f m2 = to_(vv);
+
+//    EXPECT_MAT_EQ(m, m2);
+//    EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
+//}
+
+//TEST_F(VisitorVecMat1fTest, DISABLED_Reset_with_VecVertices)
+//{
+////    EXPECT_NO_THROW(to_.Reset());
+
+////    Mat1f m(4, 3);
+////    randn(m, 0.f, 100.f);
+
+////    Mat1f m2 = to_(m);
+////    EXPECT_NO_THROW(to_.Reset());
+
+////    CloudXYZPtr cloud = Mat2PointCloud(m);
+////    m2 = to_(cloud);
+////    EXPECT_NO_THROW(to_.Reset());
+
+////    m2 = to_(m);
+////    EXPECT_NO_THROW(to_.Reset());
+//}
+
 template <class TPoint>
 class VisitorVecMat1fCloudTest : public VisitorVecMat1fTest
 {
@@ -199,51 +244,6 @@ TYPED_TEST(VisitorVecMat1fCloudTest, Reset_with_cloud)
     EXPECT_NO_THROW(this->to_.Reset());
     EXPECT_NO_THROW(this->to_.Reset());
 }
-
-//// fixtures for VecVertices
-
-//TEST_F(VisitorVecMat1fTest, Empty_VecVertices)
-//{
-//    EXPECT_TRUE(to_(VecVertices()).empty());
-//}
-
-//TEST_F(VisitorVecMat1fTest, Empty_VecVertices_Size)
-//{
-//    EXPECT_MAT_DIMS_EQ(to_(VecVertices()), Size2i(0, 0));
-//}
-
-//TEST_F(VisitorVecMat1fTest, From_VecVertices)
-//{
-//    Mat1f m(4, 3);
-//    for(size_t i=0; i<m.total(); i++) {
-
-//        m(i) = static_cast<float>(randu<uint32_t>() % 256);
-//    }
-//    VecVertices vv = Mat2VecVertices(m.clone());
-
-//    Mat1f m2 = to_(vv);
-
-//    EXPECT_MAT_EQ(m, m2);
-//    EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
-//}
-
-//TEST_F(VisitorVecMat1fTest, DISABLED_Reset_with_VecVertices)
-//{
-////    EXPECT_NO_THROW(to_.Reset());
-
-////    Mat1f m(4, 3);
-////    randn(m, 0.f, 100.f);
-
-////    Mat1f m2 = to_(m);
-////    EXPECT_NO_THROW(to_.Reset());
-
-////    CloudXYZPtr cloud = Mat2PointCloud(m);
-////    m2 = to_(cloud);
-////    EXPECT_NO_THROW(to_.Reset());
-
-////    m2 = to_(m);
-////    EXPECT_NO_THROW(to_.Reset());
-//}
 
 #endif // __WITH_PCL
 
