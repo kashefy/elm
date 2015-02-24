@@ -7,6 +7,7 @@
 //M*/
 #include "elm/core/featuredata.h"
 
+#include "elm/core/debug_utils.h"
 #include "elm/core/stl/stl_inl.h"
 #include "elm/core/exception.h"
 #include "elm/ts/pcl_point_typed_tests.h"
@@ -47,12 +48,33 @@ TEST_F(FeatureDataTest, Init_Mat1f)
     EXPECT_MAT_EQ(m, mat_);
 }
 
+TEST_F(FeatureDataTest, Init_Mat1f_get_VecMat1f)
+{
+    FeatureData to(mat_);
+
+    EXPECT_SIZE(1, to.get<VecMat1f>());
+    Mat1f m = to.get<VecMat1f>()[0];
+
+    EXPECT_MAT_EQ(m, mat_);
+}
+
 TEST_F(FeatureDataTest, InitWithSparseMat1f)
 {
     SparseMat1f m_sparse(mat_);
     FeatureData to(m_sparse);
 
     Mat1f m = to.get<Mat1f>();
+
+    EXPECT_MAT_EQ(m, mat_);
+}
+
+TEST_F(FeatureDataTest, InitWithSparseMat1f_get_VecMat1f)
+{
+    SparseMat1f m_sparse(mat_);
+    FeatureData to(m_sparse);
+
+    EXPECT_SIZE(1, to.get<VecMat1f>());
+    Mat1f m = to.get<VecMat1f>()[0];
 
     EXPECT_MAT_EQ(m, mat_);
 }
@@ -184,6 +206,33 @@ TYPED_TEST(FeatureDataCloud_Test, InitWithSparseMat1f)
 }
 
 /**
+ * @brief Initialize test object with VecMat1f object, then call cloud getters.
+ */
+TYPED_TEST(FeatureDataCloud_Test, InitWithVecMat1f)
+{
+    typedef boost::shared_ptr<pcl::PointCloud< TypeParam > > CloudTPPtr;
+
+    // VecMat1f to Cloud conversion assumes 1 point per VecMat1f element
+    size_t nb_floats = elm::ts::ExpectedPointAttr_<TypeParam >::nb_floats;
+
+    this->mat_ = this->mat_.reshape(1, this->mat_.total()/nb_floats);
+
+    VecMat1f vm;
+    for(int r=0; r<this->mat_.rows; r++) {
+
+        vm.push_back(this->mat_.row(r));
+    }
+
+    FeatureData to(vm);
+
+    // VecMat1f to Cloud conversion results in unorganized point cloud
+    // so we'll need to reshape before comparing.
+    CloudTPPtr cld = to.get<CloudTPPtr >();
+
+    EXPECT_MAT_EQ(PointCloud2Mat_<TypeParam >(cld).reshape(1, this->mat_.rows), this->mat_);
+}
+
+/**
  * @brief Test caching of cloud reference
  * by comparing what the pointers are pointing at and verifying the use count increased by 1 after calling get
  */
@@ -274,6 +323,24 @@ TYPED_TEST(FeatureDataPOD_Test, FromSparseMat1f)
     }
 }
 
+TYPED_TEST(FeatureDataPOD_Test, FromVecMat1f)
+{
+    float _v = 256.f; // to cover a range of values common between all of our PODs
+    while(--_v >= 0.f) {
+
+        FeatureData to(VecMat1f(1, Mat1f(1, 1, _v)));
+        EXPECT_EQ(static_cast<TypeParam >(_v), to.get<TypeParam >()) << "Value mismatch.";
+    }
+}
+
+TYPED_TEST(FeatureDataPOD_Test, FromVecMat1f_invalid)
+{
+    {
+        FeatureData to(VecMat1f(2, Mat1f(1, 1, 0.f)));
+        EXPECT_THROW(to.get<TypeParam >(), ExceptionBadDims);
+    }
+}
+
 TYPED_TEST(FeatureDataPOD_Test, cout)
 {
     float vf = 3.f; // to cover a range of values common between all of our PODs
@@ -309,6 +376,8 @@ TYPED_TEST(FeatureDataPOD_Test, FromPOD)
         EXPECT_EQ( static_cast<uchar >(_v),  to.get<uchar>() )  << "Value mismatch while getting uchar.";
 
         EXPECT_MAT_EQ( Mat1f(1, 1, static_cast<float >(_v)), to.get<Mat1f >()) << "Value mismatch while getting Mat1f.";
+
+        EXPECT_MAT_EQ( Mat1f(1, 1, static_cast<float >(_v)), to.get<VecMat1f >()[0]) << "Value mismatch while getting VecMat1f.";
 
 #ifdef __WITH_PCL
 
