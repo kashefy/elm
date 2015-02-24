@@ -11,7 +11,7 @@
 #ifndef _ELM_CORE_VISITORSPARSEMAT1f_H_
 #define _ELM_CORE_VISITORSPARSEMAT1f_H_
 
-#include "elm/core/typedefs_fwd.h"
+#include "elm/core/typedefs_sfwd.h"
 #include "elm/core/visitors/visitor_.h"
 
 #include "elm/core/pcl/typedefs_fwd.h"
@@ -32,10 +32,9 @@ public:
      */
     elm::SparseMat1f operator()(const cv::Mat &m) const;
 
-    /**
-     * @throws elm::ExceptionBadDims on empty input
-     */
     elm::SparseMat1f operator()(const cv::Mat1f &m) const;
+
+    elm::SparseMat1f operator()(const elm::VecMat1f &v) const;
 
     elm::SparseMat1f operator()(float f) const;
 

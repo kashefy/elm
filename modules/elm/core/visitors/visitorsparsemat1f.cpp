@@ -40,6 +40,31 @@ SparseMat1f VisitorSparseMat1f::operator()(const Mat1f &m) const
     return (m.empty())? SparseMat1f() : SparseMat1f(m);
 }
 
+SparseMat1f VisitorSparseMat1f::operator()(const VecMat1f &v) const
+{
+    SparseMat sparse;
+
+    size_t n = v.size();
+
+    if(n > 0) {
+
+        Mat1f dense;
+        for(size_t i=0; i<n; i++) {
+
+            ELM_THROW_BAD_DIMS_IF(!dense.empty() && v[i].cols != dense.cols,
+                                  "vector element dims must stay consistent.");
+            dense.push_back(v[i]);
+        }
+        sparse = operator ()(dense);
+    }
+    else {
+
+        sparse = SparseMat1f();
+    }
+
+    return sparse;
+}
+
 SparseMat1f VisitorSparseMat1f::operator()(float f) const
 {
     return SparseMat1f(Mat1f(1, 1, f));

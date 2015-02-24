@@ -12,6 +12,7 @@
 
 #include "elm/core/visitors/visitorcloud_.h"
 #include "elm/core/visitors/visitormat1f.h"
+#include "elm/core/visitors/visitorvecmat1f.h"
 #include "elm/core/visitors/visitorsparsemat1f.h"
 #include "elm/core/visitors/visitorpod_.h"
 #include "elm/core/visitors/visitorvertices.h"

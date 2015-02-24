@@ -46,6 +46,42 @@ TEST_F(VisitorVecVerticesTest, EmptyVecVertices_Size)
     EXPECT_SIZE(0, to_(VecVertices()));
 }
 
+TEST_F(VisitorVecVerticesTest, Empty_VecMat1f)
+{
+    EXPECT_TRUE(to_(VecMat1f()).empty());
+    EXPECT_TRUE(to_(VecMat1f(0)).empty());
+}
+
+TEST_F(VisitorVecVerticesTest, Empty_VecMat1f_empty_elements)
+{
+    EXPECT_SIZE(1, to_(VecMat1f(1, Mat1f())));
+    to_.Reset();
+    EXPECT_SIZE(2, to_(VecMat1f(2, Mat1f())));
+}
+
+TEST_F(VisitorVecVerticesTest, From_VecMat1f)
+{
+    const int N=5;
+    VecMat1f vm;
+    for(int i=0; i<N; i++) {
+
+        vm.push_back(Mat1f(i+1, i+2, static_cast<float>(i)));
+    }
+    VecVertices vv = to_(vm);
+
+    EXPECT_SIZE(N, vv);
+
+    for(int i=0; i<N; i++) {
+
+        EXPECT_SIZE((i+1)*(i+2), vv[i].vertices);
+
+        for(size_t j=0; j<vv[i].vertices.size(); j++) {
+
+            EXPECT_FLOAT_EQ(vm[i](j), static_cast<float>(vv[i].vertices[j]));
+        }
+    }
+}
+
 TEST_F(VisitorVecVerticesTest, Twos_cloudXYZ)
 {
     CloudXYZPtr in = Mat2PointCloud_<PointXYZ>(Mat1f(4, 3, 2));

@@ -11,7 +11,7 @@
 #ifndef _ELM_CORE_VISITORMAT1f_H_
 #define _ELM_CORE_VISITORMAT1f_H_
 
-#include "elm/core/typedefs_fwd.h"
+#include "elm/core/typedefs_sfwd.h"
 #include "elm/core/visitors/visitor_.h"
 
 #include "elm/core/pcl/typedefs_fwd.h"
@@ -29,6 +29,8 @@ public:
    cv::Mat1f operator()(const cv::Mat1f &m) const;
 
    cv::Mat1f operator()(const elm::SparseMat1f &m) const;
+
+   cv::Mat1f operator()(const elm::VecMat1f &v) const;
 
    cv::Mat1f operator()(float f) const;
 

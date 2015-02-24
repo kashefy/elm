@@ -84,6 +84,92 @@ TEST_F(VisitorSparseMat1fTest, FromDenseMat1f)
     }
 }
 
+TEST_F(VisitorSparseMat1fTest, FromVecMat1f_empty)
+{
+    EXPECT_EQ(0, to_(VecMat1f()).size());
+    EXPECT_EQ(0, to_(VecMat1f(0)).size());\
+}
+
+TEST_F(VisitorSparseMat1fTest, FromVecMat1f_empty_elements)
+{
+    EXPECT_EQ(0, to_(VecMat1f(1)).size());
+    EXPECT_EQ(0, to_(VecMat1f(1, Mat1f())).size());
+    EXPECT_EQ(0, to_(VecMat1f(3, Mat1f())).size());
+    EXPECT_EQ(0, to_(VecMat1f(3, Mat1f(1, 0))).size());
+    EXPECT_EQ(0, to_(VecMat1f(3, Mat1f(0, 1))).size());
+}
+
+TEST_F(VisitorSparseMat1fTest, FromVecMat1f_row_mats)
+{
+    const int N=5;
+    VecMat1f v;
+    for(int i=0; i<N; i++) {
+
+        v.push_back(Mat1f(1, 3, static_cast<float>(i)));
+
+        SparseMat1f sparse = to_(v);
+        Mat1f m;
+        sparse.convertTo(m, CV_32FC1);
+
+        EXPECT_EQ(3, m.cols);
+        EXPECT_EQ(i+1, m.rows);
+
+        for(int r=0; r<m.rows; r++) {
+
+            for(int c=0; c<m.cols; c++) {
+
+                EXPECT_FLOAT_EQ(m(r, c), v[r](c));
+            }
+        }
+    }
+}
+
+TEST_F(VisitorSparseMat1fTest, FromVecMat1f_rows_concat)
+{
+    VecMat1f v;
+    v.push_back(Mat1f(2, 3, 1.f));
+    v.push_back(Mat1f(3, 3, 2.f));
+
+    SparseMat1f sparse = to_(v);
+    Mat1f m;
+    sparse.convertTo(m, CV_32FC1);
+
+    EXPECT_MAT_EQ(m.rowRange(0, 2), v[0]);
+    EXPECT_MAT_EQ(m.rowRange(2, m.rows), v[1]);
+}
+
+TEST_F(VisitorSparseMat1fTest, FromVecMat1f_variable_size)
+{
+    {
+        VecMat1f v;
+        v.push_back(Mat1f(1, 5, 1.f));
+        v.push_back(Mat1f(1, 2, 2.f));
+
+        EXPECT_THROW(to_(v), ExceptionBadDims);
+    }
+    {
+        VecMat1f v;
+        v.push_back(Mat1f(1, 5, 1.f));
+        v.push_back(Mat1f(1, 2, 0.f));
+
+        EXPECT_THROW(to_(v), ExceptionBadDims);
+    }
+    {
+        VecMat1f v;
+        v.push_back(Mat1f(1, 2, 1.f));
+        v.push_back(Mat1f(1, 5, 2.f));
+
+        EXPECT_THROW(to_(v), ExceptionBadDims);
+    }
+    {
+        VecMat1f v;
+        v.push_back(Mat1f(1, 2, 0.f));
+        v.push_back(Mat1f(1, 5, 2.f));
+
+        EXPECT_THROW(to_(v), ExceptionBadDims);
+    }
+}
+
 TEST_F(VisitorSparseMat1fTest, Reset)
 {
     EXPECT_NO_THROW(to_.Reset());

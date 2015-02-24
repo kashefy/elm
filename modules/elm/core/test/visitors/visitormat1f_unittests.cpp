@@ -10,6 +10,7 @@
  */
 #include "elm/core/visitors/visitormat1f.h"
 
+#include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
 #include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/vertices.h"
@@ -90,6 +91,72 @@ TEST_F(VisitorMat1fTest, FromSparseMat1f)
 
         EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
         EXPECT_NE(m.data, m2.data) << "Mats are not pointing to the same data in memory. Expecting shared copy.";
+    }
+}
+
+TEST_F(VisitorMat1fTest, FromVecMat1f_empty)
+{
+    EXPECT_TRUE(to_(VecMat1f()).empty());
+    EXPECT_TRUE(to_(VecMat1f(0)).empty());
+}
+
+TEST_F(VisitorMat1fTest, FromVecMat1f_empty_elements)
+{
+    EXPECT_TRUE(to_(VecMat1f(1, Mat1f())).empty());
+    EXPECT_TRUE(to_(VecMat1f(2, Mat1f())).empty());
+    EXPECT_TRUE(to_(VecMat1f(3, Mat1f())).empty());
+}
+
+TEST_F(VisitorMat1fTest, FromVecMat1f_row_mats)
+{
+    const int N=5;
+    VecMat1f v;
+    for(int i=0; i<N; i++) {
+
+        v.push_back(Mat1f(1, 3, static_cast<float>(i)));
+
+        Mat1f m = to_(v);
+
+        EXPECT_EQ(3, m.cols);
+        EXPECT_EQ(i+1, m.rows);
+
+        for(int r=0; r<m.rows; r++) {
+
+            for(int c=0; c<m.cols; c++) {
+
+                EXPECT_FLOAT_EQ(m(r, c), v[r](c));
+            }
+        }
+    }
+}
+
+TEST_F(VisitorMat1fTest, FromVecMat1f_rows_concat)
+{
+    VecMat1f v;
+    v.push_back(Mat1f(2, 3, 1.f));
+    v.push_back(Mat1f(3, 3, 2.f));
+
+    Mat1f m = to_(v);
+
+    EXPECT_MAT_EQ(m.rowRange(0, 2), v[0]);
+    EXPECT_MAT_EQ(m.rowRange(2, m.rows), v[1]);
+}
+
+TEST_F(VisitorMat1fTest, FromVecMat1f_variable_size)
+{
+    {
+        VecMat1f v;
+        v.push_back(Mat1f(1, 5, 1.f));
+        v.push_back(Mat1f(1, 2, 2.f));
+
+        EXPECT_THROW(to_(v), ExceptionBadDims);
+    }
+    {
+        VecMat1f v;
+        v.push_back(Mat1f(1, 2, 1.f));
+        v.push_back(Mat1f(1, 5, 2.f));
+
+        EXPECT_THROW(to_(v), ExceptionBadDims);
     }
 }
 

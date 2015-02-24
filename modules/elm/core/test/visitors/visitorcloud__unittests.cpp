@@ -97,6 +97,40 @@ TYPED_TEST(VisitorCloud_PointTypedTest, FromSparseMat1f)
     EXPECT_NE(this->m_.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
 }
 
+TYPED_TEST(VisitorCloud_PointTypedTest, FromVecMat1f)
+{
+    typedef boost::shared_ptr<PointCloud<TypeParam > > CloudTPPtr;
+
+    VecMat1f v;
+    for(int r=0; r<this->m_.rows; r++) {
+        v.push_back(this->m_.row(r));
+    }
+
+    CloudTPPtr cld = this->to_(v);
+
+    ASSERT_FALSE(cld->isOrganized());
+
+    ASSERT_EQ(cld->size(), v.size());
+
+    Mat1f m2 = PointCloud2Mat_<TypeParam >(cld).reshape(1, this->m_.rows);
+
+    int padding = static_cast<int>(PCLPointTraits_<TypeParam>::NbFloats()-PCLPointTraits_<TypeParam>::FieldCount());
+    EXPECT_MAT_DIMS_EQ(m2, Size2i(this->m_.cols+padding, this->m_.rows));
+
+    EXPECT_MAT_EQ(this->m_, m2.colRange(0, this->m_.cols));
+    EXPECT_NE(this->m_.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
+}
+
+TYPED_TEST(VisitorCloud_PointTypedTest, FromVecMat1f_empty)
+{
+    typedef boost::shared_ptr<PointCloud<TypeParam > > CloudTPPtr;
+
+    VecMat1f v;
+
+    CloudTPPtr cld = this->to_(v);
+    EXPECT_TRUE(cld->empty());
+}
+
 /**
  * @brief from same typed point cloud
  */

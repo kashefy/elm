@@ -9,6 +9,7 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "elm/core/exception.h"
 #include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/vertices.h"
 
@@ -41,6 +42,26 @@ Mat1f VisitorMat1f::operator()(const SparseMat1f &m) const
         m.convertTo(dense, dense.type());
     }
     return dense;
+}
+
+Mat1f VisitorMat1f::operator()(const elm::VecMat1f &v) const
+{
+    Mat1f m;
+    // take a shortcut for single-element vectors
+    // effectively the same but ensures re-using the same Mat1f object
+    if(v.size() == 1) {
+
+        m = v[0];
+    }
+    else {
+        for(size_t i=0; i<v.size(); i++) {
+
+            ELM_THROW_BAD_DIMS_IF(!m.empty() && v[i].cols != m.cols,
+                                  "vector element dims must stay consistent.");
+            m.push_back(v[i]);
+        }
+    }
+    return m;
 }
 
 Mat1f VisitorMat1f::operator()(float f) const
