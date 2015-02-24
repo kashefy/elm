@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/encoding/populationcode.h"
+#include "elm/encoding/populationcode_derivs/softmax_populationcode.h"
 
 #include <string>
 
@@ -21,116 +21,6 @@ using std::string;
 using cv::Mat1f;
 
 using namespace elm;
-
-const string base_PopulationCode::KEY_INPUT_STIMULUS   = "in";
-const string base_PopulationCode::KEY_OUTPUT_POP_CODE  = "pc";
-
-base_PopulationCode::~base_PopulationCode()
-{
-}
-
-base_PopulationCode::base_PopulationCode()
-    : base_Layer()
-{
-}
-
-base_PopulationCode::base_PopulationCode(const LayerConfig &config)
-    : base_Layer(config)
-{
-}
-
-void base_PopulationCode::Clear()
-{
-    pop_code_ = Mat1f();
-}
-
-void base_PopulationCode::Reconfigure(const LayerConfig &config)
-{
-    ELM_THROW_NOT_IMPLEMENTED;
-}
-
-void base_PopulationCode::Reset(const LayerConfig &config)
-{
-    Clear();
-}
-
-void base_PopulationCode::InputNames(const LayerInputNames &config)
-{
-    name_stimulus_ = config.Input(KEY_INPUT_STIMULUS);
-}
-
-void base_PopulationCode::OutputNames(const LayerOutputNames &config)
-{
-    name_pop_code_ = config.Output(KEY_OUTPUT_POP_CODE);
-}
-
-void base_PopulationCode::Activate(const Signal &signal)
-{
-    State(signal.MostRecentMat1f(name_stimulus_), VecMat1f());
-    pop_code_ = PopCode();
-}
-
-void base_PopulationCode::Response(Signal &signal)
-{
-    signal.Append(name_pop_code_, pop_code_);
-}
-
-MutexPopulationCode::MutexPopulationCode()
-    : base_PopulationCode()
-{
-}
-
-MutexPopulationCode::MutexPopulationCode(const LayerConfig &config)
-    : base_PopulationCode(config)
-{
-}
-
-void MutexPopulationCode::State(const Mat1f& in, const VecMat1f& kernels)
-{
-    pop_code_ = Mat1f::zeros(in.rows, in.cols*2);
-    for(int i=0, j=0; i < static_cast<int>(in.total()); i++, j+=2) {
-
-        int k = (in(i) < 0.5f) ? 0 : 1;
-        pop_code_(j+k) = 1.f;
-    }
-}
-
-Mat1f MutexPopulationCode::PopCode()
-{
-    return pop_code_;
-}
-
-const string base_StatefulPopulationCode::KEY_OUTPUT_OPT_STATE = "state";
-
-base_StatefulPopulationCode::base_StatefulPopulationCode()
-    : base_PopulationCode()
-{
-}
-
-base_StatefulPopulationCode::base_StatefulPopulationCode(const LayerConfig &config)
-    : base_PopulationCode(config)
-{
-}
-
-void base_StatefulPopulationCode::Clear()
-{
-    base_PopulationCode::Clear();
-    state_ = Mat1f();
-}
-
-void base_StatefulPopulationCode::OutputNames(const LayerIONames &config)
-{
-    base_PopulationCode::OutputNames(config);
-    name_state_ = config.OutputOpt(KEY_OUTPUT_OPT_STATE);
-}
-
-void base_StatefulPopulationCode::Response(Signal &signal)
-{
-    base_PopulationCode::Response(signal);
-    if(name_state_) {
-        signal.Append(name_state_.get(), state_);
-    }
-}
 
 SoftMaxPopulationCode::SoftMaxPopulationCode()
     :base_PopulationCode()

@@ -1,4 +1,4 @@
-#include "elm/encoding/populationcode.h"
+#include "elm/encoding/populationcode_derivs/softmax_populationcode.h"
 
 #include <opencv2/core/core_c.h>
 
