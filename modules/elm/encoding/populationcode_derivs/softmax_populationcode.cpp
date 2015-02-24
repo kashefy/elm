@@ -48,60 +48,68 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
         }
     }
 
-    // normalize individual responses by global factor
-    if(norm_factor != 0) {
+    State(kernel_response);
 
-        for(VecMat1f::iterator itr=kernel_response.begin();
-            itr != kernel_response.end();
-            itr++) {
+//    // normalize individual responses by global factor
+//    if(norm_factor != 0) {
 
-            (*itr) /= norm_factor;
-        }
-    }
+//        for(VecMat1f::iterator itr=kernel_response.begin();
+//            itr != kernel_response.end();
+//            itr++) {
 
-    state_.clear();
-    state_.reserve(in.total());
-    fan_out_ = static_cast<int>(kernels.size());
-    for(size_t i=0; i<in.total(); i++) {
+//            (*itr) /= norm_factor;
+//        }
+//    }
 
-        int r = i / in.cols;
-        int c = i % in.cols;
-        Mat1f node_state(1, fan_out_);
-        int k=0;
-        for(VecMat1f::const_iterator itr=kernel_response.begin();
-            itr != kernel_response.end();
-            itr++, k++) {
+//    state_.clear();
+//    state_.reserve(in.total());
+//    fan_out_ = static_cast<int>(kernels.size());
+//    for(size_t i=0; i<in.total(); i++) {
 
-            node_state(0, k) = (*itr)(r, c);
-        }
-        state_.push_back(node_state);
-    }
+//        int r = i / in.cols;
+//        int c = i % in.cols;
+//        Mat1f node_state(1, fan_out_);
+//        int k=0;
+//        for(VecMat1f::const_iterator itr=kernel_response.begin();
+//            itr != kernel_response.end();
+//            itr++, k++) {
+
+//            node_state(0, k) = (*itr)(r, c);
+//        }
+//        state_.push_back(node_state);
+//    }
 }
 
 void SoftMaxPopulationCode::State(const Mat1f &in, const std::unique_ptr<base_FilterBank> &filter_bank)
 {
-    VecMat1f kernel_response = filter_bank->Compute(in);
+    State(filter_bank->Compute(in));
+}
 
+void SoftMaxPopulationCode::State(const VecMat1f &in)
+{
+    VecMat1f kernel_response = in;
     Normalize(kernel_response);
 
     state_.clear();
-    state_.reserve(in.total());
     fan_out_ = static_cast<int>(kernel_response.size());
 
-    for(size_t i=0; i<in.total(); i++) {
+    if(in.size() > 0) {
 
-        int r = i / in.cols;
-        int c = i % in.cols;
-        Mat1f node_state(1, fan_out_);
-        int k=0;
-        for(VecMat1f::const_iterator itr=kernel_response.begin();
-            itr != kernel_response.end();
-            itr++, k++) {
+        for(size_t i=0; i<in[0].total(); i++) {
 
-            node_state(0, k) = (*itr)(r, c);
+            int r = i / in[0].cols;
+            int c = i % in[0].cols;
+            Mat1f node_state(1, fan_out_);
+            int k=0;
+            for(VecMat1f::const_iterator itr=kernel_response.begin();
+                itr != kernel_response.end();
+                itr++, k++) {
+
+                node_state(0, k) = (*itr)(r, c);
+            }
+
+            state_.push_back(node_state);
         }
-
-        state_.push_back(node_state);
     }
 }
 

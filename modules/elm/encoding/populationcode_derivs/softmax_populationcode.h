@@ -40,6 +40,13 @@ public:
     virtual void State(const cv::Mat1f &in, std::unique_ptr<base_FilterBank> const &filter_bank);
 
     /**
+     * @brief Compute distribution for each node from different kernel responses
+     * @param input stimulus
+     * @param kernels (e.g. filter bank)
+     */
+    virtual void State(const elm::VecMat1f& in);
+
+    /**
      * @brief Determine population code per input node by sampling from response distribution
      * @return population code for all input nodes
      */
