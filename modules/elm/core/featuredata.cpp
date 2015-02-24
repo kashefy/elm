@@ -19,7 +19,7 @@ FeatureData::FeatureData()
     Init();
 }
 
-// explicit specialization for template method get()
+// explicit specializations for template method get()
 
 template<>
 Mat_<float> FeatureData::get()
@@ -31,6 +31,12 @@ template<>
 SparseMat1f FeatureData::get()
 {
     return var_.apply_visitor(visitor_sparse_mat_);
+}
+
+template<>
+VecMat1f FeatureData::get()
+{
+    return var_.apply_visitor(visitor_vm_);
 }
 
 #ifdef __WITH_PCL // PCL support required
@@ -77,9 +83,10 @@ void FeatureData::Reset()
     visitor_cloud_nrml_.Reset();
     visitor_cloud_ptnrml_.Reset();
     visitor_cloud_xyz_.Reset();
+    visitor_vv_.Reset();
     visitor_mat_.Reset();
     visitor_sparse_mat_.Reset();
-    visitor_vv_.Reset();
+    visitor_vm_.Reset();
 }
 
 std::ostream& operator<<(std::ostream& os, FeatureData& obj)

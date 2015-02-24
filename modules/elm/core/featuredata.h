@@ -83,6 +83,7 @@ protected:
     <
     cv::Mat1f,
     elm::SparseMat1f,
+    elm::VecMat1f,
     elm::CloudXYZPtr,
     elm::CloudNrmlPtr,
     elm::CloudPtNrmlPtr,
@@ -105,8 +106,9 @@ protected:
     VisitorVoid visitor_vv_;            ///< place holder visitor that does nothing
 #endif // __WITH_PCL
 
-    VisitorMat1f visitor_mat_;      ///< visitor for converting to Mat1f objects
+    VisitorMat1f visitor_mat_;              ///< visitor for converting to Mat1f objects
     VisitorSparseMat1f visitor_sparse_mat_; ///< visitor for converting to SparseMat1f objects
+    VisitorVecMat1f visitor_vm_;            ///< visitor for converting to VecMat1f objects
 };
 
 std::ostream& operator<<(std::ostream& os, FeatureData& obj);
