@@ -19,11 +19,13 @@ using namespace elm;
 MutexPopulationCode::MutexPopulationCode()
     : base_PopulationCode()
 {
+    Clear();
 }
 
 MutexPopulationCode::MutexPopulationCode(const LayerConfig &config)
     : base_PopulationCode(config)
 {
+    Reset(config);
 }
 
 void MutexPopulationCode::State(const Mat1f& in, const VecMat1f& kernels)
