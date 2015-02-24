@@ -51,8 +51,6 @@ void base_FilterBankLayer::OutputNames(const LayerOutputNames &io)
 
 void base_FilterBankLayer::Activate(const Signal &signal)
 {
-    response_.clear();
-    response_.reserve(kernels_.size());
     response_ = Convolve(signal.MostRecentMat1f(name_input_));
 }
 
@@ -63,6 +61,9 @@ void base_FilterBankLayer::Response(Signal &signal)
 
 VecMat1f base_FilterBankLayer::Convolve(const cv::Mat1f &stimulus)
 {
+    response_.clear();
+    response_.reserve(kernels_.size());
+
     for(VecMat1f::const_iterator itr=kernels_.begin();
         itr != kernels_.end();
         itr++) {
