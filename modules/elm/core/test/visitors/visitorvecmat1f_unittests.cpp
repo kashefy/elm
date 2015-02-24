@@ -142,6 +142,12 @@ TEST_F(VisitorVecMat1fTest, Empty_VecVertices_size)
     EXPECT_SIZE(0, to_(VecVertices()));
 }
 
+TEST_F(VisitorVecMat1fTest, From_VecVertices_empty_Vertices)
+{
+    EXPECT_SIZE(1, to_(VecVertices(1)));
+    EXPECT_SIZE(2, to_(VecVertices(2)));
+}
+
 TEST_F(VisitorVecMat1fTest, From_VecVertices)
 {
     Mat1f m(4, 3);

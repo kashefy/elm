@@ -104,8 +104,15 @@ VecVertices VisitorVecVertices::operator()(const VecMat1f &v)
 
         for(size_t i=0; i<v.size(); i++) {
 
-            VecVertices tmp = Mat2VecVertices(v[i].reshape(1, 1));
-            vv_.push_back(tmp[0]);
+            cv::Mat1f m = v[i];
+            if(!m.empty()) {
+
+                VecVertices tmp = Mat2VecVertices(m.reshape(1, 1));
+                vv_.push_back(tmp[0]);
+            }
+            else {
+                vv_.push_back(Vertices());
+            }
         }
     }
     return vv_;
