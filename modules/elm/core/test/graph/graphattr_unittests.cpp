@@ -706,4 +706,243 @@ TEST_F(GraphAttrConstructTest, ApplyVertexToMap_masked_img_invalid_vtx_id)
     }
 }
 
+/**
+ * @brief testing GraphAttr methods after sucessful construction
+ * form masked image map
+ */
+class GraphAttrMaskedTest : public ::testing::Test
+{
+protected:
+    virtual void SetUp()
+    {
+        const int ROWS=3;
+        const int COLS=3;
+        float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
+                                 3.f, 6.0f, 6.0f,
+                                 9.f, 9.5f, 11.f};
+        map_ = Mat1f(ROWS, COLS, data).clone();
+
+        Mat1b exclude;
+        cv::bitwise_or(map_ < 2.f, map_ == 9.f, exclude);
+        cv::bitwise_not(exclude, mask_);
+
+        to_ = GraphAttr(map_, mask_);
+    }
+
+    // members
+    GraphAttr to_;  ///< test object
+    Mat1f map_;
+    Mat1b mask_;
+};
+
+TEST_F(GraphAttrMaskedTest, ApplyVertexToMap_masked_img_invalid_vtx_id)
+{
+    ASSERT_GT(to_.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    EXPECT_THROW(to_.applyVertexToMap(-1.f, func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(0.f, func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(5.f, func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(11.2f, func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(9.f, func_masked_img), ExceptionKeyError);
+
+    for(size_t i=0; i<map_.total(); i++) {
+
+        if(mask_(i)) {
+            EXPECT_NO_THROW(to_.applyVertexToMap(map_(i), func_masked_img));
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)+0.2f, func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)-0.2f, func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)+0.7f, func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)-0.7f, func_masked_img), ExceptionKeyError);
+        }
+        else {
+            EXPECT_THROW(to_.applyVertexToMap(map_(i), func_masked_img), ExceptionKeyError);
+        }
+    }
+}
+
+TEST_F(GraphAttrMaskedTest, RemoveEdges_invalid)
+{
+    EXPECT_THROW(to_.removeEdges(2.2f, 9.0f), ExceptionKeyError);
+    EXPECT_THROW(to_.removeEdges(9.0f, 2.2f), ExceptionKeyError);
+}
+
+TEST_F(GraphAttrMaskedTest, VertexIndex)
+{
+    VecF vtx_ids = to_.VerticesIds();
+    for(size_t i=0; i<vtx_ids.size(); i++) {
+
+        EXPECT_EQ(static_cast<int>(i), to_.VertexIndex(vtx_ids[i]));
+
+        EXPECT_THROW(to_.VertexIndex(vtx_ids[i]+100.f), ExceptionKeyError);
+    }
+}
+
+TEST_F(GraphAttrMaskedTest, VertexIndex_graph_without_vertices)
+{
+    GraphAttr to;
+    VecF vtx_ids = to.VerticesIds();
+
+    ASSERT_EQ(size_t(0), vtx_ids.size()) << "Expecting empty graph, without vertices";
+
+    EXPECT_THROW(to.VertexIndex(0.f), ExceptionKeyError);
+    EXPECT_THROW(to.VertexIndex(2.2f), ExceptionKeyError);
+    EXPECT_THROW(to.VertexIndex(6.f), ExceptionKeyError);
+    EXPECT_THROW(to.VertexIndex(9.f), ExceptionKeyError);
+}
+
+/**
+ * @brief Remove edge between two vertices that weren't connected
+ * in the first place.
+ */
+TEST_F(GraphAttrMaskedTest, RemoveEdges_no_edge)
+{
+    Mat1f adj0;
+    to_.AdjacencyMat(adj0);
+
+    float u = 2.2f;
+    float v = 11.0f;
+    to_.removeEdges(u, v); // no edge
+
+    Mat1f adj;
+    to_.AdjacencyMat(adj);
+
+    ASSERT_EQ(0.f, adj(to_.VertexIndex(u), to_.VertexIndex(v)))
+            << "test requires two vertices that are not connected. to one another.";
+    ASSERT_EQ(0.f, adj(to_.VertexIndex(v), to_.VertexIndex(u)))
+            << "test requires two vertices that are not connected. to one another.";
+
+    EXPECT_MAT_EQ(adj0, adj) << "Adjacency matrix changed after redge rmeoval.";
+}
+
+TEST_F(GraphAttrMaskedTest, RemoveEdges)
+{
+    float u = 2.2f;
+    float v = 6.0f;
+
+    int u_idx = to_.VertexIndex(u);
+    int v_idx = to_.VertexIndex(v);
+
+    Mat1f adj0;
+    to_.AdjacencyMat(adj0);
+
+    ASSERT_GT(adj0(u_idx, v_idx), 0.f) << "test assumes edge between vertices exists.";
+    ASSERT_GT(adj0(v_idx, u_idx), 0.f) << "test assumes edge between vertices exists.";
+
+    to_.removeEdges(u, v);
+
+    Mat1f adj;
+    to_.AdjacencyMat(adj);
+
+    EXPECT_EQ(0.f, adj(u_idx, v_idx));
+    EXPECT_EQ(0.f, adj(v_idx, u_idx));
+}
+
+/**
+ * @brief Test that edge contraction/merging decreases number of vertices
+ */
+TEST_F(GraphAttrMaskedTest, ContractEdges_new_dims)
+{
+    const int NB_VERTICES = static_cast<int>(to_.num_vertices());
+
+    ASSERT_GT(NB_VERTICES, 1) << "this test requires a graph with at least 2 vertices.";
+
+    for(int i=1; i<NB_VERTICES; i++) {
+
+        VecF vtx_ids = to_.VerticesIds();
+        float u = vtx_ids[0];
+        float v = vtx_ids[1];
+
+        Mat1f adj_pre;
+        to_.AdjacencyMat(adj_pre);
+
+        to_.contractEdges(u, v);
+
+        EXPECT_EQ(size_t(NB_VERTICES-i), to_.num_vertices()) << "no. of vertices not decreasing.";
+        EXPECT_SIZE(size_t(NB_VERTICES-i), to_.VerticesIds()) << "no. of vertices not decreasing.";
+
+        Mat1f adj;
+        to_.AdjacencyMat(adj);
+
+        EXPECT_MAT_DIMS_EQ(adj, Size2i(adj_pre.cols-1, adj_pre.rows-1))
+                << "Expecting adj. matrix to shrink by 1 row and 1 column.";
+    }
+}
+
+/**
+ * @brief Verify which vertex got removed after merge
+ */
+TEST_F(GraphAttrMaskedTest, ContractEdges_vtx_removed)
+{
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 2 vertices.";
+
+    while(static_cast<int>(to_.num_vertices()) > 1) {
+
+        VecF vtx_ids = to_.VerticesIds();
+        float u = vtx_ids[1];
+        float v = vtx_ids[0];
+
+        Mat1f adj_pre;
+        to_.AdjacencyMat(adj_pre);
+
+        to_.contractEdges(u, v);
+
+        EXPECT_THROW(to_.VertexIndex(u), ExceptionKeyError);
+        EXPECT_EQ(0, to_.VertexIndex(v));
+    }
+}
+
+TEST_F(GraphAttrMaskedTest, ContractEdges_merge_neighbors)
+{
+    float u = 6.0f;
+    float v = 9.5f;
+
+    int u_idx = to_.VertexIndex(u);
+    int v_idx = to_.VertexIndex(v);
+
+    Mat1f adj0;
+    to_.AdjacencyMat(adj0);
+
+    to_.contractEdges(u, v);
+
+    // perform OR of adj. row and column for both vertices
+    // and enforce all-zero diagonal
+    Mat1f adj_or = adj0.clone();
+    cv::bitwise_or(adj_or.row(u_idx), adj_or.row(v_idx),
+                   adj_or.row(v_idx));
+    cv::bitwise_or(adj_or.col(u_idx), adj_or.col(v_idx),
+                   adj_or.col(v_idx));
+    for(int r=0; r<adj_or.rows; r++) {
+        adj_or(r, r) = 0.f;
+    }
+
+    Mat1f adj;
+    to_.AdjacencyMat(adj);
+
+    // iterate through both and compare connectivity after merge.
+    // skip vertex that was omitted by merge
+    int r_m = -1;
+    for(int r=0; r<adj.rows; r++) {
+
+        if(r!=u_idx) {
+            r_m++;
+        }
+        int c_m = -1;
+        for(int c=0; c<adj.cols; c++) {
+
+            if(c!=u_idx) {
+                c_m++;
+            }
+
+            if(r!=u_idx && c!=u_idx) {
+
+                EXPECT_FLOAT_EQ(adj_or(r, c), adj(r_m, c_m));
+            }
+        }
+    }
+}
+
 } // annonymous namespace for test cases and fixtures

@@ -11,7 +11,7 @@
 
 #include "elm/core/exception.h"
 #include "elm/core/inputname.h"
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 
 using namespace std;
 using namespace elm;

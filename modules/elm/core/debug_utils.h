@@ -9,6 +9,7 @@
 #define _ELM_CORE_DEBUG_UTILS_H_
 
 #include <iostream>
+#include "elm/core/stl/stl_inl.h"   // vector to string conversion
 
 namespace elm {
 

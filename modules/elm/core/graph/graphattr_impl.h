@@ -10,6 +10,7 @@
 
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/undirected_graph.hpp>
 
 #include "elm/core/typedefs_fwd.h"
 
@@ -21,7 +22,9 @@ typedef boost::property<boost::edge_weight_t, float> EdgeWeightProp;
 typedef boost::property<boost::vertex_color_t, float,
         boost::property<boost::vertex_index2_t, cv::Mat1f > >
         VtxProp;
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VtxProp, EdgeWeightProp> GraphAttrType;
+typedef boost::undirected_graph<VtxProp, EdgeWeightProp> GraphAttrType;
+
+//typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VtxProp, EdgeWeightProp> GraphAttrType;
 typedef boost::graph_traits<GraphAttrType> GraphAttrTraits;
 typedef GraphAttrTraits::edge_iterator edge_iter;
 typedef GraphAttrTraits::vertex_descriptor VtxDescriptor;
@@ -44,7 +47,13 @@ struct GraphAttr_Impl
      */
     GraphAttr_Impl(const cv::Mat1f &map_img, const cv::Mat1b &mask);
 
-    bool findVtxDescriptor(float vtx_id, VtxDescriptor &vtx_descriptor) const;
+    bool findVertex(float vtx_id, VtxDescriptor &vtx_descriptor) const;
+
+    void removeEdges(float vtx_u, float vtx_v, VtxDescriptor &u, VtxDescriptor &v);
+
+    void removeEdges(const VtxDescriptor &u, const VtxDescriptor &v);
+
+    void removeVertex(float vtx_id, const VtxDescriptor &vtx);
 
     // public members
     GraphAttrType g;    ///< underlying graph object
@@ -60,9 +69,9 @@ protected:
      * @param value primary vertex identifying property (e.g. map img value)
      * @return vertex descriptor
      */
-    VtxDescriptor retrieveVtxDescriptor(float vtx_id);
+    VtxDescriptor retrieveVertex(float vtx_id);
 
-    MapVtxDescriptor vtx_descriptor_cache_;   ///< cache vertex descriptors
+    MapVtxDescriptor vtx_cache_;   ///< cache vertex descriptors
 };
 
 } // namespace elm

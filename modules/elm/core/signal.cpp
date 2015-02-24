@@ -8,7 +8,7 @@
 #include "elm/core/signal.h"
 
 #include "elm/core/exception.h"
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 
 using namespace std;
 using namespace cv;

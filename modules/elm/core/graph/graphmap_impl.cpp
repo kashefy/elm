@@ -10,7 +10,7 @@
 #include <opencv2/core/core.hpp>
 
 #include "elm/core/exception.h"
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 
 using namespace std;
 using namespace cv;

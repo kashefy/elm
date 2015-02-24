@@ -13,7 +13,7 @@
 #include <string>
 
 #include "elm/core/exception.h"
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 
 /** @brief class for registering derived instantances
  * Partially inspired by:

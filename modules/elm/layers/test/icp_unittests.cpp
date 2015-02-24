@@ -19,7 +19,7 @@
 #include "elm/core/layerconfig.h"
 #include "elm/core/pcl/cloud_.h"
 #include "elm/core/signal.h"
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layer_assertions.h"
 

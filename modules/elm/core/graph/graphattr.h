@@ -87,11 +87,53 @@ public:
      */
     cv::Mat1f getAttributes(float vtx_id) const;
 
+    /**
+     * @brief apply function to source image map masked by vertex
+     * @param func point to function to apply on masked image
+     * @param vtx_id for mapping source map image
+     * @return result of function application
+     * @throws elm::ExceptionKeyError for invalid vertex id
+     */
     cv::Mat1f applyVertexToMap(float vtx_id, cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
+    /**
+     * @brief apply function to source image map masked by vertex for each vertex
+     * @param func point to function to apply on masked image
+     * @param vtx_id for mapping source map image
+     * @return result of function application for each vertex
+     */
     VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
-    // members
+
+    void removeEdges(float vtx_u, float vtx_v);
+
+    /**
+     * @brief get the index of a vertex in adjacency matrix
+     * @param vtx vertex id
+     * @return vertex index
+     * @throws elm::ExceptionKeyError for invalid vertex id
+     */
+    int VertexIndex(float vtx) const;
+
+    /**
+     * @brief contract edges/merge two vertices
+     *
+     * remove (u, v) and (v, u) edges
+     * merge all u and v out-edges with common targets
+     * merge all u and v in-edges with common sources
+     * move the rest of u out-edges to v
+     * move the rest of u in-edges to v
+     *
+     * @param id_u id for vertex u (e.g. color)
+     * @param id_v id for vertex v (e.g. color)
+     * @return index of merged vertex (idx_v)
+     * @throws elm::ExceptionKeyError for invalid vertex index
+     */
+    float contractEdges(float id_u, float id_v);
+
+
+
+    // public members
     std::shared_ptr<GraphAttr_Impl> impl;
 };
 

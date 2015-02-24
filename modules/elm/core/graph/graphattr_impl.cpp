@@ -9,8 +9,9 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 
 using namespace std;
 using namespace cv;
@@ -20,9 +21,11 @@ GraphAttr_Impl::GraphAttr_Impl()
 {
 }
 
-GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
+GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
+                               const Mat1b &mask)
     : src_map_img(map_img)
 {
+    // some validation first
     ELM_THROW_BAD_DIMS_IF(map_img.total()==static_cast<size_t>(1),
                           "Cannot create graph out of single element map.");
 
@@ -50,7 +53,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
                     vertex_color_id = get(boost::vertex_color, g);
 
             float value_cur = map_img(r, c);
-            VtxDescriptor cur = retrieveVtxDescriptor(value_cur);
+            VtxDescriptor cur = retrieveVertex(value_cur);
             vertex_color_id[cur] = value_cur;
 
             if(c < map_img.cols-1) {
@@ -58,7 +61,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
                 if(!is_masked || mask(r, c+1)) {
 
                     float value = map_img(r, c+1);
-                    VtxDescriptor right = retrieveVtxDescriptor(value);
+                    VtxDescriptor right = retrieveVertex(value);
                     vertex_color_id[right] = value;
 
                     if(cur != right) {
@@ -73,7 +76,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
                 if(!is_masked || mask(r+1, c)) {
 
                     float value = map_img(r+1, c);
-                    VtxDescriptor down = retrieveVtxDescriptor(value);
+                    VtxDescriptor down = retrieveVertex(value);
                     vertex_color_id[down] = value;
 
                     if(cur != down) {
@@ -86,27 +89,27 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img, const Mat1b &mask)
     } // row
 }
 
-VtxDescriptor GraphAttr_Impl::retrieveVtxDescriptor(float vtx_id)
+VtxDescriptor GraphAttr_Impl::retrieveVertex(float vtx_id)
 {
     VtxDescriptor descriptor;
 
     // if found, return cached descriptor
-    if(!findVtxDescriptor(vtx_id, descriptor)) {
+    if(!findVertex(vtx_id, descriptor)) {
 
         // otherwise, request new descriptor
         descriptor = boost::add_vertex(vtx_id, g);
 
         // cache new descriptor
-        vtx_descriptor_cache_[vtx_id] = descriptor;
+        vtx_cache_[vtx_id] = descriptor;
     }
 
     return descriptor;
 }
 
-bool GraphAttr_Impl::findVtxDescriptor(float vtx_id, VtxDescriptor &vtx_descriptor) const
+bool GraphAttr_Impl::findVertex(float vtx_id, VtxDescriptor &vtx_descriptor) const
 {
-    MapVtxDescriptor::const_iterator itr = vtx_descriptor_cache_.find(vtx_id);
-    bool found = itr != vtx_descriptor_cache_.end();
+    MapVtxDescriptor::const_iterator itr = vtx_cache_.find(vtx_id);
+    bool found = itr != vtx_cache_.end();
     if(found) {
 
         vtx_descriptor = itr->second; // get cached descriptor
@@ -115,3 +118,42 @@ bool GraphAttr_Impl::findVtxDescriptor(float vtx_id, VtxDescriptor &vtx_descript
     return found;
 }
 
+void GraphAttr_Impl::removeEdges(const VtxDescriptor &u, const VtxDescriptor &v)
+{
+    GraphAttrTraits::edge_descriptor e;
+    bool found;
+
+    boost::tie(e, found) = edge(u, v, g);
+
+    if(found) {
+
+        remove_edge(e, g);
+    }
+}
+
+void GraphAttr_Impl::removeEdges(float vtx_u, float vtx_v, VtxDescriptor &u, VtxDescriptor &v)
+{
+    if(!findVertex(vtx_u, u)) {
+
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_u << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    if(!findVertex(vtx_v, v)) {
+
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_v << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    return removeEdges(u, v);
+}
+
+void GraphAttr_Impl::removeVertex(float vtx_id, const VtxDescriptor &vtx)
+{
+    boost::remove_vertex(vtx, g);
+
+    // remove from cache
+    vtx_cache_.erase(vtx_id);
+}

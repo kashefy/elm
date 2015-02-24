@@ -15,7 +15,7 @@
 #include "elm/core/exception.h"
 #include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
-#include "elm/core/stl/stl.h"
+#include "elm/core/stl/stl_inl.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layerattr_.h"
 #include "elm/ts/ts.h"
