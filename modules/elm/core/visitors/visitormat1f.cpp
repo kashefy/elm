@@ -9,6 +9,7 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "elm/core/exception.h"
 #include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/vertices.h"
 
@@ -48,6 +49,8 @@ Mat1f VisitorMat1f::operator()(const elm::VecMat1f &v) const
     Mat1f m;
     for(size_t i=0; i<v.size(); i++) {
 
+        ELM_THROW_BAD_DIMS_IF(!m.empty() && v[i].cols != m.cols,
+                              "vector element dims must stay consistent.");
         m.push_back(v[i]);
     }
     return m;
