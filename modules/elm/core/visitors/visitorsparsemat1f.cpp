@@ -43,10 +43,14 @@ SparseMat1f VisitorSparseMat1f::operator()(const Mat1f &m) const
 SparseMat1f VisitorSparseMat1f::operator()(const VecMat1f &v) const
 {
     size_t n = v.size();
-    if(n != 1) {
+    if(n > 1) {
 
         ELM_THROW_NOT_IMPLEMENTED_WMSG(
                     "Conversion from VecMat1f to SparseMat1f not implemented yet.");
+    }
+    else if(n==0) {
+
+        return SparseMat1f();
     }
     else {
         return operator ()(v[0]);

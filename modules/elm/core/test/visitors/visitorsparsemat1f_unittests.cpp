@@ -84,6 +84,12 @@ TEST_F(VisitorSparseMat1fTest, FromDenseMat1f)
     }
 }
 
+TEST_F(VisitorSparseMat1fTest, FromVecMat1f_empty)
+{
+    EXPECT_EQ(0, to_(VecMat1f()).size());
+    EXPECT_EQ(0, to_(VecMat1f(0)).size());\
+}
+
 TEST_F(VisitorSparseMat1fTest, Reset)
 {
     EXPECT_NO_THROW(to_.Reset());
