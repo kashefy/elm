@@ -89,44 +89,42 @@ TEST_F(VisitorVecMat1fTest, FromMat1f)
     }
 }
 
-//TEST_F(VisitorVecMat1fTest, EmptySparseMat1f)
-//{
-//    EXPECT_TRUE(to_(SparseMat1f()).empty());
+TEST_F(VisitorVecMat1fTest, EmptySparseMat1f)
+{
+    EXPECT_SIZE(1, to_(SparseMat1f()));
+    EXPECT_TRUE(to_(SparseMat1f())[0].empty());
 
-//    SparseMat m(Mat1f(1, 1, 1.f));
-//    m.clear();  // clearing is equivalent to setting elements to zero
-//    EXPECT_FALSE(to_(m).empty());
-//}
+    SparseMat m(Mat1f(1, 1, 1.f));
+    EXPECT_SIZE(1, to_(SparseMat1f()));
+    m.clear();  // clearing is equivalent to setting elements to zero
 
-//TEST_F(VisitorVecMat1fTest, FromSparseMat1f)
-//{
-//    int N=5;
+    EXPECT_TRUE(to_(SparseMat1f())[0].empty());
+}
 
-//    while(N--) {
+TEST_F(VisitorVecMat1fTest, FromSparseMat1f)
+{
+    int N=5;
 
-//        const int MAT_ROWS = abs(randu<int>()) % 10 + 1;
-//        const int MAT_COLS = abs(randu<int>()) % 100 + 1;
+    while(N--) {
 
-//        Mat1f m(MAT_ROWS, MAT_COLS);
-//        randn(m, 0.f, 100.f);
+        const int MAT_ROWS = abs(randu<int>()) % 10 + 1;
+        const int MAT_COLS = abs(randu<int>()) % 100 + 1;
 
-//        Mat1f m2 = to_(SparseMat1f(m));
+        Mat1f m(MAT_ROWS, MAT_COLS);
+        randn(m, 0.f, 100.f);
 
-//        EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
-//        EXPECT_NE(m.data, m2.data) << "Mats are not pointing to the same data in memory. Expecting shared copy.";
-//    }
-//}
+        SparseMat1f m2 = to_(SparseMat1f(m))[0];
 
-//TEST_F(VisitorVecMat1fTest, Reset)
-//{
-//    EXPECT_NO_THROW(to_.Reset());
+        EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
+    }
+}
 
-//    Mat1f m(4, 3);
-//    randn(m, 0.f, 100.f);
-
-//    Mat1f m2 = to_(m);
-//    EXPECT_NO_THROW(to_.Reset());
-//}
+TEST_F(VisitorVecMat1fTest, Reset)
+{
+    EXPECT_NO_THROW(to_.Reset());
+    to_(Mat1f(4, 3, 1.f));
+    EXPECT_NO_THROW(to_.Reset());
+}
 
 //#ifndef __WITH_PCL
 //    #warning "Disabling unit tests that require PCL support."
