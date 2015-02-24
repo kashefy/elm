@@ -78,6 +78,7 @@ void FeatureData::Reset()
     visitor_cloud_ptnrml_.Reset();
     visitor_cloud_xyz_.Reset();
     visitor_mat_.Reset();
+    visitor_sparse_mat_.Reset();
     visitor_vv_.Reset();
 }
 
