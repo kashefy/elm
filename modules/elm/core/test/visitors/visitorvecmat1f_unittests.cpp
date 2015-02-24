@@ -126,52 +126,50 @@ TEST_F(VisitorVecMat1fTest, Reset)
     EXPECT_NO_THROW(to_.Reset());
 }
 
-//#ifndef __WITH_PCL
-//    #warning "Disabling unit tests that require PCL support."
-//#else // __WITH_PCL
+#ifdef __WITH_PCL
 
-//TEST_F(VisitorVecMat1fTest, EmptyCLoud)
-//{
-//    CloudXYZPtr cld(new CloudXYZ);
-//    EXPECT_TRUE(to_(cld).empty());
-//}
+TEST_F(VisitorVecMat1fTest, FromCLoud_empty)
+{
+    CloudXYZPtr cld(new CloudXYZ);
+    EXPECT_TRUE(to_(cld).empty());
+}
 
-//TEST_F(VisitorVecMat1fTest, EmptyCloudSize)
-//{
-//    CloudXYZPtr cld(new CloudXYZ);
-//    EXPECT_MAT_DIMS_EQ(to_(cld), Size2i(0, 0));
-//}
+TEST_F(VisitorVecMat1fTest, FromCloud)
+{
+    Mat1f m(4, 3);
+    randn(m, 0.f, 100.f);
+    CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
 
-//TEST_F(VisitorVecMat1fTest, FromCloud)
-//{
-//    Mat1f m(4, 3);
-//    randn(m, 0.f, 100.f);
-//    CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
+    VecMat1f v = to_(cloud);
+    EXPECT_SIZE(m.rows, v);
 
-//    Mat1f m2 = to_(cloud);
-//    hconcat(m, Mat1f(m.rows, 1, 1), m);
+    hconcat(m, Mat1f(m.rows, 1, 1), m); // account for padding
 
-//    EXPECT_MAT_EQ(m, m2);
-//    EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
-//}
+    for(size_t i=0; i<v.size(); i++) {
 
-//TEST_F(VisitorVecMat1fTest, Reset_with_cloud)
-//{
-//    EXPECT_NO_THROW(to_.Reset());
+        Mat1f m2 = v[i];
 
-//    Mat1f m(4, 3);
-//    randn(m, 0.f, 100.f);
+        EXPECT_MAT_EQ(m.row(i), m2);
+        EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
+    }
+}
 
-//    Mat1f m2 = to_(m);
-//    EXPECT_NO_THROW(to_.Reset());
+TEST_F(VisitorVecMat1fTest, Reset_with_cloud)
+{
+    EXPECT_NO_THROW(to_.Reset());
 
-//    CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
-//    m2 = to_(cloud);
-//    EXPECT_NO_THROW(to_.Reset());
+    Mat1f m(4, 3, 1.f);
 
-//    m2 = to_(m);
-//    EXPECT_NO_THROW(to_.Reset());
-//}
+    VecMat1f v = to_(m);
+    EXPECT_NO_THROW(to_.Reset());
+
+    CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
+    v = to_(cloud);
+    EXPECT_NO_THROW(to_.Reset());
+
+    v = to_(m);
+    EXPECT_NO_THROW(to_.Reset());
+}
 
 //// fixtures for VecVertices
 
@@ -218,7 +216,7 @@ TEST_F(VisitorVecMat1fTest, Reset)
 ////    EXPECT_NO_THROW(to_.Reset());
 //}
 
-//#endif // __WITH_PCL
+#endif // __WITH_PCL
 
 } // annonymous namespace for visitors' test fixtures
 
