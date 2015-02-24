@@ -136,7 +136,7 @@ public:
             c_.reset(new pcl::PointCloud<TPointDst >);
             for(size_t i=0; i<v.size(); i++) {
 
-                c_->push_back(Mat2PointCloud_<TPointDst >(v[i]));
+                c_->push_back(Mat2PointCloud_<TPointDst >(v[i])->at(0));
             }
         }
         return c_;
