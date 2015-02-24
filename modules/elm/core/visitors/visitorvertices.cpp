@@ -98,4 +98,17 @@ VecVertices VisitorVecVertices::operator()(const SparseMat1f &m)
     return vv_;
 }
 
+VecVertices VisitorVecVertices::operator()(const VecMat1f &v)
+{
+    if(vv_.empty()) {
+
+        for(size_t i=0; i<v.size(); i++) {
+
+            VecVertices tmp = Mat2VecVertices(v[i].reshape(1, 1));
+            vv_.push_back(tmp[0]);
+        }
+    }
+    return vv_;
+}
+
 #endif // __WITH_PCL

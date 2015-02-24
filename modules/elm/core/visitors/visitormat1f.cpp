@@ -43,6 +43,16 @@ Mat1f VisitorMat1f::operator()(const SparseMat1f &m) const
     return dense;
 }
 
+Mat1f VisitorMat1f::operator()(const elm::VecMat1f &v) const
+{
+    Mat1f m;
+    for(size_t i=0; i<v.size(); i++) {
+
+        m.push_back(v[i]);
+    }
+    return m;
+}
+
 Mat1f VisitorMat1f::operator()(float f) const
 {
     return Mat1f(1, 1, f);

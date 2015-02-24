@@ -12,7 +12,7 @@
 
 #include "elm/core/pcl/typedefs_fwd.h"
 #include "elm/core/pcl/vertices.h"
-#include "elm/core/typedefs_fwd.h"
+#include "elm/core/typedefs_sfwd.h"
 #include "elm/core/visitors/visitor_.h"
 
 namespace elm {
@@ -46,6 +46,12 @@ public:
     elm::VecVertices operator()(const cv::Mat1f &m);
 
     elm::VecVertices operator()(const elm::SparseMat1f &m);
+
+    /**
+     * @brief elm::VecMat1f to elm::VecVertices
+     * Mat1f elements will be flattened.
+     */
+    elm::VecVertices operator()(const elm::VecMat1f &v);
 
 protected:
     template <typename TScalar>

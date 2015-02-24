@@ -13,7 +13,7 @@
 #include "elm/core/pcl/cloud_2cloud_.h"
 #include "elm/core/pcl/vertices.h"
 #include "elm/core/cv/typedefs_fwd.h"
-#include "elm/core/typedefs_fwd.h"
+#include "elm/core/typedefs_sfwd.h"
 #include "elm/core/visitors/visitor_.h"
 
 namespace elm {
@@ -125,6 +125,19 @@ public:
                 m.convertTo(dense, dense.type());
             }
             c_ = Mat2PointCloud_<TPointDst >(dense);
+        }
+        return c_;
+    }
+
+    CloudTPDstPtr operator()(const elm::VecMat1f &v) {
+
+        if(!bool(c_)) {
+
+            c_.reset(new pcl::PointCloud<TPointDst >);
+            for(size_t i=0; i<v.size(); i++) {
+
+                c_->push_back(Mat2PointCloud_<TPointDst >(v[i]));
+            }
         }
         return c_;
     }

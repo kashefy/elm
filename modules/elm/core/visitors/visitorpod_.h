@@ -15,7 +15,7 @@
 #include "elm/core/cv/sparsemat_utils.h"
 #include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/vertices.h"
-#include "elm/core/typedefs_fwd.h"
+#include "elm/core/typedefs_sfwd.h"
 
 namespace elm {
 
@@ -77,6 +77,20 @@ public:
                 delete[] idx;
             }
             return value;
+        }
+    }
+
+    T operator()(const elm::VecMat1f &v) const
+    {
+        size_t n = v.size();
+        if(n != 1) {
+
+            std::stringstream s;
+            s << "Cannot convert " << n << "-element VecMat1f to Scalar.";
+            ELM_THROW_BAD_DIMS(s.str());
+        }
+        else {
+            return static_cast<T>(operator ()(v[0]));
         }
     }
 
