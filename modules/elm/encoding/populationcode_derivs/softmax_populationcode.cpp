@@ -7,8 +7,6 @@
 //M*/
 #include "elm/encoding/populationcode_derivs/softmax_populationcode.h"
 
-#include <string>
-
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
