@@ -39,7 +39,7 @@ public:
      * @param stimulus
      * @return response per kernel
      */
-    virtual elm::VecMat1f Compute(cv::Mat1f stimulus);
+    virtual elm::VecMat1f Convolve(cv::Mat1f stimulus);
 
     /**
      * @brief Get element response across all kernels

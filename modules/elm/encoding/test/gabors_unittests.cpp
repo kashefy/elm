@@ -273,7 +273,7 @@ TEST_F(GaborFilterBankTest, Compute)
             bars.Draw(theta*180.f/CV_PI, img);
             img.convertTo(stimulus, CV_32FC1, 1./255.);
 
-            VecMat1f response_actual = to_.Compute(stimulus);
+            VecMat1f response_actual = to_.Convolve(stimulus);
 
             VecMat1f response_get = to_.Response();
 
@@ -323,7 +323,7 @@ TEST_F(GaborFilterBankTest, ElementResponse)
     bars.Draw(45.f, img);
     img.convertTo(stimulus, CV_32FC1, 1./255.);
 
-    VecMat1f response = to_.Compute(stimulus);
+    VecMat1f response = to_.Convolve(stimulus);
 
     const int N=100;
     for(int i=0; i<N; i++) {
