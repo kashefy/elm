@@ -57,6 +57,19 @@ TEST_F(FeatureDataTest, InitWithSparseMat1f)
     EXPECT_MAT_EQ(m, mat_);
 }
 
+TEST_F(FeatureDataTest, InitWithVecMat1f)
+{
+    FeatureData to(VecMat1f(1, mat_));
+
+    Mat1f m = to.get<Mat1f>();
+
+    EXPECT_MAT_EQ(m, mat_);
+
+    m = to.get<VecMat1f>()[0];
+
+    EXPECT_MAT_EQ(m, mat_);
+}
+
 /**
  * @brief Verify initializing with Mat and getting a mat only involves a shared copy
  */
@@ -68,6 +81,24 @@ TEST_F(FeatureDataTest, Same_Mat)
     EXPECT_MAT_EQ(m, mat_);
     EXPECT_EQ(m.data, mat_.data) << "Both Mats are not pointing to the same memory location.";
     ASSERT_NE(m.clone().data, mat_.data) << "Cannot still be pointing to the same memory chunk after cloning.";
+}
+
+TEST_F(FeatureDataTest, VecMat1f_Same_Mat)
+{
+    FeatureData to(VecMat1f(1, mat_));
+
+    {
+        Mat1f m = to.get<Mat1f>();
+        EXPECT_MAT_EQ(m, mat_);
+        EXPECT_EQ(m.data, mat_.data) << "Both Mats are not pointing to the same memory location.";
+        ASSERT_NE(m.clone().data, mat_.data) << "Cannot still be pointing to the same memory chunk after cloning.";
+    }
+    {
+        Mat1f m = to.get<VecMat1f>()[0];
+        EXPECT_MAT_EQ(m, mat_);
+        EXPECT_EQ(m.data, mat_.data) << "Both Mats are not pointing to the same memory location.";
+        ASSERT_NE(m.clone().data, mat_.data) << "Cannot still be pointing to the same memory chunk after cloning.";
+    }
 }
 
 #ifdef __WITH_PCL // following test case only applicable with PCL support and Point Cloud definitions
