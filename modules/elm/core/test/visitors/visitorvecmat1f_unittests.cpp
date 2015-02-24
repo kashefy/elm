@@ -130,50 +130,102 @@ TEST_F(VisitorVecMat1fTest, Reset)
 
 #ifdef __WITH_PCL
 
-//// fixtures for VecVertices
+// fixtures for VecVertices
 
-//TEST_F(VisitorVecMat1fTest, Empty_VecVertices)
-//{
-//    EXPECT_TRUE(to_(VecVertices()).empty());
-//}
+TEST_F(VisitorVecMat1fTest, Empty_VecVertices)
+{
+    EXPECT_TRUE(to_(VecVertices()).empty());
+}
 
-//TEST_F(VisitorVecMat1fTest, Empty_VecVertices_Size)
-//{
-//    EXPECT_MAT_DIMS_EQ(to_(VecVertices()), Size2i(0, 0));
-//}
+TEST_F(VisitorVecMat1fTest, Empty_VecVertices_size)
+{
+    EXPECT_SIZE(0, to_(VecVertices()));
+}
 
-//TEST_F(VisitorVecMat1fTest, From_VecVertices)
-//{
-//    Mat1f m(4, 3);
-//    for(size_t i=0; i<m.total(); i++) {
+TEST_F(VisitorVecMat1fTest, From_VecVertices)
+{
+    Mat1f m(4, 3);
+    for(size_t i=0; i<m.total(); i++) {
 
-//        m(i) = static_cast<float>(randu<uint32_t>() % 256);
-//    }
-//    VecVertices vv = Mat2VecVertices(m.clone());
+        m(i) = static_cast<float>(randu<uint32_t>() % 256);
+    }
+    VecVertices vv = Mat2VecVertices(m);
 
-//    Mat1f m2 = to_(vv);
+    VecMat1f vm = to_(vv);
 
-//    EXPECT_MAT_EQ(m, m2);
-//    EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
-//}
+    EXPECT_SIZE(m.rows, vm);
 
-//TEST_F(VisitorVecMat1fTest, DISABLED_Reset_with_VecVertices)
-//{
-////    EXPECT_NO_THROW(to_.Reset());
+    for(size_t i=0; i<vm.size(); i++) {
 
-////    Mat1f m(4, 3);
-////    randn(m, 0.f, 100.f);
+        Mat1f m2 = vm[i];
+        EXPECT_MAT_EQ(m.row(i), m2);
+        EXPECT_NE(m.row(i).data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
+    }
+}
 
-////    Mat1f m2 = to_(m);
-////    EXPECT_NO_THROW(to_.Reset());
+TEST_F(VisitorVecMat1fTest, From_VecVertices_mixed_empty)
+{
+    VecVertices vv;
+    pcl::Vertices v;
+    vv.push_back(v);
+    v.vertices.push_back(uint32_t(3));
+    vv.push_back(v);
+    vv.push_back(pcl::Vertices());
 
-////    CloudXYZPtr cloud = Mat2PointCloud(m);
-////    m2 = to_(cloud);
-////    EXPECT_NO_THROW(to_.Reset());
+    VecMat1f vm = to_(vv);
 
-////    m2 = to_(m);
-////    EXPECT_NO_THROW(to_.Reset());
-//}
+    EXPECT_SIZE(3, vm);
+
+    EXPECT_TRUE(vm[0].empty());
+    EXPECT_FLOAT_EQ(3.f, vm[1](0));
+    EXPECT_TRUE(vm[2].empty());
+}
+
+TEST_F(VisitorVecMat1fTest, From_VecVertices_variable_size)
+{
+    const size_t N = 4;
+    VecVertices vv;
+    for(size_t i=1; i<=N; i++) {
+
+        pcl::Vertices v;
+        for(size_t j=0; j<i; j++) {
+
+            v.vertices.push_back(randu<uint32_t>() % 256);
+        }
+        vv.push_back(v);
+    }
+
+    VecMat1f vm = to_(vv);
+
+    EXPECT_SIZE(N, vm);
+
+    for(size_t i=0; i<vm.size(); i++) {
+
+        EXPECT_EQ(vm[i].total(), vv[i].vertices.size());
+        for(size_t j=0; j<vm[i].total(); j++) {
+
+            EXPECT_FLOAT_EQ(static_cast<float>(vv[i].vertices[j]), vm[i](j));
+        }
+    }
+}
+
+TEST_F(VisitorVecMat1fTest, Reset_with_VecVertices)
+{
+    EXPECT_NO_THROW(to_.Reset());
+
+    Mat1f m(4, 3, 1.f);
+    VecVertices vv = Mat2VecVertices(m);
+
+    to_(vv);
+    EXPECT_NO_THROW(to_.Reset());
+
+    CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
+    to_(cloud);
+    EXPECT_NO_THROW(to_.Reset());
+
+    to_(m);
+    EXPECT_NO_THROW(to_.Reset());
+}
 
 template <class TPoint>
 class VisitorVecMat1fCloudTest : public VisitorVecMat1fTest
