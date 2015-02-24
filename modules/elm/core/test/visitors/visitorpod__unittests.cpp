@@ -118,6 +118,41 @@ TYPED_TEST_P(VisitorPOD_Test, Value_FromSparseMat1f_ndims)
     }
 }
 
+TYPED_TEST_P(VisitorPOD_Test, Invalid_VecMat1f) {
+
+    VisitorPOD_<TypeParam > to;
+
+    // empty
+    EXPECT_THROW(to(VecMat1f()), ExceptionBadDims);
+
+    // empty element
+    EXPECT_THROW(to(VecMat1f(1, Mat1f())), ExceptionBadDims);
+
+    // multiple empty elements
+    EXPECT_THROW(to(VecMat1f(5, Mat1f())), ExceptionBadDims);
+
+    // multiple elements
+    EXPECT_THROW(to(VecMat1f(2, Mat1f(1, 1, 1.f))), ExceptionBadDims);
+
+    EXPECT_THROW(to(VecMat1f(1, Mat1f(1, 2, 1.f))), ExceptionBadDims);
+    EXPECT_THROW(to(VecMat1f(1, Mat1f(2, 1, 1.f))), ExceptionBadDims);
+    EXPECT_THROW(to(VecMat1f(2, Mat1f(1, 2, 1.f))), ExceptionBadDims);
+    EXPECT_THROW(to(VecMat1f(2, Mat1f(2, 1, 1.f))), ExceptionBadDims);
+}
+
+TYPED_TEST_P(VisitorPOD_Test, From_VecMat1f) {
+
+    VisitorPOD_<TypeParam > to;
+
+    float _v = 256.f; // to cover a range of values common between all of our PODs
+    while(--_v >= 0.f) {
+
+        EXPECT_EQ(static_cast<TypeParam >(_v),
+                  to(VecMat1f(1, Mat1f(1, 1, _v))))
+                << "Value mismatch.";
+    }
+}
+
 #ifdef __WITH_PCL // PCL support required for these tests
 
 TYPED_TEST_P(VisitorPOD_Test, Value_FromVecVertices)
@@ -223,6 +258,8 @@ REGISTER_TYPED_TEST_CASE_P(VisitorPOD_Test,
                            Invalid_SparseMat1f,
                            Value_FromSparseMat1f,
                            Value_FromSparseMat1f_ndims,
+                           Invalid_VecMat1f,
+                           From_VecMat1f,
                            Value_FromVecVertices,
                            Invalid_Cloud,
                            Invalid_VecVertices
