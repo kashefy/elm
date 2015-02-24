@@ -7,9 +7,6 @@
 //M*/
 #include "elm/encoding/populationcode_derivs/mutex_populationcode.h"
 
-#include "elm/core/sampler.h"
-#include "elm/core/signal.h"
-
 using std::string;
 
 using cv::Mat1f;
