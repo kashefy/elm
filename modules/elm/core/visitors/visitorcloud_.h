@@ -129,6 +129,12 @@ public:
         return c_;
     }
 
+    /**
+     * @brief elm::VecMat1f -> Cloud
+     * treats each vector elements as a pont
+     * @param v vector of Mat1f with point data
+     * @return unordered point cloud
+     */
     CloudTPDstPtr operator()(const elm::VecMat1f &v) {
 
         if(!bool(c_)) {
