@@ -42,8 +42,8 @@ float GraphAttr::operator ()(int idx_u, int idx_v) const
     VecF vtx_idx = VerticesIds();
     GraphAttrTraits::vertex_descriptor u, v;
 
-    impl->findVtxDescriptor(vtx_idx[idx_u], u);
-    impl->findVtxDescriptor(vtx_idx[idx_v], v);
+    impl->findVertex(vtx_idx[idx_u], u);
+    impl->findVertex(vtx_idx[idx_v], v);
 
     typename property_map < GraphAttrType, edge_weight_t >::type
             weight = get(edge_weight, impl->g);
@@ -63,28 +63,26 @@ void GraphAttr::AdjacencyMat(Mat1f &adj) const
         adj = Mat1f(nb_vertices, nb_vertices);
     }
 
-    typename property_map < GraphAttrType, edge_weight_t >::type
+    // a lot of clutter just to traverse all edges
+    typename property_map <GraphAttrType, edge_weight_t >::type
             weight = get(edge_weight, impl->g);
 
     GraphAttrTraits::vertex_iterator begin, end, next_u;
     tie(begin, end) = vertices(impl->g);
 
     int idx_u=0;
-    for (next_u = begin; next_u != end; idx_u++) {
+    for (next_u = begin; next_u != end; ++next_u, idx_u++) {
 
         GraphAttrTraits::vertex_iterator next_v;
         int idx_v=0;
-        for (next_v = begin; next_v != end; idx_v++) {
+        for (next_v = begin; next_v != end; ++next_v, idx_v++) {
 
             GraphAttrTraits::edge_descriptor e;
             bool found;
 
             tie(e, found) = edge(*next_u, *next_v, impl->g);
             adj(idx_u, idx_v) = found? get(weight, e) : 0.f;
-
-            ++next_v;
         }
-        ++next_u;
     }
 }
 
@@ -110,7 +108,7 @@ VecF GraphAttr::VerticesIds() const
 void GraphAttr::addAttributes(float vtx_id, const Mat1f &attr)
 {
     VtxDescriptor descriptor;
-    if(impl->findVtxDescriptor(vtx_id, descriptor)) {
+    if(impl->findVertex(vtx_id, descriptor)) {
 
         property_map<GraphAttrType, vertex_index2_t>::type
                 vertex_attributes = get(vertex_index2, impl->g);
@@ -127,7 +125,7 @@ void GraphAttr::addAttributes(float vtx_id, const Mat1f &attr)
 Mat1f GraphAttr::getAttributes(float vtx_id) const
 {
     VtxDescriptor descriptor;
-    if(impl->findVtxDescriptor(vtx_id, descriptor)) {
+    if(impl->findVertex(vtx_id, descriptor)) {
 
         property_map<GraphAttrType, vertex_index2_t>::type
                 vertex_attributes = get(vertex_index2, impl->g);
@@ -146,7 +144,7 @@ Mat1f GraphAttr::applyVertexToMap(float vtx_id, Mat1f (*func)(const Mat1f &img, 
     Mat1f vtx_result;
 
     VtxDescriptor vtx_descriptor;
-    if(impl->findVtxDescriptor(vtx_id, vtx_descriptor)) {
+    if(impl->findVertex(vtx_id, vtx_descriptor)) {
 
         property_map<GraphAttrType, vertex_color_t>::type
                 vertex_color_id = get(vertex_color, impl->g);
@@ -209,26 +207,13 @@ float GraphAttr::contractEdges(float id_u, float id_v)
     typename property_map <GraphAttrType, edge_weight_t >::type
             weight = get(edge_weight, impl->g);
 
-    property_map<GraphAttrType, vertex_color_t>::type
-            vertex_color_id = get(vertex_color, impl->g);
+   std::vector< std::pair<VtxDescriptor, VtxDescriptor> > obsolete_edges;
 
-//    for (boost::tie(e, e_end) = edges(impl->g); e != e_end; ++e) {
-
-//        VtxDescriptor src, dst;
-//        src = source(*e, impl->g);
-//        dst = target(*e, impl->g);
-
-//        ELM_COUT_VAR("e("<<vertex_color_id[src]<<","<<vertex_color_id[dst]<<")");
-
-//    }
-
-    for (boost::tie(e, e_end) = out_edges(u, impl->g); e != e_end; ++e) {
+    for(tie(e, e_end) = out_edges(u, impl->g); e != e_end; ++e) {
 
         VtxDescriptor src, dst;
         src = source(*e, impl->g);
         dst = target(*e, impl->g);
-
-        ELM_COUT_VAR("e("<<vertex_color_id[src]<<","<<vertex_color_id[dst]<<")");
 
         // move or merge edge?
         if(src == u) {
@@ -237,13 +222,10 @@ float GraphAttr::contractEdges(float id_u, float id_v)
 //            bool found;
 //            boost::tie(e_v, found) = edge(v, dst, impl->g);
 
-            ELM_COUT_VAR("add e("<<vertex_color_id[v]<<","<<vertex_color_id[dst]<<")");
-
             add_edge(v, dst, get(weight, *e), impl->g); // move edge
         }
         else if(dst == u) {
 
-            ELM_COUT_VAR("add e("<<vertex_color_id[src]<<","<<vertex_color_id[v]<<")");
             add_edge(src, v, get(weight, *e), impl->g); // move edge
         }
         else {
@@ -254,14 +236,21 @@ float GraphAttr::contractEdges(float id_u, float id_v)
             ELM_THROW_VALUE_ERROR(s.str());
         }
 
-        //impl->removeEdges(src, dst);
+        // keep track of edges to remove later
+        obsolete_edges.push_back(std::make_pair(src, dst));
+    }
+
+    // must remove obsolete edges before removing vertex
+    VtxDescriptor src, dst;
+    for(size_t i=0; i<obsolete_edges.size(); i++) {
+
+        tie(src, dst) = obsolete_edges[i];
+        impl->removeEdges(src, dst);
     }
 
     impl->removeVertex(id_u, u);
 
-    int idx_z = id_v;
-
-    return idx_z;
+    return id_v;
 }
 
 void GraphAttr::removeEdges(float vtx_u, float vtx_v)
@@ -273,7 +262,7 @@ void GraphAttr::removeEdges(float vtx_u, float vtx_v)
 int GraphAttr::VertexIndex(float vtx_id) const
 {
     VtxDescriptor v;
-    if(!impl->findVtxDescriptor(vtx_id, v)) {
+    if(!impl->findVertex(vtx_id, v)) {
 
         std::stringstream s;
         s << "No vertex with id (" << vtx_id << ").";

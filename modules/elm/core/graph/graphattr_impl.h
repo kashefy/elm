@@ -47,7 +47,7 @@ struct GraphAttr_Impl
      */
     GraphAttr_Impl(const cv::Mat1f &map_img, const cv::Mat1b &mask);
 
-    bool findVtxDescriptor(float vtx_id, VtxDescriptor &vtx_descriptor) const;
+    bool findVertex(float vtx_id, VtxDescriptor &vtx_descriptor) const;
 
     void removeEdges(float vtx_u, float vtx_v, VtxDescriptor &u, VtxDescriptor &v);
 
@@ -69,9 +69,9 @@ protected:
      * @param value primary vertex identifying property (e.g. map img value)
      * @return vertex descriptor
      */
-    VtxDescriptor retrieveVtxDescriptor(float vtx_id);
+    VtxDescriptor retrieveVertex(float vtx_id);
 
-    MapVtxDescriptor vtx_descriptor_cache_;   ///< cache vertex descriptors
+    MapVtxDescriptor vtx_cache_;   ///< cache vertex descriptors
 };
 
 } // namespace elm

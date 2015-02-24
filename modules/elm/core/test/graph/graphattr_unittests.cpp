@@ -841,9 +841,62 @@ TEST_F(GraphAttrMaskedTest, RemoveEdges)
     EXPECT_EQ(0.f, adj(v_idx, u_idx));
 }
 
+/**
+ * @brief Test that edge contraction/merging decreases number of vertices
+ */
+TEST_F(GraphAttrMaskedTest, ContractEdges_new_dims)
+{
+    const int NB_VERTICES = static_cast<int>(to_.num_vertices());
+
+    ASSERT_GT(NB_VERTICES, 1) << "this test requires a graph with at least 2 vertices.";
+
+    for(int i=1; i<NB_VERTICES; i++) {
+
+        VecF vtx_ids = to_.VerticesIds();
+        float u = vtx_ids[0];
+        float v = vtx_ids[1];
+
+        Mat1f adj_pre;
+        to_.AdjacencyMat(adj_pre);
+
+        to_.contractEdges(u, v);
+
+        EXPECT_EQ(size_t(NB_VERTICES-i), to_.num_vertices()) << "no. of vertices not decreasing.";
+        EXPECT_SIZE(size_t(NB_VERTICES-i), to_.VerticesIds()) << "no. of vertices not decreasing.";
+
+        Mat1f adj;
+        to_.AdjacencyMat(adj);
+
+        EXPECT_MAT_DIMS_EQ(adj, Size2i(adj_pre.cols-1, adj_pre.rows-1))
+                << "Expecting adj. matrix to shrink by 1 row and 1 column.";
+    }
+}
+
+/**
+ * @brief Verify which vertex got removed after merge
+ */
+TEST_F(GraphAttrMaskedTest, ContractEdges_vtx_removed)
+{
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 2 vertices.";
+
+    while(static_cast<int>(to_.num_vertices()) > 1) {
+
+        VecF vtx_ids = to_.VerticesIds();
+        float u = vtx_ids[1];
+        float v = vtx_ids[0];
+
+        Mat1f adj_pre;
+        to_.AdjacencyMat(adj_pre);
+
+        to_.contractEdges(u, v);
+
+        EXPECT_THROW(to_.VertexIndex(u), ExceptionKeyError);
+        EXPECT_EQ(0, to_.VertexIndex(v));
+    }
+}
+
 TEST_F(GraphAttrMaskedTest, ContractEdges_merge_neighbors)
 {
-    ELM_COUT_VAR(to_string(to_.VerticesIds()));
     float u = 6.0f;
     float v = 9.5f;
 
@@ -853,14 +906,43 @@ TEST_F(GraphAttrMaskedTest, ContractEdges_merge_neighbors)
     Mat1f adj0;
     to_.AdjacencyMat(adj0);
 
-    ELM_COUT_VAR(adj0);
     to_.contractEdges(u, v);
 
-    ELM_COUT_VAR(to_string(to_.VerticesIds()));
+    // perform OR of adj. row and column for both vertices
+    // and enforce all-zero diagonal
+    Mat1f adj_or = adj0.clone();
+    cv::bitwise_or(adj_or.row(u_idx), adj_or.row(v_idx),
+                   adj_or.row(v_idx));
+    cv::bitwise_or(adj_or.col(u_idx), adj_or.col(v_idx),
+                   adj_or.col(v_idx));
+    for(int r=0; r<adj_or.rows; r++) {
+        adj_or(r, r) = 0.f;
+    }
+
     Mat1f adj;
     to_.AdjacencyMat(adj);
 
-    ELM_COUT_VAR(adj);
+    // iterate through both and compare connectivity after merge.
+    // skip vertex that was omitted by merge
+    int r_m = -1;
+    for(int r=0; r<adj.rows; r++) {
+
+        if(r!=u_idx) {
+            r_m++;
+        }
+        int c_m = -1;
+        for(int c=0; c<adj.cols; c++) {
+
+            if(c!=u_idx) {
+                c_m++;
+            }
+
+            if(r!=u_idx && c!=u_idx) {
+
+                EXPECT_FLOAT_EQ(adj_or(r, c), adj(r_m, c_m));
+            }
+        }
+    }
 }
 
 } // annonymous namespace for test cases and fixtures
