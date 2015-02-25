@@ -71,7 +71,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_dims)
     to_.State(Reshape(gabors_->Convolve(in_)));
     cv::Mat pop_code = to_.PopCode();
     EXPECT_GT(static_cast<int>(in_.total())*NB_KERNELS_, 0);
-    EXPECT_MAT_DIMS_EQ(pop_code, cv::Size(in_.total()*NB_KERNELS_, 1));
+    EXPECT_MAT_DIMS_EQ(pop_code, cv::Size(NB_KERNELS_, in_.total()));
     EXPECT_MAT_TYPE(pop_code, CV_32F);
 }
 
@@ -80,7 +80,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_zeros)
     in_ = Mat1f::zeros(SIZE_, SIZE_);
     to_.State(Reshape(gabors_->Convolve(in_)));
     cv::Mat pop_code = to_.PopCode();
-    EXPECT_MAT_EQ(pop_code, Mat1f::zeros(1, in_.total()*NB_KERNELS_));
+    EXPECT_MAT_EQ(pop_code, Mat1f::zeros(in_.total(), NB_KERNELS_));
 }
 
 class IdentityTransform : public base_FilterBank
@@ -114,7 +114,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_uniform)
     to_.State(Reshape(identity_transf.Convolve(in_)));
 
     const int N=1e3;
-    Mat1f counts = Mat1f::zeros(1, static_cast<int>(in_.total())*NB_ID_KERNELS);
+    Mat1f counts = Mat1f::zeros(static_cast<int>(in_.total()), NB_ID_KERNELS);
 
     for(int i=0; i<N; i++) {
 
@@ -132,11 +132,11 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_uniform)
 
     counts /= static_cast<float>(N);
 
-    cv::Mat m, s;
-    cv::meanStdDev(counts, m, s);
+    cv::Mat mean, stddev;
+    cv::meanStdDev(counts, mean, stddev);
 
-    EXPECT_FLOAT_EQ(1./static_cast<double>(NB_ID_KERNELS), m.at<double>(0));
-    EXPECT_LE(s.at<double>(0), 0.02);
+    EXPECT_FLOAT_EQ(1./static_cast<double>(NB_ID_KERNELS), mean.at<double>(0));
+    EXPECT_LE(stddev.at<double>(0), 0.02);
 }
 
 TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
@@ -157,7 +157,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
         to_.State(response_el);
 
         const int N=30;
-        Mat1f counts = Mat1f::zeros(1, static_cast<int>(in_.total())*NB_KERNELS_);
+        Mat1f counts = Mat1f::zeros(static_cast<int>(in_.total()), NB_KERNELS_);
         for(int i=0; i<N; i++) {
 
             cv::Mat pop_code = to_.PopCode();
@@ -167,8 +167,6 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
                     << "Encountered oversampling for same input element.";
             cv::add(pop_code, counts, counts);
         }
-
-        counts = counts.reshape(1, in_.total());
 
         // which kernel responded the most to the oriented bar?
         cv::Mat1f col_sums(1, NB_KERNELS_);
@@ -204,7 +202,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_filter_bank_orientation)
         to_.State(Reshape(gabors_->Convolve(in_)));
 
         const int N=10;
-        Mat1f counts = Mat1f::zeros(1, static_cast<int>(in_.total())*NB_KERNELS_);
+        Mat1f counts = Mat1f::zeros(static_cast<int>(in_.total()), NB_KERNELS_);
         for(int i=0; i<N; i++) {
 
             cv::Mat pop_code = to_.PopCode();
@@ -214,14 +212,9 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_filter_bank_orientation)
             cv::add(pop_code, counts, counts);
         }
 
-        counts = counts.reshape(1, in_.total());
-
         // for which did the bar respond the most?
-        cv::Mat1i col_sums(1, NB_KERNELS_);
-        for(int i=0; i<counts.cols; i++) {
-
-            col_sums(i) = static_cast<int>(cv::sum(counts.col(i))(0));
-        }
+        cv::Mat1f col_sums(1, NB_KERNELS_);
+        cv::reduce(counts, col_sums, 0, CV_REDUCE_SUM);
 
         double min_val;
         int min_idx[2] = {-1, -1};

@@ -119,7 +119,7 @@ void SaliencyItti::Activate(const Signal &signal)
     int max_idx[2];
     for(size_t i=0, j=0; i<stimulus.total(); i++, j+=j_step) {
 
-        minMaxIdx(orientation_spikes.colRange(j, j+j_step), &min_val, 0, 0, max_idx);
+        minMaxIdx(orientation_spikes.row(i), &min_val, 0, 0, max_idx);
         orientation_index(i) = max_idx[1];
 
         mask_low_orientation_response(i) =

@@ -22,32 +22,31 @@ using cv::Mat1f;
 using namespace elm;
 
 SoftMaxPopulationCode::SoftMaxPopulationCode()
-    :base_PopulationCode()
+    : base_PopulationCode(),
+      min_distr_sum_(0.f)
 {
 }
 
 void SoftMaxPopulationCode::State(const Mat1f &in)//, const VecMat1f &kernels)
 {
-    fan_out_ = in.cols;
-    state_.clear();
-    for(int r=0; r<in.rows; r++) {
-        state_.push_back(in.row(r));
-    }
+    state_ = in;
 }
 
 Mat1f SoftMaxPopulationCode::PopCode()
 {
-    Mat1f pop_code = Mat1f::zeros(1, fan_out_*static_cast<int>(state_.size()));
+    Mat1f pop_code = Mat1f::zeros(state_.size());
 
-    int col = 0;
-    for(VecMat1f::const_iterator itr=state_.begin(); itr != state_.end(); itr++, col+=fan_out_) {
+    for(int r=0; r<state_.rows; r++) {
 
         Sampler1D sampler;
-        // no sampling for all-zero response
-        if(cv::sum(*itr)(0) > 0.f) {
 
-            sampler.pdf(*itr);
-            pop_code(col+sampler.Sample()) = 1.f;
+        Mat1f pdf = state_.row(r);
+
+        // no sampling for all-zero response
+        if(cv::sum(pdf)[0] > min_distr_sum_) {
+
+            sampler.pdf(pdf);
+            pop_code(r, sampler.Sample()) = 1.f;
         }
     }
 

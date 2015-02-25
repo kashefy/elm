@@ -28,7 +28,7 @@ public:
 
     /**
      * @brief Compute distribution for each node from different kernel responses
-     * @param input stimulus (expecting distribution per row)
+     * @param input stimulus state (i.e. expecting distribution per row)
      * @param kernels (e.g. filter bank)
      */
     virtual void State(const cv::Mat1f& in);
@@ -40,9 +40,8 @@ public:
     virtual cv::Mat1f PopCode();
 
 protected:
-    VecMat1f state_;            ///< internal state
-    int fan_out_;               ///< dimensions of state per node (e.g. no. of kernels)
-
+    cv::Mat1f state_;   ///< internal state (columns may represent no. kernels)
+    float min_distr_sum_; ///< minimum value for sampling from element state (default is zero)
 };
 
 } // namespace elm
