@@ -23,7 +23,7 @@ public:
 
     MutexPopulationCode(const LayerConfig &config);
 
-    virtual void State(const cv::Mat1f& in, const elm::VecMat1f& kernels=elm::VecMat1f());
+    virtual void State(const cv::Mat1f& in);//, const elm::VecMat1f& kernels=elm::VecMat1f());
 
     virtual cv::Mat1f PopCode();
 };

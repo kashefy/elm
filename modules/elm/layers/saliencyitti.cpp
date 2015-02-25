@@ -102,7 +102,7 @@ void SaliencyItti::OutputNames(const LayerOutputNames &io)
 void SaliencyItti::Activate(const Signal &signal)
 {
     Mat1f stimulus = signal.MostRecentMat1f(name_input_);
-    pop_code_orient_.State(gabors_->Convolve(stimulus));
+    pop_code_orient_.State(Reshape(gabors_->Convolve(stimulus)));
 
     Mat orientation_spikes = pop_code_orient_.PopCode();
     Mat1i orientation_index(stimulus.size());

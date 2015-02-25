@@ -63,7 +63,7 @@ void base_PopulationCode::OutputNames(const LayerOutputNames &config)
 
 void base_PopulationCode::Activate(const Signal &signal)
 {
-    State(signal.MostRecentMat1f(name_stimulus_), VecMat1f());
+    State(signal.MostRecentMat1f(name_stimulus_));
     pop_code_ = PopCode();
 }
 

@@ -1,8 +1,11 @@
 #include "elm/encoding/populationcode_derivs/softmax_populationcode.h"
 
 #include <opencv2/core/core_c.h>
+#include <opencv2/highgui/highgui.hpp>
 
+#include "elm/core/debug_utils.h"
 #include "elm/core/cv/mat_utils_inl.h"
+#include "elm/core/cv/mat_vector_utils.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/encoding/gabors.h"
@@ -65,7 +68,7 @@ std::shared_ptr<base_FilterBank> SoftMaxPopulationCodeTest::gabors_;
 TEST_F(SoftMaxPopulationCodeTest, PopCode_dims)
 {
     in_ = Mat1f::zeros(SIZE_, SIZE_);
-    to_.State(gabors_->Convolve(in_));
+    to_.State(Reshape(gabors_->Convolve(in_)));
     cv::Mat pop_code = to_.PopCode();
     EXPECT_GT(static_cast<int>(in_.total())*NB_KERNELS_, 0);
     EXPECT_MAT_DIMS_EQ(pop_code, cv::Size(in_.total()*NB_KERNELS_, 1));
@@ -75,7 +78,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_dims)
 TEST_F(SoftMaxPopulationCodeTest, PopCode_zeros)
 {
     in_ = Mat1f::zeros(SIZE_, SIZE_);
-    to_.State(gabors_->Convolve(in_));
+    to_.State(Reshape(gabors_->Convolve(in_)));
     cv::Mat pop_code = to_.PopCode();
     EXPECT_MAT_EQ(pop_code, Mat1f::zeros(1, in_.total()*NB_KERNELS_));
 }
@@ -108,7 +111,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_uniform)
 
     const int NB_ID_KERNELS=identity_transf.size();
 
-    to_.State(identity_transf.Convolve(in_));
+    to_.State(Reshape(identity_transf.Convolve(in_)));
 
     const int N=1e3;
     Mat1f counts = Mat1f::zeros(1, static_cast<int>(in_.total())*NB_ID_KERNELS);
@@ -148,7 +151,10 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
         cv::Mat img;
         bars.Draw(angle, img);
         img.convertTo(in_, CV_32FC1, 1./255.);
-        to_.State(in_, kernels_);
+
+        cv::Mat1f response_el = Reshape(gabors_->Convolve(in_));
+
+        to_.State(response_el);
 
         const int N=30;
         Mat1f counts = Mat1f::zeros(1, static_cast<int>(in_.total())*NB_KERNELS_);
@@ -174,7 +180,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
         cv::minMaxIdx(col_sums, &min_val, 0, min_idx, max_idx);
 
         EXPECT_EQ(expected_index, max_idx[1])
-                << "Found max response or unexpected kernel" << col_sums;
+                << "Found max response for unexpected kernel" << col_sums;
         EXPECT_NE(min_idx[1], max_idx[1]);
 
         angle += THETA_STEP_/CV_PI*180.;
@@ -195,7 +201,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_filter_bank_orientation)
         cv::Mat img;
         bars.Draw(angle, img);
         img.convertTo(in_, CV_32FC1, 1./255.);
-        to_.State(gabors_->Convolve(in_));
+        to_.State(Reshape(gabors_->Convolve(in_)));
 
         const int N=10;
         Mat1f counts = Mat1f::zeros(1, static_cast<int>(in_.total())*NB_KERNELS_);

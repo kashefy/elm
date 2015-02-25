@@ -35,7 +35,7 @@ public:
      *
      * @todo Drop kernel parameter, when filter bank becomes a layer
      */
-    virtual void State(const cv::Mat1f& in, const elm::VecMat1f& kernels=elm::VecMat1f()) = 0;
+    virtual void State(const cv::Mat1f& in) = 0;//, const elm::VecMat1f& kernels=elm::VecMat1f()) = 0;
 
     /**
      * @brief get population code

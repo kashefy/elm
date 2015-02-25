@@ -30,14 +30,14 @@ public:
      * @param input stimulus
      * @param kernels (e.g. filter bank)
      */
-    virtual void State(const cv::Mat1f& in, const elm::VecMat1f& kernels=elm::VecMat1f());
+    virtual void State(const cv::Mat1f& in);//, const elm::VecMat1f& kernels=elm::VecMat1f());
 
     /**
      * @brief Compute distribution for each node from different kernel responses
      * @param input stimulus
      * @param kernels (e.g. filter bank)
      */
-    virtual void State(const elm::VecMat1f& in);
+    //virtual void State(const elm::VecMat1f& in);
 
     /**
      * @brief Determine population code per input node by sampling from response distribution
@@ -50,7 +50,7 @@ protected:
      * @brief Normalize kernel response by global factor
      * @param response normalized in-place
      */
-    virtual void Normalize(elm::VecMat1f &response) const;
+    //virtual void Normalize(elm::VecMat1f &response) const;
 
     VecMat1f state_;            ///< internal state
     int fan_out_;               ///< dimensions of state per node (e.g. no. of kernels)
