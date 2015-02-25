@@ -14,7 +14,7 @@
 #include "elm/encoding/intensitycontrast.h"
 #include "elm/encoding/gabors.h"
 #include "elm/encoding/populationcode_derivs/softmax_populationcode.h"
-#include "elm/layers/base_layer_derivations/base_singleinputfeaturelayer.h"
+#include "elm/layers/layers_interim/base_singleinputfeaturelayer.h"
 
 namespace elm {
 /**

@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/layers/base_layer_derivations/base_smoothlayer.h"
+#include "elm/layers/layers_interim/base_smoothlayer.h"
 
 #include "elm/core/layerconfig.h"
 

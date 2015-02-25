@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/layers/base_layer_derivations/base_singleinputfeaturelayer.h"
+#include "elm/layers/layers_interim/base_featuretransformationlayer.h"
 
 #include <memory>
 
@@ -24,51 +24,33 @@ namespace {
 const string NAME_IN_M  = "in";
 const string NAME_OUT_M = "out";
 
-/** @brief class deriving from intermediate base_SingleInputFeatureLayer for test purposes
+/** @brief class deriving from intermediate base_FeatureTransformationLayer for test purposes
   */
-class DummySingleInputFeatureLayer : public base_SingleInputFeatureLayer
+class DummyFeatureTransformationLayer : public base_FeatureTransformationLayer
 {
 public:
-    static const string KEY_OUTPUT_M;
-
     void Clear() {}
 
     void Reconfigure(const LayerConfig &config) {}
-
-    void OutputNames(const LayerOutputNames &io) {
-
-        name_out_ = io.Output(KEY_OUTPUT_M);
-    }
 
     void Activate(const Signal &signal) {
 
         m_ = signal.MostRecentMat1f(name_input_)*2.f;
     }
 
-    void Response(Signal &signal) {
-
-        signal.Append(name_out_, m_);
-    }
-
-    DummySingleInputFeatureLayer() {}
-
-protected:
-    string name_out_;
-
-    Mat1f m_;
+    DummyFeatureTransformationLayer() {}
 };
-const string DummySingleInputFeatureLayer::KEY_OUTPUT_M = "m_out";
 
-class SingleInputFeatureLayerTest : public ::testing::Test
+class FeatureTransformationLayerTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
-        to_.reset(new DummySingleInputFeatureLayer());
+        to_.reset(new DummyFeatureTransformationLayer());
 
         LayerIONames io;
-        io.Input(DummySingleInputFeatureLayer::KEY_INPUT_STIMULUS, NAME_IN_M);
-        io.Output(DummySingleInputFeatureLayer::KEY_OUTPUT_M, NAME_OUT_M);
+        io.Input(DummyFeatureTransformationLayer::KEY_INPUT_STIMULUS, NAME_IN_M);
+        io.Output(DummyFeatureTransformationLayer::KEY_OUTPUT_RESPONSE, NAME_OUT_M);
 
         to_->IONames(io);
 
@@ -86,13 +68,17 @@ protected:
     Signal sig_;
 };
 
-TEST_F(SingleInputFeatureLayerTest, Sanity)
+TEST_F(FeatureTransformationLayerTest, Sanity)
 {
-    EXPECT_EQ(base_SingleInputFeatureLayer::KEY_INPUT_STIMULUS,
-              DummySingleInputFeatureLayer::KEY_INPUT_STIMULUS);
+    EXPECT_EQ(base_FeatureTransformationLayer::KEY_INPUT_STIMULUS,
+              DummyFeatureTransformationLayer::KEY_INPUT_STIMULUS);
+
+    EXPECT_EQ(base_FeatureTransformationLayer::KEY_OUTPUT_RESPONSE,
+              DummyFeatureTransformationLayer::KEY_OUTPUT_RESPONSE);
+
 }
 
-TEST_F(SingleInputFeatureLayerTest, ActivateAndResponse)
+TEST_F(FeatureTransformationLayerTest, ActivateAndResponse)
 {
     to_->Activate(sig_);
     to_->Response(sig_);

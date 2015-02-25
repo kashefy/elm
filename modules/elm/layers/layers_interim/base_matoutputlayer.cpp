@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/layers/base_layer_derivations/base_matoutputlayer.h"
+#include "elm/layers/layers_interim/base_matoutputlayer.h"
 
 #include "elm/core/layerionames.h"
 #include "elm/core/signal.h"

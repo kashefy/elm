@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/layers/base_layer_derivations/base_sparsematoutputlayer.h"
+#include "elm/layers/layers_interim/base_sparsematoutputlayer.h"
 
 #include "elm/core/layerionames.h"
 #include "elm/core/signal.h"

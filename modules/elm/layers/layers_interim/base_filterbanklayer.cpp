@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/layers/base_layer_derivations/base_filterbanklayer.h"
+#include "elm/layers/layers_interim/base_filterbanklayer.h"
 
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/imgproc/imgproc.hpp>

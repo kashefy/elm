@@ -5,10 +5,10 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef _ELM_LAYERS_BASE_LAYER_DERIVS_BASE_SMOOTHLAYER_H_
-#define _ELM_LAYERS_BASE_LAYER_DERIVS_BASE_SMOOTHLAYER_H_
+#ifndef _ELM_LAYERS_LAYERS_INTERIM_BASE_SMOOTHLAYER_H_
+#define _ELM_LAYERS_LAYERS_INTERIM_BASE_SMOOTHLAYER_H_
 
-#include "elm/layers/base_layer_derivations/base_featuretransformationlayer.h"
+#include "elm/layers/layers_interim/base_featuretransformationlayer.h"
 
 namespace elm {
 
@@ -40,4 +40,4 @@ protected:
 
 } // namespace elm
 
-#endif // _ELM_LAYERS_BASE_LAYER_DERIVS_BASE_SMOOTHLAYER_H_
+#endif // _ELM_LAYERS_LAYERS_INTERIM_BASE_SMOOTHLAYER_H_

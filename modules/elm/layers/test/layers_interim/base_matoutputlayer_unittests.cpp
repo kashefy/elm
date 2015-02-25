@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/layers/base_layer_derivations/base_sparsematoutputlayer.h"
+#include "elm/layers/layers_interim/base_matoutputlayer.h"
 
 #include <memory>
 
@@ -24,9 +24,9 @@ namespace {
 const string NAME_IN_M  = "in";
 const string NAME_OUT_M = "out";
 
-/** @brief class deriving from base_SparseMatOutputLayer for test purposes
+/** @brief class deriving from base_MatOutputLayer for test purposes
   */
-class DummySparseMatOutputLayer : public base_SparseMatOutputLayer
+class DummyMatOutputLayer : public base_MatOutputLayer
 {
 public:
     static const string KEY_INPUT_M;
@@ -45,23 +45,23 @@ public:
         m_ = signal.MostRecentMat1f(name_in_)*2.f;
     }
 
-    DummySparseMatOutputLayer() {}
+    DummyMatOutputLayer() {}
 
 protected:
     string name_in_;
 };
-const string DummySparseMatOutputLayer::KEY_INPUT_M = "m_in";
+const string DummyMatOutputLayer::KEY_INPUT_M = "m_in";
 
-class SparseMatOutputLayerTest : public ::testing::Test
+class MatOutputLayerTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
-        to_.reset(new DummySparseMatOutputLayer());
+        to_.reset(new DummyMatOutputLayer());
 
         LayerIONames io;
-        io.Input(DummySparseMatOutputLayer::KEY_INPUT_M, NAME_IN_M);
-        io.Output(DummySparseMatOutputLayer::KEY_OUTPUT_RESPONSE, NAME_OUT_M);
+        io.Input(DummyMatOutputLayer::KEY_INPUT_M, NAME_IN_M);
+        io.Output(DummyMatOutputLayer::KEY_OUTPUT_RESPONSE, NAME_OUT_M);
 
         to_->IONames(io);
 
@@ -79,25 +79,19 @@ protected:
     Signal sig_;
 };
 
-TEST_F(SparseMatOutputLayerTest, Sanity)
+TEST_F(MatOutputLayerTest, Sanity)
 {
-    EXPECT_EQ(base_SparseMatOutputLayer::KEY_OUTPUT_RESPONSE,
-              DummySparseMatOutputLayer::KEY_OUTPUT_RESPONSE);
+    EXPECT_EQ(base_MatOutputLayer::KEY_OUTPUT_RESPONSE,
+              DummyMatOutputLayer::KEY_OUTPUT_RESPONSE);
 }
 
-TEST_F(SparseMatOutputLayerTest, ActivateAndResponse)
+TEST_F(MatOutputLayerTest, ActivateAndResponse)
 {
     to_->Activate(sig_);
     to_->Response(sig_);
 
     EXPECT_MAT_EQ(sig_.MostRecentMat1f(NAME_IN_M)*2,
                   sig_.MostRecentMat1f(NAME_OUT_M));
-
-    Mat1f dense;
-    sig_.MostRecent(NAME_IN_M).get<SparseMat1f>().convertTo(dense, CV_32FC1);
-
-    EXPECT_MAT_EQ(dense*2,
-                  sig_.MostRecent(NAME_OUT_M).get<SparseMat1f>());
 }
 
 } // annonymous namespace for test cases and test fixtures

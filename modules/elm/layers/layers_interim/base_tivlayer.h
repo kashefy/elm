@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef _ELM_CORE_BASE_LAYER_DERIVS_BASE_TIVLAYER_H_
-#define _ELM_CORE_BASE_LAYER_DERIVS_BASE_TIVLAYER_H_
+#ifndef _ELM_LAYERS_LAYERS_INTERIM_BASE_TIVLAYER_H_
+#define _ELM_LAYERS_LAYERS_INTERIM_BASE_TIVLAYER_H_
 
 #include "elm/core/base_Layer.h"
 
@@ -28,4 +28,4 @@ protected:
 
 } // namespace elm
 
-#endif // _ELM_CORE_BASE_LAYER_DERIVS_BASE_TIVLAYER_H_
+#endif // _ELM_LAYERS_LAYERS_INTERIM_BASE_TIVLAYER_H_

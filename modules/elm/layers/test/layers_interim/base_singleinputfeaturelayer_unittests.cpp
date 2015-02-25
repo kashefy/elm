@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/layers/base_layer_derivations/base_matoutputlayer.h"
+#include "elm/layers/layers_interim/base_singleinputfeaturelayer.h"
 
 #include <memory>
 
@@ -24,44 +24,51 @@ namespace {
 const string NAME_IN_M  = "in";
 const string NAME_OUT_M = "out";
 
-/** @brief class deriving from base_MatOutputLayer for test purposes
+/** @brief class deriving from intermediate base_SingleInputFeatureLayer for test purposes
   */
-class DummyMatOutputLayer : public base_MatOutputLayer
+class DummySingleInputFeatureLayer : public base_SingleInputFeatureLayer
 {
 public:
-    static const string KEY_INPUT_M;
+    static const string KEY_OUTPUT_M;
 
     void Clear() {}
 
     void Reconfigure(const LayerConfig &config) {}
 
-    void InputNames(const LayerInputNames &io) {
+    void OutputNames(const LayerOutputNames &io) {
 
-        name_in_ = io.Input(KEY_INPUT_M);
+        name_out_ = io.Output(KEY_OUTPUT_M);
     }
 
     void Activate(const Signal &signal) {
 
-        m_ = signal.MostRecentMat1f(name_in_)*2.f;
+        m_ = signal.MostRecentMat1f(name_input_)*2.f;
     }
 
-    DummyMatOutputLayer() {}
+    void Response(Signal &signal) {
+
+        signal.Append(name_out_, m_);
+    }
+
+    DummySingleInputFeatureLayer() {}
 
 protected:
-    string name_in_;
-};
-const string DummyMatOutputLayer::KEY_INPUT_M = "m_in";
+    string name_out_;
 
-class MatOutputLayerTest : public ::testing::Test
+    Mat1f m_;
+};
+const string DummySingleInputFeatureLayer::KEY_OUTPUT_M = "m_out";
+
+class SingleInputFeatureLayerTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
-        to_.reset(new DummyMatOutputLayer());
+        to_.reset(new DummySingleInputFeatureLayer());
 
         LayerIONames io;
-        io.Input(DummyMatOutputLayer::KEY_INPUT_M, NAME_IN_M);
-        io.Output(DummyMatOutputLayer::KEY_OUTPUT_RESPONSE, NAME_OUT_M);
+        io.Input(DummySingleInputFeatureLayer::KEY_INPUT_STIMULUS, NAME_IN_M);
+        io.Output(DummySingleInputFeatureLayer::KEY_OUTPUT_M, NAME_OUT_M);
 
         to_->IONames(io);
 
@@ -79,13 +86,13 @@ protected:
     Signal sig_;
 };
 
-TEST_F(MatOutputLayerTest, Sanity)
+TEST_F(SingleInputFeatureLayerTest, Sanity)
 {
-    EXPECT_EQ(base_MatOutputLayer::KEY_OUTPUT_RESPONSE,
-              DummyMatOutputLayer::KEY_OUTPUT_RESPONSE);
+    EXPECT_EQ(base_SingleInputFeatureLayer::KEY_INPUT_STIMULUS,
+              DummySingleInputFeatureLayer::KEY_INPUT_STIMULUS);
 }
 
-TEST_F(MatOutputLayerTest, ActivateAndResponse)
+TEST_F(SingleInputFeatureLayerTest, ActivateAndResponse)
 {
     to_->Activate(sig_);
     to_->Response(sig_);

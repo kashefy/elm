@@ -1,4 +1,4 @@
-#include "elm/layers/base_layer_derivations/base_singleinputfeaturelayer.h"
+#include "elm/layers/layers_interim/base_singleinputfeaturelayer.h"
 
 #include "elm/core/inputname.h"
 #include "elm/core/layerionames.h"

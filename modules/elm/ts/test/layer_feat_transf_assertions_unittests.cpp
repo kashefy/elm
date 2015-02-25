@@ -12,7 +12,7 @@
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
-#include "elm/layers/base_layer_derivations/base_featuretransformationlayer.h"
+#include "elm/layers/layers_interim/base_featuretransformationlayer.h"
 
 using namespace std;
 using namespace elm;

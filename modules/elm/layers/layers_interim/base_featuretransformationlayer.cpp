@@ -1,4 +1,4 @@
-#include "elm/layers/base_layer_derivations/base_featuretransformationlayer.h"
+#include "elm/layers/layers_interim/base_featuretransformationlayer.h"
 
 #include "elm/core/layerconfig.h"
 

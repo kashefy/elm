@@ -7,15 +7,15 @@
 //M*/
 /** @file Define classes for encapsulating, applying filter banks
  */
-#ifndef _ELM_ENCODING_BASE_FILTERBANKLAYER_H_
-#define _ELM_ENCODING_BASE_FILTERBANKLAYER_H_
+#ifndef _ELM_LAYERS_LAYERS_INTERIM_BASE_FILTERBANKLAYER_H_
+#define _ELM_LAYERS_LAYERS_INTERIM_BASE_FILTERBANKLAYER_H_
 
 #include <opencv2/core/core.hpp>    // complete definition for VecMat1f
 
 #include "elm/core/exception.h"
 #include "elm/core/typedefs_sfwd.h"
 #include "elm/encoding/base_filterbank.h"
-#include "elm/layers/base_layer_derivations/base_singleinputfeaturelayer.h"
+#include "elm/layers/layers_interim/base_singleinputfeaturelayer.h"
 
 namespace elm {
 
@@ -58,4 +58,4 @@ protected:
 
 } // namespace elm
 
-#endif // _ELM_ENCODING_BASE_FILTERBANKLAYER_H_
+#endif // _ELM_LAYERS_LAYERS_INTERIM_BASE_FILTERBANKLAYER_H_
