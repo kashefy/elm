@@ -7,9 +7,11 @@
 //M*/
 #include "elm/encoding/base_populationcode.h"
 
+#include "elm/core/inputname.h"
+#include "elm/core/layerinputnames.h"
+#include "elm/core/layeroutputnames.h"
 #include "elm/core/sampler.h"
 #include "elm/core/signal.h"
-#include "elm/encoding/base_filterbank.h"
 
 using std::string;
 

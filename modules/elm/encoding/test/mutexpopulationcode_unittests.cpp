@@ -3,10 +3,11 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "elm/core/cv/mat_utils.h"
+#include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
-#include "elm/layers/layerfactory.h"
 #include "elm/core/signal.h"
 #include "elm/io/synth.h"
+#include "elm/layers/layerfactory.h"
 #include "elm/ts/ts.h"
 
 using std::string;
