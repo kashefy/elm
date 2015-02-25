@@ -21,7 +21,7 @@
 #include "elm/layers/icp.h"
 #include "elm/layers/layer_y.h"
 #include "elm/layers/medianblur.h"
-#include "elm/encoding/populationcode.h"
+#include "elm/encoding/populationcode_derivs/mutex_populationcode.h"
 #include "elm/layers/saliencyitti.h"
 #include "elm/layers/sinkhornbalancing.h"
 #include "elm/layers/triangulation.h"

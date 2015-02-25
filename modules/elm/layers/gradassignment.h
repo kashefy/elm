@@ -12,7 +12,7 @@
 
 #include <opencv2/core/core.hpp>
 
-#include "elm/layers/base_layer_derivations/base_matoutputlayer.h"
+#include "elm/layers/layers_interim/base_matoutputlayer.h"
 
 namespace elm {
 

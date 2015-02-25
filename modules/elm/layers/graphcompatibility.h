@@ -9,7 +9,7 @@
 #define _ELM_LAYERS_GRAPHCOMPATIBILITY_H_
 
 #include "elm/core/typedefs_fwd.h"
-#include "elm/layers/base_layer_derivations/base_sparsematoutputlayer.h"
+#include "elm/layers/layers_interim/base_sparsematoutputlayer.h"
 
 namespace elm {
 

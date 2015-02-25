@@ -74,13 +74,13 @@ void SaliencyItti::Reset(const LayerConfig &config)
     theta_range_ = ARange_<float>(0.f, CV_PI, 90.*CV_PI/180.);
     VecF theta = Mat_ToVec_<float>(theta_range_);
 
-    gabors_.reset(new GaborFilterBank());
-    ELM_DYN_CAST(GaborFilterBank, gabors_)->Reset(DEFAULT_RADIUS,
-                                                  DEFAULT_SIGMA,
-                                                  theta,
-                                                  DEFAULT_LAMBDA,
-                                                  DEFAULT_GAMMA,
-                                                  DEFAULT_PS);
+    gabors_.reset(new Gabors());
+    ELM_DYN_CAST(Gabors, gabors_)->Reset(DEFAULT_RADIUS,
+                                         DEFAULT_SIGMA,
+                                         theta,
+                                         DEFAULT_LAMBDA,
+                                         DEFAULT_GAMMA,
+                                         DEFAULT_PS);
 
     // intensity contrast
     intensity_constrast_.Init(DEFAULT_RADIUS, 1.f);
@@ -102,7 +102,7 @@ void SaliencyItti::OutputNames(const LayerOutputNames &io)
 void SaliencyItti::Activate(const Signal &signal)
 {
     Mat1f stimulus = signal.MostRecentMat1f(name_input_);
-    pop_code_orient_.State(stimulus, gabors_);
+    pop_code_orient_.State(Reshape(gabors_->Convolve(stimulus)));
 
     Mat orientation_spikes = pop_code_orient_.PopCode();
     Mat1i orientation_index(stimulus.size());
@@ -119,7 +119,7 @@ void SaliencyItti::Activate(const Signal &signal)
     int max_idx[2];
     for(size_t i=0, j=0; i<stimulus.total(); i++, j+=j_step) {
 
-        minMaxIdx(orientation_spikes.colRange(j, j+j_step), &min_val, 0, 0, max_idx);
+        minMaxIdx(orientation_spikes.row(i), &min_val, 0, 0, max_idx);
         orientation_index(i) = max_idx[1];
 
         mask_low_orientation_response(i) =

@@ -39,7 +39,7 @@ public:
      * @param stimulus
      * @return response per kernel
      */
-    virtual elm::VecMat1f Compute(cv::Mat1f stimulus);
+    virtual elm::VecMat1f Convolve(const cv::Mat1f &stimulus);
 
     /**
      * @brief Get element response across all kernels
@@ -51,7 +51,6 @@ public:
 
     /**
      * @brief Get underlying kernels
-     * Mostly meant for testing purposes because it can involve a heavy copy of matrices.
      * @return vector of kernels
      */
     virtual elm::VecMat1f Kernels() const = 0;

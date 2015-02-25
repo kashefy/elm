@@ -8,7 +8,7 @@
 #ifndef _ELM_LAYERS_MEDIANBLUR_H_
 #define _ELM_LAYERS_MEDIANBLUR_H_
 
-#include "elm/layers/base_layer_derivations/base_smoothlayer.h"
+#include "elm/layers/layers_interim/base_smoothlayer.h"
 
 namespace elm {
 

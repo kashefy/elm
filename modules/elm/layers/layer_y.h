@@ -8,7 +8,7 @@
 #ifndef _ELM_LAYERS_LAYERY_H_
 #define _ELM_LAYERS_LAYERY_H_
 
-#include "elm/layers/base_layer_derivations/base_featuretransformationlayer.h"
+#include "elm/layers/layers_interim/base_featuretransformationlayer.h"
 #include "elm/neuron/neuron.h"
 
 namespace elm {
