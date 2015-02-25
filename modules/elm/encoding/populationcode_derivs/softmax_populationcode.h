@@ -14,8 +14,6 @@
 
 namespace elm {
 
-class base_FilterBank;
-
 /**
  * @brief Population code sampled from distribution
  * (e.g. soft-max oriented gabor filter response)
