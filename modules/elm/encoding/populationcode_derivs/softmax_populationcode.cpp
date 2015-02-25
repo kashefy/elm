@@ -51,11 +51,6 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
     State(kernel_response);
 }
 
-void SoftMaxPopulationCode::State(const Mat1f &in, const std::unique_ptr<base_FilterBank> &filter_bank)
-{
-    State(filter_bank->Convolve(in));
-}
-
 void SoftMaxPopulationCode::State(const VecMat1f &in)
 {
     VecMat1f kernel_response = in;

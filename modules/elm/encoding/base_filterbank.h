@@ -51,7 +51,6 @@ public:
 
     /**
      * @brief Get underlying kernels
-     * Mostly meant for testing purposes because it can involve a heavy copy of matrices.
      * @return vector of kernels
      */
     virtual elm::VecMat1f Kernels() const = 0;

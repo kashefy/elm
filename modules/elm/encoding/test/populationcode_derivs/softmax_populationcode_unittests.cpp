@@ -36,11 +36,11 @@ protected:
         const float* p = theta_range.ptr<float>(0);
         VecF theta(p, p+theta_range.cols);
 
-        kernels_ = Gabors::CreateKernels(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
-        NB_KERNELS_ = static_cast<int>(kernels_.size());
-
         gabors_.reset(new Gabors());
-        dynamic_cast<Gabors*>(gabors_.get())->Reset(RADIUS, SIGMA, theta_range, _LAMBDA, _GAMMA, PS);
+        dynamic_cast<Gabors*>(gabors_.get())->Reset(RADIUS, SIGMA, theta, _LAMBDA, _GAMMA, PS);
+
+        kernels_ = gabors_->Kernels();
+        NB_KERNELS_ = static_cast<int>(kernels_.size());
     }
 
     void virtual SetUp()
@@ -54,18 +54,18 @@ protected:
     static VecMat1f kernels_;
     static float THETA_STEP_;
 
-    static std::unique_ptr<base_FilterBank> gabors_; ///< filter bank to hold gabor filters
+    static std::shared_ptr<base_FilterBank> gabors_; ///< filter bank to hold gabor filters
 };
 VecMat1f SoftMaxPopulationCodeTest::kernels_;
 int SoftMaxPopulationCodeTest::SIZE_;
 int SoftMaxPopulationCodeTest::NB_KERNELS_;
 float SoftMaxPopulationCodeTest::THETA_STEP_;
-std::unique_ptr<base_FilterBank> SoftMaxPopulationCodeTest::gabors_;
+std::shared_ptr<base_FilterBank> SoftMaxPopulationCodeTest::gabors_;
 
 TEST_F(SoftMaxPopulationCodeTest, PopCode_dims)
 {
     in_ = Mat1f::zeros(SIZE_, SIZE_);
-    to_.State(in_, kernels_);
+    to_.State(gabors_->Convolve(in_));
     cv::Mat pop_code = to_.PopCode();
     EXPECT_GT(static_cast<int>(in_.total())*NB_KERNELS_, 0);
     EXPECT_MAT_DIMS_EQ(pop_code, cv::Size(in_.total()*NB_KERNELS_, 1));
@@ -75,22 +75,40 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_dims)
 TEST_F(SoftMaxPopulationCodeTest, PopCode_zeros)
 {
     in_ = Mat1f::zeros(SIZE_, SIZE_);
-    to_.State(in_, kernels_);
+    to_.State(gabors_->Convolve(in_));
     cv::Mat pop_code = to_.PopCode();
     EXPECT_MAT_EQ(pop_code, Mat1f::zeros(1, in_.total()*NB_KERNELS_));
 }
+
+class IdentityTransform : public base_FilterBank
+{
+public:
+    IdentityTransform()
+        : base_FilterBank()
+    {
+        kernels_.clear();
+        kernels_ = Kernels();
+    }
+
+    elm::VecMat1f Kernels() const
+    {
+        VecMat1f k;
+        for(int i=0; i<3; i++) {
+            k.push_back(Mat1f::ones(3, 3));
+        }
+        return k;
+    }
+};
 
 TEST_F(SoftMaxPopulationCodeTest, PopCode_uniform)
 {
     in_ = Mat1f::ones(5, 5);
 
-    VecMat1f identity_kernels;
-    const int NB_ID_KERNELS=3;
-    for(int i=0; i<NB_ID_KERNELS; i++) {
-        identity_kernels.push_back(Mat1f::ones(3, 3));
-    }
+    IdentityTransform identity_transf;
 
-    to_.State(in_, identity_kernels);
+    const int NB_ID_KERNELS=identity_transf.size();
+
+    to_.State(identity_transf.Convolve(in_));
 
     const int N=1e3;
     Mat1f counts = Mat1f::zeros(1, static_cast<int>(in_.total())*NB_ID_KERNELS);
@@ -177,7 +195,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_filter_bank_orientation)
         cv::Mat img;
         bars.Draw(angle, img);
         img.convertTo(in_, CV_32FC1, 1./255.);
-        to_.State(in_, gabors_);
+        to_.State(gabors_->Convolve(in_));
 
         const int N=10;
         Mat1f counts = Mat1f::zeros(1, static_cast<int>(in_.total())*NB_KERNELS_);

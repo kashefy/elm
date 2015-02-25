@@ -34,13 +34,6 @@ public:
 
     /**
      * @brief Compute distribution for each node from different kernel responses
-     * Use predefined kernels inside a filter bank
-     * @param filter_bank, ownership kept by caller
-     */
-    virtual void State(const cv::Mat1f &in, std::unique_ptr<base_FilterBank> const &filter_bank);
-
-    /**
-     * @brief Compute distribution for each node from different kernel responses
      * @param input stimulus
      * @param kernels (e.g. filter bank)
      */
