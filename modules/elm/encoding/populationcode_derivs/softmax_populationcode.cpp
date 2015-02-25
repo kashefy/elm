@@ -49,35 +49,6 @@ void SoftMaxPopulationCode::State(const Mat1f &in, const VecMat1f &kernels)
     }
 
     State(kernel_response);
-
-//    // normalize individual responses by global factor
-//    if(norm_factor != 0) {
-
-//        for(VecMat1f::iterator itr=kernel_response.begin();
-//            itr != kernel_response.end();
-//            itr++) {
-
-//            (*itr) /= norm_factor;
-//        }
-//    }
-
-//    state_.clear();
-//    state_.reserve(in.total());
-//    fan_out_ = static_cast<int>(kernels.size());
-//    for(size_t i=0; i<in.total(); i++) {
-
-//        int r = i / in.cols;
-//        int c = i % in.cols;
-//        Mat1f node_state(1, fan_out_);
-//        int k=0;
-//        for(VecMat1f::const_iterator itr=kernel_response.begin();
-//            itr != kernel_response.end();
-//            itr++, k++) {
-
-//            node_state(0, k) = (*itr)(r, c);
-//        }
-//        state_.push_back(node_state);
-//    }
 }
 
 void SoftMaxPopulationCode::State(const Mat1f &in, const std::unique_ptr<base_FilterBank> &filter_bank)
