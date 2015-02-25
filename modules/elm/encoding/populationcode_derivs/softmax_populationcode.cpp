@@ -32,6 +32,10 @@ elm::MapIONames LayerAttr_<SoftMaxPopulationCode>::io_pairs = boost::assign::map
         ;
 //#endif
 
+SoftMaxPopulationCode::~SoftMaxPopulationCode()
+{
+}
+
 SoftMaxPopulationCode::SoftMaxPopulationCode()
     : base_PopulationCode(),
       min_distr_sum_(0.f)

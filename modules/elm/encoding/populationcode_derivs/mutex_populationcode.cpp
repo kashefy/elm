@@ -26,6 +26,10 @@ elm::MapIONames LayerAttr_<MutexPopulationCode>::io_pairs = boost::assign::map_l
         ;
 //#endif
 
+MutexPopulationCode::~MutexPopulationCode()
+{
+}
+
 MutexPopulationCode::MutexPopulationCode()
     : base_PopulationCode()
 {

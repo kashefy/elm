@@ -28,6 +28,8 @@ public:
     void IONames(const LayerIONames &io);
 
 protected:
+    virtual ~base_FeatureTransformationLayer();
+
     base_FeatureTransformationLayer();
 
     base_FeatureTransformationLayer(const LayerConfig &config);

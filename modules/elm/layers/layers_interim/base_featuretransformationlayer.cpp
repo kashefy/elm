@@ -4,6 +4,10 @@
 
 using namespace elm;
 
+base_FeatureTransformationLayer::~base_FeatureTransformationLayer()
+{
+}
+
 base_FeatureTransformationLayer::base_FeatureTransformationLayer()
     : base_SingleInputFeatureLayer(),
       base_MatOutputLayer()

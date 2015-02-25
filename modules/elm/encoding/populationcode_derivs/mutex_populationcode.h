@@ -19,6 +19,8 @@ namespace elm {
 class MutexPopulationCode : public base_PopulationCode
 {
 public:
+    virtual ~MutexPopulationCode();
+
     MutexPopulationCode();
 
     MutexPopulationCode(const LayerConfig &config);
