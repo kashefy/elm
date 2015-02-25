@@ -30,12 +30,11 @@ public:
 
     /**
      * @brief Compute internal state
-     * @param in input
-     * @param kernels vector of kernels
+     * @param in input, see expected dimension required by dervied class
      *
      * @todo Drop kernel parameter, when filter bank becomes a layer
      */
-    virtual void State(const cv::Mat1f& in) = 0;//, const elm::VecMat1f& kernels=elm::VecMat1f()) = 0;
+    virtual void State(const cv::Mat1f& in) = 0;
 
     /**
      * @brief get population code
