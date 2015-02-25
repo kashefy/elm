@@ -53,7 +53,6 @@ protected:
     virtual void Normalize(elm::VecMat1f &response) const;
 
     VecMat1f state_;            ///< internal state
-    VecMat1f response_distr_;   ///< response distribution
     int fan_out_;               ///< dimensions of state per node (e.g. no. of kernels)
 
 };
