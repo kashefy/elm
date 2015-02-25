@@ -31,7 +31,7 @@ public:
      *
      * @param kernel radius, yields kernel of size (r*2+1, r*2+1)
      * @param sigma Std dev. of gaussian envelope
-     * @param theta_rad filter's preferred orientation in radians (0 rad = horizontal, pi/2 = vertical)
+     * @param theta_rad filter's preferred orientation in radians (0 rad = horizontal, pi/2 = vertical, pi/4 = / relative to horizontal axis)
      * @param lambd wavelength of sinusoid
      * @param gamma spatial aspect ratio
      * @param ps phase offset in radians

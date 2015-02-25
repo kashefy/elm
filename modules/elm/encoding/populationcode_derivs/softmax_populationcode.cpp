@@ -10,7 +10,6 @@
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "elm/core/debug_utils.h"
 #include "elm/core/sampler.h"
 #include "elm/core/signal.h"
 #include "elm/encoding/base_filterbank.h"

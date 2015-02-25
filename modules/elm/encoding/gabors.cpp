@@ -43,7 +43,7 @@ Mat1f Gabors::CreateKernel(int radius,
                   float gamma,
                   float ps)
 {
-    theta_rad = -theta_rad + ELM_PI2;
+    theta_rad =  ELM_PI2 - theta_rad;
     if(radius < 1) { ELM_THROW_VALUE_ERROR("Gabor kernel radius must be >= 1."); }
     int diam = radius*2+1;
     Mat1f kernel = getGaborKernel(Size2i(diam, diam),

@@ -3,7 +3,6 @@
 #include <opencv2/core/core_c.h>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "elm/core/debug_utils.h"
 #include "elm/core/cv/mat_utils_inl.h"
 #include "elm/core/cv/mat_vector_utils.h"
 #include "elm/core/layerconfig.h"
@@ -31,9 +30,10 @@ protected:
         const float _GAMMA = 0.02;   //10;
         const float PS = 0;         //CV_PI*0.5;
 
-        const float THETA_STOP=CV_PI;
-        THETA_STEP_ = 45.*CV_PI/180.;
+        const float THETA_STOP=180.f;
+        THETA_STEP_ = 30.f;
         Mat1f theta_range = ARange_<float>(0.f, THETA_STOP, THETA_STEP_);
+        theta_range *= CV_PI/180.f;
 
         // Mat1f to VecF
         const float* p = theta_range.ptr<float>(0);
@@ -153,10 +153,11 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
         img.convertTo(in_, CV_32FC1, 1./255.);
 
         cv::Mat1f response_el = Reshape(gabors_->Convolve(in_));
+        response_el.setTo(0.f, response_el < 0.025f);
 
         to_.State(response_el);
 
-        const int N=100;
+        const int N=200;
         Mat1f counts = Mat1f::zeros(static_cast<int>(in_.total()), NB_KERNELS_);
         for(int i=0; i<N; i++) {
 
@@ -178,7 +179,8 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
         cv::minMaxIdx(col_sums, &min_val, 0, min_idx, max_idx);
 
         EXPECT_EQ(expected_index, max_idx[1])
-                << "Found max response for unexpected kernel" << col_sums;
+                << "Found max response for unexpected kernel for angle="
+                << angle << " " << col_sums;
         EXPECT_NE(min_idx[1], max_idx[1]);
 
         angle += THETA_STEP_/CV_PI*180.;

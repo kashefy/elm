@@ -47,6 +47,11 @@ TEST(GaborKernelTest, KernelRotated)
         Mat kernel90 = Gabors::CreateKernel(RADIUS, SIGMA, (angle+90)*CV_PI/180.0f, _LAMBDA, _GAMMA, PS);
         Mat kernel180 = Gabors::CreateKernel(RADIUS, SIGMA, (angle+180)*CV_PI/180.0f, _LAMBDA, _GAMMA, PS);
 
+        //cv::imshow("0", ConvertTo8U(kernel0));
+        //cv::imshow("90", ConvertTo8U(kernel90));
+        // cv::imshow("180", ConvertTo8U(kernel180))  ;
+        //cv::waitKey();
+
         EXPECT_MAT_NEAR(kernel0, kernel180, 1e-7);
 
         flip(kernel90.t(), kernel90, 0);
@@ -180,14 +185,18 @@ protected:
     {
         to_ = Gabors();
 
-        const float THETA_STOP=CV_PI;
-        const float THETA_STEP=45.*CV_PI/180.;
+        const float THETA_STOP=180.f;
+        const float THETA_STEP=30.f;
         theta_range_ = ARange_<float>(0.f, THETA_STOP, THETA_STEP);
+        theta_range_ /= CV_PI/180.f;
 
         to_.Reset(RADIUS, SIGMA, theta_range_, _LAMBDA, _GAMMA, PS);
 
-        kernels_ = Gabors::CreateKernels(RADIUS, SIGMA, theta_range_, _LAMBDA, _GAMMA, PS);
-
+        kernels_ = Gabors::CreateKernels(RADIUS,
+                                         SIGMA,
+                                         theta_range_,
+                                         _LAMBDA,
+                                         _GAMMA, PS);
     }
 
     Gabors to_;    ///< test object
@@ -257,7 +266,7 @@ TEST_F(GaborFilterBankTest, SizeGetter)
  * - match response magnitude of filter bank with response to standalone kernel
  * - iterate to next orientation
  */
-TEST_F(GaborFilterBankTest, Compute)
+TEST_F(GaborFilterBankTest, Convolve)
 {
     for(int size=28; size<100; size*=2) {
 
@@ -271,6 +280,7 @@ TEST_F(GaborFilterBankTest, Compute)
             float theta = theta_range_(i);
             Mat img, stimulus;
             bars.Draw(theta*180.f/CV_PI, img);
+
             img.convertTo(stimulus, CV_32FC1, 1./255.);
 
             VecMat1f response_actual = to_.Convolve(stimulus);
