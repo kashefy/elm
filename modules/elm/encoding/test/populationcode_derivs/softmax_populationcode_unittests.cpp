@@ -11,12 +11,15 @@
 #include "elm/io/synth.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/ts.h"
+#include "elm/ts/layer_assertions.h"
 
 using std::string;
 using cv::Mat1f;
 using namespace elm;
 
 namespace {
+
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(SoftMaxPopulationCode);
 
 class SoftMaxPopulationCodeTest : public testing::Test
 {
