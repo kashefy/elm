@@ -19,8 +19,8 @@ using cv::Mat1f;
 
 using namespace elm;
 
-const string base_PopulationCode::KEY_INPUT_STIMULUS   = "in";
-const string base_PopulationCode::KEY_OUTPUT_POP_CODE  = "pc";
+const string base_PopulationCode::KEY_INPUT_STIMULUS   = detail::BASE_POPULATIONCODE__KEY_INPUT_STIMULUS;
+const string base_PopulationCode::KEY_OUTPUT_POP_CODE  = detail::BASE_POPULATIONCODE__KEY_OUTPUT_POP_CODE;
 
 base_PopulationCode::~base_PopulationCode()
 {
