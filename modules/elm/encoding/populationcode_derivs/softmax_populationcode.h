@@ -8,8 +8,6 @@
 #ifndef _ELM_ENCODING_SOFTMAX_POPULATIONCODE_H_
 #define _ELM_ENCODING_SOFTMAX_POPULATIONCODE_H_
 
-#include <memory>
-
 #include "elm/encoding/base_populationcode.h"
 
 namespace elm {
