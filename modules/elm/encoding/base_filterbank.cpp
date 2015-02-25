@@ -23,7 +23,7 @@ base_FilterBank::base_FilterBank()
 {
 }
 
-VecMat1f base_FilterBank::Convolve(Mat1f stimulus)
+VecMat1f base_FilterBank::Convolve(const Mat1f &stimulus)
 {
     response_.clear();
     response_.reserve(kernels_.size());
