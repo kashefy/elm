@@ -20,6 +20,8 @@ namespace elm {
 class SoftMaxPopulationCode : public base_PopulationCode
 {
 public:
+    virtual ~SoftMaxPopulationCode();
+
     SoftMaxPopulationCode();
 
     /**

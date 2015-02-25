@@ -20,6 +20,10 @@ using namespace elm;
 
 const string base_StatefulPopulationCode::KEY_OUTPUT_OPT_STATE = "state";
 
+base_StatefulPopulationCode::~base_StatefulPopulationCode()
+{
+}
+
 base_StatefulPopulationCode::base_StatefulPopulationCode()
     : base_PopulationCode()
 {
