@@ -8,7 +8,6 @@
 #ifndef _ELM_ENCODING_MUTEX_POPULATIONCODE_H_
 #define _ELM_ENCODING_MUTEX_POPULATIONCODE_H_
 
-#include "elm/core/typedefs_sfwd.h"
 #include "elm/encoding/base_populationcode.h"
 
 namespace elm {
