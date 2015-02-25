@@ -945,4 +945,49 @@ TEST_F(GraphAttrMaskedTest, ContractEdges_merge_neighbors)
     }
 }
 
+TEST_F(GraphAttrMaskedTest, GetNeighbors_empty)
+{
+    GraphAttr to;
+
+    ASSERT_EQ(size_t(0), to.VerticesIds().size()) << "Expecting empty graph, without vertices";
+
+    EXPECT_THROW(to.getNeighbors(0.f), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(2.2f), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(6.f), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(9.f), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(-1.f), ExceptionKeyError);
+}
+
+TEST_F(GraphAttrMaskedTest, GetNeighbors_invalid)
+{
+    ASSERT_GT(to_.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    EXPECT_THROW(to_.getNeighbors(-1.f), ExceptionKeyError);
+    EXPECT_THROW(to_.getNeighbors(0.f), ExceptionKeyError);
+    EXPECT_THROW(to_.getNeighbors(5.f), ExceptionKeyError);
+    EXPECT_THROW(to_.getNeighbors(11.2f), ExceptionKeyError);
+}
+
+TEST_F(GraphAttrMaskedTest, GetNeighbors_none)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    float data[ROWS*COLS] = {1.f, 1.0f, 2.2f,
+                             3.f, 1.0f, 6.0f,
+                             1.f, 1.0f, 11.f};
+    map_ = Mat1f(ROWS, COLS, data).clone();
+
+    Mat1b exclude;
+    // mask everything around a vertex to get one without neighbors
+    cv::bitwise_or(map_ == 1.f, map_ == 9.f, exclude);
+    cv::bitwise_not(exclude, mask_);
+
+    GraphAttr to = GraphAttr(map_, mask_);
+
+    ASSERT_GT(to.num_vertices(), size_t(1));
+
+    EXPECT_SIZE(0, to.getNeighbors(3.f));
+    EXPECT_GT(to.getNeighbors(6.f).size(), size_t(0));
+}
+
 } // annonymous namespace for test cases and fixtures

@@ -202,12 +202,12 @@ float GraphAttr::contractEdges(float id_u, float id_v)
     // move the rest of u out-edges to v
     // move the rest of u in-edges to v
     graph_traits<GraphAttrTraits>::out_edge_iterator e, e_end;
-    graph_traits<GraphAttrTraits>::edge_descriptor e_v;
+    //graph_traits<GraphAttrTraits>::edge_descriptor e_v;
 
     typename property_map <GraphAttrType, edge_weight_t >::type
             weight = get(edge_weight, impl->g);
 
-   std::vector< std::pair<VtxDescriptor, VtxDescriptor> > obsolete_edges;
+    std::vector< std::pair<VtxDescriptor, VtxDescriptor> > obsolete_edges;
 
     for(tie(e, e_end) = out_edges(u, impl->g); e != e_end; ++e) {
 
@@ -282,6 +282,50 @@ int GraphAttr::VertexIndex(float vtx_id) const
     }
 
     return idx;
+}
+
+VecF GraphAttr::getNeighbors(float vtx_id) const
+{
+    VtxDescriptor u;
+    if(!impl->findVertex(vtx_id, u)) {
+
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_id << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    VecF neigh_ids;
+
+    // Property accessor
+    property_map<GraphAttrType, vertex_color_t>::type
+            vertex_color_id = get(vertex_color, impl->g);
+
+    graph_traits<GraphAttrTraits>::out_edge_iterator e, e_end;
+    for(tie(e, e_end) = out_edges(u, impl->g); e != e_end; ++e) {
+
+        VtxDescriptor src, dst;
+        src = source(*e, impl->g);
+        dst = target(*e, impl->g);
+
+        // move or merge edge?
+        if(src == u) {
+
+            neigh_ids.push_back(vertex_color_id[dst]);
+        }
+        else if(dst == u) {
+
+            neigh_ids.push_back(vertex_color_id[src]);
+        }
+        else {
+
+            std::stringstream s;
+            s << "Neither edge source nor its target is  vertex u="<<
+                 u << "with id=" << vtx_id << ".";
+            ELM_THROW_VALUE_ERROR(s.str());
+        }
+    }
+
+    return neigh_ids;
 }
 
 // non member functions
