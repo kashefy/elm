@@ -74,7 +74,7 @@ VecMat1f VisitorVecMat1f::operator()(const VecVertices &vv) const
 
     for(size_t i=0; i<vv.size(); i++) {
 
-        vector<uint32_t> tmp = vv[i].vertices;
+        std::vector<uint32_t> tmp = vv[i].vertices;
         int sz_vertex = static_cast<int>(tmp.size());
 
         Mat1f m(1, sz_vertex);
