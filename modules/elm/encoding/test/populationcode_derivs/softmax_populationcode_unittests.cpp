@@ -32,7 +32,7 @@ protected:
         const float PS = 0;         //CV_PI*0.5;
 
         const float THETA_STOP=CV_PI;
-        THETA_STEP_ = 90.*CV_PI/180.;
+        THETA_STEP_ = 45.*CV_PI/180.;
         Mat1f theta_range = ARange_<float>(0.f, THETA_STOP, THETA_STEP_);
 
         // Mat1f to VecF
@@ -156,7 +156,7 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
 
         to_.State(response_el);
 
-        const int N=30;
+        const int N=100;
         Mat1f counts = Mat1f::zeros(static_cast<int>(in_.total()), NB_KERNELS_);
         for(int i=0; i<N; i++) {
 
@@ -179,49 +179,6 @@ TEST_F(SoftMaxPopulationCodeTest, PopCode_orientation)
 
         EXPECT_EQ(expected_index, max_idx[1])
                 << "Found max response for unexpected kernel" << col_sums;
-        EXPECT_NE(min_idx[1], max_idx[1]);
-
-        angle += THETA_STEP_/CV_PI*180.;
-        expected_index++;
-    }
-}
-
-TEST_F(SoftMaxPopulationCodeTest, PopCode_filter_bank_orientation)
-{
-    SynthBars bars;
-    bars.Reset(28, 28, 1);
-
-    float angle = 0.f;
-    int expected_index = 0;
-
-    while(angle < 180.f) {
-
-        cv::Mat img;
-        bars.Draw(angle, img);
-        img.convertTo(in_, CV_32FC1, 1./255.);
-        to_.State(Reshape(gabors_->Convolve(in_)));
-
-        const int N=10;
-        Mat1f counts = Mat1f::zeros(static_cast<int>(in_.total()), NB_KERNELS_);
-        for(int i=0; i<N; i++) {
-
-            cv::Mat pop_code = to_.PopCode();
-            EXPECT_MAT_DIMS_EQ(pop_code, counts);
-            EXPECT_LE(cv::sum(pop_code)(0), in_.total())
-                    << "Encountered oversampling for same input element.";
-            cv::add(pop_code, counts, counts);
-        }
-
-        // for which did the bar respond the most?
-        cv::Mat1f col_sums(1, NB_KERNELS_);
-        cv::reduce(counts, col_sums, 0, CV_REDUCE_SUM);
-
-        double min_val;
-        int min_idx[2] = {-1, -1};
-        int max_idx[2] = {-1, -1};
-        cv::minMaxIdx(col_sums, &min_val, 0, min_idx, max_idx);
-
-        EXPECT_EQ(expected_index, max_idx[1]);
         EXPECT_NE(min_idx[1], max_idx[1]);
 
         angle += THETA_STEP_/CV_PI*180.;
