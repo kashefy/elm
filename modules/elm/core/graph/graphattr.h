@@ -131,7 +131,12 @@ public:
      */
     float contractEdges(float id_u, float id_v);
 
-
+    /**
+     * @brief Get list of neighboring vertices
+     * @param vtx_id vertex id
+     * @return list of vertex ids neighboring given vertex
+     */
+    VecF getNeighbors(float vtx_id) const;
 
     // public members
     std::shared_ptr<GraphAttr_Impl> impl;

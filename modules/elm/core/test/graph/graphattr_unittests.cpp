@@ -9,6 +9,8 @@
 
 #include "gtest/gtest.h"
 
+#include <set>
+
 #include <opencv2/core/core.hpp>
 
 #include "elm/core/debug_utils.h"
@@ -941,6 +943,161 @@ TEST_F(GraphAttrMaskedTest, ContractEdges_merge_neighbors)
 
                 EXPECT_FLOAT_EQ(adj_or(r, c), adj(r_m, c_m));
             }
+        }
+    }
+}
+
+TEST_F(GraphAttrMaskedTest, GetNeighbors_empty)
+{
+    GraphAttr to;
+
+    ASSERT_EQ(size_t(0), to.VerticesIds().size()) << "Expecting empty graph, without vertices";
+
+    EXPECT_THROW(to.getNeighbors(0.f), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(2.2f), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(6.f), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(9.f), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(-1.f), ExceptionKeyError);
+}
+
+TEST_F(GraphAttrMaskedTest, GetNeighbors_invalid)
+{
+    ASSERT_GT(to_.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    EXPECT_THROW(to_.getNeighbors(-1.f), ExceptionKeyError);
+    EXPECT_THROW(to_.getNeighbors(0.f), ExceptionKeyError);
+    EXPECT_THROW(to_.getNeighbors(5.f), ExceptionKeyError);
+    EXPECT_THROW(to_.getNeighbors(11.2f), ExceptionKeyError);
+    EXPECT_THROW(to_.getNeighbors(9.f), ExceptionKeyError) << "this vertex was masked.";
+}
+
+TEST_F(GraphAttrMaskedTest, GetNeighbors_none)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    float data[ROWS*COLS] = {1.f, 1.0f, 2.2f,
+                             3.f, 1.0f, 6.0f,
+                             1.f, 1.0f, 11.f};
+    map_ = Mat1f(ROWS, COLS, data).clone();
+
+    Mat1b exclude;
+    // mask everything around a vertex to get one without neighbors
+    cv::bitwise_or(map_ == 1.f, map_ == 9.f, exclude);
+    cv::bitwise_not(exclude, mask_);
+
+    GraphAttr to = GraphAttr(map_, mask_);
+
+    ASSERT_GT(to.num_vertices(), size_t(1));
+
+    EXPECT_SIZE(0, to.getNeighbors(3.f));
+    EXPECT_GT(to.getNeighbors(6.f).size(), size_t(0));
+}
+
+TEST_F(GraphAttrMaskedTest, GetNeighbors_all_neighbors)
+{
+    /*
+    float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
+                             3.f, 6.0f, 6.0f,
+                             9.f, 9.5f, 11.f};
+
+        cv::bitwise_or(map_ < 2.f, map_ == 9.f, exclude);
+        { x , 7.0f, 2.2f,
+         3.f, 6.0f, 6.0f,
+          x , 9.5f, 11.f};
+    */
+
+    ASSERT_GT(to_.num_vertices(), size_t(1));
+
+    VecF tmp = to_.getNeighbors(6.f);
+    std::set<float> neigh_ids(tmp.begin(), tmp.end());
+    EXPECT_SIZE(5, neigh_ids);
+
+    std::set<float> expected_neighs;
+    expected_neighs.insert(7.f);
+    expected_neighs.insert(2.2f);
+    expected_neighs.insert(3.f);
+    expected_neighs.insert(9.5f);
+    expected_neighs.insert(11.f);
+
+    EXPECT_EQ(expected_neighs, neigh_ids);
+}
+
+TEST_F(GraphAttrMaskedTest, GetNeighbors_who)
+{
+    /*
+    float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
+                             3.f, 6.0f, 6.0f,
+                             9.f, 9.5f, 11.f};
+
+        cv::bitwise_or(map_ < 2.f, map_ == 9.f, exclude);
+        { x , 7.0f, 2.2f,
+         3.f, 6.0f, 6.0f,
+          x , 9.5f, 11.f};
+    */
+    ASSERT_GT(to_.num_vertices(), size_t(1));
+
+    {
+        VecF tmp = to_.getNeighbors(2.2f);
+        std::set<float> neigh_ids(tmp.begin(), tmp.end());
+        EXPECT_SIZE(2, neigh_ids);
+
+        std::set<float> expected_neighs;
+        expected_neighs.insert(6.f);
+        expected_neighs.insert(7.f);
+
+        EXPECT_EQ(expected_neighs, neigh_ids);
+    }
+    {
+        VecF tmp = to_.getNeighbors(11.f);
+        std::set<float> neigh_ids(tmp.begin(), tmp.end());
+        EXPECT_SIZE(2, neigh_ids);
+
+        std::set<float> expected_neighs;
+        expected_neighs.insert(6.f);
+        expected_neighs.insert(9.5f);
+
+        EXPECT_EQ(expected_neighs, neigh_ids);
+    }
+    {
+        VecF tmp = to_.getNeighbors(3.f);
+        std::set<float> neigh_ids(tmp.begin(), tmp.end());
+        EXPECT_SIZE(1, neigh_ids);
+
+        std::set<float> expected_neighs;
+        expected_neighs.insert(6.f);
+
+        EXPECT_EQ(expected_neighs, neigh_ids);
+    }
+}
+
+TEST_F(GraphAttrMaskedTest, GetNeighbors_adjacency)
+{
+    /*
+    float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
+                             3.f, 6.0f, 6.0f,
+                             9.f, 9.5f, 11.f};
+
+        cv::bitwise_or(map_ < 2.f, map_ == 9.f, exclude);
+        { x , 7.0f, 2.2f,
+         3.f, 6.0f, 6.0f,
+          x , 9.5f, 11.f};
+    */
+    ASSERT_GT(to_.num_vertices(), size_t(1));
+
+    Mat1f adj;
+    to_.AdjacencyMat(adj);
+
+    VecF vtx_ids = to_.VerticesIds();
+
+    for(size_t i=0; i<vtx_ids.size(); i++) {
+
+        VecF neigh_ids = to_.getNeighbors(vtx_ids[i]);
+
+        EXPECT_SIZE(cv::sum(adj.row(i))[0], neigh_ids);
+
+        for(size_t j=0; j<neigh_ids.size(); j++) {
+
+            EXPECT_FLOAT_EQ(1.f, adj(i, to_.VertexIndex(neigh_ids[j])));
         }
     }
 }

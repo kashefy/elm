@@ -5,6 +5,10 @@
 
 namespace elm {
 
+/**
+ * @brief Layer for difference of gaussians
+ * @todo define and implement
+ */
 class DiffOfGaussians
         : base_FeatureTransformationLayer
 {
