@@ -28,7 +28,17 @@ include(cmake/MessageUtils.cmake)
 # ----------------------------------------------------------------------------
 # Print all warnings and enable C++11 support
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
+
+# -fPIC
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
+# position indepdendent code for CMake older 2.8.9
+if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" STREQUAL "2.8")
+    if(${CMAKE_PATCH_VERSION} LESS 9)
+        if(LINUX)
+            set(CMAKE_CXX_FLAGS ${CMAKE_CSS_FLAGS} "-fPIC")
+        endif(LINUX)
+    endif(${CMAKE_PATCH_VERSION} LESS 9)
+endif()
 set(CMAKE_VERBOSE ON CACHE BOOL "Verbose mode")
 
 # Setup build and install locations
