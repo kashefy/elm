@@ -9,10 +9,11 @@
 
 using namespace elm;
 
+base_TIVLayer::~base_TIVLayer()
+{
+}
+
 base_TIVLayer::base_TIVLayer()
 {
 }
 
-base_TIVLayer::~base_TIVLayer()
-{
-}

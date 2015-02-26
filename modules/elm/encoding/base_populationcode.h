@@ -15,7 +15,12 @@
 
 namespace elm {
 
-class base_FilterBank;
+namespace detail {
+
+const std::string BASE_POPULATIONCODE__KEY_INPUT_STIMULUS   = "input";    ///< define string here to ensure early initialization for test purposes
+const std::string BASE_POPULATIONCODE__KEY_OUTPUT_POP_CODE = "pop_code";      ///< define string here to ensure early initialization for test purposes
+
+}
 
 /**
  * @brief The base class for population codes

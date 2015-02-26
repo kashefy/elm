@@ -21,10 +21,14 @@ using namespace elm;
 #include <boost/assign/list_of.hpp>
 template <>
 elm::MapIONames LayerAttr_<MutexPopulationCode>::io_pairs = boost::assign::map_list_of
-        ELM_ADD_INPUT_PAIR(MutexPopulationCode::KEY_INPUT_STIMULUS)
-        ELM_ADD_OUTPUT_PAIR(MutexPopulationCode::KEY_OUTPUT_POP_CODE)
+        ELM_ADD_INPUT_PAIR(detail::BASE_POPULATIONCODE__KEY_INPUT_STIMULUS)
+        ELM_ADD_OUTPUT_PAIR(detail::BASE_POPULATIONCODE__KEY_OUTPUT_POP_CODE)
         ;
 //#endif
+
+MutexPopulationCode::~MutexPopulationCode()
+{
+}
 
 MutexPopulationCode::MutexPopulationCode()
     : base_PopulationCode()

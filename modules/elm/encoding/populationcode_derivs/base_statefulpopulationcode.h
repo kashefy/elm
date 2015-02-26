@@ -29,6 +29,8 @@ public:
     static const std::string KEY_OUTPUT_OPT_STATE;  ///< optional output for state due to most recent stimuli
 
 protected:
+    virtual ~base_StatefulPopulationCode();
+
     virtual void Clear();
 
     virtual void OutputNames(const LayerIONames &config);
