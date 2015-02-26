@@ -1106,15 +1106,15 @@ TEST_F(GraphAttrMaskedTest, GetNeighbors_mulitple_contacts)
 {
     const int ROWS=2;
     const int COLS=3;
-    float data[ROWS*COLS] = {3.f, 1.0f, 2.2f,
-                             3.f, 1.0f, 6.0f};
+    float data[ROWS*COLS] = {3.f, 1.f, 2.2f,
+                             3.f, 1.f, 6.f};
     map_ = Mat1f(ROWS, COLS, data).clone();
 
     GraphAttr to = GraphAttr(map_, Mat1b());
 
     EXPECT_SIZE(1, to.getNeighbors(3.f));
     EXPECT_SIZE(3, to.getNeighbors(1.f));
-    EXPECT_SIZE(2, to.getNeighbors(2.f));
+    EXPECT_SIZE(2, to.getNeighbors(2.2f));
 }
 
 } // annonymous namespace for test cases and fixtures
