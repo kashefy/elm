@@ -209,6 +209,9 @@ float GraphAttr::contractEdges(float id_u, float id_v)
 
     std::vector< std::pair<VtxDescriptor, VtxDescriptor> > obsolete_edges;
 
+//    property_map<GraphAttrType, vertex_color_t>::type
+//            vertex_color_id = get(vertex_color, impl->g);
+
     for(tie(e, e_end) = out_edges(u, impl->g); e != e_end; ++e) {
 
         VtxDescriptor src, dst;

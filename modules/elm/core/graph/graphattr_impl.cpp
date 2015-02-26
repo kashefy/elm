@@ -154,6 +154,21 @@ void GraphAttr_Impl::removeVertex(float vtx_id, const VtxDescriptor &vtx)
 {
     boost::remove_vertex(vtx, g);
 
-    // remove from cache
-    vtx_cache_.erase(vtx_id);
+    /* Removing a vertex from boost graph resets
+     * all descriptors to the [0, V-1]
+     * so we need to update the cache
+     * to reflect new vertex descriptors
+     */
+
+    // Iterate through the vertices and add them to new cache
+    vtx_cache_.clear();
+
+    boost::property_map<GraphAttrType, boost::vertex_color_t>::type
+            vertex_color_id = get(boost::vertex_color, g);
+
+    GraphAttrTraits::vertex_iterator v, end;
+    for(tie(v, end) = vertices(g); v != end; ++v) {
+
+        vtx_cache_[vertex_color_id[*v]] = *v;
+    }
 }
