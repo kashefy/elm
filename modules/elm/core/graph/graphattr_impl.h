@@ -10,7 +10,7 @@
 
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/undirected_graph.hpp>
+//#include <boost/graph/undirected_graph.hpp>
 
 #include "elm/core/typedefs_fwd.h"
 
@@ -22,9 +22,10 @@ typedef boost::property<boost::edge_weight_t, float> EdgeWeightProp;
 typedef boost::property<boost::vertex_color_t, float,
         boost::property<boost::vertex_index2_t, cv::Mat1f > >
         VtxProp;
-typedef boost::undirected_graph<VtxProp, EdgeWeightProp> GraphAttrType;
+//typedef boost::undirected_graph<VtxProp, EdgeWeightProp> GraphAttrType;
 
-//typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VtxProp, EdgeWeightProp> GraphAttrType;
+typedef boost::adjacency_list<boost::setS, boost::vecS, boost::undirectedS, VtxProp, EdgeWeightProp> GraphAttrType;
+
 typedef boost::graph_traits<GraphAttrType> GraphAttrTraits;
 typedef GraphAttrTraits::edge_iterator edge_iter;
 typedef GraphAttrTraits::vertex_descriptor VtxDescriptor;
