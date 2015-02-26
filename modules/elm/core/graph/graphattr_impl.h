@@ -24,7 +24,7 @@ typedef boost::property<boost::vertex_color_t, float,
         VtxProp;
 //typedef boost::undirected_graph<VtxProp, EdgeWeightProp> GraphAttrType;
 
-typedef boost::adjacency_list<boost::setS, boost::vecS, boost::undirectedS, VtxProp, EdgeWeightProp> GraphAttrType;
+typedef boost::adjacency_list<boost::setS, boost::listS, boost::undirectedS, VtxProp, EdgeWeightProp> GraphAttrType;
 
 typedef boost::graph_traits<GraphAttrType> GraphAttrTraits;
 typedef GraphAttrTraits::edge_iterator edge_iter;
