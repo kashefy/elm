@@ -855,6 +855,7 @@ TEST_F(GraphAttrMaskedTest, ContractEdges_new_dims)
     for(int i=1; i<NB_VERTICES; i++) {
 
         VecF vtx_ids = to_.VerticesIds();
+        //ELM_COUT_VAR(elm::to_string(vtx_ids));
         float u = vtx_ids[0];
         float v = vtx_ids[1];
 
@@ -862,6 +863,7 @@ TEST_F(GraphAttrMaskedTest, ContractEdges_new_dims)
         to_.AdjacencyMat(adj_pre);
 
         to_.contractEdges(u, v);
+        //ELM_COUT_VAR(elm::to_string(to_.VerticesIds()));
 
         EXPECT_EQ(size_t(NB_VERTICES-i), to_.num_vertices()) << "no. of vertices not decreasing.";
         EXPECT_SIZE(size_t(NB_VERTICES-i), to_.VerticesIds()) << "no. of vertices not decreasing.";
@@ -1100,6 +1102,21 @@ TEST_F(GraphAttrMaskedTest, GetNeighbors_adjacency)
             EXPECT_FLOAT_EQ(1.f, adj(i, to_.VertexIndex(neigh_ids[j])));
         }
     }
+}
+
+TEST_F(GraphAttrMaskedTest, GetNeighbors_mulitple_contacts)
+{
+    const int ROWS=2;
+    const int COLS=3;
+    float data[ROWS*COLS] = {3.f, 1.f, 2.2f,
+                             3.f, 1.f, 6.f};
+    map_ = Mat1f(ROWS, COLS, data).clone();
+
+    GraphAttr to = GraphAttr(map_, Mat1b());
+
+    EXPECT_SIZE(1, to.getNeighbors(3.f));
+    EXPECT_SIZE(3, to.getNeighbors(1.f));
+    EXPECT_SIZE(2, to.getNeighbors(2.2f));
 }
 
 } // annonymous namespace for test cases and fixtures
