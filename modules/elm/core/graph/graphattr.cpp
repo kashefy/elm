@@ -253,6 +253,9 @@ float GraphAttr::contractEdges(float id_u, float id_v)
 
     impl->removeVertex(id_u, u);
 
+    // let map reflect vertex merge
+    impl->src_map_img.setTo(id_v, impl->src_map_img == id_u);
+
     return id_v;
 }
 
