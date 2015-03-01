@@ -80,6 +80,31 @@ cv::Point2i Mat2Point2i(const cv::Mat1i &m);
 template <typename T>
 cv::Point3_<T> Mat2Point3_(const cv::Mat_<T> &m);
 
+/**
+ * @brief get mask of nan elements in a matrix
+ *
+ * NaN as defined by IEEE754 standard
+ *
+ * http://answers.opencv.org/question/2221/create-a-mask-for-nan-cells/
+ * Restricted to Mat of floats for which the standard provides a NaN definition.
+ * http://stackoverflow.com/questions/3949457/can-an-integer-be-nan-in-c
+ *
+ * @param src matrix of floats
+ * @return mask of nan elements (true where element == NaN)
+ */
+cv::Mat1b is_nan(const cv::Mat1f &src);
+
+/**
+ * @brief get mask of elements that are valid numbers (not NaN) in a matrix
+ *
+ * NaN as defined by IEEE754 standard
+ *
+ * @param src matrix
+ * @return mask of non-nan elements (true where element != NaN)
+ * @see is_nan()
+ */
+cv::Mat1b is_not_nan(const cv::Mat1f &src);
+
 } // elm namespace
 
 #endif // _ELM_CORE_CV_MAT_UTILS_H_

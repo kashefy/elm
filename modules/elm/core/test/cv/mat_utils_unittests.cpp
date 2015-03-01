@@ -504,6 +504,99 @@ TEST(Mat2PointTest, Invalid)
     EXPECT_THROW(Mat2Point3_(Mat1i(1, 2)),    ExceptionBadDims);
 }
 
+class Mat1fNaNTest : public ::testing::Test
+{
+protected:
+    static const float NAN_VALUE;
+};
+const float Mat1fNaNTest::NAN_VALUE = numeric_limits<float>::quiet_NaN();
+
+TEST_F(Mat1fNaNTest, Is_nan_empty)
+{
+    EXPECT_TRUE(is_nan(Mat1f()).empty());
+    EXPECT_EQ(size_t(0), is_nan(Mat1f()).total());
+}
+
+TEST_F(Mat1fNaNTest, Is_nan_all)
+{
+    for(int r=1; r<5; r++) {
+
+        for(int c=1; c<5; c++) {
+
+            Mat1b mask = is_nan(Mat1f(r, c, NAN_VALUE));
+            EXPECT_EQ(r*c, countNonZero(mask));
+        }
+    }
+}
+
+TEST_F(Mat1fNaNTest, Is_nan_zeros)
+{
+    Mat1f in(3, 4, 0.f);
+    Mat1b mask = is_nan(in);
+    EXPECT_EQ(0, countNonZero(mask));
+
+    for(int c=0; c<in.cols; c++) {
+
+        EXPECT_EQ(uchar(0), mask(0, c));
+        in(0, c) = NAN_VALUE;
+        mask = is_nan(in);
+        EXPECT_EQ(c+1, countNonZero(mask));
+        EXPECT_EQ(uchar(255), mask(0, c));
+    }
+}
+
+TEST_F(Mat1fNaNTest, Is_nan)
+{
+    Mat1f in(3, 4, 1.f);
+    Mat1b mask = is_nan(in);
+    EXPECT_EQ(0, countNonZero(mask));
+
+    for(int c=0; c<in.cols; c++) {
+
+        EXPECT_EQ(uchar(0), mask(0, c));
+        in(0, c) = NAN_VALUE;
+
+        mask = is_nan(in);
+        EXPECT_EQ(c+1, countNonZero(mask));
+        EXPECT_EQ(uchar(255), mask(0, c));
+    }
+}
+
+TEST_F(Mat1fNaNTest, Is_not_nan_empty)
+{
+    EXPECT_TRUE(is_not_nan(Mat1f()).empty());
+    EXPECT_EQ(size_t(0), is_not_nan(Mat1f()).total());
+}
+
+TEST_F(Mat1fNaNTest, Is_not_nan_all)
+{
+    for(int r=1; r<5; r++) {
+
+        for(int c=1; c<5; c++) {
+
+            Mat1b mask = is_not_nan(Mat1f(r, c, NAN_VALUE));
+            EXPECT_EQ(0, countNonZero(mask));
+        }
+    }
+}
+
+TEST_F(Mat1fNaNTest, Is_not_nan)
+{
+    Mat1f in(3, 4, 1.f);
+    const int NB_ELEMENTS=static_cast<int>(in.total());
+    Mat1b mask = is_not_nan(in);
+    EXPECT_EQ(NB_ELEMENTS, countNonZero(mask));
+
+    for(int c=0; c<in.cols; c++) {
+
+        EXPECT_EQ(uchar(255), mask(0, c));
+        in(0, c) = NAN_VALUE;
+        mask = is_not_nan(in);
+        EXPECT_EQ(NB_ELEMENTS-c-1, countNonZero(mask));
+        EXPECT_EQ(uchar(0), mask(0, c));
+    }
+}
+
 /**
  * @brief A setup for repeating tests with different types of mat objects (int, float, uchar)
  * @todo convert to TYPED_TESTS
