@@ -117,5 +117,25 @@ Point3f Mat2Point3_(const Mat1f &m)
     return Point3f(m(0), m(1), m(2));
 }
 
+Mat1b isnan(const Mat1f &src)
+{
+    if(src.empty()) {
+
+        return Mat1b();
+    }
+
+    return (src != src);
+}
+
+Mat1b is_not_nan(const Mat1f &src)
+{
+    if(src.empty()) {
+
+        return Mat1b();
+    }
+
+    return (src == src);
+}
+
 } //namespace elm
 

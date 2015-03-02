@@ -11,6 +11,7 @@
 
 #include "elm/core/debug_utils.h"
 
+#include "elm/core/cv/mat_utils_inl.h"
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/percentile.h"
@@ -135,6 +136,27 @@ TEST_F(MedianBlurTest, Response_const_valued_input)
     }
 }
 
+TEST_F(MedianBlurTest, Response_const_valued_input_with_nan)
+{
+    for(float v=-3.f; v<=3.f; v+=1.5f) {
+
+        Signal sig;
+
+        Mat1f in(10, 10, v);
+
+        in(2, 3) = numeric_limits<float>::quiet_NaN();
+
+        sig.Append(NAME_IN, in);
+
+        to_->Activate(sig);
+        to_->Response(sig);
+
+        Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
+
+        EXPECT_MAT_EQ(Mat1f(in.rows, in.cols, v), blurred);
+    }
+}
+
 /**
  * @brief Inspect values of blurred image, when aperture size
  * is large (e.g. kszie > 5)
@@ -207,6 +229,64 @@ TEST_F(MedianBlurTest, Response_blurred_values_median_center)
 
         EXPECT_FLOAT_EQ(median, blurred(ksize/2, ksize/2))
                 << "Unexpected value at the centre of blurred image with ksize=" << ksize;
+    }
+}
+
+/**
+ * @brief Inspect values of blurred image when input matches apertrue size
+ * with nan value in the input.
+ */
+TEST_F(MedianBlurTest, Response_blurred_values_median_center_with_nan)
+{
+    const int NB_KSZIE_VALUES = 2;
+    int ksize_values[NB_KSZIE_VALUES] = {3, 5};
+
+    for(int i=0; i<NB_KSZIE_VALUES; i++) {
+
+        int ksize = ksize_values[i];
+
+        PTree params;
+        params.add(MedianBlur::PARAM_APERTURE_SIZE, ksize);
+        config_.Params(params);
+        to_.reset(new MedianBlur(config_));
+
+        Mat1f in(ksize, ksize);
+        randn(in, 0.f, 100.f);
+        in(ksize/2-1, ksize/2-1) = numeric_limits<float>::quiet_NaN();
+
+        Signal sig;
+        sig.Append(NAME_IN, in);
+
+        to_->Activate(sig);
+        to_->Response(sig);
+
+        Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
+
+//        ELM_COUT_VAR(in);
+//        ELM_COUT_VAR(blurred);
+
+        EXPECT_EQ(1, countNonZero(isnan(blurred)));
+        EXPECT_EQ(uchar(255), isnan(blurred)(ksize/2-1, ksize/2-1));
+
+//        VecF non_nan_values;
+//        Mat1b mask_not_nan = is_not_nan(in);
+//        for(size_t j=0; j<in.total(); j++) {
+
+//            if(mask_not_nan(j)) {
+
+//                non_nan_values.push_back(in(j));
+//            }
+//        }
+
+//        ELM_COUT_VAR(Mat1f(non_nan_values).reshape(1, 1));
+
+//        float median_no_nan = Percentile().CalcPercentile(Mat1f(non_nan_values).reshape(1, 1), 0.5f);
+//        float median_with_nan = Percentile().CalcPercentile(in.reshape(1, 1), 0.5f);
+
+//        bool is_match = elm::find_first_of<float>(blurred, median_no_nan) ||
+//                elm::find_first_of<float>(blurred, median_with_nan);
+//        EXPECT_TRUE(is_match)
+//                << "Could not find median value in blurred image with ksize=" << ksize;
     }
 }
 
