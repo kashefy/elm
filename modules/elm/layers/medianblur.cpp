@@ -57,6 +57,7 @@ void MedianBlur::Reconfigure(const LayerConfig &config)
 void MedianBlur::Activate(const Signal &signal)
 {
     Mat src, dst;
+    Mat1b mask_nan;
 
     /* from OpneCV's docs:
      * when ksize is 3 or 5,
@@ -71,14 +72,20 @@ void MedianBlur::Activate(const Signal &signal)
 
         src = signal.MostRecentMat1f(name_input_);
 
-        Mat1b nan = elm::isnan(src);
-        if(cv::countNonZero(nan) > 0) {
+        mask_nan = elm::isnan(src);
+        if(cv::countNonZero(mask_nan) > 0) {
 
             src = src.clone();
-            src.setTo(1e7, nan);
+            src.setTo(1e7, mask_nan);
         }
     }
 
     medianBlur(src, dst, ksize_);
+
+    if(!mask_nan.empty()) {
+
+        dst.setTo(std::numeric_limits<float>::quiet_NaN(), mask_nan);
+    }
+
     m_ = dst;
 }
