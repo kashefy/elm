@@ -511,44 +511,44 @@ protected:
 };
 const float Mat1fNaNTest::NAN_VALUE = numeric_limits<float>::quiet_NaN();
 
-TEST_F(Mat1fNaNTest, Is_nan_empty)
+TEST_F(Mat1fNaNTest, Isnan_empty)
 {
-    EXPECT_TRUE(is_nan(Mat1f()).empty());
-    EXPECT_EQ(size_t(0), is_nan(Mat1f()).total());
+    EXPECT_TRUE(isnan(Mat1f()).empty());
+    EXPECT_EQ(size_t(0), isnan(Mat1f()).total());
 }
 
-TEST_F(Mat1fNaNTest, Is_nan_all)
+TEST_F(Mat1fNaNTest, Isnan_all)
 {
     for(int r=1; r<5; r++) {
 
         for(int c=1; c<5; c++) {
 
-            Mat1b mask = is_nan(Mat1f(r, c, NAN_VALUE));
+            Mat1b mask = isnan(Mat1f(r, c, NAN_VALUE));
             EXPECT_EQ(r*c, countNonZero(mask));
         }
     }
 }
 
-TEST_F(Mat1fNaNTest, Is_nan_zeros)
+TEST_F(Mat1fNaNTest, Isnan_zeros)
 {
     Mat1f in(3, 4, 0.f);
-    Mat1b mask = is_nan(in);
+    Mat1b mask = isnan(in);
     EXPECT_EQ(0, countNonZero(mask));
 
     for(int c=0; c<in.cols; c++) {
 
         EXPECT_EQ(uchar(0), mask(0, c));
         in(0, c) = NAN_VALUE;
-        mask = is_nan(in);
+        mask = isnan(in);
         EXPECT_EQ(c+1, countNonZero(mask));
         EXPECT_EQ(uchar(255), mask(0, c));
     }
 }
 
-TEST_F(Mat1fNaNTest, Is_nan)
+TEST_F(Mat1fNaNTest, Isnan)
 {
     Mat1f in(3, 4, 1.f);
-    Mat1b mask = is_nan(in);
+    Mat1b mask = isnan(in);
     EXPECT_EQ(0, countNonZero(mask));
 
     for(int c=0; c<in.cols; c++) {
@@ -556,7 +556,7 @@ TEST_F(Mat1fNaNTest, Is_nan)
         EXPECT_EQ(uchar(0), mask(0, c));
         in(0, c) = NAN_VALUE;
 
-        mask = is_nan(in);
+        mask = isnan(in);
         EXPECT_EQ(c+1, countNonZero(mask));
         EXPECT_EQ(uchar(255), mask(0, c));
     }

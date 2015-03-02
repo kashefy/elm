@@ -92,7 +92,7 @@ cv::Point3_<T> Mat2Point3_(const cv::Mat_<T> &m);
  * @param src matrix of floats
  * @return mask of nan elements (true where element == NaN)
  */
-cv::Mat1b is_nan(const cv::Mat1f &src);
+cv::Mat1b isnan(const cv::Mat1f &src);
 
 /**
  * @brief get mask of elements that are valid numbers (not NaN) in a matrix

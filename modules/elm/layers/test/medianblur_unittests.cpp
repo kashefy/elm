@@ -260,8 +260,8 @@ TEST_F(MedianBlurTest, Response_blurred_values_median_center_with_nan)
 //        ELM_COUT_VAR(in);
 //        ELM_COUT_VAR(blurred);
 
-        EXPECT_EQ(1, countNonZero(is_nan(blurred)));
-        EXPECT_EQ(uchar(255), is_nan(blurred)(ksize/2-1, ksize/2-1));
+        EXPECT_EQ(1, countNonZero(isnan(blurred)));
+        EXPECT_EQ(uchar(255), isnan(blurred)(ksize/2-1, ksize/2-1));
 
         VecF non_nan_values;
         Mat1b mask_not_nan = is_not_nan(in);
