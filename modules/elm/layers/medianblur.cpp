@@ -55,6 +55,7 @@ void MedianBlur::Activate(const Signal &signal)
 {
     Mat src, dst;
     Mat1b mask_nan;
+    const float LARGE_VALUE = 1e7;
 
     /* from OpneCV's docs:
      * when ksize is 3 or 5,
@@ -73,7 +74,7 @@ void MedianBlur::Activate(const Signal &signal)
         if(cv::countNonZero(mask_nan) > 0) {
 
             src = src.clone();
-            src.setTo(1e7, mask_nan);
+            src.setTo(LARGE_VALUE, mask_nan);
         }
     }
 
@@ -81,6 +82,7 @@ void MedianBlur::Activate(const Signal &signal)
 
     if(!mask_nan.empty()) {
 
+        cv::bitwise_or(mask_nan, src == LARGE_VALUE, mask_nan);
         dst.setTo(std::numeric_limits<float>::quiet_NaN(), mask_nan);
     }
 
