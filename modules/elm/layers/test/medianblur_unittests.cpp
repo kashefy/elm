@@ -266,8 +266,8 @@ TEST_F(MedianBlurTest, Response_blurred_values_median_center_with_nan)
 
         Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
 
-//        ELM_COUT_VAR(in);
-//        ELM_COUT_VAR(blurred);
+        ELM_COUT_VAR(in);
+        ELM_COUT_VAR(blurred);
 
         EXPECT_EQ(1, countNonZero(isnan(blurred)));
         EXPECT_EQ(uchar(255), isnan(blurred)(ksize/2-1, ksize/2-1));
@@ -282,10 +282,12 @@ TEST_F(MedianBlurTest, Response_blurred_values_median_center_with_nan)
             }
         }
 
-        //ELM_COUT_VAR(Mat1f(non_nan_values).reshape(1, 1));
+        ELM_COUT_VAR(Mat1f(non_nan_values).reshape(1, 1));
 
         float median_no_nan = Percentile().CalcPercentile(Mat1f(non_nan_values).reshape(1, 1), 0.5f);
         float median_with_nan = Percentile().CalcPercentile(in.reshape(1, 1), 0.5f);
+
+        ELM_COUT_VAR(median_no_nan << " " << median_with_nan);
 
         bool is_match = elm::find_first_of<float>(blurred, median_no_nan) ||
                 elm::find_first_of<float>(blurred, median_with_nan);
