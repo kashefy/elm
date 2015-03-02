@@ -11,6 +11,7 @@
 
 #include "elm/core/debug_utils.h"
 
+#include "elm/core/cv/mat_utils_inl.h"
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/percentile.h"
@@ -231,6 +232,10 @@ TEST_F(MedianBlurTest, Response_blurred_values_median_center)
     }
 }
 
+/**
+ * @brief Inspect values of blurred image when input matches apertrue size
+ * with nan value in the input.
+ */
 TEST_F(MedianBlurTest, Response_blurred_values_median_center_with_nan)
 {
     const int NB_KSZIE_VALUES = 2;
@@ -274,16 +279,14 @@ TEST_F(MedianBlurTest, Response_blurred_values_median_center_with_nan)
         }
 
         //ELM_COUT_VAR(Mat1f(non_nan_values).reshape(1, 1));
+
         float median_no_nan = Percentile().CalcPercentile(Mat1f(non_nan_values).reshape(1, 1), 0.5f);
         float median_with_nan = Percentile().CalcPercentile(in.reshape(1, 1), 0.5f);
 
-        bool is_match = (blurred(ksize/2, ksize/2) == median_no_nan) ||
-                (blurred(ksize/2, ksize/2) == median_with_nan) ||
-                (blurred(ksize/2, ksize/2-1) == median_no_nan) ||
-                (blurred(ksize/2, ksize/2-1) == median_with_nan)
-                ;
+        bool is_match = elm::find_first_of<float>(blurred, median_no_nan) ||
+                elm::find_first_of<float>(blurred, median_with_nan);
         EXPECT_TRUE(is_match)
-                << "Could not find median value in rough centre of blurred image with ksize=" << ksize;
+                << "Could not find median value in blurred image with ksize=" << ksize;
     }
 }
 
