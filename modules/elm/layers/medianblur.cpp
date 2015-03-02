@@ -11,13 +11,19 @@
 
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layerattr_.h"
 
+using std::string;
 using namespace cv;
 using namespace elm;
+
+const string MedianBlur::PARAM_NAN_SURROGTATE = "nan_surrogate";
+
+const float MedianBlur::DEFAULT_NAN_SURROGATE = 1e7;
 
 template <>
 elm::MapIONames LayerAttr_<MedianBlur>::io_pairs = boost::assign::map_list_of
@@ -49,13 +55,15 @@ void MedianBlur::Reconfigure(const LayerConfig &config)
              " Got " << ksize_;
         ELM_THROW_VALUE_ERROR(s.str());
     }
+
+    nan_surrogate_ = config.Params().get<float>(PARAM_NAN_SURROGTATE,
+                                                DEFAULT_NAN_SURROGATE);
 }
 
 void MedianBlur::Activate(const Signal &signal)
 {
     Mat src, dst;
     Mat1b mask_nan;
-    const float LARGE_VALUE = 1e7;
 
     /* from OpneCV's docs:
      * when ksize is 3 or 5,
@@ -74,7 +82,7 @@ void MedianBlur::Activate(const Signal &signal)
         if(cv::countNonZero(mask_nan) > 0) {
 
             src = src.clone();
-            src.setTo(LARGE_VALUE, mask_nan);
+            src.setTo(nan_surrogate_*2, mask_nan);
         }
     }
 
@@ -82,8 +90,9 @@ void MedianBlur::Activate(const Signal &signal)
 
     if(!mask_nan.empty()) {
 
-        cv::bitwise_or(mask_nan, src == LARGE_VALUE, mask_nan);
-        dst.setTo(std::numeric_limits<float>::quiet_NaN(), mask_nan);
+        const float NAN_VALUE = std::numeric_limits<float>::quiet_NaN();
+        cv::bitwise_or(mask_nan, dst >= nan_surrogate_/2.f, mask_nan);
+        dst.setTo(NAN_VALUE, mask_nan);
     }
 
     m_ = dst;

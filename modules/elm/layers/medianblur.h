@@ -25,6 +25,10 @@ namespace elm {
 class MedianBlur : public base_SmoothLayer
 {
 public:
+    static const std::string PARAM_NAN_SURROGTATE;      ///< value used as nan replacement to reverse effect of nan values in response, must not occur in data
+
+    static const float DEFAULT_NAN_SURROGATE;           ///< = 1e7
+
     MedianBlur();
 
     MedianBlur(const LayerConfig &config);
@@ -35,6 +39,7 @@ public:
 
 protected:
     // members
+    float nan_surrogate_;
 };
 
 } // namespace elm
