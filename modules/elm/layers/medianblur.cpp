@@ -70,6 +70,13 @@ void MedianBlur::Activate(const Signal &signal)
     else {
 
         src = signal.MostRecentMat1f(name_input_);
+
+        Mat1b nan = elm::isnan(src);
+        if(cv::countNonZero(nan) > 0) {
+
+            src = src.clone();
+            src.setTo(1e7, nan);
+        }
     }
 
     medianBlur(src, dst, ksize_);
