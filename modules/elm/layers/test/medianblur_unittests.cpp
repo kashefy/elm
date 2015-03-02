@@ -280,6 +280,9 @@ TEST_F(MedianBlurTest, Response_blurred_values_median_center_with_nan)
 
                 non_nan_values.push_back(in(j));
             }
+            else {
+                non_nan_values.push_back(1e7);
+            }
         }
 
         ELM_COUT_VAR(Mat1f(non_nan_values).reshape(1, 1));
