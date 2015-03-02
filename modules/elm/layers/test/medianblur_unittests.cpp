@@ -268,25 +268,25 @@ TEST_F(MedianBlurTest, Response_blurred_values_median_center_with_nan)
         EXPECT_EQ(1, countNonZero(isnan(blurred)));
         EXPECT_EQ(uchar(255), isnan(blurred)(ksize/2-1, ksize/2-1));
 
-        VecF non_nan_values;
-        Mat1b mask_not_nan = is_not_nan(in);
-        for(size_t j=0; j<in.total(); j++) {
+//        VecF non_nan_values;
+//        Mat1b mask_not_nan = is_not_nan(in);
+//        for(size_t j=0; j<in.total(); j++) {
 
-            if(mask_not_nan(j)) {
+//            if(mask_not_nan(j)) {
 
-                non_nan_values.push_back(in(j));
-            }
-        }
+//                non_nan_values.push_back(in(j));
+//            }
+//        }
 
-        //ELM_COUT_VAR(Mat1f(non_nan_values).reshape(1, 1));
+//        ELM_COUT_VAR(Mat1f(non_nan_values).reshape(1, 1));
 
-        float median_no_nan = Percentile().CalcPercentile(Mat1f(non_nan_values).reshape(1, 1), 0.5f);
-        float median_with_nan = Percentile().CalcPercentile(in.reshape(1, 1), 0.5f);
+//        float median_no_nan = Percentile().CalcPercentile(Mat1f(non_nan_values).reshape(1, 1), 0.5f);
+//        float median_with_nan = Percentile().CalcPercentile(in.reshape(1, 1), 0.5f);
 
-        bool is_match = elm::find_first_of<float>(blurred, median_no_nan) ||
-                elm::find_first_of<float>(blurred, median_with_nan);
-        EXPECT_TRUE(is_match)
-                << "Could not find median value in blurred image with ksize=" << ksize;
+//        bool is_match = elm::find_first_of<float>(blurred, median_no_nan) ||
+//                elm::find_first_of<float>(blurred, median_with_nan);
+//        EXPECT_TRUE(is_match)
+//                << "Could not find median value in blurred image with ksize=" << ksize;
     }
 }
 
