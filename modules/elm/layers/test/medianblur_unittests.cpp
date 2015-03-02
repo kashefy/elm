@@ -282,7 +282,7 @@ TEST_F(MedianBlurTest, Response_blurred_values_median_center_with_nan)
             }
         }
 
-        ELM_COUT_VAR(Mat1f(non_nan_values).reshape(1, 1));
+        //ELM_COUT_VAR(Mat1f(non_nan_values).reshape(1, 1));
 
         float median_no_nan = Percentile().CalcPercentile(Mat1f(non_nan_values).reshape(1, 1), 0.5f);
         float median_with_nan = Percentile().CalcPercentile(in.reshape(1, 1), 0.5f);
