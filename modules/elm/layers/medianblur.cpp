@@ -7,6 +7,8 @@
 //M*/
 #include "elm/layers/medianblur.h"
 
+#include <boost/assign/list_of.hpp>
+
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include "elm/core/exception.h"
@@ -17,16 +19,11 @@
 using namespace cv;
 using namespace elm;
 
-/** @todo why does define guard lead to undefined reference error?
- */
-//#ifdef __WITH_GTEST
-#include <boost/assign/list_of.hpp>
 template <>
 elm::MapIONames LayerAttr_<MedianBlur>::io_pairs = boost::assign::map_list_of
         ELM_ADD_INPUT_PAIR(detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS)
         ELM_ADD_OUTPUT_PAIR(detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
         ;
-//#endif
 
 MedianBlur::MedianBlur()
     : base_SmoothLayer()
