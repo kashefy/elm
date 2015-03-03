@@ -91,29 +91,27 @@ public:
     /**
      * @brief apply function to source image map masked by vertex
      * @param vtx_id for mapping source map image
-     * @param func point to function to apply on masked image
+     * @param func point to function to apply on masked image (can be static method)
      * @return result of function application
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
     cv::Mat1f applyVertexToMap(float vtx_id, cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
     /**
-     * @brief apply function to source image map masked by vertex
+     * @brief apply method to source image map masked by vertex
      * @param vtx_id for mapping source map image
      * @param vtx_op reference to object with operator method
-     * @return result of function application
+     * @return result of method application
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
     cv::Mat1f applyVertexToMap(float vtx_id, base_GraphVertexOp &vtx_op) const;
 
     /**
      * @brief apply function to source image map masked by vertex for each vertex
-     * @param func point to function to apply on masked image
-     * @param vtx_id for mapping source map image
+     * @param func point to function to apply on masked image (can be static method)
      * @return result of function application for each vertex
      */
     VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
-
 
     void removeEdges(float vtx_u, float vtx_v);
 
