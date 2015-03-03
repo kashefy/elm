@@ -889,9 +889,6 @@ TEST_F(GraphAttrMaskedTest, ContractEdges_vtx_removed)
         float u = vtx_ids[1];
         float v = vtx_ids[0];
 
-        Mat1f adj_pre;
-        to_.AdjacencyMat(adj_pre);
-
         to_.contractEdges(u, v);
 
         EXPECT_THROW(to_.VertexIndex(u), ExceptionKeyError);
