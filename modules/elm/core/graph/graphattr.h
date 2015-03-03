@@ -13,6 +13,7 @@
 namespace elm {
 
 class GraphAttr_Impl;
+class base_GraphVertexOp;
 
 /**
  * @brief class for exposing the public interface of GraphAttr_Impl
@@ -89,12 +90,21 @@ public:
 
     /**
      * @brief apply function to source image map masked by vertex
-     * @param func point to function to apply on masked image
      * @param vtx_id for mapping source map image
+     * @param func point to function to apply on masked image
      * @return result of function application
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
     cv::Mat1f applyVertexToMap(float vtx_id, cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
+
+    /**
+     * @brief apply function to source image map masked by vertex
+     * @param vtx_id for mapping source map image
+     * @param vtx_op reference to object with operator method
+     * @return result of function application
+     * @throws elm::ExceptionKeyError for invalid vertex id
+     */
+    cv::Mat1f applyVertexToMap(float vtx_id, base_GraphVertexOp &vtx_op) const;
 
     /**
      * @brief apply function to source image map masked by vertex for each vertex

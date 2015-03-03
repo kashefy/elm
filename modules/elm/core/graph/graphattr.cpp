@@ -11,6 +11,7 @@
 
 #include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
+#include "elm/core/graph/base_GraphVertexOp.h"
 #include "elm/core/graph/graphattr_impl.h"
 
 using namespace boost;
@@ -152,6 +153,29 @@ Mat1f GraphAttr::applyVertexToMap(float vtx_id, Mat1f (*func)(const Mat1f &img, 
         float vtx_color = vertex_color_id[vtx_descriptor];
         Mat1b _mask = impl->src_map_img == vtx_color;
         vtx_result = func(impl->src_map_img, _mask);
+    }
+    else {
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_id << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    return vtx_result;
+}
+
+Mat1f GraphAttr::applyVertexToMap(float vtx_id, base_GraphVertexOp &vtx_op) const
+{
+    Mat1f vtx_result;
+
+    VtxDescriptor vtx_descriptor;
+    if(impl->findVertex(vtx_id, vtx_descriptor)) {
+
+        property_map<GraphAttrType, vertex_color_t>::type
+                vertex_color_id = get(vertex_color, impl->g);
+
+        float vtx_color = vertex_color_id[vtx_descriptor];
+        Mat1b _mask = impl->src_map_img == vtx_color;
+        vtx_result = vtx_op(impl->src_map_img, _mask);
     }
     else {
         std::stringstream s;
