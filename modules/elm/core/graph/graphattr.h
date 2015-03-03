@@ -104,7 +104,12 @@ public:
      */
     VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
-
+    /**
+     * @brief remove edge(s) between two vertices
+     * @param vtx_u id for vertex u
+     * @param vtx_v id for vertex v
+     * @throws elm::ExceptionKeyError for invalid vertex id
+     */
     void removeEdges(float vtx_u, float vtx_v);
 
     /**
