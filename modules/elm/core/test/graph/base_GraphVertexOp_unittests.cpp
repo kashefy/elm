@@ -150,5 +150,29 @@ TEST_F(GraphVertexOpTest, op_applied_to_graph_vertex)
     EXPECT_MAT_EQ(result_op, result_graph);
 }
 
+TEST_F(GraphVertexOpTest, op_applied_to_graph_vertex_call_count)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
+                             3.f, 6.0f, 6.0f,
+                             9.f, 9.5f, 11.f};
+    Mat1f map = Mat1f(ROWS, COLS, data).clone();
+
+    Mat1b exclude, mask;
+    cv::bitwise_or(map < 2.f, map == 9.f, exclude);
+    cv::bitwise_not(exclude, mask);
+
+    GraphAttr graph(map, mask);
+
+    ASSERT_GT(graph.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    EXPECT_EQ(0, to_.CallCount());
+
+    graph.applyVertexToMap(6.f, to_);
+
+    EXPECT_EQ(1, to_.CallCount());
+}
+
 
 } // annonymous namespace for tests
