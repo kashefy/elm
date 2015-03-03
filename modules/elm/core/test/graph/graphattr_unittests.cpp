@@ -889,9 +889,6 @@ TEST_F(GraphAttrMaskedTest, ContractEdges_vtx_removed)
         float u = vtx_ids[1];
         float v = vtx_ids[0];
 
-        Mat1f adj_pre;
-        to_.AdjacencyMat(adj_pre);
-
         to_.contractEdges(u, v);
 
         EXPECT_THROW(to_.VertexIndex(u), ExceptionKeyError);
@@ -1117,6 +1114,126 @@ TEST_F(GraphAttrMaskedTest, GetNeighbors_mulitple_contacts)
     EXPECT_SIZE(1, to.getNeighbors(3.f));
     EXPECT_SIZE(3, to.getNeighbors(1.f));
     EXPECT_SIZE(2, to.getNeighbors(2.2f));
+}
+
+TEST_F(GraphAttrMaskedTest, Remove_vertex_empty)
+{
+    GraphAttr to;
+
+    ASSERT_EQ(size_t(0), to.VerticesIds().size()) << "Expecting empty graph, without vertices";
+
+    EXPECT_THROW(to.removeVertex(0.f), ExceptionKeyError);
+    EXPECT_THROW(to.removeVertex(2.2f), ExceptionKeyError);
+    EXPECT_THROW(to.removeVertex(6.f), ExceptionKeyError);
+    EXPECT_THROW(to.removeVertex(9.f), ExceptionKeyError);
+    EXPECT_THROW(to.removeVertex(-1.f), ExceptionKeyError);
+}
+
+TEST_F(GraphAttrMaskedTest, Remove_vertex_invalid)
+{
+    ASSERT_GT(to_.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    EXPECT_THROW(to_.removeVertex(-1.f), ExceptionKeyError);
+    EXPECT_THROW(to_.removeVertex(0.f), ExceptionKeyError);
+    EXPECT_THROW(to_.removeVertex(5.f), ExceptionKeyError);
+    EXPECT_THROW(to_.removeVertex(11.2f), ExceptionKeyError);
+    EXPECT_THROW(to_.removeVertex(9.f), ExceptionKeyError) << "this vertex was masked.";
+}
+
+/**
+ * @brief Verify which vertex got removed after merge
+ */
+TEST_F(GraphAttrMaskedTest, Remove_vertex)
+{
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 2 vertices.";
+
+    while(static_cast<int>(to_.num_vertices()) > 1) {
+
+        VecF vtx_ids = to_.VerticesIds();
+
+        float u = vtx_ids[1];
+        float v = vtx_ids[0];
+
+        to_.removeVertex(u);
+
+        EXPECT_THROW(to_.VertexIndex(u), ExceptionKeyError);
+        EXPECT_THROW(to_.removeVertex(u), ExceptionKeyError);
+        EXPECT_EQ(0, to_.VertexIndex(v));
+    }
+}
+
+TEST_F(GraphAttrMaskedTest, Remove_vertex_all_vertices)
+{
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 2 vertices.";
+
+    while(static_cast<int>(to_.num_vertices()) > 1) {
+
+        VecF vtx_ids = to_.VerticesIds();
+
+        float v = vtx_ids[0];
+
+        to_.removeVertex(v);
+
+        EXPECT_THROW(to_.VertexIndex(v), ExceptionKeyError);
+        EXPECT_THROW(to_.removeVertex(v), ExceptionKeyError);
+    }
+}
+
+TEST_F(GraphAttrMaskedTest, Remove_vertex_check_vtx_ids)
+{
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 2 vertices.";
+
+    while(static_cast<int>(to_.num_vertices()) > 0) {
+
+        VecF vtx_ids = to_.VerticesIds();
+        float v = vtx_ids[0];
+
+        to_.removeVertex(v);
+
+        vtx_ids = to_.VerticesIds();
+        VecF::const_iterator itr = std::find(vtx_ids.begin(), vtx_ids.end(), v);
+        EXPECT_EQ(vtx_ids.end(), itr) << "Vertex still in list of vertex ids after removal.";
+    }
+}
+
+cv::Mat1f mask_vertex(const cv::Mat1f& img, const cv::Mat1b &mask)
+{
+    Mat1b mask_inverted;
+    cv::bitwise_not(mask, mask_inverted);
+    return img.clone().setTo(0, mask_inverted);
+}
+
+TEST_F(GraphAttrMaskedTest, Remove_vertex_check_map)
+{
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 2 vertices.";
+
+    Mat1f map;
+
+    while(static_cast<int>(to_.num_vertices()) > 0) {
+
+        VecF vtx_ids = to_.VerticesIds();
+        float v = vtx_ids[0];
+
+        // replace with getter to Graph's underlying map image
+        VecMat1f masked_maps = to_.applyVerticesToMap(mask_vertex);
+        map = Mat1f::zeros(map_.size());
+        for(size_t i=0; i<masked_maps.size(); i++) {
+
+            map += masked_maps[i];
+        }
+        EXPECT_GT(countNonZero(map==v), 0);
+
+        to_.removeVertex(v);
+
+        masked_maps = to_.applyVerticesToMap(mask_vertex);
+        Mat1f map = Mat1f::zeros(map_.size());
+        for(size_t i=0; i<masked_maps.size(); i++) {
+
+            map += masked_maps[i];
+        }
+        EXPECT_EQ(0, countNonZero(map==v)) << "still finding pixel with vertex color after removal.";
+
+    }
 }
 
 } // annonymous namespace for test cases and fixtures

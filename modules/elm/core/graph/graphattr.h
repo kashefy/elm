@@ -113,6 +113,12 @@ public:
      */
     VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
+    /**
+     * @brief remove edge(s) between two vertices
+     * @param vtx_u id for vertex u
+     * @param vtx_v id for vertex v
+     * @throws elm::ExceptionKeyError for invalid vertex id
+     */
     void removeEdges(float vtx_u, float vtx_v);
 
     /**
@@ -145,6 +151,16 @@ public:
      * @return list of vertex ids neighboring given vertex
      */
     VecF getNeighbors(float vtx_id) const;
+
+    /**
+     * @brief remove a vertex from the graph
+     *
+     * Sets corresponding pixels in source map image to zero.
+     *
+     * @param vtx_id id of vertex to remove
+     * @throws elm::ExceptionKeyError for invalid vertex id
+     */
+    void removeVertex(float vtx_id);
 
     // public members
     std::shared_ptr<GraphAttr_Impl> impl;

@@ -358,6 +358,54 @@ VecF GraphAttr::getNeighbors(float vtx_id) const
     return neigh_ids;
 }
 
+void GraphAttr::removeVertex(float vtx_id)
+{
+    VtxDescriptor u;
+
+    if(!impl->findVertex(vtx_id, u)) {
+
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_id << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    graph_traits<GraphAttrTraits>::out_edge_iterator e, e_end;
+
+    std::vector< std::pair<VtxDescriptor, VtxDescriptor> > obsolete_edges;
+
+    for(tie(e, e_end) = out_edges(u, impl->g); e != e_end; ++e) {
+
+        VtxDescriptor src, dst;
+        src = source(*e, impl->g);
+        dst = target(*e, impl->g);
+
+        // move or merge edge?
+        if(src != u && dst != u) {
+
+            std::stringstream s;
+            s << "Neither edge source nor its target is vertex u="<<
+                 u << "with id=" << vtx_id << ".";
+            ELM_THROW_VALUE_ERROR(s.str());
+        }
+
+        // keep track of edges to remove later
+        obsolete_edges.push_back(std::make_pair(src, dst));
+    }
+
+    // must remove obsolete edges before removing vertex
+    VtxDescriptor src, dst;
+    for(size_t i=0; i<obsolete_edges.size(); i++) {
+
+        tie(src, dst) = obsolete_edges[i];
+        impl->removeEdges(src, dst);
+    }
+
+    impl->removeVertex(vtx_id, u);
+
+    // let map reflect vertex merge
+    impl->src_map_img.setTo(0.f, impl->src_map_img == vtx_id);
+}
+
 // non member functions
 
 void elm::apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
