@@ -766,6 +766,104 @@ TEST_F(GraphAttrMaskedTest, ApplyVertexToMap_masked_img_invalid_vtx_id)
     }
 }
 
+class DummyWithStaticMethod
+{
+public:
+    static Mat1f func_masked_img(const cv::Mat1f &img, const cv::Mat1b &mask) {
+
+        return img.clone().setTo(0.f, mask == 0);
+    }
+};
+
+TEST_F(GraphAttrMaskedTest, ApplyVertexToMap_masked_img_invalid_vtx_id_static_method)
+{
+    ASSERT_GT(to_.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    EXPECT_THROW(to_.applyVertexToMap(-1.f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(0.f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(5.f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(11.2f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+
+    EXPECT_THROW(to_.applyVertexToMap(9.f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+
+    for(size_t i=0; i<map_.total(); i++) {
+
+        if(mask_(i)) {
+            EXPECT_NO_THROW(to_.applyVertexToMap(map_(i), DummyWithStaticMethod::func_masked_img));
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)+0.2f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)-0.2f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)+0.7f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)-0.7f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+        }
+        else {
+            EXPECT_THROW(to_.applyVertexToMap(map_(i), DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+        }
+    }
+}
+
+
+TEST_F(GraphAttrConstructTest, ApplyVertexToMap_masked_img_static_method)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    float data[ROWS*COLS] = {1, 1, 2.2,
+                             3, 6, 6,
+                             9, 9.5, 11};
+    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+
+    Mat1b exclude, mask;
+    cv::bitwise_or(m < 2, m == 9, exclude);
+    cv::bitwise_not(exclude, mask);
+
+    GraphAttr to(m, mask);
+
+    ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    VecF vtx_ids = to.VerticesIds();
+
+    for(size_t i=0; i<vtx_ids.size(); i++) {
+
+        float vtx_id = vtx_ids[i];
+
+        Mat1f result = to.applyVertexToMap(vtx_id, DummyWithStaticMethod::func_masked_img);
+
+        EXPECT_MAT_EQ(m.clone().setTo(0.f, m != vtx_id), result);
+    }
+}
+
+TEST_F(GraphAttrConstructTest, ApplyVerticesToMap_masked_img_static_method)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    float data[ROWS*COLS] = {1, 1, 2.2,
+                             3, 6, 6,
+                             9, 9.5, 11};
+    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+
+    Mat1b exclude, mask;
+    cv::bitwise_or(m < 2, m == 9, exclude);
+    cv::bitwise_not(exclude, mask);
+
+    GraphAttr to(m, mask);
+
+    ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    VecF vtx_ids = to.VerticesIds();
+
+    VecMat1f results = to.applyVerticesToMap(DummyWithStaticMethod::func_masked_img);
+
+    EXPECT_EQ(vtx_ids.size(), results.size()) << "Expecting exactly 1 item per vertex.";
+
+    for(size_t i=0; i<vtx_ids.size(); i++) {
+
+        float vtx_id = vtx_ids[i];
+        EXPECT_MAT_EQ(m.clone().setTo(0.f, m != vtx_id), results[i]);
+    }
+}
+
 TEST_F(GraphAttrMaskedTest, RemoveEdges_invalid)
 {
     EXPECT_THROW(to_.removeEdges(2.2f, 9.0f), ExceptionKeyError);
