@@ -338,7 +338,7 @@ void GraphAttr::removeVertex(float vtx_id)
 {
     VtxDescriptor u;
 
-    if(!findVertex(vtx_id, u)) {
+    if(!impl->findVertex(vtx_id, u)) {
 
         std::stringstream s;
         s << "No vertex with id (" << vtx_id << ").";
@@ -376,10 +376,10 @@ void GraphAttr::removeVertex(float vtx_id)
         impl->removeEdges(src, dst);
     }
 
-    impl->removeVertex(id_u, u);
+    impl->removeVertex(vtx_id, u);
 
     // let map reflect vertex merge
-    impl->src_map_img.setTo(0.f, impl->src_map_img == id_u);
+    impl->src_map_img.setTo(0.f, impl->src_map_img == vtx_id);
 }
 
 // non member functions
