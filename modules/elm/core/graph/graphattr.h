@@ -104,7 +104,7 @@ public:
      * @return result of method application
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
-    cv::Mat1f applyVertexToMap(float vtx_id, base_GraphVertexOp &vtx_op) const;
+    cv::Mat1f applyVertexOpToMap(float vtx_id, base_GraphVertexOp &vtx_op) const;
 
     /**
      * @brief apply function to source image map masked by vertex for each vertex
@@ -164,18 +164,17 @@ public:
 
     // public members
     std::shared_ptr<GraphAttr_Impl> impl;
-};
 
-/**
- * @brief apply function to image after masking it by color (mask := img == color)
- * @param color
- * @param img
- * @param dst
- */
-void apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
-                  float color,
-                  const cv::Mat1f &img,
-                  cv::Mat1f &dst);
+protected:
+    /**
+     * @brief apply function to image after masking it by color (mask := img == color)
+     * @param[in] color vertex color
+     * @param[out] dst result of applying function on source image masked by vertex color
+     */
+    virtual void apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
+                              float color,
+                              cv::Mat1f &dst) const;
+};
 
 } // namespace elm
 

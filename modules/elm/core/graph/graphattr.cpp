@@ -163,7 +163,7 @@ Mat1f GraphAttr::applyVertexToMap(float vtx_id, Mat1f (*func)(const Mat1f &img, 
     return vtx_result;
 }
 
-Mat1f GraphAttr::applyVertexToMap(float vtx_id, base_GraphVertexOp &vtx_op) const
+Mat1f GraphAttr::applyVertexOpToMap(float vtx_id, base_GraphVertexOp &vtx_op) const
 {
     Mat1f vtx_result;
 
@@ -175,7 +175,7 @@ Mat1f GraphAttr::applyVertexToMap(float vtx_id, base_GraphVertexOp &vtx_op) cons
 
         float vtx_color = vertex_color_id[vtx_descriptor];
         Mat1b _mask = impl->src_map_img == vtx_color;
-        vtx_result = vtx_op(impl->src_map_img, _mask);
+        vtx_op.mutableOpCaller(impl->src_map_img, _mask, vtx_result);
     }
     else {
         std::stringstream s;
@@ -203,9 +203,11 @@ VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat
 
         float vtx_color = vertex_color_id[*vi];
 
-        group.create_thread(boost::bind(&elm::apply_masked,
-                                        func,
-                                        vtx_color, impl->src_map_img, boost::ref(results[i++]))
+        group.create_thread(
+                    boost::bind(&GraphAttr::apply_masked, this,
+                                func,
+                                vtx_color,
+                                boost::ref(results[i++]))
                             );
     }
     group.join_all();
@@ -408,12 +410,11 @@ void GraphAttr::removeVertex(float vtx_id)
 
 // non member functions
 
-void elm::apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
-                       float color,
-                       const Mat1f &img,
-                       Mat1f &dst)
+void GraphAttr::apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
+                             float color,
+                             Mat1f &dst) const
 {
-    Mat1b _mask = img == color;
-    dst = func(img, _mask);
+    Mat1b _mask = (impl->src_map_img == color);
+    dst = func(impl->src_map_img, _mask);
 }
 
