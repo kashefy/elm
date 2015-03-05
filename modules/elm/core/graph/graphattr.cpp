@@ -11,6 +11,7 @@
 
 #include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
+#include "elm/core/graph/base_GraphVertexOp.h"
 #include "elm/core/graph/graphattr_impl.h"
 
 using namespace boost;
@@ -162,6 +163,29 @@ Mat1f GraphAttr::applyVertexToMap(float vtx_id, Mat1f (*func)(const Mat1f &img, 
     return vtx_result;
 }
 
+Mat1f GraphAttr::applyVertexOpToMap(float vtx_id, base_GraphVertexOp &vtx_op) const
+{
+    Mat1f vtx_result;
+
+    VtxDescriptor vtx_descriptor;
+    if(impl->findVertex(vtx_id, vtx_descriptor)) {
+
+        property_map<GraphAttrType, vertex_color_t>::type
+                vertex_color_id = get(vertex_color, impl->g);
+
+        float vtx_color = vertex_color_id[vtx_descriptor];
+        Mat1b _mask = impl->src_map_img == vtx_color;
+        vtx_op.mutableOpCaller(impl->src_map_img, _mask, vtx_result);
+    }
+    else {
+        std::stringstream s;
+        s << "No vertex with id (" << vtx_id << ").";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+    return vtx_result;
+}
+
 VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat1b &mask)) const
 {
     VecMat1f results(num_vertices());
@@ -179,9 +203,11 @@ VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat
 
         float vtx_color = vertex_color_id[*vi];
 
-        group.create_thread(boost::bind(&elm::apply_masked,
-                                        func,
-                                        vtx_color, impl->src_map_img, boost::ref(results[i++]))
+        group.create_thread(
+                    boost::bind(&GraphAttr::apply_masked, this,
+                                func,
+                                vtx_color,
+                                boost::ref(results[i++]))
                             );
     }
     group.join_all();
@@ -382,14 +408,16 @@ void GraphAttr::removeVertex(float vtx_id)
     impl->src_map_img.setTo(0.f, impl->src_map_img == vtx_id);
 }
 
-// non member functions
-
-void elm::apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
-                       float color,
-                       const Mat1f &img,
-                       Mat1f &dst)
+Mat1f GraphAttr::MapImg() const
 {
-    Mat1b _mask = img == color;
-    dst = func(img, _mask);
+    return impl->src_map_img;
+}
+
+void GraphAttr::apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
+                             float color,
+                             Mat1f &dst) const
+{
+    Mat1b _mask = (impl->src_map_img == color);
+    dst = func(impl->src_map_img, _mask);
 }
 

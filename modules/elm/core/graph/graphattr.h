@@ -13,6 +13,7 @@
 namespace elm {
 
 class GraphAttr_Impl;
+class base_GraphVertexOp;
 
 /**
  * @brief class for exposing the public interface of GraphAttr_Impl
@@ -29,7 +30,7 @@ public:
 
     /**
      * @brief Construct and attributed Graph from map representing image
-     * @param map
+     * @param map source map image
      * @param mask for excluding invalid elements
      */
     GraphAttr(const cv::Mat1f &map_img, const cv::Mat1b &mask);
@@ -89,17 +90,25 @@ public:
 
     /**
      * @brief apply function to source image map masked by vertex
-     * @param func point to function to apply on masked image
      * @param vtx_id for mapping source map image
+     * @param func point to function to apply on masked image (can be static method)
      * @return result of function application
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
     cv::Mat1f applyVertexToMap(float vtx_id, cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
     /**
-     * @brief apply function to source image map masked by vertex for each vertex
-     * @param func point to function to apply on masked image
+     * @brief apply method to source image map masked by vertex
      * @param vtx_id for mapping source map image
+     * @param vtx_op reference to object with operator method
+     * @return result of method application
+     * @throws elm::ExceptionKeyError for invalid vertex id
+     */
+    cv::Mat1f applyVertexOpToMap(float vtx_id, base_GraphVertexOp &vtx_op) const;
+
+    /**
+     * @brief apply function to source image map masked by vertex for each vertex
+     * @param func point to function to apply on masked image (can be static method)
      * @return result of function application for each vertex
      */
     VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
@@ -153,20 +162,25 @@ public:
      */
     void removeVertex(float vtx_id);
 
+    /**
+     * @brief Get graph's underlying map img
+     * @return a shared copy of the graph's underlying map image
+     */
+    cv::Mat1f MapImg() const;
+
     // public members
     std::shared_ptr<GraphAttr_Impl> impl;
-};
 
-/**
- * @brief apply function to image after masking it by color (mask := img == color)
- * @param color
- * @param img
- * @param dst
- */
-void apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
-                  float color,
-                  const cv::Mat1f &img,
-                  cv::Mat1f &dst);
+protected:
+    /**
+     * @brief apply function to image after masking it by color (mask := img == color)
+     * @param[in] color vertex color
+     * @param[out] dst result of applying function on source image masked by vertex color
+     */
+    virtual void apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
+                              float color,
+                              cv::Mat1f &dst) const;
+};
 
 } // namespace elm
 
