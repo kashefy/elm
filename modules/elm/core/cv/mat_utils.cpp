@@ -117,6 +117,21 @@ Point3f Mat2Point3_(const Mat1f &m)
     return Point3f(m(0), m(1), m(2));
 }
 
+Mat1i Rect2iToMat(const Rect2i &r)
+{
+    Mat1i m(1, 4);
+    Point2Mat(r.tl()).copyTo(m.colRange(0, 2));
+    Point2Mat(r.br()).copyTo(m.colRange(2, 4));
+    return m;
+}
+
+Rect2i MatToRect2i(const Mat1i &m)
+{
+    ELM_THROW_BAD_DIMS_IF(m.total() < 4, "Mat must have at least 4 elements to convert to Rect");
+
+    return Rect2i(Mat2Point2i(m.colRange(0, 2)), Mat2Point2i(m.colRange(2, 4)));
+}
+
 Mat1b isnan(const Mat1f &src)
 {
     if(src.empty()) {
