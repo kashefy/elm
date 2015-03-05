@@ -89,7 +89,7 @@ cv::Mat1i Rect2iToMat(const cv::Rect2i &r);
 
 /**
  * @brief Convert row Matrix of ints to Rect object
- * @param Row matrix with rectangle data [tl.x, tl.y, br.x, br.y]
+ * @param Row matrix with rectangle data (top-left and bottom right coordinates, order is irrelevant]
  * @return Rectangle
  * @throws elm::ExceptionBadDims on input Mat with less than 4 elements
  */

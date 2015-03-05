@@ -129,7 +129,7 @@ Rect2i MatToRect2i(const Mat1i &m)
 {
     ELM_THROW_BAD_DIMS_IF(m.total() < 4, "Mat must have at least 4 elements to convert to Rect");
 
-    return Rect2i(Mat2Point2i(m.colRange(0, 2)), Mat2Point2i(m.colRange(2, 4)));
+    return Rect2i(Point2i(m(0), m(1)), Point2i(m(2), m(3)));
 }
 
 Mat1b isnan(const Mat1f &src)
