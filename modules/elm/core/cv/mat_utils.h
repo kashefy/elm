@@ -81,6 +81,21 @@ template <typename T>
 cv::Point3_<T> Mat2Point3_(const cv::Mat_<T> &m);
 
 /**
+ * @brief Convert Rect of ints to a row Matrix of ints
+ * @param r Rectangle
+ * @return Row matrix with rectangle data [tl.x, tl.y, br.x, br.y]
+ */
+cv::Mat1i Rect2iToMat(const cv::Rect2i &r);
+
+/**
+ * @brief Convert row Matrix of ints to Rect object
+ * @param Row matrix with rectangle data [tl.x, tl.y, br.x, br.y]
+ * @return Rectangle
+ * @throws elm::ExceptionBadDims on input Mat with less than 4 elements
+ */
+cv::Rect2i MatToRect2i(const cv::Mat1i &m);
+
+/**
  * @brief get mask of nan elements in a matrix
  *
  * NaN as defined by IEEE754 standard

@@ -504,6 +504,102 @@ TEST(Mat2PointTest, Invalid)
     EXPECT_THROW(Mat2Point3_(Mat1i(1, 2)),    ExceptionBadDims);
 }
 
+TEST(MatToRect2iTest, Invalid)
+{
+    EXPECT_THROW(MatToRect2i(Mat1i()),        ExceptionBadDims);
+    EXPECT_THROW(MatToRect2i(Mat1i(0, 0)),    ExceptionBadDims);
+    EXPECT_THROW(MatToRect2i(Mat1i(1, 0)),    ExceptionBadDims);
+    EXPECT_THROW(MatToRect2i(Mat1i(0, 1)),    ExceptionBadDims);
+    EXPECT_THROW(MatToRect2i(Mat1i(1, 1)),    ExceptionBadDims);
+    EXPECT_THROW(MatToRect2i(Mat1i(3, 1)),    ExceptionBadDims);
+    EXPECT_THROW(MatToRect2i(Mat1i(1, 3)),    ExceptionBadDims);
+}
+
+TEST(MatToRect2iTest, MatToRect2i)
+{
+    Mat1i m(1, 4);
+    m(0) = 0;
+    m(1) = 1;
+    m(2) = 2;
+    m(3) = 3;
+
+    Rect2i r = MatToRect2i(m);
+    EXPECT_EQ(0, r.tl().x);
+    EXPECT_EQ(1, r.tl().y);
+    EXPECT_EQ(2, r.br().x);
+    EXPECT_EQ(3, r.br().y);
+
+    r = MatToRect2i(m.t());
+    EXPECT_EQ(0, r.tl().x);
+    EXPECT_EQ(1, r.tl().y);
+    EXPECT_EQ(2, r.br().x);
+    EXPECT_EQ(3, r.br().y);
+
+    r = MatToRect2i(m.reshape(1, 2));
+    EXPECT_EQ(0, r.tl().x);
+    EXPECT_EQ(1, r.tl().y);
+    EXPECT_EQ(2, r.br().x);
+    EXPECT_EQ(3, r.br().y);
+}
+
+TEST(MatToRect2iTest, MatToRect2i_redundant_elems)
+{
+    Mat1i m(1, 6);
+    m(0) = -2;
+    m(1) = -1;
+    m(2) = 0;
+    m(3) = -3;
+    m(4) = 100;
+    m(5) = 200;
+
+    Rect2i r = MatToRect2i(m);
+    EXPECT_EQ(-2, r.tl().x);
+    EXPECT_EQ(-1, r.tl().y);
+    EXPECT_EQ(0, r.br().x);
+    EXPECT_EQ(-3, r.br().y);
+
+    r = MatToRect2i(m.t());
+    EXPECT_EQ(-2, r.tl().x);
+    EXPECT_EQ(-1, r.tl().y);
+    EXPECT_EQ(0, r.br().x);
+    EXPECT_EQ(-3, r.br().y);
+}
+
+TEST(MatToRect2iTest, MatToRect2i_across_axis)
+{
+    Mat1i m(1, 4);
+    m(0) = -10;
+    m(1) = 5;
+    m(2) = 2;
+    m(3) = -5;
+
+    Rect2i r = MatToRect2i(m);
+    EXPECT_EQ(-10, r.tl().x);
+    EXPECT_EQ(5, r.tl().y);
+    EXPECT_EQ(2, r.br().x);
+    EXPECT_EQ(-5, r.br().y);
+
+    r = MatToRect2i(m.t());
+    EXPECT_EQ(-10, r.tl().x);
+    EXPECT_EQ(5, r.tl().y);
+    EXPECT_EQ(2, r.br().x);
+    EXPECT_EQ(-5, r.br().y);
+}
+
+TEST(MatToRect2iTest, Rect2iToMat)
+{
+    Rect2i r(-10, 5, 12, -10);
+
+    Mat1i m = Rect2iToMat(r);
+
+    EXPECT_MAT_DIMS_EQ(m, Size2i(4, 1)) << "Expecting a row matrix with 4 elements.";
+
+    EXPECT_FLOAT_EQ(-10, m(0));
+    EXPECT_FLOAT_EQ(5, m(1));
+    EXPECT_FLOAT_EQ(2, m(2));
+    EXPECT_FLOAT_EQ(-5, m(3));
+}
+
 class Mat1fNaNTest : public ::testing::Test
 {
 protected:
