@@ -2,7 +2,7 @@
 #define _ELM_CORE_GRAPH_BASE_GRAPHVERTEXOP_H_
 
 #include <boost/thread/mutex.hpp>
-#include <opencv2/core/core.hpp>
+
 #include "elm/core/typedefs_fwd.h"
 
 namespace elm {
