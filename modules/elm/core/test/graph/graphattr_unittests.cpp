@@ -1243,7 +1243,7 @@ TEST_F(GraphAttrMaskedTest, Remove_vertex_invalid)
  */
 TEST_F(GraphAttrMaskedTest, Remove_vertex)
 {
-    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 2 vertices.";
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 1 vertex.";
 
     while(static_cast<int>(to_.num_vertices()) > 1) {
 
@@ -1262,7 +1262,7 @@ TEST_F(GraphAttrMaskedTest, Remove_vertex)
 
 TEST_F(GraphAttrMaskedTest, Remove_vertex_all_vertices)
 {
-    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 2 vertices.";
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 1 vertex.";
 
     while(static_cast<int>(to_.num_vertices()) > 1) {
 
@@ -1279,7 +1279,7 @@ TEST_F(GraphAttrMaskedTest, Remove_vertex_all_vertices)
 
 TEST_F(GraphAttrMaskedTest, Remove_vertex_check_vtx_ids)
 {
-    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 2 vertices.";
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 1 vertex.";
 
     while(static_cast<int>(to_.num_vertices()) > 0) {
 
@@ -1303,7 +1303,7 @@ cv::Mat1f mask_vertex(const cv::Mat1f& img, const cv::Mat1b &mask)
 
 TEST_F(GraphAttrMaskedTest, Remove_vertex_check_map)
 {
-    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 2 vertices.";
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 1 vertex.";
 
     Mat1f map;
 
@@ -1332,6 +1332,48 @@ TEST_F(GraphAttrMaskedTest, Remove_vertex_check_map)
         EXPECT_EQ(0, countNonZero(map==v)) << "still finding pixel with vertex color after removal.";
 
     }
+}
+
+TEST_F(GraphAttrMaskedTest, GetMapImg)
+{
+    EXPECT_MAT_EQ(map_, to_.MapImg());
+}
+
+TEST_F(GraphAttrMaskedTest, GetMapImg_vertex_removed)
+{
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 2) << "this test requires a graph with at least 2 vertices.";
+
+    VecF vtx_ids = to_.VerticesIds();
+    float u = vtx_ids[0];
+    float v = vtx_ids[1];
+
+    EXPECT_GT(countNonZero(to_.MapImg()==u), 0);
+    EXPECT_GT(countNonZero(to_.MapImg()==v), 0);
+
+    to_.removeVertex(v);
+
+    EXPECT_GT(countNonZero(to_.MapImg()==u), 0);
+    EXPECT_EQ(0, countNonZero(to_.MapImg()==v));
+}
+
+TEST_F(GraphAttrMaskedTest, GetMapImg_vertex_removed_mask)
+{
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 2) << "this test requires a graph with at least 2 vertices.";
+
+    VecF vtx_ids = to_.VerticesIds();
+    float u = vtx_ids[0];
+    float v = vtx_ids[1];
+
+    Mat1b mask_u = to_.MapImg()==u;
+    Mat1b mask_v = to_.MapImg()==v;
+
+    ASSERT_FALSE(Equal(mask_u, mask_v));
+
+    to_.removeVertex(v);
+
+    EXPECT_MAT_EQ(mask_u, to_.MapImg()==u);
+    EXPECT_EQ(0, countNonZero(to_.MapImg()==v));
+    EXPECT_FALSE(Equal(to_.MapImg()==v, mask_v));
 }
 
 } // annonymous namespace for test cases and fixtures

@@ -30,7 +30,7 @@ public:
 
     /**
      * @brief Construct and attributed Graph from map representing image
-     * @param map
+     * @param map source map image
      * @param mask for excluding invalid elements
      */
     GraphAttr(const cv::Mat1f &map_img, const cv::Mat1b &mask);
@@ -161,6 +161,12 @@ public:
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
     void removeVertex(float vtx_id);
+
+    /**
+     * @brief Get graph's underlying map img
+     * @return a shared copy of the graph's underlying map image
+     */
+    cv::Mat1f MapImg() const;
 
     // public members
     std::shared_ptr<GraphAttr_Impl> impl;
