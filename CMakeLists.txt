@@ -153,10 +153,10 @@ if(BUILD_TESTS)
 
     include(cmake/BuildTests.cmake)
     status("    Configure unittest project")
-    build_tests("run_unittests" "*unittest*")
+    build_tests("run_${ROOT_PROJECT}_unittests" "*unittest*")
 
     status("    Configure integrationtest project")
-    build_tests("run_integrationtests" "*integ*test*")
+    build_tests("run_${ROOT_PROJECT}_integrationtests" "*integ*test*")
 
     add_definitions(-D__WITH_GTEST) # Useful in case test class needs to be friend of class under test
 
