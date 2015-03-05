@@ -408,8 +408,6 @@ void GraphAttr::removeVertex(float vtx_id)
     impl->src_map_img.setTo(0.f, impl->src_map_img == vtx_id);
 }
 
-// non member functions
-
 void GraphAttr::apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
                              float color,
                              Mat1f &dst) const
