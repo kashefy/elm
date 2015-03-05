@@ -586,6 +586,20 @@ TEST(MatToRect2iTest, MatToRect2i_across_axis)
     EXPECT_EQ(-5, r.br().y);
 }
 
+TEST(MatToRect2iTest, Rect2iToMat)
+{
+    Rect2i r(-10, 5, 12, -10);
+
+    Mat1i m = Rect2iToMat(r);
+
+    EXPECT_MAT_DIMS_EQ(m, Size2i(4, 1)) << "Expecting a row matrix with 4 elements.";
+
+    EXPECT_FLOAT_EQ(-10, m(0));
+    EXPECT_FLOAT_EQ(5, m(1));
+    EXPECT_FLOAT_EQ(2, m(2));
+    EXPECT_FLOAT_EQ(-5, m(3));
+}
+
 class Mat1fNaNTest : public ::testing::Test
 {
 protected:
