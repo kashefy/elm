@@ -33,4 +33,4 @@ before_script:
 script:
   - make -j2
   - cd ./bin
-  - ./run_unittests
+  - ./run_elm_unittests
