@@ -24,12 +24,12 @@ namespace elm
 /**
  * @brief Print a ptree to standard out in xml format
  * @param[in] property tree to print
- * @param[out] output stream, cout by default
+ * @param[out] output stream, (e.g std::cout)
  */
 void PrintXML(const PTree &pt,
               std::basic_ostream<
               typename PTree::key_type::value_type
-              > &stream=std::cout);
+              > &stream);
 
 /**
  * @brief push back elements from property_tree into a vector
