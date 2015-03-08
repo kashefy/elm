@@ -19,6 +19,12 @@
 
 namespace elm {
 
+namespace detail {
+
+const std::string BASE_FILTERBANK_LAYER__KEY_OUTPUT_RESPONSE = "m";   ///< define string here to ensure early initialization for test purposes
+
+}
+
 /**
  * @brief base class for filter banks
  *  The interface should aid in iterating through response
