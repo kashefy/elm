@@ -42,9 +42,12 @@ public:
      */
     void assign(cv::Mat_<TElem > &m)
     {
-        backwards();
-        forwards(m);
-        clear();
+        if(!m.empty()) {
+
+            backwards();
+            forwards(m);
+            clear();
+        }
     }
 
 protected:
