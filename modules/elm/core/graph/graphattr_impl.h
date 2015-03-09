@@ -50,16 +50,49 @@ struct GraphAttr_Impl
      */
     GraphAttr_Impl(const cv::Mat1f &map_img, const cv::Mat1b &mask);
 
+    /**
+     * @brief find Vertex and get its descriptor
+     * @param[in] vtx_id id of vertex to find
+     * @param[out] vtx_descriptor vertex descriptor
+     * @return true on found
+     */
     bool findVertex(float vtx_id, VtxDescriptor &vtx_descriptor) const;
 
+    /**
+     * @brief remove edges between two vertices while obtaining their descriptors
+     * @param[in] vtx_u id for first vertex
+     * @param[in] vtx_v id for second vertex
+     * @param[out] u descriptor for first vertex
+     * @param[out] v descriptor for second vertex
+     */
     void removeEdges(float vtx_u, float vtx_v, VtxDescriptor &u, VtxDescriptor &v);
 
+    /**
+     * @brief remove edges between two vertices
+     * @param u first vertex
+     * @param v second vertex
+     */
     void removeEdges(const VtxDescriptor &u, const VtxDescriptor &v);
 
+    /**
+     * @brief remove Vertex
+     * @param vtx_id vertex id to remove
+     * @param vtx descriptor of vertex to remove
+     */
     void removeVertex(float vtx_id, const VtxDescriptor &vtx);
 
+    /**
+     * @brief Keep track of Vertex substitutions
+     * Substitutions used for updating map image
+     * @param src source vertex
+     * @param dst destination vertex (vertex' new id)
+     */
     void recordVertexSubstitution(float src, float dst);
 
+    /**
+     * @brief Get graph's underlying map image
+     * @return map image
+     */
     cv::Mat1f MapImg();
 
     // public members
@@ -67,8 +100,8 @@ struct GraphAttr_Impl
 
 protected:
     // typedefs
-    typedef std::map<float, VtxDescriptor > MapVtxDescriptor;
-    typedef std::pair<float, float> VtxSubstitution;
+    typedef std::map<float, VtxDescriptor > MapVtxDescriptor;   ///< typedef for Map from vertex id to its descriptors
+    typedef std::pair<float, float> VtxSubstitution;            ///< typedef for vector of recorded vertex substitutions
 
     /**
      * @brief retrieves vertex_descriptor of an existing or new vertex
@@ -83,9 +116,9 @@ protected:
     void updateMapImg();
 
     // members
-    cv::Mat1f src_map_img_;  ///< source map image for this graph
+    cv::Mat1f src_map_img_;         ///< source map image for this graph
 
-    MapVtxDescriptor vtx_cache_;   ///< cache vertex descriptors
+    MapVtxDescriptor vtx_cache_;    ///< cache vertex descriptors
 
     std::vector<VtxSubstitution > vertex_subs_; ///< record vertex substitutions
 };
