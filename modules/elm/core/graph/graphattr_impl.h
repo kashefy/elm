@@ -33,13 +33,13 @@ typedef GraphAttrTraits::vertex_descriptor VtxDescriptor;
 /**
  * @brief full GraphAttr implementation class
  * Enforces a list of unique vertices accroding to their main property
+ * @todo split map image from this class
  */
 struct GraphAttr_Impl
 {
     static const float ID_UNASSIGNED;    ///< reserved for map element not assigned to a vertex
 
-    /**
-     * @brief Default constructor
+    /** @brief Default constructor
      */
     GraphAttr_Impl();
 
