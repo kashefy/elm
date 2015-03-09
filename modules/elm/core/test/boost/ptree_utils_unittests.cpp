@@ -43,7 +43,7 @@ protected:
 
 TEST_F(PTreeUtilsPrintTest, DISABLED_PrintXML_Display) {
 
-    PrintXML(pt_);
+    PrintXML(pt_, std::cout);
 }
 
 TEST_F(PTreeUtilsPrintTest, PrintXML) {

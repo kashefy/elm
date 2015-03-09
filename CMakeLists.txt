@@ -19,6 +19,7 @@ set(${ROOT_PROJECT}_MODULES "")
 set(BUILD_TESTS ON CACHE BOOL "Whether to build test projects.")
 set(FORCE_IN_SOURCE OFF CACHE BOOL "Whether to force allow in-source builds.")
 
+include(cmake/CompilerUtils.cmake)
 include(cmake/FileSystemUtils.cmake)
 include(cmake/ListUtils.cmake)
 include(cmake/MessageUtils.cmake)
@@ -35,11 +36,15 @@ set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" STREQUAL "2.8")
     if(${CMAKE_PATCH_VERSION} LESS 9)
         if(LINUX)
-            set(CMAKE_CXX_FLAGS ${CMAKE_CSS_FLAGS} "-fPIC")
+            set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fPIC")
         endif(LINUX)
     endif(${CMAKE_PATCH_VERSION} LESS 9)
 endif()
+
 set(CMAKE_VERBOSE ON CACHE BOOL "Verbose mode")
+
+# Profiling - appliable to BUILD_TYPE=Profile
+SETUP_PROFILING()
 
 # Setup build and install locations
 if(NOT RUNTIME_INSTALL_DIRECTORY)
@@ -202,7 +207,14 @@ install(FILES ${CMAKE_BINARY_DIR}/${ROOT_PROJECT_CONFIG} DESTINATION share/${ROO
 
 status("")
 
-status("Build:")
+status("Build settings:")
+status("")
+status("    Build type:\t${CMAKE_BUILD_TYPE}")
+status("    C Flags:\t${CMAKE_C_FLAGS}")
+status("    C++ Flags:\t${CMAKE_CXX_FLAGS}")
+
+status("")
+status("Targets:")
 set(MODULE_NAMES ${${ROOT_PROJECT}_MODULES})
 strip_lib_prefix(MODULE_NAMES ${MODULE_NAMES})
 status("    modules:  "      ${MODULE_NAMES})

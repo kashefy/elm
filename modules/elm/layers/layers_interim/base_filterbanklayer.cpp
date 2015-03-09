@@ -14,8 +14,11 @@
 #include "elm/core/layeroutputnames.h"
 #include "elm/core/signal.h"
 
+using std::string;
 using namespace cv;
 using namespace elm;
+
+const string base_FilterBankLayer::KEY_OUTPUT_RESPONSE = detail::BASE_FILTERBANK_LAYER__KEY_OUTPUT_RESPONSE;
 
 base_FilterBankLayer::~base_FilterBankLayer()
 {
