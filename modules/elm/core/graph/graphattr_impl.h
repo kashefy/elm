@@ -16,6 +16,8 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "elm/core/cv/deferredassign_.h"
+
 namespace elm {
 
 typedef boost::property<boost::edge_weight_t, float> EdgeWeightProp;
@@ -101,7 +103,6 @@ struct GraphAttr_Impl
 protected:
     // typedefs
     typedef std::map<float, VtxDescriptor > MapVtxDescriptor;   ///< typedef for Map from vertex id to its descriptors
-    typedef std::pair<float, float> VtxSubstitution;            ///< typedef for vector of recorded vertex substitutions
 
     /**
      * @brief retrieves vertex_descriptor of an existing or new vertex
@@ -120,7 +121,7 @@ protected:
 
     MapVtxDescriptor vtx_cache_;    ///< cache vertex descriptors
 
-    std::vector<VtxSubstitution > vertex_subs_; ///< record vertex substitutions
+    elm::DeferredAssign_<float> vertex_subs_; ///< keep track of vertex substitutions
 };
 
 } // namespace elm

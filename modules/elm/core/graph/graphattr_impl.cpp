@@ -177,7 +177,7 @@ void GraphAttr_Impl::removeVertex(float vtx_id, const VtxDescriptor &vtx)
 
 void GraphAttr_Impl::recordVertexSubstitution(float src, float dst)
 {
-    vertex_subs_.push_back(std::make_pair(src, dst));
+    vertex_subs_.push_back(src, dst);
 }
 
 Mat1f GraphAttr_Impl::MapImg()
@@ -190,65 +190,5 @@ void GraphAttr_Impl::updateMapImg()
 {
     // update map image with any recorded vertex substitutions
     // vertex substitutions could have come from contractEdges()
-
-    const int nb_subs = static_cast<int>(vertex_subs_.size());
-
-    // traverse backwards in substitution list
-    // to short-circuit intermediate substitutions
-    for(int i=nb_subs-1; i>=0; i--) {
-
-        float src_i, dst_i;
-        boost::tie(src_i, dst_i) = vertex_subs_[i];
-
-        if(src_i != dst_i) {
-
-            for(int j=i-1; j>=0; j--) {
-
-                float src_j, dst_j;
-                boost::tie(src_j, dst_j) = vertex_subs_[j];
-
-                if(src_i == dst_j) {
-
-                    vertex_subs_[j].second = dst_i;
-                }
-            }
-        }
-    }
-
-    // forward traversal by OR-ing masks with common destination value
-    for(size_t i=0; i<vertex_subs_.size(); i++) {
-
-        float src_i, dst_i;
-        boost::tie(src_i, dst_i) = vertex_subs_[i];
-
-        if(src_i != dst_i) {
-
-            Mat mask = src_map_img_ == src_i;
-
-            for(size_t j=i+1; j<vertex_subs_.size(); j++) {
-
-                float src_j, dst_j;
-                boost::tie(src_j, dst_j) = vertex_subs_[j];
-
-                if(dst_j == dst_i) {
-
-                    Mat mask_j = src_map_img_ == src_j;
-
-                    if(countNonZero(mask_j) > 0) {
-
-                        cv::bitwise_or(mask, mask_j, mask, mask_j);
-                    }
-
-                    vertex_subs_[j].second = src_j;
-                }
-            }
-
-            if(countNonZero(mask) > 0) {
-
-                src_map_img_.setTo(dst_i, mask); // overwrite values with OR'ed mask
-            }
-        }
-    }
-
-    vertex_subs_.clear();
+    vertex_subs_.assign(src_map_img_);
 }
