@@ -8,6 +8,8 @@
 #ifndef _ELM_CORE_GRAPH_GRAPHATTR_IMPL_H_
 #define _ELM_CORE_GRAPH_GRAPHATTR_IMPL_H_
 
+#include <unordered_map>
+
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 //#include <boost/graph/undirected_graph.hpp>
@@ -102,7 +104,7 @@ struct GraphAttr_Impl
 
 protected:
     // typedefs
-    typedef std::map<float, VtxDescriptor > MapVtxDescriptor;   ///< typedef for Map from vertex id to its descriptors
+    typedef std::unordered_map<float, VtxDescriptor > MapVtxDescriptor;   ///< typedef for Map from vertex id to its descriptors
 
     /**
      * @brief retrieves vertex_descriptor of an existing or new vertex
