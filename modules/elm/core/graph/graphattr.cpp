@@ -408,7 +408,7 @@ void GraphAttr::removeVertex(float vtx_id)
     impl->removeVertex(vtx_id, u);
 
     // let map reflect vertex merge
-    impl->recordVertexSubstitution(vtx_id, 0.f);
+    impl->recordVertexSubstitution(vtx_id, impl->ID_UNASSIGNED);
 }
 
 Mat1f GraphAttr::MapImg() const

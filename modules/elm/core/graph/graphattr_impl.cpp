@@ -17,6 +17,8 @@ using namespace std;
 using namespace cv;
 using namespace elm;
 
+const float GraphAttr_Impl::ID_UNASSIGNED = 0.f;
+
 GraphAttr_Impl::GraphAttr_Impl()
 {
 }

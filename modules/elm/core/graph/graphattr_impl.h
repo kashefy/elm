@@ -36,6 +36,8 @@ typedef GraphAttrTraits::vertex_descriptor VtxDescriptor;
  */
 struct GraphAttr_Impl
 {
+    static const float ID_UNASSIGNED;    ///< reserved for map element not assigned to a vertex
+
     /**
      * @brief Default constructor
      */
