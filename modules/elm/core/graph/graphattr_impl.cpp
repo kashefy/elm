@@ -23,7 +23,7 @@ GraphAttr_Impl::GraphAttr_Impl()
 
 GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
                                const Mat1b &mask)
-    : src_map_img(map_img)
+    : src_map_img_(map_img)
 {
     // some validation first
     ELM_THROW_BAD_DIMS_IF(map_img.total()==static_cast<size_t>(1),
@@ -171,4 +171,32 @@ void GraphAttr_Impl::removeVertex(float vtx_id, const VtxDescriptor &vtx)
 
         vtx_cache_[vertex_color_id[*v]] = *v;
     }
+}
+
+void GraphAttr_Impl::recordVertexSubstitution(float src, float dst)
+{
+    vertex_subs_.push_back(std::make_pair(src, dst));
+}
+
+Mat1f GraphAttr_Impl::MapImg()
+{
+    // before returning map, update it with any recorded vertex substitutions
+    // (vertex substitutions could have come from contractEdges)
+    typedef std::vector<VtxSubstitution>::reverse_iterator RevIterType;
+    for(RevIterType itr = vertex_subs_.rbegin();
+        itr != vertex_subs_.rend();
+        ++itr) {
+
+        float src, dst;
+        boost::tie(src, dst) = *itr;
+
+        Mat mask = src_map_img_ == src;
+        if(countNonZero(mask) > 0) {
+
+            src_map_img_.setTo(dst, mask);
+        }
+    }
+    vertex_subs_.clear();
+
+    return src_map_img_;
 }

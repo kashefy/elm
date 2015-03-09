@@ -56,14 +56,17 @@ struct GraphAttr_Impl
 
     void removeVertex(float vtx_id, const VtxDescriptor &vtx);
 
+    void recordVertexSubstitution(float src, float dst);
+
+    cv::Mat1f MapImg();
+
     // public members
     GraphAttrType g;    ///< underlying graph object
-
-    cv::Mat1f src_map_img;  ///< source map image for this graph
 
 protected:
     // typedefs
     typedef std::map<float, VtxDescriptor > MapVtxDescriptor;
+    typedef std::pair<float, float> VtxSubstitution;
 
     /**
      * @brief retrieves vertex_descriptor of an existing or new vertex
@@ -72,7 +75,12 @@ protected:
      */
     VtxDescriptor retrieveVertex(float vtx_id);
 
+    // members
+    cv::Mat1f src_map_img_;  ///< source map image for this graph
+
     MapVtxDescriptor vtx_cache_;   ///< cache vertex descriptors
+
+    std::vector<VtxSubstitution > vertex_subs_; ///< record vertex substitutions
 };
 
 } // namespace elm
