@@ -232,7 +232,13 @@ void GraphAttr_Impl::updateMapImg()
 
                 if(dst_j == dst_i) {
 
-                    cv::bitwise_or(mask, src_map_img_ == src_j, mask);
+                    Mat mask_j = src_map_img_ == src_j;
+
+                    if(countNonZero(mask_j) > 0) {
+
+                        cv::bitwise_or(mask, mask_j, mask, mask_j);
+                    }
+
                     vertex_subs_[j].second = src_j;
                 }
             }
