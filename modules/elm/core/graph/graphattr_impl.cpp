@@ -182,23 +182,67 @@ void GraphAttr_Impl::recordVertexSubstitution(float src, float dst)
 
 Mat1f GraphAttr_Impl::MapImg()
 {
-    // before returning map, update it with any recorded vertex substitutions
-    // (vertex substitutions could have come from contractEdges)
-    typedef std::vector<VtxSubstitution>::reverse_iterator RevIterType;
-    for(RevIterType itr = vertex_subs_.rbegin();
-        itr != vertex_subs_.rend();
-        ++itr) {
+    updateMapImg();
+    return src_map_img_;
+}
 
-        float src, dst;
-        boost::tie(src, dst) = *itr;
+void GraphAttr_Impl::updateMapImg()
+{
+    // update map image with any recorded vertex substitutions
+    // vertex substitutions could have come from contractEdges()
 
-        Mat mask = src_map_img_ == src;
-        if(countNonZero(mask) > 0) {
+    const int nb_subs = static_cast<int>(vertex_subs_.size());
 
-            src_map_img_.setTo(dst, mask);
+    // traverse backwards in substitution list
+    // to short-circuit intermediate substitutions
+    for(int i=nb_subs-1; i>=0; i--) {
+
+        float src_i, dst_i;
+        boost::tie(src_i, dst_i) = vertex_subs_[i];
+
+        if(src_i != dst_i) {
+
+            for(int j=i-1; j>=0; j--) {
+
+                float src_j, dst_j;
+                boost::tie(src_j, dst_j) = vertex_subs_[j];
+
+                if(src_i == dst_j) {
+
+                    vertex_subs_[j].second = dst_i;
+                }
+            }
         }
     }
-    vertex_subs_.clear();
 
-    return src_map_img_;
+    // forward traversal by OR-ing masks with common destination value
+    for(size_t i=0; i<vertex_subs_.size(); i++) {
+
+        float src_i, dst_i;
+        boost::tie(src_i, dst_i) = vertex_subs_[i];
+
+        if(src_i != dst_i) {
+
+            Mat mask = src_map_img_ == src_i;
+
+            for(size_t j=i+1; j<vertex_subs_.size(); j++) {
+
+                float src_j, dst_j;
+                boost::tie(src_j, dst_j) = vertex_subs_[j];
+
+                if(dst_j == dst_i) {
+
+                    cv::bitwise_or(mask, src_map_img_ == src_j, mask);
+                    vertex_subs_[j].second = src_j;
+                }
+            }
+
+            if(countNonZero(mask) > 0) {
+
+                src_map_img_.setTo(dst_i, mask); // overwrite values with OR'ed mask
+            }
+        }
+    }
+
+    vertex_subs_.clear();
 }

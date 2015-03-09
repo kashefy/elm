@@ -77,6 +77,11 @@ protected:
      */
     VtxDescriptor retrieveVertex(float vtx_id);
 
+    /**
+     * @brief update map image to reflect any recent vertex substitutions
+     */
+    void updateMapImg();
+
     // members
     cv::Mat1f src_map_img_;  ///< source map image for this graph
 
