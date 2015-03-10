@@ -21,6 +21,7 @@ public:
     }
 
 protected:
+
     /**
      * @brief forward traversal by OR-ing masks with common destination value
      */
@@ -31,7 +32,7 @@ protected:
         const int nb_subs = static_cast<int>(this->subs_.size());
         for(int i=0; i<nb_subs; i++) {
 
-            float src, dst;
+            TElem src, dst;
             boost::tie(src, dst) = this->subs_[i];
             subs_map[dst].insert(src);
         }
