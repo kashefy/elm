@@ -41,6 +41,8 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
 
     EdgeWeightProp EDGE_CONNECTED = 1.f;
 
+    lut_.Capacity(map_img.total());
+
     for(int r=0; r<map_img.rows; r++) {
 
         for(int c=0; c<map_img.cols; c++) {
@@ -103,6 +105,7 @@ VtxDescriptor GraphAttr_Impl::retrieveVertex(float vtx_id)
 
         // cache new descriptor
         vtx_cache_[vtx_id] = descriptor;
+        lut_.insert(vtx_id);
     }
 
     return descriptor;
@@ -178,6 +181,7 @@ void GraphAttr_Impl::removeVertex(float vtx_id, const VtxDescriptor &vtx)
 void GraphAttr_Impl::recordVertexSubstitution(float src, float dst)
 {
     vertex_subs_.push_back(src, dst);
+    lut_.update(src, dst);
 }
 
 Mat1f GraphAttr_Impl::MapImg()
@@ -190,5 +194,8 @@ void GraphAttr_Impl::updateMapImg()
 {
     // update map image with any recorded vertex substitutions
     // vertex substitutions could have come from contractEdges()
-    vertex_subs_.assign(src_map_img_);
+    //vertex_subs_.assign(src_map_img_);
+    Mat1i x = src_map_img_;
+    lut_.apply(x);
+    src_map_img_ = x;
 }

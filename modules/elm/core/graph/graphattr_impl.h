@@ -19,6 +19,7 @@
 #include <opencv2/core/core.hpp>
 
 #include "elm/core/cv/deferredassign_.h"
+#include "elm/core/cv/lut.h"
 
 namespace elm {
 
@@ -124,6 +125,8 @@ protected:
     MapVtxDescriptor vtx_cache_;    ///< cache vertex descriptors
 
     elm::DeferredAssign_<float> vertex_subs_; ///< keep track of vertex substitutions
+
+    elm::LUT lut_;
 };
 
 } // namespace elm

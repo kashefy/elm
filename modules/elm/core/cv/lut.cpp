@@ -20,11 +20,13 @@ LUT::LUT(int capacity)
       count_(0),
       max_entry_(0)
 {
+    table_[0] = 0;
 }
 
 void LUT::Capacity(int n)
 {
     table_ = std::vector<int>(n+1);
+    table_[0] = 0;
 }
 
 void LUT::insert(int lut_entry)
