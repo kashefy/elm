@@ -27,7 +27,7 @@ public:
      * @param src current value
      * @param dst desired value
      */
-    virtual void push_back(TElem src, TElem dst)
+    virtual void push_back(const TElem &src, const TElem &dst)
     {
         subs_.push_back(std::make_pair(src, dst));
     }
