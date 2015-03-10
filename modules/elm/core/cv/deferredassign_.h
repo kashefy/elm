@@ -1,6 +1,9 @@
 #ifndef _ELM_CORE_CV_DEFERREDASSIGN__H_
 #define _ELM_CORE_CV_DEFERREDASSIGN__H_
 
+#include <unordered_map>
+#include <unordered_set>
+
 #include <boost/tuple/tuple.hpp>
 
 #include <opencv2/core/core.hpp>
@@ -23,7 +26,7 @@ public:
      * @param src current value
      * @param dst desired value
      */
-    void push_back(TElem src, TElem dst)
+    virtual void push_back(TElem src, TElem dst)
     {
         subs_.push_back(std::make_pair(src, dst));
     }
@@ -31,7 +34,7 @@ public:
     /**
      * @brief clear substitution records
      */
-    void clear()
+    virtual void clear()
     {
         subs_.clear();
     }
@@ -57,9 +60,10 @@ protected:
      * @brief traverse backwards in substitution list
      * to short-circuit intermediate substitutions
      */
-    void backwards()
+    virtual void backwards()
     {
         const int nb_subs = static_cast<int>(subs_.size());
+
 
         for(int i=nb_subs-1; i>=0; i--) {
 
@@ -85,7 +89,7 @@ protected:
     /**
      * @brief forward traversal by OR-ing masks with common destination value
      */
-    void forwards(cv::Mat_<TElem > &m)
+    virtual void forwards(cv::Mat_<TElem > &m)
     {
         for(size_t i=0; i<subs_.size(); i++) {
 
@@ -103,14 +107,14 @@ protected:
 
                     if(dst_j == dst_i) {
 
-                        cv::Mat mask_j = m == src_j;
+                        if(src_i != src_j) {
 
-                        if(countNonZero(mask_j) > 0) {
+                            cv::Mat mask_j = m == src_j;
 
                             cv::bitwise_or(mask, mask_j, mask, mask_j);
                         }
 
-                        subs_[j].second = src_j;
+                        subs_[j].second = src_i;
                     }
                 }
 
