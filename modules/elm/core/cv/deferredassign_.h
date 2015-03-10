@@ -1,9 +1,6 @@
 #ifndef _ELM_CORE_CV_DEFERREDASSIGN__H_
 #define _ELM_CORE_CV_DEFERREDASSIGN__H_
 
-#include <unordered_map>
-#include <unordered_set>
-
 #include <boost/tuple/tuple.hpp>
 
 #include <opencv2/core/core.hpp>
