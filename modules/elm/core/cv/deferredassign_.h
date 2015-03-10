@@ -14,6 +14,10 @@ template<class TElem>
 class DeferredAssign_
 {
 public:
+    virtual ~DeferredAssign_()
+    {
+    }
+
     DeferredAssign_()
     {
     }
