@@ -64,7 +64,8 @@ protected:
     // members
     std::vector<VtxDescriptor > descriptors_;   ///< cache vertex descriptors
     std::vector<VtxColor > ids_;                ///< cached vertex ids/colors
-    int lim_;
+    int lim_;                                   ///< limit of meaningful entries in cache
+    int capacity_;                              ///< cache capacity
 };
 
 } // namespace elm

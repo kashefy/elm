@@ -11,7 +11,8 @@ VertexCache::~VertexCache()
 }
 
 VertexCache::VertexCache()
-    : lim_(-1)
+    : lim_(-1),
+      capacity_(0)
 {
 }
 
@@ -24,6 +25,7 @@ void VertexCache::reserve(int capacity)
 {
     descriptors_ = vector<VtxDescriptor >(capacity);
     ids_ = vector<VtxColor >(capacity, -1);
+    capacity_ = capacity;
     lim_ = -1;
 }
 
@@ -50,7 +52,7 @@ bool VertexCache::exists(VtxColor vtx_id) const
 {
     return vtx_id <= lim_ &&
             vtx_id >= 0 &&
-            vtx_id < static_cast<int>(ids_.size()) &&
+            vtx_id < capacity_ &&
             ids_[vtx_id] >= 0;
 }
 
@@ -68,11 +70,13 @@ bool VertexCache::find(VtxColor vtx_id, VtxDescriptor &vtx_descriptor) const
 
 void VertexCache::insert(VtxColor vtx_id, const VtxDescriptor &descriptor)
 {
-    while(vtx_id >= static_cast<int>(descriptors_.size())) {
+    while(vtx_id >= capacity_) {
 
         descriptors_.push_back(VtxDescriptor());
         ids_.push_back(-1);
+        capacity_++;
     }
+
     descriptors_[vtx_id] = descriptor;
     ids_[vtx_id] = vtx_id;
     if(vtx_id > lim_) {
@@ -83,13 +87,9 @@ void VertexCache::insert(VtxColor vtx_id, const VtxDescriptor &descriptor)
 
 void VertexCache::recordSubstitution(VtxColor src, VtxColor dst)
 {
-    bool found_src = src <= lim_ &&
-            src >= 0 &&
-            ids_[src] >= 0;
+    bool found_src = exists(src);
 
-    bool found_dst = dst <= lim_ &&
-            dst >= 0 &&
-            ids_[dst] >= 0;
+    bool found_dst = exists(dst);
 
     if(found_src && found_dst) {
 
