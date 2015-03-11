@@ -46,12 +46,17 @@ void VertexCache::clear()
     lim_ = -1;
 }
 
-bool VertexCache::find(VtxColor vtx_id, VtxDescriptor &vtx_descriptor) const
+bool VertexCache::exists(VtxColor vtx_id) const
 {
-    bool found = vtx_id <= lim_ &&
+    return vtx_id <= lim_ &&
             vtx_id >= 0 &&
             vtx_id < static_cast<int>(ids_.size()) &&
             ids_[vtx_id] >= 0;
+}
+
+bool VertexCache::find(VtxColor vtx_id, VtxDescriptor &vtx_descriptor) const
+{
+    bool found = exists(vtx_id);
 
     if(found) {
 
@@ -63,8 +68,11 @@ bool VertexCache::find(VtxColor vtx_id, VtxDescriptor &vtx_descriptor) const
 
 void VertexCache::insert(VtxColor vtx_id, const VtxDescriptor &descriptor)
 {
-    ELM_THROW_BAD_DIMS_IF(vtx_id > descriptors_.size(), "d");
-    ELM_THROW_BAD_DIMS_IF(vtx_id > ids_.size(), "i");
+    while(vtx_id >= static_cast<int>(descriptors_.size())) {
+
+        descriptors_.push_back(VtxDescriptor());
+        ids_.push_back(-1);
+    }
     descriptors_[vtx_id] = descriptor;
     ids_[vtx_id] = vtx_id;
     if(vtx_id > lim_) {
