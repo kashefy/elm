@@ -18,8 +18,9 @@ namespace elm {
  * Enforces a list of unique vertices accroding to their main property
  * @todo split map image from this class
  */
-struct GraphAttr_Impl
+class GraphAttr_Impl
 {
+public:
     static const int ID_UNASSIGNED;    ///< reserved for map element not assigned to a vertex
 
     /** @brief Default constructor
