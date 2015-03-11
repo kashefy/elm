@@ -25,7 +25,7 @@ public:
     {
     }
 
-    Mat1f mutableOp(const Mat1i &img, const Mat1b &mask)
+    Mat1f mutableOp(const Mat1i &img, const Mat &mask)
     {
         ++call_count_;
         return img.clone().setTo(0, mask);
@@ -76,7 +76,7 @@ TEST_F(GraphVertexOpTest, op)
 
 TEST_F(GraphVertexOpTest, op_input_empty)
 {
-    EXPECT_TRUE(to_.mutableOp(Mat1f(), Mat1b()).empty());
+    EXPECT_TRUE(to_.mutableOp(Mat1f(), Mat()).empty());
 }
 
 TEST_F(GraphVertexOpTest, op_dims)

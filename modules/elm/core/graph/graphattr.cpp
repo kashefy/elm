@@ -142,7 +142,7 @@ Mat1f GraphAttr::getAttributes(int vtx_id) const
     }
 }
 
-Mat1f GraphAttr::applyVertexToMap(int vtx_id, Mat1f (*func)(const Mat1i &img, const Mat1b &mask)) const
+Mat1f GraphAttr::applyVertexToMap(int vtx_id, Mat1f (*func)(const Mat1i &img, const Mat &mask)) const
 {
     Mat1f vtx_result;
 
@@ -191,7 +191,7 @@ Mat1f GraphAttr::applyVertexOpToMap(int vtx_id, base_GraphVertexOp &vtx_op) cons
     return vtx_result;
 }
 
-VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1i &img, const Mat1b &mask)) const
+VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1i &img, const Mat &mask)) const
 {
     VecMat1f results(num_vertices());
 
@@ -418,12 +418,12 @@ Mat1i GraphAttr::MapImg() const
     return impl->MapImg();
 }
 
-void GraphAttr::apply_masked(cv::Mat1f (*func) (const cv::Mat1i &img, const cv::Mat1b &mask),
+void GraphAttr::apply_masked(cv::Mat1f (*func) (const cv::Mat1i &img, const cv::Mat &mask),
                              int color,
                              Mat1f &dst) const
 {
     Mat1i map_img = impl->MapImg();
-    Mat1b _mask = (map_img == color);
+    Mat _mask = (map_img == color);
     dst = func(map_img, _mask);
 }
 

@@ -590,7 +590,7 @@ TEST_F(GraphAttrConstructTest, Add_and_getAttributes_masked)
  * @param mask
  * @return masked_img
  */
-Mat1f func_masked_img(const cv::Mat1i &img, const cv::Mat1b &mask) {
+Mat1f func_masked_img(const cv::Mat1i &img, const cv::Mat &mask) {
 
     return img.clone().setTo(0, mask == 0);
 }
@@ -755,7 +755,7 @@ TEST_F(GraphAttrMaskedTest, ApplyVertexToMap_masked_img_invalid_vtx_id)
 class DummyWithStaticMethod
 {
 public:
-    static Mat1f func_masked_img(const cv::Mat1i &img, const cv::Mat1b &mask) {
+    static Mat1f func_masked_img(const cv::Mat1i &img, const cv::Mat &mask) {
 
         return img.clone().setTo(0, mask == 0);
     }
@@ -1276,7 +1276,7 @@ TEST_F(GraphAttrMaskedTest, Remove_vertex_check_vtx_ids)
     }
 }
 
-cv::Mat1f mask_vertex(const cv::Mat1i& img, const cv::Mat1b &mask)
+cv::Mat1f mask_vertex(const cv::Mat1i& img, const cv::Mat &mask)
 {
     Mat1b mask_inverted;
     cv::bitwise_not(mask, mask_inverted);
