@@ -7,6 +7,7 @@ namespace elm {
 
 /**
  * @brief class for Vertex Id and descriptor caching and recording of subtitutions
+ * @todo explicit test coverage, now covered through integration in GraphAttr
  */
 class VertexCache
 {
