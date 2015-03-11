@@ -73,7 +73,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
                 if(!is_masked || mask(r, c+1)) {
 
                     VtxColor value = map_img(r, c+1);
-                    VtxDescriptor right = retrieveVertex(value);
+                    VtxDescriptor right = retrieveVertex(value, is_new_vertex);
 
                     if(cur != right) {
 
@@ -92,7 +92,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
                 if(!is_masked || mask(r+1, c)) {
 
                     VtxColor value = map_img(r+1, c);
-                    VtxDescriptor down = retrieveVertex(value);
+                    VtxDescriptor down = retrieveVertex(value, is_new_vertex);
 
                     if(cur != down) {
 
