@@ -8,8 +8,6 @@
 #ifndef _ELM_CORE_GRAPH_GRAPHATTR_IMPL_H_
 #define _ELM_CORE_GRAPH_GRAPHATTR_IMPL_H_
 
-#include <unordered_map>
-
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
@@ -109,9 +107,6 @@ struct GraphAttr_Impl
     GraphAttrType g;    ///< underlying graph object
 
 protected:
-    // typedefs
-    typedef std::unordered_map<VtxColor, VtxDescriptor > MapVtxDescriptor;   ///< typedef for Map from vertex id to its descriptors
-
     /**
      * @brief retrieves vertex_descriptor of an existing or new vertex
      * @param value primary vertex identifying property (e.g. map img value)
@@ -127,7 +122,9 @@ protected:
     // members
     cv::Mat_<VtxColor > src_map_img_;         ///< source map image for this graph
 
-    MapVtxDescriptor vtx_cache_;    ///< cache vertex descriptors
+    std::vector<VtxDescriptor > vtx_cache_;    ///< cache vertex descriptors
+    std::vector<VtxColor > vtx_cache_id_;    ///< cache vertex descriptors
+    int cache_lim_;
 
     elm::DeferredAssign_<VtxColor > vertex_subs_; ///< keep track of vertex substitutions
 };

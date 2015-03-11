@@ -22,6 +22,7 @@ GraphAttr_Impl::~GraphAttr_Impl()
 }
 
 GraphAttr_Impl::GraphAttr_Impl()
+    : cache_lim_(-1)
 {
 }
 
@@ -39,9 +40,19 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
 
     g = GraphAttrType(); // no. of vertices unknown yet
 
+    cache_lim_ = -1;
+
+    const size_t CACHE_SIZE = src_map_img_.total()*2+1;
+    vtx_cache_ = vector<VtxDescriptor >(CACHE_SIZE);
+    vtx_cache_id_ = vector<VtxColor >(CACHE_SIZE, -1);
+
     bool is_masked = !mask.empty();
 
     EdgeWeightProp EDGE_CONNECTED = 1.f;
+
+    // Property accessors
+    boost::property_map<GraphAttrType, boost::vertex_color_t>::type
+            vtx_color_lut = get(boost::vertex_color, g);
 
     for(int r=0; r<map_img.rows; r++) {
 
@@ -52,13 +63,9 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
                 continue; // skip iteration at masked element;
             }
 
-            // Property accessors
-            boost::property_map<GraphAttrType, boost::vertex_color_t>::type
-                    vertex_color_id = get(boost::vertex_color, g);
-
             VtxColor value_cur = map_img(r, c);
             VtxDescriptor cur = retrieveVertex(value_cur);
-            vertex_color_id[cur] = value_cur;
+            vtx_color_lut[cur] = value_cur;
 
             if(c < map_img.cols-1) {
 
@@ -66,7 +73,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
 
                     VtxColor value = map_img(r, c+1);
                     VtxDescriptor right = retrieveVertex(value);
-                    vertex_color_id[right] = value;
+                    vtx_color_lut[right] = value;
 
                     if(cur != right) {
 
@@ -81,7 +88,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
 
                     VtxColor value = map_img(r+1, c);
                     VtxDescriptor down = retrieveVertex(value);
-                    vertex_color_id[down] = value;
+                    vtx_color_lut[down] = value;
 
                     if(cur != down) {
 
@@ -105,6 +112,11 @@ VtxDescriptor GraphAttr_Impl::retrieveVertex(VtxColor vtx_id)
 
         // cache new descriptor
         vtx_cache_[vtx_id] = descriptor;
+        vtx_cache_id_[vtx_id] = vtx_id;
+        if(vtx_id > cache_lim_) {
+
+            cache_lim_ = vtx_id;
+        }
     }
 
     return descriptor;
@@ -112,11 +124,10 @@ VtxDescriptor GraphAttr_Impl::retrieveVertex(VtxColor vtx_id)
 
 bool GraphAttr_Impl::findVertex(VtxColor vtx_id, VtxDescriptor &vtx_descriptor) const
 {
-    MapVtxDescriptor::const_iterator itr = vtx_cache_.find(vtx_id);
-    bool found = itr != vtx_cache_.end();
+    bool found = vtx_id <= cache_lim_ && vtx_id >= 0 && vtx_cache_id_[vtx_id] >= 0;
     if(found) {
 
-        vtx_descriptor = itr->second; // get cached descriptor
+        vtx_descriptor = vtx_cache_[vtx_id]; // get cached descriptor
     }
 
     return found;
@@ -165,7 +176,10 @@ void GraphAttr_Impl::removeVertex(VtxColor vtx_id, const VtxDescriptor &vtx)
      */
 
     // Iterate through the vertices and add them to new cache
-    vtx_cache_.clear();
+    const size_t CACHE_SIZE = src_map_img_.total()*2+1;
+    vtx_cache_ = vector<VtxDescriptor >(CACHE_SIZE);
+    vtx_cache_id_ = vector<VtxColor >(CACHE_SIZE, -1);
+    cache_lim_ = -1;
 
     boost::property_map<GraphAttrType, boost::vertex_color_t>::type
             vertex_color_id = get(boost::vertex_color, g);
@@ -173,7 +187,13 @@ void GraphAttr_Impl::removeVertex(VtxColor vtx_id, const VtxDescriptor &vtx)
     GraphAttrTraits::vertex_iterator v, end;
     for(tie(v, end) = vertices(g); v != end; ++v) {
 
-        vtx_cache_[vertex_color_id[*v]] = *v;
+        VtxColor key = vertex_color_id[*v];
+        vtx_cache_[key] = *v;
+        vtx_cache_id_[key] = key;
+        if(key > cache_lim_) {
+
+            cache_lim_ = key;
+        }
     }
 }
 
