@@ -25,12 +25,14 @@ public:
 
     /**
      * @brief alternate constructor
+     * The capacity should also equal the largest value you expect inserting into the LUT
      * @param capacity expected table capacity
      */
     LUT(int capacity);
 
     /**
      * @brief Set expected look-up table capacity
+     * The capacity should also equal the largest value you expect inserting into the LUT
      * @param n capacity
      */
     void Capacity(int n);

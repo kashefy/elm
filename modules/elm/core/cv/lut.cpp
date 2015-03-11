@@ -2,15 +2,17 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "elm/core/exception.h"
+
 using namespace elm;
 
 LUT::~LUT()
 {
-
 }
 
 LUT::LUT()
-    : count_(0),
+    : table_(1, 0),
+      count_(0),
       max_entry_(0)
 {
 }
@@ -31,6 +33,11 @@ void LUT::Capacity(int n)
 
 void LUT::insert(int lut_entry)
 {
+    if(static_cast<size_t>(lut_entry) >= table_.size()) {
+
+        ELM_THROW_KEY_ERROR("LUT entry must be <= capacity.");
+    }
+
     table_[lut_entry] = lut_entry;
     count_++;
 
