@@ -206,7 +206,7 @@ VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat
     int i=0;
     for (next = vi; vi != vi_end; vi = ++next) {
 
-        int vtx_color = vertex_color_id[*vi];
+        VtxColor vtx_color = vertex_color_id[*vi];
 
         group.create_thread(
                     boost::bind(&GraphAttr::apply_masked, this,

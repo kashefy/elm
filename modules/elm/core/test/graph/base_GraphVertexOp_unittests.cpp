@@ -132,22 +132,22 @@ TEST_F(GraphVertexOpTest, op_applied_to_graph_vertex)
 {
     const int ROWS=3;
     const int COLS=3;
-    float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
-                             3.f, 6.0f, 6.0f,
-                             9.f, 9.5f, 11.f};
+    float data[ROWS*COLS] = {1, 7, 2,
+                             3, 6, 6,
+                             9, 9, 11};
     Mat1f map = Mat1f(ROWS, COLS, data).clone();
 
     Mat1b exclude, mask;
-    cv::bitwise_or(map < 2.f, map == 9.f, exclude);
+    cv::bitwise_or(map < 2, map == 9, exclude);
     cv::bitwise_not(exclude, mask);
 
     GraphAttr graph(map, mask);
 
     ASSERT_GT(graph.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    Mat1f result_graph = graph.applyVertexOpToMap(6.f, to_);
+    Mat1f result_graph = graph.applyVertexOpToMap(6, to_);
 
-    Mat1f result_op = to_.mutableOp(map, map == 6.f);
+    Mat1f result_op = to_.mutableOp(map, map == 6);
 
     EXPECT_MAT_EQ(result_op, result_graph);
 }
