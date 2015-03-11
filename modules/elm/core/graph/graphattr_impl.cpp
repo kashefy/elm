@@ -161,7 +161,7 @@ void GraphAttr_Impl::removeVertex(VtxColor vtx_id, const VtxDescriptor &vtx)
      */
 
     // Iterate through the vertices and add them to new cache
-    vtx_cache_.reserve(src_map_img_.total()*2+1);
+    vtx_cache_.remove(vtx_id);
 
     boost::property_map<GraphAttrType, boost::vertex_color_t>::type
             vertex_color_id = get(boost::vertex_color, g);
