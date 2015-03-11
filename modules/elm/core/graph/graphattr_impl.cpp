@@ -7,8 +7,6 @@
 //M*/
 #include "elm/core/graph/graphattr_impl.h"
 
-#include <opencv2/core/core.hpp>
-
 #include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
 #include "elm/core/stl/stl_inl.h"
@@ -17,13 +15,17 @@ using namespace std;
 using namespace cv;
 using namespace elm;
 
-const float GraphAttr_Impl::ID_UNASSIGNED = 0.f;
+const int GraphAttr_Impl::ID_UNASSIGNED = 0;
+
+GraphAttr_Impl::~GraphAttr_Impl()
+{
+}
 
 GraphAttr_Impl::GraphAttr_Impl()
 {
 }
 
-GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
+GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1i &map_img,
                                const Mat1b &mask)
     : src_map_img_(map_img)
 {
@@ -41,8 +43,6 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
 
     EdgeWeightProp EDGE_CONNECTED = 1.f;
 
-    lut_.Capacity(map_img.total());
-
     for(int r=0; r<map_img.rows; r++) {
 
         for(int c=0; c<map_img.cols; c++) {
@@ -56,7 +56,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
             boost::property_map<GraphAttrType, boost::vertex_color_t>::type
                     vertex_color_id = get(boost::vertex_color, g);
 
-            float value_cur = map_img(r, c);
+            int value_cur = map_img(r, c);
             VtxDescriptor cur = retrieveVertex(value_cur);
             vertex_color_id[cur] = value_cur;
 
@@ -64,7 +64,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
 
                 if(!is_masked || mask(r, c+1)) {
 
-                    float value = map_img(r, c+1);
+                    int value = map_img(r, c+1);
                     VtxDescriptor right = retrieveVertex(value);
                     vertex_color_id[right] = value;
 
@@ -79,7 +79,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
 
                 if(!is_masked || mask(r+1, c)) {
 
-                    float value = map_img(r+1, c);
+                    int value = map_img(r+1, c);
                     VtxDescriptor down = retrieveVertex(value);
                     vertex_color_id[down] = value;
 
@@ -93,7 +93,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
     } // row
 }
 
-VtxDescriptor GraphAttr_Impl::retrieveVertex(float vtx_id)
+VtxDescriptor GraphAttr_Impl::retrieveVertex(int vtx_id)
 {
     VtxDescriptor descriptor;
 
@@ -105,13 +105,12 @@ VtxDescriptor GraphAttr_Impl::retrieveVertex(float vtx_id)
 
         // cache new descriptor
         vtx_cache_[vtx_id] = descriptor;
-        lut_.insert(vtx_id);
     }
 
     return descriptor;
 }
 
-bool GraphAttr_Impl::findVertex(float vtx_id, VtxDescriptor &vtx_descriptor) const
+bool GraphAttr_Impl::findVertex(int vtx_id, VtxDescriptor &vtx_descriptor) const
 {
     MapVtxDescriptor::const_iterator itr = vtx_cache_.find(vtx_id);
     bool found = itr != vtx_cache_.end();
@@ -136,7 +135,7 @@ void GraphAttr_Impl::removeEdges(const VtxDescriptor &u, const VtxDescriptor &v)
     }
 }
 
-void GraphAttr_Impl::removeEdges(float vtx_u, float vtx_v, VtxDescriptor &u, VtxDescriptor &v)
+void GraphAttr_Impl::removeEdges(int vtx_u, int vtx_v, VtxDescriptor &u, VtxDescriptor &v)
 {
     if(!findVertex(vtx_u, u)) {
 
@@ -155,7 +154,7 @@ void GraphAttr_Impl::removeEdges(float vtx_u, float vtx_v, VtxDescriptor &u, Vtx
     return removeEdges(u, v);
 }
 
-void GraphAttr_Impl::removeVertex(float vtx_id, const VtxDescriptor &vtx)
+void GraphAttr_Impl::removeVertex(int vtx_id, const VtxDescriptor &vtx)
 {
     boost::remove_vertex(vtx, g);
 
@@ -178,13 +177,12 @@ void GraphAttr_Impl::removeVertex(float vtx_id, const VtxDescriptor &vtx)
     }
 }
 
-void GraphAttr_Impl::recordVertexSubstitution(float src, float dst)
+void GraphAttr_Impl::recordVertexSubstitution(int src, int dst)
 {
     vertex_subs_.push_back(src, dst);
-    lut_.update(src, dst);
 }
 
-Mat1f GraphAttr_Impl::MapImg()
+Mat1i GraphAttr_Impl::MapImg()
 {
     updateMapImg();
     return src_map_img_;
@@ -194,8 +192,5 @@ void GraphAttr_Impl::updateMapImg()
 {
     // update map image with any recorded vertex substitutions
     // vertex substitutions could have come from contractEdges()
-    //vertex_subs_.assign(src_map_img_);
-    Mat1i x = src_map_img_;
-    lut_.apply(x);
-    src_map_img_ = x;
+    vertex_subs_.assign(src_map_img_);
 }
