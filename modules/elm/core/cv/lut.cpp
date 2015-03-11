@@ -78,7 +78,7 @@ int LUT::update(int a, int b)
 
 void LUT::apply(cv::Mat1i &m) const
 {
-    if(table_.empty()) {
+    if(count_ < 1) {
 
         return;
     }
