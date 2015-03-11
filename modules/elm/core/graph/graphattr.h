@@ -95,7 +95,7 @@ public:
      * @return result of function application
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
-    cv::Mat1f applyVertexToMap(int vtx_id, cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
+    cv::Mat1f applyVertexToMap(int vtx_id, cv::Mat1f (*func) (const cv::Mat1i &img, const cv::Mat1b &mask)) const;
 
     /**
      * @brief apply method to source image map masked by vertex
@@ -111,7 +111,7 @@ public:
      * @param func point to function to apply on masked image (can be static method)
      * @return result of function application for each vertex
      */
-    VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
+    VecMat1f applyVerticesToMap(cv::Mat1f (*func) (const cv::Mat1i &img, const cv::Mat1b &mask)) const;
 
     /**
      * @brief remove edge(s) between two vertices
@@ -177,7 +177,7 @@ protected:
      * @param[in] color vertex color
      * @param[out] dst result of applying function on source image masked by vertex color
      */
-    virtual void apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
+    virtual void apply_masked(cv::Mat1f (*func) (const cv::Mat1i &img, const cv::Mat1b &mask),
                               int color,
                               cv::Mat1f &dst) const;
 };

@@ -20,7 +20,7 @@ class base_GraphVertexOp
 public:
     virtual ~base_GraphVertexOp();
 
-    virtual void mutableOpCaller(const cv::Mat1f& img, const cv::Mat1b &mask, cv::Mat1f &dst);
+    virtual void mutableOpCaller(const cv::Mat1i& img, const cv::Mat1b &mask, cv::Mat1f &dst);
 
     /**
      * @brief operator () to pass for applying to graph vertex
@@ -28,7 +28,7 @@ public:
      * @param mask masked (usually by vertex id)
      * @return transformation result
      */
-    virtual cv::Mat1f mutableOp(const cv::Mat1f& img, const cv::Mat1b &mask) = 0;
+    virtual cv::Mat1f mutableOp(const cv::Mat1i& img, const cv::Mat1b &mask) = 0;
 
 protected:
     base_GraphVertexOp();

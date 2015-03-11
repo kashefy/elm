@@ -25,10 +25,10 @@ public:
     {
     }
 
-    Mat1f mutableOp(const Mat1f &img, const Mat1b &mask)
+    Mat1f mutableOp(const Mat1i &img, const Mat1b &mask)
     {
         ++call_count_;
-        return img.clone().setTo(0.f, mask);
+        return img.clone().setTo(0, mask);
     }
 
     int CallCount() const
@@ -53,10 +53,10 @@ protected:
 
 TEST_F(GraphVertexOpTest, op)
 {
-    Mat1f img(2, 2);
+    Mat1i img(2, 2);
     for(size_t i=0; i<img.total(); i++) {
 
-        img(i) = static_cast<float>(i);
+        img(i) = i;
     }
 
     Mat1f result;
@@ -85,7 +85,7 @@ TEST_F(GraphVertexOpTest, op_dims)
 
         for(int c=1; c<11; c++) {
 
-            Mat1f img(r, c, 123.f);
+            Mat1i img(r, c, 123);
             Mat1f result = to_.mutableOp(img, img > 0);
             EXPECT_MAT_DIMS_EQ(result, cv::Size2i(c, r));
         }
@@ -94,10 +94,10 @@ TEST_F(GraphVertexOpTest, op_dims)
 
 TEST_F(GraphVertexOpTest, op_mask)
 {
-    Mat1f img(2, 2);
+    Mat1i img(2, 2);
     for(size_t i=0; i<img.total(); i++) {
 
-        img(i) = static_cast<float>(i);
+        img(i) = i;
     }
 
     Mat1f result;
@@ -117,13 +117,13 @@ TEST_F(GraphVertexOpTest, op_mask)
 
 TEST_F(GraphVertexOpTest, op_call_count)
 {
-    Mat1f img(2, 2, 1.f);
+    Mat1i img(2, 2, 1);
 
     Mat1f result;
 
     for(size_t i=0; i<img.total(); i++) {
 
-        result = to_.mutableOp(img, img == static_cast<float>(i));
+        result = to_.mutableOp(img, img == static_cast<int>(i));
         EXPECT_EQ(static_cast<int>(i+1), to_.CallCount());
     }
 }
@@ -132,10 +132,10 @@ TEST_F(GraphVertexOpTest, op_applied_to_graph_vertex)
 {
     const int ROWS=3;
     const int COLS=3;
-    float data[ROWS*COLS] = {1, 7, 2,
-                             3, 6, 6,
-                             9, 9, 11};
-    Mat1f map = Mat1f(ROWS, COLS, data).clone();
+    int data[ROWS*COLS] = {1, 7, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i map = Mat1i(ROWS, COLS, data).clone();
 
     Mat1b exclude, mask;
     cv::bitwise_or(map < 2, map == 9, exclude);
@@ -156,13 +156,13 @@ TEST_F(GraphVertexOpTest, op_applied_to_graph_vertex_call_count)
 {
     const int ROWS=3;
     const int COLS=3;
-    float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
-                             3.f, 6.0f, 6.0f,
-                             9.f, 9.5f, 11.f};
-    Mat1f map = Mat1f(ROWS, COLS, data).clone();
+    int data[ROWS*COLS] = {1, 7, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i map = Mat1i(ROWS, COLS, data).clone();
 
     Mat1b exclude, mask;
-    cv::bitwise_or(map < 2.f, map == 9.f, exclude);
+    cv::bitwise_or(map < 2, map == 9, exclude);
     cv::bitwise_not(exclude, mask);
 
     GraphAttr graph(map, mask);
@@ -171,7 +171,7 @@ TEST_F(GraphVertexOpTest, op_applied_to_graph_vertex_call_count)
 
     EXPECT_EQ(0, to_.CallCount());
 
-    graph.applyVertexOpToMap(6.f, to_);
+    graph.applyVertexOpToMap(6, to_);
 
     EXPECT_EQ(1, to_.CallCount());
 }
