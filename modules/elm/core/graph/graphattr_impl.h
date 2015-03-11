@@ -21,9 +21,13 @@
 
 namespace elm {
 
-typedef boost::property<boost::edge_weight_t, float> EdgeWeightProp;
-typedef boost::property<boost::vertex_color_t, int,
-        boost::property<boost::vertex_index2_t, cv::Mat1f > >
+typedef float EdgeWeight;
+typedef boost::property<boost::edge_weight_t, EdgeWeight> EdgeWeightProp;
+
+typedef int VtxColor;
+typedef cv::Mat1f VtxIdx2;
+typedef boost::property<boost::vertex_color_t, VtxColor,
+        boost::property<boost::vertex_index2_t, VtxIdx2 > >
         VtxProp;
 
 typedef boost::adjacency_list<boost::setS, boost::listS, boost::undirectedS, VtxProp, EdgeWeightProp> GraphAttrType;
@@ -99,21 +103,21 @@ struct GraphAttr_Impl
      * @brief Get graph's underlying map image
      * @return map image
      */
-    cv::Mat1i MapImg();
+    cv::Mat_<VtxColor > MapImg();
 
     // public members
     GraphAttrType g;    ///< underlying graph object
 
 protected:
     // typedefs
-    typedef std::unordered_map<int, VtxDescriptor > MapVtxDescriptor;   ///< typedef for Map from vertex id to its descriptors
+    typedef std::unordered_map<VtxColor, VtxDescriptor > MapVtxDescriptor;   ///< typedef for Map from vertex id to its descriptors
 
     /**
      * @brief retrieves vertex_descriptor of an existing or new vertex
      * @param value primary vertex identifying property (e.g. map img value)
      * @return vertex descriptor
      */
-    VtxDescriptor retrieveVertex(int vtx_id);
+    VtxDescriptor retrieveVertex(VtxColor vtx_id);
 
     /**
      * @brief update map image to reflect any recent vertex substitutions
@@ -121,11 +125,11 @@ protected:
     void updateMapImg();
 
     // members
-    cv::Mat1i src_map_img_;         ///< source map image for this graph
+    cv::Mat_<VtxColor > src_map_img_;         ///< source map image for this graph
 
     MapVtxDescriptor vtx_cache_;    ///< cache vertex descriptors
 
-    elm::DeferredAssign_<int> vertex_subs_; ///< keep track of vertex substitutions
+    elm::DeferredAssign_<VtxColor > vertex_subs_; ///< keep track of vertex substitutions
 };
 
 } // namespace elm
