@@ -18,6 +18,8 @@ using namespace boost;
 using namespace cv;
 using namespace elm;
 
+typedef std::vector<VtxColor > VecColor;
+
 GraphAttr::~GraphAttr()
 {
     impl.reset();
@@ -40,11 +42,11 @@ size_t GraphAttr::num_vertices() const
 
 float GraphAttr::operator ()(int idx_u, int idx_v) const
 {
-    VecI vtx_idx = VerticesIds();
+    VecColor vtx_ids = VerticesIds();
     GraphAttrTraits::vertex_descriptor u, v;
 
-    impl->findVertex(vtx_idx[idx_u], u);
-    impl->findVertex(vtx_idx[idx_v], v);
+    impl->findVertex(vtx_ids[idx_u], u);
+    impl->findVertex(vtx_ids[idx_v], v);
 
     typename property_map < GraphAttrType, edge_weight_t >::type
             weight = get(edge_weight, impl->g);
@@ -92,7 +94,7 @@ VecI GraphAttr::VerticesIds() const
     VecI vtx_ids(num_vertices());
 
     property_map<GraphAttrType, vertex_color_t>::type
-            vertex_color_id = get(vertex_color, impl->g);
+            vtx_color_lut = get(vertex_color, impl->g);
 
     GraphAttrTraits::vertex_iterator vi, vi_end, next;
     tie(vi, vi_end) = vertices(impl->g);
@@ -100,7 +102,7 @@ VecI GraphAttr::VerticesIds() const
     for (next = vi; vi != vi_end; vi = next) {
 
         ++next;
-        vtx_ids[i++] = vertex_color_id[*vi];
+        vtx_ids[i++] = vtx_color_lut[*vi];
     }
 
     return vtx_ids;
