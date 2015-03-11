@@ -22,7 +22,6 @@ GraphAttr_Impl::~GraphAttr_Impl()
 }
 
 GraphAttr_Impl::GraphAttr_Impl()
-    : cache_lim_(-1)
 {
 }
 
@@ -40,11 +39,7 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
 
     g = GraphAttrType(); // no. of vertices unknown yet
 
-    cache_lim_ = -1;
-
-    const size_t CACHE_SIZE = src_map_img_.total()*2+1;
-    vtx_cache_ = vector<VtxDescriptor >(CACHE_SIZE);
-    vtx_cache_id_ = vector<VtxColor >(CACHE_SIZE, -1);
+    vtx_cache_.reserve(src_map_img_.total()*2+1); // some sufficiently high number
 
     bool is_masked = !mask.empty();
 
@@ -111,12 +106,7 @@ VtxDescriptor GraphAttr_Impl::retrieveVertex(VtxColor vtx_id)
         descriptor = boost::add_vertex(vtx_id, g);
 
         // cache new descriptor
-        vtx_cache_[vtx_id] = descriptor;
-        vtx_cache_id_[vtx_id] = vtx_id;
-        if(vtx_id > cache_lim_) {
-
-            cache_lim_ = vtx_id;
-        }
+        vtx_cache_.insert(vtx_id, descriptor);
     }
 
     return descriptor;
@@ -124,12 +114,7 @@ VtxDescriptor GraphAttr_Impl::retrieveVertex(VtxColor vtx_id)
 
 bool GraphAttr_Impl::findVertex(VtxColor vtx_id, VtxDescriptor &vtx_descriptor) const
 {
-    bool found = vtx_id <= cache_lim_ && vtx_id >= 0 && vtx_cache_id_[vtx_id] >= 0;
-    if(found) {
-
-        vtx_descriptor = vtx_cache_[vtx_id]; // get cached descriptor
-    }
-
+    bool found = vtx_cache_.find(vtx_id, vtx_descriptor);
     return found;
 }
 
@@ -176,10 +161,7 @@ void GraphAttr_Impl::removeVertex(VtxColor vtx_id, const VtxDescriptor &vtx)
      */
 
     // Iterate through the vertices and add them to new cache
-    const size_t CACHE_SIZE = src_map_img_.total()*2+1;
-    vtx_cache_ = vector<VtxDescriptor >(CACHE_SIZE);
-    vtx_cache_id_ = vector<VtxColor >(CACHE_SIZE, -1);
-    cache_lim_ = -1;
+    vtx_cache_.reserve(src_map_img_.total()*2+1);
 
     boost::property_map<GraphAttrType, boost::vertex_color_t>::type
             vertex_color_id = get(boost::vertex_color, g);
@@ -188,12 +170,7 @@ void GraphAttr_Impl::removeVertex(VtxColor vtx_id, const VtxDescriptor &vtx)
     for(tie(v, end) = vertices(g); v != end; ++v) {
 
         VtxColor key = vertex_color_id[*v];
-        vtx_cache_[key] = *v;
-        vtx_cache_id_[key] = key;
-        if(key > cache_lim_) {
-
-            cache_lim_ = key;
-        }
+        vtx_cache_.insert(key, *v);
     }
 }
 

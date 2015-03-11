@@ -9,7 +9,7 @@
 #define _ELM_CORE_GRAPH_GRAPHATTR_IMPL_H_
 
 #include "elm/core/cv/deferredassignhashed_.h"
-#include "elm/core/graph/graphattr_impl_typedefs.h"
+#include "elm/core/graph/vertexcache.h"
 
 namespace elm {
 
@@ -102,9 +102,7 @@ protected:
     // members
     cv::Mat_<VtxColor > src_map_img_;         ///< source map image for this graph
 
-    std::vector<VtxDescriptor > vtx_cache_;    ///< cache vertex descriptors
-    std::vector<VtxColor > vtx_cache_id_;    ///< cache vertex descriptors
-    int cache_lim_;
+    VertexCache vtx_cache_;    ///< cache vertex descriptors
 
     elm::DeferredAssign_<VtxColor > vertex_subs_; ///< keep track of vertex substitutions
 };
