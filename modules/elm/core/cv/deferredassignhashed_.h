@@ -15,6 +15,10 @@ template<class TElem>
 class DeferredAssignHashed_ : public DeferredAssign_<TElem >
 {
 public:
+    virtual ~DeferredAssignHashed_()
+    {
+    }
+
     DeferredAssignHashed_()
         : DeferredAssign_<TElem >()
     {
