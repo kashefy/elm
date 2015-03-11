@@ -89,10 +89,11 @@ public:
 protected:
     /**
      * @brief retrieves vertex_descriptor of an existing or new vertex
-     * @param value primary vertex identifying property (e.g. map img value)
+     * @param[in] value primary vertex identifying property (e.g. map img value)
+     * @param[out] flag indicating if a new certex was created
      * @return vertex descriptor
      */
-    VtxDescriptor retrieveVertex(VtxColor vtx_id);
+    VtxDescriptor retrieveVertex(VtxColor vtx_id, bool &is_new);
 
     /**
      * @brief update map image to reflect any recent vertex substitutions

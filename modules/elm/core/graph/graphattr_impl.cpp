@@ -49,6 +49,8 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
     boost::property_map<GraphAttrType, boost::vertex_color_t>::type
             vtx_color_lut = get(boost::vertex_color, g);
 
+    bool is_new_vertex;
+
     for(int r=0; r<map_img.rows; r++) {
 
         for(int c=0; c<map_img.cols; c++) {
@@ -59,8 +61,12 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
             }
 
             VtxColor value_cur = map_img(r, c);
-            VtxDescriptor cur = retrieveVertex(value_cur);
-            vtx_color_lut[cur] = value_cur;
+            VtxDescriptor cur = retrieveVertex(value_cur, is_new_vertex);
+
+            if(is_new_vertex) {
+
+                vtx_color_lut[cur] = value_cur;
+            }
 
             if(c < map_img.cols-1) {
 
@@ -68,9 +74,13 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
 
                     VtxColor value = map_img(r, c+1);
                     VtxDescriptor right = retrieveVertex(value);
-                    vtx_color_lut[right] = value;
 
                     if(cur != right) {
+
+                        if(is_new_vertex) {
+
+                            vtx_color_lut[right] = value;
+                        }
 
                         add_edge(cur, right, EDGE_CONNECTED, g);
                     }
@@ -83,9 +93,13 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
 
                     VtxColor value = map_img(r+1, c);
                     VtxDescriptor down = retrieveVertex(value);
-                    vtx_color_lut[down] = value;
 
                     if(cur != down) {
+
+                        if(is_new_vertex) {
+
+                            vtx_color_lut[down] = value;
+                        }
 
                         add_edge(cur, down, EDGE_CONNECTED, g);
                     }
@@ -95,11 +109,12 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
     } // row
 }
 
-VtxDescriptor GraphAttr_Impl::retrieveVertex(VtxColor vtx_id)
+VtxDescriptor GraphAttr_Impl::retrieveVertex(VtxColor vtx_id, bool &is_new)
 {
     VtxDescriptor descriptor;
 
     // if found, return cached descriptor
+
     if(!findVertex(vtx_id, descriptor)) {
 
         // otherwise, request new descriptor
@@ -107,6 +122,11 @@ VtxDescriptor GraphAttr_Impl::retrieveVertex(VtxColor vtx_id)
 
         // cache new descriptor
         vtx_cache_.insert(vtx_id, descriptor);
+
+        is_new = true;
+    }
+    else {
+        is_new = false;
     }
 
     return descriptor;
