@@ -33,7 +33,7 @@ public:
      * @param map source map image
      * @param mask for excluding invalid elements
      */
-    GraphAttr(const cv::Mat1f &map_img, const cv::Mat1b &mask);
+    GraphAttr(const cv::Mat1i &map_img, const cv::Mat1b &mask);
 
     /**
      * @brief get no. of vertices in graph
@@ -68,7 +68,7 @@ public:
      *
      * @return list vertex ids
      */
-    VecF VerticesIds() const;
+    std::vector<int> VerticesIds() const;
 
     /**
      * @brief add Attributes to vertex
@@ -76,7 +76,7 @@ public:
      * @param attr
      * @throws elm::ExceptionKeyError for non-existing vertex id
      */
-    void addAttributes(float vtx_id, const cv::Mat1f &attr);
+    void addAttributes(int vtx_id, const cv::Mat1f &attr);
 
     /**
      * @brief get Attributes to vertex
@@ -86,7 +86,7 @@ public:
      *
      * @throws elm::ExceptionKeyError for non-existing vertex id
      */
-    cv::Mat1f getAttributes(float vtx_id) const;
+    cv::Mat1f getAttributes(int vtx_id) const;
 
     /**
      * @brief apply function to source image map masked by vertex
@@ -95,7 +95,7 @@ public:
      * @return result of function application
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
-    cv::Mat1f applyVertexToMap(float vtx_id, cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
+    cv::Mat1f applyVertexToMap(int vtx_id, cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask)) const;
 
     /**
      * @brief apply method to source image map masked by vertex
@@ -104,7 +104,7 @@ public:
      * @return result of method application
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
-    cv::Mat1f applyVertexOpToMap(float vtx_id, base_GraphVertexOp &vtx_op) const;
+    cv::Mat1f applyVertexOpToMap(int vtx_id, base_GraphVertexOp &vtx_op) const;
 
     /**
      * @brief apply function to source image map masked by vertex for each vertex
@@ -119,7 +119,7 @@ public:
      * @param vtx_v id for vertex v
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
-    void removeEdges(float vtx_u, float vtx_v);
+    void removeEdges(int vtx_u, int vtx_v);
 
     /**
      * @brief get the index of a vertex in adjacency matrix
@@ -127,7 +127,7 @@ public:
      * @return vertex index
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
-    int VertexIndex(float vtx) const;
+    int VertexIndex(int vtx) const;
 
     /**
      * @brief contract edges/merge two vertices
@@ -143,14 +143,14 @@ public:
      * @return index of merged vertex (idx_v)
      * @throws elm::ExceptionKeyError for invalid vertex index
      */
-    float contractEdges(float id_u, float id_v);
+    int contractEdges(int id_u, int id_v);
 
     /**
      * @brief Get list of neighboring vertices
      * @param vtx_id vertex id
      * @return list of vertex ids neighboring given vertex
      */
-    VecF getNeighbors(float vtx_id) const;
+    VecI getNeighbors(int vtx_id) const;
 
     /**
      * @brief remove a vertex from the graph
@@ -160,13 +160,13 @@ public:
      * @param vtx_id id of vertex to remove
      * @throws elm::ExceptionKeyError for invalid vertex id
      */
-    void removeVertex(float vtx_id);
+    void removeVertex(int vtx_id);
 
     /**
      * @brief Get graph's underlying map img
      * @return a shared copy of the graph's underlying map image
      */
-    cv::Mat1f MapImg() const;
+    cv::Mat1i MapImg() const;
 
     // public members
     std::shared_ptr<GraphAttr_Impl> impl;
@@ -178,7 +178,7 @@ protected:
      * @param[out] dst result of applying function on source image masked by vertex color
      */
     virtual void apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
-                              float color,
+                              int color,
                               cv::Mat1f &dst) const;
 };
 

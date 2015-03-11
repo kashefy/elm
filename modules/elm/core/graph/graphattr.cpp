@@ -28,7 +28,7 @@ GraphAttr::GraphAttr()
 {
 }
 
-GraphAttr::GraphAttr(const Mat1f &map_img, const Mat1b &mask)
+GraphAttr::GraphAttr(const Mat1i &map_img, const Mat1b &mask)
     : impl(new GraphAttr_Impl(map_img, mask))
 {
 }
@@ -40,7 +40,7 @@ size_t GraphAttr::num_vertices() const
 
 float GraphAttr::operator ()(int idx_u, int idx_v) const
 {
-    VecF vtx_idx = VerticesIds();
+    VecI vtx_idx = VerticesIds();
     GraphAttrTraits::vertex_descriptor u, v;
 
     impl->findVertex(vtx_idx[idx_u], u);
@@ -87,9 +87,9 @@ void GraphAttr::AdjacencyMat(Mat1f &adj) const
     }
 }
 
-VecF GraphAttr::VerticesIds() const
+VecI GraphAttr::VerticesIds() const
 {
-    VecF vtx_ids(num_vertices());
+    VecI vtx_ids(num_vertices());
 
     property_map<GraphAttrType, vertex_color_t>::type
             vertex_color_id = get(vertex_color, impl->g);
@@ -106,7 +106,7 @@ VecF GraphAttr::VerticesIds() const
     return vtx_ids;
 }
 
-void GraphAttr::addAttributes(float vtx_id, const Mat1f &attr)
+void GraphAttr::addAttributes(int vtx_id, const Mat1f &attr)
 {
     VtxDescriptor descriptor;
     if(impl->findVertex(vtx_id, descriptor)) {
@@ -123,7 +123,7 @@ void GraphAttr::addAttributes(float vtx_id, const Mat1f &attr)
     }
 }
 
-Mat1f GraphAttr::getAttributes(float vtx_id) const
+Mat1f GraphAttr::getAttributes(int vtx_id) const
 {
     VtxDescriptor descriptor;
     if(impl->findVertex(vtx_id, descriptor)) {
@@ -140,7 +140,7 @@ Mat1f GraphAttr::getAttributes(float vtx_id) const
     }
 }
 
-Mat1f GraphAttr::applyVertexToMap(float vtx_id, Mat1f (*func)(const Mat1f &img, const Mat1b &mask)) const
+Mat1f GraphAttr::applyVertexToMap(int vtx_id, Mat1f (*func)(const Mat1f &img, const Mat1b &mask)) const
 {
     Mat1f vtx_result;
 
@@ -150,7 +150,7 @@ Mat1f GraphAttr::applyVertexToMap(float vtx_id, Mat1f (*func)(const Mat1f &img, 
         property_map<GraphAttrType, vertex_color_t>::type
                 vertex_color_id = get(vertex_color, impl->g);
 
-        float vtx_color = vertex_color_id[vtx_descriptor];
+        int vtx_color = vertex_color_id[vtx_descriptor];
 
         Mat1f map_img = impl->MapImg();
         Mat1b _mask = map_img == vtx_color;
@@ -165,7 +165,7 @@ Mat1f GraphAttr::applyVertexToMap(float vtx_id, Mat1f (*func)(const Mat1f &img, 
     return vtx_result;
 }
 
-Mat1f GraphAttr::applyVertexOpToMap(float vtx_id, base_GraphVertexOp &vtx_op) const
+Mat1f GraphAttr::applyVertexOpToMap(int vtx_id, base_GraphVertexOp &vtx_op) const
 {
     Mat1f vtx_result;
 
@@ -175,7 +175,7 @@ Mat1f GraphAttr::applyVertexOpToMap(float vtx_id, base_GraphVertexOp &vtx_op) co
         property_map<GraphAttrType, vertex_color_t>::type
                 vertex_color_id = get(vertex_color, impl->g);
 
-        float vtx_color = vertex_color_id[vtx_descriptor];
+        int vtx_color = vertex_color_id[vtx_descriptor];
         Mat1f map_img = impl->MapImg();
         Mat1b _mask = map_img == vtx_color;
         vtx_op.mutableOpCaller(map_img, _mask, vtx_result);
@@ -204,7 +204,7 @@ VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat
     int i=0;
     for (next = vi; vi != vi_end; vi = ++next) {
 
-        float vtx_color = vertex_color_id[*vi];
+        int vtx_color = vertex_color_id[*vi];
 
         group.create_thread(
                     boost::bind(&GraphAttr::apply_masked, this,
@@ -218,7 +218,7 @@ VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1f &img, const Mat
     return results;
 }
 
-float GraphAttr::contractEdges(float id_u, float id_v)
+int GraphAttr::contractEdges(int id_u, int id_v)
 {
     VtxDescriptor u;
     VtxDescriptor v;
@@ -288,13 +288,13 @@ float GraphAttr::contractEdges(float id_u, float id_v)
     return id_v;
 }
 
-void GraphAttr::removeEdges(float vtx_u, float vtx_v)
+void GraphAttr::removeEdges(int vtx_u, int vtx_v)
 {
     VtxDescriptor u, v;
     return impl->removeEdges(vtx_u, vtx_v, u, v);
 }
 
-int GraphAttr::VertexIndex(float vtx_id) const
+int GraphAttr::VertexIndex(int vtx_id) const
 {
     VtxDescriptor v;
     if(!impl->findVertex(vtx_id, v)) {
@@ -304,7 +304,7 @@ int GraphAttr::VertexIndex(float vtx_id) const
         ELM_THROW_KEY_ERROR(s.str());
     }
 
-    VecF ids = VerticesIds();
+    VecI ids = VerticesIds();
     bool found = false;
     int idx = -1;
     for(int i=0; i < static_cast<int>(ids.size()) && !found; i++) {
@@ -319,7 +319,7 @@ int GraphAttr::VertexIndex(float vtx_id) const
     return idx;
 }
 
-VecF GraphAttr::getNeighbors(float vtx_id) const
+VecI GraphAttr::getNeighbors(int vtx_id) const
 {
     VtxDescriptor u;
     if(!impl->findVertex(vtx_id, u)) {
@@ -329,7 +329,7 @@ VecF GraphAttr::getNeighbors(float vtx_id) const
         ELM_THROW_KEY_ERROR(s.str());
     }
 
-    VecF neigh_ids;
+    VecI neigh_ids;
 
     // Property accessor
     property_map<GraphAttrType, vertex_color_t>::type
@@ -363,7 +363,7 @@ VecF GraphAttr::getNeighbors(float vtx_id) const
     return neigh_ids;
 }
 
-void GraphAttr::removeVertex(float vtx_id)
+void GraphAttr::removeVertex(int vtx_id)
 {
     VtxDescriptor u;
 
@@ -411,16 +411,16 @@ void GraphAttr::removeVertex(float vtx_id)
     impl->recordVertexSubstitution(vtx_id, impl->ID_UNASSIGNED);
 }
 
-Mat1f GraphAttr::MapImg() const
+Mat1i GraphAttr::MapImg() const
 {
     return impl->MapImg();
 }
 
 void GraphAttr::apply_masked(cv::Mat1f (*func) (const cv::Mat1f &img, const cv::Mat1b &mask),
-                             float color,
+                             int color,
                              Mat1f &dst) const
 {
-    Mat1f map_img = impl->MapImg();
+    Mat1i map_img = impl->MapImg();
     Mat1b _mask = (map_img == color);
     dst = func(map_img, _mask);
 }
