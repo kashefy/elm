@@ -11,6 +11,8 @@
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
+#include <opencv2/core/core.hpp>
+
 #include "elm/core/typedefs_fwd.h"
 
 namespace elm {

@@ -8,8 +8,6 @@
 #ifndef _ELM_CORE_GRAPH_GRAPHATTR_IMPL_H_
 #define _ELM_CORE_GRAPH_GRAPHATTR_IMPL_H_
 
-#include <opencv2/core/core.hpp>
-
 #include "elm/core/cv/deferredassignhashed_.h"
 #include "elm/core/graph/graphattr_impl_typedefs.h"
 
