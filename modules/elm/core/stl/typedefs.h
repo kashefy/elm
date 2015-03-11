@@ -20,6 +20,7 @@ typedef unsigned char uchar;
 
 typedef std::vector< std::string > VecS;    ///< Convinience typedef for vector of strings
 typedef std::vector< float > VecF;          ///< Convinience typedef for vector of floats
+typedef std::vector< int > VecI;            ///< Convinience typedef for vector of integers
 typedef std::map<std::string, std::string> MapSS;   ///< Convinience typedef for map of string keys and string values
 
 }
