@@ -1,5 +1,8 @@
 #include "elm/core/graph/vertexcache.h"
 
+#include "elm/core/exception.h"
+#include "elm/core/debug_utils.h"
+
 using namespace std;
 using namespace elm;
 
@@ -24,6 +27,18 @@ void VertexCache::reserve(int capacity)
     lim_ = -1;
 }
 
+void VertexCache::remove(VtxColor vtx_id)
+{
+    ids_[vtx_id] = -1;
+    if(vtx_id == lim_) {
+
+        while(lim_ >= 0 && ids_[lim_] >= 0) {
+
+            lim_--;
+        }
+    }
+}
+
 void VertexCache::clear()
 {
     descriptors_.clear();
@@ -35,6 +50,7 @@ bool VertexCache::find(VtxColor vtx_id, VtxDescriptor &vtx_descriptor) const
 {
     bool found = vtx_id <= lim_ &&
             vtx_id >= 0 &&
+            vtx_id < static_cast<int>(ids_.size()) &&
             ids_[vtx_id] >= 0;
 
     if(found) {
@@ -47,6 +63,8 @@ bool VertexCache::find(VtxColor vtx_id, VtxDescriptor &vtx_descriptor) const
 
 void VertexCache::insert(VtxColor vtx_id, const VtxDescriptor &descriptor)
 {
+    ELM_THROW_BAD_DIMS_IF(vtx_id > descriptors_.size(), "d");
+    ELM_THROW_BAD_DIMS_IF(vtx_id > ids_.size(), "i");
     descriptors_[vtx_id] = descriptor;
     ids_[vtx_id] = vtx_id;
     if(vtx_id > lim_) {

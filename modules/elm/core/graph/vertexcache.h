@@ -27,6 +27,8 @@ public:
 
     void recordSubstitution(VtxColor src, VtxColor dst);
 
+    void remove(VtxColor vtx_id);
+
 protected:
     // members
     std::vector<VtxDescriptor > descriptors_;   ///< cache vertex descriptors
