@@ -98,3 +98,16 @@ void VertexCache::recordSubstitution(VtxColor src, VtxColor dst)
     }
 }
 
+VtxColor VertexCache::Id(VtxColor vtx_id) const
+{
+    if(vtx_id <= lim_ &&
+            vtx_id >= 0 &&
+            vtx_id < capacity_) {
+
+        return ids_[vtx_id];
+    }
+    else {
+        ELM_THROW_KEY_ERROR("invalid id");
+    }
+}
+

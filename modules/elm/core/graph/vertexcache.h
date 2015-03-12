@@ -61,6 +61,13 @@ public:
      */
     void remove(VtxColor vtx_id);
 
+    /**
+     * @brief Get true Id for a vector (in case it got substituted along the way)
+     * @param vtx_id
+     * @return true id
+     */
+    VtxColor Id(VtxColor vtx_id) const;
+
 protected:
     // members
     std::vector<VtxDescriptor > descriptors_;   ///< cache vertex descriptors
