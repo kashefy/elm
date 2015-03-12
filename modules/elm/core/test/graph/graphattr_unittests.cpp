@@ -36,7 +36,7 @@ TEST_F(GraphAttrConstructTest, Destruct)
 
 TEST_F(GraphAttrConstructTest, EmptyMap)
 {
-    Mat1f x;
+    Mat1i x;
     GraphAttr to(x, Mat());
     EXPECT_EQ(static_cast<size_t>(0), to.num_vertices());
 }
@@ -171,7 +171,7 @@ TEST_F(GraphAttrConstructTest, AdjacencyDense)
     EXPECT_FLOAT_EQ(0.f, adj(1, 2));
 
     // verify vertices vector
-    VecF vtx_ids = to.VerticesIds();
+    VecI vtx_ids = to.VerticesIds();
     EXPECT_SIZE(nb_vertices, vtx_ids);
 
     // verify vertex ids and their order
@@ -227,7 +227,7 @@ TEST_F(GraphAttrConstructTest, VerticesIds)
     }
 
     // verify vertices vector
-    VecF vtx_ids = to.VerticesIds();
+    VecI vtx_ids = to.VerticesIds();
     EXPECT_SIZE(nb_vertices, vtx_ids);
 
     // verify vertex ids and their order
@@ -333,7 +333,7 @@ TEST_F(GraphAttrConstructTest, VerticesIds_masked)
     }
 
     // verify vertices vector
-    VecF vtx_ids = to.VerticesIds();
+    VecI vtx_ids = to.VerticesIds();
     EXPECT_SIZE(nb_vertices, vtx_ids);
 
     // verify vertex ids and their order
@@ -366,16 +366,16 @@ TEST_F(GraphAttrConstructTest, VerticesIds_masked_unique)
 {
     const int ROWS=3;
     const int COLS=3;
-    float data[ROWS*COLS] = {1.1f, 1.1f, 2.0f,
-                             3.0f, 6.0f, 6.0f,
-                             9.2f, 9.02f, 11.0f};
-    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
 
     Mat1b mask = m >= 2;
 
     GraphAttr to(m, mask);
     const int nb_vertices = static_cast<int>(to.num_vertices());
-    EXPECT_EQ(6, nb_vertices);
+    EXPECT_EQ(5, nb_vertices);
 
     Mat1f adj;
     to.AdjacencyMat(adj);
@@ -389,7 +389,7 @@ TEST_F(GraphAttrConstructTest, VerticesIds_masked_unique)
     }
 
     // verify vertices vector
-    VecF vtx_ids = to.VerticesIds();
+    VecI vtx_ids = to.VerticesIds();
     EXPECT_SIZE(nb_vertices, vtx_ids);
 
     for(int i=0; i<nb_vertices; i++) {
@@ -403,16 +403,16 @@ TEST_F(GraphAttrConstructTest, VerticesIds_masked_unique)
 
 TEST_F(GraphAttrConstructTest, AddAttributes_empty_graph)
 {
-    Mat1f x;
+    Mat1i x;
     GraphAttr to(x, Mat());
     EXPECT_EQ(static_cast<size_t>(0), to.num_vertices());
 
-    float vtx_id = -10.f;
-    while(++vtx_id <= 10.f) {
+    int vtx_id = -1;
+    while(++vtx_id <= 10) {
 
-        EXPECT_THROW(to.addAttributes(++vtx_id, Mat1f()), ExceptionKeyError);
+        EXPECT_THROW(to.addAttributes(vtx_id, Mat1f()), ExceptionKeyError);
 
-        EXPECT_THROW(to.addAttributes(++vtx_id, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+        EXPECT_THROW(to.addAttributes(vtx_id, Mat1f(2, 3, 1.f)), ExceptionKeyError);
     }
 }
 
@@ -429,20 +429,17 @@ TEST_F(GraphAttrConstructTest, AddAttributes_invalid_vtx_id)
 
     ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    EXPECT_THROW(to.addAttributes(-1.f, Mat1f()), ExceptionKeyError);
-    EXPECT_THROW(to.addAttributes(-1.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(0, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(0, Mat1f(2, 3, 1.f)), ExceptionKeyError);
 
-    EXPECT_THROW(to.addAttributes(0.f, Mat1f()), ExceptionKeyError);
-    EXPECT_THROW(to.addAttributes(0.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(5, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(5, Mat1f(2, 3, 1.f)), ExceptionKeyError);
 
-    EXPECT_THROW(to.addAttributes(5.f, Mat1f()), ExceptionKeyError);
-    EXPECT_THROW(to.addAttributes(5.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(12, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(12, Mat1f(2, 3, 1.f)), ExceptionKeyError);
 
-    EXPECT_THROW(to.addAttributes(11.2f, Mat1f()), ExceptionKeyError);
-    EXPECT_THROW(to.addAttributes(11.2, Mat1f(2, 3, 1.f)), ExceptionKeyError);
-
-    EXPECT_NO_THROW(to.addAttributes(9.f, Mat1f()));
-    EXPECT_NO_THROW(to.addAttributes(9.f, Mat1f(2, 3, 1.f)));
+    EXPECT_NO_THROW(to.addAttributes(9, Mat1f()));
+    EXPECT_NO_THROW(to.addAttributes(9, Mat1f(2, 3, 1.f)));
 }
 
 TEST_F(GraphAttrConstructTest, AddAttributes_invalid_vtx_id_masked)
@@ -462,20 +459,17 @@ TEST_F(GraphAttrConstructTest, AddAttributes_invalid_vtx_id_masked)
 
     ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    EXPECT_THROW(to.addAttributes(-1.f, Mat1f()), ExceptionKeyError);
-    EXPECT_THROW(to.addAttributes(-1.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(0, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(0, Mat1f(2, 3, 1.f)), ExceptionKeyError);
 
-    EXPECT_THROW(to.addAttributes(0.f, Mat1f()), ExceptionKeyError);
-    EXPECT_THROW(to.addAttributes(0.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(5, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(5, Mat1f(2, 3, 1.f)), ExceptionKeyError);
 
-    EXPECT_THROW(to.addAttributes(5.f, Mat1f()), ExceptionKeyError);
-    EXPECT_THROW(to.addAttributes(5.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(12, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(12, Mat1f(2, 3, 1.f)), ExceptionKeyError);
 
-    EXPECT_THROW(to.addAttributes(11.2f, Mat1f()), ExceptionKeyError);
-    EXPECT_THROW(to.addAttributes(11.2, Mat1f(2, 3, 1.f)), ExceptionKeyError);
-
-    EXPECT_THROW(to.addAttributes(9.f, Mat1f()), ExceptionKeyError);
-    EXPECT_THROW(to.addAttributes(9.f, Mat1f(2, 3, 1.f)), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(9, Mat1f()), ExceptionKeyError);
+    EXPECT_THROW(to.addAttributes(9, Mat1f(2, 3, 1.f)), ExceptionKeyError);
 }
 
 TEST_F(GraphAttrConstructTest, GetAttributes_empty_graph)
@@ -484,10 +478,10 @@ TEST_F(GraphAttrConstructTest, GetAttributes_empty_graph)
     GraphAttr to(x, Mat());
     EXPECT_EQ(static_cast<size_t>(0), to.num_vertices());
 
-    float vtx_id = -10.f;
-    while(++vtx_id <= 10.f) {
+    float vtx_id = -1;
+    while(++vtx_id <= 10) {
 
-        EXPECT_THROW(to.getAttributes(++vtx_id), ExceptionKeyError);
+        EXPECT_THROW(to.getAttributes(vtx_id), ExceptionKeyError);
     }
 }
 
@@ -504,20 +498,18 @@ TEST_F(GraphAttrConstructTest, GetAttributes_invalid_vtx_id)
 
     ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    EXPECT_THROW(to.getAttributes(-1.f), ExceptionKeyError);
-    EXPECT_THROW(to.getAttributes(0.f), ExceptionKeyError);
-    EXPECT_THROW(to.getAttributes(12.f), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(-1), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(0), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(12), ExceptionKeyError);
 
-    EXPECT_THROW(to.getAttributes(4.f), ExceptionKeyError);
-    EXPECT_THROW(to.getAttributes(5.f), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(4), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(5), ExceptionKeyError);
 
     for(size_t i=0; i<m.total(); i++) {
 
         EXPECT_NO_THROW(to.getAttributes(m(i)));
-        EXPECT_THROW(to.getAttributes(m(i)+0.2f), ExceptionKeyError);
-        EXPECT_THROW(to.getAttributes(m(i)-0.2f), ExceptionKeyError);
-        EXPECT_THROW(to.getAttributes(m(i)+0.8f), ExceptionKeyError);
-        EXPECT_THROW(to.getAttributes(m(i)-0.8f), ExceptionKeyError);
+        EXPECT_THROW(to.getAttributes(m(i)+100), ExceptionKeyError);
+        EXPECT_THROW(to.getAttributes(m(i)-100), ExceptionKeyError);
     }
 }
 
@@ -538,24 +530,22 @@ TEST_F(GraphAttrConstructTest, GetAttributes_invalid_vtx_id_masked)
 
     ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    EXPECT_THROW(to.getAttributes(-1.f), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(-1), ExceptionKeyError);
 
-    EXPECT_THROW(to.getAttributes(0.f), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(0), ExceptionKeyError);
 
-    EXPECT_THROW(to.getAttributes(5.f), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(5), ExceptionKeyError);
 
-    EXPECT_THROW(to.getAttributes(11.2f), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(12), ExceptionKeyError);
 
-    EXPECT_THROW(to.getAttributes(9.f), ExceptionKeyError);
+    EXPECT_THROW(to.getAttributes(9), ExceptionKeyError);
 
     for(size_t i=0; i<m.total(); i++) {
 
         if(mask(i)) {
             EXPECT_NO_THROW(to.getAttributes(m(i)));
-            EXPECT_THROW(to.getAttributes(m(i)+0.2f), ExceptionKeyError);
-            EXPECT_THROW(to.getAttributes(m(i)-0.2f), ExceptionKeyError);
-            EXPECT_THROW(to.getAttributes(m(i)+0.8f), ExceptionKeyError);
-            EXPECT_THROW(to.getAttributes(m(i)-0.8f), ExceptionKeyError);
+            EXPECT_THROW(to.getAttributes(m(i)+20), ExceptionKeyError);
+            EXPECT_THROW(to.getAttributes(m(i)-20), ExceptionKeyError);
         }
         else {
             EXPECT_THROW(to.getAttributes(m(i)), ExceptionKeyError);
@@ -567,10 +557,10 @@ TEST_F(GraphAttrConstructTest, Add_and_getAttributes_masked)
 {
     const int ROWS=3;
     const int COLS=3;
-    float data[ROWS*COLS] = {1, 1, 2.2,
-                             3, 6, 6,
-                             9, 9.5, 11};
-    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
 
     Mat1b exclude, mask;
     cv::bitwise_or(m < 2, m == 9, exclude);
@@ -580,7 +570,7 @@ TEST_F(GraphAttrConstructTest, Add_and_getAttributes_masked)
 
     ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    VecF vtx_ids = to.VerticesIds();
+    VecI vtx_ids = to.VerticesIds();
 
     // populate vertex attributes with arbitrary values
     for(size_t i=0; i<vtx_ids.size(); i++) {
@@ -600,19 +590,19 @@ TEST_F(GraphAttrConstructTest, Add_and_getAttributes_masked)
  * @param mask
  * @return masked_img
  */
-Mat1f func_masked_img(const cv::Mat1f &img, const cv::Mat1b &mask) {
+Mat1f func_masked_img(const cv::Mat1i &img, const cv::Mat &mask) {
 
-    return img.clone().setTo(0.f, mask == 0);
+    return img.clone().setTo(0, mask == 0);
 }
 
 TEST_F(GraphAttrConstructTest, ApplyVerticesToMap_masked_img)
 {
     const int ROWS=3;
     const int COLS=3;
-    float data[ROWS*COLS] = {1, 1, 2.2,
-                             3, 6, 6,
-                             9, 9.5, 11};
-    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
 
     Mat1b exclude, mask;
     cv::bitwise_or(m < 2, m == 9, exclude);
@@ -622,7 +612,7 @@ TEST_F(GraphAttrConstructTest, ApplyVerticesToMap_masked_img)
 
     ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    VecF vtx_ids = to.VerticesIds();
+    VecI vtx_ids = to.VerticesIds();
 
     VecMat1f results = to.applyVerticesToMap(func_masked_img);
 
@@ -630,9 +620,9 @@ TEST_F(GraphAttrConstructTest, ApplyVerticesToMap_masked_img)
 
     for(size_t i=0; i<vtx_ids.size(); i++) {
 
-        float vtx_id = vtx_ids[i];
+        int vtx_id = vtx_ids[i];
 
-        EXPECT_MAT_EQ(m.clone().setTo(0.f, m != vtx_id), results[i]);
+        EXPECT_MAT_EQ(Mat1f(m.clone().setTo(0, m != vtx_id)), results[i]);
 
     }
 }
@@ -641,10 +631,10 @@ TEST_F(GraphAttrConstructTest, ApplyVertexToMap_masked_img)
 {
     const int ROWS=3;
     const int COLS=3;
-    float data[ROWS*COLS] = {1, 1, 2.2,
-                             3, 6, 6,
-                             9, 9.5, 11};
-    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
 
     Mat1b exclude, mask;
     cv::bitwise_or(m < 2, m == 9, exclude);
@@ -654,7 +644,7 @@ TEST_F(GraphAttrConstructTest, ApplyVertexToMap_masked_img)
 
     ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    VecF vtx_ids = to.VerticesIds();
+    VecI vtx_ids = to.VerticesIds();
 
     for(size_t i=0; i<vtx_ids.size(); i++) {
 
@@ -662,7 +652,7 @@ TEST_F(GraphAttrConstructTest, ApplyVertexToMap_masked_img)
 
         Mat1f result = to.applyVertexToMap(vtx_id, func_masked_img);
 
-        EXPECT_MAT_EQ(m.clone().setTo(0.f, m != vtx_id), result);
+        EXPECT_MAT_EQ(Mat1f(m.clone().setTo(0, m != vtx_id)), result);
     }
 }
 
@@ -670,10 +660,10 @@ TEST_F(GraphAttrConstructTest, ApplyVertexToMap_masked_img_invalid_vtx_id)
 {
     const int ROWS=3;
     const int COLS=3;
-    float data[ROWS*COLS] = {1, 1, 2.2,
-                             3, 6, 6,
-                             9, 9.5, 11};
-    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
 
     Mat1b exclude, mask;
     cv::bitwise_or(m < 2, m == 9, exclude);
@@ -683,24 +673,22 @@ TEST_F(GraphAttrConstructTest, ApplyVertexToMap_masked_img_invalid_vtx_id)
 
     ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    EXPECT_THROW(to.applyVertexToMap(-1.f, func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to.applyVertexToMap(-1, func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to.applyVertexToMap(0.f, func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to.applyVertexToMap(0, func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to.applyVertexToMap(5.f, func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to.applyVertexToMap(5, func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to.applyVertexToMap(11.2f, func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to.applyVertexToMap(12, func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to.applyVertexToMap(9.f, func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to.applyVertexToMap(9, func_masked_img), ExceptionKeyError);
 
     for(size_t i=0; i<m.total(); i++) {
 
         if(mask(i)) {
             EXPECT_NO_THROW(to.applyVertexToMap(m(i), func_masked_img));
-            EXPECT_THROW(to.applyVertexToMap(m(i)+0.2f, func_masked_img), ExceptionKeyError);
-            EXPECT_THROW(to.applyVertexToMap(m(i)-0.2f, func_masked_img), ExceptionKeyError);
-            EXPECT_THROW(to.applyVertexToMap(m(i)+0.7f, func_masked_img), ExceptionKeyError);
-            EXPECT_THROW(to.applyVertexToMap(m(i)-0.7f, func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to.applyVertexToMap(m(i)+20, func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to.applyVertexToMap(m(i)-20, func_masked_img), ExceptionKeyError);
         }
         else {
             EXPECT_THROW(to.applyVertexToMap(m(i), func_masked_img), ExceptionKeyError);
@@ -719,13 +707,13 @@ protected:
     {
         const int ROWS=3;
         const int COLS=3;
-        float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
-                                 3.f, 6.0f, 6.0f,
-                                 9.f, 9.5f, 11.f};
-        map_ = Mat1f(ROWS, COLS, data).clone();
+        int data[ROWS*COLS] = {1, 7, 2,
+                               3, 6, 6,
+                               9, 9, 11};
+        map_ = Mat1i(ROWS, COLS, data).clone();
 
         Mat1b exclude;
-        cv::bitwise_or(map_ < 2.f, map_ == 9.f, exclude);
+        cv::bitwise_or(map_ < 2, map_ == 9, exclude);
         cv::bitwise_not(exclude, mask_);
 
         to_ = GraphAttr(map_, mask_);
@@ -733,7 +721,7 @@ protected:
 
     // members
     GraphAttr to_;  ///< test object
-    Mat1f map_;
+    Mat1i map_;
     Mat1b mask_;
 };
 
@@ -741,24 +729,22 @@ TEST_F(GraphAttrMaskedTest, ApplyVertexToMap_masked_img_invalid_vtx_id)
 {
     ASSERT_GT(to_.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    EXPECT_THROW(to_.applyVertexToMap(-1.f, func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to_.applyVertexToMap(-1, func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to_.applyVertexToMap(0.f, func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to_.applyVertexToMap(0, func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to_.applyVertexToMap(5.f, func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to_.applyVertexToMap(5, func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to_.applyVertexToMap(11.2f, func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to_.applyVertexToMap(12, func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to_.applyVertexToMap(9.f, func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to_.applyVertexToMap(9, func_masked_img), ExceptionKeyError);
 
     for(size_t i=0; i<map_.total(); i++) {
 
         if(mask_(i)) {
             EXPECT_NO_THROW(to_.applyVertexToMap(map_(i), func_masked_img));
-            EXPECT_THROW(to_.applyVertexToMap(map_(i)+0.2f, func_masked_img), ExceptionKeyError);
-            EXPECT_THROW(to_.applyVertexToMap(map_(i)-0.2f, func_masked_img), ExceptionKeyError);
-            EXPECT_THROW(to_.applyVertexToMap(map_(i)+0.7f, func_masked_img), ExceptionKeyError);
-            EXPECT_THROW(to_.applyVertexToMap(map_(i)-0.7f, func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)+20, func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)-20, func_masked_img), ExceptionKeyError);
         }
         else {
             EXPECT_THROW(to_.applyVertexToMap(map_(i), func_masked_img), ExceptionKeyError);
@@ -769,9 +755,9 @@ TEST_F(GraphAttrMaskedTest, ApplyVertexToMap_masked_img_invalid_vtx_id)
 class DummyWithStaticMethod
 {
 public:
-    static Mat1f func_masked_img(const cv::Mat1f &img, const cv::Mat1b &mask) {
+    static Mat1f func_masked_img(const cv::Mat1i &img, const cv::Mat &mask) {
 
-        return img.clone().setTo(0.f, mask == 0);
+        return img.clone().setTo(0, mask == 0);
     }
 };
 
@@ -779,24 +765,22 @@ TEST_F(GraphAttrMaskedTest, ApplyVertexToMap_masked_img_invalid_vtx_id_static_me
 {
     ASSERT_GT(to_.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    EXPECT_THROW(to_.applyVertexToMap(-1.f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to_.applyVertexToMap(-1, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to_.applyVertexToMap(0.f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to_.applyVertexToMap(0, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to_.applyVertexToMap(5.f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to_.applyVertexToMap(5, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to_.applyVertexToMap(11.2f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to_.applyVertexToMap(12, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
 
-    EXPECT_THROW(to_.applyVertexToMap(9.f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+    EXPECT_THROW(to_.applyVertexToMap(9, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
 
     for(size_t i=0; i<map_.total(); i++) {
 
         if(mask_(i)) {
             EXPECT_NO_THROW(to_.applyVertexToMap(map_(i), DummyWithStaticMethod::func_masked_img));
-            EXPECT_THROW(to_.applyVertexToMap(map_(i)+0.2f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
-            EXPECT_THROW(to_.applyVertexToMap(map_(i)-0.2f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
-            EXPECT_THROW(to_.applyVertexToMap(map_(i)+0.7f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
-            EXPECT_THROW(to_.applyVertexToMap(map_(i)-0.7f, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)+20, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
+            EXPECT_THROW(to_.applyVertexToMap(map_(i)-20, DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
         }
         else {
             EXPECT_THROW(to_.applyVertexToMap(map_(i), DummyWithStaticMethod::func_masked_img), ExceptionKeyError);
@@ -809,10 +793,10 @@ TEST_F(GraphAttrConstructTest, ApplyVertexToMap_masked_img_static_method)
 {
     const int ROWS=3;
     const int COLS=3;
-    float data[ROWS*COLS] = {1, 1, 2.2,
-                             3, 6, 6,
-                             9, 9.5, 11};
-    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
 
     Mat1b exclude, mask;
     cv::bitwise_or(m < 2, m == 9, exclude);
@@ -822,15 +806,15 @@ TEST_F(GraphAttrConstructTest, ApplyVertexToMap_masked_img_static_method)
 
     ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    VecF vtx_ids = to.VerticesIds();
+    VecI vtx_ids = to.VerticesIds();
 
     for(size_t i=0; i<vtx_ids.size(); i++) {
 
-        float vtx_id = vtx_ids[i];
+        int vtx_id = vtx_ids[i];
 
         Mat1f result = to.applyVertexToMap(vtx_id, DummyWithStaticMethod::func_masked_img);
 
-        EXPECT_MAT_EQ(m.clone().setTo(0.f, m != vtx_id), result);
+        EXPECT_MAT_EQ(Mat1f(m.clone().setTo(0.f, m != vtx_id)), result);
     }
 }
 
@@ -838,10 +822,10 @@ TEST_F(GraphAttrConstructTest, ApplyVerticesToMap_masked_img_static_method)
 {
     const int ROWS=3;
     const int COLS=3;
-    float data[ROWS*COLS] = {1, 1, 2.2,
-                             3, 6, 6,
-                             9, 9.5, 11};
-    Mat1f m = Mat1f(ROWS, COLS, data).clone();
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
 
     Mat1b exclude, mask;
     cv::bitwise_or(m < 2, m == 9, exclude);
@@ -851,7 +835,7 @@ TEST_F(GraphAttrConstructTest, ApplyVerticesToMap_masked_img_static_method)
 
     ASSERT_GT(to.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    VecF vtx_ids = to.VerticesIds();
+    VecI vtx_ids = to.VerticesIds();
 
     VecMat1f results = to.applyVerticesToMap(DummyWithStaticMethod::func_masked_img);
 
@@ -859,39 +843,39 @@ TEST_F(GraphAttrConstructTest, ApplyVerticesToMap_masked_img_static_method)
 
     for(size_t i=0; i<vtx_ids.size(); i++) {
 
-        float vtx_id = vtx_ids[i];
-        EXPECT_MAT_EQ(m.clone().setTo(0.f, m != vtx_id), results[i]);
+        int vtx_id = vtx_ids[i];
+        EXPECT_MAT_EQ(Mat1f(m.clone().setTo(0.f, m != vtx_id)), results[i]);
     }
 }
 
 TEST_F(GraphAttrMaskedTest, RemoveEdges_invalid)
 {
-    EXPECT_THROW(to_.removeEdges(2.2f, 9.0f), ExceptionKeyError);
-    EXPECT_THROW(to_.removeEdges(9.0f, 2.2f), ExceptionKeyError);
+    EXPECT_THROW(to_.removeEdges(20, 9), ExceptionKeyError);
+    EXPECT_THROW(to_.removeEdges(9, 20), ExceptionKeyError);
 }
 
 TEST_F(GraphAttrMaskedTest, VertexIndex)
 {
-    VecF vtx_ids = to_.VerticesIds();
+    VecI vtx_ids = to_.VerticesIds();
     for(size_t i=0; i<vtx_ids.size(); i++) {
 
         EXPECT_EQ(static_cast<int>(i), to_.VertexIndex(vtx_ids[i]));
 
-        EXPECT_THROW(to_.VertexIndex(vtx_ids[i]+100.f), ExceptionKeyError);
+        EXPECT_THROW(to_.VertexIndex(vtx_ids[i]+100), ExceptionKeyError);
     }
 }
 
 TEST_F(GraphAttrMaskedTest, VertexIndex_graph_without_vertices)
 {
     GraphAttr to;
-    VecF vtx_ids = to.VerticesIds();
+    VecI vtx_ids = to.VerticesIds();
 
     ASSERT_EQ(size_t(0), vtx_ids.size()) << "Expecting empty graph, without vertices";
 
-    EXPECT_THROW(to.VertexIndex(0.f), ExceptionKeyError);
-    EXPECT_THROW(to.VertexIndex(2.2f), ExceptionKeyError);
-    EXPECT_THROW(to.VertexIndex(6.f), ExceptionKeyError);
-    EXPECT_THROW(to.VertexIndex(9.f), ExceptionKeyError);
+    EXPECT_THROW(to.VertexIndex(0), ExceptionKeyError);
+    EXPECT_THROW(to.VertexIndex(22), ExceptionKeyError);
+    EXPECT_THROW(to.VertexIndex(6), ExceptionKeyError);
+    EXPECT_THROW(to.VertexIndex(9), ExceptionKeyError);
 }
 
 /**
@@ -903,8 +887,8 @@ TEST_F(GraphAttrMaskedTest, RemoveEdges_no_edge)
     Mat1f adj0;
     to_.AdjacencyMat(adj0);
 
-    float u = 2.2f;
-    float v = 11.0f;
+    int u = 2;
+    int v = 11;
     to_.removeEdges(u, v); // no edge
 
     Mat1f adj;
@@ -920,8 +904,8 @@ TEST_F(GraphAttrMaskedTest, RemoveEdges_no_edge)
 
 TEST_F(GraphAttrMaskedTest, RemoveEdges)
 {
-    float u = 2.2f;
-    float v = 6.0f;
+    int u = 2;
+    int v = 6;
 
     int u_idx = to_.VertexIndex(u);
     int v_idx = to_.VertexIndex(v);
@@ -952,10 +936,10 @@ TEST_F(GraphAttrMaskedTest, ContractEdges_new_dims)
 
     for(int i=1; i<NB_VERTICES; i++) {
 
-        VecF vtx_ids = to_.VerticesIds();
+        VecI vtx_ids = to_.VerticesIds();
         //ELM_COUT_VAR(elm::to_string(vtx_ids));
-        float u = vtx_ids[0];
-        float v = vtx_ids[1];
+        int u = vtx_ids[0];
+        int v = vtx_ids[1];
 
         Mat1f adj_pre;
         to_.AdjacencyMat(adj_pre);
@@ -983,9 +967,9 @@ TEST_F(GraphAttrMaskedTest, ContractEdges_vtx_removed)
 
     while(static_cast<int>(to_.num_vertices()) > 1) {
 
-        VecF vtx_ids = to_.VerticesIds();
-        float u = vtx_ids[1];
-        float v = vtx_ids[0];
+        VecI vtx_ids = to_.VerticesIds();
+        int u = vtx_ids[1];
+        int v = vtx_ids[0];
 
         to_.contractEdges(u, v);
 
@@ -996,8 +980,8 @@ TEST_F(GraphAttrMaskedTest, ContractEdges_vtx_removed)
 
 TEST_F(GraphAttrMaskedTest, ContractEdges_merge_neighbors)
 {
-    float u = 6.0f;
-    float v = 9.5f;
+    int u = 6;
+    int v = 11;
 
     int u_idx = to_.VertexIndex(u);
     int v_idx = to_.VertexIndex(v);
@@ -1050,71 +1034,70 @@ TEST_F(GraphAttrMaskedTest, GetNeighbors_empty)
 
     ASSERT_EQ(size_t(0), to.VerticesIds().size()) << "Expecting empty graph, without vertices";
 
-    EXPECT_THROW(to.getNeighbors(0.f), ExceptionKeyError);
-    EXPECT_THROW(to.getNeighbors(2.2f), ExceptionKeyError);
-    EXPECT_THROW(to.getNeighbors(6.f), ExceptionKeyError);
-    EXPECT_THROW(to.getNeighbors(9.f), ExceptionKeyError);
-    EXPECT_THROW(to.getNeighbors(-1.f), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(0), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(22), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(6), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(9), ExceptionKeyError);
+    EXPECT_THROW(to.getNeighbors(-1), ExceptionKeyError);
 }
 
 TEST_F(GraphAttrMaskedTest, GetNeighbors_invalid)
 {
     ASSERT_GT(to_.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    EXPECT_THROW(to_.getNeighbors(-1.f), ExceptionKeyError);
-    EXPECT_THROW(to_.getNeighbors(0.f), ExceptionKeyError);
-    EXPECT_THROW(to_.getNeighbors(5.f), ExceptionKeyError);
-    EXPECT_THROW(to_.getNeighbors(11.2f), ExceptionKeyError);
-    EXPECT_THROW(to_.getNeighbors(9.f), ExceptionKeyError) << "this vertex was masked.";
+    EXPECT_THROW(to_.getNeighbors(-1), ExceptionKeyError);
+    EXPECT_THROW(to_.getNeighbors(0), ExceptionKeyError);
+    EXPECT_THROW(to_.getNeighbors(5), ExceptionKeyError);
+    EXPECT_THROW(to_.getNeighbors(12), ExceptionKeyError);
+    EXPECT_THROW(to_.getNeighbors(9), ExceptionKeyError) << "this vertex was masked.";
 }
 
 TEST_F(GraphAttrMaskedTest, GetNeighbors_none)
 {
     const int ROWS=3;
     const int COLS=3;
-    float data[ROWS*COLS] = {1.f, 1.0f, 2.2f,
-                             3.f, 1.0f, 6.0f,
-                             1.f, 1.0f, 11.f};
-    map_ = Mat1f(ROWS, COLS, data).clone();
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 1, 6,
+                           1, 1, 11};
+    map_ = Mat1i(ROWS, COLS, data).clone();
 
     Mat1b exclude;
     // mask everything around a vertex to get one without neighbors
-    cv::bitwise_or(map_ == 1.f, map_ == 9.f, exclude);
+    cv::bitwise_or(map_ == 1, map_ == 9, exclude);
     cv::bitwise_not(exclude, mask_);
 
     GraphAttr to = GraphAttr(map_, mask_);
 
     ASSERT_GT(to.num_vertices(), size_t(1));
 
-    EXPECT_SIZE(0, to.getNeighbors(3.f));
-    EXPECT_GT(to.getNeighbors(6.f).size(), size_t(0));
+    EXPECT_SIZE(0, to.getNeighbors(3));
+    EXPECT_GT(to.getNeighbors(6).size(), size_t(0));
 }
 
 TEST_F(GraphAttrMaskedTest, GetNeighbors_all_neighbors)
 {
     /*
-    float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
-                             3.f, 6.0f, 6.0f,
-                             9.f, 9.5f, 11.f};
+    int data[ROWS*COLS] = {1, 7, 2,
+                           3, 6, 6,
+                           9, 9, 11};
 
-        cv::bitwise_or(map_ < 2.f, map_ == 9.f, exclude);
-        { x , 7.0f, 2.2f,
-         3.f, 6.0f, 6.0f,
-          x , 9.5f, 11.f};
+        cv::bitwise_or(map_ < 2, map_ == 9, exclude);
+        { x , 7, 2,
+          3 , 6, 6,
+          x , x, 11};
     */
 
     ASSERT_GT(to_.num_vertices(), size_t(1));
 
-    VecF tmp = to_.getNeighbors(6.f);
-    std::set<float> neigh_ids(tmp.begin(), tmp.end());
-    EXPECT_SIZE(5, neigh_ids);
+    VecI tmp = to_.getNeighbors(6);
+    std::set<int> neigh_ids(tmp.begin(), tmp.end());
+    EXPECT_SIZE(4, neigh_ids);
 
-    std::set<float> expected_neighs;
-    expected_neighs.insert(7.f);
-    expected_neighs.insert(2.2f);
-    expected_neighs.insert(3.f);
-    expected_neighs.insert(9.5f);
-    expected_neighs.insert(11.f);
+    std::set<int> expected_neighs;
+    expected_neighs.insert(7);
+    expected_neighs.insert(2);
+    expected_neighs.insert(3);
+    expected_neighs.insert(11);
 
     EXPECT_EQ(expected_neighs, neigh_ids);
 }
@@ -1122,46 +1105,45 @@ TEST_F(GraphAttrMaskedTest, GetNeighbors_all_neighbors)
 TEST_F(GraphAttrMaskedTest, GetNeighbors_who)
 {
     /*
-    float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
-                             3.f, 6.0f, 6.0f,
-                             9.f, 9.5f, 11.f};
+    int data[ROWS*COLS] = {1, 7, 2,
+                           3, 6, 6,
+                           9, 9, 11};
 
-        cv::bitwise_or(map_ < 2.f, map_ == 9.f, exclude);
-        { x , 7.0f, 2.2f,
-         3.f, 6.0f, 6.0f,
-          x , 9.5f, 11.f};
+        cv::bitwise_or(map_ < 2, map_ == 9, exclude);
+        { x , 7, 2,
+          3 , 6, 6,
+          x , x, 11};
     */
     ASSERT_GT(to_.num_vertices(), size_t(1));
 
     {
-        VecF tmp = to_.getNeighbors(2.2f);
-        std::set<float> neigh_ids(tmp.begin(), tmp.end());
+        VecI tmp = to_.getNeighbors(2);
+        std::set<int> neigh_ids(tmp.begin(), tmp.end());
         EXPECT_SIZE(2, neigh_ids);
 
-        std::set<float> expected_neighs;
-        expected_neighs.insert(6.f);
-        expected_neighs.insert(7.f);
+        std::set<int> expected_neighs;
+        expected_neighs.insert(6);
+        expected_neighs.insert(7);
 
         EXPECT_EQ(expected_neighs, neigh_ids);
     }
     {
-        VecF tmp = to_.getNeighbors(11.f);
-        std::set<float> neigh_ids(tmp.begin(), tmp.end());
-        EXPECT_SIZE(2, neigh_ids);
-
-        std::set<float> expected_neighs;
-        expected_neighs.insert(6.f);
-        expected_neighs.insert(9.5f);
-
-        EXPECT_EQ(expected_neighs, neigh_ids);
-    }
-    {
-        VecF tmp = to_.getNeighbors(3.f);
-        std::set<float> neigh_ids(tmp.begin(), tmp.end());
+        VecI tmp = to_.getNeighbors(11);
+        std::set<int> neigh_ids(tmp.begin(), tmp.end());
         EXPECT_SIZE(1, neigh_ids);
 
-        std::set<float> expected_neighs;
-        expected_neighs.insert(6.f);
+        std::set<int> expected_neighs;
+        expected_neighs.insert(6);
+
+        EXPECT_EQ(expected_neighs, neigh_ids);
+    }
+    {
+        VecI tmp = to_.getNeighbors(3);
+        std::set<int> neigh_ids(tmp.begin(), tmp.end());
+        EXPECT_SIZE(1, neigh_ids);
+
+        std::set<int> expected_neighs;
+        expected_neighs.insert(6);
 
         EXPECT_EQ(expected_neighs, neigh_ids);
     }
@@ -1170,25 +1152,25 @@ TEST_F(GraphAttrMaskedTest, GetNeighbors_who)
 TEST_F(GraphAttrMaskedTest, GetNeighbors_adjacency)
 {
     /*
-    float data[ROWS*COLS] = {1.f, 7.0f, 2.2f,
-                             3.f, 6.0f, 6.0f,
-                             9.f, 9.5f, 11.f};
+    int data[ROWS*COLS] = {1, 7, 2,
+                           3, 6, 6,
+                           9, 9, 11};
 
-        cv::bitwise_or(map_ < 2.f, map_ == 9.f, exclude);
-        { x , 7.0f, 2.2f,
-         3.f, 6.0f, 6.0f,
-          x , 9.5f, 11.f};
+        cv::bitwise_or(map_ < 2, map_ == 9, exclude);
+        { x , 7, 2,
+          3 , 6, 6,
+          x , x, 11};
     */
     ASSERT_GT(to_.num_vertices(), size_t(1));
 
     Mat1f adj;
     to_.AdjacencyMat(adj);
 
-    VecF vtx_ids = to_.VerticesIds();
+    VecI vtx_ids = to_.VerticesIds();
 
     for(size_t i=0; i<vtx_ids.size(); i++) {
 
-        VecF neigh_ids = to_.getNeighbors(vtx_ids[i]);
+        VecI neigh_ids = to_.getNeighbors(vtx_ids[i]);
 
         EXPECT_SIZE(cv::sum(adj.row(i))[0], neigh_ids);
 
@@ -1203,15 +1185,15 @@ TEST_F(GraphAttrMaskedTest, GetNeighbors_mulitple_contacts)
 {
     const int ROWS=2;
     const int COLS=3;
-    float data[ROWS*COLS] = {3.f, 1.f, 2.2f,
-                             3.f, 1.f, 6.f};
-    map_ = Mat1f(ROWS, COLS, data).clone();
+    int data[ROWS*COLS] = {3, 1, 2,
+                           3, 1, 6};
+    map_ = Mat1i(ROWS, COLS, data).clone();
 
     GraphAttr to = GraphAttr(map_, Mat1b());
 
-    EXPECT_SIZE(1, to.getNeighbors(3.f));
-    EXPECT_SIZE(3, to.getNeighbors(1.f));
-    EXPECT_SIZE(2, to.getNeighbors(2.2f));
+    EXPECT_SIZE(1, to.getNeighbors(3));
+    EXPECT_SIZE(3, to.getNeighbors(1));
+    EXPECT_SIZE(2, to.getNeighbors(2));
 }
 
 TEST_F(GraphAttrMaskedTest, Remove_vertex_empty)
@@ -1220,22 +1202,22 @@ TEST_F(GraphAttrMaskedTest, Remove_vertex_empty)
 
     ASSERT_EQ(size_t(0), to.VerticesIds().size()) << "Expecting empty graph, without vertices";
 
-    EXPECT_THROW(to.removeVertex(0.f), ExceptionKeyError);
-    EXPECT_THROW(to.removeVertex(2.2f), ExceptionKeyError);
-    EXPECT_THROW(to.removeVertex(6.f), ExceptionKeyError);
-    EXPECT_THROW(to.removeVertex(9.f), ExceptionKeyError);
-    EXPECT_THROW(to.removeVertex(-1.f), ExceptionKeyError);
+    EXPECT_THROW(to.removeVertex(0), ExceptionKeyError);
+    EXPECT_THROW(to.removeVertex(2), ExceptionKeyError);
+    EXPECT_THROW(to.removeVertex(6), ExceptionKeyError);
+    EXPECT_THROW(to.removeVertex(9), ExceptionKeyError);
+    EXPECT_THROW(to.removeVertex(-1), ExceptionKeyError);
 }
 
 TEST_F(GraphAttrMaskedTest, Remove_vertex_invalid)
 {
     ASSERT_GT(to_.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
 
-    EXPECT_THROW(to_.removeVertex(-1.f), ExceptionKeyError);
-    EXPECT_THROW(to_.removeVertex(0.f), ExceptionKeyError);
-    EXPECT_THROW(to_.removeVertex(5.f), ExceptionKeyError);
-    EXPECT_THROW(to_.removeVertex(11.2f), ExceptionKeyError);
-    EXPECT_THROW(to_.removeVertex(9.f), ExceptionKeyError) << "this vertex was masked.";
+    EXPECT_THROW(to_.removeVertex(-1),  ExceptionKeyError);
+    EXPECT_THROW(to_.removeVertex(0),   ExceptionKeyError);
+    EXPECT_THROW(to_.removeVertex(5),   ExceptionKeyError);
+    EXPECT_THROW(to_.removeVertex(12),  ExceptionKeyError);
+    EXPECT_THROW(to_.removeVertex(9),   ExceptionKeyError) << "this vertex was masked.";
 }
 
 /**
@@ -1247,10 +1229,10 @@ TEST_F(GraphAttrMaskedTest, Remove_vertex)
 
     while(static_cast<int>(to_.num_vertices()) > 1) {
 
-        VecF vtx_ids = to_.VerticesIds();
+        VecI vtx_ids = to_.VerticesIds();
 
-        float u = vtx_ids[1];
-        float v = vtx_ids[0];
+        int u = vtx_ids[1];
+        int v = vtx_ids[0];
 
         to_.removeVertex(u);
 
@@ -1266,9 +1248,9 @@ TEST_F(GraphAttrMaskedTest, Remove_vertex_all_vertices)
 
     while(static_cast<int>(to_.num_vertices()) > 1) {
 
-        VecF vtx_ids = to_.VerticesIds();
+        VecI vtx_ids = to_.VerticesIds();
 
-        float v = vtx_ids[0];
+        int v = vtx_ids[0];
 
         to_.removeVertex(v);
 
@@ -1283,18 +1265,18 @@ TEST_F(GraphAttrMaskedTest, Remove_vertex_check_vtx_ids)
 
     while(static_cast<int>(to_.num_vertices()) > 0) {
 
-        VecF vtx_ids = to_.VerticesIds();
-        float v = vtx_ids[0];
+        VecI vtx_ids = to_.VerticesIds();
+        int v = vtx_ids[0];
 
         to_.removeVertex(v);
 
         vtx_ids = to_.VerticesIds();
-        VecF::const_iterator itr = std::find(vtx_ids.begin(), vtx_ids.end(), v);
+        VecI::const_iterator itr = std::find(vtx_ids.begin(), vtx_ids.end(), v);
         EXPECT_EQ(vtx_ids.end(), itr) << "Vertex still in list of vertex ids after removal.";
     }
 }
 
-cv::Mat1f mask_vertex(const cv::Mat1f& img, const cv::Mat1b &mask)
+cv::Mat1f mask_vertex(const cv::Mat1i& img, const cv::Mat &mask)
 {
     Mat1b mask_inverted;
     cv::bitwise_not(mask, mask_inverted);
@@ -1303,14 +1285,15 @@ cv::Mat1f mask_vertex(const cv::Mat1f& img, const cv::Mat1b &mask)
 
 TEST_F(GraphAttrMaskedTest, Remove_vertex_check_map)
 {
+    ASSERT_TRUE(map_.isContinuous());
     ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 1 vertex.";
 
     Mat1f map;
 
     while(static_cast<int>(to_.num_vertices()) > 0) {
 
-        VecF vtx_ids = to_.VerticesIds();
-        float v = vtx_ids[0];
+        VecI vtx_ids = to_.VerticesIds();
+        int v = vtx_ids[0];
 
         // replace with getter to Graph's underlying map image
         VecMat1f masked_maps = to_.applyVerticesToMap(mask_vertex);
@@ -1334,6 +1317,51 @@ TEST_F(GraphAttrMaskedTest, Remove_vertex_check_map)
     }
 }
 
+TEST_F(GraphAttrMaskedTest, Remove_vertex_check_map_non_continuous)
+{
+    hconcat(map_.col(0), map_, map_);
+
+    Mat1i map2 = map_.colRange(1, map_.cols);
+
+    Mat1b exclude;
+    cv::bitwise_or(map2 < 2, map2 == 9, exclude);
+    cv::bitwise_not(exclude, mask_);
+
+    ASSERT_FALSE(map2.isContinuous());
+
+    to_ = GraphAttr(map2, mask_);
+
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 1 vertex.";
+
+    Mat1f map;
+
+    while(static_cast<int>(to_.num_vertices()) > 0) {
+
+        VecI vtx_ids = to_.VerticesIds();
+        int v = vtx_ids[0];
+
+        // replace with getter to Graph's underlying map image
+        VecMat1f masked_maps = to_.applyVerticesToMap(mask_vertex);
+        map = Mat1f::zeros(map2.size());
+        for(size_t i=0; i<masked_maps.size(); i++) {
+
+            map += masked_maps[i];
+        }
+        EXPECT_GT(countNonZero(map==v), 0);
+
+        to_.removeVertex(v);
+
+        masked_maps = to_.applyVerticesToMap(mask_vertex);
+        Mat1f map = Mat1f::zeros(map2.size());
+        for(size_t i=0; i<masked_maps.size(); i++) {
+
+            map += masked_maps[i];
+        }
+        EXPECT_EQ(0, countNonZero(map==v)) << "still finding pixel with vertex color after removal.";
+
+    }
+}
+
 TEST_F(GraphAttrMaskedTest, GetMapImg)
 {
     EXPECT_MAT_EQ(map_, to_.MapImg());
@@ -1343,9 +1371,9 @@ TEST_F(GraphAttrMaskedTest, GetMapImg_vertex_removed)
 {
     ASSERT_GT(static_cast<int>(to_.num_vertices()), 2) << "this test requires a graph with at least 2 vertices.";
 
-    VecF vtx_ids = to_.VerticesIds();
-    float u = vtx_ids[0];
-    float v = vtx_ids[1];
+    VecI vtx_ids = to_.VerticesIds();
+    int u = vtx_ids[0];
+    int v = vtx_ids[1];
 
     EXPECT_GT(countNonZero(to_.MapImg()==u), 0);
     EXPECT_GT(countNonZero(to_.MapImg()==v), 0);
@@ -1360,9 +1388,9 @@ TEST_F(GraphAttrMaskedTest, GetMapImg_vertex_removed_mask)
 {
     ASSERT_GT(static_cast<int>(to_.num_vertices()), 2) << "this test requires a graph with at least 2 vertices.";
 
-    VecF vtx_ids = to_.VerticesIds();
-    float u = vtx_ids[0];
-    float v = vtx_ids[1];
+    VecI vtx_ids = to_.VerticesIds();
+    int u = vtx_ids[0];
+    int v = vtx_ids[1];
 
     Mat1b mask_u = to_.MapImg()==u;
     Mat1b mask_v = to_.MapImg()==v;

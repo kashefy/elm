@@ -7,8 +7,6 @@
 //M*/
 #include "elm/core/graph/graphattr_impl.h"
 
-#include <opencv2/core/core.hpp>
-
 #include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
 #include "elm/core/stl/stl_inl.h"
@@ -17,13 +15,21 @@ using namespace std;
 using namespace cv;
 using namespace elm;
 
-GraphAttr_Impl::GraphAttr_Impl()
+const int GraphAttr_Impl::ID_UNASSIGNED = 0;
+
+GraphAttr_Impl::~GraphAttr_Impl()
 {
 }
 
-GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
+GraphAttr_Impl::GraphAttr_Impl()
+    : is_map_dirty_(false)
+{
+}
+
+GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
                                const Mat1b &mask)
-    : src_map_img(map_img)
+    : src_map_img_(map_img),
+      is_map_dirty_(false)
 {
     // some validation first
     ELM_THROW_BAD_DIMS_IF(map_img.total()==static_cast<size_t>(1),
@@ -35,9 +41,17 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
 
     g = GraphAttrType(); // no. of vertices unknown yet
 
+    vtx_cache_.reserve(src_map_img_.total()*2+1); // some sufficiently high number
+
     bool is_masked = !mask.empty();
 
     EdgeWeightProp EDGE_CONNECTED = 1.f;
+
+    // Property accessors
+    boost::property_map<GraphAttrType, boost::vertex_color_t>::type
+            vtx_color_lut = get(boost::vertex_color, g);
+
+    bool is_new_vertex;
 
     for(int r=0; r<map_img.rows; r++) {
 
@@ -48,23 +62,27 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
                 continue; // skip iteration at masked element;
             }
 
-            // Property accessors
-            boost::property_map<GraphAttrType, boost::vertex_color_t>::type
-                    vertex_color_id = get(boost::vertex_color, g);
+            VtxColor value_cur = map_img(r, c);
+            VtxDescriptor cur = retrieveVertex(value_cur, is_new_vertex);
 
-            float value_cur = map_img(r, c);
-            VtxDescriptor cur = retrieveVertex(value_cur);
-            vertex_color_id[cur] = value_cur;
+            if(is_new_vertex) {
+
+                vtx_color_lut[cur] = value_cur;
+            }
 
             if(c < map_img.cols-1) {
 
                 if(!is_masked || mask(r, c+1)) {
 
-                    float value = map_img(r, c+1);
-                    VtxDescriptor right = retrieveVertex(value);
-                    vertex_color_id[right] = value;
+                    VtxColor value = map_img(r, c+1);
+                    VtxDescriptor right = retrieveVertex(value, is_new_vertex);
 
                     if(cur != right) {
+
+                        if(is_new_vertex) {
+
+                            vtx_color_lut[right] = value;
+                        }
 
                         add_edge(cur, right, EDGE_CONNECTED, g);
                     }
@@ -75,11 +93,15 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
 
                 if(!is_masked || mask(r+1, c)) {
 
-                    float value = map_img(r+1, c);
-                    VtxDescriptor down = retrieveVertex(value);
-                    vertex_color_id[down] = value;
+                    VtxColor value = map_img(r+1, c);
+                    VtxDescriptor down = retrieveVertex(value, is_new_vertex);
 
                     if(cur != down) {
+
+                        if(is_new_vertex) {
+
+                            vtx_color_lut[down] = value;
+                        }
 
                         add_edge(cur, down, EDGE_CONNECTED, g);
                     }
@@ -89,32 +111,32 @@ GraphAttr_Impl::GraphAttr_Impl(const cv::Mat1f &map_img,
     } // row
 }
 
-VtxDescriptor GraphAttr_Impl::retrieveVertex(float vtx_id)
+VtxDescriptor GraphAttr_Impl::retrieveVertex(VtxColor vtx_id, bool &is_new)
 {
     VtxDescriptor descriptor;
 
     // if found, return cached descriptor
+
     if(!findVertex(vtx_id, descriptor)) {
 
         // otherwise, request new descriptor
         descriptor = boost::add_vertex(vtx_id, g);
 
         // cache new descriptor
-        vtx_cache_[vtx_id] = descriptor;
+        vtx_cache_.insert(vtx_id, descriptor);
+
+        is_new = true;
+    }
+    else {
+        is_new = false;
     }
 
     return descriptor;
 }
 
-bool GraphAttr_Impl::findVertex(float vtx_id, VtxDescriptor &vtx_descriptor) const
+bool GraphAttr_Impl::findVertex(VtxColor vtx_id, VtxDescriptor &vtx_descriptor) const
 {
-    MapVtxDescriptor::const_iterator itr = vtx_cache_.find(vtx_id);
-    bool found = itr != vtx_cache_.end();
-    if(found) {
-
-        vtx_descriptor = itr->second; // get cached descriptor
-    }
-
+    bool found = vtx_cache_.find(vtx_id, vtx_descriptor);
     return found;
 }
 
@@ -131,7 +153,7 @@ void GraphAttr_Impl::removeEdges(const VtxDescriptor &u, const VtxDescriptor &v)
     }
 }
 
-void GraphAttr_Impl::removeEdges(float vtx_u, float vtx_v, VtxDescriptor &u, VtxDescriptor &v)
+void GraphAttr_Impl::removeEdges(VtxColor vtx_u, VtxColor vtx_v, VtxDescriptor &u, VtxDescriptor &v)
 {
     if(!findVertex(vtx_u, u)) {
 
@@ -150,7 +172,7 @@ void GraphAttr_Impl::removeEdges(float vtx_u, float vtx_v, VtxDescriptor &u, Vtx
     return removeEdges(u, v);
 }
 
-void GraphAttr_Impl::removeVertex(float vtx_id, const VtxDescriptor &vtx)
+void GraphAttr_Impl::removeVertex(VtxColor vtx_id, const VtxDescriptor &vtx)
 {
     boost::remove_vertex(vtx, g);
 
@@ -161,7 +183,7 @@ void GraphAttr_Impl::removeVertex(float vtx_id, const VtxDescriptor &vtx)
      */
 
     // Iterate through the vertices and add them to new cache
-    vtx_cache_.clear();
+    vtx_cache_.remove(vtx_id);
 
     boost::property_map<GraphAttrType, boost::vertex_color_t>::type
             vertex_color_id = get(boost::vertex_color, g);
@@ -169,6 +191,52 @@ void GraphAttr_Impl::removeVertex(float vtx_id, const VtxDescriptor &vtx)
     GraphAttrTraits::vertex_iterator v, end;
     for(tie(v, end) = vertices(g); v != end; ++v) {
 
-        vtx_cache_[vertex_color_id[*v]] = *v;
+        VtxColor key = vertex_color_id[*v];
+        vtx_cache_.insert(key, *v);
+    }
+
+    is_map_dirty_ = true;
+}
+
+void GraphAttr_Impl::recordVertexSubstitution(VtxColor src, VtxColor dst)
+{
+    //vertex_subs_.push_back(src, dst);
+    vtx_cache_.recordSubstitution(src, dst);
+}
+
+Mat_<VtxColor > GraphAttr_Impl::MapImg()
+{
+    if(is_map_dirty_) {
+
+        updateMapImg();
+    }
+
+    return src_map_img_;
+}
+
+void GraphAttr_Impl::updateMapImg()
+{
+    // update map image with any recorded vertex substitutions
+    // vertex substitutions could have come from contractEdges()
+
+    if(src_map_img_.isContinuous()) {
+
+        int *mat_data_ptr = reinterpret_cast<int*>(src_map_img_.data);
+        int *end = reinterpret_cast<int*>(src_map_img_.dataend);
+
+        for(; mat_data_ptr != end; mat_data_ptr++) {
+
+            int tmp = vtx_cache_.Id(*mat_data_ptr);
+            *mat_data_ptr = tmp < 0 ? 0 : tmp;
+        }
+    }
+    else {
+
+        const int NB_ELEMENTS = static_cast<int>(src_map_img_.total());
+        for(int i=0; i<NB_ELEMENTS; i++) {
+
+            int tmp = vtx_cache_.Id(src_map_img_(i));
+            src_map_img_(i) = tmp < 0 ? 0 : tmp;
+        }
     }
 }
