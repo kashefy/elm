@@ -106,6 +106,8 @@ protected:
     VertexCache vtx_cache_;    ///< cache vertex descriptors
 
     elm::DeferredAssign_<VtxColor > vertex_subs_; ///< keep track of vertex substitutions
+
+    bool is_map_dirty_;
 };
 
 } // namespace elm

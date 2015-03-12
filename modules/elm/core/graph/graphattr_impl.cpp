@@ -22,12 +22,14 @@ GraphAttr_Impl::~GraphAttr_Impl()
 }
 
 GraphAttr_Impl::GraphAttr_Impl()
+    : is_map_dirty_(false)
 {
 }
 
 GraphAttr_Impl::GraphAttr_Impl(const cv::Mat_<VtxColor > &map_img,
                                const Mat1b &mask)
-    : src_map_img_(map_img)
+    : src_map_img_(map_img),
+      is_map_dirty_(false)
 {
     // some validation first
     ELM_THROW_BAD_DIMS_IF(map_img.total()==static_cast<size_t>(1),
@@ -192,16 +194,23 @@ void GraphAttr_Impl::removeVertex(VtxColor vtx_id, const VtxDescriptor &vtx)
         VtxColor key = vertex_color_id[*v];
         vtx_cache_.insert(key, *v);
     }
+
+    is_map_dirty_ = true;
 }
 
 void GraphAttr_Impl::recordVertexSubstitution(VtxColor src, VtxColor dst)
 {
-    vertex_subs_.push_back(src, dst);
+    //vertex_subs_.push_back(src, dst);
+    vtx_cache_.recordSubstitution(src, dst);
 }
 
 Mat_<VtxColor > GraphAttr_Impl::MapImg()
 {
-    updateMapImg();
+    if(is_map_dirty_) {
+
+        updateMapImg();
+    }
+
     return src_map_img_;
 }
 
@@ -209,5 +218,25 @@ void GraphAttr_Impl::updateMapImg()
 {
     // update map image with any recorded vertex substitutions
     // vertex substitutions could have come from contractEdges()
-    vertex_subs_.assign(src_map_img_);
+    //vertex_subs_.assign(src_map_img_);
+    if(src_map_img_.isContinuous()) {
+
+        const int NB_ELEMENTS = static_cast<int>(src_map_img_.total());
+        int *mat_data_ptr = reinterpret_cast<int*>(src_map_img_.data);
+        //int *mat_data_end_ptr = reinterpret_cast<int*>(src_map_img_.dataend);
+        for(int i=0; i<NB_ELEMENTS; i++, mat_data_ptr++) {
+
+            int tmp = vtx_cache_.Id(*mat_data_ptr);
+            *mat_data_ptr = tmp < 0 ? 0 : tmp;
+        }
+    }
+    else {
+
+        const int NB_ELEMENTS = static_cast<int>(src_map_img_.total());
+        for(int i=0; i<NB_ELEMENTS; i++) {
+
+            int tmp = vtx_cache_.Id(src_map_img_(i));
+            src_map_img_(i) = tmp < 0 ? 0 : tmp;
+        }
+    }
 }

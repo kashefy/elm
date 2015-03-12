@@ -203,6 +203,8 @@ VecMat1f GraphAttr::applyVerticesToMap(Mat1f (*func)(const Mat1i &img, const Mat
 
     thread_group group;
 
+    impl->MapImg();
+
     int i=0;
     for (next = vi; vi != vi_end; vi = ++next) {
 

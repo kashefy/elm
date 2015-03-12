@@ -1285,6 +1285,7 @@ cv::Mat1f mask_vertex(const cv::Mat1i& img, const cv::Mat &mask)
 
 TEST_F(GraphAttrMaskedTest, Remove_vertex_check_map)
 {
+    ASSERT_TRUE(map_.isContinuous());
     ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 1 vertex.";
 
     Mat1f map;
@@ -1307,6 +1308,51 @@ TEST_F(GraphAttrMaskedTest, Remove_vertex_check_map)
 
         masked_maps = to_.applyVerticesToMap(mask_vertex);
         Mat1f map = Mat1f::zeros(map_.size());
+        for(size_t i=0; i<masked_maps.size(); i++) {
+
+            map += masked_maps[i];
+        }
+        EXPECT_EQ(0, countNonZero(map==v)) << "still finding pixel with vertex color after removal.";
+
+    }
+}
+
+TEST_F(GraphAttrMaskedTest, Remove_vertex_check_map_non_continuous)
+{
+    hconcat(map_.col(0), map_, map_);
+
+    Mat1i map2 = map_.colRange(1, map_.cols);
+
+    Mat1b exclude;
+    cv::bitwise_or(map2 < 2, map2 == 9, exclude);
+    cv::bitwise_not(exclude, mask_);
+
+    ASSERT_FALSE(map2.isContinuous());
+
+    to_ = GraphAttr(map2, mask_);
+
+    ASSERT_GT(static_cast<int>(to_.num_vertices()), 1) << "this test requires a graph with at least 1 vertex.";
+
+    Mat1f map;
+
+    while(static_cast<int>(to_.num_vertices()) > 0) {
+
+        VecI vtx_ids = to_.VerticesIds();
+        int v = vtx_ids[0];
+
+        // replace with getter to Graph's underlying map image
+        VecMat1f masked_maps = to_.applyVerticesToMap(mask_vertex);
+        map = Mat1f::zeros(map2.size());
+        for(size_t i=0; i<masked_maps.size(); i++) {
+
+            map += masked_maps[i];
+        }
+        EXPECT_GT(countNonZero(map==v), 0);
+
+        to_.removeVertex(v);
+
+        masked_maps = to_.applyVerticesToMap(mask_vertex);
+        Mat1f map = Mat1f::zeros(map2.size());
         for(size_t i=0; i<masked_maps.size(); i++) {
 
             map += masked_maps[i];
