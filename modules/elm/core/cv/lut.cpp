@@ -90,8 +90,22 @@ void LUT::apply(cv::Mat1i &m) const
         return;
     }
 
-    for(size_t i=0; i<m.total(); i++) {
+    if(m.isContinuous()) {
 
-        m(i) = table_[m(i)];
+        int *mat_data_ptr = reinterpret_cast<int*>(m.data);
+        const int *END = reinterpret_cast<int*>(m.dataend);
+
+        for(; mat_data_ptr != END; mat_data_ptr++) {
+
+            *mat_data_ptr = table_[*mat_data_ptr];
+        }
+    }
+    else {
+
+        const int NB_ELEMENTS = static_cast<int>(m.total());
+        for(int i=0; i<NB_ELEMENTS; i++) {
+
+            m(i) = table_[m(i)];
+        }
     }
 }
