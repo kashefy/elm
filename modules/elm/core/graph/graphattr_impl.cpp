@@ -218,13 +218,13 @@ void GraphAttr_Impl::updateMapImg()
 {
     // update map image with any recorded vertex substitutions
     // vertex substitutions could have come from contractEdges()
-    //vertex_subs_.assign(src_map_img_);
+
     if(src_map_img_.isContinuous()) {
 
-        const int NB_ELEMENTS = static_cast<int>(src_map_img_.total());
         int *mat_data_ptr = reinterpret_cast<int*>(src_map_img_.data);
-        //int *mat_data_end_ptr = reinterpret_cast<int*>(src_map_img_.dataend);
-        for(int i=0; i<NB_ELEMENTS; i++, mat_data_ptr++) {
+        int *end = reinterpret_cast<int*>(src_map_img_.dataend);
+
+        for(; mat_data_ptr != end; mat_data_ptr++) {
 
             int tmp = vtx_cache_.Id(*mat_data_ptr);
             *mat_data_ptr = tmp < 0 ? 0 : tmp;
