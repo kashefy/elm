@@ -7,7 +7,11 @@ namespace elm {
 
 /**
  * @brief class for Vertex Id and descriptor caching and recording of subtitutions
- * @todo explicit test coverage, now covered through integration in GraphAttr
+ *
+ * Every entry can have the following states:
+ * 1. masked == never entered == removed
+ * 2. substituted == linked
+ * 3. true == identity
  */
 class VertexCache
 {
@@ -68,7 +72,37 @@ public:
      */
     VtxColor Id(VtxColor vtx_id) const;
 
+
+    /**
+     * @brief check if key is valid
+     * Does not determine if key is a valid vertex id
+     * @param key
+     * @return true if key is valid
+     */
+    bool validKey(VtxColor key) const;
+
+    /**
+     * @brief check if a vertex cache just links to another entry
+     * Useful for differentiating true vertex from substituted one
+     * @param vtx_id vertex color/id
+     * @return true if vertex is just a link to another
+     */
+    bool isLink(VtxColor vtx_id) const;
+
+    /**
+     * @brief check if a vertex is masked
+     * Does not determine if vertex is linked to another
+     * @param vtx_id vertex color/id
+     * @return true if vertex is masked
+     */
+    bool isMasked(VtxColor vtx_id) const;
+
 protected:
+
+    bool isLinkValue(VtxColor key, VtxColor value) const;
+
+    bool isMaskedValue(VtxColor vtx_id_value) const;
+
     // members
     std::vector<VtxDescriptor > descriptors_;   ///< cache vertex descriptors
     std::vector<VtxColor > ids_;                ///< cached vertex ids/colors
