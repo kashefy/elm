@@ -1,6 +1,11 @@
 # The ELM framework #
 
+master: 
 [![Build Status](https://travis-ci.org/kashefy/elm.svg?branch=master)](https://travis-ci.org/kashefy/elm)
+[![Coverage Status](https://coveralls.io/repos/kashefy/elm/badge.svg?branch=master)](https://coveralls.io/r/kashefy/elm?branch=master)
+
+HEAD revision:
+[![Build Status](https://travis-ci.org/kashefy/elm.svg)](https://travis-ci.org/kashefy/elm)
 [![Coverage Status](https://coveralls.io/repos/kashefy/elm/badge.svg)](https://coveralls.io/r/kashefy/elm)
 
 This started off as a a C++ implementation of a Spike-based Expectation Maximization (SEM) model, a biologically inspired model for object detection and recognition.
