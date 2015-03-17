@@ -22,7 +22,7 @@ set(FORCE_IN_SOURCE OFF CACHE BOOL "Whether to force allow in-source builds.")
 
 include(cmake/CompilerUtils.cmake)
 if(WITH_TEST_COVERAGE)
-	include(cmake/CodeCoverage.cmake)
+    include(cmake/CodeCoverage.cmake)
 endif(WITH_TEST_COVERAGE)
 include(cmake/FileSystemUtils.cmake)
 include(cmake/ListUtils.cmake)
@@ -165,12 +165,12 @@ if(BUILD_TESTS)
     build_tests("run_${ROOT_PROJECT}_unittests" "*unittest*")
     
     if(WITH_TEST_COVERAGE)
-    setup_target_for_coverage(
-		${ROOT_PROJECT}_unittests_coverage  # Name for custom target.
-		run_${ROOT_PROJECT}_unittests   # Name of the test driver executable that runs the tests.
-										# NOTE! This should always have a ZERO as exit code
-										# otherwise the coverage generation will not complete.
-		${EXECUTABLE_OUTPUT_PATH}/coverage            # Name of output directory.
+        setup_target_for_coverage(
+            ${ROOT_PROJECT}_unittests_coverage  # Name for custom target.
+            run_${ROOT_PROJECT}_unittests       # Name of the test driver executable that runs the tests.
+                                                # NOTE! This should always have a ZERO as exit code
+                                                # otherwise the coverage generation will not complete.
+            coverage # Name of output directory.
 		)
     endif(WITH_TEST_COVERAGE)
     
