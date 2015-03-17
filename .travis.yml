@@ -11,7 +11,7 @@ before_install:
   - git checkout 2.4
   - mkdir build
   - cd build
-  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF ..
+  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF ..
   - make -j2
   - cd ../..
   - wget https://googletest.googlecode.com/files/gtest-1.7.0.zip
@@ -23,14 +23,20 @@ before_install:
   - cd ../elm
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
   - sudo apt-get update -qq
+  # install lcov to coveralls conversion + upload tool
+  - gem install coveralls-lcov
 install:
-  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libpcl-all
+  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libpcl-all lcov
 before_script:
   - pwd
   - mkdir build
   - cd build
-  - cmake -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install ..
+  - cmake -DCMAKE_BUILD_TYPE=Coverage -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON ..
 script:
   - make -j2
   - cd ./bin
   - ./run_elm_unittests
+  - cd ..
+after_success:
+  - make elm_unittests_coverage
+  - coveralls-lcov coverage.info
