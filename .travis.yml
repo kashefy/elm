@@ -39,4 +39,6 @@ script:
   - cd ..
 after_success:
   - make elm_unittests_coverage
+  - ls -l
+  - ls -l ./coverage
   - coveralls-lcov coverage.info
