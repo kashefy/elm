@@ -185,6 +185,10 @@ if(BUILD_TESTS)
         status("Copying test data")
         file(COPY ${CMAKE_SOURCE_DIR}/testdata DESTINATION ${EXECUTABLE_OUTPUT_PATH})
 
+        if(WITH_TEST_COVERAGE)
+            file(COPY ${CMAKE_SOURCE_DIR}/testdata DESTINATION ${CMAKE_BINARY_DIR})
+        endif(WITH_TEST_COVERAGE)
+
     endif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/testdata")
 
 endif(BUILD_TESTS)
