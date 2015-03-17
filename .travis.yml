@@ -23,6 +23,8 @@ before_install:
   - cd ../elm
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
   - sudo apt-get update -qq
+  # install lcov to coveralls conversion + upload tool
+  - gem install coveralls-lcov
 install:
   - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libpcl-all lcov
 before_script:
@@ -34,3 +36,7 @@ script:
   - make -j2
   - cd ./bin
   - ./run_elm_unittests
+  - cd ..
+after_success:
+  - make elm_unittests_coverage
+  - coveralls-lcov coverage.info
