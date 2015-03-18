@@ -11,17 +11,21 @@
 
 using namespace elm;
 
+const std::string base_SupervisedBatch::KEY_TRAIN_LABEL = detail::BASE_SUPERVISEDBATCH_KEY_TRAIN_LABEL;
+
 base_SupervisedBatch::~base_SupervisedBatch()
 {
 }
 
 base_SupervisedBatch::base_SupervisedBatch()
-    : base_LearningLayer()
+    : base_LearningLayer(),
+      base_FeatureTransformationLayer()
 {
 }
 
 base_SupervisedBatch::base_SupervisedBatch(const LayerConfig &config)
-    : base_LearningLayer(config)
+    : base_LearningLayer(config),
+      base_FeatureTransformationLayer(config)
 {
 }
 

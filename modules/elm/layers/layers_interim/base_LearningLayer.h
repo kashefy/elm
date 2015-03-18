@@ -19,7 +19,7 @@ class LayerConfig;
  * @brief class for defining interfaces of an abstract layer that can learn
  * Overloaded constructor calls overloaded Reset() so you can implement Reset(config) directly.
  */
-class base_LearningLayer : public base_Layer
+class base_LearningLayer : virtual public base_Layer
 {
 public:
     virtual ~base_LearningLayer();

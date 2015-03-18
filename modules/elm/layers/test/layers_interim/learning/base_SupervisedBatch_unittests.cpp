@@ -44,12 +44,6 @@ public:
     void Reconfigure(const elm::LayerConfig &cfg)
     {}
 
-    void InputNames(const LayerInputNames &io)
-    {}
-
-    void OutputNames(const LayerOutputNames &io)
-    {}
-
     void Activate(const Signal &signal)
     {}
 
@@ -73,7 +67,7 @@ protected:
         to_.reset(new DummySupervisedBatch(LayerConfig()));
     }
 
-    std::shared_ptr<base_SupervisedBatch> to_;
+    std::shared_ptr<base_Layer> to_;
 };
 
 TEST_F(SupervisedBatchTest, Constructor)
@@ -85,12 +79,12 @@ TEST_F(SupervisedBatchTest, Learn_batch)
 {
     ASSERT_FALSE(ELM_DYN_CAST(DummySupervisedBatch, to_)->getFlag());
 
-    EXPECT_NO_THROW(to_->Learn(cv::Mat(), cv::Mat()));
+    EXPECT_NO_THROW(ELM_DYN_CAST(base_LearningLayer, to_)->Learn(cv::Mat(), cv::Mat()));
 
     EXPECT_TRUE(ELM_DYN_CAST(DummySupervisedBatch, to_)->getFlag());
 }
 
 TEST_F(SupervisedBatchTest, Learn_online)
 {
-    EXPECT_THROW(to_->Learn(), ExceptionNotImpl);
+    EXPECT_THROW(ELM_DYN_CAST(base_LearningLayer, to_)->Learn(), ExceptionNotImpl);
 }
