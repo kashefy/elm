@@ -9,6 +9,7 @@
 #define _ELM_LAYERS_LAYERS_INTERIM_LEARNINGLAYER_H_
 
 #include "elm/core/base_Layer.h"
+#include "elm/core/cv/typedefs_fwd.h"
 
 namespace elm {
 
@@ -25,8 +26,18 @@ public:
 
     /**
      * @brief Learn from most recent stimuli
+     * Useful for online unsupervised learning (e.g. STDP in WTA circuits)
      */
     virtual void Learn() = 0;
+
+    /**
+     * @brief Learn from batch of features and labels
+     * Useful for batch supervised learning
+     *
+     * @param features training data, sample per row
+     * @param labels row or column matrix per sample
+     */
+    virtual void Learn(const cv::Mat1f& features, const cv::Mat1f &labels) = 0;
 
 protected:
     base_LearningLayer();
