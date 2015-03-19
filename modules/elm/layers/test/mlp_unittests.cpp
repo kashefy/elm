@@ -68,15 +68,37 @@ protected:
     LayerConfig config_;        ///< default config for tests
 };
 
-//TEST_F(MLPTrainTest, Reset_EmptyConfig)
-//{
-//    //EXPECT_THROW(to_->Reset(LayerConfig()), boost::property_tree::ptree_bad_path);
-//}
+TEST_F(MLPTrainTest, Reset_EmptyConfig)
+{
+    EXPECT_THROW(to_->Reset(LayerConfig()), boost::property_tree::ptree_bad_path);
+}
 
-//TEST_F(MLPTrainTest, Param_invalid)
-//{
+TEST_F(MLPTrainTest, Param_invalid_layers_too_few)
+{
+    PTree params = config_.Params();
+    {
+        VecI arch = {2};
+        params.put(MLP::PARAM_ARCH, arch);
+        config_.Params(params);
+        EXPECT_THROW(to_.reset(new MLP(config_)), ExceptionBadDims);
+    }
+    {
+        VecI arch = {200};
+        params.put(MLP::PARAM_ARCH, arch);
+        config_.Params(params);
+        EXPECT_THROW(to_.reset(new MLP(config_)), ExceptionBadDims);
+    }
+}
 
-//}
+TEST_F(MLPTrainTest, Param_invalid_layers_none)
+{
+    PTree params = config_.Params();
+    {
+        params.put(MLP::PARAM_ARCH, VecI());
+        config_.Params(params);
+        EXPECT_THROW(to_.reset(new MLP(config_)), ExceptionBadDims);
+    }
+}
 
 //TEST_F(MLPTest, Response_exists)
 //{
