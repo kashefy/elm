@@ -10,11 +10,11 @@ using namespace std;
 using namespace cv;
 using namespace elm;
 
-const string MLP::PARAM_ARCH;
-const string MLP::PARAM_TERM_CRITERIA;
-const string MLP::PARAM_TRAIN_METHOD;
-const string MLP::PARAM_BP_DW_SCALE;
-const string MLP::PARAM_BP_MOMENT_SCALE;
+const string MLP::PARAM_ARCH            = "arch";
+const string MLP::PARAM_TERM_CRITERIA   = "term_crit";
+const string MLP::PARAM_TRAIN_METHOD    = "train_method";
+const string MLP::PARAM_BP_DW_SCALE     = "bp_dw_scale";
+const string MLP::PARAM_BP_MOMENT_SCALE = "bp_moment_scale";
 
 #include <boost/assign/list_of.hpp>
 template <>
