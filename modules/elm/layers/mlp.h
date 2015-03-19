@@ -19,7 +19,7 @@ public:
     static const std::string PARAM_BP_DW_SCALE;         ///< backpropagation(BP)'s delta weight scale
     static const std::string PARAM_BP_MOMENT_SCALE;     ///< BP's moment scale
 
-    ~MLP();
+    virtual ~MLP();
 
     MLP();
 
