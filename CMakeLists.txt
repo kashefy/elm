@@ -32,7 +32,7 @@ include(cmake/MessageUtils.cmake)
 # Set global CMake variables
 # ----------------------------------------------------------------------------
 # Print all warnings and enable C++11 support
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
 
 # -fPIC
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
