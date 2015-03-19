@@ -4,10 +4,24 @@
 #include "elm/core/boost/translators/transl_str_veci.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
+#include "elm/ts/layerattr_.h"
 
 using namespace std;
 using namespace cv;
 using namespace elm;
+
+const string MLP::PARAM_ARCH;
+const string MLP::PARAM_TERM_CRITERIA;
+const string MLP::PARAM_TRAIN_METHOD;
+const string MLP::PARAM_BP_DW_SCALE;
+const string MLP::PARAM_BP_MOMENT_SCALE;
+
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<MLP>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_INPUT_PAIR(detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS)
+        ELM_ADD_OUTPUT_PAIR(detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
+        ;
 
 MLP::~MLP()
 {
