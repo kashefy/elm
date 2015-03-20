@@ -31,7 +31,7 @@ ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(MLP);
 const string NAME_IN             = "in";
 const string NAME_OUT_PREDICTION = "out";
 
-class MLPTrainTest : public ::testing::Test
+class MLPInitTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
@@ -58,22 +58,25 @@ protected:
             config_.Params(params);
         }
 
-        config_.Input(MLP::KEY_INPUT_STIMULUS, NAME_IN);
-        config_.Output(MLP::KEY_OUTPUT_RESPONSE, NAME_OUT_PREDICTION);
+        io_ = LayerIONames();
+        io_.Input(MLP::KEY_INPUT_STIMULUS, NAME_IN);
+        io_.Output(MLP::KEY_OUTPUT_RESPONSE, NAME_OUT_PREDICTION);
 
         to_.reset(new MLP(config_));
+        to_->IONames(io_);
     }
 
     shared_ptr<base_Layer> to_; ///< test object
     LayerConfig config_;        ///< default config for tests
+    LayerIONames io_;
 };
 
-TEST_F(MLPTrainTest, Reset_EmptyConfig)
+TEST_F(MLPInitTest, Reset_EmptyConfig)
 {
     EXPECT_THROW(to_->Reset(LayerConfig()), boost::property_tree::ptree_bad_path);
 }
 
-TEST_F(MLPTrainTest, Param_invalid_layers_too_few)
+TEST_F(MLPInitTest, Param_invalid_layers_too_few)
 {
     PTree params = config_.Params();
     {
@@ -90,7 +93,7 @@ TEST_F(MLPTrainTest, Param_invalid_layers_too_few)
     }
 }
 
-TEST_F(MLPTrainTest, Param_invalid_layers_none)
+TEST_F(MLPInitTest, Param_invalid_layers_none)
 {
     PTree params = config_.Params();
     {
@@ -100,84 +103,131 @@ TEST_F(MLPTrainTest, Param_invalid_layers_none)
     }
 }
 
-//TEST_F(MLPTest, Response_exists)
-//{
-//    Signal sig;
-//    sig.Append(NAME_IN, Mat1f(10, 10, 1.f));
+class MLPTrainTest : public MLPInitTest
+{
+public:
+    void GenerateSeparableBinary(int n, int feat_dims, cv::Mat1f &feat, cv::Mat1f &labels)
+    {
+        const float NEG_CLASS = -1.f;
+        const float POS_CLASS = 1.f;
 
-//    to_->Activate(sig);
+        feat = Mat1f(n, feat_dims);
+        labels = Mat1f(n, 1);
 
-//    EXPECT_FALSE(sig.Exists(NAME_OUT_BLURRED));
+        Mat1f feat_neg(n/2, feat_dims);
+        cv::randn(feat_neg, -1.f, 1.f);
+        Mat1f labels_neg(feat_neg.rows, 1, NEG_CLASS);
 
-//    to_->Response(sig);
+        Mat1f feat_pos(n/2, feat_dims);
+        cv::randn(feat_pos, 1.f, 1.f);
+        Mat1f labels_pos(feat_pos.rows, 1, POS_CLASS);
 
-//    EXPECT_TRUE(sig.Exists(NAME_OUT_BLURRED));
-//}
+        Mat1f feat_concat, labels_concat;
 
-//TEST_F(MLPTest, Response_dims)
-//{
-//    const int R=20;
-//    const int C=20;
+        vconcat(feat_neg, feat_pos, feat_concat);
+        vconcat(labels_neg, labels_pos, labels_concat);
 
-//    for(int r=5; r<R; r++) {
+        Mat1i idx = ARange_<int>(0, feat_concat.rows, 1);
+        cv::randShuffle(idx);
 
-//        for(int c=5; c<C; c++) {
+        for (int src_idx=0; src_idx<n; src_idx++) {
 
-//            Signal sig;
-//            sig.Append(NAME_IN, Mat1f(r, c, 1.f));
+            int dst_idx = idx(src_idx);
+            feat_concat.row(src_idx).copyTo(feat.row(dst_idx));
+            labels_concat.row(src_idx).copyTo(labels.row(dst_idx));
+        }
+    }
 
-//            to_->Activate(sig);
-//            to_->Response(sig);
+protected:
+    virtual void SetUp()
+    {
+        MLPInitTest::SetUp();
 
-//            Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
+        // params
+        {
+            PTree params = config_.Params();
 
-//            EXPECT_EQ(r, blurred.rows);
-//            EXPECT_EQ(c, blurred.cols);
-//        }
-//    }
-//}
+            VecI arch = {2, 2, 1};
+            params.put(MLP::PARAM_ARCH, arch);
 
-//TEST_F(MLPTest, Response_const_valued_input)
-//{
-//    for(float v=-3.f; v<=3.f; v+=1.5f) {
+            config_.Params(params);
+        }
 
-//        Signal sig;
+        to_.reset(new MLP(config_));
+        to_->IONames(io_);
+    }
+};
 
-//        Mat1f in(10, 10, v);
-//        sig.Append(NAME_IN, in);
+TEST_F(MLPTrainTest, Train_separable_binary)
+{
+    const int NB_TRAIN=100;
+    const int FEAT_DIMS=2;
 
-//        to_->Activate(sig);
-//        to_->Response(sig);
+    Mat1f train_feat, train_labels;
+    GenerateSeparableBinary(NB_TRAIN, FEAT_DIMS,
+                            train_feat, train_labels);
 
-//        Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
+    ELM_DYN_CAST(base_LearningLayer, to_)->Learn(train_feat, train_labels);
 
-//        EXPECT_MAT_EQ(Mat1f(in.rows, in.cols, v), blurred);
-//    }
-//}
+    const int NB_TEST=100;
+    Mat1f test_feat, test_labels;
+    GenerateSeparableBinary(NB_TEST, FEAT_DIMS,
+                            test_feat, test_labels);
 
-//TEST_F(MedianBlurTest, Response_const_valued_input_with_nan)
-//{
-//    for(float v=-3.f; v<=3.f; v+=1.5f) {
+    Mat1i confusion = Mat1i::zeros(2, 2);
+    const int TP = 0;
+    const int FN = 1;
+    const int FP = 2;
+    const int TN = 3;
 
-//        Signal sig;
+    Mat1f result(NB_TEST, 2);
 
-//        Mat1f in(10, 10, v);
+    for (int i=0; i<NB_TEST; i++) {
 
-//        in(2, 3) = numeric_limits<float>::quiet_NaN();
+        Mat1f test_feat_sample = test_feat.row(i);
 
-//        sig.Append(NAME_IN, in);
+        float target_label = test_labels.row(i)(0);
 
-//        to_->Activate(sig);
-//        to_->Response(sig);
+        Signal sig;
+        sig.Append(NAME_IN, test_feat_sample);
 
-//        Mat1f blurred = sig.MostRecentMat1f(NAME_OUT_BLURRED);
+        EXPECT_FALSE(sig.Exists(NAME_OUT_PREDICTION));
 
-//        EXPECT_EQ(1, countNonZero(elm::isnan(blurred)));
-//        EXPECT_EQ(uchar(255), elm::isnan(blurred)(2, 3));
+        to_->Activate(sig);
+        to_->Response(sig);
 
-//        in(2, 3) = blurred(2, 3) = v;
-//        EXPECT_MAT_EQ(in, blurred);
-//    }
-//}
+        EXPECT_TRUE(sig.Exists(NAME_OUT_PREDICTION));
+
+        Mat1f response = sig.MostRecentMat1f(NAME_OUT_PREDICTION);
+
+        EXPECT_MAT_DIMS_EQ(response, Size2i(1, 1));
+
+        float predicted = response(0);
+
+        result(i, 0) = target_label;
+        result(i, 1) = predicted;
+
+        if(target_label >= 0.f && predicted >= 0.f) {
+
+            confusion(TP)++;
+        }
+        else if(target_label < 0.f && predicted < 0.f) {
+
+            confusion(TN)++;
+        }
+        else {
+
+            confusion(target_label < 0.f? FP : FN)++;
+        }
+    }
+
+    //ELM_COUT_VAR(confusion);
+
+    ASSERT_EQ(NB_TEST/2, cv::sum(confusion.row(0))[0]);
+    ASSERT_EQ(NB_TEST/2, cv::sum(confusion.row(1))[0]);
+
+    EXPECT_GT(confusion(TP), confusion(FP));
+    EXPECT_GT(confusion(TN), confusion(FN));
+}
 
 } // annonymous namespace for test fixtures and test cases
