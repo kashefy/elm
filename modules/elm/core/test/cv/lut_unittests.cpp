@@ -120,6 +120,39 @@ TEST_F(LUTTest, Apply_chained)
     EXPECT_MAT_EQ(expected, m);
 }
 
+/**
+ * @brief Cover scenario of values replaced by lower as well as higher ones
+ */
+TEST_F(LUTTest, Apply_to_higher_lower)
+{
+    const int N = 6;
+    int data[N] = {1, 2,
+                   5, 4,
+                   6, 1};
+    Mat1i m = Mat1i(3, 2, data).clone();
+
+    LUT to;
+    to.Capacity(N);
+
+    to.insert(1);
+    to.insert(2);
+    to.insert(4);
+    to.insert(5);
+    to.insert(6);
+
+    to.update(2, 6);
+    to.update(1, 2);
+
+    to.apply(m);
+
+    int data2[N] = {1, 1,
+                    5, 4,
+                    1, 1};
+
+    Mat1i expected = Mat1i(3, 2, data2).clone();
+    EXPECT_MAT_EQ(expected, m);
+}
+
 TEST_F(LUTTest, Assign_chained_empty_mat)
 {
     Mat1i m;
