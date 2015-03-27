@@ -1142,3 +1142,33 @@ TEST_F(MatOverloadCallPrecedenceTest, CheckId)
 //    EXPECT_EQ(_MAT, foo(Mat1f(), Mat()));
 
 }
+
+TEST(MatPerElementOp, Division_nan)
+{
+    const int ROWS=2;
+    const int COLS=3;
+
+    const float NAN_VALUE=std::numeric_limits<float>::quiet_NaN();
+
+    float data1[ROWS*COLS] = {NAN_VALUE, NAN_VALUE, NAN_VALUE,
+                              0.f, 0.f, -0.006000042f
+                             };
+    Mat1f numer = Mat1f(ROWS, COLS, data1).clone();
+
+    float data2[ROWS*COLS] = {1.8740001f, 1.8790001f, 1.8850001f,
+                              1.8740001f, 1.8790001f, 1.8790001f,
+                             };
+    Mat1f denom = Mat1f(ROWS, COLS, data2).clone();
+
+    Mat1f div;
+    cv::divide(numer, denom, div);
+
+    float data3[ROWS*COLS] = {NAN_VALUE, NAN_VALUE, NAN_VALUE,
+                              0.f, 0.f, -0.0031932101f,
+                             };
+
+    EXPECT_TRUE(div(0)!=div(0)); // inequality for detecting NaN
+    EXPECT_TRUE(div(0)!=div(1)); // inequality for detecting NaN
+    EXPECT_TRUE(div(0)!=div(2)); // inequality for detecting NaN
+    EXPECT_MAT_EQ(Mat1f(ROWS, COLS, data3).clone().row(1), div.row(1));
+}

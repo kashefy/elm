@@ -55,6 +55,7 @@ public:
      * @param a entry value
      * @param b entry value
      * @return persistent value in look-up table min(a,b)
+     * @todo speed up traversal using secondary lut or per entry max
      */
     int update(int a, int b);
 
