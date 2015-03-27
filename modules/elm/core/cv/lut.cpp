@@ -73,7 +73,7 @@ int LUT::update(int a, int b)
         min_ = a;
     }
 
-    for (int i=0; i<=max_; i++) {
+    for (int i=0; i<=max_entry_; i++) {
 
         if(table_[i] == max_) {
 
