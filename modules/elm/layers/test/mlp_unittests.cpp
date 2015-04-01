@@ -138,6 +138,49 @@ public:
         }
     }
 
+    void GenerateSeparableMultiClass(int nb_classes, int n, int feat_dims, cv::Mat1f &feat, cv::Mat1f &labels)
+    {
+        const float NEG_CLASS = -1.f;
+        const float POS_CLASS = 1.f;
+
+        feat = Mat1f(n, feat_dims);
+        labels = Mat1f(n, 1);
+
+        float mu_start = -2.f;
+        float mu_incr = 1.f;
+
+        Mat1f feat_concat, labels_concat;
+
+        for (int i=0; i<; i++) {
+
+            Mat1f feati(n/, feat_dims);
+            cv::randn(feati, -2.f, 1.f);
+            Mat1f labelsi(feati.rows, 1, 0.f);
+            labelsi.col(0).setTo(1.f);
+
+            if(i > 0) {
+
+                vconcat(feat_concat, feati, feat_concat);
+                vconcat(labels_concat, labelsi, labels_concat);
+            }
+            else {
+
+                feat_concat = feati;
+                labels_concat = labelsi;
+            }
+        }
+
+        Mat1i idx = ARange_<int>(0, feat_concat.rows, 1);
+        cv::randShuffle(idx);
+
+        for (int src_idx=0; src_idx<n; src_idx++) {
+
+            int dst_idx = idx(src_idx);
+            feat_concat.row(src_idx).copyTo(feat.row(dst_idx));
+            labels_concat.row(src_idx).copyTo(labels.row(dst_idx));
+        }
+    }
+
 protected:
     virtual void SetUp()
     {
@@ -228,6 +271,82 @@ TEST_F(MLPTrainTest, Train_separable_binary)
 
     EXPECT_GT(confusion(TP), confusion(FP));
     EXPECT_GT(confusion(TN), confusion(FN));
+}
+
+TEST_F(MLPTrainTest, Train_separable_multiclass)
+{
+    const int NB_CLASSES=4;
+    const int NB_TRAIN=120;
+    const int FEAT_DIMS=2;
+
+    Mat1f train_feat, train_labels;
+    GenerateSeparableMultiClass(NB_CLASSES, NB_TRAIN, FEAT_DIMS,
+                                train_feat, train_labels);
+
+    ELM_DYN_CAST(base_LearningLayer, to_)->Learn(train_feat, train_labels);
+
+    const int NB_TEST=120;
+    Mat1f test_feat, test_labels;
+    GenerateSeparableBinary(NB_CLASSES, NB_TEST, FEAT_DIMS,
+                            test_feat, test_labels);
+
+//    for(int c=0; c<NB_CLASSES; c++) {
+
+//        Mat1i confusion = Mat1i::zeros(2, 2);
+//        const int TP = 0;
+//        const int FN = 1;
+//        const int FP = 2;
+//        const int TN = 3;
+
+//        Mat1f result(NB_TEST, 2);
+
+//        for (int i=0; i<NB_TEST; i++) {
+
+//            Mat1f test_feat_sample = test_feat.row(i);
+
+//            float target_label = test_labels.row(i)(0);
+
+//            Signal sig;
+//            sig.Append(NAME_IN, test_feat_sample);
+
+//            EXPECT_FALSE(sig.Exists(NAME_OUT_PREDICTION));
+
+//            to_->Activate(sig);
+//            to_->Response(sig);
+
+//            EXPECT_TRUE(sig.Exists(NAME_OUT_PREDICTION));
+
+//            Mat1f response = sig.MostRecentMat1f(NAME_OUT_PREDICTION);
+
+//            EXPECT_MAT_DIMS_EQ(response, Size2i(1, 1));
+
+//            float predicted = response(0);
+
+//            result(i, 0) = target_label;
+//            result(i, 1) = predicted;
+
+//            if(target_label >= 0.f && predicted >= 0.f) {
+
+//                confusion(TP)++;
+//            }
+//            else if(target_label < 0.f && predicted < 0.f) {
+
+//                confusion(TN)++;
+//            }
+//            else {
+
+//                confusion(target_label < 0.f? FP : FN)++;
+//            }
+//        }
+
+//        //ELM_COUT_VAR(confusion);
+
+//        ASSERT_EQ(NB_TEST/2, cv::sum(confusion.row(0))[0]);
+//        ASSERT_EQ(NB_TEST/2, cv::sum(confusion.row(1))[0]);
+
+//        EXPECT_GT(confusion(TP), confusion(FP));
+//        EXPECT_GT(confusion(TN), confusion(FN));
+//    }
 }
 
 } // annonymous namespace for test fixtures and test cases
