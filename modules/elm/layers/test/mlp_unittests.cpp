@@ -140,36 +140,35 @@ public:
 
     void GenerateSeparableMultiClass(int nb_classes, int n, int feat_dims, cv::Mat1f &feat, cv::Mat1f &labels)
     {
-        const float NEG_CLASS = -1.f;
-        const float POS_CLASS = 1.f;
-
         feat = Mat1f(n, feat_dims);
-        labels = Mat1f(n, 1);
+        labels = Mat1f(n, nb_classes);
 
-        float mu_start = -2.f;
-        float mu_incr = 1.f;
+        float mu = -5.f;
+        float mu_incr = 2.f;
 
         Mat1f feat_concat, labels_concat;
 
-        for (int i=0; i<; i++) {
+        // concatenate features of multiple classes
+        for (int c=0; c<nb_classes; c++, mu+=mu_incr) {
 
-            Mat1f feati(n/, feat_dims);
-            cv::randn(feati, -2.f, 1.f);
-            Mat1f labelsi(feati.rows, 1, 0.f);
-            labelsi.col(0).setTo(1.f);
+            Mat1f feat_c(n/nb_classes, feat_dims);
+            cv::randn(feat_c, mu, 1.f);
+            Mat1f labels_c = Mat1f(feat_c.rows, nb_classes, 0.f);
+            labels_c.col(c).setTo(1.f);
 
-            if(i > 0) {
+            if(c > 0) {
 
-                vconcat(feat_concat, feati, feat_concat);
-                vconcat(labels_concat, labelsi, labels_concat);
+                vconcat(feat_concat, feat_c, feat_concat);
+                vconcat(labels_concat, labels_c, labels_concat);
             }
             else {
 
-                feat_concat = feati;
-                labels_concat = labelsi;
+                feat_concat = feat_c;
+                labels_concat = labels_c;
             }
         }
 
+        // shuffle
         Mat1i idx = ARange_<int>(0, feat_concat.rows, 1);
         cv::randShuffle(idx);
 
@@ -273,11 +272,17 @@ TEST_F(MLPTrainTest, Train_separable_binary)
     EXPECT_GT(confusion(TN), confusion(FN));
 }
 
-TEST_F(MLPTrainTest, Train_separable_multiclass)
+TEST_F(MLPTrainTest, Train_separable_multiclass_even_gt_2)
 {
     const int NB_CLASSES=4;
-    const int NB_TRAIN=120;
-    const int FEAT_DIMS=2;
+    const int NB_TRAIN=30*NB_CLASSES;
+    const int FEAT_DIMS=3;
+
+    PTree params = config_.Params();
+    VecI arch = {FEAT_DIMS, 5, 5, NB_CLASSES};
+    params.put(MLP::PARAM_ARCH, arch);
+    config_.Params(params);
+    to_->Reset(config_);
 
     Mat1f train_feat, train_labels;
     GenerateSeparableMultiClass(NB_CLASSES, NB_TRAIN, FEAT_DIMS,
@@ -285,68 +290,337 @@ TEST_F(MLPTrainTest, Train_separable_multiclass)
 
     ELM_DYN_CAST(base_LearningLayer, to_)->Learn(train_feat, train_labels);
 
-    const int NB_TEST=120;
+    const int NB_TEST=NB_TRAIN;
     Mat1f test_feat, test_labels;
-    GenerateSeparableBinary(NB_CLASSES, NB_TEST, FEAT_DIMS,
-                            test_feat, test_labels);
+    GenerateSeparableMultiClass(NB_CLASSES, NB_TEST, FEAT_DIMS,
+                                test_feat, test_labels);
 
-//    for(int c=0; c<NB_CLASSES; c++) {
+    std::vector<Mat1i> confusion_one_vs_all(NB_CLASSES);
+    for(int c=0; c<NB_CLASSES; c++) {
 
-//        Mat1i confusion = Mat1i::zeros(2, 2);
-//        const int TP = 0;
-//        const int FN = 1;
-//        const int FP = 2;
-//        const int TN = 3;
+        confusion_one_vs_all[c] = Mat1i::zeros(2, 2);
+    }
 
-//        Mat1f result(NB_TEST, 2);
+    const int TP = 0;
+    const int FN = 1;
+    const int FP = 2;
+    const int TN = 3;
 
-//        for (int i=0; i<NB_TEST; i++) {
+    VecI count(NB_CLASSES);
 
-//            Mat1f test_feat_sample = test_feat.row(i);
+    for (int i=0; i<NB_TEST; i++) {
 
-//            float target_label = test_labels.row(i)(0);
+        Mat1f test_feat_sample = test_feat.row(i);
 
-//            Signal sig;
-//            sig.Append(NAME_IN, test_feat_sample);
+        //ELM_COUT_VAR(test_labels.row(i));
+        int label_arg_max;
+        {
+            double min_val, max_val;
+            int max_idx[2];
+            cv::minMaxIdx(test_labels.row(i), &min_val, &max_val, 0, max_idx);
+            label_arg_max = max_idx[1];
+            count[label_arg_max]++;
+        }
 
-//            EXPECT_FALSE(sig.Exists(NAME_OUT_PREDICTION));
+        Signal sig;
+        sig.Append(NAME_IN, test_feat_sample);
 
-//            to_->Activate(sig);
-//            to_->Response(sig);
+        EXPECT_FALSE(sig.Exists(NAME_OUT_PREDICTION));
 
-//            EXPECT_TRUE(sig.Exists(NAME_OUT_PREDICTION));
+        to_->Activate(sig);
+        to_->Response(sig);
 
-//            Mat1f response = sig.MostRecentMat1f(NAME_OUT_PREDICTION);
+        EXPECT_TRUE(sig.Exists(NAME_OUT_PREDICTION));
 
-//            EXPECT_MAT_DIMS_EQ(response, Size2i(1, 1));
+        Mat1f response = sig.MostRecentMat1f(NAME_OUT_PREDICTION);
 
-//            float predicted = response(0);
+        //ELM_COUT_VAR(response);
 
-//            result(i, 0) = target_label;
-//            result(i, 1) = predicted;
+        EXPECT_MAT_DIMS_EQ(response, Size2i(NB_CLASSES, 1));
 
-//            if(target_label >= 0.f && predicted >= 0.f) {
+        int response_arg_max;
+        {
+            double min_val, max_val;
+            int max_idx[2];
+            cv::minMaxIdx(response, &min_val, &max_val, 0, max_idx);
+            response_arg_max = max_idx[1];
+        }
 
-//                confusion(TP)++;
-//            }
-//            else if(target_label < 0.f && predicted < 0.f) {
+        if(label_arg_max == response_arg_max) {
 
-//                confusion(TN)++;
-//            }
-//            else {
+            confusion_one_vs_all[label_arg_max](TP)++;
 
-//                confusion(target_label < 0.f? FP : FN)++;
-//            }
-//        }
+            // and TN for the rest
+            for(int c=0; c<NB_CLASSES; c++) {
 
-//        //ELM_COUT_VAR(confusion);
+                if(c != label_arg_max) {
 
-//        ASSERT_EQ(NB_TEST/2, cv::sum(confusion.row(0))[0]);
-//        ASSERT_EQ(NB_TEST/2, cv::sum(confusion.row(1))[0]);
+                    confusion_one_vs_all[c](TN)++;
+                }
+            }
+        }
+        else {
 
-//        EXPECT_GT(confusion(TP), confusion(FP));
-//        EXPECT_GT(confusion(TN), confusion(FN));
-//    }
+            confusion_one_vs_all[response_arg_max](FP)++;
+            confusion_one_vs_all[label_arg_max](FN)++;
+
+            // and TN for the rest
+            for(int c=0; c<NB_CLASSES; c++) {
+
+                if(c != label_arg_max && c != response_arg_max) {
+
+                    confusion_one_vs_all[c](TN)++;
+                }
+            }
+        }
+    }
+
+    for(int c=0; c<NB_CLASSES; c++) {
+
+//        ELM_COUT_VAR(c);
+//        ELM_COUT_VAR(confusion_one_vs_all[c]);
+
+        ASSERT_EQ(NB_TEST/NB_CLASSES, cv::sum(confusion_one_vs_all[c].row(0))[0]) << "data point(s) not accounted for";
+        ASSERT_EQ(NB_TEST-NB_TEST/NB_CLASSES, cv::sum(confusion_one_vs_all[c].row(1))[0]) << "data point(s) not accounted for";
+
+        EXPECT_GT(confusion_one_vs_all[c](TP), confusion_one_vs_all[c](FP));
+        EXPECT_GT(confusion_one_vs_all[c](TN), confusion_one_vs_all[c](FN));
+    }
+}
+
+TEST_F(MLPTrainTest, Train_separable_multiclass_odd_gt_2)
+{
+    const int NB_CLASSES=3;
+    const int NB_TRAIN=30*NB_CLASSES;
+    const int FEAT_DIMS=3;
+
+    PTree params = config_.Params();
+    VecI arch = {FEAT_DIMS, 5, 5, NB_CLASSES};
+    params.put(MLP::PARAM_ARCH, arch);
+    config_.Params(params);
+    to_->Reset(config_);
+
+    Mat1f train_feat, train_labels;
+    GenerateSeparableMultiClass(NB_CLASSES, NB_TRAIN, FEAT_DIMS,
+                                train_feat, train_labels);
+
+    ELM_DYN_CAST(base_LearningLayer, to_)->Learn(train_feat, train_labels);
+
+    const int NB_TEST=NB_TRAIN;
+    Mat1f test_feat, test_labels;
+    GenerateSeparableMultiClass(NB_CLASSES, NB_TEST, FEAT_DIMS,
+                                test_feat, test_labels);
+
+    std::vector<Mat1i> confusion_one_vs_all(NB_CLASSES);
+    for(int c=0; c<NB_CLASSES; c++) {
+
+        confusion_one_vs_all[c] = Mat1i::zeros(2, 2);
+    }
+
+    const int TP = 0;
+    const int FN = 1;
+    const int FP = 2;
+    const int TN = 3;
+
+    VecI count(NB_CLASSES);
+
+    for (int i=0; i<NB_TEST; i++) {
+
+        Mat1f test_feat_sample = test_feat.row(i);
+
+        //ELM_COUT_VAR(test_labels.row(i));
+        int label_arg_max;
+        {
+            double min_val, max_val;
+            int max_idx[2];
+            cv::minMaxIdx(test_labels.row(i), &min_val, &max_val, 0, max_idx);
+            label_arg_max = max_idx[1];
+            count[label_arg_max]++;
+        }
+
+        Signal sig;
+        sig.Append(NAME_IN, test_feat_sample);
+
+        EXPECT_FALSE(sig.Exists(NAME_OUT_PREDICTION));
+
+        to_->Activate(sig);
+        to_->Response(sig);
+
+        EXPECT_TRUE(sig.Exists(NAME_OUT_PREDICTION));
+
+        Mat1f response = sig.MostRecentMat1f(NAME_OUT_PREDICTION);
+
+        //ELM_COUT_VAR(response);
+
+        EXPECT_MAT_DIMS_EQ(response, Size2i(NB_CLASSES, 1));
+
+        int response_arg_max;
+        {
+            double min_val, max_val;
+            int max_idx[2];
+            cv::minMaxIdx(response, &min_val, &max_val, 0, max_idx);
+            response_arg_max = max_idx[1];
+        }
+
+        if(label_arg_max == response_arg_max) {
+
+            confusion_one_vs_all[label_arg_max](TP)++;
+
+            // and TN for the rest
+            for(int c=0; c<NB_CLASSES; c++) {
+
+                if(c != label_arg_max) {
+
+                    confusion_one_vs_all[c](TN)++;
+                }
+            }
+        }
+        else {
+
+            confusion_one_vs_all[response_arg_max](FP)++;
+            confusion_one_vs_all[label_arg_max](FN)++;
+
+            // and TN for the rest
+            for(int c=0; c<NB_CLASSES; c++) {
+
+                if(c != label_arg_max && c != response_arg_max) {
+
+                    confusion_one_vs_all[c](TN)++;
+                }
+            }
+        }
+    }
+
+    for(int c=0; c<NB_CLASSES; c++) {
+
+//        ELM_COUT_VAR(c);
+//        ELM_COUT_VAR(confusion_one_vs_all[c]);
+
+        ASSERT_EQ(NB_TEST/NB_CLASSES, cv::sum(confusion_one_vs_all[c].row(0))[0]) << "data point(s) not accounted for";
+        ASSERT_EQ(NB_TEST-NB_TEST/NB_CLASSES, cv::sum(confusion_one_vs_all[c].row(1))[0]) << "data point(s) not accounted for";
+
+        EXPECT_GT(confusion_one_vs_all[c](TP), confusion_one_vs_all[c](FP));
+        EXPECT_GT(confusion_one_vs_all[c](TN), confusion_one_vs_all[c](FN));
+    }
+}
+
+/**
+ * @brief Effectively binary classification
+ */
+TEST_F(MLPTrainTest, Train_separable_multiclass_2)
+{
+    const int NB_CLASSES=2;
+    const int NB_TRAIN=30*NB_CLASSES;
+    const int FEAT_DIMS=3;
+
+    PTree params = config_.Params();
+    VecI arch = {FEAT_DIMS, 5, 5, NB_CLASSES};
+    params.put(MLP::PARAM_ARCH, arch);
+    config_.Params(params);
+    to_->Reset(config_);
+
+    Mat1f train_feat, train_labels;
+    GenerateSeparableMultiClass(NB_CLASSES, NB_TRAIN, FEAT_DIMS,
+                                train_feat, train_labels);
+
+    ELM_DYN_CAST(base_LearningLayer, to_)->Learn(train_feat, train_labels);
+
+    const int NB_TEST=NB_TRAIN;
+    Mat1f test_feat, test_labels;
+    GenerateSeparableMultiClass(NB_CLASSES, NB_TEST, FEAT_DIMS,
+                                test_feat, test_labels);
+
+    std::vector<Mat1i> confusion_one_vs_all(NB_CLASSES);
+    for(int c=0; c<NB_CLASSES; c++) {
+
+        confusion_one_vs_all[c] = Mat1i::zeros(2, 2);
+    }
+
+    const int TP = 0;
+    const int FN = 1;
+    const int FP = 2;
+    const int TN = 3;
+
+    VecI count(NB_CLASSES);
+
+    for (int i=0; i<NB_TEST; i++) {
+
+        Mat1f test_feat_sample = test_feat.row(i);
+
+        //ELM_COUT_VAR(test_labels.row(i));
+        int label_arg_max;
+        {
+            double min_val, max_val;
+            int max_idx[2];
+            cv::minMaxIdx(test_labels.row(i), &min_val, &max_val, 0, max_idx);
+            label_arg_max = max_idx[1];
+            count[label_arg_max]++;
+        }
+
+        Signal sig;
+        sig.Append(NAME_IN, test_feat_sample);
+
+        EXPECT_FALSE(sig.Exists(NAME_OUT_PREDICTION));
+
+        to_->Activate(sig);
+        to_->Response(sig);
+
+        EXPECT_TRUE(sig.Exists(NAME_OUT_PREDICTION));
+
+        Mat1f response = sig.MostRecentMat1f(NAME_OUT_PREDICTION);
+
+        //ELM_COUT_VAR(response);
+
+        EXPECT_MAT_DIMS_EQ(response, Size2i(NB_CLASSES, 1));
+
+        int response_arg_max;
+        {
+            double min_val, max_val;
+            int max_idx[2];
+            cv::minMaxIdx(response, &min_val, &max_val, 0, max_idx);
+            response_arg_max = max_idx[1];
+        }
+
+        if(label_arg_max == response_arg_max) {
+
+            confusion_one_vs_all[label_arg_max](TP)++;
+
+            // and TN for the rest
+            for(int c=0; c<NB_CLASSES; c++) {
+
+                if(c != label_arg_max) {
+
+                    confusion_one_vs_all[c](TN)++;
+                }
+            }
+        }
+        else {
+
+            confusion_one_vs_all[response_arg_max](FP)++;
+            confusion_one_vs_all[label_arg_max](FN)++;
+
+            // and TN for the rest
+            for(int c=0; c<NB_CLASSES; c++) {
+
+                if(c != label_arg_max && c != response_arg_max) {
+
+                    confusion_one_vs_all[c](TN)++;
+                }
+            }
+        }
+    }
+
+    for(int c=0; c<NB_CLASSES; c++) {
+
+//        ELM_COUT_VAR(c);
+//        ELM_COUT_VAR(confusion_one_vs_all[c]);
+
+        ASSERT_EQ(NB_TEST/NB_CLASSES, cv::sum(confusion_one_vs_all[c].row(0))[0]) << "data point(s) not accounted for";
+        ASSERT_EQ(NB_TEST-NB_TEST/NB_CLASSES, cv::sum(confusion_one_vs_all[c].row(1))[0]) << "data point(s) not accounted for";
+
+        EXPECT_GT(confusion_one_vs_all[c](TP), confusion_one_vs_all[c](FP));
+        EXPECT_GT(confusion_one_vs_all[c](TN), confusion_one_vs_all[c](FN));
+    }
 }
 
 } // annonymous namespace for test fixtures and test cases
