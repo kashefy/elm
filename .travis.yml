@@ -23,7 +23,8 @@ before_install:
   # get HDF5, build after apt-get installation
   - wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
   # get MATIO, build after apt-get installation
-  - wget http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fmatio%2Ffiles%2F&ts=1427974023&use_mirror=heanet
+  - wget http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz
+  - ls
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
   - sudo apt-get update -qq
   # install lcov to coveralls conversion + upload tool
