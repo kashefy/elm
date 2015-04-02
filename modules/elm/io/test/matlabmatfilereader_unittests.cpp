@@ -27,6 +27,8 @@ namespace bfs=boost::filesystem; // use alias
 using namespace cv;
 using namespace elm;
 
+namespace  {
+
 class MatlabMATFileReaderTest : public ::testing::Test
 {
 protected:
@@ -222,5 +224,7 @@ TEST_F(MatlabMATFileReaderTest, DISABLED_MATIO)
 
     vector<string> var_names = to.TopLevelVarNames();
 }
+
+} // annonymous namespace for unit tests
 
 #endif // __WITH_MATIO
