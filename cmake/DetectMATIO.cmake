@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# MATIO
+#  MAT File I/O Library "MATIO"
 # ----------------------------------------------------------------------------
 # Defines: MATIO_FOUND, MATIO_INCLUDE_DIRS, MATIO_LIBS, MATIO_LIBRARY_DIR
 #
