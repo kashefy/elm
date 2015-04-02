@@ -13,6 +13,8 @@
 
 #include "gtest/gtest.h"
 
+#ifdef __WITH_MATIO
+
 #include "matio.h"
 
 #include "elm/core/debug_utils.h"
@@ -220,3 +222,5 @@ TEST_F(MatlabMATFileReaderTest, DISABLED_MATIO)
 
     vector<string> var_names = to.TopLevelVarNames();
 }
+
+#endif // __WITH_MATIO

@@ -12,6 +12,8 @@
 
 #include <opencv2/core/core.hpp>        // convert to OpenCV Mat
 
+#ifdef __WITH_MATIO
+
 #include "matio.h"                      // io for matlab's .mat files
 
 #include "elm/core/debug_utils.h"
@@ -160,5 +162,5 @@ void MatlabMATFileReader::ResetFileHandle()
     }
 }
 
-
+#endif // __WITH_MATIO
 

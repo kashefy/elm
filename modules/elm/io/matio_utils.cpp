@@ -13,6 +13,8 @@
 
 using namespace cv;
 
+#ifdef __WITH_MATIO
+
 unsigned int elm::MATIOClassTOCV_TYPE(matio_classes type)
 {
     unsigned int cv_type;
@@ -31,3 +33,5 @@ unsigned int elm::MATIOClassTOCV_TYPE(matio_classes type)
 
     return cv_type;
 }
+
+#endif // __WITH_MATIO

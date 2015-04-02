@@ -8,13 +8,16 @@
 #ifndef _ELM_IO_MATIO_UTILS_H_
 #define _ELM_IO_MATIO_UTILS_H_
 
+#ifdef __WITH_MATIO
+
 #include "matio.h"
 
 namespace elm {
 
 unsigned int MATIOClassTOCV_TYPE(matio_classes type);
 
-
 } // namespace elm
+
+#endif // __WITH_MATIO
 
 #endif // _ELM_IO_MATIO_UTILS_H_
