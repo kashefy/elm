@@ -7,24 +7,36 @@
 //M*/
 #include "elm/io/matlabmatfilereader.h"
 
-#include <boost/filesystem.hpp>
-#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>         // path
+#include <boost/algorithm/string.hpp>   // tolower()
 
-#include "matio.h"
+#include <opencv2/core/core.hpp>        // convert to OpenCV Mat
 
-#include "elm/core/exception.h"
+#include "matio.h"                      // io for matlab's .mat files
+
+#include "elm/core/debug_utils.h"
+#include "elm/core/exception.h"         // supported exceptions
+#include "elm/io/matio_utils.h"
 
 using namespace std;
 namespace bfs=boost::filesystem;
+using namespace cv;
 using namespace elm;
 
 MatlabMATFileReader::MatlabMATFileReader()
-    : matfp_(NULL)
+    : matfp_(NULL),
+      cursor_(NULL)
 {
 }
 
 MatlabMATFileReader::~MatlabMATFileReader()
 {
+    if(cursor_ != NULL) {
+
+        Mat_VarFree(cursor_);
+        cursor_ = NULL;
+    }
+
     if(matfp_ != NULL) {
 
         Mat_Close(matfp_);
@@ -70,11 +82,20 @@ void MatlabMATFileReader::ReadHeader(const string &path)
         ELM_THROW_FILEIO_ERROR(s.str());
     }
 
+    path_ = path;
+
     matvar_t *var;
     while ((var = Mat_VarReadNextInfo(matfp_)) != NULL ) {
 
         string var_name(var->name);
         var_names_.push_back(var_name);
+
+//        std::cout<<var_name<<": dims=" << var->rank << " [";
+//        for(int i=0; i<var->rank; i++) {
+
+//            std::cout << var->dims[i]<<"," <<std::endl;
+//        }
+//        std::cout << "]" <<std::endl;
 
         Mat_VarFree(var);
         var = NULL;
@@ -85,3 +106,59 @@ vector<string> MatlabMATFileReader::TopLevelVarNames() const
 {
     return var_names_;
 }
+
+void MatlabMATFileReader::Seek(const string &var_name)
+{
+    ResetFileHandle();
+
+    cursor_ = Mat_VarReadInfo(matfp_, var_name.c_str());
+    if ( NULL == cursor_ ) {
+
+        stringstream s;
+        s << "Variable \"" << var_name << "\" not found, or error reading MAT file";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+
+}
+
+matvar_t* MatlabMATFileReader::Cursor() const
+{
+    return cursor_;
+}
+
+Mat MatlabMATFileReader::CursorToMat() const
+{
+    Mat m;
+
+    if(cursor_ == NULL) {
+
+        ELM_THROW_KEY_ERROR("Cursor not pointing anywhere");
+    }
+
+    unsigned int cv_type = MATIOClassTOCV_TYPE(cursor_->class_type);
+
+    int* sizes = new int[cursor_->rank];
+    for(int i=0; i<cursor_->rank; i++) {
+
+        sizes[i] = static_cast<int>(cursor_->dims[i]);
+    }
+
+    Mat_VarReadDataAll(matfp_, cursor_);
+
+    m = Mat(cursor_->rank, sizes, CV_MAKE_TYPE(cv_type, 1), cursor_->data);
+
+    delete []sizes;
+
+    return m;
+}
+
+void MatlabMATFileReader::ResetFileHandle()
+{
+    if (matfp_ != NULL) {
+
+        Mat_Rewind(matfp_);
+    }
+}
+
+
+
