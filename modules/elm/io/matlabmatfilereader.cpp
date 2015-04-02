@@ -19,6 +19,7 @@ namespace bfs=boost::filesystem;
 using namespace elm;
 
 MatlabMATFileReader::MatlabMATFileReader()
+    : matfp_(NULL)
 {
 }
 
@@ -27,6 +28,7 @@ MatlabMATFileReader::~MatlabMATFileReader()
     if(matfp_ != NULL) {
 
         Mat_Close(matfp_);
+        matfp_ = NULL;
     }
 }
 
@@ -45,7 +47,7 @@ void MatlabMATFileReader::ReadHeader(const string &path)
     string ext = p.extension().string();
     boost::algorithm::to_lower(ext);
 
-    if(ext != "mat") {
+    if(ext != ".mat") {
 
         stringstream s;
         s << p.string();
@@ -58,7 +60,7 @@ void MatlabMATFileReader::ReadHeader(const string &path)
         Mat_Close(matfp_);
     }
 
-    matfp_ = Mat_Open(p.string().c_str(), MAT_ACC_RDONLY);
+    matfp_ = Mat_Open(path.c_str(), MAT_ACC_RDONLY);
 
     if (matfp_ ==  NULL) {
 
@@ -77,7 +79,6 @@ void MatlabMATFileReader::ReadHeader(const string &path)
         Mat_VarFree(var);
         var = NULL;
     }
-    Mat_Close(matfp_);
 }
 
 vector<string> MatlabMATFileReader::TopLevelVarNames() const
