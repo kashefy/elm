@@ -19,19 +19,45 @@ before_install:
   - cd gtest-1.7.0
   - cmake .
   - make
-  - pwd
-  - cd ../elm
+  - cd ..
+  # get HDF5, build after apt-get installation
+  - wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
+  # get MATIO, build after apt-get installation
+  - wget http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fmatio%2Ffiles%2F&ts=1427974023&use_mirror=heanet
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
   - sudo apt-get update -qq
   # install lcov to coveralls conversion + upload tool
   - gem install coveralls-lcov
+    # back to ELM source directory
+  - cd $TRAVIS_BUILD_DIR
 install:
-  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libpcl-all lcov
+  # lcov: for test coverage reporting, building with coverage info
+  # gfortran fort77 are for HDF5, MATIO support
+  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libpcl-all lcov gfortran fort77
+  # HDF5
+  - cd ..
+  - tar -xzf hdf5-1.8.14.tar.gz
+  - cd hdf5-1.8.14
+  - mkdir ../hdf5
+  - ./configure --prefix=../hdf5 --enable-fortran --enable-fortran2003 --with-default-api-version=v18
+  - make -j2
+  - make install
+  - cd ..
+    # MATIO
+  - tar -xzf matio-1.5.2.tar.gz
+  - cd matio-1.5.2
+  - mkdir ../matio
+  - ./configure --prefix=../matio --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=../hdf5
+  - make -j2
+  - make install
+  - cd $TRAVIS_BUILD_DIR
 before_script:
+  - pwd
+  - cd $TRAVIS_BUILD_DIR
   - pwd
   - mkdir build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=Coverage -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON ..
+  - cmake -DCMAKE_BUILD_TYPE=Coverage -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=../../matio -DHDF5_DIR=../../hdf5 ..
 script:
   - make -j2
   - cd ./bin
