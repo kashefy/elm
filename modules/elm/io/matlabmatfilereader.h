@@ -8,6 +8,9 @@
 #ifndef _ELM_IO_MATLABMATFILEREADER_H_
 #define _ELM_IO_MATLABMATFILEREADER_H_
 
+#include <vector>
+#include <string>
+
 struct _mat_t;
 typedef struct _mat_t mat_t;
 
@@ -23,10 +26,14 @@ public:
 
     virtual ~MatlabMATFileReader();
 
+    void ReadHeader(const std::string &path);
 
+    std::vector<std::string> TopLevelVarNames() const;
 
 protected:
     mat_t *matfp_;  ///< file handle
+
+    std::vector<std::string> var_names_;
 };
 
 }// namespace elm

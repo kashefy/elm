@@ -13,6 +13,7 @@
 
 #include "matio.h"
 
+#include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
 
 using namespace std;
@@ -27,33 +28,14 @@ class MatlabMATFileReaderTest : public ::testing::Test
 TEST_F(MatlabMATFileReaderTest, MATIO)
 {
     bfs::path p("/media/win/Users/woodstock/dev/data/nyu_depth_v2_labeled.mat");
-    bool b = bfs::is_regular_file(p);
 
-    int err = 0;
-    mat_t *matfp;
-    matvar_t *matvar;
+    MatlabMATFileReader reader;
+    reader.ReadHeader(p.string());
 
-    matfp = Mat_Open(p.string().c_str(), MAT_ACC_RDONLY);
+    vector<string> var_names = reader.TopLevelVarNames();
 
+    for(size_t i=0; i<var_names.size(); i++) {
 
-    if ( NULL == matfp ) {
-
-        fprintf(stderr,"Error opening MAT file");
+        ELM_COUT_VAR(var_names[i]);
     }
-    while ( (matvar = Mat_VarReadNextInfo(matfp)) != NULL ) {
-
-        printf("%s\n",matvar->name);
-
-
-        Mat_VarFree(matvar);
-
-        matvar = NULL;
-    }
-    Mat_Close(matfp);
-
-
-//    mat_ft x = Mat_GetVersion(matfp);
-//    matvar = Mat_VarReadInfo(matfp,"x");
-//    matvar = Mat_VarReadInfo(matfp,"labels");
-    //matvar=Mat_VarGetStructFieldByName(matvar,"numsample",1);
 }
