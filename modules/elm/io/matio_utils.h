@@ -30,10 +30,10 @@ unsigned int MATIOClassTOCV_TYPE(matio_classes type);
  *
  * colum-major order is assumed
  *
- * @param src matrix
- * @param dim which dimension to slice at from source matrix
- * @param idx index alongside dimension to slice from
- * @param dst data of matrix slice copied into this object, Mat object's dims adjusted accordingly.
+ * @param[in] src matrix
+ * @param[in] dim which dimension to slice at from source matrix
+ * @param[in] idx index alongside dimension to slice from
+ * @param[out] dst data of matrix slice copied into this object, Mat object's dims adjusted accordingly.
  */
 void SliceCopy(const cv::Mat &src, int dim, int idx, cv::Mat& dst);
 
@@ -50,6 +50,22 @@ void SliceCopy(const cv::Mat &src, int dim, int idx, cv::Mat& dst);
  * @param subs subscript across each dimension
  */
 void ind2sub(int idx, int dims, const int *sizes, std::vector<int> &subs);
+
+/**
+ * @brief calculate linear index from subscript values
+ * @param dims no. of dimensions
+ * @param sizes size of each dimension
+ * @param subs subscript of requested element across each dimension
+ * @return linear index corresponding to multi-dimensional subscript
+ */
+int sub2ind(int dims, const int *sizes, const int *subs);
+
+/**
+ * @brief Convert 3-dimensional OpenCV Mat to multi-channel Mat
+ * @param[in] src multi-dimensional Mat
+ * @param[out] dst 2-dimensional multi-channel Mat
+ */
+void Mat3DTo3Ch(const cv::Mat &src, cv::Mat& dst);
 
 } // namespace elm
 

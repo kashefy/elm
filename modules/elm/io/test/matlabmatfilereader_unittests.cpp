@@ -12,6 +12,7 @@
 #include <boost/filesystem.hpp>
 
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "gtest/gtest.h"
 
@@ -435,67 +436,30 @@ TEST_F(MatlabMATFileReaderTest, Slice_3d_from_4d)
 
 TEST_F(MatlabMATFileReaderTest, DISABLED_MATIO)
 {
-    //bfs::path p("/media/win/Users/woodstock/dev/data/nyu_depth_v2_labeled.mat");
-    bfs::path p("/media/win/Users/woodstock/dev/data/m4.mat");
+    bfs::path p("/media/win/Users/woodstock/dev/data/nyu_depth_v2_labeled.mat");
 
     MatlabMATFileReader to;
     to.ReadHeader(p.string());
 
     vector<string> var_names = to.TopLevelVarNames();
 
-    to.Seek("m4");
+    to.Seek("images");
     Mat x = to.CursorToMat();
 
-    Mat y;
-    elm::SliceCopy(x, 3, 0, y);
+    for(int i=0; i<1000; i++) {
 
-    int l =0;
-    for(int i=0; i<x.size[2]; i++) {
+        ELM_COUT_VAR(i);
+        Mat y;
+        elm::SliceCopy(x.clone(), 3, i, y);
 
-        for(int j=0; j<x.size[1]; j++) {
+        Mat img;
+        elm::Mat3DTo3Ch(y, img);
 
-            for(int k=0; k<x.size[0]; k++) {
+        cv::cvtColor(img, img, CV_RGB2BGR);
 
-                std::cout<<static_cast<int>(y.at<uchar>(l++))<<", ";
-            }
-            std::cout<<std::endl;
-        }
-        std::cout<<std::endl;
+        cv::imshow("image", img);
+        cv::waitKey();
     }
-
-    ELM_COUT_VAR(y);
-    elm::SliceCopy(x, 3, 1, y);
-
-    ELM_COUT_VAR(y);
-
-
-//    for(int i=0; i<x.size[0]; i++) {
-
-//        for(int j=0; j<x.size[1]; j++) {
-
-//            for(int k=0; k<x.size[2]; k++) {
-
-//                //ELM_COUT_VAR(i<<","<<j<<","<<k<<": "<<x.at<double>(i,j, k));
-//                std::cout<<x.at<double>(i,j, k)<<", ";
-//            }
-//            std::cout<<std::endl;
-
-//            //y2.at<uchar>(i, j) = y.at<uchar>(i,j);
-
-////            ELM_COUT_VAR(i<<","<<j<<" "<<x.at<double>(i,j));
-////            ELM_COUT_VAR(i<<","<<j<<" "<<x.at<double>(i,j,0));
-////            ELM_COUT_VAR(i<<","<<j<<" "<<x.at<double>(i,j,1));
-//            //y2.at<uchar>(i, j) = static_cast<uchar>(x.at<uint16_t>(i,j, 0));
-//        }
-
-//        std::cout<<std::endl;
-//    }
-
-
-
-//    cv::imshow("y", y2.t());
-
-//    cv::waitKey();
 }
 
 } // annonymous namespace for unit tests

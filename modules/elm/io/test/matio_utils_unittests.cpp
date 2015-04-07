@@ -142,6 +142,51 @@ TEST(MATIO_UTILS_TEST, Ind2sub_3d)
     EXPECT_EQ(1, subs[2]);
 }
 
+TEST(MATIO_UTILS_TEST, Sub2ind_first_el)
+{
+    const int DIMS=3;
+    const int SIZES[DIMS] = {4, 3, 2};
+
+    int subs[DIMS] = {0, 0, 0};
+    EXPECT_EQ(0, sub2ind(DIMS, SIZES, subs));
+}
+
+TEST(MATIO_UTILS_TEST, Sub2ind_last_el)
+{
+    const int DIMS=3;
+    const int SIZES[DIMS] = {4, 3, 2};
+
+    int subs[DIMS] = {3, 2, 1};
+    EXPECT_EQ(4*3*2-1, sub2ind(DIMS, SIZES, subs));
+}
+
+TEST(MATIO_UTILS_TEST, Sub2ind_1d)
+{
+    const int DIMS=1;
+    const int SIZES[DIMS] = {4};
+
+    int subs[DIMS] = {2};
+    EXPECT_EQ(2, sub2ind(DIMS, SIZES, subs));
+}
+
+TEST(MATIO_UTILS_TEST, Sub2ind_2d)
+{
+    const int DIMS=2;
+    const int SIZES[DIMS] = {4, 3};
+
+    int subs[DIMS] = {2, 1};
+    EXPECT_EQ(7, sub2ind(DIMS, SIZES, subs));
+}
+
+TEST(MATIO_UTILS_TEST, Sub2ind_3d)
+{
+    const int DIMS=3;
+    const int SIZES[DIMS] = {4, 3, 2};
+
+    int subs[DIMS] = {3, 0, 1};
+    EXPECT_EQ(19, sub2ind(DIMS, SIZES, subs));
+}
+
 } // annonymous namespace for unit tests
 
 #endif // __WITH_MATIO

@@ -73,22 +73,46 @@ void elm::SliceCopy(const cv::Mat &src, int dim, int idx, cv::Mat& dst)
 
     dst = Mat(dim, sizes, src.type());
 
-    uchar *src_data_ptr = src.data;
-    uchar *dst_data_ptr = dst.data;
-    const size_t ELEM_SIZE = src.elemSize();
-
     const int DIM_SUB_IDX = src.dims-dim-1;
 
-    for(int l=0; l<src.total(); l++) {
+    int l_start, l_end;
+    {
+        int *subs_start = new int[src.dims];
+        int *subs_end = new int[src.dims];
+        for(int d=0; d<src.dims; d++) {
 
-        std::vector<int> subs;
-        ind2sub(l, src.dims, src_sizes_rev, subs);
+            if(d==DIM_SUB_IDX) {
 
-        if(subs[DIM_SUB_IDX] == idx) {
+                subs_start[d] = subs_end[d] = idx;
+            }
+            else {
+
+                subs_start[d] = 0;
+                subs_end[d] = src_sizes_rev[d]-1;
+            }
+        }
+
+        l_start = sub2ind(src.dims, src_sizes_rev, subs_start);
+        l_end = sub2ind(src.dims, src_sizes_rev, subs_end);
+
+        delete []subs_start;
+        delete []subs_end;
+    }
+
+    const size_t ELEM_SIZE = src.elemSize();
+    uchar *src_data_ptr = src.data + l_start * ELEM_SIZE;
+    uchar *dst_data_ptr = dst.data;
+
+    for(int l=l_start; l<=l_end; l++) {
+
+        //std::vector<int> subs;
+        //ind2sub(l, src.dims, src_sizes_rev, subs);
+        //std::cout<<l<<" "<<elm::to_string(subs)<<" "<< (subs[DIM_SUB_IDX] == idx) << " "<<std::endl;
+        //if(subs[DIM_SUB_IDX] == idx) {
 
             memcpy(dst_data_ptr, src_data_ptr, ELEM_SIZE);
             dst_data_ptr += ELEM_SIZE;
-        }
+        //}
 
         src_data_ptr += ELEM_SIZE;
     }
@@ -122,6 +146,43 @@ void elm::ind2sub(int idx, int dims, const int *sizes, std::vector<int> &subs)
     }
 
     delete [] prod;
+}
+
+int elm::sub2ind(int dims, const int *sizes, const int *subs)
+{
+    int idx = 0;
+    for (int i=0; i < dims; i++) {
+
+        int prod = 1;
+        for (int j=dims-1; j > i; j--) {
+
+            prod *= sizes[j];
+        }
+        idx += subs[i] * prod;
+    }
+    return idx;
+}
+
+void elm::Mat3DTo3Ch(const Mat &src, Mat &dst)
+{
+    const int ROWS=src.size[0];
+    const int COLS=src.size[1];
+    const int NB_CHANNELS=src.size[2];
+
+    dst = Mat(ROWS, COLS, CV_MAKETYPE(src.type(), NB_CHANNELS));
+
+    int i=0;
+    for(int ch=0; ch<NB_CHANNELS; ch++) {
+
+        for(int c=0; c<COLS; c++) {
+
+            for(int r=0; r<ROWS; r++) {
+
+                dst.at<Vec3b>(r,c)[ch] = src.at<uchar>(i);
+                i++;
+            }
+        }
+    }
 }
 
 #endif // __WITH_MATIO
