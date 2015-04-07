@@ -14,16 +14,16 @@ before_install:
   - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF ..
   - make -j2 --quiet
   - cd ../..
-  - wget https://googletest.googlecode.com/files/gtest-1.7.0.zip
+  - wget --quiet https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - unzip gtest-1.7.0.zip
   - cd gtest-1.7.0
   - cmake .
   - make
   - cd ..
   # get HDF5, build after apt-get installation
-  - wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
+  - wget --quiet http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
   # get MATIO, build after apt-get installation
-  - wget http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz
+  - wget --quiet http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz
   - ls
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
   - sudo apt-get update -qq
@@ -34,7 +34,7 @@ before_install:
 install:
   # lcov: for test coverage reporting, building with coverage info
   # gfortran fort77 are for HDF5, MATIO support
-  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libpcl-all lcov gfortran fort77
+  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libpcl-all lcov gfortran fort77 > /dev/null
   # HDF5
   - cd ..
   - tar -xzf hdf5-1.8.14.tar.gz
