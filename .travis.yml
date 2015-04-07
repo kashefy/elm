@@ -63,7 +63,9 @@ before_script:
   - ls ../../
   - ls ../../matio/
   - ls ../../matio/include
-  - cmake -DCMAKE_BUILD_TYPE=Coverage -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=../../matio -DHDF5_DIR=../../hdf5 ..
+  - ls `readlink -f ../matio`
+  - ls `readlink -f ../matio`/include
+  - cmake -DCMAKE_BUILD_TYPE=Coverage -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=`readlink -f ../matio` -DHDF5_DIR=`readlink -f ../matio` ..
 script:
   - pwd
   - make -j2 VERBOSE=1
