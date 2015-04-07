@@ -392,7 +392,7 @@ TEST_F(MatlabMATFileReaderTest, Slice_3d)
     }
 }
 
-TEST_F(MatlabMATFileReaderTest, Slice_3d_from_4d)
+TEST_F(MatlabMATFileReaderTest, Mat3DToMat3Ch)
 {
     bfs::path p(test_filepath_);
 
@@ -407,30 +407,44 @@ TEST_F(MatlabMATFileReaderTest, Slice_3d_from_4d)
     Mat y;
     elm::SliceCopy(x, 3, 0, y);
 
-    ASSERT_GT(x.dims, y.dims);
-    EXPECT_EQ(3, y.dims);
+    Mat img;
+    elm::Mat3DTo3Ch(y, img);
 
-    EXPECT_EQ(x.size[0], y.size[0]);
-    EXPECT_EQ(x.size[1], y.size[1]);
-    EXPECT_EQ(x.size[2], y.size[2]);
+    EXPECT_EQ(2, img.dims);
+    EXPECT_EQ(3, img.channels());
+    EXPECT_EQ(x.size[2], img.channels());
+    EXPECT_MAT_DIMS_EQ(img, cv::Size2i(x.size[1], x.size[0]));
 
-    for(size_t i=0; i<y.total(); i++) {
+//    ELM_COUT_VAR(static_cast<Mat3i>(img));
 
-        EXPECT_EQ(i+1, static_cast<int>(y.at<uchar>(i)));
+    img = img.t(); // easier to set expected values with tranposed image
+    for(int r=0, i=1; r<img.rows; r++) {
+
+        for(int c=0; c<img.cols; c++, i++) {
+
+            Vec3b el = img.at<Vec3b>(r, c);
+
+            EXPECT_EQ(i, static_cast<int>(el[0]));
+            EXPECT_EQ(i+12, static_cast<int>(el[1]));
+            EXPECT_EQ(i+12*2, static_cast<int>(el[2]));
+        }
     }
 
     elm::SliceCopy(x, 3, 1, y);
 
-    ASSERT_GT(x.dims, y.dims);
-    EXPECT_EQ(3, y.dims);
+    elm::Mat3DTo3Ch(y, img);
 
-    EXPECT_EQ(x.size[0], y.size[0]);
-    EXPECT_EQ(x.size[1], y.size[1]);
-    EXPECT_EQ(x.size[2], y.size[2]);
+    img = img.t(); // easier to set expected values with tranposed image
+    for(int r=0, i=101; r<img.rows; r++) {
 
-    for(size_t i=0; i<y.total(); i++) {
+        for(int c=0; c<img.cols; c++, i++) {
 
-        EXPECT_EQ(i+101, static_cast<int>(y.at<uchar>(i)));
+            Vec3b el = img.at<Vec3b>(r, c);
+
+            EXPECT_EQ(i, static_cast<int>(el[0]));
+            EXPECT_EQ(i+12, static_cast<int>(el[1]));
+            EXPECT_EQ(i+12*2, static_cast<int>(el[2]));
+        }
     }
 }
 
