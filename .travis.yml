@@ -66,7 +66,7 @@ before_script:
   - cmake -DCMAKE_BUILD_TYPE=Coverage -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=../../matio -DHDF5_DIR=../../hdf5 ..
 script:
   - pwd
-  - make -j2
+  - make -j2 VERBOSE=1
   - pwd
   - cd ./bin
   - pwd
