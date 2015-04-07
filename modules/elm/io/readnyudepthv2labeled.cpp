@@ -11,9 +11,11 @@
 
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include <elm/core/exception.h>
-#include <elm/io/matio_utils.h>
-#include <elm/io/matlabmatfilereader.h>
+#include "elm/core/debug_utils.h"
+
+#include "elm/core/exception.h"
+#include "elm/io/matio_utils.h"
+#include "elm/io/matlabmatfilereader.h"
 
 using namespace std;
 using namespace cv;
@@ -62,6 +64,21 @@ int ReadNYUDepthV2Labeled::ReadHeader(const std::string &path)
     reader_->Seek(KEY_DEPTHS);
     depths_ = reader_->CursorToMat();
 
+//    int i=0;
+//    for(int r=0; r<640; r++) {
+
+//        for(int c=0; c<480; c++) {
+
+//            std::cout<<depths_.at<float>(i);
+
+//            if(c<480-1) std::cout<<",";
+//            else std::cout<<";"<<std::endl;
+//            i++;
+//        }
+//    }
+
+//    std::cout<<std::endl;
+
     reader_->Seek(KEY_IMAGES);
     images_ = reader_->CursorToMat();
 
@@ -73,10 +90,35 @@ int ReadNYUDepthV2Labeled::ReadHeader(const std::string &path)
 
 void ReadNYUDepthV2Labeled::Next(Mat &bgr, Mat &depth, Mat &labels)
 {
-    elm::SliceCopy(depths_, 2, index_, depth);
+    //ELM_COUT_VAR(depths_.dims<<":"<<depths_.size[0]<<","<<depths_.size[1]<<","<<depths_.size[2]);
 
-    elm::SliceCopy(labels_, 2, index_, labels);
+    depth = Mat(depths_.size[1], depths_.size[0], CV_32FC1);
+    for(int r=0, i=index_*(depth.total()), j=0; r<depth.rows; r++) {
+
+        for(int c=0; c<depth.cols; c++, i++, j++) {
+
+            depth.at<float>(j) = depths_.at<float>(i);
+            i++;
+            j++;
+        }
+    }
+    //elm::SliceCopy(depths_, 2, index_, depth);
+    cv::transpose(depth, depth);
+
+    labels = Mat(labels_.size[1], labels_.size[0], CV_16UC1);
+
+    for(int r=0, i=index_*(labels.total()), j=0; r<labels.rows; r++) {
+
+        for(int c=0; c<labels.cols; c++, i++, j++) {
+
+            labels.at<uint16_t>(j) = labels_.at<uint16_t>(i);
+            i++;
+            j++;
+        }
+    }
     labels.convertTo(labels, CV_32SC1);
+
+    cv::transpose(labels, labels);
 
     Mat bgr3d;
     elm::SliceCopy(images_, 3, index_, bgr3d);
@@ -84,9 +126,10 @@ void ReadNYUDepthV2Labeled::Next(Mat &bgr, Mat &depth, Mat &labels)
     bgr.convertTo(bgr, CV_8UC3);
     cv::cvtColor(bgr, bgr, CV_RGB2BGR);
 
+    cv::transpose(bgr, bgr);
+
     index_++;
 }
-
 
 bool ReadNYUDepthV2Labeled::IS_EOF() const
 {

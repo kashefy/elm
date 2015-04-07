@@ -30,7 +30,7 @@ using namespace elm;
 
 namespace  {
 
-class MatlabMATFileReaderTest : public ::testing::Test
+class ReadNYUDepthV2LabeledTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
@@ -221,7 +221,7 @@ protected:
     bfs::path test_filepath_;
 };
 
-TEST_F(MatlabMATFileReaderTest, MATIO)
+TEST_F(ReadNYUDepthV2LabeledTest, DISABLED_NYUV2)
 {
     bfs::path p("/media/win/Users/woodstock/dev/data/nyu_depth_v2_labeled.mat");
 
@@ -238,7 +238,7 @@ TEST_F(MatlabMATFileReaderTest, MATIO)
         cv::imshow("image", bgr);
         cv::imshow("depth", elm::ConvertTo8U(depth));
         cv::imshow("labels", elm::ConvertTo8U(labels));
-        cv::waitKey();
+        cv::waitKey(0);
     }
 }
 
