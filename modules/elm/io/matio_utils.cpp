@@ -11,6 +11,10 @@
 
 #include "elm/core/exception.h"
 
+#include "elm/core/debug_utils.h"
+#include "elm/core/cv/mat_vector_utils.h"
+#include "elm/core/cv/mat_vector_utils_inl.h"
+
 using namespace cv;
 
 #ifdef __WITH_MATIO
@@ -50,6 +54,74 @@ unsigned int elm::MATIOClassTOCV_TYPE(matio_classes type)
     }
 
     return cv_type;
+}
+
+void elm::SliceCopy(const cv::Mat &src, int dim, int idx, cv::Mat& dst)
+{
+    int *sizes = new int[dim];
+
+    int *src_sizes_rev = new int[src.dims];
+    for(int i=0; i<src.dims; i++) {
+
+        src_sizes_rev[i] = src.size[src.dims-i-1];
+    }
+
+    for(int i=0; i<dim; i++) {
+
+        sizes[i] = src.size[i];
+    }
+
+    dst = Mat(dim, sizes, src.type());
+
+    uchar *src_data_ptr = src.data;
+    uchar *dst_data_ptr = dst.data;
+    const size_t ELEM_SIZE = src.elemSize();
+
+    const int DIM_SUB_IDX = src.dims-dim-1;
+
+    for(int l=0; l<src.total(); l++) {
+
+        std::vector<int> subs;
+        ind2sub(l, src.dims, src_sizes_rev, subs);
+
+        if(subs[DIM_SUB_IDX] == idx) {
+
+            memcpy(dst_data_ptr, src_data_ptr, ELEM_SIZE);
+            dst_data_ptr += ELEM_SIZE;
+        }
+
+        src_data_ptr += ELEM_SIZE;
+    }
+
+    delete [] sizes;
+    delete [] src_sizes_rev;
+}
+
+void elm::ind2sub(int idx, int dims, const int *sizes, std::vector<int> &subs)
+{
+    subs.resize(dims);
+
+    int *prod = new int [dims];
+    for (int i=0; i < dims; i++) {
+
+        prod[i] = 1;
+        for (int j=dims-1; j > i; j--) {
+
+            prod[i] *= sizes[j];
+        }
+    }
+
+    for (int i=0; i < dims; i++) {
+
+        subs[i] = idx;
+        for (int j=0; j < i ; j++) {
+
+            subs[i] = subs[i] % prod[j];
+        }
+        subs[i] = static_cast<int>(floor( static_cast<float>(subs[i] / prod[i]) ));
+    }
+
+    delete [] prod;
 }
 
 #endif // __WITH_MATIO

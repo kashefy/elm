@@ -16,6 +16,7 @@
 #include "matio.h"
 
 #include "elm/core/exception.h"
+#include "elm/ts/container.h"
 
 using namespace elm;
 
@@ -51,6 +52,94 @@ TEST(MATIO_UTILS_TEST, MATIOClassTOCV_TYPE_invalid)
     EXPECT_THROW(MATIOClassTOCV_TYPE(MAT_C_OBJECT), ExceptionTypeError);
     EXPECT_THROW(MATIOClassTOCV_TYPE(MAT_C_STRUCT), ExceptionTypeError);
     EXPECT_THROW(MATIOClassTOCV_TYPE(MAT_C_SPARSE), ExceptionTypeError);
+}
+
+TEST(MATIO_UTILS_TEST, Ind2sub_size)
+{
+    for(int d=1; d<10; d++) {
+
+        int *SIZES = new int[d];
+
+        for(int i=0; i<d; i++) {
+
+            SIZES[i] = 1;
+        }
+
+        std::vector<int> subs;
+        ind2sub(0, d, SIZES, subs);
+        EXPECT_SIZE(d, subs);
+
+        delete [] SIZES;
+    }
+}
+
+TEST(MATIO_UTILS_TEST, Ind2sub_first_el)
+{
+    const int DIMS=3;
+    const int SIZES[DIMS] = {4, 3, 2};
+
+    std::vector<int> subs;
+    ind2sub(0, DIMS, SIZES, subs);
+
+    for(int i=0; i<DIMS; i++) {
+
+        EXPECT_EQ(0, subs[i]);
+    }
+}
+
+TEST(MATIO_UTILS_TEST, Ind2sub_last_el)
+{
+    const int DIMS=3;
+    const int SIZES[DIMS] = {4, 3, 2};
+
+    std::vector<int> subs;
+    ind2sub(4*3*2-1, DIMS, SIZES, subs);
+
+    for(int i=0; i<DIMS; i++) {
+
+        EXPECT_EQ(SIZES[i]-1, subs[i]);
+    }
+}
+
+TEST(MATIO_UTILS_TEST, Ind2sub_1d)
+{
+    const int DIMS=1;
+    const int SIZES[DIMS] = {4};
+
+    std::vector<int> subs;
+    ind2sub(2, DIMS, SIZES, subs);
+
+    EXPECT_SIZE(1, subs);
+    EXPECT_EQ(2, subs[0]);
+}
+
+
+TEST(MATIO_UTILS_TEST, Ind2sub_2d)
+{
+    const int DIMS=2;
+    const int SIZES[DIMS] = {4, 3};
+
+    std::vector<int> subs;
+    ind2sub(7, DIMS, SIZES, subs);
+
+    EXPECT_SIZE(2, subs);
+    EXPECT_EQ(2, subs[0]);
+    EXPECT_EQ(1, subs[1]);
+}
+
+TEST(MATIO_UTILS_TEST, Ind2sub_3d)
+{
+    const int DIMS=3;
+    const int SIZES[DIMS] = {4, 3, 2};
+
+    std::vector<int> subs;
+
+    ind2sub(19, DIMS, SIZES, subs);
+
+    EXPECT_SIZE(3, subs);
+    EXPECT_EQ(3, subs[0]);
+    EXPECT_EQ(0, subs[1]);
+    EXPECT_EQ(1, subs[2]);
 }
 
 } // annonymous namespace for unit tests
