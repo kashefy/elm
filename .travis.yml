@@ -49,7 +49,7 @@ install:
   - cd matio-1.5.2
   - mkdir ../matio
   - ./configure --prefix=`readlink -f ../matio` --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=`readlink -f ../hdf5`
-  - make -j2
+  - make
   - make install
   - cd $TRAVIS_BUILD_DIR
 before_script:
