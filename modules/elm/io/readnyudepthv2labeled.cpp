@@ -7,6 +7,8 @@
 //M*/
 #include "elm/io/readnyudepthv2labeled.h"
 
+#ifdef __WITH_MATIO
+
 #include <vector>
 
 #include <opencv2/imgproc/imgproc.hpp>
@@ -132,3 +134,5 @@ bool ReadNYUDepthV2Labeled::IS_EOF() const
 {
     return index_ >= nb_items_;
 }
+
+#endif // __WITH_MATIO

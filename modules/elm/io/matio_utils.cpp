@@ -7,6 +7,8 @@
 //M*/
 #include "elm/io/matio_utils.h"
 
+#ifdef __WITH_MATIO
+
 #include <opencv2/core/core.hpp>
 
 #include "elm/core/exception.h"
@@ -16,8 +18,6 @@
 #include "elm/core/cv/mat_vector_utils_inl.h"
 
 using namespace cv;
-
-#ifdef __WITH_MATIO
 
 unsigned int elm::MATIOClassTOCV_TYPE(matio_classes type)
 {

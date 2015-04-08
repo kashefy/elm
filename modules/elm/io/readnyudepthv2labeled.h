@@ -8,6 +8,8 @@
 #ifndef _ELM_IO_READNYUDEPTHV2LABELED_H_
 #define _ELM_IO_READNYUDEPTHV2LABELED_H_
 
+#ifdef __WITH_MATIO
+
 #include <string>
 
 #include <opencv2/core/core.hpp>
@@ -62,5 +64,7 @@ protected:
 };
 
 } // namespace elm
+
+#endif // __WITH_MATIO
 
 #endif // _ELM_IO_READNYUDEPTHV2LABELED_H_

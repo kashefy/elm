@@ -7,6 +7,8 @@
 //M*/
 #include "elm/io/matlabmatfilereader.h"
 
+#ifdef __WITH_MATIO
+
 #include <fstream>
 
 #include <boost/filesystem.hpp>
@@ -15,8 +17,6 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include "gtest/gtest.h"
-
-#ifdef __WITH_MATIO
 
 #include "matio.h"
 

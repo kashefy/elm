@@ -8,6 +8,8 @@
 #ifndef _ELM_IO_MATLABMATFILEREADER_H_
 #define _ELM_IO_MATLABMATFILEREADER_H_
 
+#ifdef __WITH_MATIO
+
 #include <vector>
 #include <string>
 
@@ -70,5 +72,7 @@ protected:
 };
 
 }// namespace elm
+
+#endif // __WITH_MATIO
 
 #endif // _ELM_IO_MATLABMATFILEREADER_H_

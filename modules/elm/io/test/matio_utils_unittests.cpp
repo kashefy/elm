@@ -7,11 +7,11 @@
 //M*/
 #include "elm/io/matio_utils.h"
 
+#ifdef __WITH_MATIO
+
 #include "gtest/gtest.h"
 
 #include <opencv2/core/core.hpp>
-
-#ifdef __WITH_MATIO
 
 #include "matio.h"
 
