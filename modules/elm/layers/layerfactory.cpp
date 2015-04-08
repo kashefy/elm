@@ -21,6 +21,7 @@
 #include "elm/layers/icp.h"
 #include "elm/layers/layer_y.h"
 #include "elm/layers/medianblur.h"
+#include "elm/layers/mlp.h"
 #include "elm/encoding/populationcode_derivs/mutex_populationcode.h"
 #include "elm/layers/saliencyitti.h"
 #include "elm/layers/sinkhornbalancing.h"
@@ -46,6 +47,7 @@ LayerRegistry g_layerRegistry = map_list_of
         LAYER_REGISTRY_PAIR( ICP )
         LAYER_REGISTRY_PAIR( LayerY )
         LAYER_REGISTRY_PAIR( MedianBlur )
+        LAYER_REGISTRY_PAIR( MLP )
         LAYER_REGISTRY_PAIR( MutexPopulationCode )
         LAYER_REGISTRY_PAIR( SaliencyItti )
         LAYER_REGISTRY_PAIR( SinkhornBalancing )

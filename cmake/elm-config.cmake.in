@@ -110,5 +110,10 @@ if(@PCL_FOUND@)
     add_definitions(-D__WITH_PCL)
 endif()
 
+if(@MATIO_FOUND@)
+    message(STATUS "ELM with MATIO support.")
+    add_definitions(-D__WITH_MATIO)
+endif()
+
 # Dependencies...Done.
 #----------------------------------------------------------------------------

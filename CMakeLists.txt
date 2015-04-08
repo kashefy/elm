@@ -32,7 +32,7 @@ include(cmake/MessageUtils.cmake)
 # Set global CMake variables
 # ----------------------------------------------------------------------------
 # Print all warnings and enable C++11 support
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
 
 # -fPIC
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
@@ -142,6 +142,18 @@ set(WITH_PCL ON CACHE BOOL "Whether to build with PCL support.")
 if(WITH_PCL)
     include(cmake/DetectPCL.cmake)
 endif(WITH_PCL)
+
+# ----------------------------------------------------------------------------
+#  MAT File I/O Library "MATIO"
+# ----------------------------------------------------------------------------
+# Reading from MATLAB's .mat files for importing datasets
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+set(WITH_MATIO ON CACHE BOOL "Whether to build with MATIO support.")
+
+if(WITH_MATIO)
+    include(cmake/DetectMATIO.cmake)
+endif(WITH_MATIO)
 
 # Dependencies covered
 # ----------------------------------------------------------------------------
@@ -267,6 +279,14 @@ status("")
 status("    PCL:  "   PCL_FOUND THEN YES (${PCL_VERSION}) ELSE NO)
 status("        lib Dir.:  "      PCL_FOUND THEN "${PCL_LIBRARY_DIRS}" ELSE "-")
 status("        components :  "   PCL_FOUND THEN "${PCL_COMPONENTS_REQ}" ELSE "-")
+
+status("")
+status("    MATIO:  "   MATIO_FOUND THEN YES ELSE NO)
+status("        include Dir.:  "  MATIO_FOUND THEN "${MATIO_INCLUDE_DIRS}" ELSE "-")
+status("        lib Dir.:  "      MATIO_FOUND THEN "${MATIO_LIBRARY_DIR}" ELSE "-")
+status("        components :  "   MATIO_FOUND THEN "${MATIO_LIBS}" ELSE "-")
+status("        hdf5 :  "   MATIO_FOUND THEN "${HDF5_DIR}" ELSE "-")
+status("            components :  "   MATIO_FOUND THEN "${HDF5_LIBS}" ELSE "-")
 
 status("")
 
