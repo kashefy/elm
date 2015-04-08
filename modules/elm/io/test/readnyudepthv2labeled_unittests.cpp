@@ -35,113 +35,32 @@ class ReadNYUDepthV2LabeledTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        test_filepath_ = "test.mat";
+        test_filepath_ = "fake_nyu_depth_v2.mat";
 
         mat_t *matfp;
         matvar_t *matvar;
 
-        const int ROWS=10;
-        size_t dims[2] = {ROWS, 1};
-        double x[ROWS] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-                y[ROWS] = {11,12,13,14,15,16,17,18,19,20};
-        struct mat_complex_split_t z = {x, y};
-
         matfp = Mat_CreateVer(test_filepath_.c_str(), NULL, MAT_FT_DEFAULT);
         if ( NULL == matfp ) {
 
-            fprintf(stderr,"Error creating MAT file \"test.mat\"\n");
+            fprintf(stderr,"Error creating MAT file \"fake_nyu_depth_v2.mat\"\n");
         }
 
-        matvar = Mat_VarCreate("x",
-                               MAT_C_DOUBLE,
-                               MAT_T_DOUBLE,
-                               2,
-                               dims,
-                               x,
-                               0);
+        float m3[4*3*2] = { 1.1f, 2.2f, 3.3f,
+                            4.4f, 5.5f, 6.6f,
+                            7.7f, 8.8f, 9.9f,
+                            10.f,11.1f,12.2f,
 
-        if ( NULL == matvar ) {
-
-            fprintf(stderr,"Error creating variable for ’x’\n");
-        }
-        else {
-
-            Mat_VarWrite(matfp,matvar, MAT_COMPRESSION_NONE);
-            Mat_VarFree(matvar);
-        }
-        matvar = Mat_VarCreate("y",
-                               MAT_C_DOUBLE,
-                               MAT_T_DOUBLE,
-                               2,
-                               dims,
-                               y,
-                               0);
-
-        if ( NULL == matvar ) {
-
-            fprintf(stderr,"Error creating variable for ’y’\n");
-        }
-        else {
-
-            Mat_VarWrite(matfp,matvar, MAT_COMPRESSION_NONE);
-            Mat_VarFree(matvar);
-        }
-        matvar = Mat_VarCreate("z",
-                               MAT_C_DOUBLE,
-                               MAT_T_DOUBLE,
-                               2,
-                               dims,
-                               &z,
-                               MAT_F_COMPLEX);
-
-        if ( NULL == matvar ) {
-
-            fprintf(stderr,"Error creating variable for ’z’\n");
-        }
-        else {
-
-            Mat_VarWrite(matfp,matvar, MAT_COMPRESSION_NONE);
-            Mat_VarFree(matvar);
-        }
-
-        double m[ROWS*2] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-                             11,12,13,14,15,16,17,18,19,20};
-
-        size_t dims2[2] = {ROWS, 2};
-
-        matvar = Mat_VarCreate("m",
-                               MAT_C_DOUBLE,
-                               MAT_T_DOUBLE,
-                               2,
-                               dims2,
-                               &m,
-                               0);
-
-        if ( NULL == matvar ) {
-
-            fprintf(stderr,"Error creating variable for ’m’\n");
-        }
-        else {
-
-            Mat_VarWrite(matfp, matvar, MAT_COMPRESSION_NONE);
-            Mat_VarFree(matvar);
-        }
-
-        double m3[4*3*2] = { 1, 2, 3,
-                             4, 5, 6,
-                             7, 8, 9,
-                             10,11,12,
-
-                             13,14,15,
-                             16,17,18,
-                             19,20,21,
-                             22,23,24};
+                            13.3f,14.4f,15.5f,
+                            16.6f,17.7f,18.8f,
+                            19.9f,20.0f,21.1f,
+                            22.2f,23.3f,24.4f};
 
         size_t dims3[3] = {4, 3, 2};
 
-        matvar = Mat_VarCreate("m3",
-                               MAT_C_DOUBLE,
-                               MAT_T_DOUBLE,
+        matvar = Mat_VarCreate("depths",
+                               MAT_C_SINGLE,
+                               MAT_T_SINGLE,
                                3,
                                dims3,
                                &m3,
@@ -149,7 +68,35 @@ protected:
 
         if ( NULL == matvar ) {
 
-            fprintf(stderr,"Error creating variable for ’m3’\n");
+            fprintf(stderr,"Error creating variable for ’depths’\n");
+        }
+        else {
+
+            Mat_VarWrite(matfp, matvar, MAT_COMPRESSION_NONE);
+            Mat_VarFree(matvar);
+        }
+
+        uint16_t labels[4*3*2] = { 1, 2, 3,
+                                   4, 5, 6,
+                                   7, 8, 9,
+                                  10,11,12,
+
+                                  13,14,15,
+                                  16,17,18,
+                                  19,20,21,
+                                  22,23,24};
+
+        matvar = Mat_VarCreate("labels",
+                               MAT_C_SINGLE,
+                               MAT_T_SINGLE,
+                               3,
+                               dims3,
+                               &labels,
+                               0);
+
+        if ( NULL == matvar ) {
+
+            fprintf(stderr,"Error creating variable for ’depths’\n");
         }
         else {
 
@@ -189,7 +136,7 @@ protected:
 
         size_t dims4[4] = {4, 3, 3, 2};
 
-        matvar = Mat_VarCreate("m4",
+        matvar = Mat_VarCreate("images",
                                MAT_C_UINT8,
                                MAT_T_UINT8,
                                4,
@@ -199,7 +146,7 @@ protected:
 
         if ( NULL == matvar ) {
 
-            fprintf(stderr,"Error creating variable for ’m4’\n");
+            fprintf(stderr,"Error creating variable for ’images’\n");
         }
         else {
 
@@ -218,8 +165,168 @@ protected:
         }
     }
 
+    void ReplaceVariableName(const bfs::path &src_path,
+                             const std::string &src_name,
+                             const bfs::path &dst_path,
+                             const std::string &dst_name)
+    {
+        mat_t *matfp_src = Mat_Open(src_path.string().c_str(), MAT_ACC_RDWR);
+        mat_t *matfp_dst = Mat_CreateVer(dst_path.string().c_str(), NULL, MAT_FT_DEFAULT);
+        if ( NULL == matfp_dst ) {
+
+            fprintf(stderr,"Error creating MAT file \"tmp.mat\"\n");
+        }
+
+        matvar_t *var;
+        while ((var = Mat_VarReadNext(matfp_src)) != NULL ) {
+
+            string var_name(var->name);
+            if(var_name == src_name) {
+
+                matvar_t *matvar2 = Mat_VarCreate(dst_name.c_str(),
+                                                  var->class_type,
+                                                  var->data_type,
+                                                  var->rank,
+                                                  var->dims,
+                                                  var->data,
+                                                  0);
+
+                if ( NULL == matvar2 ) {
+
+                    fprintf(stderr,"Error creating variable for ’foo’\n");
+                }
+                else {
+
+                    Mat_VarWrite(matfp_dst, matvar2, MAT_COMPRESSION_NONE);
+                    Mat_VarFree(matvar2);
+                }
+            }
+            else {
+
+                Mat_VarWrite(matfp_dst, var, MAT_COMPRESSION_NONE);
+            }
+
+            Mat_VarFree(var);
+            var = NULL;
+        }
+        Mat_Close(matfp_src);
+        Mat_Close(matfp_dst);
+    }
+
     bfs::path test_filepath_;
 };
+
+TEST_F(ReadNYUDepthV2LabeledTest, Bad_Ext)
+{
+    ReadNYUDepthV2Labeled to;
+    EXPECT_THROW(to.ReadHeader(bfs::path("foo.bar").string()), ExceptionFileIOError);
+}
+
+TEST_F(ReadNYUDepthV2LabeledTest, Bad_Path)
+{
+    ReadNYUDepthV2Labeled to;
+    EXPECT_THROW(to.ReadHeader(bfs::path("foo.mat").string()), ExceptionFileIOError);
+}
+
+TEST_F(ReadNYUDepthV2LabeledTest, ReplaceVariableName_unchanged)
+{
+    bfs::path tmp_path("tmp.mat");
+
+    ReplaceVariableName(test_filepath_, "depths", tmp_path, "depths");
+
+    ReadNYUDepthV2Labeled to;
+    EXPECT_NO_THROW(to.ReadHeader(tmp_path.string()));
+
+    bfs::remove(tmp_path);
+}
+
+TEST_F(ReadNYUDepthV2LabeledTest, Bad_header_no_depths)
+{
+    {
+        ReadNYUDepthV2Labeled to;
+        EXPECT_NO_THROW(to.ReadHeader(test_filepath_.string()));
+    }
+
+    bfs::path tmp_path("tmp.mat");
+
+    ReplaceVariableName(test_filepath_, "depths", tmp_path, "foo");
+
+    ReadNYUDepthV2Labeled to;
+    EXPECT_THROW(to.ReadHeader(tmp_path.string()), ExceptionKeyError);
+
+    bfs::remove(tmp_path);
+}
+
+TEST_F(ReadNYUDepthV2LabeledTest, Bad_header_no_images)
+{
+    {
+        ReadNYUDepthV2Labeled to;
+        EXPECT_NO_THROW(to.ReadHeader(test_filepath_.string()));
+    }
+
+    bfs::path tmp_path("tmp.mat");
+
+    ReplaceVariableName(test_filepath_, "images", tmp_path, "foo");
+
+    ReadNYUDepthV2Labeled to;
+    EXPECT_THROW(to.ReadHeader(tmp_path.string()), ExceptionKeyError);
+
+    bfs::remove(tmp_path);
+}
+
+TEST_F(ReadNYUDepthV2LabeledTest, Bad_header_no_labels)
+{
+    {
+        ReadNYUDepthV2Labeled to;
+        EXPECT_NO_THROW(to.ReadHeader(test_filepath_.string()));
+    }
+
+    bfs::path tmp_path("tmp.mat");
+
+    ReplaceVariableName(test_filepath_, "labels", tmp_path, "foo");
+
+    ReadNYUDepthV2Labeled to;
+    EXPECT_THROW(to.ReadHeader(tmp_path.string()), ExceptionKeyError);
+
+    bfs::remove(tmp_path);
+}
+
+TEST_F(ReadNYUDepthV2LabeledTest, Nb_items)
+{
+    ReadNYUDepthV2Labeled to;
+    EXPECT_EQ(2, to.ReadHeader(test_filepath_.string()));
+}
+
+TEST_F(ReadNYUDepthV2LabeledTest, Is_eof)
+{
+    ReadNYUDepthV2Labeled to;
+    EXPECT_NO_THROW(to.ReadHeader(test_filepath_.string()));
+
+    int count = 0;
+
+    while(!to.IS_EOF()) {
+
+        Mat bgr, depth, labels;
+        to.Next(bgr, depth, labels);
+        count++;
+    }
+
+    EXPECT_EQ(2, count);
+}
+
+TEST_F(ReadNYUDepthV2LabeledTest, Next_first)
+{
+    ReadNYUDepthV2Labeled to;
+    EXPECT_NO_THROW(to.ReadHeader(test_filepath_.string()));
+
+    Mat bgr, depth, labels;
+    to.Next(bgr, depth, labels);
+
+    EXPECT_MAT_DIMS_EQ(bgr, Size2i(3, 4));
+    EXPECT_EQ(3, bgr.channels());
+    EXPECT_MAT_DIMS_EQ(depth, Size2i(3, 4));
+    EXPECT_MAT_DIMS_EQ(labels, Size2i(3, 4));
+}
 
 TEST_F(ReadNYUDepthV2LabeledTest, DISABLED_NYUV2)
 {
@@ -227,6 +334,8 @@ TEST_F(ReadNYUDepthV2LabeledTest, DISABLED_NYUV2)
 
     ReadNYUDepthV2Labeled to;
     int nb_items = to.ReadHeader(p.string());
+
+    ELM_COUT_VAR(nb_items);
 
     for(int i=0; i<10; i++) {
 

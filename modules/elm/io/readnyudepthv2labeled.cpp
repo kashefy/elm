@@ -85,7 +85,8 @@ int ReadNYUDepthV2Labeled::ReadHeader(const std::string &path)
     reader_->Seek(KEY_LABELS);
     labels_ = reader_->CursorToMat();
 
-    return labels_.size[labels_.dims-1];
+    nb_items_ = labels_.size[labels_.dims-1];
+    return nb_items_;
 }
 
 void ReadNYUDepthV2Labeled::Next(Mat &bgr, Mat &depth, Mat &labels)
@@ -98,8 +99,6 @@ void ReadNYUDepthV2Labeled::Next(Mat &bgr, Mat &depth, Mat &labels)
         for(int c=0; c<depth.cols; c++, i++, j++) {
 
             depth.at<float>(j) = depths_.at<float>(i);
-            i++;
-            j++;
         }
     }
     //elm::SliceCopy(depths_, 2, index_, depth);
@@ -112,8 +111,6 @@ void ReadNYUDepthV2Labeled::Next(Mat &bgr, Mat &depth, Mat &labels)
         for(int c=0; c<labels.cols; c++, i++, j++) {
 
             labels.at<uint16_t>(j) = labels_.at<uint16_t>(i);
-            i++;
-            j++;
         }
     }
     labels.convertTo(labels, CV_32SC1);
