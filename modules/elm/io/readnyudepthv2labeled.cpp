@@ -125,8 +125,6 @@ void ReadNYUDepthV2Labeled::Next(Mat &bgr, Mat &depth, Mat &labels)
     bgr.convertTo(bgr, CV_8UC3);
     cv::cvtColor(bgr, bgr, CV_RGB2BGR);
 
-    cv::transpose(bgr, bgr);
-
     index_++;
 }
 

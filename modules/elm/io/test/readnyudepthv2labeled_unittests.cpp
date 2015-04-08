@@ -324,7 +324,7 @@ TEST_F(ReadNYUDepthV2LabeledTest, Next_dims)
         Mat bgr, depth, labels;
         to.Next(bgr, depth, labels);
 
-        EXPECT_MAT_DIMS_EQ(bgr, Size2i(4, 3));
+        EXPECT_MAT_DIMS_EQ(bgr, Size2i(3, 4));
         EXPECT_EQ(3, bgr.channels());
         EXPECT_MAT_DIMS_EQ(depth, Size2i(3, 4));
         EXPECT_MAT_DIMS_EQ(labels, Size2i(3, 4));
@@ -370,9 +370,9 @@ TEST_F(ReadNYUDepthV2LabeledTest, Next_first)
     // inspect bgr image
     //ELM_COUT_VAR(bgr);
 
-    for(int r=0, i=1; r<bgr.rows; r++) {
+    for(int c=0, i=1; c<bgr.cols; c++) {
 
-        for(int c=0; c<bgr.cols; c++, i++) {
+        for(int r=0; r<bgr.rows; r++, i++) {
 
             Vec3b el = bgr.at<Vec3b>(r, c);
 
