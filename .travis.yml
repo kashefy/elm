@@ -17,8 +17,8 @@ before_install:
   - wget --quiet https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - unzip -qq gtest-1.7.0.zip
   - cd gtest-1.7.0
-  - cmake .
-  - make
+  - cmake . > /dev/null
+  - make > /dev/null
   - cd ..
   # get HDF5, build after apt-get installation
   - wget --quiet http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
