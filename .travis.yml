@@ -41,8 +41,8 @@ install:
   - cd hdf5-1.8.14
   - mkdir ../hdf5
   - ./configure --prefix=`readlink -f ../hdf5` --enable-fortran --enable-fortran2003 --with-default-api-version=v18 > /dev/null
-  - make -j2 > /dev/null
-  - make install > /dev/null
+  - make --quiet --silent -j2 > /dev/null
+  - make --quiet --silent install > /dev/null
   - cd ..
     # MATIO
   - tar -xzf matio-1.5.2.tar.gz
