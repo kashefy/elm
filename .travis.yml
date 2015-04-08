@@ -18,7 +18,7 @@ before_install:
   - unzip -qq gtest-1.7.0.zip
   - cd gtest-1.7.0
   - cmake . > /dev/null
-  - make > /dev/null
+  - make --quiet --silent > /dev/null
   - cd ..
   # get HDF5, build after apt-get installation
   - wget --quiet http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
@@ -49,8 +49,8 @@ install:
   - cd matio-1.5.2
   - mkdir ../matio
   - ./configure --prefix=`readlink -f ../matio` --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=`readlink -f ../hdf5` > /dev/null
-  - make > /dev/null
-  - make install > /dev/null
+  - make --quiet --silent > /dev/null
+  - make --quiet --silent install > /dev/null
   - cd $TRAVIS_BUILD_DIR
   - ls `readlink -f ../matio`
 before_script:
