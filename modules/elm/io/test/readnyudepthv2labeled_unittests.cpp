@@ -314,6 +314,23 @@ TEST_F(ReadNYUDepthV2LabeledTest, Is_eof)
     EXPECT_EQ(2, count);
 }
 
+TEST_F(ReadNYUDepthV2LabeledTest, Next_dims)
+{
+    ReadNYUDepthV2Labeled to;
+    EXPECT_NO_THROW(to.ReadHeader(test_filepath_.string()));
+
+    while(!to.IS_EOF()) {
+
+        Mat bgr, depth, labels;
+        to.Next(bgr, depth, labels);
+
+        EXPECT_MAT_DIMS_EQ(bgr, Size2i(4, 3));
+        EXPECT_EQ(3, bgr.channels());
+        EXPECT_MAT_DIMS_EQ(depth, Size2i(3, 4));
+        EXPECT_MAT_DIMS_EQ(labels, Size2i(3, 4));
+    }
+}
+
 TEST_F(ReadNYUDepthV2LabeledTest, Next_first)
 {
     ReadNYUDepthV2Labeled to;
@@ -322,10 +339,50 @@ TEST_F(ReadNYUDepthV2LabeledTest, Next_first)
     Mat bgr, depth, labels;
     to.Next(bgr, depth, labels);
 
-    EXPECT_MAT_DIMS_EQ(bgr, Size2i(3, 4));
-    EXPECT_EQ(3, bgr.channels());
-    EXPECT_MAT_DIMS_EQ(depth, Size2i(3, 4));
-    EXPECT_MAT_DIMS_EQ(labels, Size2i(3, 4));
+    // inspect depth image
+    {
+        int i = 1;
+        for(int c=0; c<depth.cols; c++) {
+
+            for(int r=0; r<depth.rows; r++, i++) {
+
+                float expected_value = static_cast<float>(i);
+                expected_value += static_cast<float>(i % 10)/10.f;
+                EXPECT_FLOAT_EQ(expected_value, depth.at<float>(r, c));
+            }
+        }
+    }
+
+    // inspect labels
+
+    //ELM_COUT_VAR(labels);
+    {
+        int i = 1;
+        for(int c=0; c<labels.cols; c++) {
+
+            for(int r=0; r<labels.rows; r++, i++) {
+
+                EXPECT_EQ(i, labels.at<int>(r, c));
+            }
+        }
+    }
+
+    // inspect bgr image
+    //ELM_COUT_VAR(bgr);
+
+    for(int r=0, i=1; r<bgr.rows; r++) {
+
+        for(int c=0; c<bgr.cols; c++, i++) {
+
+            Vec3b el = bgr.at<Vec3b>(r, c);
+
+            // switch first and last channel because of bgr to rgb conversion
+            EXPECT_EQ(i, static_cast<int>(el[2]));
+            EXPECT_EQ(i+12, static_cast<int>(el[1]));
+            EXPECT_EQ(i+12*2, static_cast<int>(el[0]));
+        }
+    }
+
 }
 
 TEST_F(ReadNYUDepthV2LabeledTest, DISABLED_NYUV2)
