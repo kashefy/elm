@@ -50,10 +50,26 @@ if(MATIO_FOUND)
     #LINK_DIRECTORIES(${MATIO_LIBRARY_DIR})
 
     # To link against non-system HDF5 installation
+    status("HDF5_DIR=${HDF5_DIR}")
     if(DEFINED HDF5_DIR)
-        LINK_DIRECTORIES(${HDF5_DIR}/lib)
-        set(HDF5_LIBS hdf5)
-        list(APPEND ${ROOT_PROJECT}_LIBS ${HDF5_LIBS})
+
+        file(TO_CMAKE_PATH ${HDF5_DIR}/lib HDF5_TMP_LIB_DIR)
+
+        find_library(HDF5_LIBS
+                     NAMES libhdf5.a hdf5
+                     HINTS ${HDF5_DIR} ${HDF5_TMP_LIB_DIR}
+                     PATHS ${HDF5_DIR} ${HDF5_TMP_LIB_DIR}
+                     DOC "find HDF5 library"
+                     NO_SYSTEM_ENVIRONMENT_PATH)
+
+        if(NOT ${HDF5_LIBS} STREQUAL HDF5_LIBS-NOTFOUND)
+
+            list(APPEND ${ROOT_PROJECT}_LIBS ${HDF5_LIBS})
+
+        endif(NOT ${HDF5_LIBS} STREQUAL HDF5_LIBS-NOTFOUND)
+
+#LINK_DIRECTORIES(${HDF5_DIR}/lib)
+#        set(HDF5_LIBS hdf5)
     endif(DEFINED HDF5_DIR)
 
     add_definitions(-D__WITH_MATIO)
