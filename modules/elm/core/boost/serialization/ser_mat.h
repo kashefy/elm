@@ -65,7 +65,12 @@ namespace serialization {
 
         obj.create(dims, sizes, elem_type);
 
-        size_t data_size = obj.cols * obj.rows * elem_size;
+        size_t data_size = elem_size;
+        for(int d=0; d<dims; d++) {
+
+            data_size *= sizes[d];
+        }
+
         ar & make_nvp("data", make_array(obj.ptr(), data_size));
 
         delete [] sizes;

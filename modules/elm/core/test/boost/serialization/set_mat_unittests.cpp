@@ -7,10 +7,11 @@
 //M*/
 #include "elm/core/boost/serialization/ser_mat.h"
 
+#include "elm/ts/mat_assertions.h"
 #include "elm/ts/serialization_assertions.h"
 
 using namespace std;
-using cv::Mat;
+using namespace cv;
 
 namespace {
 
@@ -76,6 +77,203 @@ TEST_F(SerializeMatTest, Serialize2d)
 
     EXPECT_EQ(str1, str2);
     EXPECT_NE(str1.c_str(), str2.c_str());
+}
+
+TEST_F(SerializeMatTest, SerializeRowMatrix_float)
+{
+    using namespace boost::archive;
+
+    string str1;
+    Mat src(1, 10, CV_32FC1);
+
+    for(size_t i=0; i<src.total(); i++) {
+
+        src.at<float>(i) = static_cast<float>(i);
+    }
+
+    Mat obj;
+
+    // serialize example to stream
+    // then deserialize to other instance
+    {
+        stringstream stream;
+
+        text_oarchive oa1(stream);
+        oa1 << src;
+        str1 = stream.str();
+
+        text_iarchive ia(stream);
+        ia >> obj;
+    }
+
+    std::string str2;
+    {
+        std::stringstream stream;
+        text_oarchive oa(stream);
+        oa << obj;
+        str2 = stream.str();
+    }
+
+    EXPECT_EQ(str1, str2);
+    EXPECT_NE(str1.c_str(), str2.c_str());
+
+    ASSERT_EQ(1, obj.rows) << "Result is not a row matrix";
+    EXPECT_MAT_EQ(obj, src);
+    EXPECT_EQ(obj.channels(), src.channels()) << "No. of channels do not match";
+}
+
+TEST_F(SerializeMatTest, SerializeColMatrix_float)
+{
+    using namespace boost::archive;
+
+    string str1;
+    Mat src(10, 1, CV_32FC1);
+
+    for(size_t i=0; i<src.total(); i++) {
+
+        src.at<float>(i) = static_cast<float>(i);
+    }
+
+    Mat obj;
+
+    // serialize example to stream
+    // then deserialize to other instance
+    {
+        stringstream stream;
+
+        text_oarchive oa1(stream);
+        oa1 << src;
+        str1 = stream.str();
+
+        text_iarchive ia(stream);
+        ia >> obj;
+    }
+
+    std::string str2;
+    {
+        std::stringstream stream;
+        text_oarchive oa(stream);
+        oa << obj;
+        str2 = stream.str();
+    }
+
+    EXPECT_EQ(str1, str2);
+    EXPECT_NE(str1.c_str(), str2.c_str());
+
+    ASSERT_EQ(1, obj.cols) << "Result is not a row matrix";
+    EXPECT_MAT_EQ(obj, src);
+    EXPECT_EQ(obj.channels(), src.channels()) << "No. of channels do not match";
+}
+
+TEST_F(SerializeMatTest, Serialize3d)
+{
+    using namespace boost::archive;
+
+    string str1;
+
+    const int DIMS=3;
+    const int SIZES[DIMS]={4, 2, 3};
+    Mat src(DIMS, SIZES, CV_32FC1);
+
+    for(size_t i=0; i<src.total(); i++) {
+
+        src.at<float>(i) = static_cast<float>(i);
+    }
+
+    Mat obj;
+
+    // serialize example to stream
+    // then deserialize to other instance
+    {
+        stringstream stream;
+
+        text_oarchive oa1(stream);
+        oa1 << src;
+        str1 = stream.str();
+
+        text_iarchive ia(stream);
+        ia >> obj;
+    }
+
+    std::string str2;
+    {
+        std::stringstream stream;
+        text_oarchive oa(stream);
+        oa << obj;
+        str2 = stream.str();
+    }
+
+    EXPECT_EQ(str1, str2);
+    EXPECT_NE(str1.c_str(), str2.c_str());
+
+    ASSERT_EQ(DIMS, obj.dims) << "Result is not a 3D matrix";
+    EXPECT_EQ(obj.channels(), src.channels()) << "No. of channels do not match";
+
+    for(int i=0; i<DIMS; i++) {
+
+        EXPECT_EQ(SIZES[i], obj.size[i]) << "Dimension mismatch";
+    }
+
+    for(size_t i=0; i<src.total(); i++) {
+
+        EXPECT_FLOAT_EQ(static_cast<float>(i), obj.at<float>(i));
+    }
+}
+
+template<class T>
+class SerializeMatTypedTest : public ::testing::Test
+{
+protected:
+    virtual void SetUp()
+    {
+        to_ = Mat_<T>(3, 2);
+
+        for(size_t i=0; i<to_.total(); i++) {
+
+            to_(i) = static_cast<T>(i);
+        }
+    }
+
+    // members
+    Mat_<T> to_;    ///< test object
+};
+
+typedef ::testing::Types<float, int, uchar, double, uint8_t, uint16_t> PODTypes;
+TYPED_TEST_CASE(SerializeMatTypedTest, PODTypes);
+
+TYPED_TEST(SerializeMatTypedTest, Serialize2d)
+{
+    using namespace boost::archive;
+
+    string str1;
+    Mat src = static_cast<Mat>(this->to_);
+    Mat obj;
+
+    // serialize example to stream
+    // then deserialize to other instance
+    {
+        stringstream stream;
+
+        text_oarchive oa1(stream);
+        oa1 << src;
+        str1 = stream.str();
+
+        text_iarchive ia(stream);
+        ia >> obj;
+    }
+
+    std::string str2;
+    {
+        std::stringstream stream;
+        text_oarchive oa(stream);
+        oa << obj;
+        str2 = stream.str();
+    }
+
+    EXPECT_EQ(str1, str2);
+    EXPECT_NE(str1.c_str(), str2.c_str());
+
+    EXPECT_MAT_EQ(obj, src);
 }
 
 } // annonymous namespace for unit tests
