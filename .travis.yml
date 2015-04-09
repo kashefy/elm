@@ -12,26 +12,53 @@ before_install:
   - mkdir build
   - cd build
   - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF ..
-  - make -j2
+  - make -j2 > /dev/null
   - cd ../..
-  - wget https://googletest.googlecode.com/files/gtest-1.7.0.zip
-  - unzip gtest-1.7.0.zip
+  - wget --quiet https://googletest.googlecode.com/files/gtest-1.7.0.zip
+  - unzip -qq gtest-1.7.0.zip
   - cd gtest-1.7.0
-  - cmake .
-  - make
-  - pwd
-  - cd ../elm
+  - cmake . > /dev/null
+  - make > /dev/null
+  - cd ..
+  # get HDF5, build after apt-get installation
+  - wget --quiet http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
+  # get MATIO, build after apt-get installation
+  - wget --quiet http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz
+  - ls
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
   - sudo apt-get update -qq
   # install lcov to coveralls conversion + upload tool
   - gem install coveralls-lcov
+    # back to ELM source directory
+  - cd $TRAVIS_BUILD_DIR
 install:
-  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libpcl-all lcov
+  # lcov: for test coverage reporting, building with coverage info
+  # gfortran fort77 are for HDF5, MATIO support
+  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libpcl-all lcov gfortran fort77 > /dev/null
+  # HDF5
+  - cd ..
+  - tar -xzf hdf5-1.8.14.tar.gz
+  - cd hdf5-1.8.14
+  - mkdir ../hdf5
+  - ./configure --prefix=`readlink -f ../hdf5` --enable-fortran --enable-fortran2003 --with-default-api-version=v18 > /dev/null
+  - make -j2 > /dev/null 2>&1
+  - make install > /dev/null 2>&1
+  - cd ..
+    # MATIO
+  - tar -xzf matio-1.5.2.tar.gz
+  - cd matio-1.5.2
+  - mkdir ../matio
+  - ./configure --prefix=`readlink -f ../matio` --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=`readlink -f ../hdf5` > /dev/null
+  - make > /dev/null 2>&1
+  - make install > /dev/null 2>&1
+  - cd $TRAVIS_BUILD_DIR
 before_script:
+  - pwd
+  - cd $TRAVIS_BUILD_DIR
   - pwd
   - mkdir build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=Coverage -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON ..
+  - cmake -DCMAKE_BUILD_TYPE=Coverage -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=`readlink -f ../../matio` -DHDF5_DIR=`readlink -f ../../hdf5` ..
 script:
   - make -j2
   - cd ./bin
