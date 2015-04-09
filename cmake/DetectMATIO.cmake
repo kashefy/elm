@@ -12,10 +12,13 @@
 
 set(MATIO_FOUND TRUE)
 
-file(TO_CMAKE_PATH ${MATIO_DIR}/lib MATIO_TMP_LIB_DIR)
-
 status("MATIO_DIR:${MATIO_DIR}")
-status("MATIO_TMP_LIB_DIR:${MATIO_TMP_LIB_DIR}")
+
+find_package(PkgConfig)
+pkg_check_modules(PC_MATIO QUIET matio)
+set(MATIO_DEFINITIONS ${PC_MATIO_CFLAGS_OTHER})
+
+file(TO_CMAKE_PATH ${MATIO_DIR}/lib MATIO_TMP_LIB_DIR)
 
 find_library(MATIO_LIBS
              NAMES libmatio.a matio
