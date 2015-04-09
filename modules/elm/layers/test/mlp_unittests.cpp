@@ -144,7 +144,7 @@ public:
         labels = Mat1f(n, nb_classes);
 
         float mu = -5.f;
-        float mu_incr = 2.f;
+        float mu_incr = 3.f;
 
         Mat1f feat_concat, labels_concat;
 
