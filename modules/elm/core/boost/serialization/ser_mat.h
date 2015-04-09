@@ -31,12 +31,15 @@ namespace serialization {
         size_t elem_size = obj.elemSize();
         size_t elem_type = obj.type();
 
-        ar & make_nvp("rows", obj.rows);
-        ar & make_nvp("cols", obj.cols);
+        ar & make_nvp("dims", obj.dims);
+        ar & make_nvp("sizes",
+                      make_array(obj.size.operator const int *(),
+                                 static_cast<size_t>(obj.dims)));
+
         ar & make_nvp("elemSize", elem_size);
         ar & make_nvp("type", elem_type);
 
-        const size_t data_size = obj.cols * obj.rows * elem_size;
+        const size_t data_size = obj.total() * elem_size;
         ar & make_nvp("data", make_array(obj.ptr(), data_size));
     }
 
@@ -50,18 +53,22 @@ namespace serialization {
     template<class Tarchive>
     void load(Tarchive & ar, cv::Mat& obj, const unsigned int version)
     {
-        int cols, rows;
+        int dims;
         size_t elem_size, elem_type;
 
-        ar & BOOST_SERIALIZATION_NVP(rows);
-        ar & BOOST_SERIALIZATION_NVP(cols);
+        ar & BOOST_SERIALIZATION_NVP(dims);
+        int *sizes = new int[dims];
+        ar & make_nvp("sizes", make_array(sizes, static_cast<size_t>(dims)));
+
         ar & make_nvp("elemSize", elem_size);
         ar & make_nvp("type", elem_type);
 
-        obj.create(rows, cols, elem_type);
+        obj.create(dims, sizes, elem_type);
 
         size_t data_size = obj.cols * obj.rows * elem_size;
         ar & make_nvp("data", make_array(obj.ptr(), data_size));
+
+        delete [] sizes;
     }
 
 } // namespace boost
