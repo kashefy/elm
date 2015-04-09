@@ -48,20 +48,20 @@ namespace serialization {
      * @param[in] version
      */
     template<class Tarchive>
-    void load(Tarchive & ar, ::cv::Mat& obj, const unsigned int version)
+    void load(Tarchive & ar, cv::Mat& obj, const unsigned int version)
     {
         int cols, rows;
         size_t elem_size, elem_type;
 
-        ar & rows;
-        ar & cols;
-        ar & elem_size;
-        ar & elem_type;
+        ar & BOOST_SERIALIZATION_NVP(rows);
+        ar & BOOST_SERIALIZATION_NVP(cols);
+        ar & make_nvp("elemSize", elem_size);
+        ar & make_nvp("type", elem_type);
 
         obj.create(rows, cols, elem_type);
 
         size_t data_size = obj.cols * obj.rows * elem_size;
-        ar & boost::serialization::make_array(obj.ptr(), data_size);
+        ar & make_nvp("data", make_array(obj.ptr(), data_size));
     }
 
 } // namespace boost
