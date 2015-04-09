@@ -31,6 +31,11 @@ include(cmake/MessageUtils.cmake)
 # ----------------------------------------------------------------------------
 # Set global CMake variables
 # ----------------------------------------------------------------------------
+if(NOT DEFINED CMAKE_BUILD_TYPE OR NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+    status("Since no build type was specified falling back on ${CMAKE_BUILD_TYPE} as the default build type.")
+endif()
+
 # Print all warnings and enable C++11 support
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
 
