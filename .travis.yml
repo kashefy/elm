@@ -52,28 +52,17 @@ install:
   - make > /dev/null 2>&1
   - make install > /dev/null 2>&1
   - cd $TRAVIS_BUILD_DIR
-  - ls `readlink -f ../matio`
 before_script:
   - pwd
   - cd $TRAVIS_BUILD_DIR
   - pwd
   - mkdir build
   - cd build
-  - ls ../
-  - ls ../../
-  - ls ../../matio/
-  - ls ../../matio/include
-  - ls `readlink -f ../../matio`
-  - ls `readlink -f ../../matio`/include
   - cmake -DCMAKE_BUILD_TYPE=Coverage -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=`readlink -f ../../matio` -DHDF5_DIR=`readlink -f ../../hdf5` ..
 script:
-  - pwd
   - make -j2
-  - pwd
   - cd ./bin
-  - pwd
   - ./run_elm_unittests
-  - ls
   - cd ..
 after_success:
   - make elm_unittests_coverage
