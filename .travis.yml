@@ -50,7 +50,7 @@ install:
   - mkdir ../matio
   - ./configure --prefix=`readlink -f ../matio` --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=`readlink -f ../hdf5` > /dev/null
   - make > /dev/null 2>&1
-  - make > /dev/null 2>&1
+  - make install > /dev/null 2>&1
   - cd $TRAVIS_BUILD_DIR
   - ls `readlink -f ../matio`
 before_script:
