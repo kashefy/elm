@@ -10,42 +10,53 @@
 # ----------------------------------------------------------------------------
 # Force the user to tell us which MATIO they want
 
-set(MATIO_FOUND FALSE)
+set(MATIO_FOUND TRUE)
 
-if(DEFINED MATIO_DIR)
+file(TO_CMAKE_PATH ${MATIO_DIR}/lib MATIO_TMP_LIB_DIR)
 
-    if(IS_DIRECTORY ${MATIO_DIR})
+status("MATIO_DIR:${MATIO_DIR}")
+status("MATIO_TMP_LIB_DIR:${MATIO_TMP_LIB_DIR}")
 
-        if(IS_DIRECTORY ${MATIO_DIR}/include AND IS_DIRECTORY ${MATIO_DIR}/lib)
+find_library(MATIO_LIBS
+             NAMES libmatio.a matio
+             HINTS ${PC_MATIO_LIBDIR} ${PC_MATIO_LIBRARY_DIRS}
+             PATHS ${MATIO_DIR} ${MATIO_TMP_LIB_DIR}
+             DOC "find MATIO library")
 
-            file(TO_CMAKE_PATH ${MATIO_DIR}/include MATIO_INCLUDE_DIRS)
-            list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${MATIO_INCLUDE_DIRS})
+if(${MATIO_LIBS} STREQUAL MATIO_LIBS-NOTFOUND)
+    message(SEND_ERROR "Failed to find MATIO library.")
+    set(MATIO_FOUND FALSE)
+endif()
 
-            set(MATIO_LIBS matio)
-            list(APPEND ${ROOT_PROJECT}_LIBS ${MATIO_LIBS})
+file(TO_CMAKE_PATH ${MATIO_DIR}/include MATIO_TMP_INCLUDE_DIR)
 
-            file(TO_CMAKE_PATH ${MATIO_DIR}/lib MATIO_LIBRARY_DIR)
-            LINK_DIRECTORIES(${MATIO_LIBRARY_DIR})
+find_path(MATIO_INCLUDE_DIR matio.h
+          HINTS ${MATIO_TMP_INCLUDE_DIR} ${PC_MATIO_INCLUDEDIR} ${PC_MATIO_INCLUDE_DIRS}
+          PATH_SUFFIXES matio)
 
-            # To link against non-system HDF5 installation
-            if(DEFINED HDF5_DIR)
-                LINK_DIRECTORIES(${HDF5_DIR}/lib)
-                set(HDF5_LIBS hdf5)
-                list(APPEND ${ROOT_PROJECT}_LIBS ${HDF5_LIBS})
-            endif(DEFINED HDF5_DIR)
+if(${MATIO_INCLUDE_DIR} STREQUAL MATIO_INCLUDE_DIR-NOTFOUND)
+    message(SEND_ERROR "Failed to find MATIO headers.")
+    set(MATIO_FOUND FALSE)
+endif()
 
-            add_definitions(-D__WITH_MATIO)
+if(MATIO_FOUND)
+    set(MATIO_INCLUDE_DIRS ${MATIO_INCLUDE_DIR})
+    list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${MATIO_INCLUDE_DIRS})
+    list(APPEND ${ROOT_PROJECT}_LIBS ${MATIO_LIBS})
 
-            set(MATIO_FOUND TRUE)
+    #LINK_DIRECTORIES(${MATIO_LIBRARY_DIR})
 
-        else()
-            message(FATAL_ERROR "\"MATIO_DIR\" missing include/ and/or lib/ subdirectories.")
-        endif()
-    else()
-        message(FATAL_ERROR "\"MATIO_DIR\" set to an invalid path. Please provide path to installation/build directory or pkg-config (.pc) file")
-    endif()
+    # To link against non-system HDF5 installation
+    if(DEFINED HDF5_DIR)
+        LINK_DIRECTORIES(${HDF5_DIR}/lib)
+        set(HDF5_LIBS hdf5)
+        list(APPEND ${ROOT_PROJECT}_LIBS ${HDF5_LIBS})
+    endif(DEFINED HDF5_DIR)
 
-else(DEFINED MATIO_DIR)
-    set(MATIO_DIR "" CACHE PATH "Root directory for MATIO build directory." )
-    message(FATAL_ERROR "\"MATIO_DIR\" not set. Please provide the path to the root build or installation directory of MATIO.")
-endif(DEFINED MATIO_DIR)
+    add_definitions(-D__WITH_MATIO)
+else(MATIO_FOUND)
+    message(FATAL_ERROR "Failed to find MATIO. Verify that MATIO_DIR points to a valid pkf-config file, build or installation directory.")
+endif(MATIO_FOUND)
+
+
+
