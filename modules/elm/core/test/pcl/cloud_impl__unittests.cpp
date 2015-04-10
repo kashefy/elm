@@ -321,6 +321,18 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Non_continuous_valid)
     }
 }
 
+TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Mat_dims_invalid)
+{
+    typedef ConverterCloudMat_<TypeParam > C_;
+
+    const int CLOUD_COLS=3;
+
+    EXPECT_THROW(C_::Mat2PointCloud(Mat1f(4, CLOUD_COLS*this->nb_floats_i_+1, 1.f)), ExceptionBadDims);
+    EXPECT_THROW(C_::Mat2PointCloud(Mat1f(1, 1, 1.f)), ExceptionBadDims);
+    EXPECT_THROW(C_::Mat2PointCloud(Mat1f(3, 1, 1.f)), ExceptionBadDims);
+    EXPECT_THROW(C_::Mat2PointCloud(Mat1f(3, 2, 1.f)), ExceptionBadDims);
+}
+
 template<typename TPoint>
 class PCL_Cloud_T_Conversion_Single_Ch_IsPadded_TypedTests : public PCL_Cloud_T_Conversion_Single_Ch_TypedTests<TPoint >
 {
