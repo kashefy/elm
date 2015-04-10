@@ -28,11 +28,45 @@ public:
     FeatureDataProtected()
         : FeatureData()
     {}
+
+    void Init()
+    {
+        FeatureData::Init();
+    }
+
+    void Reset()
+    {
+        FeatureData::Reset();
+    }
 };
 
 TEST(FeatureDataProtectedTest, Constructor)
 {
     EXPECT_NO_THROW(FeatureDataProtected to);
+}
+
+TEST(FeatureDataProtectedTest, Init)
+{
+    FeatureDataProtected to;
+    EXPECT_NO_THROW(to.Init());
+}
+
+TEST(FeatureDataProtectedTest, Reset)
+{
+    {
+        FeatureDataProtected to;
+        to.Init();
+        to.Reset();
+        to.Reset();
+        to.Reset();
+    }
+
+    {
+        FeatureDataProtected to;
+        to.Reset();
+        to.Reset();
+        to.Reset();
+    }
 }
 
 /**
