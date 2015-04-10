@@ -270,6 +270,25 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Values_Organized)
     }
 }
 
+TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Non_continuous)
+{
+    typedef ConverterCloudMat_<TypeParam > C_;
+
+    const int CLOUD_COLS=3;
+
+    // organized point cloud
+    Mat1f m = Mat1f::ones(4, CLOUD_COLS*this->field_count_i_+1);
+
+    Mat1f m2 = m.colRange(0, m.cols-1).clone();
+    ASSERT_TRUE(m2.isContinuous());
+    typename PointCloud<TypeParam >::Ptr cloud_ptr(new PointCloud<TypeParam >(CLOUD_COLS, m2.rows));
+    EXPECT_NO_THROW(C_::CopyContMatData2Cloud(m2, this->field_count_sz_, cloud_ptr));
+
+    m2 = m.colRange(0, m.cols-1);
+    ASSERT_FALSE(m2.isContinuous());
+    EXPECT_THROW(C_::CopyContMatData2Cloud(m2, this->field_count_sz_, cloud_ptr), ExceptionTypeError);
+}
+
 template<typename TPoint>
 class PCL_Cloud_T_Conversion_Single_Ch_IsPadded_TypedTests : public PCL_Cloud_T_Conversion_Single_Ch_TypedTests<TPoint >
 {
