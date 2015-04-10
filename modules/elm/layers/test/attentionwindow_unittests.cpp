@@ -57,7 +57,7 @@ protected:
     PTree params_;      ///< default params
 };
 
-TEST_F(AttentionWindowInitTest, MissingParams)
+TEST_F(AttentionWindowInitTest, MissingParams_Reset)
 {
     EXPECT_THROW(AttentionWindow().Reset(LayerConfig()), bpt::ptree_bad_path);
 
@@ -76,9 +76,33 @@ TEST_F(AttentionWindowInitTest, MissingParams)
     }
 }
 
+TEST_F(AttentionWindowInitTest, MissingParams_Constructor)
+{
+    EXPECT_THROW(to_.reset(new AttentionWindow(LayerConfig())), bpt::ptree_bad_path);
+
+    {
+        PTree p(params_);
+        p.erase(AttentionWindow::PARAM_WIN_COLS);
+        cfg_.Params(p);
+        EXPECT_THROW(to_.reset(new AttentionWindow(cfg_)), bpt::ptree_bad_path);
+    }
+
+    {
+        PTree p(params_);
+        p.erase(AttentionWindow::PARAM_WIN_ROWS);
+        cfg_.Params(p);
+        EXPECT_THROW(to_.reset(new AttentionWindow(cfg_)), bpt::ptree_bad_path);
+    }
+}
+
 TEST_F(AttentionWindowInitTest, Reset_ParamsPresent)
 {
     EXPECT_NO_THROW(AttentionWindow().Reset(cfg_)) << "Any required paramters missing?";
+}
+
+TEST_F(AttentionWindowInitTest, Constructor)
+{
+    EXPECT_NO_THROW(AttentionWindow(cfg_)) << "Any required paramters missing?";
 }
 
 /**
@@ -215,6 +239,12 @@ TEST_F(AttentionWindowTest, Window)
 
         EXPECT_MAT_EQ(scene(Rect(tl, window.size())), window);
     }
+}
+
+TEST_F(AttentionWindowTest, Window_scene_too_small)
+{
+    sig_.Append(NAME_SCENE, Mat1f(2, 2));
+    EXPECT_THROW(to_->Activate(sig_), ExceptionBadDims);
 }
 
 TEST_F(AttentionWindowTest, Loc_NoRectify)

@@ -209,7 +209,7 @@ TYPED_TEST(VisitorCloud_PointTypedTest, Reset)
 
             mat_cld = PointCloud2Mat_<TypeParam >(cld);
             EXPECT_MAT_DIMS_EQ(mat_cld, Size2i(m0.cols+padding, m0.rows));
-            EXPECT_MAT_EQ(m0, mat_cld.colRange(0, m0.cols)) << "Not using cahced cloud.";
+            EXPECT_MAT_EQ(m0, mat_cld.colRange(0, m0.cols)) << "Not using cached cloud.";
         }
         else {
 
