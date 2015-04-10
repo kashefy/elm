@@ -85,7 +85,7 @@ public:
                 memcpy(&(*itr), mat_data_ptr, step_size);       // dangerous
                 mat_data_ptr += step;
 
-                col++;
+                col += step;
             }
         }
     }

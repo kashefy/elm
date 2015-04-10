@@ -270,7 +270,7 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Values_Organized)
     }
 }
 
-TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Non_continuous)
+TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Non_continuous_invalid)
 {
     typedef ConverterCloudMat_<TypeParam > C_;
 
@@ -287,6 +287,38 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Non_continuous)
     m2 = m.colRange(0, m.cols-1);
     ASSERT_FALSE(m2.isContinuous());
     EXPECT_THROW(C_::CopyContMatData2Cloud(m2, this->field_count_sz_, cloud_ptr), ExceptionTypeError);
+}
+
+TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Non_continuous_valid)
+{
+    typedef ConverterCloudMat_<TypeParam > C_;
+
+    const int CLOUD_COLS=2;
+
+    // organized point cloud
+    Mat1f m0(4, CLOUD_COLS*this->field_count_i_+1);
+    randn(m0, 0.f, 100.f);
+
+    Mat1f m = m0.colRange(0, m0.cols-1);
+
+    ASSERT_FALSE(m.isContinuous());
+
+    typename PointCloud<TypeParam >::Ptr cloud_ptr = C_::Mat2PointCloud(m);
+
+    for(size_t r=0; r<cloud_ptr->height; r++) {
+
+        int i=0;
+        for(size_t c=0; c<cloud_ptr->width; c++) {
+
+            TypeParam pt = cloud_ptr->at(c, r);;
+            float *pt_data_ptr = reinterpret_cast<float*>(&pt);
+
+            for(int field_idx=0; field_idx<this->field_count_i_; field_idx++) {
+
+                EXPECT_FLOAT_EQ(m(r, i++), pt_data_ptr[field_idx]) << "Unexpected value for field " << i << ".";
+            }
+        }
+    }
 }
 
 template<typename TPoint>
