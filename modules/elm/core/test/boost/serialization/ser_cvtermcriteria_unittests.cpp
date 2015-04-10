@@ -7,8 +7,6 @@
 //M*/
 #include "elm/core/boost/serialization/ser_cvtermcriteria.h"
 
-#include "elm/core/boost/translators/transl_str_cvtermcriteria.h"
-
 #include "elm/ts/serialization_assertions.h"
 
 namespace {

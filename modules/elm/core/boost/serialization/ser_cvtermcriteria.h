@@ -5,6 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
+#ifndef _ELM_CORE_BOOST_SERIALIZATION_SER_CVTERMCRITERIA_H_
+#define _ELM_CORE_BOOST_SERIALIZATION_SER_CVTERMCRITERIA_H_
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
 
@@ -24,3 +26,5 @@ namespace serialization {
 
 } // namespace boost
 } // namespace serialization
+
+#endif // _ELM_CORE_BOOST_SERIALIZATION_SER_CVTERMCRITERIA_H_
