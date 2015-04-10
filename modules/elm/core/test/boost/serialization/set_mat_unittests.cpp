@@ -29,7 +29,7 @@ static Mat CreateExampleMat()
 
 template<> Mat SerializationTypeAttr_<Mat>::example = CreateExampleMat();
 
-//INSTANTIATE_TYPED_TEST_CASE_P(SerializationTypedTest_Mat_Test, SerializationTypedTest, Mat);
+INSTANTIATE_TYPED_TEST_CASE_P(SerializationTypedTest_Mat_Test, SerializationTypedTest, Mat);
 
 class SerializeMatTest : public ::testing::Test
 {
