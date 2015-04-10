@@ -17,6 +17,8 @@
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 
+#include "elm/core/boost/serialization/serialization_utils.h"
+
 template <class T>
 class SerializationTypedTest : public ::testing::Test
 {
@@ -146,11 +148,79 @@ TYPED_TEST_P(SerializationTypedTest, Serialize_str_stream_xml)
     EXPECT_NE(str1.c_str(), str2.c_str());
 }
 
+
+
+TYPED_TEST_P(SerializationTypedTest, Serialize_str_stream_bin_wrapped)
+{
+    using namespace boost::archive;
+
+    std::string str1;
+    TypeParam obj;
+
+    // serialize example to stream
+    // then deserialize to other instance
+    {
+        std::stringstream stream;
+
+        binary_oarchive oa1(stream);
+        elm::Save(oa1, SerializationTypeAttr_<TypeParam >::example);
+        str1 = stream.str();
+
+        binary_iarchive ia(stream);
+        elm::Load(ia, obj);
+    }
+
+    std::string str2;
+    {
+        std::stringstream stream;
+        binary_oarchive oa(stream);
+        elm::Save(oa, obj);
+        str2 = stream.str();
+    }
+
+    EXPECT_EQ(str1, str2);
+    EXPECT_NE(str1.c_str(), str2.c_str());
+}
+
+TYPED_TEST_P(SerializationTypedTest, Serialize_str_stream_txt_wrapped)
+{
+    using namespace boost::archive;
+
+    std::string str1;
+    TypeParam obj;
+
+    // serialize example to stream
+    // then deserialize to other instance
+    {
+        std::stringstream stream;
+
+        text_oarchive oa1(stream);
+        elm::Save(oa1, SerializationTypeAttr_<TypeParam >::example);
+        str1 = stream.str();
+
+        text_iarchive ia(stream);
+        elm::Load(ia, obj);
+    }
+
+    std::string str2;
+    {
+        std::stringstream stream;
+        text_oarchive oa(stream);
+        elm::Save(oa, obj);
+        str2 = stream.str();
+    }
+
+    EXPECT_EQ(str1, str2);
+    EXPECT_NE(str1.c_str(), str2.c_str());
+}
+
 // Register test names
 REGISTER_TYPED_TEST_CASE_P(SerializationTypedTest,
                            Serialize_str_stream_bin,
                            Serialize_str_stream_txt,
-                           Serialize_str_stream_xml
+                           Serialize_str_stream_xml,
+                           Serialize_str_stream_bin_wrapped,
+                           Serialize_str_stream_txt_wrapped
                            ); ///< register additional typed_test_p (i.e. unit test) routines here
 
 
