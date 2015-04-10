@@ -29,6 +29,11 @@ public:
         : FeatureData()
     {}
 
+    template <class T>
+    FeatureDataProtected(const T &t)
+        : FeatureData(t)
+    {}
+
     void Init()
     {
         FeatureData::Init();
@@ -175,6 +180,18 @@ TEST_F(FeatureDataTest, VecMat1f_Same_Mat)
 
 using namespace pcl;
 
+TEST(FeatureDataProtectedTest, Reset_valid)
+{
+    Mat1f m = Mat1f(4, 3);
+    randn(m, 0.f, 100.f);
+
+    typedef boost::shared_ptr<PointCloud<PointXYZ > > CloudTPPtr;
+
+    FeatureDataProtected to(m);
+    CloudTPPtr cld1 = to.get<CloudTPPtr>();
+    EXPECT_NO_THROW(to.Reset());
+}
+
 /**
  * @brief Typed tests around FeatureData class with pcl PointCloud typed feature data
  */
@@ -301,6 +318,32 @@ TYPED_TEST(FeatureDataCloud_Test, Cached_Cloud)
     // check use count increased
     EXPECT_EQ(cld2.use_count(), cld.use_count());
     EXPECT_EQ(cld2.use_count(), old_cld_use_count+1);
+}
+
+TYPED_TEST(FeatureDataCloud_Test, Cached_Cloud_protected_reset)
+{
+    typedef boost::shared_ptr<pcl::PointCloud< TypeParam > > CloudTPPtr;
+
+    FeatureDataProtected to(this->mat_);
+
+    CloudTPPtr cld = to.get<CloudTPPtr >();
+    EXPECT_NE(cld, this->cld_);
+    long old_cld_use_count = cld.use_count();
+
+    to.Reset();
+
+    CloudTPPtr cld2 = to.get<CloudTPPtr >();
+
+    EXPECT_EQ(old_cld_use_count-1, cld.use_count()) << "use count did not decrease.";
+
+    EXPECT_NE(cld2, this->cld_);
+    EXPECT_NE(cld2, cld) << "Still same object after reset";
+
+    // but we expect a new copy of the same data
+    EXPECT_EQ(this->cld_->height, cld2->height) << "Unexpected height after reset";
+    EXPECT_EQ(this->cld_->width, cld2->width) << "Unexpected width after reset";
+
+    EXPECT_MAT_EQ(PointCloud2Mat_<TypeParam >(cld2).reshape(1, this->mat_.rows), this->mat_) << "data mismatch after reset";
 }
 
 #endif // __WITH_PCL
