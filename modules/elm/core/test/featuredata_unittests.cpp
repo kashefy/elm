@@ -20,8 +20,23 @@ using namespace elm;
 namespace {
 
 /**
+ * @brief For testing FeatureData's protected default constructor
+ */
+class FeatureDataProtected : public elm::FeatureData
+{
+public:
+    FeatureDataProtected()
+        : FeatureData()
+    {}
+};
+
+TEST(FeatureDataProtectedTest, Constructor)
+{
+    EXPECT_NO_THROW(FeatureDataProtected to);
+}
+
+/**
  * @brief Test FeatureData class
- * @todo define guards around PCL dependent tests
  */
 class FeatureDataTest : public ::testing::Test
 {
@@ -34,7 +49,6 @@ protected:
 
     Mat1f mat_;
 };
-
 
 /**
  * @brief Initialize test object with Mat object, then call getters.
