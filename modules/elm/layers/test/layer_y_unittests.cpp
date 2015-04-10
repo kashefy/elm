@@ -80,7 +80,7 @@ TEST_F(LayerYInitTest, ParamsInValid)
     }
 }
 
-TEST_F(LayerYInitTest, ParamsMissing)
+TEST_F(LayerYInitTest, ParamsMissing_Reset)
 {
     {
         LayerY to;
@@ -102,6 +102,28 @@ TEST_F(LayerYInitTest, ParamsMissing)
     }
 }
 
+TEST_F(LayerYInitTest, ParamsMissing_Constructor)
+{
+    std::shared_ptr<base_Layer> to;
+    {
+        EXPECT_THROW(to.reset(new LayerY(LayerConfig())), ptree_bad_path);
+    }
+    {
+        PTree p;
+        p.put(LayerY::PARAM_DELTA_T_MSEC, 1.f);
+        LayerConfig cfg;
+        cfg.Params(p);
+        EXPECT_THROW(to.reset(new LayerY(cfg)), ptree_bad_path);
+    }
+    {
+        PTree p;
+        p.put(LayerY::PARAM_FREQ, 1.f);
+        LayerConfig cfg;
+        cfg.Params(p);
+        EXPECT_THROW(to.reset(new LayerY(cfg)), ptree_bad_path);
+    }
+}
+
 TEST_F(LayerYInitTest, Create)
 {
     LayerIONames io;
@@ -112,6 +134,20 @@ TEST_F(LayerYInitTest, Create)
                 config_,
                 io);
     EXPECT_TRUE(bool(ptr));
+}
+
+TEST_F(LayerYInitTest, Extra_keys)
+{
+    LayerIONames io;
+    io.Input(LayerY::KEY_INPUT_STIMULUS, NAME_STIMULUS);
+    io.Output(LayerY::KEY_OUTPUT_RESPONSE, NAME_SPIKES);
+    PTree p = config_.Params();
+    p.put("foo", 1);
+    config_.Params(p);
+    EXPECT_THROW(LayerFactory::CreateShared(
+                     "LayerY",
+                     config_,
+                     io), ExceptionKeyError);
 }
 
 class LayerYTest : public LayerYInitTest
@@ -130,6 +166,12 @@ protected:
     LayerIONames io_;
     std::shared_ptr<base_Layer> to_;    ///< test object
 };
+
+TEST_F(LayerYTest, Clear)
+{
+    EXPECT_NO_THROW(to_->Clear());
+    EXPECT_NO_THROW(to_->Clear());
+}
 
 TEST_F(LayerYTest, Activate)
 {
