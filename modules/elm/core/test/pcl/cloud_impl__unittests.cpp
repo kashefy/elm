@@ -303,14 +303,31 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Single_Ch_TypedTests, Non_continuous_valid)
 
     ASSERT_FALSE(m.isContinuous());
 
+    std::cout<<m<<std::endl;
+
     typename PointCloud<TypeParam >::Ptr cloud_ptr = C_::Mat2PointCloud(m);
+
+    for(size_t r=0; r<cloud_ptr->height; r++) {
+
+        for(size_t c=0; c<cloud_ptr->width; c++) {
+
+            TypeParam pt = cloud_ptr->at(c, r);
+            float *pt_data_ptr = reinterpret_cast<float*>(&pt);
+
+            for(int field_idx=0; field_idx<this->field_count_i_; field_idx++) {
+
+                std::cout<<pt_data_ptr[field_idx] << ", ";
+            }
+            std::cout<<std::endl;
+        }
+    }
 
     for(size_t r=0; r<cloud_ptr->height; r++) {
 
         int i=0;
         for(size_t c=0; c<cloud_ptr->width; c++) {
 
-            TypeParam pt = cloud_ptr->at(c, r);;
+            TypeParam pt = cloud_ptr->at(c, r);
             float *pt_data_ptr = reinterpret_cast<float*>(&pt);
 
             for(int field_idx=0; field_idx<this->field_count_i_; field_idx++) {
