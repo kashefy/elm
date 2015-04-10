@@ -60,7 +60,7 @@ before_script:
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=Coverage -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=`readlink -f ../../matio` -DHDF5_DIR=`readlink -f ../../hdf5` ..
 script:
-  - make -j2
+  - make
   - cd ./bin
   - ./run_elm_unittests
   - cd ..
