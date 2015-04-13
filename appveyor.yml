@@ -12,8 +12,8 @@ install:
   - appveyor DownloadFile https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - 7z x .\gtest-1.7.0.zip -y > NUL
   - cmd: CD gtest-1.7.0
-  - cmd: cmake -G "MSYS Makefiles" .
-  - cmd: make
+  - cmd: cmake -G "MinGW Makefiles" .
+  - cmd: mingw32-make
   - cmd: dir C:\Libraries\boost
 before_build:
   - cmd: SET APP_PATH=%CD%
