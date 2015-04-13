@@ -4,12 +4,19 @@ cache:
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
 install:
   - ps: ls C:\
-  - cmd: choco install opencv -y
-  - ps: cd ..
+  - ps: git clone https://github.com/Itseez/opencv.git
+  - ps: cd opencv
+  - ps: git fetch
+  - ps: git branch -a
+  - ps: git checkout 2.4
+  - ps: mkdir build
+  - ps: cd build
+  - ps: mv "C:\Program Files (x86)\Git\bin\sh.exe" "C:\Program Files (x86)\Git\bin\shxx.exe"
+  - cmd: cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF ..
+  ps: cd ..\..
   - appveyor DownloadFile https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - 7z x .\gtest-1.7.0.zip -y > NUL
   - ps: cd gtest-1.7.0
-  - ps: mv "C:\Program Files (x86)\Git\bin\sh.exe" "C:\Program Files (x86)\Git\bin\shxx.exe"
   - set PATH=C:\MinGW\bin;%PATH%
   - cmd: cmake -G "MinGW Makefiles" .
   - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
@@ -21,7 +28,7 @@ before_build:
   - ps: cd ..\build
   - ps: mv "C:\Program Files (x86)\Git\bin\sh.exe" "C:\Program Files (x86)\Git\bin\shxx.exe"
   - set PATH=C:\MinGW\bin;%PATH%
-  - cmd: cmake -G "MinGW Makefiles" -DOpenCV_DIR=C:\OpenCV249\opencv\build -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT=C:\Libraries\boost -DWITH_PCL=OFF -DWITH_MATIO=OFF ..\elm
+  - cmd: cmake -G "MinGW Makefiles" -DOpenCV_DIR=..\opencv\build -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT=C:\Libraries\boost -DWITH_PCL=OFF -DWITH_MATIO=OFF ..\elm
   - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
 build_script:
   - set PATH=C:\MinGW\bin;%PATH%
