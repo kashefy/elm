@@ -8,6 +8,7 @@ install:
   - cmd: CD gtest-1.7.0
   - cmd: cmake -G "MinGW Makefiles" .
   - cmd: make
+  - cmd: dir C:\Libraries\boost
 before_build:
   - cmd: SET APP_PATH=%CD%
   - cmd: IF EXIST C:\OpenCV* CD C:\OpenCV*
