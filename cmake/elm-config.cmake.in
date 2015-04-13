@@ -49,14 +49,14 @@ if(EXISTS ${ELM_CMAKE_DIR}/modules AND IS_DIRECTORY ${ELM_CMAKE_DIR}/modules)
 	# Provide the include directories to the caller
     set(ELM_INCLUDE_DIRS @ROOT_PROJECT_INCLUDE_DIRS@)
 
-	set(ELM_LIB_DIR ${ELM_CMAKE_DIR}/lib)
+        set(ELM_LIB_DIR ${ELM_CMAKE_DIR}/lib)
 	
 elseif(EXISTS ${PARENT_DIR}/../include AND IS_DIRECTORY ${PARENT_DIR}/../include)
 	
 	# install prefix
 	#message(AUTHOR_WARNING "install prefix")
-	set(ELM_INCLUDE_DIRS ${PARENT_DIR}/../include)
-	set(ELM_LIB_DIR ${PARENT_DIR}/../lib)
+        set(ELM_INCLUDE_DIRS ${PARENT_DIR}/../include)
+        set(ELM_LIB_DIR ${PARENT_DIR}/../lib)
 
 else()
 	#message(STATUS "???")
@@ -72,8 +72,8 @@ set(ELM_MODULE_NAMES @ROOT_PROJECT_MODULES@)
 set(ELM_LIBS "")
 foreach(ELM_MODULE_NAME ${ELM_MODULE_NAMES})
 
-	set(ELM_MODULE_BASENAME ${ELM_LIB_DIR}/${ELM_MODULE_NAME})
-	file(GLOB ELM_MODULE_LIB_MATCHES "${ELM_LIB_DIR}/*${ELM_MODULE_NAME}*")
+        set(ELM_MODULE_BASENAME ${ELM_LIB_DIR}/${ELM_MODULE_NAME})
+        file(GLOB ELM_MODULE_LIB_MATCHES "${ELM_LIB_DIR}/*${ELM_MODULE_NAME}*")
 	list(APPEND ELM_LIBS ${ELM_MODULE_LIB_MATCHES})
 endforeach()
 
@@ -108,11 +108,13 @@ set(ELM_DEPS_LIBS @ROOT_PROJECT_DEPS@)
 if(@PCL_FOUND@)
     message(STATUS "ELM with PCL support.")
     add_definitions(-D__WITH_PCL)
+    set(@ROOT_PROJECT_UPPER@_WITH_PCL ON)
 endif()
 
 if(@MATIO_FOUND@)
     message(STATUS "ELM with MATIO support.")
     add_definitions(-D__WITH_MATIO)
+    set(@ROOT_PROJECT_UPPER@_WITH_MATIO ON)
 endif()
 
 # Dependencies...Done.
