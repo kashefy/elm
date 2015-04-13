@@ -3,6 +3,9 @@ cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
 install:
+  - set PATH=C:\MinGW\bin;%PATH%
+  - ps: ls C:\
+  - ps: ls C:\MinGW
   - cmd: cmake --version
   - cmd: ECHO "INSTALL OPENCV:"
   - cmd: choco install opencv -y
