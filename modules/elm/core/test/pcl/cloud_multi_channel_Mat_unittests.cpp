@@ -139,6 +139,12 @@ TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Empty_Size)
     EXPECT_EQ(size_t(0), C_::Mat2PointCloud(Matnf(0, 3))->size());
 }
 
+TYPED_TEST(PCL_Cloud_T_Conversion_Multi_Ch_TypedTests, Nb_channels_invalid)
+{
+    typedef ConverterCloudMat_<TypeParam > C_;
+    EXPECT_THROW(C_::Mat2PointCloud(Mat_<Vec<float, 2> >(4, 1, 1.f)), ExceptionBadDims);
+}
+
 /**
  * @brief Multi-channel Mat where no. of channels are equal to Point type's field count
  */

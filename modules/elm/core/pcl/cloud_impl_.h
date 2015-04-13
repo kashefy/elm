@@ -70,22 +70,22 @@ public:
             size_t step_size = sizeof(float)*step;
 
             int row = 0;
-            int col = 0;
+            int col_offset = 0;
 
             for(typename pcl::PointCloud<TPoint>::iterator itr=dst->begin();
                     itr != dst->end(); ++itr) {
 
-                if(col == src.cols) {
+                if(col_offset == src.cols) {
 
                     mat_data_ptr = src.ptr<float>(++row);
-                    col = 0;
+                    col_offset = 0;
                 }
 
                 //memcpy((*itr).data, mat_data_ptr, step_size); // Normal has data_n[] member, not data[]
                 memcpy(&(*itr), mat_data_ptr, step_size);       // dangerous
                 mat_data_ptr += step;
 
-                col++;
+                col_offset += step;
             }
         }
     }
