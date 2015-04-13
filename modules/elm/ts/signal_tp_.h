@@ -66,7 +66,7 @@ protected:
         ASSERT_GE(FtV_<T >::values.size(), names_.size()) << "Not enough values provided for setting up fixtures.";
         ASSERT_GE(FtV_<T >::values.size(), size_t(3)) << "Need at least 3 values.";
 
-        for(uint i=0; i<names_.size(); i++) {
+        for(size_t i=0; i<names_.size(); i++) {
 
             to_.Append(names_[i], FtV_<T >::values[i]);
         }
