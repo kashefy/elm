@@ -12,7 +12,9 @@ install:
   - appveyor DownloadFile https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - 7z x .\gtest-1.7.0.zip -y > NUL
   - cmd: CD gtest-1.7.0
+  - ps: mv "C:\Program Files (x86)\Git\bin\sh.exe" "C:\Program Files (x86)\Git\bin\shxx.exe"
   - cmd: cmake -G "MinGW Makefiles" .
+  - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
   - cmd: mingw32-make
   - cmd: dir C:\Libraries\boost
 before_build:
