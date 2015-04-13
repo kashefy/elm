@@ -4,9 +4,9 @@ install:
   - cmd: ECHO "INSTALL OPENCV:"
   - cmd: choco install opencv -y
   - appveyor DownloadFile https://googletest.googlecode.com/files/gtest-1.7.0.zip
-  - 7z x .\gtest-1.7.0.zip
+  - 7z x .\gtest-1.7.0.zip -y > NUL
   - cmd: CD gtest-1.7.0
-  - cmd: cmake -G "MinGW Makefiles" .
+  - cmd: cmake -G "MSYS Makefiles" .
   - cmd: make
   - cmd: dir C:\Libraries\boost
 before_build:
