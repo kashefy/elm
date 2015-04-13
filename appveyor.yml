@@ -3,8 +3,8 @@ install:
   - cmd: cmake --version
   - cmd: ECHO "INSTALL OPENCV:"
   - cmd: choco install opencv -y
-  - cmd: wget --quiet https://googletest.googlecode.com/files/gtest-1.7.0.zip
-  - cmd: unzip -qq gtest-1.7.0.zip
+  - appveyor DownloadFile https://googletest.googlecode.com/files/gtest-1.7.0.zip
+  - 7z x .\gtest-1.7.0.zip
   - cmd: CD gtest-1.7.0
   - cmd: cmake -G "MinGW Makefiles" .
   - cmd: make
