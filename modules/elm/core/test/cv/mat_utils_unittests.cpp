@@ -47,7 +47,7 @@ TEST(MatUtilsTest, ConvertTo8U_uint)
     for(size_t i=2; i<src.total(); i++) {
 
         // large numbers lead to overflow errors and are difficult to assert
-        src(i) = randu<uint>() % 256;
+        src(i) = randu<uint32_t>() % 256;
     }
 
     Mat result = ConvertTo8U(src);
