@@ -7,6 +7,9 @@ install:
   - ps: ls C:\
   - cmd: cmake --version
   - cmd: choco install opencv -y
+  - ps: ls %APPVEYOR_BUILD_FOLDER%
+  - ps: cd %APPVEYOR_BUILD_FOLDER%
+  - ps: cd ..
   - appveyor DownloadFile https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - 7z x .\gtest-1.7.0.zip -y > NUL
   - ps: cd gtest-1.7.0
@@ -20,10 +23,17 @@ before_build:
   - cmd: IF EXIST C:\OpenCV* CD C:\OpenCV*
   - cmd: SET OPENCV_ROOT_PATH=%CD%\opencv
   - cmd: CD %APP_PATH%
+  - ps: ls %APPVEYOR_BUILD_FOLDER%
+  - ps: cd %APPVEYOR_BUILD_FOLDER%
+  - ps: cd ..
+  - ps: mkdir build
+  - ps: cd build
+  - cmd: cmake -G "MinGW Makefiles" -DOpenCV_DIR=%OPENCV_ROOT_PATH% -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT=C:\Libraries\boost -DWITH_PCL=OFF -DWITH_MATIO=OFF %APPVEYOR_BUILD_FOLDER%
 build_script:
-  - cmd: ECHO "BUILD"
+  - cmd: mingw32-make
 test_script:
-  - cmd: ECHO "TEST"
+  - ps: cd .\bin
+  - cmd: .\run_elm_unittests.exe
 # to run your custom scripts instead of provider deployments
 deploy_script:
   - cmd: ECHO "NOTHING TO DEPLOY"
