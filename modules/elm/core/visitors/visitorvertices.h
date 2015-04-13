@@ -66,8 +66,8 @@ protected:
     elm::VecVertices vv_;   ///< internal copy for caching most recent conversion result
 };
 
-#endif // __WITH_PCL
-
 } // namespace elm
+
+#endif // __WITH_PCL
 
 #endif // _ELM_CORE_VISITORVERTICES_H_
