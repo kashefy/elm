@@ -22,7 +22,7 @@ before_build:
   - cmd: SET OPENCV_ROOT_PATH=%CD%\opencv
   - cmd: CD %APP_PATH%
   - ps: mkdir ..\build
-  - ps: cd build
+  - ps: cd ..\build
   - cmd: cmake -G "MinGW Makefiles" -DOpenCV_DIR=%OPENCV_ROOT_PATH% -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT=C:\Libraries\boost -DWITH_PCL=OFF -DWITH_MATIO=OFF ..\elm
 build_script:
   - cmd: mingw32-make
