@@ -20,6 +20,7 @@ before_build:
   - cmd: SET APP_PATH=%CD%
   - cmd: IF EXIST C:\OpenCV* CD C:\OpenCV*
   - ps: ls C:\OpenCV249
+  - ps: ls C:\OpenCV249\opencv
   - cmd: SET OPENCV_ROOT_PATH=%CD%\opencv
   - ps: ls %OPENCV_ROOT_PATH%
   - ps: ls C:\OpenCV*
