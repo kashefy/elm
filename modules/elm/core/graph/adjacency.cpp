@@ -23,10 +23,11 @@
 
 using namespace std;
 using namespace cv;
-using namespace pcl;
 using namespace elm;
 
 #ifdef __WITH_PCL
+
+using namespace pcl;
 
 void elm::TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &t, Mat1f &dst)
 {
