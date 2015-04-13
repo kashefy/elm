@@ -3,7 +3,6 @@ cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
 install:
-  - set PATH=C:\MinGW\bin;%PATH%
   - ps: ls C:\
   - cmd: choco install opencv -y
   - ps: cd ..
@@ -11,6 +10,7 @@ install:
   - 7z x .\gtest-1.7.0.zip -y > NUL
   - ps: cd gtest-1.7.0
   - ps: mv "C:\Program Files (x86)\Git\bin\sh.exe" "C:\Program Files (x86)\Git\bin\shxx.exe"
+  - set PATH=C:\MinGW\bin;%PATH%
   - cmd: cmake -G "MinGW Makefiles" .
   - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
   - cmd: mingw32-make
@@ -23,8 +23,10 @@ before_build:
   - cmd: CD %APP_PATH%
   - ps: mkdir ..\build
   - ps: cd ..\build
+  - set PATH=C:\MinGW\bin;%PATH%
   - cmd: cmake -G "MinGW Makefiles" -DOpenCV_DIR=%OPENCV_ROOT_PATH% -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT=C:\Libraries\boost -DWITH_PCL=OFF -DWITH_MATIO=OFF ..\elm
 build_script:
+  - set PATH=C:\MinGW\bin;%PATH%
   - cmd: mingw32-make
 test_script:
   - ps: cd .\bin
