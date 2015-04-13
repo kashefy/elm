@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: 0.0.{build}
 install:
   - cmd: cmake --version
   - cmd: ECHO "INSTALL OPENCV:"
@@ -22,4 +22,3 @@ deploy_script:
   - cmd: ECHO "NOTHING TO DEPLOY"
 on_success:
   - cmd: ECHO "NOTHING TO DO ON SUCCESS"
-environment:
