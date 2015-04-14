@@ -222,7 +222,7 @@ void GraphAttr_Impl::updateMapImg()
     if(src_map_img_.isContinuous()) {
 
         int *mat_data_ptr = reinterpret_cast<int*>(src_map_img_.data);
-        int *end = reinterpret_cast<int*>(src_map_img_.dataend);
+        const int *end = reinterpret_cast<const int*>(src_map_img_.dataend);
 
         for(; mat_data_ptr != end; mat_data_ptr++) {
 
