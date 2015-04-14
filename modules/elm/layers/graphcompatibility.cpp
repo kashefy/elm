@@ -30,7 +30,7 @@ template <>
 elm::MapIONames LayerAttr_<GraphCompatibility>::io_pairs = boost::assign::map_list_of
         ELM_ADD_INPUT_PAIR(GraphCompatibility::KEY_INPUT_GRAPH_AB)
         ELM_ADD_INPUT_PAIR(GraphCompatibility::KEY_INPUT_GRAPH_IJ)
-        ELM_ADD_OUTPUT_PAIR(detail::BASE_SPARSEMATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
+        ELM_ADD_OUTPUT_PAIR(elm::detail::BASE_SPARSEMATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
         ;
 //#endif
 

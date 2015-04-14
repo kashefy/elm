@@ -40,7 +40,7 @@ const float SaliencyItti::DEFAULT_ORIENT_RESPONSE_PERCENTILE = 0.7f;
 #include <boost/assign/list_of.hpp>
 template <>
 elm::MapIONames LayerAttr_<SaliencyItti>::io_pairs = boost::assign::map_list_of
-        ELM_ADD_INPUT_PAIR(detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS)
+        ELM_ADD_INPUT_PAIR(elm::detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS)
         ELM_ADD_OUTPUT_PAIR(SaliencyItti::KEY_OUTPUT_SALIENCY)
         ELM_ADD_OUTPUT_PAIR(SaliencyItti::KEY_OUTPUT_SALIENT_LOC)
         ;
