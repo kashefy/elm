@@ -76,8 +76,6 @@ void Cloud_2Cloud_<pcl::PointNormal, pcl::Normal>::Convert(
 
 } // namespace elm
 
-#else // __WITH_PCL
-    #warning "Unable to define cloud 2 cloud converter without PCL support."
 #endif // __WITH_PCL
 
 #endif // _ELM_CORE_PCL_CLOUD__2CLOUD__H_

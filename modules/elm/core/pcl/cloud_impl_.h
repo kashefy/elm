@@ -249,8 +249,6 @@ public:
 
 } // namespace elm
 
-#else // __WITH_PCL
-    #warning "Unable to define template Converter Cloud Mat without PCL support."
 #endif // __WITH_PCL
 
 #endif // _ELM_CORE_PCL_CLOUD_IMPL__H_

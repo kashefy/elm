@@ -11,7 +11,7 @@
 #include <string>
 
 #ifndef __WITH_PCL
-    #warning "Disabling ICP layer due to no PCL support and defining it as a non-supported"
+    // Disabling ICP layer due to no PCL support and defining it as a non-supported
     #include "elm/layers/layernotsupported.h"
 namespace elm {
     class ICP : public ELM_LAYER_NOT_SUPPORTED(ICP, "Building with PCL is required for supporting ICP layer.");
