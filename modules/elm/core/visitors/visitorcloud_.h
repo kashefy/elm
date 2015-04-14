@@ -155,8 +155,6 @@ protected:
 
 } // namespace elm
 
-#else // __WITH_PCL
-    #warning "Unable to define VisitorCloud_ visitor without PCL support."
 #endif // __WITH_PCL
 
 #endif // _ELM_CORE_VISITORCLOUD__H_
