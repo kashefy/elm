@@ -16,8 +16,6 @@
 
 namespace elm {
 
-typedef unsigned char uchar;
-
 typedef std::vector< std::string > VecS;    ///< Convinience typedef for vector of strings
 typedef std::vector< float > VecF;          ///< Convinience typedef for vector of floats
 typedef std::vector< int > VecI;            ///< Convinience typedef for vector of integers
