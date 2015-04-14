@@ -1,10 +1,14 @@
 version: 0.0.{build}
+clone_depth: 10
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
   - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
   - C:\OpenCV249\opencv\build\x86\mingw_static
 install:
+  # install python packages (i.e. pip, numpy)
+  - powershell .\\ci\\appveyor\\install.ps1
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - set PATH=C:\MinGW\bin;%PATH%
   - ps: ls C:\
   - cmd: choco install opencv -y
