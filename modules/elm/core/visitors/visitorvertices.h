@@ -41,7 +41,7 @@ public:
 
     elm::VecVertices operator()(int n);
 
-    elm::VecVertices operator()(uchar c);
+    elm::VecVertices operator()(pod::uchar c);
 
     elm::VecVertices operator()(const cv::Mat1f &m);
 
