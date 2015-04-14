@@ -11,9 +11,7 @@
 #ifndef _ELM_CORE_PCL_UTILS_H_
 #define _ELM_CORE_PCL_UTILS_H_
 
-#ifndef __WITH_PCL
-    #warning "Skipping pcl utilities since PCL support is disabled."
-#else // __WITH_PCL
+#ifdef __WITH_PCL // Skipping pcl utilities since PCL support is disabled.
 
 #include <boost/shared_ptr.hpp>
 #include <pcl/Vertices.h>

@@ -48,7 +48,11 @@ float GraphAttr::operator ()(int idx_u, int idx_v) const
     impl->findVertex(vtx_ids[idx_u], u);
     impl->findVertex(vtx_ids[idx_v], v);
 
-    typename property_map < GraphAttrType, edge_weight_t >::type
+#if _MSC_VER
+#else // #if _MSC_VER && !__INTEL_COMPILER
+    typename 
+#endif // #if _MSC_VER && !__INTEL_COMPILER
+		property_map < GraphAttrType, edge_weight_t >::type
             weight = get(edge_weight, impl->g);
 
     GraphAttrTraits::edge_descriptor e;
@@ -67,7 +71,11 @@ void GraphAttr::AdjacencyMat(Mat1f &adj) const
     }
 
     // a lot of clutter just to traverse all edges
-    typename property_map <GraphAttrType, edge_weight_t >::type
+#if _MSC_VER && !__INTEL_COMPILER
+#else // #if _MSC_VER && !__INTEL_COMPILER
+	typename
+#endif // #if _MSC_VER && !__INTEL_COMPILER
+		property_map <GraphAttrType, edge_weight_t >::type
             weight = get(edge_weight, impl->g);
 
     GraphAttrTraits::vertex_iterator begin, end, next_u;
@@ -237,7 +245,11 @@ int GraphAttr::contractEdges(int id_u, int id_v)
     graph_traits<GraphAttrTraits>::out_edge_iterator e, e_end;
     //graph_traits<GraphAttrTraits>::edge_descriptor e_v;
 
-    typename property_map <GraphAttrType, edge_weight_t >::type
+#if _MSC_VER && !__INTEL_COMPILER
+#else // #if _MSC_VER && !__INTEL_COMPILER
+	typename
+#endif // #if _MSC_VER && !__INTEL_COMPILER
+		property_map <GraphAttrType, edge_weight_t >::type
             weight = get(edge_weight, impl->g);
 
     std::vector< std::pair<VtxDescriptor, VtxDescriptor> > obsolete_edges;
