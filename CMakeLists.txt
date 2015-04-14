@@ -37,11 +37,11 @@ if(NOT DEFINED CMAKE_BUILD_TYPE OR NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Print all warnings and enable C++11 support
-if(WIN32) # gtest on windows (MinGW) doesn't do well with C++11
+if(WIN32 AND NOT MSVC) # gtest on windows (MinGW) doesn't do well with C++11
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
-else(WIN32)
+else(WIN32 AND NOT MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
-endif(WIN32)
+endif(WIN32 AND NOT MSVC)
 
 # -fPIC
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
