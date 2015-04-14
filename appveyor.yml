@@ -10,15 +10,15 @@ install:
   - ps: mkdir C:\OpenCV249\opencv\build\x86\mingw_static
   - ps: cd C:\OpenCV249\opencv\build\x86\mingw_static
   - ps: mv "C:\Program Files (x86)\Git\bin\sh.exe" "C:\Program Files (x86)\Git\bin\shxx.exe"
-  - cmd: cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF C:\OpenCV249\opencv\sources
-  - cmd: mingw32-make > NUL
+  - cmd: cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF -Wno-dev C:\OpenCV249\opencv\sources > NUL
+  - cmd: mingw32-make > NUL 2>&1
   - cmd: CD %APP_PATH%
   - appveyor DownloadFile https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - 7z x .\gtest-1.7.0.zip -y > NUL
-  - ps: cd gtest-1.7.0
+  - ps: cd gtest-1.7.0 2>&1
   - cmd: cmake -G "MinGW Makefiles" .
-  - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
   - cmd: mingw32-make
+  - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
   # return to repo dir
   - ps: cd ..\elm
 before_build:
