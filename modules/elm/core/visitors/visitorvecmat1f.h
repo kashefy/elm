@@ -36,7 +36,7 @@ public:
 
     VecMat1f operator()(int n) const;
 
-    VecMat1f operator()(uchar c) const;
+	VecMat1f operator()(pod::uchar c) const;
 
 #ifdef __WITH_PCL // this conversion requires PCL support
 

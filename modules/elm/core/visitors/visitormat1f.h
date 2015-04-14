@@ -36,7 +36,7 @@ public:
 
    cv::Mat1f operator()(int n) const;
 
-   cv::Mat1f operator()(uchar c) const;
+   cv::Mat1f operator()(pod::uchar c) const;
 
 #ifdef __WITH_PCL // this conversion requires PCL support
 
