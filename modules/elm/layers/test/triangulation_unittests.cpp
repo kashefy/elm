@@ -250,6 +250,4 @@ TEST_F(TriangulationAdjacencyTest, Adjacency)
 
 } // annonymous namespace for test fixtures
 
-#else // __WITH_PCL
-    #warning "Skipping building Triangulation layer unit tests"
 #endif // __WITH_PCL

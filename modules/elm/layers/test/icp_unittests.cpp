@@ -223,6 +223,4 @@ TEST_F(ICPTest, NoConvergence)
 
 } // annonymous namespace for test fixtures
 
-#else // __WITH_PCL
-    #warning "Skipping building ICP layer unittests due to no PCL support"
 #endif // __WITH_PCL

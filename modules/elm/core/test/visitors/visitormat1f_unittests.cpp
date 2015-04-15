@@ -171,9 +171,7 @@ TEST_F(VisitorMat1fTest, Reset)
     EXPECT_NO_THROW(to_.Reset());
 }
 
-#ifndef __WITH_PCL
-    #warning "Disabling unit tests that require PCL support."
-#else // __WITH_PCL
+#ifdef __WITH_PCL // Disable unit tests that require PCL support.
 
 TEST_F(VisitorMat1fTest, EmptyCLoud)
 {
