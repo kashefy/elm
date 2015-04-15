@@ -13,6 +13,7 @@ install:
   - ps: ls C:\
   - cmd: choco install opencv -y
   - cmd: SET APP_PATH=%CD%
+  - ps: ls C:\OpenCV249\opencv\build\x86
   - ps: mkdir C:\OpenCV249\opencv\build\x86\mingw_static
   - ps: cd C:\OpenCV249\opencv\build\x86\mingw_static
   - ps: mv "C:\Program Files (x86)\Git\bin\sh.exe" "C:\Program Files (x86)\Git\bin\shxx.exe"
