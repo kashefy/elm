@@ -7,8 +7,8 @@ cache:
   - C:\OpenCV249\opencv\build\x86\mingw_static
 install:
   # install python packages (i.e. pip, numpy)
-  - powershell .\\ci\\appveyor\\install.ps1
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  #- powershell .\\ci\\appveyor\\install.ps1
+  #- "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - set PATH=C:\MinGW\bin;%PATH%
   - ps: ls C:\
   - cmd: choco install opencv -y
