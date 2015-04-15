@@ -9,20 +9,22 @@
 
 #include "elm/ts/serialization_assertions.h"
 
-namespace {
 
 static CvTermCriteria CreateExampleCvTermCriteria()
 {
-    CvTermCriteria c;
+	CvTermCriteria c;
 
-    c.epsilon = 0.01;
-    c.max_iter = 100;
-    c.type = CV_TERMCRIT_EPS;
+	c.epsilon = 0.01;
+	c.max_iter = 100;
+	c.type = CV_TERMCRIT_EPS;
 
-    return c;
+	return c;
 }
 
 template<> CvTermCriteria SerializationTypeAttr_<CvTermCriteria>::example = CreateExampleCvTermCriteria();
+
+namespace {
+
 
 INSTANTIATE_TYPED_TEST_CASE_P(SerializationTypedTest_CvTermCriteria_Test, SerializationTypedTest, CvTermCriteria);
 
