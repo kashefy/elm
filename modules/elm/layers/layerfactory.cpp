@@ -59,9 +59,13 @@ LayerFactory::LayerFactory()
 {
 }
 
+/** @todo eliminate need for checking not MSVC
+ */
 LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateShared(const LayerType &type)
 {
+#if !_MSC_VER
     static_assert(std::is_same<LayerRegistor::RegisteredTypeSharedPtr, LayerShared >(), "Mismatching shared_ptr types.");
+#endif // !_MSC_VER
     return LayerRegistor::CreatePtrShared(g_layerRegistry, type);
 }
 
