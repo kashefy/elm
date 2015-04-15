@@ -19,6 +19,7 @@ install:
   - cmd: cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF -DBUILD_opencv_python=OFF -DBUILD_opencv_python2=OFF -Wno-dev C:\OpenCV249\opencv\sources
   - cmd: mingw32-make > NUL
   - cmd: CD %APP_PATH%
+  - cmd: CD ..
   - appveyor DownloadFile https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - 7z x .\gtest-1.7.0.zip -y > NUL
   - ps: cd gtest-1.7.0 2>&1
@@ -26,7 +27,7 @@ install:
   - cmd: mingw32-make
   - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
   # return to repo dir
-  - ps: cd ..\elm
+  - ps: cd %APP_PATH%
 before_build:
   - ps: mkdir ..\build
   - ps: cd ..\build
