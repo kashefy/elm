@@ -250,6 +250,4 @@ TEST(PCLUtilsPointCloud_2MatTEST, Owner)
 
 } // annonymous namespace around tests
 
-#else // __WITH_PCL
-    #warning "Skipping building pcl utils unit tests due to no pcl support."
 #endif // __WITH_PCL
