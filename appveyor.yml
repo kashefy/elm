@@ -16,8 +16,8 @@ install:
   - ps: mkdir C:\OpenCV249\opencv\build\x86\mingw_static
   - ps: cd C:\OpenCV249\opencv\build\x86\mingw_static
   - ps: mv "C:\Program Files (x86)\Git\bin\sh.exe" "C:\Program Files (x86)\Git\bin\shxx.exe"
-  - cmd: cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF -DBUILD_opencv_python=OFF -DBUILD_opencv_python2=OFF -Wno-dev C:\OpenCV249\opencv\sources > NUL
-  - cmd: mingw32-make > NUL 2>&1
+  - cmd: cmake -G "MinGW Makefiles" -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF -DBUILD_opencv_python=OFF -DBUILD_opencv_python2=OFF -Wno-dev C:\OpenCV249\opencv\sources
+  - cmd: mingw32-make > NUL
   - cmd: CD %APP_PATH%
   - appveyor DownloadFile https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - 7z x .\gtest-1.7.0.zip -y > NUL
