@@ -23,15 +23,15 @@ install:
   - cmd: CD ..
   - appveyor DownloadFile https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - 7z x .\gtest-1.7.0.zip -y > NUL
-  - ps: cd gtest-1.7.0 2>&1
-  - cmd: cmake -G "MinGW Makefiles" .
-  - cmd: mingw32-make
+  - ps: cd gtest-1.7.0
+  - cmd: cmake -G "MinGW Makefiles" . > NUL
+  - cmd: mingw32-make > NUL
   - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
   # return to repo dir
-  - ps: cd %APP_PATH%
+  - cmd: CD %APP_PATH%
 before_build:
   - ps: mkdir ..\build
-  - ps: cd ..\build
+  - cmd: CD ..\build
   - ps: mv "C:\Program Files (x86)\Git\bin\sh.exe" "C:\Program Files (x86)\Git\bin\shxx.exe"
   - set PATH=C:\MinGW\bin;%PATH%
   - cmd: cmake -G "MinGW Makefiles" -DOpenCV_DIR=C:\OpenCV249\opencv\build\x86\mingw_static -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT=C:\Libraries\boost -DWITH_PCL=OFF -DWITH_MATIO=OFF ..\elm
