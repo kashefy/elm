@@ -12,6 +12,7 @@ install:
   - set PATH=C:\MinGW\bin;%PATH%
   - ls C:/Libraries/boost
   - ls C:/Libraries/boost/stage
+  - ls C:/Libraries/boost/lib
   - ps: ls C:\
   - cmd: choco install opencv -y
   - cmd: SET APP_PATH=%CD%
