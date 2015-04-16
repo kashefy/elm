@@ -5,6 +5,7 @@ environment:
   generator: "Visual Studio 12 2013"
   BOOST_ROOT: C:\Libraries\boost
   BOOST_LIBRARYDIR: C:\Libraries\boost\lib32-msvc-12.0
+  BUILD_TYPE: "Release"
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
@@ -49,7 +50,7 @@ before_build:
   - set PATH=C:\MinGW\bin;%PATH%
   # Restore building MinGW when Boost libraries become available
   #- cmd: cmake -G "%generator%" -DOpenCV_DIR=C:\OpenCV249\opencv\build\x86\mingw_static -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT=C:\Libraries\boost -DWITH_PCL=OFF -DWITH_MATIO=OFF ..\elm
-  - cmd: cmake -G "%generator%" -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT="%BOOST_ROOT%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%" -DBoost_USE_STATIC_LIBS=ON -DBoost_USE_MULTITHREADED=ON -DOpenCV_DIR=C:\OpenCV249\opencv\build\ -DWITH_PCL=OFF -DWITH_MATIO=OFF -DWITH_WARNINGS_ALL=OFF -DCMAKE_CXX_FLAGS="/W0" ..\elm
+  - cmd: cmake -G "%generator%" -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT="%BOOST_ROOT%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%" -DBoost_USE_STATIC_LIBS=ON -DBoost_USE_MULTITHREADED=ON -DOpenCV_DIR=C:\OpenCV249\opencv\build\ -DWITH_PCL=OFF -DWITH_MATIO=OFF -DWITH_WARNINGS_ALL=OFF -DCMAKE_CXX_FLAGS="/W0" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..\elm
   - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
 build_script:
   - set PATH=C:\MinGW\bin;%PATH%
