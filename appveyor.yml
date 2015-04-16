@@ -12,6 +12,7 @@ install:
   #- powershell .\\ci\\appveyor\\install.ps1
   #- "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - set PATH=C:\MinGW\bin;%PATH%
+  - ls C:/Libraries/boost
   - ls C:/Libraries/boost/stage/lib
   - ps: ls C:\
   - cmd: choco install opencv -y
