@@ -4,7 +4,8 @@ cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
   - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
-  - C:\OpenCV249\opencv\build\x86\mingw_static
+  - C:\OpenCV249 -> appveyor.yml
+  - C:\OpenCV249\opencv\build\x86\mingw_static -> appveyor.yml
 install:
   # install python packages (i.e. pip, numpy)
   #- powershell .\\ci\\appveyor\\install.ps1
