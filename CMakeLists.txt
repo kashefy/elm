@@ -49,6 +49,10 @@ elseif(NOT WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 endif(WIN32 AND NOT MSVC)
 
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+endif(MSVC)
+
 # -fPIC
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 # position indepdendent code for CMake older 2.8.9
