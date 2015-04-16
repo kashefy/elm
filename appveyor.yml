@@ -34,8 +34,7 @@ install:
   - cmd: cmake -G "Visual Studio 12 2013" . > NUL
   - cmd: msbuild gtest.sln /p:Configuration=Release
   # move build artifacts to GTEST_ROOT for cmake to find it later
-  - ps: mv .\Release\gtest.lib .\
-  - ps: mv .\Release\gtest_main.lib .\
+  - cmd: move .\Release\gtest* .\
   - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
   # return to repo dir
   - cmd: CD %APP_PATH%
