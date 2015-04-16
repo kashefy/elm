@@ -62,7 +62,7 @@ endif()
 
 set(CMAKE_VERBOSE ON CACHE BOOL "Verbose mode")
 
-# Profiling - appliable to BUILD_TYPE=Profile
+# Profiling - applciable to BUILD_TYPE=Profile
 SETUP_PROFILING()
 
 # Setup build and install locations
@@ -111,7 +111,7 @@ endif(BUILD_TESTS)
 # ----------------------------------------------------------------------------
 # Matrix definitions operations
 # Image processing
-# Image visuzalization
+# Image visualization
 # Image and Video I/O
 # Exception handling
 # ----------------------------------------------------------------------------
