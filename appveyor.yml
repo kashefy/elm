@@ -71,7 +71,7 @@ test_script:
   - ps: cd .\bin
   - ps: if "%generator%"=="Visual Studio 12 2013" cd .\Release
   - set PATH=C:\OpenCV249\opencv\build\v12\bin;..\gtest-1.7.0;%PATH%
-  - cmd: .\run_elm_unittests.exe
+  #- cmd: .\run_elm_unittests.exe
 # to run your custom scripts instead of provider deployments
 deploy_script:
   - cmd: ECHO "NOTHING TO DEPLOY"
