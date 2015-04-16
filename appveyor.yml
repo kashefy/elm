@@ -1,4 +1,5 @@
 version: 0.0.{build}
+os: unstable
 clone_depth: 10
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
