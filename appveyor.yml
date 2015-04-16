@@ -1,11 +1,20 @@
 version: 0.0.{build}
 os: unstable
+
+# scripts that are called at very beginning, before repo cloning
+init:
+  - cmd: cmake --version
+  - cmd: msbuild /version
+  
 clone_depth: 10
+
 environment:
-  generator: "Visual Studio 12 2013"
   BOOST_ROOT: C:\Libraries\boost
   BOOST_LIBRARYDIR: C:\Libraries\boost\lib32-msvc-12.0
-  BUILD_TYPE: "Release"
+  CONFIGURATION: "Release"
+  matrix:
+    - generator: "Visual Studio 12 2013"
+    - generator: "NMake Files"
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
@@ -37,9 +46,9 @@ install:
   #- cmd: cmake -G "%generator%" . > NUL
   #- cmd: mingw32-make > NUL
   - cmd: cmake -G "%generator%" -DBUILD_SHARED_LIBS=ON . > NUL
-  - cmd: msbuild gtest.sln /p:Configuration=Release
-  # move build artifacts to GTEST_ROOT for cmake to find it later
-  - cmd: move .\Release\gtest* .\
+  - cmd: msbuild gtest.sln /p:Configuration=%CONFIGURATION%
+  # move build artifacts to GTEST_ROOT for cmake to find it later (only needed with VS generator)
+  - cmd: if "%generator%"=="Visual Studio 12 2013" move .\%CONFIGURATION%\gtest* .\
   - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
   # return to repo dir
   - cmd: CD %APP_PATH%
@@ -50,12 +59,12 @@ before_build:
   - set PATH=C:\MinGW\bin;%PATH%
   # Restore building MinGW when Boost libraries become available
   #- cmd: cmake -G "%generator%" -DOpenCV_DIR=C:\OpenCV249\opencv\build\x86\mingw_static -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT=C:\Libraries\boost -DWITH_PCL=OFF -DWITH_MATIO=OFF ..\elm
-  - cmd: cmake -G "%generator%" -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT="%BOOST_ROOT%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%" -DBoost_USE_STATIC_LIBS=ON -DBoost_USE_MULTITHREADED=ON -DOpenCV_DIR=C:\OpenCV249\opencv\build\ -DWITH_PCL=OFF -DWITH_MATIO=OFF -DWITH_WARNINGS_ALL=OFF -DCMAKE_CXX_FLAGS="/W0" -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..\elm
+  - cmd: cmake -G "%generator%" -DGTEST_ROOT=..\gtest-1.7.0 -DBOOST_ROOT="%BOOST_ROOT%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%" -DBoost_USE_STATIC_LIBS=ON -DBoost_USE_MULTITHREADED=ON -DOpenCV_DIR=C:\OpenCV249\opencv\build\ -DWITH_PCL=OFF -DWITH_MATIO=OFF -DWITH_WARNINGS_ALL=OFF -DCMAKE_CXX_FLAGS="/W0" -DCMAKE_BUILD_TYPE=%CONFIGURATION% ..\elm
   - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
 build_script:
   - set PATH=C:\MinGW\bin;%PATH%
   #- cmd: mingw32-make
-  - cmd: msbuild elm.sln /p:Configuration=Release
+  - cmd: msbuild elm.sln /p:Configuration=%CONFIGURATION%
 test_script:
   - ps: cd .\bin
   - ps: cd .\Release
