@@ -2,9 +2,9 @@ version: 0.0.{build}
 os: unstable
 clone_depth: 10
 environment:
-  - generator: "Visual Studio 12 2013"
-  - BOOST_ROOT: C:\Libraries\boost
-  - BOOST_LIBRARYDIR: C:\Libraries\boost\lib32-msvc-12.0
+  generator: "Visual Studio 12 2013"
+  BOOST_ROOT: C:\Libraries\boost
+  BOOST_LIBRARYDIR: C:\Libraries\boost\lib32-msvc-12.0
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
