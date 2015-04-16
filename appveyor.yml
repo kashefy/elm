@@ -14,7 +14,7 @@ environment:
   CONFIGURATION: "Release"
   matrix:
     - generator: "Visual Studio 12 2013"
-    - generator: "NMake Files"
+    #- generator: "NMake Makefiles"
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
@@ -46,7 +46,8 @@ install:
   #- cmd: cmake -G "%generator%" . > NUL
   #- cmd: mingw32-make > NUL
   - cmd: cmake -G "%generator%" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=%CONFIGURATION% . > NUL
-  - cmd: msbuild gtest.sln /p:Configuration=%CONFIGURATION%
+  - cmd: if "%generator%"=="Visual Studio 12 2013" msbuild gtest.sln /p:Configuration=%CONFIGURATION%
+  - cmd: if "%generator%"=="NMake Makefiles" nmake
   # move build artifacts to GTEST_ROOT for cmake to find it later (only needed with VS generator)
   - cmd: if "%generator%"=="Visual Studio 12 2013" move .\%CONFIGURATION%\gtest* .\
   - ps: mv "C:\Program Files (x86)\Git\bin\shxx.exe" "C:\Program Files (x86)\Git\bin\sh.exe"
@@ -64,10 +65,11 @@ before_build:
 build_script:
   - set PATH=C:\MinGW\bin;%PATH%
   #- cmd: mingw32-make
-  - cmd: msbuild elm.sln /p:Configuration=%CONFIGURATION%
+  - cmd: if "%generator%"=="Visual Studio 12 2013" msbuild elm.sln /p:Configuration=%CONFIGURATION%
+  - cmd: if "%generator%"=="NMake Makefiles" nmake
 test_script:
   - ps: cd .\bin
-  - ps: cd .\Release
+  - ps: if "%generator%"=="Visual Studio 12 2013" cd .\Release
   - set PATH=C:\OpenCV249\opencv\build\v12\bin;..\gtest-1.7.0;%PATH%
   - cmd: .\run_elm_unittests.exe
 # to run your custom scripts instead of provider deployments
