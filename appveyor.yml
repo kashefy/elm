@@ -30,7 +30,7 @@ install:
   # Restore building MinGW when Boost libraries become available
   #- cmd: cmake -G "MinGW Makefiles" . > NUL
   #- cmd: mingw32-make > NUL
-  - cmd: cmake -G "Visual Studio 12 2013" . > NUL
+  - cmd: cmake -G "Visual Studio 12 2013" -DBUILD_SHARED_LIBS=ON . > NUL
   - cmd: msbuild gtest.sln /p:Configuration=Release
   # move build artifacts to GTEST_ROOT for cmake to find it later
   - cmd: move .\Release\gtest* .\
