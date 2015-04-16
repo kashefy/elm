@@ -45,7 +45,7 @@ install:
   # Restore building MinGW when Boost libraries become available
   #- cmd: cmake -G "%generator%" . > NUL
   #- cmd: mingw32-make > NUL
-  - cmd: cmake -G "%generator%" -DBUILD_SHARED_LIBS=ON . > NUL
+  - cmd: cmake -G "%generator%" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=%CONFIGURATION% . > NUL
   - cmd: msbuild gtest.sln /p:Configuration=%CONFIGURATION%
   # move build artifacts to GTEST_ROOT for cmake to find it later (only needed with VS generator)
   - cmd: if "%generator%"=="Visual Studio 12 2013" move .\%CONFIGURATION%\gtest* .\
