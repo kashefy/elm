@@ -14,11 +14,12 @@ set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
 
 # ----------------------------------------------------------------------------
-# Set default behavior
+# Set default behaviour
 # ----------------------------------------------------------------------------
 set(BUILD_TESTS ON CACHE BOOL "Whether to build test projects.")
 set(WITH_TEST_COVERAGE OFF CACHE BOOL "Whether to produce test coverage reports.")
 set(FORCE_IN_SOURCE OFF CACHE BOOL "Whether to force allow in-source builds.")
+set(WITH_WARNINGS_ALL ON CACHE BOOL "Whether to print all compiler warnings.")
 
 include(cmake/CompilerUtils.cmake)
 if(WITH_TEST_COVERAGE)
@@ -36,8 +37,12 @@ if(NOT DEFINED CMAKE_BUILD_TYPE OR NOT CMAKE_BUILD_TYPE)
     status("Since no build type was specified falling back on ${CMAKE_BUILD_TYPE} as the default build type.")
 endif()
 
-# Print all warnings and enable C++11 support
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+# Print all warnings
+if(WITH_WARNINGS_ALL)
+    PRINT_ALL_WARNINGS()
+endif(WITH_WARNINGS_ALL)
+
+# enable C++11 support
 if(WIN32 AND NOT MSVC) # gtest on windows (MinGW) doesn't do well with C++11
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 elseif(NOT WIN32)
