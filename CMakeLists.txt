@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-#  Root CMake file for the elm project
+#  Root CMake file for the ELM project
 # ----------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 2.8.7)
@@ -233,7 +233,7 @@ endif(BUILD_TESTS)
 #----------------------------------------------------------------------------
 
 # variable substitutions
-set(ROOT_PROJECT_CONFIG elm-config.cmake)
+set(ROOT_PROJECT_CONFIG ${ROOT_PROJECT}-config.cmake)
 
 # Set full-name variables for suffix variables, otherwise config won't substitute them:
 set(ROOT_PROJECT_INCLUDE_DIRS ${${ROOT_PROJECT}_INCLUDE_DIRS})
