@@ -27,12 +27,12 @@ install:
   #- "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - set PATH=C:\MinGW\bin;%PATH%
   - ls C:/Libraries/boost
-  - ps: ls C:\
+  - ls C:\
   - cmd: choco install opencv -y
   - cmd: SET APP_PATH=%CD%
   - ps: ls C:\OpenCV249\opencv\build\x86
   - ps: mkdir C:\OpenCV249\opencv\build\x86\mingw_static
-  - ps: cd C:\OpenCV249\opencv\build\x86\mingw_static
+  - cmd: CD C:\OpenCV249\opencv\build\x86\mingw_static
   - ps: mv "C:\Program Files (x86)\Git\bin\sh.exe" "C:\Program Files (x86)\Git\bin\shxx.exe"
   # Restore building MinGW when Boost libraries become available
   #- cmd: cmake -G "%generator%" -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF -DBUILD_opencv_python=OFF -DBUILD_opencv_python2=OFF -DBUILD_opencv_calib3d=OFF -DBUILD_opencv_ocl=OFF -DBUILD_opencv_nonfree=OFF -DBUILD_opencv_contrib=OFF -DBUILD_opencv_photo=OFF -DBUILD_opencv_stitching=OFF -DBUILD_opencv_superres=OFF -DBUILD_opencv_videostab=OFF -Wno-dev C:\OpenCV249\opencv\sources > NUL
@@ -41,7 +41,7 @@ install:
   - cmd: CD ..
   - appveyor DownloadFile https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - 7z x .\gtest-1.7.0.zip -y > NUL
-  - ps: cd gtest-1.7.0
+  - cmd: CD gtest-1.7.0
   # Restore building MinGW when Boost libraries become available
   #- cmd: cmake -G "%generator%" . > NUL
   #- cmd: mingw32-make > NUL
@@ -54,7 +54,7 @@ install:
   # return to repo dir
   - cmd: CD %APP_PATH%
 before_build:
-  - ps: mkdir ..\build
+  - cmd: mkdir ..\build
   - cmd: CD ..\build
   - ps: mv "C:\Program Files (x86)\Git\bin\sh.exe" "C:\Program Files (x86)\Git\bin\shxx.exe"
   - set PATH=C:\MinGW\bin;%PATH%
@@ -68,8 +68,8 @@ build_script:
   - cmd: if "%generator%"=="Visual Studio 12 2013" msbuild elm.sln /p:Configuration=%CONFIGURATION%
   - cmd: if "%generator%"=="NMake Makefiles" nmake
 test_script:
-  - ps: cd .\bin
-  - ps: if "%generator%"=="Visual Studio 12 2013" cd .\Release
+  - cmd: CD .\bin
+  - cmd: if "%generator%"=="Visual Studio 12 2013" cd .\Release
   - set PATH=C:\OpenCV249\opencv\build\v12\bin;..\gtest-1.7.0;%PATH%
   #- cmd: .\run_elm_unittests.exe
 # to run your custom scripts instead of provider deployments
