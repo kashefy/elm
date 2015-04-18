@@ -6,7 +6,7 @@ init:
   - cmd: cmake --version
   - cmd: msbuild /version
   
-clone_depth: 10
+clone_depth: 5
 
 environment:
   BOOST_ROOT: C:\Libraries\boost
