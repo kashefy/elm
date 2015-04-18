@@ -314,5 +314,7 @@ status("")
 status("paths:")
 status("    install prefix:\t${CMAKE_INSTALL_PREFIX}")
 status("    test-data     :\t${EXECUTABLE_OUTPUT_PATH}/test-data")
+get_filename_component(ROOT_PROJECT_CONFIG_ABSPATH ${ROOT_PROJECT_CONFIG} ABSOLUTE)
+status("    CMake config  :\t${ROOT_PROJECT_CONFIG_ABSPATH}")
 
 status("")
