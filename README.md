@@ -24,6 +24,7 @@ The extended SEM and its specific layers are detached from the generic ELM frame
 3. SEM model extended with scale and translation invariance through hiearchical learning
 4. C++ implementation and code refactoring **in progress** (partially complete)
 5. Separate SEM specific layers, hello ELM framework
+6. Learning layers and module
   
 Anticipated milestones:
   
