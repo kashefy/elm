@@ -41,7 +41,7 @@ public:
 
     elm::VecVertices operator()(int n);
 
-    elm::VecVertices operator()(uchar c);
+    elm::VecVertices operator()(pod::uchar c);
 
     elm::VecVertices operator()(const cv::Mat1f &m);
 
@@ -66,8 +66,8 @@ protected:
     elm::VecVertices vv_;   ///< internal copy for caching most recent conversion result
 };
 
-#endif // __WITH_PCL
-
 } // namespace elm
+
+#endif // __WITH_PCL
 
 #endif // _ELM_CORE_VISITORVERTICES_H_

@@ -7,6 +7,10 @@
 //M*/
 #include "elm/ts/mat_assertions.h"
 
+#if _MSC_VER && !__INTEL_COMPILER
+#include <stdint.h>
+#endif // _MSC_VER && !__INTEL_COMPILER
+
 #include "elm/core/exception.h"
 #include "elm/core/cv/mat_type_utils.h"
 

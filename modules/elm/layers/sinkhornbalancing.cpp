@@ -30,7 +30,7 @@ const string SinkhornBalancing::KEY_OUTPUT_IS_CONVERGED = "convergence";
 #include <boost/assign/list_of.hpp>
 template <>
 elm::MapIONames LayerAttr_<SinkhornBalancing>::io_pairs = boost::assign::map_list_of
-        ELM_ADD_INPUT_PAIR(detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS)
+        ELM_ADD_INPUT_PAIR(elm::detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS)
         ELM_ADD_OUTPUT_PAIR(SinkhornBalancing::KEY_OUTPUT_MAT_BALANCED)
         ELM_ADD_OUTPUT_PAIR(SinkhornBalancing::KEY_OUTPUT_IS_CONVERGED)
         ;

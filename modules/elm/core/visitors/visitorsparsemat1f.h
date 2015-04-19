@@ -40,7 +40,7 @@ public:
 
     elm::SparseMat1f operator()(int n) const;
 
-    elm::SparseMat1f operator()(uchar c) const;
+	elm::SparseMat1f operator()(pod::uchar c) const;
 
 #ifdef __WITH_PCL // this conversion requires PCL support
 

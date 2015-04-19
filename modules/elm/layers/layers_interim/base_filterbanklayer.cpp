@@ -18,7 +18,7 @@ using std::string;
 using namespace cv;
 using namespace elm;
 
-const string base_FilterBankLayer::KEY_OUTPUT_RESPONSE = detail::BASE_FILTERBANK_LAYER__KEY_OUTPUT_RESPONSE;
+const string base_FilterBankLayer::KEY_OUTPUT_RESPONSE = elm::detail::BASE_FILTERBANK_LAYER__KEY_OUTPUT_RESPONSE;
 
 base_FilterBankLayer::~base_FilterBankLayer()
 {

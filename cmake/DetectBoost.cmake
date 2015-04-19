@@ -8,8 +8,13 @@
 
 set(BOOST_MIN_VERSION "1.46.0" CACHE STRING "Minimum version of boost to link against (e.g. C:/BOOST_1_56_0 is 1.56.0")
 
+if(MSVC)
+    # mitigate interference of the auto-linking
+    add_definitions(-DBOOST_ALL_NO_LIB)
+endif(MSVC)
+
 # Don't forget to include 'system'
-set(BOOST_COMPONENTS system filesystem serialization graph)
+set(BOOST_COMPONENTS system filesystem serialization graph thread)
 status("")
 find_package(Boost ${BOOST_MIN_VERSION} REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 if(Boost_FOUND)

@@ -1,6 +1,7 @@
 # The ELM framework #
 
 [![Build Status](https://travis-ci.org/kashefy/elm.svg?branch=master)](https://travis-ci.org/kashefy/elm)
+[![Build status](https://ci.appveyor.com/api/projects/status/4ksmtom5g520dndf/branch/master?svg=true)](https://ci.appveyor.com/project/kashefy/elm/branch/master)
 [![Coverage Status](https://coveralls.io/repos/kashefy/elm/badge.svg?branch=master)](https://coveralls.io/r/kashefy/elm?branch=master)
 
 This started off as a a C++ implementation of a Spike-based Expectation Maximization (SEM) model, a biologically inspired model for object detection and recognition.
@@ -23,6 +24,7 @@ The extended SEM and its specific layers are detached from the generic ELM frame
 3. SEM model extended with scale and translation invariance through hiearchical learning
 4. C++ implementation and code refactoring **in progress** (partially complete)
 5. Separate SEM specific layers, hello ELM framework
+6. Learning layers and module
   
 Anticipated milestones:
   

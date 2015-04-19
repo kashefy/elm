@@ -93,7 +93,7 @@ void LUT::apply(cv::Mat1i &m) const
     if(m.isContinuous()) {
 
         int *mat_data_ptr = reinterpret_cast<int*>(m.data);
-        const int *END = reinterpret_cast<int*>(m.dataend);
+        const int *END = reinterpret_cast<const int*>(m.dataend);
 
         for(; mat_data_ptr != END; mat_data_ptr++) {
 

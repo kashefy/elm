@@ -538,6 +538,4 @@ TYPED_TEST(VisitorCloud_Cloud2Cloud_PointTypedTest, ToPointCloudOfDifferentType)
 
 } // annonymous namespace for cloud visitors' test fixtures
 
-#else // __WITH_PCL
-    #warning "Skipping building cloud visitor unit tests due to no pcl support."
 #endif // __WITH_PCL

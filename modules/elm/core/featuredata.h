@@ -97,7 +97,7 @@ protected:
 
     VisitorVecVertices visitor_vv_; ///< visitor for converting to STL vector of PCL Vertices
 #else
-    boost::variant< cv::Mat1f, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
+    boost::variant< cv::Mat1f, elm::SparseMat1f, elm::VecMat1f, float, int, uchar > var_; ///< variant object to enable finite representations of a single feature data instance
 
     VisitorVoid visitor_cloud_xyz_;     ///< place holder visitor that does nothing
     VisitorVoid visitor_cloud_nrml_;    ///< place holder visitor that does nothing

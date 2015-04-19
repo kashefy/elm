@@ -169,8 +169,8 @@ cv::Mat ReadMNISTImagesTransl::Next()
     cv::Mat mnist_img = ReadMNISTImages::Next();
     cv::Mat scene = cv::Mat::zeros(scene_dims_, mnist_img.type());
 
-    current_loc_.x = cv::randu<uint>() % (scene_dims_.width-mnist_img.cols);
-    current_loc_.y = cv::randu<uint>() % (scene_dims_.height-mnist_img.rows);
+    current_loc_.x = static_cast<int>(cv::randu<uint32_t>() % (scene_dims_.width-mnist_img.cols));
+    current_loc_.y = static_cast<int>(cv::randu<uint32_t>() % (scene_dims_.height-mnist_img.rows));
 
     mnist_img.copyTo(scene(cv::Rect2i(current_loc_, mnist_img.size())));
     return scene;

@@ -12,6 +12,7 @@
 #define _ELM_CORE_STL_INL_H_
 
 #include <map>
+#include <stdlib.h> // rand
 #include <string>
 #include <sstream>
 #include <vector>

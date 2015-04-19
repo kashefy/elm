@@ -13,21 +13,21 @@
 using namespace std;
 using namespace cv;
 
-namespace {
-
 static Mat CreateExampleMat()
 {
-    Mat m(3, 2, CV_32FC1);
+	Mat m(3, 2, CV_32FC1);
 
-    for(size_t i=0; i<m.total(); i++) {
+	for (size_t i = 0; i<m.total(); i++) {
 
-        m.at<float>(i) = i;
-    }
+		m.at<float>(i) = i;
+	}
 
-    return m;
+	return m;
 }
 
 template<> Mat SerializationTypeAttr_<Mat>::example = CreateExampleMat();
+
+namespace {
 
 INSTANTIATE_TYPED_TEST_CASE_P(SerializationTypedTest_Mat_Test, SerializationTypedTest, Mat);
 

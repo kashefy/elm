@@ -41,7 +41,11 @@ float GraphMap::operator ()(int idx_u, int idx_v) const
     GraphMapTraits::vertex_descriptor u(idx_u);
     GraphMapTraits::vertex_descriptor v(idx_v);
 
-    typename boost::property_map < GraphMapType, boost::edge_weight_t >::type
+#if _MSC_VER && !__INTEL_COMPILER
+#else // #if _MSC_VER && !__INTEL_COMPILER
+	typename
+#endif // #if _MSC_VER && !__INTEL_COMPILER
+		boost::property_map < GraphMapType, boost::edge_weight_t >::type
             weight = get(boost::edge_weight, impl->g);
 
     GraphMapTraits::edge_descriptor e;

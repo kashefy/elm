@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-#  Root CMake file for the elm project
+#  Root CMake file for the ELM project
 # ----------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 2.8.7)
@@ -14,11 +14,12 @@ set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
 
 # ----------------------------------------------------------------------------
-# Set default behavior
+# Set default behaviour
 # ----------------------------------------------------------------------------
 set(BUILD_TESTS ON CACHE BOOL "Whether to build test projects.")
 set(WITH_TEST_COVERAGE OFF CACHE BOOL "Whether to produce test coverage reports.")
 set(FORCE_IN_SOURCE OFF CACHE BOOL "Whether to force allow in-source builds.")
+set(WITH_WARNINGS_ALL ON CACHE BOOL "Whether to print all compiler warnings.")
 
 include(cmake/CompilerUtils.cmake)
 if(WITH_TEST_COVERAGE)
@@ -36,8 +37,21 @@ if(NOT DEFINED CMAKE_BUILD_TYPE OR NOT CMAKE_BUILD_TYPE)
     status("Since no build type was specified falling back on ${CMAKE_BUILD_TYPE} as the default build type.")
 endif()
 
-# Print all warnings and enable C++11 support
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")
+# Print all warnings
+if(WITH_WARNINGS_ALL)
+    PRINT_ALL_WARNINGS()
+endif(WITH_WARNINGS_ALL)
+
+# enable C++11 support
+if(WIN32 AND NOT MSVC) # gtest on windows (MinGW) doesn't do well with C++11
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+elseif(NOT WIN32)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+endif(WIN32 AND NOT MSVC)
+
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+endif(MSVC)
 
 # -fPIC
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
@@ -52,7 +66,7 @@ endif()
 
 set(CMAKE_VERBOSE ON CACHE BOOL "Verbose mode")
 
-# Profiling - appliable to BUILD_TYPE=Profile
+# Profiling - applciable to BUILD_TYPE=Profile
 SETUP_PROFILING()
 
 # Setup build and install locations
@@ -101,7 +115,7 @@ endif(BUILD_TESTS)
 # ----------------------------------------------------------------------------
 # Matrix definitions operations
 # Image processing
-# Image visuzalization
+# Image visualization
 # Image and Video I/O
 # Exception handling
 # ----------------------------------------------------------------------------
@@ -219,13 +233,15 @@ endif(BUILD_TESTS)
 #----------------------------------------------------------------------------
 
 # variable substitutions
-set(ROOT_PROJECT_CONFIG elm-config.cmake)
+set(ROOT_PROJECT_CONFIG ${ROOT_PROJECT}-config.cmake)
 
 # Set full-name variables for suffix variables, otherwise config won't substitute them:
 set(ROOT_PROJECT_INCLUDE_DIRS ${${ROOT_PROJECT}_INCLUDE_DIRS})
 
 set(ROOT_PROJECT_MODULES ${${ROOT_PROJECT}_MODULES})
 set(ROOT_PROJECT_DEPS ${${ROOT_PROJECT}_LIBS})
+
+string(TOUPPER ${ROOT_PROJECT} ROOT_PROJECT_UPPER)
 
 configure_file(cmake/${ROOT_PROJECT_CONFIG}.in ${ROOT_PROJECT_CONFIG} @ONLY)
 
@@ -272,7 +288,7 @@ convert_to_lib_name(OpenCV_MODULES ${OpenCV_MODULES})
 status("        modules :  "      OpenCV_FOUND THEN ${OpenCV_MODULES} ELSE "-")
 status("")
 status("    Boost:    "   Boost_FOUND THEN "${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION} (${Boost_VERSION})"  ELSE NO)
-status("        lib Dir.:  "   Boost_FOUND THEN "${BOOST_ROOT}/lib" ELSE "-")
+status("        lib Dir.:  "   Boost_FOUND THEN "${Boost_LIBRARY_DIRS};${Boost_LIBRARY_DIR}" ELSE "-")
 set(Boost_LIB_NAMES ${Boost_LIBRARIES})
 convert_to_lib_name(Boost_LIB_NAMES ${Boost_LIB_NAMES})
 status("        components :  "      Boost_FOUND THEN ${Boost_LIB_NAMES} ELSE "-")
@@ -298,5 +314,7 @@ status("")
 status("paths:")
 status("    install prefix:\t${CMAKE_INSTALL_PREFIX}")
 status("    test-data     :\t${EXECUTABLE_OUTPUT_PATH}/test-data")
+get_filename_component(ROOT_PROJECT_CONFIG_ABSPATH ${ROOT_PROJECT_CONFIG} ABSOLUTE)
+status("    CMake config  :\t${ROOT_PROJECT_CONFIG_ABSPATH}")
 
 status("")

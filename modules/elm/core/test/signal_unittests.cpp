@@ -36,7 +36,7 @@ protected:
         in.push_back("foo");
         in.push_back("bar");
 
-        for(uint i=0; i<in.size(); i++) {
+        for(size_t i=0; i<in.size(); i++) {
 
             to_.Append(in[i], Mat1f());
         }

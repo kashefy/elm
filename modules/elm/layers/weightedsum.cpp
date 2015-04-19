@@ -27,8 +27,8 @@ const std::string WeightedSum::PARAM_B              = "b";
 #include <boost/assign/list_of.hpp>
 template <>
 elm::MapIONames LayerAttr_<WeightedSum>::io_pairs = boost::assign::map_list_of
-        ELM_ADD_INPUT_PAIR(detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS)
-        ELM_ADD_OUTPUT_PAIR(detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
+        ELM_ADD_INPUT_PAIR(elm::detail::BASE_SINGLE_INPUT_FEATURE_LAYER__KEY_INPUT_STIMULUS)
+        ELM_ADD_OUTPUT_PAIR(elm::detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE)
         ;
 //#endif
 

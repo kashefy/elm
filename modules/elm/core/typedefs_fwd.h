@@ -14,9 +14,11 @@
 #include "elm/core/boost/typedefs_fwd.h"
 #include "elm/core/cv/typedefs_fwd.h"
 
-typedef unsigned char uchar;
-
 namespace elm {
+	
+namespace pod {
+	typedef unsigned char uchar;
+} // namespace pod
 
 typedef cv::SparseMat_<float> SparseMat1f;   ///< convinience forward typedef for Mat of floats without constraints on no. of channels
 
