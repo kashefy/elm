@@ -17,7 +17,9 @@ class SpikingHistoryTest : public ::testing::Test
 {
 protected:
     SpikingHistoryTest()
-        : to_(5, 3)
+        : to_(5, 3),
+          len_(-1),
+          dims_(0)
     {
     }
 
