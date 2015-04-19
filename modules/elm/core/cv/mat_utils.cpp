@@ -141,7 +141,10 @@ Mat1b isnan(const Mat1f &src)
         return Mat1b();
     }
 
-    return (src != src);
+    Mat1b dst;
+    compare(src, src, dst, CMP_NE);
+
+    return dst;
 }
 
 Mat1b is_not_nan(const Mat1f &src)
@@ -151,7 +154,10 @@ Mat1b is_not_nan(const Mat1f &src)
         return Mat1b();
     }
 
-    return (src == src);
+    Mat1b dst;
+    compare(src, src, dst, CMP_EQ);
+
+    return dst;
 }
 
 } //namespace elm
