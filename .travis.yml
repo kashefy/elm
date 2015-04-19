@@ -34,7 +34,7 @@ before_install:
 install:
   # lcov: for test coverage reporting, building with coverage info
   # gfortran fort77 are for HDF5, MATIO support
-  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libboost-thread-dev libpcl-all lcov gfortran fort77 > /dev/null
+  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libboost-thread-dev libpcl-all lcov libreadline-dev gfortran fort77 > /dev/null
   # HDF5
   - cd ..
   - tar -xzf hdf5-1.8.14.tar.gz
