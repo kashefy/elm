@@ -193,8 +193,6 @@ public:
     }
 
 protected:
-
-    bfs::path path_;
 };
 
 class ReadMNISTImagesTest : public ReadMNISTLabelsTest
