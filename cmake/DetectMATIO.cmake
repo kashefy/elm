@@ -66,6 +66,11 @@ if(MATIO_FOUND)
 
             list(APPEND ${ROOT_PROJECT}_LIBS ${HDF5_LIBS})
 
+            if(UNIX)
+                # HDF5 on Unix systems references to dlclose()
+                list(APPEND ${ROOT_PROJECT}_LIBS dl)
+            endif(UNIX)
+
         endif(NOT ${HDF5_LIBS} STREQUAL HDF5_LIBS-NOTFOUND)
 
 #LINK_DIRECTORIES(${HDF5_DIR}/lib)
