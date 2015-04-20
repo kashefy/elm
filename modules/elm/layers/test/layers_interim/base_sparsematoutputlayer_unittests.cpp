@@ -45,7 +45,13 @@ public:
         m_ = signal.MostRecentMat1f(name_in_)*2.f;
     }
 
-    DummySparseMatOutputLayer() {}
+    DummySparseMatOutputLayer()
+        : base_SparseMatOutputLayer()
+    {}
+
+    DummySparseMatOutputLayer(const LayerConfig &cfg)
+        : base_SparseMatOutputLayer(cfg)
+    {}
 
 protected:
     string name_in_;
@@ -78,6 +84,16 @@ protected:
     shared_ptr<base_Layer> to_; ///< test object
     Signal sig_;
 };
+
+TEST_F(SparseMatOutputLayerTest, Constructor)
+{
+    EXPECT_NO_THROW(to_.reset(new DummySparseMatOutputLayer(LayerConfig())));
+}
+
+TEST_F(SparseMatOutputLayerTest, Destructor)
+{
+    EXPECT_NO_THROW(to_.reset());
+}
 
 TEST_F(SparseMatOutputLayerTest, Sanity)
 {
