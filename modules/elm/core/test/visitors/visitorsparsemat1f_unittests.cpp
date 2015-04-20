@@ -13,6 +13,7 @@
 #include "elm/core/exception.h"
 #include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/vertices.h"
+#include "elm/ts/pcl_point_typed_tests.h"
 #include "elm/ts/ts.h"
 
 using namespace std;
@@ -36,12 +37,57 @@ TEST_F(VisitorSparseMat1fTest, EmptySparseMat1f)
     EXPECT_THROW(to_(SparseMat1f(0, 0)), std::exception);
 }
 
-TEST_F(VisitorSparseMat1fTest, EmptyMat)
+TEST_F(VisitorSparseMat1fTest, EmptyMat1f)
 {
     EXPECT_EQ(0, to_(Mat1f()).size());
     EXPECT_EQ(0, to_(Mat1f(0, 0)).size());
     EXPECT_EQ(0, to_(Mat1f(1, 0)).size());
     EXPECT_EQ(0, to_(Mat1f(0, 1)).size());
+}
+
+TEST_F(VisitorSparseMat1fTest, EmptyMat)
+{
+    EXPECT_THROW(to_(Mat()), ExceptionBadDims);
+
+    EXPECT_THROW(to_(Mat(0, 0, CV_32FC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 0, CV_32FC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 0, CV_32FC3)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_32FC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_32FC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_32FC3)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_32FC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_32FC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_32FC3)), ExceptionBadDims);
+
+    EXPECT_THROW(to_(Mat(0, 0, CV_8UC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 0, CV_8UC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 0, CV_8UC3)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_8UC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_8UC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_8UC3)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_8UC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_8UC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_8UC3)), ExceptionBadDims);
+
+    EXPECT_THROW(to_(Mat(0, 0, CV_32SC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 0, CV_32SC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 0, CV_32SC3)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_32SC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_32SC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_32SC3)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_32SC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_32SC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_32SC3)), ExceptionBadDims);
+
+    EXPECT_THROW(to_(Mat(0, 0, CV_8UC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 0, CV_8UC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 0, CV_8UC3)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_8UC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_8UC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(0, 1, CV_8UC3)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_8UC1)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_8UC2)), ExceptionBadDims);
+    EXPECT_THROW(to_(Mat(1, 0, CV_8UC3)), ExceptionBadDims);
 }
 
 TEST_F(VisitorSparseMat1fTest, FromSparseMat1f)
@@ -76,11 +122,40 @@ TEST_F(VisitorSparseMat1fTest, FromDenseMat1f)
         Mat1f m(MAT_ROWS, MAT_COLS);
         randn(m, 0.f, 100.f);
 
-        Mat1f m2;
-        to_(m).convertTo(m2, CV_32FC1);
+        {
+            Mat1f m2;
+            to_(m).convertTo(m2, CV_32FC1);
 
-        EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
-        EXPECT_NE(m.data, m2.data);
+            EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
+            EXPECT_NE(m.data, m2.data);
+        }
+        {
+            Mat m1;
+            m.convertTo(m1, CV_64FC1);
+            Mat1f m2;
+            to_(m).convertTo(m2, CV_32FC1);
+
+            EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
+            EXPECT_NE(m.data, m2.data);
+        }
+        {
+            Mat m1;
+            m.convertTo(m1, CV_8UC1);
+            Mat1f m2;
+            to_(m).convertTo(m2, CV_32FC1);
+
+            EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
+            EXPECT_NE(m.data, m2.data);
+        }
+        {
+            Mat m1;
+            m.convertTo(m1, CV_32SC1);
+            Mat1f m2;
+            to_(m).convertTo(m2, CV_32FC1);
+
+            EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
+            EXPECT_NE(m.data, m2.data);
+        }
     }
 }
 
@@ -184,46 +259,6 @@ TEST_F(VisitorSparseMat1fTest, Reset)
 
 #ifdef __WITH_PCL // unit tests that require PCL support (e.g point cloud)
 
-TEST_F(VisitorSparseMat1fTest, EmptyCLoud)
-{
-    CloudXYZPtr cld(new CloudXYZ);
-    EXPECT_EQ(0, to_(cld).size());
-}
-
-TEST_F(VisitorSparseMat1fTest, FromCloud)
-{
-    Mat1f m(4, 3);
-    randn(m, 0.f, 100.f);
-    CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
-
-    Mat1f m2;
-    to_(cloud).convertTo(m2, CV_32FC1);
-
-    hconcat(m, Mat1f(m.rows, 1, 1), m);
-
-    EXPECT_MAT_EQ(m, m2);
-    EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
-}
-
-TEST_F(VisitorSparseMat1fTest, Reset_with_cloud)
-{
-    EXPECT_NO_THROW(to_.Reset());
-
-    Mat1f m(4, 3);
-    randn(m, 0.f, 100.f);
-
-    Mat1f m2;
-    to_(m).convertTo(m2, CV_32FC1);
-    EXPECT_NO_THROW(to_.Reset());
-
-    CloudXYZPtr cloud = Mat2PointCloud_<pcl::PointXYZ>(m);
-    to_(cloud);
-    EXPECT_NO_THROW(to_.Reset());
-
-    to_(m);
-    EXPECT_NO_THROW(to_.Reset());
-}
-
 // fixtures for VecVertices
 
 TEST_F(VisitorSparseMat1fTest, Empty_VecVertices)
@@ -270,6 +305,95 @@ TEST_F(VisitorSparseMat1fTest, Reset_with_VecVertices)
     EXPECT_NO_THROW(to_.Reset());
 }
 
+template <class TPoint>
+class VisitorSparseMat1fCloud_TypedTest : public VisitorSparseMat1fTest
+{
+protected:
+    virtual void SetUp() {
+
+        size_t field_count_sz = elm::ts::ExpectedPointAttr_<TPoint>::field_count;
+        field_count_ = static_cast<int>(field_count_sz);
+
+        size_t nb_floats_sz = elm::ts::ExpectedPointAttr_<TPoint>::nb_floats;
+        nb_floats_ = static_cast<int>(nb_floats_sz);
+    }
+
+    // members
+    int field_count_;
+    int nb_floats_;
+};
+
+TYPED_TEST_CASE(VisitorSparseMat1fCloud_TypedTest, PCLPointTypes);
+
+TYPED_TEST(VisitorSparseMat1fCloud_TypedTest, EmptyCLoud) {
+
+    typename pcl::PointCloud<TypeParam >::Ptr cld(new pcl::PointCloud<TypeParam >);
+    EXPECT_EQ(0, to_(cld).size());
+}
+
+TYPED_TEST(VisitorSparseMat1fCloud_TypedTest, FromCloud) {
+
+    Mat1f m(4, this->field_count_);
+    randn(m, 0.f, 100.f);
+    typename pcl::PointCloud<TypeParam >::Ptr cloud = Mat2PointCloud_<TypeParam >(m);
+
+    Mat1f m2;
+    to_(cloud).convertTo(m2, CV_32FC1);
+
+    Mat1f m_ref = PointCloud2Mat_<TypeParam> (cloud);
+
+    EXPECT_MAT_EQ(m_ref, m2);
+    EXPECT_NE(m.data, m2.data) << "Expecting deep copy. If intentionally optimized to be a shared copy, please update test.";
+}
+
+TYPED_TEST(VisitorSparseMat1fCloud_TypedTest, Reset_with_cloud) {
+
+    EXPECT_NO_THROW(this->to_.Reset());
+
+    Mat1f m(4, this->field_count_);
+    randn(m, 0.f, 100.f);
+
+    Mat1f m2;
+    this->to_(m).convertTo(m2, CV_32FC1);
+    EXPECT_NO_THROW(this->to_.Reset());
+
+    typename pcl::PointCloud<TypeParam >::Ptr cloud = Mat2PointCloud_<TypeParam >(m);
+    this->to_(cloud);
+    EXPECT_NO_THROW(this->to_.Reset());
+
+    this->to_(m);
+    EXPECT_NO_THROW(this->to_.Reset());
+}
+
 #endif // __WITH_PCL
+
+template <class T>
+class VisitorSparseMat1fPOD_TypedTest : public VisitorSparseMat1fTest
+{
+protected:
+};
+
+typedef ::testing::Types<float, int, uchar> PODTypes;
+TYPED_TEST_CASE(VisitorSparseMat1fPOD_TypedTest, PODTypes);
+
+TYPED_TEST(VisitorSparseMat1fPOD_TypedTest, FromPOD)
+{
+    int N=10;
+
+    while(N--) {
+
+        TypeParam v = randu<TypeParam>();
+
+        SparseMat1f m = this->to_(v);
+        EXPECT_EQ(2, m.dims());
+        EXPECT_EQ(1, m.size(0));
+        EXPECT_EQ(1, m.size(1));
+        EXPECT_EQ(m.size(0), m.size(1));
+
+        Mat1f m2;
+        m.convertTo(m2, CV_32FC1);
+        EXPECT_EQ(static_cast<float>(v), m2(0));
+    }
+}
 
 } // annonymous namespace for visitors' test fixtures
