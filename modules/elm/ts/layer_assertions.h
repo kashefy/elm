@@ -50,6 +50,12 @@ TYPED_TEST_P(Layer_TP_, Constructor)
     EXPECT_NO_THROW(TypeParam());
 }
 
+TYPED_TEST_P(Layer_TP_, Destructor)
+{
+    EXPECT_NO_THROW(this->layer_ptr_.reset());
+    EXPECT_FALSE(bool(this->layer_ptr_));
+}
+
 /**
  * @brief test around a layer's ability to validate its required io names
  * Basically tests that elm::ExceptionKeyError is thrown whenever a required I/O name is not provided.
@@ -107,6 +113,7 @@ TYPED_TEST_P(Layer_TP_, RequiredIONamesValidation)
 REGISTER_TYPED_TEST_CASE_P(Layer_TP_,
                            Clear,
                            Constructor,
+                           Destructor,
                            RequiredIONamesValidation
                            ); ///< register additional typed_test_p (i.e. unit test) routines here
 
