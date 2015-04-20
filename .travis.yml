@@ -1,30 +1,33 @@
 
 language: cpp
 compiler: gcc
+env:
+  global:
+    - BUILD_TYPE=Coverage
+    - DEPS_DIR=`readlink -f $TRAVIS_BUILD_DIR/..`
+    - OPENCV_BUILD_DIR=$DEPS_DIR/opencv/build
 before_install:
   - sudo apt-get update -qq
-  - cd ..
+  # Build OpenCV 2.4 from source
+  - cd $DEPS_DIR
   - git clone https://github.com/Itseez/opencv.git
   - cd opencv
-  - git fetch
-  - git branch -a
-  - git checkout 2.4
-  - mkdir build
-  - cd build
-  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF ..
+  - git fetch && git branch -a && git checkout 2.4
+  - mkdir $OPENCV_BUILD_DIR && cd $OPENCV_BUILD_DIR
+  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF $DEPS_DIR/opencv
   - make -j2 > /dev/null
-  - cd ../..
+  # Build Google Test Framework from source
+  - cd $DEPS_DIR
   - wget --quiet https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - unzip -qq gtest-1.7.0.zip
   - cd gtest-1.7.0
   - cmake . > /dev/null
   - make > /dev/null
-  - cd ..
+  - cd $DEPS_DIR
   # get HDF5, build after apt-get installation
   - wget --quiet http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
   # get MATIO, build after apt-get installation
   - wget --quiet http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz
-  - ls
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
   - sudo apt-get update -qq
   # install lcov to coveralls conversion + upload tool
@@ -36,34 +39,38 @@ install:
   # gfortran fort77 are for HDF5, MATIO support
   - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libboost-thread-dev libpcl-all lcov gfortran fort77 > /dev/null
   # HDF5
-  - cd ..
+  - cd $DEPS_DIR
   - tar -xzf hdf5-1.8.14.tar.gz
   - cd hdf5-1.8.14
-  - mkdir ../hdf5
-  - ./configure --prefix=`readlink -f ../hdf5` --enable-fortran --enable-fortran2003 --with-default-api-version=v18 > /dev/null
+  - mkdir $DEPS_DIR/hdf5
+  - ./configure --prefix=$DEPS_DIR/hdf5 --enable-fortran --enable-fortran2003 --with-default-api-version=v18 > /dev/null
   - make -j2 > /dev/null 2>&1
   - make install > /dev/null 2>&1
-  - cd ..
     # MATIO
+  - cd $DEPS_DIR
   - tar -xzf matio-1.5.2.tar.gz
   - cd matio-1.5.2
-  - mkdir ../matio
-  - ./configure --prefix=`readlink -f ../matio` --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=`readlink -f ../hdf5` > /dev/null
+  - mkdir $DEPS_DIR/matio
+  - ./configure --prefix=$DEPS_DIR/matio --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=$DEPS_DIR/hdf5 > /dev/null
   - make > /dev/null 2>&1
   - make install > /dev/null 2>&1
+    # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
 before_script:
-  - pwd
+    # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
   - pwd
   - mkdir build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=Coverage -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=../opencv/build -DGTEST_ROOT=../gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=`readlink -f ../../matio` -DHDF5_DIR=`readlink -f ../../hdf5` ..
+  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 ..
 script:
   - make
+  # unit tests
   - cd ./bin
   - ./run_elm_unittests
+  # Back to root build directory
   - cd ..
 after_success:
+  # test coverage
   - make elm_unittests_coverage
   - coveralls-lcov coverage.info
