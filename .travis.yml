@@ -4,7 +4,7 @@ compiler: gcc
 env:
   global:
     - BUILD_TYPE=Coverage
-    - DEPS_DIR=`readlink -f $TRAVIS_BUILD_DIR/..`
+    - DEPS_DIR="`readlink -f $TRAVIS_BUILD_DIR/..`"
     - OPENCV_BUILD_DIR=$DEPS_DIR/opencv/build
 before_install:
   - sudo apt-get update -qq
