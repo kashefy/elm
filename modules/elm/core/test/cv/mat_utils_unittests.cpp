@@ -936,14 +936,13 @@ TYPED_TEST(MatPODTypesTest, FindFirstOf_Found) {
     MatTP v_mat(1, static_cast<int>(v.size()));
     for(size_t i=0; i<v.size(); i++) v_mat(i) = v[i];
 
-    int index;
     for(size_t i=0; i<v.size(); i++) {
 
         EXPECT_TRUE( find_first_of(v_mat.reshape(1, 1), v[i]) );
         EXPECT_TRUE( find_first_of(v_mat.reshape(1, 2), v[i]) );
         EXPECT_TRUE( find_first_of(v_mat.t(), v[i]) );
 
-        index = -1;
+        int index = -1;
         EXPECT_TRUE( find_first_of(v_mat.reshape(1, 1), v[i], index) );
         EXPECT_EQ(static_cast<int>(i), index);
 

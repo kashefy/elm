@@ -77,11 +77,11 @@ void Graph::AdjacencyMat(SparseMat1f &adj) const
 
     if((adj.size() == 0) || (nb_vertices < adj.size()[0]) || (nb_vertices < adj.size()[1])) {
 
-        int dims = 2;
-        const int _sizes[2] = {nb_vertices, nb_vertices};
+        const int DIMS = 2;
+        const int _sizes[DIMS] = {nb_vertices, nb_vertices};
         if(nb_vertices > 0) {
 
-            adj = SparseMat1f(dims, _sizes);
+            adj = SparseMat1f(DIMS, _sizes);
         }
     }
 

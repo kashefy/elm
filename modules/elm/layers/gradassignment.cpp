@@ -139,7 +139,7 @@ void GradAssignment::Activate(const Signal &signal)
                           "Size of 4th dim. != no. of vertices in 2nd graph.");
 
     // got all inputs, now go go go
-    bool is_m_converged = false;
+    bool is_converged = false;
 
     Mat1f m_ai_hat = Mat1f(A_+1, I_+1, 1.f+EPSILON); // add slack variables to be more robust to outliers
 
@@ -147,36 +147,23 @@ void GradAssignment::Activate(const Signal &signal)
 
     float beta = beta_0_;
 
-    int nb_iterations_0;
-
-    //ELM_COUT_VAR(cv::format(c_ai, Formatter::FMT_NUMPY));
     while(beta < beta_max_) { // A
 
-        nb_iterations_0 = 0;
-        while(!is_m_converged && nb_iterations_0 < max_iter_per_beta_) { // B
+        int n = 0;
+        while(!is_converged && n < max_iter_per_beta_) { // B
 
             Mat1f m_ai_hat_0 = m_ai_hat.clone();
 
-            //ELM_COUT_VAR(m_ai_hat_0);
-//            Mat1f q_ai = q_ai(A_, I_); ///< partial derivative of E_wg with respect to M_ai
-
-//            multiply(c_ai, m_, q_ai);
             Mat1f q_ai = GraphCompatibility::Integrate(c_aibj, m_);
 
-            //imshow("m", ConvertTo8U(m_));
-            //cv::waitKey();
-
-            //ELM_COUT_VAR(q_ai);
             // softassign
             exp(beta*q_ai, m_);
-            //ELM_COUT_VAR(m_);
 
-            is_m_converged = SinkhornBalancing::RowColNormalization(m_ai_hat, max_iter_sinkhorn_, 0.05f); // C
+            SinkhornBalancing::RowColNormalization(m_ai_hat, max_iter_sinkhorn_, 0.05f); // C
 
-            //ELM_COUT_VAR(m_ai_hat);
-            is_m_converged = sum(abs(m_-m_ai_hat_0(Rect2i(0, 0, A_, I_))))[0] < 0.5f;
+            is_converged = sum(abs(m_-m_ai_hat_0(Rect2i(0, 0, A_, I_))))[0] < 0.5f;
 
-            nb_iterations_0++;
+            n++;
         } // end B
 
         beta *= beta_rate_;

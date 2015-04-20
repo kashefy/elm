@@ -21,7 +21,7 @@ Mat1f elm::ElementsAt(const VecMat1f &v, int r, int c)
     int k=0;
     for(VecMat1f::const_iterator itr=v.begin();
         itr != v.end();
-        itr++, k++) {
+        ++itr, k++) {
 
         if(r < 0 || r >= (*itr).rows || c< 0 || c >= (*itr).cols) {
 
