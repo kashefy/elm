@@ -40,6 +40,11 @@ protected:
 
 TYPED_TEST_CASE_P(Layer_TP_);
 
+TYPED_TEST_P(Layer_TP_, Clear)
+{
+    EXPECT_NO_THROW(this->layer_ptr_->Clear());
+}
+
 TYPED_TEST_P(Layer_TP_, Constructor)
 {
     EXPECT_NO_THROW(TypeParam());
@@ -100,6 +105,7 @@ TYPED_TEST_P(Layer_TP_, RequiredIONamesValidation)
 
 // Register test names
 REGISTER_TYPED_TEST_CASE_P(Layer_TP_,
+                           Clear,
                            Constructor,
                            RequiredIONamesValidation
                            ); ///< register additional typed_test_p (i.e. unit test) routines here
