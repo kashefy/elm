@@ -17,7 +17,9 @@ class SpikingHistoryTest : public ::testing::Test
 {
 protected:
     SpikingHistoryTest()
-        : to_(5, 3)
+        : to_(5, 3),
+          len_(-1),
+          dims_(0)
     {
     }
 
@@ -165,9 +167,10 @@ class SpikingHistoryColRangeTest : public SpikingHistoryTest
 protected:
     SpikingHistoryColRangeTest()
         : SpikingHistoryTest(),
-          to_cr_(5, 3)
-    {
-    }
+          to_cr_(5, 3),
+          start_(1),
+          end_(-1)
+    {}
 
     virtual void SetUp()
     {

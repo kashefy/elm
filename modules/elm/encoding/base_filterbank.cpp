@@ -30,7 +30,7 @@ VecMat1f base_FilterBank::Convolve(const Mat1f &stimulus)
 
     for(VecMat1f::const_iterator itr=kernels_.begin();
      itr != kernels_.end();
-     itr++) {
+     ++itr) {
 
          Mat1f r;
          filter2D(stimulus, r, -1, *itr, Point(-1, -1), 0, BORDER_REPLICATE);

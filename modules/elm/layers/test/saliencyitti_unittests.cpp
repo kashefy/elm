@@ -30,7 +30,10 @@ ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(SaliencyItti);
 class SynthL : public base_Synth
 {
 public:
-    SynthL() {}
+    SynthL()
+        : rows_(-1),
+          cols_(-1)
+    {}
 
     /**
      * @brief Set parameters

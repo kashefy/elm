@@ -75,11 +75,11 @@ void elm::TriangulatedCloudToAdjacency(const CloudXYZPtr &cld, const Triangles &
 
     if((dst.size() == 0) || (nb_vertices < dst.size()[0]) || (nb_vertices < dst.size()[1])) {
 
-        int dims = 2;
-        const int _sizes[2] = {nb_vertices, nb_vertices};
+        const int DIMS = 2;
+        const int _sizes[DIMS] = {nb_vertices, nb_vertices};
         if(nb_vertices > 0) {
 
-            dst = SparseMat1f(dims, _sizes);
+            dst = SparseMat1f(DIMS, _sizes);
         }
     }
 
