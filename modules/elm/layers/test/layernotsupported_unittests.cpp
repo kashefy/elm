@@ -51,6 +51,7 @@ TEST(LayerNotSupportedTest, Message)
     }
 }
 
+
 class CheatLayerNotSupported : public base_LayerNotSupported
 {
 public:
@@ -80,6 +81,26 @@ TEST(LayerNotSupportedTest, Methods)
     EXPECT_THROW( to.Reconfigure(cfg),   ExceptionNotImpl );
     EXPECT_THROW( to.Reset(cfg),         ExceptionNotImpl );
     EXPECT_THROW( to.Response(sig),      ExceptionNotImpl );
+}
+
+/**
+ * @brief use macro for defining a layer as not supported
+ */
+class DummyLayerNotSupportedNoMsg : public ELM_LAYER_NOT_SUPPORTED(DummyLayerNotSupportedNoMsg, "");
+
+/** @brief test routines around "dummy not supported layer".
+ * Bbascially testing that Exceptions are thrown correctly
+ */
+TEST(LayerNotSupportedNoMsgTest, ConstructorsThrow)
+{
+    EXPECT_THROW(DummyLayerNotSupported to,      ExceptionNotImpl);
+
+    LayerConfig cfg;
+    EXPECT_THROW(DummyLayerNotSupported to(cfg), ExceptionNotImpl);
+
+    std::shared_ptr<base_LayerNotSupported> to_ptr;
+    EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupported()),    ExceptionNotImpl);
+    EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupported(cfg)), ExceptionNotImpl);
 }
 
 } // anonymous namespace for test routines

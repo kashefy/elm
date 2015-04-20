@@ -37,6 +37,47 @@ TEST_F(VisitorMat1fTest, EmptyMat)
     EXPECT_TRUE(to_(Mat1f(0, 0)).empty());
     EXPECT_TRUE(to_(Mat1f(1, 0)).empty());
     EXPECT_TRUE(to_(Mat1f(0, 1)).empty());
+
+    EXPECT_TRUE(to_(Mat()).empty());
+    EXPECT_TRUE(to_(Mat(0, 0, CV_32FC1)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_32FC1)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_32FC1)).empty());
+    EXPECT_TRUE(to_(Mat(0, 0, CV_32FC2)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_32FC2)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_32FC2)).empty());
+    EXPECT_TRUE(to_(Mat(0, 0, CV_32FC3)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_32FC3)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_32FC3)).empty());
+
+    EXPECT_TRUE(to_(Mat(0, 0, CV_64FC1)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_64FC1)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_64FC1)).empty());
+    EXPECT_TRUE(to_(Mat(0, 0, CV_64FC2)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_64FC2)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_64FC2)).empty());
+    EXPECT_TRUE(to_(Mat(0, 0, CV_64FC3)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_64FC3)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_64FC3)).empty());
+
+    EXPECT_TRUE(to_(Mat(0, 0, CV_8UC1)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_8UC1)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_8UC1)).empty());
+    EXPECT_TRUE(to_(Mat(0, 0, CV_8UC2)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_8UC2)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_8UC2)).empty());
+    EXPECT_TRUE(to_(Mat(0, 0, CV_8UC3)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_8UC3)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_8UC3)).empty());
+
+    EXPECT_TRUE(to_(Mat(0, 0, CV_32SC1)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_32SC1)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_32SC1)).empty());
+    EXPECT_TRUE(to_(Mat(0, 0, CV_32SC2)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_32SC2)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_32SC2)).empty());
+    EXPECT_TRUE(to_(Mat(0, 0, CV_32SC3)).empty());
+    EXPECT_TRUE(to_(Mat(1, 0, CV_32SC3)).empty());
+    EXPECT_TRUE(to_(Mat(0, 1, CV_32SC3)).empty());
 }
 
 TEST_F(VisitorMat1fTest, EmptyMatSize)
@@ -45,6 +86,47 @@ TEST_F(VisitorMat1fTest, EmptyMatSize)
     EXPECT_MAT_DIMS_EQ(to_(Mat1f(0, 0)), Size2i(0, 0));
     EXPECT_MAT_DIMS_EQ(to_(Mat1f(1, 0)), Size2i(0, 1));
     EXPECT_MAT_DIMS_EQ(to_(Mat1f(0, 1)), Size2i(1, 0));
+
+    EXPECT_MAT_DIMS_EQ(to_(Mat()), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_32FC1)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_32FC1)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_32FC1)), Size2i(1, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_32FC2)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_32FC2)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_32FC2)), Size2i(2, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_32FC3)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_32FC3)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_32FC3)), Size2i(3, 0));
+
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_64FC1)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_64FC1)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_64FC1)), Size2i(1, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_64FC2)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_64FC2)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_64FC2)), Size2i(2, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_64FC3)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_64FC3)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_64FC3)), Size2i(3, 0));
+
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_8UC1)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_8UC1)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_8UC1)), Size2i(1, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_8UC2)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_8UC2)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_8UC2)), Size2i(2, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_8UC3)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_8UC3)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_8UC3)), Size2i(3, 0));
+
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_32SC1)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_32SC1)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_32SC1)), Size2i(1, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_32SC2)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_32SC2)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_32SC2)), Size2i(2, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 0, CV_32SC3)), Size2i(0, 0));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(1, 0, CV_32SC3)), Size2i(0, 1));
+    EXPECT_MAT_DIMS_EQ(to_(Mat(0, 1, CV_32SC3)), Size2i(3, 0));
 }
 
 TEST_F(VisitorMat1fTest, FromMat1f)
@@ -63,6 +145,50 @@ TEST_F(VisitorMat1fTest, FromMat1f)
 
         EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
         EXPECT_EQ(m.data, m2.data) << "Mats are not pointing to the same data in memory. Expecting shared copy.";
+    }
+}
+
+TEST_F(VisitorMat1fTest, FromMat)
+{
+    int N=5;
+
+    while(N--) {
+
+        const int MAT_ROWS = abs(randu<int>()) % 10 + 1;
+        const int MAT_COLS = abs(randu<int>()) % 100 + 1;
+
+        Mat1f m(MAT_ROWS, MAT_COLS);
+        randn(m, 0.f, 100.f);
+
+        {
+            Mat m1 = m;
+            Mat1f m2 = to_(m1);
+
+            EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
+            EXPECT_EQ(m.data, m2.data) << "Mats are not pointing to the same data in memory. Expecting shared copy.";
+        }
+
+        {
+            Mat m1;
+            m.convertTo(m1, CV_8UC1);
+            Mat1f m2 = to_(m1);
+
+            m1.convertTo(m, CV_32FC1);
+
+            EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
+            EXPECT_NE(m.data, m2.data) << "Mats are not pointing to the same data in memory. Expecting shared copy.";
+        }
+
+        {
+            Mat m1;
+            m.convertTo(m1, CV_32SC1);
+            Mat1f m2 = to_(m1);
+
+            m1.convertTo(m, CV_32FC1);
+
+            EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
+            EXPECT_NE(m.data, m2.data) << "Mats are not pointing to the same data in memory. Expecting shared copy.";
+        }
     }
 }
 
