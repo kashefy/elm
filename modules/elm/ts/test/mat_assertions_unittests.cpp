@@ -457,6 +457,24 @@ TEST(SparseMatAssertionsTest, Mat1fNotEqDims) {
     EXPECT_FALSE( Equal(b, a) );
 }
 
+TEST(SparseMatAssertionsTest, DimsMismatch) {
+
+    const int _sizes[1] = {2};
+    SparseMat a(1, _sizes, CV_32FC1);
+    Mat b = Mat::ones(2, 3, CV_32FC1);
+
+    EXPECT_FALSE( EqualDims(a, b) );
+    EXPECT_FALSE( EqualDims(b, a) );
+    EXPECT_FALSE( Equal(a, b) );
+    EXPECT_FALSE( Equal(b, a) );
+
+    SparseMat c(Mat::zeros(3, 2, CV_32FC1));
+    EXPECT_FALSE( EqualDims(a, c) );
+    EXPECT_FALSE( EqualDims(c, a) );
+    EXPECT_FALSE( Equal(a, c) );
+    EXPECT_FALSE( Equal(c, a) );
+}
+
 /**
  * @brief repeat Mat1fNotEqDims test with cv::Size overload
  */
