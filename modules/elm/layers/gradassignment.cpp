@@ -9,6 +9,7 @@
 
 #include "elm/core/debug_utils.h"
 
+#include "elm/core/exception.h"
 #include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"

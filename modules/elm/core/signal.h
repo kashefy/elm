@@ -8,24 +8,43 @@
 #ifndef _ELM_CORE_SIGNAL_H_
 #define _ELM_CORE_SIGNAL_H_
 
-#include "elm/core/typedefs_sfwd.h" // VecMat
+#include <memory>
 
-#include "elm/core/featuredata.h"
-#include "elm/core/signal_.h"
+#include "elm/core/typedefs_sfwd.h"
+#include "elm/core/pcl/typedefs_fwd.h"
 
 namespace elm {
 
-typedef Signal_<FeatureData >::VecFeat_ VecFeatData; ///< convinience typedef for vector of FeatureData objects
+class Signal_Impl;
+class FeatureData;
 
 /**
  * @brief The Signal class, a class for holding single and multiple samples of features
  */
-class Signal : public Signal_<FeatureData >
+class Signal
 {
 public:
-    ~Signal();
+    virtual ~Signal();
 
     Signal();
+
+    void Clear();
+
+    void Append(const std::string &name, const FeatureData &feat);
+
+    void Append(const std::string &name, const cv::Mat1f &feat);
+
+    void Append(const std::string &name, const VecMat1f &feat);
+
+    void Append(const std::string &name, const SparseMat1f &feat);
+
+    void Append(const std::string &name, const CloudXYZPtr &feat);
+
+    bool Exists(const std::string &name) const;
+
+    VecS FeatureNames() const;
+
+    FeatureData MostRecent(const std::string& name) const;
 
     /** @brief Get features as Mat under a given name
      * @param name
@@ -41,8 +60,7 @@ public:
     cv::Mat1f MostRecentMat1f(const std::string& name) const;
 
 protected:
-    typedef Signal_<FeatureData >::MapSVecFeat_ MapSVecFD; ///< convinience typedef for a map with string keys and VecFeatData values
-
+    std::shared_ptr<Signal_Impl> impl_;
 };
 
 } // namespace elm

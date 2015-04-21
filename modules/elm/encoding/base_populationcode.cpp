@@ -7,6 +7,7 @@
 //M*/
 #include "elm/encoding/base_populationcode.h"
 
+#include "elm/core/exception.h"
 #include "elm/core/inputname.h"
 #include "elm/core/layerinputnames.h"
 #include "elm/core/layeroutputnames.h"

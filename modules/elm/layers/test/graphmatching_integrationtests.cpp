@@ -175,7 +175,7 @@ TEST_F(GraphMatchingTest, GraphMatching)
 
         if(sig_.Exists(NAME_ADJACENCY) && !is_g_ij_added) {
 
-            Mat1f adj = sig_.MostRecent(NAME_ADJACENCY).get<Mat1f>();
+            Mat1f adj = sig_.MostRecentMat1f(NAME_ADJACENCY);
 
 
             double min_val, max_val;
@@ -210,7 +210,7 @@ TEST_F(GraphMatchingTest, DISABLED_GraphMatching_with_noise)
 
         if(sig_.Exists(NAME_ADJACENCY) && !is_g_ij_added) {
 
-            Mat1f adj = sig_.MostRecent(NAME_ADJACENCY).get<Mat1f>().clone();
+            Mat1f adj = sig_.MostRecentMat1f(NAME_ADJACENCY).clone();
 
             double min_val, max_val;
             minMaxIdx(adj, &min_val, &max_val);

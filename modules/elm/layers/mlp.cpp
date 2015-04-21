@@ -9,6 +9,7 @@
 
 #include "elm/core/boost/translators/transl_str_cvtermcriteria.h"
 #include "elm/core/boost/translators/transl_str_veci.h"
+#include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layerattr_.h"

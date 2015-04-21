@@ -19,6 +19,7 @@
 
 #include "elm/core/defs.h"
 #include "elm/core/exception.h"
+#include "elm/core/featuredata.h"
 #include "elm/core/graph/adjacency.h"
 #include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"

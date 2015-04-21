@@ -7,6 +7,7 @@
 //M*/
 #include "elm/core/signal.h"
 
+#include "elm/core/featuredata.h"
 #include "elm/core/exception.h"
 #include "elm/ts/signal_tp_.h"
 #include "elm/ts/ts.h"
@@ -69,7 +70,7 @@ TEST_F(SignalTest, MostRecentMat)
     for(int i=0; i<3; i++) {
 
         EXPECT_SIZE(2+i, to_["foo"]);
-        to_.Append("foo", Mat1f::ones(1, 1)+i);
+        to_.Append("foo", Mat1f(1, 1, i+1));
         EXPECT_SIZE(2+i+1, to_["foo"]);
         EXPECT_MAT_EQ(to_.MostRecentMat1f("foo"), Mat1f::ones(1, 1)+i);
     }

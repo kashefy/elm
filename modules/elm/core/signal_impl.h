@@ -18,12 +18,12 @@ namespace elm {
 typedef Signal_<FeatureData >::VecFeat_ VecFeatData; ///< convinience typedef for vector of FeatureData objects
 
 /**
- * @brief The Signal class, a class for holding single and multiple samples of features
+ * @brief The Signal Implementation class, a class for holding single and multiple samples of features
  */
 class Signal_Impl : public Signal_<FeatureData >
 {
 public:
-    ~Signal_Impl();
+    virtual ~Signal_Impl();
 
     Signal_Impl();
 

@@ -11,6 +11,7 @@
 
 #include "elm/core/debug_utils.h"
 
+#include "elm/core/cv/mat_utils.h"
 #include "elm/core/cv/mat_utils_inl.h"
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
