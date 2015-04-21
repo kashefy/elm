@@ -467,6 +467,12 @@ TEST(SparseMatAssertionsTest, DimsMismatch) {
     EXPECT_FALSE( EqualDims(b, a) );
     EXPECT_FALSE( Equal(a, b) );
     EXPECT_FALSE( Equal(b, a) );
+
+    SparseMat c(Mat::zeros(3, 2, CV_32FC1));
+    EXPECT_FALSE( EqualDims(a, c) );
+    EXPECT_FALSE( EqualDims(c, a) );
+    EXPECT_FALSE( Equal(a, c) );
+    EXPECT_FALSE( Equal(c, a) );
 }
 
 /**
