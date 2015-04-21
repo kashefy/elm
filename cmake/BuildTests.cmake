@@ -39,7 +39,7 @@ FUNCTION(build_tests test_project filter)
         endif(BUILD_python)
 
     else(nbTestFiles GREATER 0)
-        message( WARNING  "Unable to locate any test files. No tests to add to this project")
+        message( WARNING  "Unable to locate any test files. No tests to add to target ${test_project}")
     endif(nbTestFiles GREATER 0)
     
 ENDFUNCTION( build_tests )
