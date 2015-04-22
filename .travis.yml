@@ -15,6 +15,7 @@ before_install:
   
   - which python
   - python --version
+  - cmake --version
   
   # Build Google Test Framework from source
   - cd $DEPS_DIR
