@@ -1,14 +1,18 @@
-
+# Travis CI configuration file
 language: cpp
 compiler: gcc
+
 bundler_args: --retry 3
+
 env:
   global:
     - BUILD_TYPE=Coverage
     - DEPS_DIR="`readlink -f $TRAVIS_BUILD_DIR/..`"
     - OPENCV_BUILD_DIR=$DEPS_DIR/opencv/build
+    
 before_install:
   - travis_retry sudo apt-get update -qq
+  
   # Build OpenCV 2.4 from source
   - cd $DEPS_DIR
   - git clone https://github.com/Itseez/opencv.git
@@ -17,6 +21,7 @@ before_install:
   - mkdir $OPENCV_BUILD_DIR && cd $OPENCV_BUILD_DIR
   - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF $DEPS_DIR/opencv
   - make -j2 > /dev/null
+  
   # Build Google Test Framework from source
   - cd $DEPS_DIR
   - wget --quiet https://googletest.googlecode.com/files/gtest-1.7.0.zip
@@ -25,29 +30,46 @@ before_install:
   - cmake . > /dev/null
   - make > /dev/null
   - cd $DEPS_DIR
+  
   # get HDF5, build after apt-get installation
   - wget --quiet http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
+  
   # get MATIO, build after apt-get installation
   - wget --quiet http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz
+  
+  # for PCL
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
-  - sudo apt-get update -qq
+  - sudo travis_retry apt-get update -qq
+  
   # install lcov to coveralls conversion + upload tool
   - gem install coveralls-lcov
+  
   # Setup anaconda for python bindings
-  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-  - chmod +x miniconda.sh
-  - ./miniconda.sh -b
-  - export PATH=/home/travis/miniconda/bin:$PATH
-  - conda update --yes conda
+  # CREDIT: https://github.com/SmokinCaterpillar/pypet/blob/master/.travis.yml
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.* ]]; then
+      travis_retry wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      travis_retry wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  # Useful for debugging any issues with conda
+  - conda info -a
+  
   # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
   - sudo rm -rf /dev/shm
-  - sudo ln -s /run/shm /dev/shm 
-    # back to ELM source directory
+  - sudo ln -s /run/shm /dev/shm
+  
+  # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
 install:
   # lcov: for test coverage reporting, building with coverage info
   # gfortran fort77 are for HDF5, MATIO support
   - travis_retry sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-graph-dev libboost-serialization-dev libboost-thread-dev libboost-python-dev libpcl-all lcov gfortran fort77 > /dev/null
+  
   # HDF5
   - cd $DEPS_DIR
   - tar -xzf hdf5-1.8.14.tar.gz
@@ -56,6 +78,7 @@ install:
   - ./configure --prefix=$DEPS_DIR/hdf5 --enable-fortran --enable-fortran2003 --with-default-api-version=v18 > /dev/null
   - make -j2 > /dev/null 2>&1
   - make install > /dev/null 2>&1
+  
   # MATIO
   - cd $DEPS_DIR
   - tar -xzf matio-1.5.2.tar.gz
@@ -64,7 +87,11 @@ install:
   - ./configure --prefix=$DEPS_DIR/matio --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=$DEPS_DIR/hdf5 > /dev/null
   - make > /dev/null 2>&1
   - make install > /dev/null 2>&1
-    # back to ELM source directory
+  
+  # Python packages
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib nose dateutil
+  
+  # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
 before_script:
     # back to ELM source directory
