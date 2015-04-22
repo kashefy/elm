@@ -2,11 +2,6 @@
 language: cpp
 compiler: gcc
 
-bundler_args: --retry 3
-
-python:
-  - 2.7
-
 env:
   global:
     - BUILD_TYPE=Coverage
@@ -15,6 +10,9 @@ env:
     
 before_install:
   - travis_retry sudo apt-get update -qq
+  
+  - which python
+  - python
   
   # Build Google Test Framework from source
   - cd $DEPS_DIR
