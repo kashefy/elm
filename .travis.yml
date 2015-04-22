@@ -79,7 +79,7 @@ install:
   
   # install lcov to coveralls conversion + upload tool
   - gem install coveralls-lcov
-  - if [ "$BUILD_TYPE" == "Coverage" ]; then travis_retry pip install coveralls; fi
+  - if [ "$BUILD_TYPE" == "Coverage" ]; then travis_retry pip install nose coveralls; fi
   
   # HDF5
   - cd $DEPS_DIR
