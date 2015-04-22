@@ -16,15 +16,6 @@ env:
 before_install:
   - travis_retry sudo apt-get update -qq
   
-  # Build OpenCV 2.4 from source
-  - cd $DEPS_DIR
-  - git clone https://github.com/Itseez/opencv.git
-  - cd opencv
-  - git fetch && git branch -a && git checkout 2.4
-  - mkdir $OPENCV_BUILD_DIR && cd $OPENCV_BUILD_DIR
-  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF $DEPS_DIR/opencv
-  - make -j2 > /dev/null
-  
   # Build Google Test Framework from source
   - cd $DEPS_DIR
   - wget --quiet https://googletest.googlecode.com/files/gtest-1.7.0.zip
@@ -71,6 +62,15 @@ before_install:
   # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
   - sudo rm -rf /dev/shm
   - sudo ln -s /run/shm /dev/shm
+  
+    # Build OpenCV 2.4 from source
+  - cd $DEPS_DIR
+  - git clone https://github.com/Itseez/opencv.git
+  - cd opencv
+  - git fetch && git branch -a && git checkout 2.4
+  - mkdir $OPENCV_BUILD_DIR && cd $OPENCV_BUILD_DIR
+  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF $DEPS_DIR/opencv
+  - make -j2 > /dev/null
   
   # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
