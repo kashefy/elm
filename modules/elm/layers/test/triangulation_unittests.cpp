@@ -21,6 +21,7 @@
 
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
+#include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/vertices.h"
 #include "elm/core/signal.h"
 #include "elm/layers/layerfactory.h"
@@ -192,7 +193,7 @@ TEST_F(TriangulationTest, ActivateAndResponse)
 
     EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_VERTICES)) << "Output feature is missing.";
 
-    Mat1f vertices_mat = sig_.MostRecent(NAME_OUTPUT_VERTICES);
+    Mat1f vertices_mat = sig_.MostRecentMat1f(NAME_OUTPUT_VERTICES);
 
     int nb_vertices = static_cast<int>(vertices_vec.size());
     int sz_vertex = static_cast<int>(vertices_vec[0].vertices.size());
@@ -241,7 +242,7 @@ TEST_F(TriangulationAdjacencyTest, Adjacency)
 
     EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_OPT_ADJ));
 
-    Mat1f adj = sig_.MostRecent(NAME_OUTPUT_OPT_ADJ).get<Mat1f>();
+    Mat1f adj = sig_.MostRecentMat1f(NAME_OUTPUT_OPT_ADJ);
 
     EXPECT_MAT_DIMS_EQ(adj, Size2i(cloud_in_->size(), cloud_in_->size())) << "Expecting no. of vertices to match no. of points in the cloud.";
 

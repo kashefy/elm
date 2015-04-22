@@ -11,6 +11,7 @@
 
 #include "gtest/gtest.h"
 
+#include "elm/core/featuredata.h"
 #include "elm/core/layerionames.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layer_assertions.h"

@@ -7,6 +7,7 @@
 //M*/
 #include "elm/layers/graphcompatibility.h"
 
+#include "elm/core/featuredata.h"
 #include "elm/core/signal.h"
 #include "elm/core/layerconfig.h"
 #include "elm/layers/layerfactory.h"
