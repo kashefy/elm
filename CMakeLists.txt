@@ -9,10 +9,13 @@ cmake_minimum_required(VERSION 2.8.7)
 # ----------------------------------------------------------------------------
 set(ROOT_PROJECT elm)
 project(${ROOT_PROJECT})
-set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules) # enforce includes to start with project's parent dir (e.g. #include <elm/core/core.h>)
+
+# enforce includes to start with project's parent dir (e.g. #include <elm/core/core.h>)
+set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules
+                                 ${PROJECT_SOURCE_DIR}/bindings)
 set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
-set(${ROOT_PROJECT}_BINDINGS "")
+set(${ROOT_PROJECT}_BIND    "")
 
 # ----------------------------------------------------------------------------
 # Set default behaviour
@@ -143,7 +146,7 @@ include(cmake/DetectOpenCV.cmake)
 # If a feature does appear in STL, check it out and migrate over.
 # ----------------------------------------------------------------------------
 set(WITH_PYTHON ${BUILD_python})
-status("py=${WITH_PYTHON},${BUILD_python}")
+
 include(cmake/DetectBoost.cmake)
 
 # Required dependencies covered\
@@ -201,11 +204,22 @@ add_subdirectory(samples)
 # ----------------------------------------------------------------------------
 if(BUILD_python)
     include(cmake/DetectPython.cmake)
-    list(APPEND ${ROOT_PROJECT}_BINDINGS python)
     if(NOT CMAKE_POSITION_INDEPENDENT_CODE AND NOT BUILD_SHARED_LIBS)
         message(SEND_ERROR "Python bindings require PIC for static linking. Enable compiler flag \"-fPIC\"")
     endif(NOT CMAKE_POSITION_INDEPENDENT_CODE AND NOT BUILD_SHARED_LIBS)
+
+    # collect libraries for linking into one list variable
+    if(PYTHON_DEBUG_LIBRARIES AND NOT PYTHON_LIBRARIES MATCHES "optimized.*debug" )
+        set(BIND_PYTHON_LIBS debug ${PYTHON_DEBUG_LIBRARIES} optimized ${PYTHON_LIBRARIES} ${BOOST_PYTHON_LIBS})
+    else()
+        set(BIND_PYTHON_LIBS ${PYTHON_DEBUG_LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_PYTHON_LIBS})
+    endif()
+
+    # collect include directories into one list variable
+    set(BIND_PYTHON_INCLUDE_DIRS ${PYTHON_INCLUDE_PATH} ${PYTHON_NUMPY_INCLUDE_DIR})
 endif(BUILD_python)
+
+add_subdirectory(bindings/${ROOT_PROJECT})
 
 # ----------------------------------------------------------------------------
 # Test Projects
@@ -297,7 +311,7 @@ status("Targets:")
 set(MODULE_NAMES ${${ROOT_PROJECT}_MODULES})
 strip_lib_prefix(MODULE_NAMES ${MODULE_NAMES})
 status("    modules:  "      ${MODULE_NAMES})
-status("    bindings: "      ${${ROOT_PROJECT}_BINDINGS})
+status("    bindings: "      ${${ROOT_PROJECT}_BIND})
 status("    unit-tests:  "   BUILD_TESTS THEN YES ELSE NO)
 
 status("")
