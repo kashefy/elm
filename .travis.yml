@@ -116,10 +116,12 @@ script:
   - export PYTHONPATH=$ELM_BUILD_DIR/lib:$PYTHONPATH
   # Back to root build directory
   - cd $TRAVIS_BUILD_DIR/bindings/elm/python/test
-  - nosetests -c ./nose.cfg
+  - nosetests --with-cov --cov elm --cov-config .coveragerc --logging-level=INFO
 after_success:
   # c++ test coverage
   - cd $ELM_BUILD_DIR
   - if [ "$BUILD_TYPE" == "Coverage" ]; then make elm_unittests_coverage; fi
   - if [ "$BUILD_TYPE" == "Coverage" ]; then coveralls-lcov coverage.info; fi
   # python test coverage TODO
+  - cd $TRAVIS_BUILD_DIR/bindings/elm/python/test
+  - coveralls --config_file .coveragerc
