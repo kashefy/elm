@@ -7,6 +7,8 @@ env:
     - BUILD_TYPE=Coverage
     - DEPS_DIR="`readlink -f $TRAVIS_BUILD_DIR/..`"
     - OPENCV_BUILD_DIR=$DEPS_DIR/opencv/build
+    # since we've set language to cpp we have to define python vars oursevles
+    - TRAVIS_PYTHON_VERSION="2.7"
     
 before_install:
   - travis_retry sudo apt-get update -qq
