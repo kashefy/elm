@@ -108,10 +108,9 @@ before_script:
   - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-fPIC" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 -DBUILD_python=ON $TRAVIS_BUILD_DIR
 
 script:
-  - make -C $ELM_BUILD_DIR
+  - cd $ELM_BUILD_DIR && make
   # run unit tests
-  - cd $ELM_BUILD_DIR/bin
-  - ./run_elm_unittests
+  - cd $ELM_BUILD_DIR/bin && ./run_elm_unittests
   # run nose tests
   - export PYTHONPATH=$ELM_BUILD_DIR/lib:$PYTHONPATH
   # Back to root build directory
