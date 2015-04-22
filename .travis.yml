@@ -60,10 +60,6 @@ before_install:
   # list installed python packages
   - pip freeze
   
-  # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
-  - sudo rm -rf /dev/shm
-  - sudo ln -s /run/shm /dev/shm
-  
     # Build OpenCV 2.4 from source
   - cd $DEPS_DIR
   - git clone https://github.com/Itseez/opencv.git
