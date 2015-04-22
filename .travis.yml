@@ -115,7 +115,7 @@ script:
   # run nose tests
   - export PYTHONPATH=$ELM_BUILD_DIR/lib:$PYTHONPATH
   # Back to root build directory
-  - cd $TRAVIS_BUILD_DIR/bindings/python/test
+  - cd $TRAVIS_BUILD_DIR/bindings/elm/python/test
   - nosetests -c ./nose.cfg
 after_success:
   # c++ test coverage
