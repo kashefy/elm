@@ -7,6 +7,8 @@ env:
     - BUILD_TYPE=Coverage
     - DEPS_DIR="`readlink -f $TRAVIS_BUILD_DIR/..`"
     - OPENCV_BUILD_DIR=$DEPS_DIR/opencv/build
+    # TRAVIS_BUILD_DIR: The absolute path to the directory where the repository being built has been copied on the worker.
+    - ELM_BUILD_DIR=$TRAVIS_BUILD_DIR/build
     # since we've set language to cpp we have to define python vars oursevles
     - TRAVIS_PYTHON_VERSION="2.7"
     
@@ -35,9 +37,6 @@ before_install:
   # for PCL
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
   - travis_retry sudo apt-get update -qq
-  
-  # install lcov to coveralls conversion + upload tool
-  - gem install coveralls-lcov
   
   # Setup anaconda for python bindings
   - echo "Python $TRAVIS_PYTHON_VERSION"
@@ -80,6 +79,10 @@ install:
   # gfortran fort77 are for HDF5, MATIO support
   - travis_retry sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-graph-dev libboost-serialization-dev libboost-thread-dev libboost-python-dev libpcl-all lcov gfortran fort77 > /dev/null
   
+  # install lcov to coveralls conversion + upload tool
+  - gem install coveralls-lcov
+  - if [ "$BUILD_TYPE" == "Coverage" ]; then travis_retry pip install coveralls; fi
+  
   # HDF5
   - cd $DEPS_DIR
   - tar -xzf hdf5-1.8.14.tar.gz
@@ -101,18 +104,22 @@ install:
   # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
 before_script:
-    # back to ELM source directory
-  - cd $TRAVIS_BUILD_DIR && pwd
-  - mkdir build && cd build
-  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-fPIC" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 ..
+  - echo $ELM_BUILD_DIR
+  - mkdir -p $ELM_BUILD_DIR && cd $ELM_BUILD_DIR
+  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-fPIC" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 -DBUILD_python=ON $TRAVIS_BUILD_DIR
 script:
-  - make
+  - make -C $ELM_BUILD_DIR
   # run unit tests
-  - cd ./bin
+  - cd $ELM_BUILD_DIR/bin
   - ./run_elm_unittests
+  # run nose tests
+  - export PYTHONPATH=$ELM_BUILD_DIR/lib:$PYTHONPATH
   # Back to root build directory
-  - cd ..
+  - cd $TRAVIS_BUILD_DIR/bindings/python/test
+  - nosetests -c ./nose.cfg
 after_success:
-  # test coverage
-  - make elm_unittests_coverage
-  - coveralls-lcov coverage.info
+  # c++ test coverage
+  - cd $ELM_BUILD_DIR
+  - if [ "$BUILD_TYPE" == "Coverage" ]; then make elm_unittests_coverage; fi
+  - if [ "$BUILD_TYPE" == "Coverage" ]; then coveralls-lcov coverage.info; fi
+  # python test coverage TODO
