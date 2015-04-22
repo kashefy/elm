@@ -50,6 +50,7 @@ before_install:
   - export PATH="$HOME/miniconda/bin:$PATH"
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
+  # miniconda is not always updated with conda
   - conda update -q conda
   # Useful for debugging any issues with conda
   - conda info -a
@@ -74,6 +75,7 @@ before_install:
   
   # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
+  
 install:
   # lcov: for test coverage reporting, building with coverage info
   # gfortran fort77 are for HDF5, MATIO support
@@ -103,10 +105,12 @@ install:
   
   # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
+  
 before_script:
   - echo $ELM_BUILD_DIR
   - mkdir -p $ELM_BUILD_DIR && cd $ELM_BUILD_DIR
   - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-fPIC" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 -DBUILD_python=ON $TRAVIS_BUILD_DIR
+
 script:
   - make -C $ELM_BUILD_DIR
   # run unit tests
@@ -117,6 +121,7 @@ script:
   # Back to root build directory
   - cd $TRAVIS_BUILD_DIR/bindings/elm/python/test
   - nosetests --with-cov --cov elm --cov-config .coveragerc --logging-level=INFO
+  
 after_success:
   # c++ test coverage
   - cd $ELM_BUILD_DIR
