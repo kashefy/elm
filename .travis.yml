@@ -1,13 +1,14 @@
 
 language: cpp
 compiler: gcc
+bundler_args: --retry 3
 env:
   global:
     - BUILD_TYPE=Coverage
     - DEPS_DIR="`readlink -f $TRAVIS_BUILD_DIR/..`"
     - OPENCV_BUILD_DIR=$DEPS_DIR/opencv/build
 before_install:
-  - sudo apt-get update -qq
+  - travis_retry sudo apt-get update -qq
   # Build OpenCV 2.4 from source
   - cd $DEPS_DIR
   - git clone https://github.com/Itseez/opencv.git
@@ -32,12 +33,21 @@ before_install:
   - sudo apt-get update -qq
   # install lcov to coveralls conversion + upload tool
   - gem install coveralls-lcov
+  # Setup anaconda for python bindings
+  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b
+  - export PATH=/home/travis/miniconda/bin:$PATH
+  - conda update --yes conda
+  # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
+  - sudo rm -rf /dev/shm
+  - sudo ln -s /run/shm /dev/shm 
     # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
 install:
   # lcov: for test coverage reporting, building with coverage info
   # gfortran fort77 are for HDF5, MATIO support
-  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-graph-dev libboost-serialization-dev libboost-thread-dev libboost-python-dev libpcl-all lcov gfortran fort77 > /dev/null
+  - travis_retry sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-graph-dev libboost-serialization-dev libboost-thread-dev libboost-python-dev libpcl-all lcov gfortran fort77 > /dev/null
   # HDF5
   - cd $DEPS_DIR
   - tar -xzf hdf5-1.8.14.tar.gz
