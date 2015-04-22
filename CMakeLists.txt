@@ -21,6 +21,12 @@ set(WITH_TEST_COVERAGE OFF CACHE BOOL "Whether to produce test coverage reports.
 set(FORCE_IN_SOURCE OFF CACHE BOOL "Whether to force allow in-source builds.")
 set(WITH_WARNINGS_ALL ON CACHE BOOL "Whether to print all compiler warnings.")
 
+if(UNIX)
+    set(WITH_PYTHON ON CACHE BOOL "Whether to build python bindings.")
+else(UNIX)
+    set(WITH_PYTHON OFF CACHE BOOL "Whether to build python bindings.")
+endif(UNIX)
+
 include(cmake/CompilerUtils.cmake)
 if(WITH_TEST_COVERAGE)
     include(cmake/CodeCoverage.cmake)
