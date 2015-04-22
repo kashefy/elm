@@ -37,8 +37,9 @@ public:
     void Append(const std::string &name, const VecMat1f &feat);
 
     void Append(const std::string &name, const SparseMat1f &feat);
-
+#ifdef __WITH_PCL
     void Append(const std::string &name, const CloudXYZPtr &feat);
+#endif // __WITH_PCL
 
     bool Exists(const std::string &name) const;
 

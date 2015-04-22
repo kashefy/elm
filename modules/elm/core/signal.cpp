@@ -60,10 +60,12 @@ void Signal::Append(const std::string &name, const SparseMat1f &feat) {
     impl_->Append(name, feat);
 }
 
+#ifdef __WITH_PCL
 void Signal::Append(const std::string &name, const CloudXYZPtr &feat) {
 
     impl_->Append(name, feat);
 }
+#endif // __WITH_PCL
 
 bool Signal::Exists(const std::string &name) const {
 
