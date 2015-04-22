@@ -4,6 +4,9 @@ compiler: gcc
 
 bundler_args: --retry 3
 
+python:
+  - 2.7
+
 env:
   global:
     - BUILD_TYPE=Coverage
