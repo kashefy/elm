@@ -14,7 +14,7 @@ before_install:
   - travis_retry sudo apt-get update -qq
   
   - which python
-  - python
+  - python --version
   
   # Build Google Test Framework from source
   - cd $DEPS_DIR
