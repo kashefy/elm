@@ -45,6 +45,7 @@ before_install:
   - gem install coveralls-lcov
   
   # Setup anaconda for python bindings
+  - echo "Python $TRAVIS_PYTHON_VERSION"
   # CREDIT: https://github.com/SmokinCaterpillar/pypet/blob/master/.travis.yml
   - if [[ $TRAVIS_PYTHON_VERSION == 2.* ]]; then
       travis_retry wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
@@ -58,6 +59,11 @@ before_install:
   - conda update -q conda
   # Useful for debugging any issues with conda
   - conda info -a
+  # Replace dep1 dep2 ... with your dependencies
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip numpy
+  - source activate test-environment
+  # list installed python packages
+  - pip freeze
   
   # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
   - sudo rm -rf /dev/shm
@@ -87,9 +93,6 @@ install:
   - ./configure --prefix=$DEPS_DIR/matio --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=$DEPS_DIR/hdf5 > /dev/null
   - make > /dev/null 2>&1
   - make install > /dev/null 2>&1
-  
-  # Python packages
-  - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib nose dateutil
   
   # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
