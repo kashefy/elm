@@ -12,6 +12,7 @@ project(${ROOT_PROJECT})
 set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules) # enforce includes to start with project's parent dir (e.g. #include <elm/core/core.h>)
 set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
+set(${ROOT_PROJECT}_BINDINGS "")
 
 # ----------------------------------------------------------------------------
 # Set default behaviour
@@ -22,9 +23,9 @@ set(FORCE_IN_SOURCE OFF CACHE BOOL "Whether to force allow in-source builds.")
 set(WITH_WARNINGS_ALL ON CACHE BOOL "Whether to print all compiler warnings.")
 
 if(UNIX)
-    set(WITH_PYTHON ON CACHE BOOL "Whether to build python bindings.")
+    set(BUILD_python ON CACHE BOOL "Whether to build python bindings.")
 else(UNIX)
-    set(WITH_PYTHON OFF CACHE BOOL "Whether to build python bindings.")
+    set(BUILD_python OFF CACHE BOOL "Whether to build python bindings.")
 endif(UNIX)
 
 include(cmake/CompilerUtils.cmake)
@@ -34,6 +35,7 @@ endif(WITH_TEST_COVERAGE)
 include(cmake/FileSystemUtils.cmake)
 include(cmake/ListUtils.cmake)
 include(cmake/MessageUtils.cmake)
+include(cmake/PkgUtils.cmake)
 
 # ----------------------------------------------------------------------------
 # Set global CMake variables
@@ -140,6 +142,8 @@ include(cmake/DetectOpenCV.cmake)
 #
 # If a feature does appear in STL, check it out and migrate over.
 # ----------------------------------------------------------------------------
+set(WITH_PYTHON ${BUILD_python})
+status("py=${WITH_PYTHON},${BUILD_python}")
 include(cmake/DetectBoost.cmake)
 
 # Required dependencies covered\
@@ -185,8 +189,23 @@ endif(WITH_MATIO)
 
 include_directories(${${ROOT_PROJECT}_INCLUDE_DIRS})
 
+# ELM modules
+# ----------------------------------------------------------------------------
 add_subdirectory(modules/${ROOT_PROJECT})
+
+# Sample projects
+# ----------------------------------------------------------------------------
 add_subdirectory(samples)
+
+# Language bindings
+# ----------------------------------------------------------------------------
+if(BUILD_python)
+    include(cmake/DetectPython.cmake)
+    list(APPEND ${ROOT_PROJECT}_BINDINGS python)
+    if(NOT CMAKE_POSITION_INDEPENDENT_CODE AND NOT BUILD_SHARED_LIBS)
+        message(SEND_ERROR "Python bindings require PIC for static linking. Enable compiler flag \"-fPIC\"")
+    endif(NOT CMAKE_POSITION_INDEPENDENT_CODE AND NOT BUILD_SHARED_LIBS)
+endif(BUILD_python)
 
 # ----------------------------------------------------------------------------
 # Test Projects
@@ -278,6 +297,7 @@ status("Targets:")
 set(MODULE_NAMES ${${ROOT_PROJECT}_MODULES})
 strip_lib_prefix(MODULE_NAMES ${MODULE_NAMES})
 status("    modules:  "      ${MODULE_NAMES})
+status("    bindings: "      ${${ROOT_PROJECT}_BINDINGS})
 status("    unit-tests:  "   BUILD_TESTS THEN YES ELSE NO)
 
 status("")
@@ -314,6 +334,17 @@ status("        lib Dir.:  "      MATIO_FOUND THEN "${MATIO_LIBRARY_DIR}" ELSE "
 status("        components :  "   MATIO_FOUND THEN "${MATIO_LIBS}" ELSE "-")
 status("        hdf5 :  "   MATIO_FOUND THEN "${HDF5_DIR}" ELSE "-")
 status("            components :  "   MATIO_FOUND THEN "${HDF5_LIBS}" ELSE "-")
+
+status("")
+status("Python:")
+status("    Interpreter:"   PYTHON_EXECUTABLE THEN "${PYTHON_EXECUTABLE} (ver ${PYTHON_VERSION_FULL})"    ELSE NO)
+    if(PYTHONLIBS_VERSION_STRING)
+        status("    Libraries:" BUILD_python THEN  "${PYTHON_LIBRARIES} (ver ${PYTHONLIBS_VERSION_STRING})"   ELSE NO)
+    else(PYTHONLIBS_VERSION_STRING)
+        status("    Libraries:" BUILD_python THEN  ${PYTHON_LIBRARIES}                                        ELSE NO)
+    endif(PYTHONLIBS_VERSION_STRING)
+    status("    NumPy:"     PYTHON_USE_NUMPY THEN "${PYTHON_NUMPY_INCLUDE_DIR} (ver ${PYTHON_NUMPY_VERSION})" ELSE "NO (Python bindings disabled)")
+    status("    Packages:"  PYTHON_EXECUTABLE THEN "${PYTHON_PACKAGES_PATH}"                            ELSE "-")
 
 status("")
 

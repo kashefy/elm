@@ -37,7 +37,7 @@ if(PYTHON_EXECUTABLE)
   endif()
 
   if(NOT ANDROID AND NOT IOS)
-    ocv_check_environment_variables(PYTHON_LIBRARY PYTHON_INCLUDE_DIR)
+    check_environment_variables(PYTHON_LIBRARY PYTHON_INCLUDE_DIR)
     if(CMAKE_CROSSCOMPILING)
       find_host_package(PythonLibs ${PYTHON_VERSION_MAJOR_MINOR})
     elseif(CMAKE_VERSION VERSION_GREATER 2.8.8 AND PYTHON_VERSION_FULL)

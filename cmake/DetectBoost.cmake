@@ -15,11 +15,11 @@ endif(MSVC)
 
 # Don't forget to include 'system'
 set(BOOST_COMPONENTS system)
-list(APPEND ${BOOST_COMPONENTS} filesystem graph serialization thread)
+list(APPEND BOOST_COMPONENTS filesystem graph serialization thread)
 
 if(WITH_PYTHON)
-    list(APPEND ${BOOST_COMPONENTS} python)
-if(WITH_PYTHON)
+    list(APPEND BOOST_COMPONENTS python)
+endif(WITH_PYTHON)
 
 status("")
 find_package(Boost ${BOOST_MIN_VERSION} REQUIRED COMPONENTS ${BOOST_COMPONENTS})
