@@ -12,7 +12,9 @@
 
 #include <boost/variant.hpp>
 
-#include "elm/core/cv/typedefs_fwd.h"
+#include <opencv2/core/core.hpp>
+
+#include "elm/core/typedefs_sfwd.h"
 #include "elm/core/visitors/visitors.h"
 
 namespace elm {
