@@ -66,7 +66,7 @@ before_install:
   - pip freeze
   
     # Build OpenCV 2.4 from source
-  - git clone https://github.com/Itseez/opencv.git $DEPS_DIR/opencv
+  - travis_retry git clone https://github.com/Itseez/opencv.git $DEPS_DIR/opencv
   - cd $DEPS_DIR/opencv
   - git fetch && git branch -a && git checkout 2.4
   - mkdir $OPENCV_BUILD_DIR && cd $OPENCV_BUILD_DIR
