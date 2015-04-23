@@ -100,7 +100,7 @@ install:
   - cd matio-1.5.2
   - mkdir $DEPS_DIR/matio
   - ./configure --prefix=$DEPS_DIR/matio --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=$DEPS_DIR/hdf5 > /dev/null
-  - make > /dev/null 2>&1
+  - make -j2 > /dev/null 2>&1
   - make install > /dev/null 2>&1
   
   # back to ELM source directory
