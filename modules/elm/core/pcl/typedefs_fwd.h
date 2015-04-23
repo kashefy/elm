@@ -25,7 +25,7 @@ class PointNormal;
 
 template <typename TPoint> class PointCloud;
 
-class Vertices;
+struct Vertices;
 
 } // fake namespace pcl for fwd declaration
 
