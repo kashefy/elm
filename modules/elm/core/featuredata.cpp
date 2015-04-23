@@ -9,6 +9,11 @@
 
 #include <iostream>
 
+#include "elm/core/visitors/visitormat1f.h"
+#include "elm/core/visitors/visitorvecmat1f.h"
+#include "elm/core/visitors/visitorsparsemat1f.h"
+#include "elm/core/visitors/visitorpod_.h"
+
 using namespace std;
 using namespace cv;
 
@@ -24,19 +29,22 @@ FeatureData::FeatureData()
 template<>
 Mat_<float> FeatureData::get()
 {
-    return var_.apply_visitor(visitor_mat_);
+    //return var_.apply_visitor(visitor_mat_);
+    return boost::apply_visitor(VisitorMat1f(), var_);
 }
 
 template<>
 SparseMat1f FeatureData::get()
 {
-    return var_.apply_visitor(visitor_sparse_mat_);
+    //return var_.apply_visitor(visitor_sparse_mat_);
+    return boost::apply_visitor(VisitorSparseMat1f(), var_);
 }
 
 template<>
 VecMat1f FeatureData::get()
 {
-    return var_.apply_visitor(visitor_vm_);
+    //return var_.apply_visitor(visitor_vm_);
+    return boost::apply_visitor(VisitorVecMat1f(), var_);
 }
 
 #ifdef __WITH_PCL // PCL support required
@@ -84,9 +92,9 @@ void FeatureData::Reset()
     visitor_cloud_ptnrml_.Reset();
     visitor_cloud_xyz_.Reset();
     visitor_vv_.Reset();
-    visitor_mat_.Reset();
-    visitor_sparse_mat_.Reset();
-    visitor_vm_.Reset();
+    //visitor_mat_.Reset();
+    //visitor_sparse_mat_.Reset();
+    //visitor_vm_.Reset();
 }
 
 std::ostream& operator<<(std::ostream& os, FeatureData& obj)
