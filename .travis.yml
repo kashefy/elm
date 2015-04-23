@@ -115,7 +115,7 @@ script:
   - export PYTHONPATH=$ELM_BUILD_DIR/lib:$PYTHONPATH
   # Back to root build directory
   - cd $TRAVIS_BUILD_DIR/bindings/elm/python/test
-  - nosetests --with-cov --cov elm --cov-config .coveragerc --logging-level=INFO
+  - nosetests --with-cov --cover-package=elm --cov-config .coveragerc --logging-level=INFO
   
 after_success:
   # c++ test coverage
