@@ -68,19 +68,6 @@ catch (const cv::Exception &e) \
 
 using namespace cv;
 
-static PyObject* failmsgp(const char *fmt, ...)
-{
-  char str[1000];
-
-  va_list ap;
-  va_start(ap, fmt);
-  vsnprintf(str, sizeof(str), fmt, ap);
-  va_end(ap);
-
-  PyErr_SetString(PyExc_TypeError, str);
-  return 0;
-}
-
 static size_t REFCOUNT_OFFSET = (size_t)&(((PyObject*)0)->ob_refcnt) +
     (0x12345678 != *(const size_t*)"\x78\x56\x34\x12\0\0\0\0\0")*sizeof(int);
 
