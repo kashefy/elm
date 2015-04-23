@@ -33,6 +33,9 @@ namespace bp=boost::python;
 using namespace cv;
 using namespace elm;
 
+// Good chunk from OpenCV python bindings:
+// ---------------------------------------
+
 static PyObject* opencv_error = 0;
 
 static int failmsg(const char *fmt, ...) {
@@ -50,7 +53,11 @@ static int failmsg(const char *fmt, ...) {
 
 NumpyAllocator g_numpyAllocator;
 
-enum { ARG_NONE = 0, ARG_MAT = 1, ARG_SCALAR = 2 };
+enum {
+    ARG_NONE = 0,
+    ARG_MAT = 1,
+    ARG_SCALAR = 2
+};
 
 // special case, when the convertor needs full ArgInfo structure
 static int pyopencv_to(const PyObject* o, Mat& m, const ArgInfo info, bool allowND=true)
@@ -624,7 +631,8 @@ static bool pyopencv_to(PyObject *o, Ptr<T>& p, const char *name="<unknown>")
     return pyopencv_to(o, *p, name);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
+// End of OpenCV code chunk
+// ------------------------
 
 #define MKTYPE2(NAME) pyopencv_##NAME##_specials(); if (!to_ok(&pyopencv_##NAME##_Type)) return
 
@@ -633,11 +641,10 @@ static bool pyopencv_to(PyObject *o, Ptr<T>& p, const char *name="<unknown>")
 #  pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #endif
 
-/************************************************************************/
-/* Module init */
-
 /**
- * cv::Mat to numpy.ndarray conversion
+ * @brief cv::Mat to numpy.ndarray conversion. With shallow copy of data.
+ * @param Mat object to convert
+ * @return pointer to new PyObject
  */
 template<> PyObject* type_into_python<Mat>::convert(Mat const& t) {
 
@@ -666,8 +673,11 @@ template<> PyObject* type_into_python<Mat>::convert(Mat const& t) {
     Py_RETURN_NONE;
 }
 
+
 /**
- * Mat1f to numpy.ndarray conversion
+ * @brief Mat1f to numpy.ndarray conversion (shallow copy)
+ * @param Mat1f (single-channel Mat of floats) object to convert
+ * @return pointer to new PyObject
  */
 template<> PyObject* type_into_python<Mat1f>::convert(Mat1f const& t) {
 
@@ -725,8 +735,6 @@ BOOST_PYTHON_MODULE(elm) {
     import_array();
     bp::numeric::array::set_module_and_type("numpy", "ndarray");
 
-    // register conversions
-
     // register custom converters
     bp::to_python_converter< Mat, type_into_python<Mat> >();
     bp::to_python_converter< Mat1f, type_into_python<Mat1f> >();
@@ -735,8 +743,8 @@ BOOST_PYTHON_MODULE(elm) {
     bp::scope().attr("__version__") = GetVersion();
 
     bp::class_<DummyPy>("Dummy")
-            .def("setMat",  &DummyPy::SetMat    )
+            .def("setMat",   &DummyPy::SetMat    )
             .def("getMat1f", &DummyPy::GetMat1f  )
-            .def("getMat",  &DummyPy::GetMat    )
+            .def("getMat",   &DummyPy::GetMat    )
             ;
 }
