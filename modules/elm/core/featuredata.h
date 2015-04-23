@@ -10,7 +10,7 @@
 
 #include <iosfwd>
 
-#include <boost/variant/.hpp>
+#include <boost/variant.hpp>
 
 #include "elm/core/cv/typedefs_fwd.h"
 #include "elm/core/visitors/visitors.h"
