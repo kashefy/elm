@@ -17,11 +17,11 @@
 
 namespace pcl {
 
-class PointXYZ;
+struct PointXYZ;
 
-class Normal;
+struct Normal;
 
-class PointNormal;
+struct PointNormal;
 
 template <typename TPoint> class PointCloud;
 
