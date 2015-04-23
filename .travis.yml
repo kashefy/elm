@@ -128,11 +128,11 @@ after_success:
   # c++ test coverage
   - cd $ELM_BUILD_DIR
   - if [ "$BUILD_TYPE" == "Coverage" ]; then make elm_unittests_coverage; fi
-  #- if [ "$BUILD_TYPE" == "Coverage" ]; then coveralls-lcov coverage.info; fi
+  - if [ "$BUILD_TYPE" == "Coverage" ]; then coveralls-lcov coverage.info; fi
   # Convert to json for merging with python coverage
-  - coveralls-lcov -v -n coverage.info > coverage.json
+  #- coveralls-lcov -v -n coverage.info > coverage.json
   # python test coverage TODO
-  - cd $TRAVIS_BUILD_DIR/bindings/elm/python/test
+  #- cd $TRAVIS_BUILD_DIR/bindings/elm/python/test
   # Merge python coverage with coveralls-style json file and send it to api endpoint
   # Note: This file must contain "source_files" data or it will not be merged
-  - coveralls --config_file .coveragerc --merge=$ELM_BUILD_DIR/coverage.json
+  #- coveralls --config_file .coveragerc --merge=$ELM_BUILD_DIR/coverage.json
