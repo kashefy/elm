@@ -24,14 +24,19 @@ endif()
 
 project(${BIND_NAME})
 
-file(GLOB SRCS *.c*)
-file(GLOB HDRS *.h*)
+file(GLOB SRC_LIST *.c*)
+file(GLOB HEADERS  *.h*)
+
+# Filter out test related sources
+set(REGEX_EXCLUDE_FROM_MODULE "(.*test.*)|(.*~.*)|(.*cv.cpp)")
+list_filterout(SRC_LIST ${REGEX_EXCLUDE_FROM_MODULE})
+list_filterout(HEADERS  ${REGEX_EXCLUDE_FROM_MODULE})
 
 add_definitions(-DPYTHON_USE_NUMPY=1)
 
 include_directories(${BIND_PYTHON_INCLUDE_DIRS})
 
-add_library(${BIND_NAME} SHARED ${SRCS} ${HDRS})
+add_library(${BIND_NAME} SHARED ${SRC_LIST} ${HEADERS})
 
 target_link_libraries(${BIND_NAME} ${BIND_PYTHON_LIBS} ${${ROOT_PROJECT}_LIBS} ${${ROOT_PROJECT}_MODULES})
 

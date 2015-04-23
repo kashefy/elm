@@ -24,7 +24,8 @@
 #include "elm/core/core.h"
 
 #include "elm/python/conversions.h"
-#include "elm/python/conversions_cv.h"
+#include "elm/python/conversions_cv.cpp"
+//#include "elm/python/conversions_cv.h"
 
 namespace bp=boost::python;
 using namespace cv;
