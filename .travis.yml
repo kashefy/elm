@@ -1,6 +1,8 @@
 # Travis CI configuration file
 language: cpp
-compiler: gcc
+compiler:
+  - clang
+  #- gcc
 
 env:
   global:
