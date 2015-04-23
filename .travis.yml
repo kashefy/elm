@@ -6,13 +6,16 @@ compiler:
 
 env:
   global:
-    - BUILD_TYPE=Coverage
+    # Dependencies
     - DEPS_DIR="`readlink -f $TRAVIS_BUILD_DIR/..`"
     - OPENCV_BUILD_DIR=$DEPS_DIR/opencv/build
     # TRAVIS_BUILD_DIR: The absolute path to the directory where the repository being built has been copied on the worker.
     - ELM_BUILD_DIR=$TRAVIS_BUILD_DIR/build
     # since we've set language to cpp we have to define python vars oursevles
     - TRAVIS_PYTHON_VERSION="2.7"
+    # ELM build parameters
+    - BUILD_TYPE=Coverage
+    - BUILD_SHARED_LIBS=OFF
     
 before_install:
   - travis_retry sudo apt-get update -qq
@@ -107,7 +110,13 @@ install:
 before_script:
   - echo $ELM_BUILD_DIR
   - mkdir -p $ELM_BUILD_DIR && cd $ELM_BUILD_DIR
-  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-fPIC --param ggc-min-expand=0 --param ggc-min-heapsize=8192" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 -DBUILD_python=ON $TRAVIS_BUILD_DIR
+  # PCL has little support for C++11, same for boost < 1.48
+  - if [[ $CXX == g* ]]; then
+      export WITH_PCL=ON
+    else
+      export WITH_PCL=OFF
+    fi
+  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="-fPIC --param ggc-min-expand=0 --param ggc-min-heapsize=8192" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_PCL=$WITH_PCL -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 -DBUILD_python=ON $TRAVIS_BUILD_DIR
 
 script:
   - cd $ELM_BUILD_DIR && make
