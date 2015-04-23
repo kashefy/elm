@@ -638,14 +638,6 @@ static bool pyopencv_to(PyObject *o, Ptr<T>& p, const char *name="<unknown>")
 /************************************************************************/
 /* Module init */
 
-static int to_ok(PyTypeObject *to)
-{
-  to->tp_alloc = PyType_GenericAlloc;
-  to->tp_new = PyType_GenericNew;
-  to->tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE;
-  return (PyType_Ready(to) == 0);
-}
-
 /**
  * cv::Mat to numpy.ndarray conversion
  */
