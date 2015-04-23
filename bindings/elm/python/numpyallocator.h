@@ -5,11 +5,7 @@
 #define HAVE_ROUND  // eliminating duplicated round() declaration
 #endif
 
-#include <boost/python.hpp>
-
-#if !PYTHON_USE_NUMPY
-#error "The module can only be built if NumPy is available"
-#endif
+#include <Python.h>
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <numpy/ndarrayobject.h>
@@ -66,8 +62,6 @@ catch (const cv::Exception &e) \
     return 0; \
 }
 
-using namespace cv;
-
 static size_t REFCOUNT_OFFSET = (size_t)&(((PyObject*)0)->ob_refcnt) +
     (0x12345678 != *(const size_t*)"\x78\x56\x34\x12\0\0\0\0\0")*sizeof(int);
 
@@ -80,8 +74,6 @@ static inline int* refcountFromPyObject(const PyObject* obj)
 {
     return (int*)((size_t)obj + REFCOUNT_OFFSET);
 }
-
-
 
 /**
  * @brief OpenCV python binding's NumpyAllocator class

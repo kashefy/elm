@@ -15,24 +15,22 @@
 // STL includes need to be included after boost on OS X
 #include <vector>
 
-#include "elm/python/conversions.h"
-
-#include "elm/core/core.h"
-
 #if !PYTHON_USE_NUMPY
 #error "The module can only be built if NumPy is available"
 #endif
 
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-#include <numpy/ndarrayobject.h>
+#include "elm/python/numpyallocator.h"
 
 #define MODULESTR "elm"
 
 #include "opencv2/core/core.hpp"
 
-#include "elm/python/numpyallocator.h"
+#include "elm/python/conversions.h"
+
+#include "elm/core/core.h"
 
 namespace bp=boost::python;
+using namespace cv;
 using namespace elm;
 
 static PyObject* opencv_error = 0;
