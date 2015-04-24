@@ -32,6 +32,12 @@ protected:
     Mat1f in_;
 };
 
+TEST_F(MutexPopulationCodeTest, Constructor) {
+
+    std::shared_ptr<base_Layer> to;
+    EXPECT_NO_THROW(to.reset(new MutexPopulationCode(LayerConfig())));
+}
+
 TEST_F(MutexPopulationCodeTest, PopCode_dims) {
 
     EXPECT_MAT_DIMS_EQ(to_.PopCode(), cv::Size2i(in_.cols*2, in_.rows));
