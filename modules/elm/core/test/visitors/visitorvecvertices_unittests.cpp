@@ -13,6 +13,7 @@
 
 #include "elm/core/exception.h"
 #include "elm/core/pcl/cloud_.h"
+#include "elm/ts/pcl_point_typed_tests.h"
 #include "elm/ts/ts.h"
 
 using namespace std;
@@ -82,14 +83,49 @@ TEST_F(VisitorVecVerticesTest, From_VecMat1f)
     }
 }
 
-TEST_F(VisitorVecVerticesTest, Twos_cloudXYZ)
+template <class TPoint>
+class VisitorVecVerticesCloud_TypedTest : public VisitorVecVerticesTest
 {
-    CloudXYZPtr in = Mat2PointCloud_<PointXYZ>(Mat1f(4, 3, 2));
+protected:
+    virtual void SetUp() {
+
+        size_t field_count_sz = elm::ts::ExpectedPointAttr_<TPoint>::field_count;
+        field_count_ = static_cast<int>(field_count_sz);
+
+        size_t nb_floats_sz = elm::ts::ExpectedPointAttr_<TPoint>::nb_floats;
+        nb_floats_ = static_cast<int>(nb_floats_sz);
+    }
+
+    // members
+    int field_count_;
+    int nb_floats_;
+};
+
+TYPED_TEST_CASE(VisitorVecVerticesCloud_TypedTest, PCLPointTypes);
+
+TYPED_TEST(VisitorVecVerticesCloud_TypedTest, Empty)
+{
+    typename pcl::PointCloud<TypeParam >::Ptr cld(new pcl::PointCloud<TypeParam >);
+    EXPECT_SIZE(0, to_(cld));
+}
+
+/**
+ * @brief Test with point cloud filled with value 2
+ */
+TYPED_TEST(VisitorVecVerticesCloud_TypedTest, Twos)
+{
+    Mat1f m(4, this->field_count_, 2);
+
+    typename pcl::PointCloud<TypeParam >::Ptr in = Mat2PointCloud_<TypeParam >(m);
 
     VecVertices vv = to_(in);
 
-    EXPECT_SIZE(4, vv);
-    EXPECT_SIZE(4, vv[0].vertices);
+    EXPECT_SIZE(m.rows, vv);
+
+    for(size_t i=0; i<vv.size(); i++) {
+
+        EXPECT_SIZE(this->nb_floats_, vv[i].vertices);
+    }
 
     for(uint32_t i=0; i<in->height; i++) {
         for(uint32_t j=0; j<in->width; j++) {
