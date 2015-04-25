@@ -9,9 +9,13 @@ cmake_minimum_required(VERSION 2.8.7)
 # ----------------------------------------------------------------------------
 set(ROOT_PROJECT elm)
 project(${ROOT_PROJECT})
-set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules) # enforce includes to start with project's parent dir (e.g. #include <elm/core/core.h>)
+
+# enforce includes to start with project's parent dir (e.g. #include <elm/core/core.h>)
+set(${ROOT_PROJECT}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/modules
+                                 ${PROJECT_SOURCE_DIR}/bindings)
 set(${ROOT_PROJECT}_LIBS    "")
 set(${ROOT_PROJECT}_MODULES "")
+set(${ROOT_PROJECT}_BIND    "")
 
 # ----------------------------------------------------------------------------
 # Set default behaviour
@@ -21,20 +25,29 @@ set(WITH_TEST_COVERAGE OFF CACHE BOOL "Whether to produce test coverage reports.
 set(FORCE_IN_SOURCE OFF CACHE BOOL "Whether to force allow in-source builds.")
 set(WITH_WARNINGS_ALL ON CACHE BOOL "Whether to print all compiler warnings.")
 
+if(UNIX)
+    set(BUILD_python ON CACHE BOOL "Whether to build python bindings.")
+else(UNIX)
+    set(BUILD_python OFF CACHE BOOL "Whether to build python bindings.")
+endif(UNIX)
+
 include(cmake/CompilerUtils.cmake)
-if(WITH_TEST_COVERAGE)
-    include(cmake/CodeCoverage.cmake)
-endif(WITH_TEST_COVERAGE)
 include(cmake/FileSystemUtils.cmake)
 include(cmake/ListUtils.cmake)
 include(cmake/MessageUtils.cmake)
+include(cmake/PkgUtils.cmake)
 
 # ----------------------------------------------------------------------------
 # Set global CMake variables
 # ----------------------------------------------------------------------------
 if(NOT DEFINED CMAKE_BUILD_TYPE OR NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Select build type (e.g. None Debug Release RelWithDebInfo MinSizeRel)" FORCE)
     status("Since no build type was specified falling back on ${CMAKE_BUILD_TYPE} as the default build type.")
+endif()
+string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE_UPPER)
+if(${BUILD_TYPE_UPPER} STREQUAL "COVERAGE")
+    set(WITH_TEST_COVERAGE ON)
+    include(cmake/CodeCoverage.cmake)
 endif()
 
 # Print all warnings
@@ -134,6 +147,8 @@ include(cmake/DetectOpenCV.cmake)
 #
 # If a feature does appear in STL, check it out and migrate over.
 # ----------------------------------------------------------------------------
+set(WITH_PYTHON ${BUILD_python})
+
 include(cmake/DetectBoost.cmake)
 
 # Required dependencies covered\
@@ -179,8 +194,34 @@ endif(WITH_MATIO)
 
 include_directories(${${ROOT_PROJECT}_INCLUDE_DIRS})
 
+# ELM modules
+# ----------------------------------------------------------------------------
 add_subdirectory(modules/${ROOT_PROJECT})
+
+# Sample projects
+# ----------------------------------------------------------------------------
 add_subdirectory(samples)
+
+# Language bindings
+# ----------------------------------------------------------------------------
+if(BUILD_python)
+    include(cmake/DetectPython.cmake)
+    if(NOT CMAKE_POSITION_INDEPENDENT_CODE AND NOT BUILD_SHARED_LIBS)
+        message(SEND_ERROR "Python bindings require PIC for static linking. Enable compiler flag \"-fPIC\"")
+    endif(NOT CMAKE_POSITION_INDEPENDENT_CODE AND NOT BUILD_SHARED_LIBS)
+
+    # collect libraries for linking into one list variable
+    if(PYTHON_DEBUG_LIBRARIES AND NOT PYTHON_LIBRARIES MATCHES "optimized.*debug" )
+        set(BIND_PYTHON_LIBS debug ${PYTHON_DEBUG_LIBRARIES} optimized ${PYTHON_LIBRARIES} ${BOOST_PYTHON_LIBS})
+    else()
+        set(BIND_PYTHON_LIBS ${PYTHON_DEBUG_LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_PYTHON_LIBS})
+    endif()
+
+    # collect include directories into one list variable
+    set(BIND_PYTHON_INCLUDE_DIRS ${PYTHON_INCLUDE_PATH} ${PYTHON_NUMPY_INCLUDE_DIR})
+endif(BUILD_python)
+
+add_subdirectory(bindings/${ROOT_PROJECT})
 
 # ----------------------------------------------------------------------------
 # Test Projects
@@ -261,7 +302,6 @@ status("")
 status("Build settings:")
 status("")
 status("    Build type:\t${CMAKE_BUILD_TYPE}")
-string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE_UPPER)
 status("    C Flags: (${CMAKE_BUILD_TYPE})\t${CMAKE_C_FLAGS_${BUILD_TYPE_UPPER}}")
 status("    C Flags:\t${CMAKE_C_FLAGS}")
 status("    C++ Flags:\t${CMAKE_CXX_FLAGS}")
@@ -272,10 +312,13 @@ status("Targets:")
 set(MODULE_NAMES ${${ROOT_PROJECT}_MODULES})
 strip_lib_prefix(MODULE_NAMES ${MODULE_NAMES})
 status("    modules:  "      ${MODULE_NAMES})
+status("    bindings: "      ${${ROOT_PROJECT}_BIND})
 status("    unit-tests:  "   BUILD_TESTS THEN YES ELSE NO)
+status("    coverage:  "   WITH_TEST_COVERAGE THEN YES ELSE NO)
+status("    \ttarget:  "   WITH_TEST_COVERAGE THEN ${ROOT_PROJECT}_unittests_coverage ELSE "-")
+status("    \tprefix:  "   WITH_TEST_COVERAGE THEN "coverage" ELSE "-")
 
 status("")
-
 status("Dependencies:")
 status("")
 status("    GTest:    "   GTEST_FOUND THEN ${GTEST_ROOT} ELSE NO)
@@ -308,6 +351,17 @@ status("        lib Dir.:  "      MATIO_FOUND THEN "${MATIO_LIBRARY_DIR}" ELSE "
 status("        components :  "   MATIO_FOUND THEN "${MATIO_LIBS}" ELSE "-")
 status("        hdf5 :  "   MATIO_FOUND THEN "${HDF5_DIR}" ELSE "-")
 status("            components :  "   MATIO_FOUND THEN "${HDF5_LIBS}" ELSE "-")
+
+status("")
+status("Python:")
+status("    Interpreter:"   PYTHON_EXECUTABLE THEN "${PYTHON_EXECUTABLE} (ver ${PYTHON_VERSION_FULL})"    ELSE NO)
+    if(PYTHONLIBS_VERSION_STRING)
+        status("    Libraries:" BUILD_python THEN  "${PYTHON_LIBRARIES} (ver ${PYTHONLIBS_VERSION_STRING})"   ELSE NO)
+    else(PYTHONLIBS_VERSION_STRING)
+        status("    Libraries:" BUILD_python THEN  ${PYTHON_LIBRARIES}                                        ELSE NO)
+    endif(PYTHONLIBS_VERSION_STRING)
+    status("    NumPy:"     PYTHON_USE_NUMPY THEN "${PYTHON_NUMPY_INCLUDE_DIR} (ver ${PYTHON_NUMPY_VERSION})" ELSE "NO (Python bindings disabled)")
+    status("    Packages:"  PYTHON_EXECUTABLE THEN "${PYTHON_PACKAGES_PATH}"                            ELSE "-")
 
 status("")
 

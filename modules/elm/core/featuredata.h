@@ -12,6 +12,9 @@
 
 #include <boost/variant.hpp>
 
+#include <opencv2/core/core.hpp>
+
+#include "elm/core/typedefs_sfwd.h"
 #include "elm/core/visitors/visitors.h"
 
 namespace elm {
@@ -30,7 +33,7 @@ public:
      */
     FeatureData(const cv::Mat &m)
     {
-        var_ = static_cast<cv::Mat_<float> >(m);
+        var_ = static_cast<cv::Mat1f >(m);
     }
 
     /**
@@ -106,9 +109,9 @@ protected:
     VisitorVoid visitor_vv_;            ///< place holder visitor that does nothing
 #endif // __WITH_PCL
 
-    VisitorMat1f visitor_mat_;              ///< visitor for converting to Mat1f objects
-    VisitorSparseMat1f visitor_sparse_mat_; ///< visitor for converting to SparseMat1f objects
-    VisitorVecMat1f visitor_vm_;            ///< visitor for converting to VecMat1f objects
+//    VisitorMat1f visitor_mat_;              ///< visitor for converting to Mat1f objects
+//    VisitorSparseMat1f visitor_sparse_mat_; ///< visitor for converting to SparseMat1f objects
+//    VisitorVecMat1f visitor_vm_;            ///< visitor for converting to VecMat1f objects
 };
 
 std::ostream& operator<<(std::ostream& os, FeatureData& obj);

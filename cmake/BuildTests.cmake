@@ -14,7 +14,7 @@ FUNCTION(build_tests test_project filter)
     file (GLOB_RECURSE SRCS ${CMAKE_SOURCE_DIR}/${filter})
 
     if(NOT BUILD_python)
-        string(REGEX REPLACE "${CMAKE_SOURCE_DIR}/modules/python/[^;]+;?" "" SRCS "${SRCS}")
+        string(REGEX REPLACE "${CMAKE_SOURCE_DIR}/bindings/python/[^;]+;?" "" SRCS "${SRCS}")
     endif(NOT BUILD_python)
      
     list (LENGTH SRCS nbTestFiles )

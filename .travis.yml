@@ -1,21 +1,29 @@
-
+# Travis CI configuration file
 language: cpp
-compiler: gcc
+compiler:
+  #- clang
+  - gcc
+
 env:
   global:
-    - BUILD_TYPE=Coverage
+    # Dependencies
     - DEPS_DIR="`readlink -f $TRAVIS_BUILD_DIR/..`"
     - OPENCV_BUILD_DIR=$DEPS_DIR/opencv/build
+    # TRAVIS_BUILD_DIR: The absolute path to the directory where the repository being built has been copied on the worker.
+    - ELM_BUILD_DIR=$TRAVIS_BUILD_DIR/build
+    # since we've set language to cpp we have to define python vars oursevles
+    - TRAVIS_PYTHON_VERSION="2.7"
+    # ELM build parameters
+    - BUILD_TYPE=Coverage
+    - BUILD_SHARED_LIBS=OFF
+    
 before_install:
-  - sudo apt-get update -qq
-  # Build OpenCV 2.4 from source
-  - cd $DEPS_DIR
-  - git clone https://github.com/Itseez/opencv.git
-  - cd opencv
-  - git fetch && git branch -a && git checkout 2.4
-  - mkdir $OPENCV_BUILD_DIR && cd $OPENCV_BUILD_DIR
-  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF $DEPS_DIR/opencv
-  - make -j2 > /dev/null
+  - travis_retry sudo apt-get update -qq
+  
+  - which python
+  - python --version
+  - cmake --version
+  
   # Build Google Test Framework from source
   - cd $DEPS_DIR
   - wget --quiet https://googletest.googlecode.com/files/gtest-1.7.0.zip
@@ -24,20 +32,60 @@ before_install:
   - cmake . > /dev/null
   - make > /dev/null
   - cd $DEPS_DIR
+  
   # get HDF5, build after apt-get installation
   - wget --quiet http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
+  
   # get MATIO, build after apt-get installation
   - wget --quiet http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz
+  
+  # for PCL
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
-  - sudo apt-get update -qq
-  # install lcov to coveralls conversion + upload tool
-  - gem install coveralls-lcov
-    # back to ELM source directory
+  - travis_retry sudo apt-get update -qq
+  
+  # Setup anaconda for python bindings
+  - echo "Python $TRAVIS_PYTHON_VERSION"
+  # CREDIT: https://github.com/SmokinCaterpillar/pypet/blob/master/.travis.yml
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.* ]]; then
+      travis_retry wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      travis_retry wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  # miniconda is not always updated with conda
+  - conda update -q conda
+  # Useful for debugging any issues with conda
+  - conda info -a
+  # Replace dep1 dep2 ... with your dependencies
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip numpy
+  - source activate test-environment
+  # list installed python packages
+  - pip freeze
+  
+    # Build OpenCV 2.4 from source
+  - travis_retry git clone https://github.com/Itseez/opencv.git $DEPS_DIR/opencv
+  - cd $DEPS_DIR/opencv
+  - git fetch && git branch -a && git checkout 2.4
+  - mkdir $OPENCV_BUILD_DIR && cd $OPENCV_BUILD_DIR
+  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF $DEPS_DIR/opencv
+  - make -j2 > /dev/null
+  
+  # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
+  
 install:
   # lcov: for test coverage reporting, building with coverage info
   # gfortran fort77 are for HDF5, MATIO support
-  - sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-serialization-dev libboost-graph-dev libboost-thread-dev libpcl-all lcov gfortran fort77 > /dev/null
+  - travis_retry sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-graph-dev libboost-serialization-dev libboost-thread-dev libboost-python-dev libpcl-all lcov gfortran fort77 > /dev/null
+  
+  # install lcov to coveralls conversion + upload tool
+  - gem install coveralls-lcov
+  #- if [ "$BUILD_TYPE" == "Coverage" ]; then travis_retry pip install nose coveralls; fi
+  - travis_retry pip install nose
+  
   # HDF5
   - cd $DEPS_DIR
   - tar -xzf hdf5-1.8.14.tar.gz
@@ -46,29 +94,47 @@ install:
   - ./configure --prefix=$DEPS_DIR/hdf5 --enable-fortran --enable-fortran2003 --with-default-api-version=v18 > /dev/null
   - make -j2 > /dev/null 2>&1
   - make install > /dev/null 2>&1
+  
   # MATIO
   - cd $DEPS_DIR
   - tar -xzf matio-1.5.2.tar.gz
   - cd matio-1.5.2
   - mkdir $DEPS_DIR/matio
   - ./configure --prefix=$DEPS_DIR/matio --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=$DEPS_DIR/hdf5 > /dev/null
-  - make > /dev/null 2>&1
+  - make -j2 > /dev/null 2>&1
   - make install > /dev/null 2>&1
-    # back to ELM source directory
+  
+  # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
+  
 before_script:
-    # back to ELM source directory
-  - cd $TRAVIS_BUILD_DIR && pwd
-  - mkdir build && cd build
-  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_TEST_COVERAGE=ON -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 ..
+  - echo $ELM_BUILD_DIR
+  - mkdir -p $ELM_BUILD_DIR && cd $ELM_BUILD_DIR
+  # PCL has little support for C++11, same for boost < 1.48
+  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="-fPIC --param ggc-min-expand=3 --param ggc-min-heapsize=8192" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 -DBUILD_python=ON $TRAVIS_BUILD_DIR
+
 script:
-  - make
+  - cd $ELM_BUILD_DIR && make -j2
   # run unit tests
-  - cd ./bin
-  - ./run_elm_unittests
+  - cd $ELM_BUILD_DIR/bin && ./run_elm_unittests
+  # run nose tests
+  - export PYTHONPATH=$ELM_BUILD_DIR/lib:$PYTHONPATH
   # Back to root build directory
-  - cd ..
+  - cd $TRAVIS_BUILD_DIR/bindings/elm/python/test
+  - ls -a
+  #- nosetests --with-cov --cover-package=elm --logging-level=INFO
+  - nosetests --logging-level=INFO
+  - ls -a
+  
 after_success:
-  # test coverage
-  - make elm_unittests_coverage
-  - coveralls-lcov coverage.info
+  # c++ test coverage
+  - cd $ELM_BUILD_DIR
+  - if [ "$BUILD_TYPE" == "Coverage" ]; then make elm_unittests_coverage; fi
+  - if [ "$BUILD_TYPE" == "Coverage" ]; then coveralls-lcov coverage.info; fi
+  # Convert to json for merging with python coverage
+  #- coveralls-lcov -v -n coverage.info > coverage.json
+  # python test coverage TODO
+  #- cd $TRAVIS_BUILD_DIR/bindings/elm/python/test
+  # Merge python coverage with coveralls-style json file and send it to api endpoint
+  # Note: This file must contain "source_files" data or it will not be merged
+  #- coveralls --config_file .coveragerc --merge=$ELM_BUILD_DIR/coverage.json

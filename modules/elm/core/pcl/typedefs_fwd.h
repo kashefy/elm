@@ -17,15 +17,15 @@
 
 namespace pcl {
 
-class PointXYZ;
+struct PointXYZ;
 
-class Normal;
+struct Normal;
 
-class PointNormal;
+struct PointNormal;
 
 template <typename TPoint> class PointCloud;
 
-class Vertices;
+struct Vertices;
 
 } // fake namespace pcl for fwd declaration
 

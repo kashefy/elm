@@ -13,7 +13,7 @@
 
 namespace elm {
 
-class Graph_Impl;
+struct Graph_Impl;
 class MatrixGraph;
 
 /**
