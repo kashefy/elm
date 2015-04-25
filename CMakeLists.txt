@@ -44,7 +44,7 @@ include(cmake/PkgUtils.cmake)
 # Set global CMake variables
 # ----------------------------------------------------------------------------
 if(NOT DEFINED CMAKE_BUILD_TYPE OR NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Select build type (e.g. None Debug Release RelWithDebInfo MinSizeRel)" FORCE)
     status("Since no build type was specified falling back on ${CMAKE_BUILD_TYPE} as the default build type.")
 endif()
 
