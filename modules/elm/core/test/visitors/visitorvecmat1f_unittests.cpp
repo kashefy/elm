@@ -91,6 +91,29 @@ TEST_F(VisitorVecMat1fTest, FromMat1f)
     }
 }
 
+TEST_F(VisitorVecMat1fTest, FromMat_floats)
+{
+    int N=5;
+
+    while(N--) {
+
+        const int MAT_ROWS = abs(randu<int>()) % 10 + 1;
+        const int MAT_COLS = abs(randu<int>()) % 100 + 1;
+
+        Mat m(MAT_ROWS, MAT_COLS, CV_32FC1);
+        randn(m, 0.f, 100.f);
+
+        VecMat1f v = to_(m);
+
+        EXPECT_SIZE(size_t(1), v);
+
+        Mat1f m2 = v[0];
+
+        EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
+        EXPECT_EQ(m.data, m2.data) << "Mats are not pointing to the same data in memory. Expecting shared copy.";
+    }
+}
+
 TEST_F(VisitorVecMat1fTest, EmptySparseMat1f)
 {
     EXPECT_SIZE(1, to_(SparseMat1f()));
