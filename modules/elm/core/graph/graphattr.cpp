@@ -278,10 +278,12 @@ int GraphAttr::contractEdges(int id_u, int id_v)
         }
         else {
 
+            //LCOV_EXCL_START
             std::stringstream s;
             s << "Neither edge source nor its target is  vertex u="<<
                  u << "with id=" << id_u << ".";
             ELM_THROW_VALUE_ERROR(s.str());
+            //LCOV_EXCL_END
         }
 
         // keep track of edges to remove later
@@ -369,10 +371,12 @@ VecI GraphAttr::getNeighbors(int vtx_id) const
         }
         else {
 
+            //LCOV_EXCL_START
             std::stringstream s;
             s << "Neither edge source nor its target is  vertex u="<<
                  u << "with id=" << vtx_id << ".";
             ELM_THROW_VALUE_ERROR(s.str());
+            //LCOV_EXCL_END
         }
     }
 
@@ -403,10 +407,12 @@ void GraphAttr::removeVertex(int vtx_id)
         // move or merge edge?
         if(src != u && dst != u) {
 
+            //LCOV_EXCL_START
             std::stringstream s;
             s << "Neither edge source nor its target is vertex u="<<
                  u << "with id=" << vtx_id << ".";
             ELM_THROW_VALUE_ERROR(s.str());
+            //LCOV_EXCL_END
         }
 
         // keep track of edges to remove later
