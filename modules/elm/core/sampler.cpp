@@ -16,7 +16,7 @@ using namespace elm;
 
 void base_Sampler::pdf(const Mat1f &pdf) {
 
-    pdf_ = pdf/sum(pdf)(0);
+    cv::divide(pdf, sum(pdf), pdf_);
     elm::CumSum(pdf_, pdf_);
 }
 
