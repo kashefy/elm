@@ -112,6 +112,11 @@ TEST_F(SupervisedBatchInstTest, Constructor)
     EXPECT_NO_THROW(DummySupervisedBatch());
 }
 
+TEST_F(SupervisedBatchInstTest, Destructor)
+{
+    EXPECT_NO_THROW(to_.reset());
+}
+
 TEST_F(SupervisedBatchInstTest, Learn_batch)
 {
     ASSERT_FALSE(ELM_DYN_CAST(DummySupervisedBatch, to_)->getFlag());
