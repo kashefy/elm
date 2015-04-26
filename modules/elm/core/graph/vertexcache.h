@@ -20,8 +20,6 @@ public:
 
     VertexCache();
 
-    VertexCache(int capacity);
-
     void clear();
 
     /**
