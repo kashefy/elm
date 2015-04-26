@@ -12,6 +12,7 @@
 #include "elm/core/cv/mat_utils.h"
 
 using namespace cv;
+using namespace elm;
 
 void base_Sampler::pdf(const Mat1f &pdf) {
 
