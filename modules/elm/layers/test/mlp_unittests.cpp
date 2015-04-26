@@ -19,6 +19,7 @@
 #include "elm/core/percentile.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/learninglayer_assertions.h"
 
 using namespace std;
 using namespace cv;
@@ -27,6 +28,7 @@ using namespace elm;
 namespace {
 
 ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(MLP);
+ELM_INSTANTIATE_LEARNING_LAYER_TYPED_TEST_CASE_P(MLP);
 
 const string NAME_IN             = "in";
 const string NAME_OUT_PREDICTION = "out";
