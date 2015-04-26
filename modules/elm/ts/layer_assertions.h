@@ -35,7 +35,7 @@ protected:
     }
 
     // members
-    std::shared_ptr<TLayer > layer_ptr_; ///< pointer to test object used in fixtures
+    std::shared_ptr<base_Layer > layer_ptr_; ///< pointer to test object used in fixtures
 };
 
 TYPED_TEST_CASE_P(Layer_TP_);
@@ -117,9 +117,54 @@ REGISTER_TYPED_TEST_CASE_P(Layer_TP_,
                            RequiredIONamesValidation
                            ); ///< register additional typed_test_p (i.e. unit test) routines here
 
+/**
+ * @brief A type-parameterized test case for repeating tests with different layer types
+ */
+template <class TLayer>
+class LayerInst_TP_ : public ::testing::Test
+{
+protected:
+    virtual void SetUp()
+    {
+        layer_inst_ptr_.reset(new TLayer());
+    }
+
+    // members
+    std::shared_ptr<TLayer > layer_inst_ptr_; ///< pointer to test object used in fixtures
+};
+
+TYPED_TEST_CASE_P(LayerInst_TP_);
+
+TYPED_TEST_P(LayerInst_TP_, Clear)
+{
+    EXPECT_NO_THROW(this->layer_inst_ptr_->Clear());
+}
+
+TYPED_TEST_P(LayerInst_TP_, Constructor)
+{
+    EXPECT_NO_THROW(TypeParam());
+}
+
+TYPED_TEST_P(LayerInst_TP_, Destructor)
+{
+    EXPECT_NO_THROW(this->layer_inst_ptr_.reset());
+    EXPECT_FALSE(bool(this->layer_inst_ptr_));
+}
+
+/* Write additional type+value parameterized tests here.
+ * Acquaint yourself with the values passed to along with each type.
+ */
+
+// Register test names
+REGISTER_TYPED_TEST_CASE_P(LayerInst_TP_,
+                           Clear,
+                           Constructor,
+                           Destructor
+                           ); ///< register additional typed_test_p (i.e. unit test) routines here
+
 /** Macro for easier registration for subscribing layers for executing standard/generalized layer tests
  */
-#define ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(Layer) INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_ ## Layer ## _Test, Layer_TP_, Layer)
+#define ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(Layer) INSTANTIATE_TYPED_TEST_CASE_P(Layer_TP_ ## Layer ## _Test, Layer_TP_, Layer); INSTANTIATE_TYPED_TEST_CASE_P(LayerInst_TP_ ## Layer ## _Test, LayerInst_TP_, Layer)
 
 } // namespace elm
 
