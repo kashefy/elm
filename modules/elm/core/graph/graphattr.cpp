@@ -50,9 +50,9 @@ float GraphAttr::operator ()(int idx_u, int idx_v) const
 
 #if _MSC_VER
 #else // #if _MSC_VER && !__INTEL_COMPILER
-    typename 
+    typename
 #endif // #if _MSC_VER && !__INTEL_COMPILER
-		property_map < GraphAttrType, edge_weight_t >::type
+        property_map < GraphAttrType, edge_weight_t >::type
             weight = get(edge_weight, impl->g);
 
     GraphAttrTraits::edge_descriptor e;
