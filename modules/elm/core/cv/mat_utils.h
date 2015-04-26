@@ -29,6 +29,9 @@ cv::Mat_<unsigned char> ConvertTo8U(const cv::Mat &src);
 
 /**
  * @brief Cumulative sum
+ *
+ * Input of zeros yields cumulative sum of zeros
+ *
  * @param src matrix
  * @param dst matrix
  */
