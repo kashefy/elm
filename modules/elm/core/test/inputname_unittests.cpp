@@ -85,19 +85,37 @@ TEST(InputNameTest, Operator_not_equals)
     EXPECT_NE(y, x);
 }
 
-TEST(InputNameTest, Operator_non_membernot__equals)
+TEST(InputNameTest, Operator_non_member_not__equals)
 {
     {
         string lhs("foo");
         InputName rhs("bar");
 
+        EXPECT_TRUE(lhs!=rhs);
         EXPECT_FALSE(lhs==rhs);
     }
     {
         string lhs("bar");
         InputName rhs("foo");
 
+        EXPECT_TRUE(lhs!=rhs);
         EXPECT_FALSE(lhs==rhs);
+    }
+
+    // repeat above but check with eq operator first
+    {
+        string lhs("foo");
+        InputName rhs("bar");
+
+        EXPECT_FALSE(lhs==rhs);
+        EXPECT_TRUE(lhs!=rhs);
+    }
+    {
+        string lhs("bar");
+        InputName rhs("foo");
+
+        EXPECT_FALSE(lhs==rhs);
+        EXPECT_TRUE(lhs!=rhs);
     }
 }
 

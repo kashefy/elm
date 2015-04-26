@@ -14,6 +14,7 @@
 #include "elm/core/defs.h"
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
+#include "elm/ts/learninglayer_assertions.h"
 
 using namespace elm;
 
@@ -85,6 +86,47 @@ TEST_F(SupervisedBatchTest, Learn_batch)
 }
 
 TEST_F(SupervisedBatchTest, Learn_online)
+{
+    EXPECT_THROW(ELM_DYN_CAST(base_LearningLayer, to_)->Learn(), ExceptionNotImpl);
+}
+
+ELM_INSTANTIATE_LEARNING_LAYER_TYPED_TEST_CASE_P(DummySupervisedBatch);
+
+/**
+ * @brief Repeat above with pointer declared of type base_SupervisedBatch
+ * Only relevant for Constructor and Destructor coverage, irrelevant for methods.
+ */
+class SupervisedBatchInstTest : public ::testing::Test
+{
+protected:
+    void SetUp()
+    {
+        to_.reset(new DummySupervisedBatch(LayerConfig()));
+    }
+
+    std::shared_ptr<base_SupervisedBatch> to_;
+};
+
+TEST_F(SupervisedBatchInstTest, Constructor)
+{
+    EXPECT_NO_THROW(DummySupervisedBatch());
+}
+
+TEST_F(SupervisedBatchInstTest, Destructor)
+{
+    EXPECT_NO_THROW(to_.reset());
+}
+
+TEST_F(SupervisedBatchInstTest, Learn_batch)
+{
+    ASSERT_FALSE(ELM_DYN_CAST(DummySupervisedBatch, to_)->getFlag());
+
+    EXPECT_NO_THROW(ELM_DYN_CAST(base_LearningLayer, to_)->Learn(cv::Mat(), cv::Mat()));
+
+    EXPECT_TRUE(ELM_DYN_CAST(DummySupervisedBatch, to_)->getFlag());
+}
+
+TEST_F(SupervisedBatchInstTest, Learn_online)
 {
     EXPECT_THROW(ELM_DYN_CAST(base_LearningLayer, to_)->Learn(), ExceptionNotImpl);
 }

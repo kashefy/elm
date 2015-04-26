@@ -79,3 +79,39 @@ TEST_F(LearningLayerTest, Reset_unique_ptr_overloaded)
     LayerConfig cfg;
     EXPECT_NO_THROW(unique_ptr<base_Layer> to(new DummyChildLearningLayer(cfg)));
 }
+
+/**
+ * @brief Repeat abover tests with layer instance declared directly as base_LearningLayer
+ */
+class LearningLayerInstTest : public ::testing::Test
+{
+protected:
+    virtual void SetUp()
+    {
+        to_.reset(new DummyChildLearningLayer());
+    }
+
+    shared_ptr<base_LearningLayer> to_; ///< test object
+};
+
+TEST_F(LearningLayerInstTest, Destructor)
+{
+    to_.reset();
+}
+
+TEST_F(LearningLayerInstTest, Reset)
+{
+    EXPECT_NO_THROW(to_->Reset(LayerConfig()));
+}
+
+TEST_F(LearningLayerInstTest, Reset_unique_ptr)
+{
+    unique_ptr<base_LearningLayer> to(new DummyChildLearningLayer());
+    EXPECT_NO_THROW(to_->Reset(LayerConfig()));
+}
+
+TEST_F(LearningLayerInstTest, Reset_unique_ptr_overloaded)
+{
+    LayerConfig cfg;
+    EXPECT_NO_THROW(unique_ptr<base_LearningLayer> to(new DummyChildLearningLayer(cfg)));
+}

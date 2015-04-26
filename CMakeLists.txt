@@ -44,10 +44,13 @@ if(NOT DEFINED CMAKE_BUILD_TYPE OR NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Select build type (e.g. None Debug Release RelWithDebInfo MinSizeRel)" FORCE)
     status("Since no build type was specified falling back on ${CMAKE_BUILD_TYPE} as the default build type.")
 endif()
+
 string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE_UPPER)
 if(${BUILD_TYPE_UPPER} STREQUAL "COVERAGE")
     set(WITH_TEST_COVERAGE ON)
     include(cmake/CodeCoverage.cmake)
+else()
+    set(WITH_TEST_COVERAGE OFF)
 endif()
 
 # Print all warnings

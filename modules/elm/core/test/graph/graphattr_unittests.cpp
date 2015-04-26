@@ -84,6 +84,38 @@ TEST_F(GraphAttrConstructTest, AdjacencyDense_dims_all_unique)
     }
 }
 
+TEST_F(GraphAttrConstructTest, AdjacencyDense_dims_all_unique_index_edge_weight)
+{
+    for(int n=2; n<11; n++) {
+
+        Mat1i m(n, n);
+        for(size_t i=0; i<m.total(); i++) {
+
+            m(i) = i;
+        }
+
+        GraphAttr to(m, Mat());
+        EXPECT_EQ(static_cast<size_t>(n*n), to.num_vertices());
+        EXPECT_EQ(m.total(), to.num_vertices());
+
+        Mat1f adj;
+        to.AdjacencyMat(adj);
+        EXPECT_MAT_DIMS_EQ(adj, Size2i(m.total(), m.total()));
+
+        Mat1f adj_from_indexing(to.num_vertices(), to.num_vertices());
+
+        for(size_t i=0; i<to.num_vertices(); i++) {
+
+            for(size_t j=0; j<to.num_vertices(); j++) {
+
+                adj_from_indexing(i, j) = to(i, j);
+            }
+        }
+
+        EXPECT_MAT_EQ(adj, adj_from_indexing) << "indexing edges does not yield the same adjacency matrix.";
+    }
+}
+
 /**
  * @brief Test adjacency matrix from graph constructed from
  * map initialized as row matrix.
@@ -179,6 +211,59 @@ TEST_F(GraphAttrConstructTest, AdjacencyDense)
     EXPECT_FLOAT_EQ(3.f, vtx_ids[1]);
     EXPECT_FLOAT_EQ(2.f, vtx_ids[2]);
     EXPECT_FLOAT_EQ(6.f, vtx_ids[3]);
+}
+
+TEST_F(GraphAttrConstructTest, AdjacencyDense_index_edges)
+{
+    const int ROWS=2;
+    const int COLS=3;
+    int data[ROWS*COLS] = {1, 1, 2,
+                           3, 6, 6};
+    Mat1i m = Mat1i(ROWS, COLS, data).clone();
+
+    GraphAttr to(m, Mat());
+    const int nb_vertices = static_cast<int>(to.num_vertices());
+    EXPECT_EQ(4, nb_vertices);
+
+    Mat1f adj;
+    to.AdjacencyMat(adj);
+    EXPECT_MAT_DIMS_EQ(adj, Size2i(nb_vertices, nb_vertices));
+    EXPECT_MAT_EQ(adj, adj.t()) << "Expecting adj. matrix symmetric around diagonal";
+
+    // verify we have no self-connections
+    for(int r=0; r<adj.rows; r++) {
+        EXPECT_EQ(0.f, adj(r, r)) << "Unexpected self-connection.";
+    }
+
+    // verify individual connections
+    EXPECT_FLOAT_EQ(1.f, adj(0, 1));
+    EXPECT_FLOAT_EQ(1.f, adj(0, 2));
+    EXPECT_FLOAT_EQ(1.f, adj(0, 3));
+    EXPECT_FLOAT_EQ(1.f, adj(1, 3));
+    EXPECT_FLOAT_EQ(1.f, adj(2, 3));
+    EXPECT_FLOAT_EQ(0.f, adj(1, 2));
+
+    // verify vertices vector
+    VecI vtx_ids = to.VerticesIds();
+    EXPECT_SIZE(nb_vertices, vtx_ids);
+
+    // verify vertex ids and their order
+    EXPECT_FLOAT_EQ(1.f, vtx_ids[0]);
+    EXPECT_FLOAT_EQ(3.f, vtx_ids[1]);
+    EXPECT_FLOAT_EQ(2.f, vtx_ids[2]);
+    EXPECT_FLOAT_EQ(6.f, vtx_ids[3]);
+
+    Mat1f adj_from_indexing(to.num_vertices(), to.num_vertices());
+
+    for(size_t i=0; i<to.num_vertices(); i++) {
+
+        for(size_t j=0; j<to.num_vertices(); j++) {
+
+            adj_from_indexing(i, j) = to(i, j);
+        }
+    }
+
+    EXPECT_MAT_EQ(adj, adj_from_indexing) << "indexing edges does not yield the same adjacency matrix.";
 }
 
 TEST_F(GraphAttrConstructTest, VerticesIds_size)

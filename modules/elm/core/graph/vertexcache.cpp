@@ -16,11 +16,6 @@ VertexCache::VertexCache()
 {
 }
 
-VertexCache::VertexCache(int capacity)
-{
-    reserve(capacity);
-}
-
 void VertexCache::reserve(int capacity)
 {
     descriptors_ = vector<VtxDescriptor >(capacity);

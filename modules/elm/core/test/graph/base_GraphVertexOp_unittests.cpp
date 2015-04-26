@@ -6,6 +6,7 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "elm/core/exception.h"
 #include "elm/core/graph/graphattr.h"
 #include "elm/ts/mat_assertions.h"
 
@@ -150,6 +151,29 @@ TEST_F(GraphVertexOpTest, op_applied_to_graph_vertex)
     Mat1f result_op = to_.mutableOp(map, map == 6);
 
     EXPECT_MAT_EQ(result_op, result_graph);
+}
+
+TEST_F(GraphVertexOpTest, op_applied_to_graph_vertex_invalid_vtx)
+{
+    const int ROWS=3;
+    const int COLS=3;
+    int data[ROWS*COLS] = {1, 7, 2,
+                           3, 6, 6,
+                           9, 9, 11};
+    Mat1i map = Mat1i(ROWS, COLS, data).clone();
+
+    Mat1b exclude, mask;
+    cv::bitwise_or(map < 2, map == 9, exclude);
+    cv::bitwise_not(exclude, mask);
+
+    GraphAttr graph(map, mask);
+
+    ASSERT_GT(graph.num_vertices(), static_cast<size_t>(0)) << "this test requires a non-empty graph";
+
+    EXPECT_THROW(graph.applyVertexOpToMap(-1, to_), ExceptionKeyError);
+    EXPECT_THROW(graph.applyVertexOpToMap(0, to_), ExceptionKeyError);
+    EXPECT_THROW(graph.applyVertexOpToMap(5, to_), ExceptionKeyError);
+    EXPECT_THROW(graph.applyVertexOpToMap(12, to_), ExceptionKeyError);
 }
 
 TEST_F(GraphVertexOpTest, op_applied_to_graph_vertex_call_count)
