@@ -122,9 +122,32 @@ TEST_F(VisitorSparseMat1fTest, FromDenseMat1f)
         Mat1f m(MAT_ROWS, MAT_COLS);
         randn(m, 0.f, 100.f);
 
+        Mat1f m2;
+        to_(m).convertTo(m2, CV_32FC1);
+
+        EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
+        EXPECT_NE(m.data, m2.data);
+    }
+}
+
+TEST_F(VisitorSparseMat1fTest, FromDenseMat_float)
+{
+    int N=5;
+
+    while(N--) {
+
+        const int MAT_ROWS = abs(randu<int>()) % 10 + 1;
+        const int MAT_COLS = abs(randu<int>()) % 100 + 1;
+
+        Mat1f m(MAT_ROWS, MAT_COLS);
+        randn(m, 0.f, 100.f);
+
         {
+            Mat m1;
+            m.convertTo(m1, CV_32FC1);
+
             Mat1f m2;
-            to_(m).convertTo(m2, CV_32FC1);
+            to_(m1).convertTo(m2, CV_32FC1);
 
             EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
             EXPECT_NE(m.data, m2.data);
@@ -133,7 +156,7 @@ TEST_F(VisitorSparseMat1fTest, FromDenseMat1f)
             Mat m1;
             m.convertTo(m1, CV_64FC1);
             Mat1f m2;
-            to_(m).convertTo(m2, CV_32FC1);
+            to_(m1).convertTo(m2, CV_32FC1);
 
             EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
             EXPECT_NE(m.data, m2.data);
@@ -141,8 +164,10 @@ TEST_F(VisitorSparseMat1fTest, FromDenseMat1f)
         {
             Mat m1;
             m.convertTo(m1, CV_8UC1);
+            m = static_cast<Mat1f>(m1);
+
             Mat1f m2;
-            to_(m).convertTo(m2, CV_32FC1);
+            to_(m1).convertTo(m2, CV_32FC1);
 
             EXPECT_MAT_EQ(m, m2) << "Matrices are not equal";
             EXPECT_NE(m.data, m2.data);
@@ -150,6 +175,8 @@ TEST_F(VisitorSparseMat1fTest, FromDenseMat1f)
         {
             Mat m1;
             m.convertTo(m1, CV_32SC1);
+            m = static_cast<Mat1f>(m1);
+
             Mat1f m2;
             to_(m).convertTo(m2, CV_32FC1);
 
