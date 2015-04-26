@@ -26,8 +26,6 @@ typedef std::map< std::string, std::pair<bool, std::string> > MapIONamesB; ///< 
 
 typedef std::map< std::string, std::pair<LayerIOKeyType, std::string> > MapIONames; ///< convinience typedef for a map of io keys and corresponding io name
 
-
-
 /**
  * @brief Layer Attributes struct, a helper struct for layer p-typed test cases.
  * It enables defining values to be used inside the tests
