@@ -55,29 +55,23 @@ TEST(Sampler1DTest, Uniform_zeros) {
     Sampler1D to; // test object
     to.pdf(pdf_uniform);
 
-    std::cout<<to.pdf()<<std::endl;
-
     Mat1f hist = Mat1f::zeros(1, SIZE);
 
     for(int i=0; i<N; i++) {
 
         int sampled_index = to.Sample();
-        //std::cout<<sampled_index<<std::endl;
-        //EXPECT_IN_CLOSED(sampled_index, 0, SIZE-1);
+        EXPECT_IN_CLOSED(sampled_index, 0, SIZE-1);
         hist(sampled_index)++;
     }
 
-    std::cout<<hist<<std::endl;
+    EXPECT_EQ(sum(hist)(0), N);
+    Mat1f hist_normalized = hist/static_cast<float>(N);
+    EXPECT_MAT_NEAR(hist_normalized, pdf_uniform, 0.2f);
 
-
-//    EXPECT_EQ(sum(hist)(0), N);
-//    Mat1f hist_normalized = hist/static_cast<float>(N);
-//    EXPECT_MAT_NEAR(hist_normalized, pdf_uniform, 0.2f);
-
-//    Mat m, s;
-//    meanStdDev(hist_normalized, m, s);
-//    EXPECT_NEAR(m.at<double>(0, 0), MEAN, 0.1);
-//    EXPECT_NEAR(s.at<double>(0, 0), 0., 0.1);
+    Mat m, s;
+    meanStdDev(hist_normalized, m, s);
+    EXPECT_NEAR(m.at<double>(0, 0), 0., 0.1);
+    EXPECT_NEAR(s.at<double>(0, 0), 0., 0.1);
 }
 
 TEST(Sampler1DTest, Gaussian) {
