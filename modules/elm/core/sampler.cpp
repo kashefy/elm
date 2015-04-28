@@ -9,7 +9,6 @@
 
 #include <opencv2/core/core.hpp>
 
-#include "elm/core/debug_utils.h"
 #include "elm/core/cv/mat_utils.h"
 
 using namespace cv;
@@ -25,9 +24,12 @@ void base_Sampler::pdf(const Mat1f &pdf) {
         pdf_ = pdf + EPS;
 
         s = EPS*static_cast<float>(pdf_.total());
+        cv::divide(pdf_, s, pdf_);
     }
+    else {
 
-    cv::divide(pdf_, s, pdf_);
+        cv::divide(pdf, s, pdf_);
+    }
 
     elm::CumSum(pdf_, pdf_);
 }
