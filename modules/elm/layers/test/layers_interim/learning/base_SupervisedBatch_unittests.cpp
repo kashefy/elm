@@ -117,16 +117,3 @@ TEST_F(SupervisedBatchInstTest, Destructor)
     EXPECT_NO_THROW(to_.reset());
 }
 
-TEST_F(SupervisedBatchInstTest, Learn_batch)
-{
-    ASSERT_FALSE(ELM_DYN_CAST(DummySupervisedBatch, to_)->getFlag());
-
-    EXPECT_NO_THROW(ELM_DYN_CAST(base_LearningLayer, to_)->Learn(cv::Mat(), cv::Mat()));
-
-    EXPECT_TRUE(ELM_DYN_CAST(DummySupervisedBatch, to_)->getFlag());
-}
-
-TEST_F(SupervisedBatchInstTest, Learn_online)
-{
-    EXPECT_THROW(ELM_DYN_CAST(base_LearningLayer, to_)->Learn(), ExceptionNotImpl);
-}
