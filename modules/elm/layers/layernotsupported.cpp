@@ -18,7 +18,7 @@ base_LayerNotSupported::base_LayerNotSupported(const string &message)
       msg_(message)
 {
     ThrowException();
-}
+}//LCOV_EXCL_LINE
 
 base_LayerNotSupported::base_LayerNotSupported()
     : base_Layer()
@@ -30,42 +30,42 @@ base_LayerNotSupported::base_LayerNotSupported(const LayerConfig &config, const 
       msg_(message)
 {
     ThrowException();
-}
+}//LCOV_EXCL_LINE
 
 void base_LayerNotSupported::Clear()
 {
     ThrowException();
-}
+}//LCOV_EXCL_LINE
 
 void base_LayerNotSupported::Reset(const LayerConfig& config)
 {
     ThrowException();
-}
+}//LCOV_EXCL_LINE
 
 void base_LayerNotSupported::Reconfigure(const LayerConfig& config)
 {
     ThrowException();
-}
+}//LCOV_EXCL_LINE
 
 void base_LayerNotSupported::InputNames(const LayerInputNames& io)
 {
     ThrowException();
-}
+}//LCOV_EXCL_LINE
 
 void base_LayerNotSupported::OutputNames(const LayerOutputNames& io)
 {
     ThrowException();
-}
+}//LCOV_EXCL_LINE
 
 void base_LayerNotSupported::Activate(const Signal &signal)
 {
     ThrowException();
-}
+}//LCOV_EXCL_LINE
 
 void base_LayerNotSupported::Response(Signal &signal)
 {
     ThrowException();
-}
+}//LCOV_EXCL_LINE
 
 void base_LayerNotSupported::ThrowException() const
 {
@@ -73,8 +73,8 @@ void base_LayerNotSupported::ThrowException() const
         ELM_THROW_NOT_IMPLEMENTED_WMSG(
                     string("This layer is not supported, please check the layer definition for requirements.")
                     );
-    }
+    }//LCOV_EXCL_LINE
     else {
         ELM_THROW_NOT_IMPLEMENTED_WMSG(msg_);
-    }
-}
+    }//LCOV_EXCL_LINE
+}//LCOV_EXCL_LINE
