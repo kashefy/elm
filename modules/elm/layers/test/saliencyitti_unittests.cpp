@@ -78,22 +78,23 @@ protected:
     virtual void SetUp()
     {
         // Setup layer
+        cfg_ = LayerConfig();
 
-        LayerConfig config;
         // params
         PTree params;
-        config.Params(params);
+        cfg_.Params(params);
 
         // IO
-        config.Input(SaliencyItti::KEY_INPUT_STIMULUS, NAME_SCENE_);
-        config.Output(SaliencyItti::KEY_OUTPUT_SALIENCY, NAME_SALIENCY_);
-        config.Output(SaliencyItti::KEY_OUTPUT_SALIENT_LOC, NAME_LOC_);
+        cfg_.Input(SaliencyItti::KEY_INPUT_STIMULUS, NAME_SCENE_);
+        cfg_.Output(SaliencyItti::KEY_OUTPUT_SALIENCY, NAME_SALIENCY_);
+        cfg_.Output(SaliencyItti::KEY_OUTPUT_SALIENT_LOC, NAME_LOC_);
 
-        to_.Reset(config);
-        to_.IONames(config);
+        to_.Reset(cfg_);
+        to_.IONames(cfg_);
     }
 
     SaliencyItti to_;   ///< test object
+    LayerConfig cfg_;
 
     static const string NAME_SCENE_;    ///< name for scene stimulus in signal
     static const string NAME_SALIENCY_; ///< name for saliency map in signal
@@ -102,6 +103,18 @@ protected:
 const string SaliencyIttiTest::NAME_SCENE_      = "in";
 const string SaliencyIttiTest::NAME_SALIENCY_   = "saliency";
 const string SaliencyIttiTest::NAME_LOC_        = "loc";
+
+TEST_F(SaliencyIttiTest, Constructor)
+{
+    shared_ptr<base_Layer> to;
+    EXPECT_NO_THROW(to.reset(new SaliencyItti(cfg_)));
+    EXPECT_NO_THROW(to.reset());
+}
+
+TEST_F(SaliencyIttiTest, Reconfigure)
+{
+    EXPECT_NO_THROW(to_.Reconfigure(cfg_));
+}
 
 TEST_F(SaliencyIttiTest, Activate)
 {
@@ -129,6 +142,54 @@ TEST_F(SaliencyIttiTest, Activate)
 //    imshow("sal", elm::ConvertTo8U(signal.MostRecent(NAME_SALIENCY_)));
 //    imshow("sam", elm::ConvertTo8U(sampled_saliency));
 //    waitKey();
+}
+
+TEST_F(SaliencyIttiTest, Activate_scene_zeros)
+{
+    const int NB_SAMPLES = 2e4;
+    const int WIDTH = 56;
+    const int HEIGHT = 56;
+
+    Mat1f sampled_saliency(HEIGHT, WIDTH, 0.f);
+    Signal signal;
+    Mat1f scene = Mat1f::zeros(HEIGHT, WIDTH);
+
+    signal.Append(NAME_SCENE_, scene);
+    to_.Activate(signal);
+
+    for(int i=0; i<NB_SAMPLES; i++) {
+
+        to_.Response(signal);
+        Mat1i loc_mat = signal.MostRecentMat1f(NAME_LOC_);
+        sampled_saliency(loc_mat(1), loc_mat(0))++;
+    }
+
+    sampled_saliency /= NB_SAMPLES;
+
+    Mat m, s;
+    cv::meanStdDev(sampled_saliency, m, s);
+
+    EXPECT_GT(m.at<double>(0), 0.);
+    EXPECT_NEAR(0., m.at<double>(0), 0.01);
+}
+
+TEST_F(SaliencyIttiTest, Response_dims)
+{
+    for(int r=9; r<14; r++) {
+
+        for(int c=9; c<14; c++) {
+
+            Signal signal;
+            Mat1f scene = Mat1f::zeros(r, c);
+
+            signal.Append(NAME_SCENE_, scene);
+            to_.Activate(signal);
+            to_.Response(signal);
+
+            EXPECT_MAT_DIMS_EQ(signal.MostRecentMat1f(NAME_SALIENCY_), Size2i(c, r));
+            EXPECT_MAT_DIMS_EQ(signal.MostRecentMat1f(NAME_LOC_), Size2i(2, 1));
+        }
+    }
 }
 
 TEST_F(SaliencyIttiTest, DISABLED_DisplayApplyMNIST)
