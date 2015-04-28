@@ -109,11 +109,16 @@ protected:
 
 TEST_F(SupervisedBatchInstTest, Constructor)
 {
+    EXPECT_NO_THROW(to_.reset(new DummySupervisedBatch(LayerConfig())));
     EXPECT_NO_THROW(DummySupervisedBatch());
 }
 
 TEST_F(SupervisedBatchInstTest, Destructor)
 {
     EXPECT_NO_THROW(to_.reset());
+
+    std::shared_ptr<DummySupervisedBatch> to2;
+    EXPECT_NO_THROW(to2.reset(new DummySupervisedBatch(LayerConfig())));
+    EXPECT_NO_THROW(to2.reset());
 }
 
