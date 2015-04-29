@@ -16,8 +16,6 @@
 
 #include <pcl/common/io.h>
 
-
-
 typedef ::testing::Types<pcl::PointXYZ, pcl::Normal, pcl::PointNormal> PCLPointTypes;
 
 namespace elm {
