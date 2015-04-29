@@ -319,4 +319,27 @@ TEST_F(GraphCompatibilityTest, CompatibilityIntegration)
     }
 }
 
+class GraphCompatibilityProtected : public GraphCompatibility
+{
+public:
+    float Compatibility(float w1, float w2) const
+    {
+        return GraphCompatibility::Compatibility(w1, w2);
+    }
+};
+
+class GraphCompatibilityProtectedTest : public ::testing::Test
+{
+};
+
+TEST_F(GraphCompatibilityProtectedTest, Compatibility_weights)
+{
+    GraphCompatibilityProtected to; ///< test object
+    EXPECT_EQ(0.f, to.Compatibility(0.f, 1.f));
+    EXPECT_EQ(0.f, to.Compatibility(0.f, 3.f));
+    EXPECT_EQ(to.Compatibility(1.f, 0.f), to.Compatibility(0.f, 1.f)) << "compatibility is not symmetric";
+    EXPECT_EQ(to.Compatibility(0.3f, 0.f), to.Compatibility(0.f, 0.3f)) << "compatibility is not symmetric";
+    EXPECT_EQ(to.Compatibility(0.7, 0.3), to.Compatibility(0.3f, 0.7f)) << "compatibility is not symmetric";
+}
+
 } // annonymous namespace for test cases and fixtures
