@@ -91,6 +91,7 @@ TEST_F(GradAssignmentInitTest, Reconfigure_invalid_beta)
     LayerConfig cfg;
 
     PTree p;
+    //p.put(GradAssignment::PARAM_BETA, BETA);
     p.put(GradAssignment::PARAM_BETA_MAX, BETA_MAX);
     p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
     p.put(GradAssignment::PARAM_MAX_ITER_PER_BETA, MAX_ITER_PER_BETA);
@@ -110,24 +111,25 @@ TEST_F(GradAssignmentInitTest, Reconfigure_invalid_beta_rate)
     LayerConfig cfg;
 
     PTree p;
+    p.put(GradAssignment::PARAM_BETA, BETA);
     p.put(GradAssignment::PARAM_BETA_MAX, BETA_MAX);
-    p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
+    //p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
     p.put(GradAssignment::PARAM_MAX_ITER_PER_BETA, MAX_ITER_PER_BETA);
     p.put(GradAssignment::PARAM_MAX_ITER_SINKHORN, MAX_ITER_SINKHORN);
 
-    p.put(GradAssignment::PARAM_BETA, 1.f);
+    p.put(GradAssignment::PARAM_BETA_RATE, 1.f);
     cfg.Params(p);
     EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
 
-    p.put(GradAssignment::PARAM_BETA, 0.8f);
+    p.put(GradAssignment::PARAM_BETA_RATE, 0.8f);
     cfg.Params(p);
     EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
 
-    p.put(GradAssignment::PARAM_BETA, 0.f);
+    p.put(GradAssignment::PARAM_BETA_RATE, 0.f);
     cfg.Params(p);
     EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
 
-    p.put(GradAssignment::PARAM_BETA, -10.f);
+    p.put(GradAssignment::PARAM_BETA_RATE, -10.f);
     cfg.Params(p);
     EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
 }
