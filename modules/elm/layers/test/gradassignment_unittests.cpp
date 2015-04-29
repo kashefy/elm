@@ -142,6 +142,29 @@ protected:
     Signal sig_;
 };
 
+TEST_F(GradAssignmentTest, Constructor_overloaded)
+{
+    LayerConfig cfg;
+
+    PTree p;
+    p.put(GradAssignment::PARAM_BETA, BETA);
+    p.put(GradAssignment::PARAM_BETA_MAX, BETA_MAX);
+    p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
+    p.put(GradAssignment::PARAM_MAX_ITER_PER_BETA, MAX_ITER_PER_BETA);
+    p.put(GradAssignment::PARAM_MAX_ITER_SINKHORN, MAX_ITER_SINKHORN);
+
+    cfg.Params(p);
+
+//    LayerIONames io;
+//    io.Input(GradAssignment::KEY_INPUT_GRAPH_AB, NAME_GRAPH_AB);
+//    io.Input(GradAssignment::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
+//    io.Input(GradAssignment::KEY_INPUT_MAT_COMPATIBILITY, NAME_COMPATIBILITY_MAT);
+
+//    io.Output(GradAssignment::KEY_OUTPUT_RESPONSE, NAME_M);
+
+    EXPECT_NO_THROW(to_.reset(new GradAssignment(cfg)));
+}
+
 TEST_F(GradAssignmentTest, ActivateAndResponse)
 {
     to_->Activate(sig_);
