@@ -25,11 +25,13 @@ class Cloud_2Cloud_TypedTests : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        this->m_ = Mat1f(4, PCLPointTraits_<TPoint >::FieldCount());
+        field_count_ = static_cast<int>(PCLPointTraits_<TPoint >::FieldCount());
+        this->m_ = Mat1f(4, field_count_);
         randn(this->m_, 0.f, 100.f);
     }
 
     Mat1f m_;                       ///< fake data
+    int field_count_;
 };
 
 TYPED_TEST_CASE(Cloud_2Cloud_TypedTests, PCLPointTypes);
@@ -61,7 +63,7 @@ TYPED_TEST(Cloud_2Cloud_TypedTests, Convert_same)
 
         EXPECT_NE(pt_data_ptr1, pt_data_ptr2) << "Pointers are pointing to the same memory location. Is this intentional?";
 
-        for(size_t i=0; i<PCLPointTraits_<TypeParam >::FieldCount(); i++) {
+        for(int i=0; i<this->field_count_; i++) {
 
             EXPECT_FLOAT_EQ(pt_data_ptr1[i], pt_data_ptr2[i]) << "Unexpected value for coordinate i=" << i;
         }

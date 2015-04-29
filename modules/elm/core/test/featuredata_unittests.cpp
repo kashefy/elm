@@ -7,7 +7,6 @@
 //M*/
 #include "elm/core/featuredata.h"
 
-#include "elm/core/debug_utils.h"
 #include "elm/core/stl/stl_inl.h"
 #include "elm/core/exception.h"
 #include "elm/ts/pcl_point_typed_tests.h"
@@ -201,20 +200,26 @@ class FeatureDataCloud_Test : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        size_t field_count = elm::ts::ExpectedPointAttr_<TPoint>::field_count;
-        size_t nb_floats = elm::ts::ExpectedPointAttr_<TPoint>::nb_floats;
+        int field_count = static_cast<int>(elm::ts::ExpectedPointAttr_<TPoint>::field_count);
+        int nb_floats = static_cast<int>(elm::ts::ExpectedPointAttr_<TPoint>::nb_floats);
 
         int cols = 2*field_count;
         while(cols % nb_floats == 0 && cols % field_count == 0) {
+
             cols += field_count;
         }
 
         mat_ = Mat1f(2, cols);
         randn(mat_, 0.f, 3.f);
-        mat_ = Mat1i(mat_);
+        mat_ = static_cast<Mat1f>(Mat1i(mat_));
 
         cld_ = Mat2PointCloud_<TPoint >(mat_.clone());
         mat_ = PointCloud2Mat_(cld_).clone();
+    }
+
+    virtual void TearDown()
+    {
+        cld_.reset();
     }
 
     Mat1f mat_;
