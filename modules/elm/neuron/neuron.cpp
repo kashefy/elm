@@ -9,6 +9,8 @@
 
 #include "elm/core/exception.h"
 
+using namespace elm;
+
 YNeuron::YNeuron()
     : poisson_(0.f, 0.f) // dummy initialization, ugly
 {

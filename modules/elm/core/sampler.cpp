@@ -12,10 +12,25 @@
 #include "elm/core/cv/mat_utils.h"
 
 using namespace cv;
+using namespace elm;
 
 void base_Sampler::pdf(const Mat1f &pdf) {
 
-    pdf_ = pdf/sum(pdf)(0);
+    float s = sum(pdf)(0);
+
+    if(s == 0) {
+
+        const float EPS = 1e-7;
+        pdf_ = pdf + EPS;
+
+        s = EPS*static_cast<float>(pdf_.total());
+        cv::divide(pdf_, s, pdf_);
+    }
+    else {
+
+        cv::divide(pdf, s, pdf_);
+    }
+
     elm::CumSum(pdf_, pdf_);
 }
 
@@ -37,7 +52,7 @@ int Sampler1D::Sample() const {
 
     const float RANDOM = float(theRNG());
     int i = 0;
-    while(pdf_(i) < RANDOM && i < static_cast<int>(pdf_.total())){
+    while(pdf_(i) < RANDOM && i < static_cast<int>(pdf_.total())) {
         i++;
     }
     return i;

@@ -15,6 +15,7 @@
 #include "elm/ts/ts.h"
 
 using namespace cv;
+using namespace elm;
 
 namespace {
 
@@ -43,6 +44,33 @@ TEST(Sampler1DTest, Uniform) {
     Mat m, s;
     meanStdDev(hist_normalized, m, s);
     EXPECT_NEAR(m.at<double>(0, 0), MEAN, 0.1);
+    EXPECT_NEAR(s.at<double>(0, 0), 0., 0.1);
+}
+
+TEST(Sampler1DTest, Uniform_zeros) {
+
+    const int SIZE = 10, N = 1e4;
+    Mat1f pdf_uniform = Mat1f::zeros(1, SIZE);
+
+    Sampler1D to; // test object
+    to.pdf(pdf_uniform);
+
+    Mat1f hist = Mat1f::zeros(1, SIZE);
+
+    for(int i=0; i<N; i++) {
+
+        int sampled_index = to.Sample();
+        EXPECT_IN_CLOSED(sampled_index, 0, SIZE-1);
+        hist(sampled_index)++;
+    }
+
+    EXPECT_EQ(sum(hist)(0), N);
+    Mat1f hist_normalized = hist/static_cast<float>(N);
+    EXPECT_MAT_NEAR(hist_normalized, pdf_uniform, 0.2f);
+
+    Mat m, s;
+    meanStdDev(hist_normalized, m, s);
+    EXPECT_NEAR(m.at<double>(0, 0), 0., 0.1);
     EXPECT_NEAR(s.at<double>(0, 0), 0., 0.1);
 }
 

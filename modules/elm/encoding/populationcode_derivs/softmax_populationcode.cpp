@@ -53,13 +53,12 @@ Mat1f SoftMaxPopulationCode::PopCode()
 
     for(int r=0; r<state_.rows; r++) {
 
-        Sampler1D sampler;
-
         Mat1f pdf = state_.row(r);
 
         // no sampling for all-zero response
         if(cv::sum(pdf)[0] > min_distr_sum_) {
 
+            Sampler1D sampler;
             sampler.pdf(pdf);
             pop_code(r, sampler.Sample()) = 1.f;
         }

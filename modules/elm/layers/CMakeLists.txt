@@ -10,7 +10,7 @@ file(GLOB_RECURSE SRC_LIST *.c*)
 file(GLOB_RECURSE HEADERS  *.h*)
 
 # Filter out test related sources
-set(REGEX_EXCLUDE_FROM_MODULE "(.*test.*)|(.*~.*)")
+set(REGEX_EXCLUDE_FROM_MODULE "(.*test.*)|(.*~.*)|(.*~)")
 list_filterout(SRC_LIST ${REGEX_EXCLUDE_FROM_MODULE})
 list_filterout(HEADERS  ${REGEX_EXCLUDE_FROM_MODULE})
 

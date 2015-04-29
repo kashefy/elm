@@ -10,8 +10,9 @@
 
 #include <opencv2/core/core.hpp>
 
-/**
- * @brief base class for sampling from a distribution
+namespace elm {
+
+/** @brief base class for sampling from a distribution
  */
 class base_Sampler
 {
@@ -81,9 +82,6 @@ public:
     cv::Point2i Sample() const;
 };
 
-namespace elm
-{
-
 /**
  * @brief Draw sample from exponential distribution
  * @param lambda
@@ -91,6 +89,6 @@ namespace elm
  */
 float randexp(float lambda);
 
-}
+} // namespace elm
 
 #endif // _ELM_CORE_SAMPLER_H_

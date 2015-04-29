@@ -10,6 +10,8 @@
 
 #include "elm/core/sampler.h"
 
+namespace elm {
+
 /**
  * @brief layer for trivial spiking neuron.
  *
@@ -40,5 +42,7 @@ public:
 protected:
     PoissonProcess poisson_;
 };
+
+} // namespace elm
 
 #endif // _ELM_NEURON_H_
