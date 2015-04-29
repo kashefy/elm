@@ -26,7 +26,7 @@ const string NAME_GRAPH_AB = "G_ab";
 const string NAME_GRAPH_IJ = "g_ij";
 const string NAME_M        = "m";
 
-class GraphCompatibilityTest : public ::testing::Test
+class GraphCompatibilityInitTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
@@ -39,6 +39,24 @@ protected:
         io.Output(GraphCompatibility::KEY_OUTPUT_RESPONSE, NAME_M);
 
         to_ = LayerFactory::CreateShared("GraphCompatibility", cfg, io);
+    }
+
+    // members
+    LayerFactory::LayerShared to_; ///< pointer to test object
+};
+
+TEST_F(GraphCompatibilityInitTest, Constructor_overloaded)
+{
+    LayerConfig cfg;
+    EXPECT_NO_THROW(to_.reset(new GraphCompatibility(cfg)));
+}
+
+class GraphCompatibilityTest : public GraphCompatibilityInitTest
+{
+protected:
+    virtual void SetUp()
+    {
+        GraphCompatibilityInitTest::SetUp();
 
         // initialize test graphs
         const int A=4;  ///< no. of nodes in G
@@ -94,13 +112,22 @@ protected:
     }
 
     // members
-    LayerFactory::LayerShared to_; ///< pointer to test object
-
     Mat1f g_ab_;                 ///< adj. matrix for test graph
     Mat1f g_ij_;                 ///< adj. matrix for test graph
 
     Signal sig_;
 };
+
+TEST_F(GraphCompatibilityTest, Activate_invalid_non_square_adj_mat)
+{
+    g_ab_ = Mat1f::ones(11, 7) - Mat1f::eye(11, 7);
+    g_ij_ = g_ab_.clone();
+
+    sig_.Append(NAME_GRAPH_AB, g_ab_);
+    sig_.Append(NAME_GRAPH_IJ, g_ij_);
+
+    EXPECT_THROW(to_->Activate(sig_), ExceptionBadDims);
+}
 
 TEST_F(GraphCompatibilityTest, Dims)
 {
