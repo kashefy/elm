@@ -213,6 +213,17 @@ protected:
     Signal sig_;
 };
 
+TEST_F(GradAssignmentTest, Activate_invalid_non_square_adj_mat)
+{
+    g_ab_ = Mat1f::ones(11, 7) - Mat1f::eye(11, 7);
+    g_ij_ = g_ab_.clone();
+
+    sig_.Append(NAME_GRAPH_AB, g_ab_);
+    sig_.Append(NAME_GRAPH_IJ, g_ij_);
+
+    EXPECT_THROW(to_->Activate(sig_), ExceptionBadDims);
+}
+
 TEST_F(GradAssignmentTest, ActivateAndResponse)
 {
     to_->Activate(sig_);
