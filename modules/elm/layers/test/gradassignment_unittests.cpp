@@ -40,11 +40,105 @@ const string NAME_GRAPH_IJ          = "g_ij";
 const string NAME_COMPATIBILITY_MAT = "c";
 const string NAME_M                 = "m";
 
-class GradAssignmentTest : public ::testing::Test
+class GradAssignmentInitTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
+        LayerConfig cfg;
+
+        PTree p;
+        p.put(GradAssignment::PARAM_BETA, BETA);
+        p.put(GradAssignment::PARAM_BETA_MAX, BETA_MAX);
+        p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
+        p.put(GradAssignment::PARAM_MAX_ITER_PER_BETA, MAX_ITER_PER_BETA);
+        p.put(GradAssignment::PARAM_MAX_ITER_SINKHORN, MAX_ITER_SINKHORN);
+
+        cfg.Params(p);
+
+        LayerIONames io;
+        io.Input(GradAssignment::KEY_INPUT_GRAPH_AB, NAME_GRAPH_AB);
+        io.Input(GradAssignment::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
+        io.Input(GradAssignment::KEY_INPUT_MAT_COMPATIBILITY, NAME_COMPATIBILITY_MAT);
+
+        io.Output(GradAssignment::KEY_OUTPUT_RESPONSE, NAME_M);
+
+        to_ = LayerFactory::CreateShared("GradAssignment", cfg, io);
+    }
+
+    // members
+    LayerFactory::LayerShared to_; ///< ptr to test object
+};
+
+TEST_F(GradAssignmentInitTest, Constructor_overloaded)
+{
+    LayerConfig cfg;
+
+    PTree p;
+    p.put(GradAssignment::PARAM_BETA, BETA);
+    p.put(GradAssignment::PARAM_BETA_MAX, BETA_MAX);
+    p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
+    p.put(GradAssignment::PARAM_MAX_ITER_PER_BETA, MAX_ITER_PER_BETA);
+    p.put(GradAssignment::PARAM_MAX_ITER_SINKHORN, MAX_ITER_SINKHORN);
+
+    cfg.Params(p);
+
+    EXPECT_NO_THROW(to_.reset(new GradAssignment(cfg)));
+}
+
+TEST_F(GradAssignmentInitTest, Reconfigure_invalid_beta)
+{
+    LayerConfig cfg;
+
+    PTree p;
+    p.put(GradAssignment::PARAM_BETA_MAX, BETA_MAX);
+    p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
+    p.put(GradAssignment::PARAM_MAX_ITER_PER_BETA, MAX_ITER_PER_BETA);
+    p.put(GradAssignment::PARAM_MAX_ITER_SINKHORN, MAX_ITER_SINKHORN);
+
+    p.put(GradAssignment::PARAM_BETA, 0.f);
+    cfg.Params(p);
+    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+
+    p.put(GradAssignment::PARAM_BETA, -0.5f);
+    cfg.Params(p);
+    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+}
+
+TEST_F(GradAssignmentInitTest, Reconfigure_invalid_beta_rate)
+{
+    LayerConfig cfg;
+
+    PTree p;
+    p.put(GradAssignment::PARAM_BETA_MAX, BETA_MAX);
+    p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
+    p.put(GradAssignment::PARAM_MAX_ITER_PER_BETA, MAX_ITER_PER_BETA);
+    p.put(GradAssignment::PARAM_MAX_ITER_SINKHORN, MAX_ITER_SINKHORN);
+
+    p.put(GradAssignment::PARAM_BETA, 1.f);
+    cfg.Params(p);
+    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+
+    p.put(GradAssignment::PARAM_BETA, 0.8f);
+    cfg.Params(p);
+    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+
+    p.put(GradAssignment::PARAM_BETA, 0.f);
+    cfg.Params(p);
+    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+
+    p.put(GradAssignment::PARAM_BETA, -10.f);
+    cfg.Params(p);
+    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+}
+
+class GradAssignmentTest : public GradAssignmentInitTest
+{
+protected:
+    virtual void SetUp()
+    {
+        GradAssignmentInitTest::SetUp();
+
         {
             LayerConfig cfg;
             LayerIONames io;
@@ -53,28 +147,6 @@ protected:
             io.Output(GraphCompatibility::KEY_OUTPUT_RESPONSE, NAME_COMPATIBILITY_MAT);
 
             graph_compatibility_= LayerFactory::CreateShared("GraphCompatibility", cfg, io);
-        }
-
-        {
-            LayerConfig cfg;
-
-            PTree p;
-            p.put(GradAssignment::PARAM_BETA, BETA);
-            p.put(GradAssignment::PARAM_BETA_MAX, BETA_MAX);
-            p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
-            p.put(GradAssignment::PARAM_MAX_ITER_PER_BETA, MAX_ITER_PER_BETA);
-            p.put(GradAssignment::PARAM_MAX_ITER_SINKHORN, MAX_ITER_SINKHORN);
-
-            cfg.Params(p);
-
-            LayerIONames io;
-            io.Input(GradAssignment::KEY_INPUT_GRAPH_AB, NAME_GRAPH_AB);
-            io.Input(GradAssignment::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
-            io.Input(GradAssignment::KEY_INPUT_MAT_COMPATIBILITY, NAME_COMPATIBILITY_MAT);
-
-            io.Output(GradAssignment::KEY_OUTPUT_RESPONSE, NAME_M);
-
-            to_ = LayerFactory::CreateShared("GradAssignment", cfg, io);
         }
 
         // initialize test graphs
@@ -133,7 +205,6 @@ protected:
         sig_.Clear();
     }
 
-    LayerFactory::LayerShared to_; ///< ptr to test object
     LayerFactory::LayerShared graph_compatibility_;
 
     Mat1f g_ab_;                 ///< adj. matrix for test graph
@@ -141,29 +212,6 @@ protected:
 
     Signal sig_;
 };
-
-TEST_F(GradAssignmentTest, Constructor_overloaded)
-{
-    LayerConfig cfg;
-
-    PTree p;
-    p.put(GradAssignment::PARAM_BETA, BETA);
-    p.put(GradAssignment::PARAM_BETA_MAX, BETA_MAX);
-    p.put(GradAssignment::PARAM_BETA_RATE, BETA_RATE);
-    p.put(GradAssignment::PARAM_MAX_ITER_PER_BETA, MAX_ITER_PER_BETA);
-    p.put(GradAssignment::PARAM_MAX_ITER_SINKHORN, MAX_ITER_SINKHORN);
-
-    cfg.Params(p);
-
-//    LayerIONames io;
-//    io.Input(GradAssignment::KEY_INPUT_GRAPH_AB, NAME_GRAPH_AB);
-//    io.Input(GradAssignment::KEY_INPUT_GRAPH_IJ, NAME_GRAPH_IJ);
-//    io.Input(GradAssignment::KEY_INPUT_MAT_COMPATIBILITY, NAME_COMPATIBILITY_MAT);
-
-//    io.Output(GradAssignment::KEY_OUTPUT_RESPONSE, NAME_M);
-
-    EXPECT_NO_THROW(to_.reset(new GradAssignment(cfg)));
-}
 
 TEST_F(GradAssignmentTest, ActivateAndResponse)
 {
