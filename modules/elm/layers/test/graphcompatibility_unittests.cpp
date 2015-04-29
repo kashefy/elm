@@ -319,6 +319,28 @@ TEST_F(GraphCompatibilityTest, CompatibilityIntegration)
     }
 }
 
+TEST(GraphCompatibilityStaticTest, Integrate_invalid_dims)
+{
+    Mat1f tmp(3, 2, 0.5f);
+
+    SparseMat1f s(tmp);
+
+    {
+        Mat1f m(s.size(0), s.size(1), 1.f);
+        EXPECT_NO_THROW(GraphCompatibility::Integrate(s, m));
+    }
+
+    {
+        Mat1f m(s.size(0)+1, s.size(1), 1.f);
+        EXPECT_THROW(GraphCompatibility::Integrate(s, m), ExceptionBadDims);
+    }
+
+    {
+        Mat1f m(s.size(0), s.size(1)+1, 1.f);
+        EXPECT_THROW(GraphCompatibility::Integrate(s, m), ExceptionBadDims);
+    }
+}
+
 class GraphCompatibilityProtected : public GraphCompatibility
 {
 public:
