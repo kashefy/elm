@@ -87,4 +87,13 @@ TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared_WithConfig)
     EXPECT_FLOAT_EQ(signal.MostRecentMat1f(NAME_RESPONSE).at<float>(0), 0.5f);
 }
 
+class LayerFactoryTest : public ::testing::Test
+{
+};
+
+TEST_F(LayerFactoryStaticTest, Constructor)
+{
+    EXPECT_NO_THROW(LayerFactory to);
+}
+
 } // annonymous namespace
