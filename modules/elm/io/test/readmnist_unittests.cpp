@@ -125,6 +125,13 @@ TEST_F(ReadMNISTLabelsTest, ReadHeader)
     EXPECT_EQ(N, ReadMNISTLabels().ReadHeader(test_data_path_.string().c_str()));
 }
 
+TEST_F(ReadMNISTLabelsTest, ReadHeader_repeated)
+{
+    const int N = FakeMNISTLabelsWriter::NB_ITEMS;
+    EXPECT_EQ(N, ReadMNISTLabels().ReadHeader(test_data_path_.string().c_str()));
+    EXPECT_EQ(N, ReadMNISTLabels().ReadHeader(test_data_path_.string().c_str()));
+}
+
 TEST_F(ReadMNISTLabelsTest, Next)
 {
     ReadMNISTLabels to;
@@ -289,6 +296,14 @@ TEST_F(ReadMNISTImagesTranslTest, SceneDims)
     EXPECT_THROW(ReadMNISTImagesTransl().SceneDims(1, -1), ExceptionBadDims);
     EXPECT_THROW(ReadMNISTImagesTransl().SceneDims(-1, -1), ExceptionBadDims);
     EXPECT_NO_THROW(ReadMNISTImagesTransl().SceneDims(1, 1));
+}
+
+TEST_F(ReadMNISTImagesTranslTest, ReadHeadersceneDims_too_small)
+{
+    ReadMNISTImagesTransl to; ///< test object
+
+    EXPECT_NO_THROW(to.SceneDims(2, 2));
+    EXPECT_THROW(to.ReadHeader(test_data_path_.string().c_str()), ExceptionBadDims);
 }
 
 TEST_F(ReadMNISTImagesTranslTest, ReadHeader)
