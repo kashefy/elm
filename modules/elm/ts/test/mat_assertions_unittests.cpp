@@ -222,6 +222,70 @@ TEST(MatAssertionsTest, Mat_NotEqSingleEl) {
 }
 
 /**
+ * @brief test checking Mat objects for equality with nan elements present
+ */
+TEST(MatAssertionsTest, Mat_EqWithNaN) {
+
+    Mat1f a = Mat1f::ones(3, 2);
+    Mat1f b = a.clone();
+
+    ASSERT_TRUE( EqualDims(a, b) );
+
+    // inject nan values;
+    a(2) = std::numeric_limits<float>::quiet_NaN();
+    b(2) = std::numeric_limits<float>::quiet_NaN();
+
+    EXPECT_TRUE( EqualDims(a, b) ) << "no longer equal after injecting nan values";
+
+    a(4) = -std::numeric_limits<float>::quiet_NaN();
+    b(4) = -std::numeric_limits<float>::quiet_NaN();
+
+    EXPECT_TRUE( EqualDims(a, b) ) << "no longer equal after injecting nan values";
+}
+
+TEST(MatAssertionsTest, Mat_EqWithNaN_negative) {
+
+    Mat1f a = Mat1f::ones(3, 2);
+    Mat1f b = a.clone();
+
+    ASSERT_TRUE( EqualDims(a, b) );
+
+    // inject nan values;
+    a(4) = -std::numeric_limits<float>::quiet_NaN();
+    b(4) = -std::numeric_limits<float>::quiet_NaN();
+
+    EXPECT_TRUE( EqualDims(a, b) ) << "no longer equal after injecting -nan values";
+}
+
+TEST(MatAssertionsTest, Mat_EqWithNaN_all) {
+
+    Mat1f a = Mat1f::ones(3, 2);
+    Mat1f b = a.clone();
+
+    ASSERT_TRUE( EqualDims(a, b) );
+
+    // inject nan values everywhere
+    a.setTo(std::numeric_limits<float>::quiet_NaN());
+    b.setTo(std::numeric_limits<float>::quiet_NaN());
+
+    EXPECT_TRUE( EqualDims(a, b) ) << "no longer equal after filling Mats with nans";
+}
+
+TEST(MatAssertionsTest, Mat_EqWithNaN_all_negative) {
+
+    Mat1f a = Mat1f::ones(3, 2);
+    Mat1f b = a.clone();
+
+    ASSERT_TRUE( EqualDims(a, b) );
+
+    // inject nan values everywhere
+    a.setTo(-std::numeric_limits<float>::quiet_NaN());
+    b.setTo(-std::numeric_limits<float>::quiet_NaN());
+
+    EXPECT_TRUE( EqualDims(a, b) ) << "no longer equal after filling Mats with -nans";
+}
+
+/**
  * @brief test OpenCV Mat Assertions with 2 Mats of float (non-equal dims, non-equal elem. values)
  */
 TEST(MatAssertionsTest, Mat_NotEqDims) {
