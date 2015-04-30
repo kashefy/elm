@@ -26,13 +26,20 @@ void VertexCache::reserve(int capacity)
 
 void VertexCache::remove(VtxColor vtx_id)
 {
-    ids_[vtx_id] = -1;
-    if(vtx_id == lim_) {
+    if(ids_.size() > 0) {
 
-        while(lim_ >= 0 && ids_[lim_] >= 0) {
+        ids_[vtx_id] = -1;
+        if(vtx_id == lim_) {
 
-            lim_--;
+            while(lim_ >= 0 && ids_[lim_] >= 0) {
+
+                lim_--;
+            }
         }
+    }
+    else {
+
+        ELM_THROW_KEY_ERROR("Cannot remove vertex from empty cache.");
     }
 }
 
