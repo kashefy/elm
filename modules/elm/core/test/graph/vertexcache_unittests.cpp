@@ -126,6 +126,39 @@ TEST_F(VertexCacheTest, Remove)
     EXPECT_FALSE(to_.exists(3));
 }
 
+TEST_F(VertexCacheTest, Remove_all)
+{
+    to_.remove(3);
+
+    EXPECT_EQ(-1, to_.Id(3));
+    EXPECT_FALSE(to_.exists(3));
+
+    to_.remove(5);
+
+    EXPECT_EQ(-1, to_.Id(5));
+    EXPECT_FALSE(to_.exists(5));
+
+    to_.remove(2);
+
+    EXPECT_EQ(-1, to_.Id(2));
+    EXPECT_FALSE(to_.exists(2));
+}
+
+TEST_F(VertexCacheTest, Remove_twice)
+{
+    EXPECT_NO_THROW(to_.remove(3));
+    EXPECT_NO_THROW(to_.remove(3));
+
+    EXPECT_EQ(-1, to_.Id(3));
+    EXPECT_FALSE(to_.exists(3));
+}
+
+TEST_F(VertexCacheTest, Remove_empty)
+{
+    VertexCache to;
+    EXPECT_THROW(to.remove(3), ExceptionKeyError);
+}
+
 TEST_F(VertexCacheTest, Remove_before_substitution)
 {
     to_.remove(5);
@@ -159,6 +192,39 @@ TEST_F(VertexCacheTest, Clear)
     EXPECT_FALSE(to_.exists(3));
     EXPECT_THROW(to_.Id(3), ExceptionKeyError);
     EXPECT_FALSE(to_.find(3, tmp));
+}
+
+/** @todo test that VtxDescriptor reflects latest insertion
+ */
+TEST_F(VertexCacheTest, Insert_twice)
+{
+    ASSERT_EQ(3, to_.Id(3));
+    VtxDescriptor a;
+    to_.insert(3, a);
+    EXPECT_EQ(3, to_.Id(3));
+
+    ASSERT_EQ(5, to_.Id(5));
+    to_.insert(5, a);
+    EXPECT_EQ(5, to_.Id(5));
+}
+
+TEST_F(VertexCacheTest, Insert_beyond_capacity)
+{
+    const int CAPACITY=3;
+    VertexCache to;
+    to.reserve(CAPACITY);
+
+    for(int i=1; i<CAPACITY*10; i++) {
+
+        VtxDescriptor tmp;
+        to.insert(i, tmp);
+    }
+
+    for(int i=1; i<CAPACITY*10; i++) {
+
+        EXPECT_TRUE(to.exists(i));
+        EXPECT_EQ(i, to.Id(i));
+    }
 }
 
 } // annonymous namespace for test cases
