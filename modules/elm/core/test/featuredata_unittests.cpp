@@ -201,24 +201,34 @@ class FeatureDataCloud_Test : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        size_t field_count = elm::ts::ExpectedPointAttr_<TPoint>::field_count;
-        size_t nb_floats = elm::ts::ExpectedPointAttr_<TPoint>::nb_floats;
+        field_count_ = static_cast<int>(elm::ts::ExpectedPointAttr_<TPoint>::field_count);
+        nb_floats_ = static_cast<int>(elm::ts::ExpectedPointAttr_<TPoint>::nb_floats);
 
-        int cols = 2*field_count;
-        while(cols % nb_floats == 0 && cols % field_count == 0) {
-            cols += field_count;
+        int cols = 2*field_count_;
+        while(cols % nb_floats_ == 0 && cols % field_count_ == 0) {
+
+            cols += field_count_;
         }
 
         mat_ = Mat1f(2, cols);
         randn(mat_, 0.f, 3.f);
-        mat_ = Mat1i(mat_);
+        mat_ = static_cast<Mat1f>(Mat1i(mat_));
 
         cld_ = Mat2PointCloud_<TPoint >(mat_.clone());
-        mat_ = PointCloud2Mat_(cld_).clone();
+        mat_ref_ = PointCloud2Mat_(cld_).clone();
+    }
+
+    virtual void TearDown()
+    {
+        cld_.reset();
     }
 
     Mat1f mat_;
+    Mat1f mat_ref_;
     boost::shared_ptr<pcl::PointCloud<TPoint > > cld_;
+
+    int field_count_;
+    int nb_floats_;
 };
 
 TYPED_TEST_CASE(FeatureDataCloud_Test, PCLPointTypes);
@@ -235,8 +245,8 @@ TYPED_TEST(FeatureDataCloud_Test, InitWithCloud)
     Mat1f m = to.get<Mat1f>();
     CloudTPPtr cld = to.get<CloudTPPtr >();
 
-    EXPECT_MAT_EQ(m, this->mat_);
-    EXPECT_MAT_EQ(PointCloud2Mat_<TypeParam>(cld), this->mat_);
+    EXPECT_MAT_EQ(m, this->mat_ref_);
+    EXPECT_MAT_EQ(PointCloud2Mat_<TypeParam>(cld), m);
 
     EXPECT_THROW(to.get<float >(), ExceptionTypeError);
     EXPECT_THROW(to.get<int >(), ExceptionTypeError);
@@ -253,7 +263,14 @@ TYPED_TEST(FeatureDataCloud_Test, InitWithMat1f)
 
     CloudTPPtr cld = to.get<CloudTPPtr >();
 
-    EXPECT_MAT_EQ(PointCloud2Mat_<TypeParam >(cld), this->mat_);
+    Mat1f m = PointCloud2Mat_<TypeParam >(cld);
+
+    int new_rows = static_cast<int>(m.total())/this->nb_floats_;
+    int new_cols = this->field_count_;
+    m = m.reshape(1, new_rows).colRange(1, new_cols);
+    this->mat_ref_ = this->mat_ref_.reshape(1, new_rows).colRange(1, new_cols);
+
+    EXPECT_MAT_EQ(m, this->mat_ref_);
 }
 
 /**
@@ -267,7 +284,14 @@ TYPED_TEST(FeatureDataCloud_Test, InitWithSparseMat1f)
 
     CloudTPPtr cld = to.get<CloudTPPtr >();
 
-    EXPECT_MAT_EQ(PointCloud2Mat_<TypeParam >(cld), this->mat_);
+    Mat1f m = PointCloud2Mat_<TypeParam >(cld);
+
+    int new_rows = static_cast<int>(m.total())/this->nb_floats_;
+    int new_cols = this->field_count_;
+    m = m.reshape(1, new_rows).colRange(1, new_cols);
+    this->mat_ref_ = this->mat_ref_.reshape(1, new_rows).colRange(1, new_cols);
+
+    EXPECT_MAT_EQ(m, this->mat_ref_);
 }
 
 /**
@@ -278,9 +302,8 @@ TYPED_TEST(FeatureDataCloud_Test, InitWithVecMat1f)
     typedef boost::shared_ptr<pcl::PointCloud< TypeParam > > CloudTPPtr;
 
     // VecMat1f to Cloud conversion assumes 1 point per VecMat1f element
-    size_t nb_floats = elm::ts::ExpectedPointAttr_<TypeParam >::nb_floats;
 
-    this->mat_ = this->mat_.reshape(1, this->mat_.total()/nb_floats);
+    this->mat_ = this->mat_.reshape(1, this->mat_.total()/this->field_count_);
 
     VecMat1f vm;
     for(int r=0; r<this->mat_.rows; r++) {
@@ -294,7 +317,13 @@ TYPED_TEST(FeatureDataCloud_Test, InitWithVecMat1f)
     // so we'll need to reshape before comparing.
     CloudTPPtr cld = to.get<CloudTPPtr >();
 
-    EXPECT_MAT_EQ(PointCloud2Mat_<TypeParam >(cld).reshape(1, this->mat_.rows), this->mat_);
+    Mat1f m = PointCloud2Mat_<TypeParam >(cld);
+    int new_rows = static_cast<int>(m.total())/this->nb_floats_;
+    int new_cols = this->field_count_;
+    m = m.reshape(1, new_rows).colRange(1, new_cols);
+    this->mat_ref_ = this->mat_ref_.reshape(1, new_rows).colRange(1, new_cols);
+
+    EXPECT_MAT_EQ(m, this->mat_ref_);
 }
 
 /**
@@ -343,7 +372,13 @@ TYPED_TEST(FeatureDataCloud_Test, Cached_Cloud_protected_reset)
     EXPECT_EQ(this->cld_->height, cld2->height) << "Unexpected height after reset";
     EXPECT_EQ(this->cld_->width, cld2->width) << "Unexpected width after reset";
 
-    EXPECT_MAT_EQ(PointCloud2Mat_<TypeParam >(cld2).reshape(1, this->mat_.rows), this->mat_) << "data mismatch after reset";
+    Mat1f m = PointCloud2Mat_<TypeParam >(cld2);
+    int new_rows = static_cast<int>(m.total())/this->nb_floats_;
+    int new_cols = this->field_count_;
+    m = m.reshape(1, new_rows).colRange(1, new_cols);
+    this->mat_ref_ = this->mat_ref_.reshape(1, new_rows).colRange(1, new_cols);
+
+    EXPECT_MAT_EQ(m, this->mat_ref_) << "data mismatch after reset";
 }
 
 #endif // __WITH_PCL

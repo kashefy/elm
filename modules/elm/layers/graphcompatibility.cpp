@@ -93,7 +93,7 @@ void GraphCompatibility::Activate(const Signal &signal)
     m_ = Compatibility(g_ab, g_ij);
 }
 
-Mat1f GraphCompatibility::Integrate(SparseMat1f &c_aibj, Mat1f m)
+Mat1f GraphCompatibility::Integrate(SparseMat1f &c_aibj, const Mat1f &m)
 {
     int A = c_aibj.size(0);
     int I = c_aibj.size(1);

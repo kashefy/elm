@@ -12,6 +12,8 @@
 
 #include "gtest/gtest.h"
 
+#include "type_traits"
+
 #include <string>
 #include <opencv2/core/core.hpp>
 
@@ -77,7 +79,12 @@ template <class T1, class T2>
     cv::Mat1b cmp_out(a.size());
     for(size_t i=0; i<a.total(); i++) {
 
-        cmp_out(i) = a(i) != b(i);
+        bool is_both_nan = false;
+        if(std::numeric_limits<T1>::has_quiet_NaN && std::numeric_limits<T1>::has_quiet_NaN) {
+
+            is_both_nan = (a(i) != a(i)) && (b(i) != b(i));
+        }
+        cmp_out(i) = !is_both_nan && (a(i) != b(i));
     }
     int n = countNonZero(cmp_out);
     if(n == 0) { return AssertionSuccess(); }

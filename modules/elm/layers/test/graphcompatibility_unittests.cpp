@@ -26,7 +26,7 @@ const string NAME_GRAPH_AB = "G_ab";
 const string NAME_GRAPH_IJ = "g_ij";
 const string NAME_M        = "m";
 
-class GraphCompatibilityTest : public ::testing::Test
+class GraphCompatibilityInitTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
@@ -39,6 +39,24 @@ protected:
         io.Output(GraphCompatibility::KEY_OUTPUT_RESPONSE, NAME_M);
 
         to_ = LayerFactory::CreateShared("GraphCompatibility", cfg, io);
+    }
+
+    // members
+    LayerFactory::LayerShared to_; ///< pointer to test object
+};
+
+TEST_F(GraphCompatibilityInitTest, Constructor_overloaded)
+{
+    LayerConfig cfg;
+    EXPECT_NO_THROW(to_.reset(new GraphCompatibility(cfg)));
+}
+
+class GraphCompatibilityTest : public GraphCompatibilityInitTest
+{
+protected:
+    virtual void SetUp()
+    {
+        GraphCompatibilityInitTest::SetUp();
 
         // initialize test graphs
         const int A=4;  ///< no. of nodes in G
@@ -94,13 +112,22 @@ protected:
     }
 
     // members
-    LayerFactory::LayerShared to_; ///< pointer to test object
-
     Mat1f g_ab_;                 ///< adj. matrix for test graph
     Mat1f g_ij_;                 ///< adj. matrix for test graph
 
     Signal sig_;
 };
+
+TEST_F(GraphCompatibilityTest, Activate_invalid_non_square_adj_mat)
+{
+    g_ab_ = Mat1f::ones(11, 7) - Mat1f::eye(11, 7);
+    g_ij_ = g_ab_.clone();
+
+    sig_.Append(NAME_GRAPH_AB, g_ab_);
+    sig_.Append(NAME_GRAPH_IJ, g_ij_);
+
+    EXPECT_THROW(to_->Activate(sig_), ExceptionBadDims);
+}
 
 TEST_F(GraphCompatibilityTest, Dims)
 {
@@ -290,6 +317,51 @@ TEST_F(GraphCompatibilityTest, CompatibilityIntegration)
         EXPECT_GT(c_ai(vertex_compat_idx, vertex_compat_idx), c_ai(vertex_non_compat_idx, vertex_non_compat_idx))
                 << "Score of compatible vertex should exceed that of non-compatible one.";
     }
+}
+
+TEST(GraphCompatibilityStaticTest, Integrate_invalid_dims)
+{
+    Mat1f tmp(3, 2, 0.5f);
+
+    SparseMat1f s(tmp);
+
+    {
+        Mat1f m(s.size(0), s.size(1), 1.f);
+        EXPECT_NO_THROW(GraphCompatibility::Integrate(s, m));
+    }
+
+    {
+        Mat1f m(s.size(0)+1, s.size(1), 1.f);
+        EXPECT_THROW(GraphCompatibility::Integrate(s, m), ExceptionBadDims);
+    }
+
+    {
+        Mat1f m(s.size(0), s.size(1)+1, 1.f);
+        EXPECT_THROW(GraphCompatibility::Integrate(s, m), ExceptionBadDims);
+    }
+}
+
+class GraphCompatibilityProtected : public GraphCompatibility
+{
+public:
+    float Compatibility(float w1, float w2) const
+    {
+        return GraphCompatibility::Compatibility(w1, w2);
+    }
+};
+
+class GraphCompatibilityProtectedTest : public ::testing::Test
+{
+};
+
+TEST_F(GraphCompatibilityProtectedTest, Compatibility_weights)
+{
+    GraphCompatibilityProtected to; ///< test object
+    EXPECT_EQ(0.f, to.Compatibility(0.f, 1.f));
+    EXPECT_EQ(0.f, to.Compatibility(0.f, 3.f));
+    EXPECT_EQ(to.Compatibility(1.f, 0.f), to.Compatibility(0.f, 1.f)) << "compatibility is not symmetric";
+    EXPECT_EQ(to.Compatibility(0.3f, 0.f), to.Compatibility(0.f, 0.3f)) << "compatibility is not symmetric";
+    EXPECT_EQ(to.Compatibility(0.7, 0.3), to.Compatibility(0.3f, 0.7f)) << "compatibility is not symmetric";
 }
 
 } // annonymous namespace for test cases and fixtures

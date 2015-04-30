@@ -9,7 +9,15 @@
 
 #ifdef __WITH_PCL   // the layer is otherwise implemented as unsupported
 
+// suppress sign comparison warning when including PCL's ICP headers
+#if !defined(_MSC_VER)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wsign-compare"
+#endif // !defined(_MSC_VER)
 #include <pcl/registration/icp.h>
+#if !defined(_MSC_VER)
+    #pragma GCC diagnostic pop // revert to command line options
+#endif // !defined(_MSC_VER)
 
 #include <opencv2/core/eigen.hpp> // for eigen2cv(), must be preceeded definitio of Eigen either PCL or #include <Eigen/Dense>
 

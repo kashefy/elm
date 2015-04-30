@@ -9,8 +9,15 @@
 
 #ifdef __WITH_PCL // test normally
 
-#include <pcl/registration/registration.h>
-#include <pcl/registration/icp.h>
+// suppress sign comparison warning when including PCL's ICP headers
+#if !defined(_MSC_VER)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wsign-compare"
+#endif // !defined(_MSC_VER)
+    #include <pcl/registration/icp.h>
+#if !defined(_MSC_VER)
+    #pragma GCC diagnostic pop // revert to command line options
+#endif // !defined(_MSC_VER)
 
 #include <Eigen/Dense>            // to enable OpenCV's eigen2cv()
 #include <opencv2/core/eigen.hpp> // for eigen2cv(), preceeded be #include <Eigen/Dense>

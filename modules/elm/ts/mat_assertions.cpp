@@ -12,6 +12,7 @@
 #endif // _MSC_VER && !__INTEL_COMPILER
 
 #include "elm/core/exception.h"
+#include "elm/core/cv/mat_utils.h"
 #include "elm/core/cv/mat_type_utils.h"
 
 using namespace std;
@@ -213,6 +214,14 @@ AssertionResult Equal(const Mat& a, const Mat& b) {
 
     Mat cmp_out;
     compare(a, b, cmp_out, CMP_NE);
+
+    Mat a_isnan = elm::isnan(a);
+    Mat b_isnan = elm::isnan(b);
+    Mat both_nan;
+    cv::bitwise_and(a_isnan, b_isnan, both_nan);
+
+    cmp_out.setTo(Scalar(0), both_nan);
+
     int n = countNonZero(cmp_out);
     if(n == 0) { return AssertionSuccess(); }
     else {
