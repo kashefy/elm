@@ -10,6 +10,7 @@
 
 #ifdef __WITH_PCL // the following visitor derived template class definitions require PCL support
 
+#include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/cloud_2cloud_.h"
 #include "elm/core/pcl/vertices.h"
 #include "elm/core/cv/typedefs_fwd.h"

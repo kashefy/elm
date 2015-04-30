@@ -10,10 +10,10 @@
 
 #ifdef __WITH_PCL // the template class definitions require PCL support
 
-#include <iostream>
+#include <pcl/point_types.h>
+#include <pcl/point_cloud.h>
 
 #include "elm/core/exception.h"
-#include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/point_traits.h"
 #include "elm/core/pcl/typedefs_fwd.h"
 
@@ -33,7 +33,7 @@ public:
     /**
      * @brief Convert point cloud of one type into another
      *
-     * template specializations exsit for pcl::PointNormal to pcl::PointXYZ conversions
+     * template specializations exist for pcl::PointNormal to pcl::PointXYZ conversions
      *
      * @param[in] src cloud
      * @param[out] dst point cloud
@@ -53,7 +53,8 @@ public:
         }
         else {
 
-            dst = Mat2PointCloud_<TPointDst >(PointCloud2Mat_<TPointSrc >(src));
+            dst.reset(new pcl::PointCloud<TPointDst >(src->width, src->height));
+            pcl::copyPointCloud(*src, *dst);
         }
     }
 

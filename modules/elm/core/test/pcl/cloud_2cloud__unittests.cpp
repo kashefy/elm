@@ -11,6 +11,7 @@
 #include "gtest/gtest.h"
 
 #include "elm/core/exception.h"
+#include "elm/core/pcl/cloud_.h"
 #include "elm/ts/pcl_point_typed_tests.h"
 
 using namespace cv;
