@@ -146,4 +146,19 @@ TEST_F(VertexCacheTest, Remove_with_substitution)
     EXPECT_EQ(-1, to_.Id(5));
 }
 
+TEST_F(VertexCacheTest, Clear)
+{
+    EXPECT_TRUE(to_.exists(3));
+    EXPECT_EQ(3, to_.Id(3));
+
+    VtxDescriptor tmp;
+    EXPECT_TRUE(to_.find(3, tmp));
+
+    to_.clear();
+
+    EXPECT_FALSE(to_.exists(3));
+    EXPECT_THROW(to_.Id(3), ExceptionKeyError);
+    EXPECT_FALSE(to_.find(3, tmp));
+}
+
 } // annonymous namespace for test cases
