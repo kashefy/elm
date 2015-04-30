@@ -719,16 +719,157 @@ TEST(SparseMatAssertionsTest, Mat_NotEqDimsAllZeros_size) {
     EXPECT_FALSE( EqualDims(a, Size2i(3, 2)) );
 }
 
+TEST(SparseMatAssertionsTest, DimsEmpty) {
+
+    SparseMat1f a;
+    EXPECT_FALSE( EqualDims(a, Size2i(3, 2)) );
+    EXPECT_FALSE( EqualDims(a, Size2i(0, 2)) );
+    EXPECT_FALSE( EqualDims(a, Size2i(3, 0)) );
+    EXPECT_TRUE( EqualDims(a, Size2i(0, 0)) );
+}
+
 /**
  * @brief test failure message
  */
-TEST(MatAssertionsTest, FailureMessage)
+TEST(MatAssertionsTest, FailureMessage_float)
 {
-    Mat a = Mat::zeros(3, 2, CV_32FC1);
-    Mat b = Mat::ones(3, 2, CV_32FC1);
+    Mat a = Mat::zeros(2, 2, CV_32FC1);
+    Mat b = Mat::zeros(2, 2, CV_32FC1);
+
+    for(int i=0; i<4; i++) {
+
+        a.at<float>(i) = static_cast<float>(i);
+        b.at<float>(i) = static_cast<float>(-i);
+    }
+
     Mat cmp_out;
     compare(a, b, cmp_out, CMP_NE);
-    EXPECT_FALSE( MatFailureMessageNonZero(a, b, cmp_out).empty() ) << "Failure message is empty";
+
+    string msg = MatFailureMessageNonZero(a, b, cmp_out);
+    ASSERT_FALSE( msg.empty() ) << "Failure message is empty";
+
+    EXPECT_EQ(msg.find("at (0,0)"), msg.npos);
+    EXPECT_NE(msg.find("at (0,1) (1) (-1)"), msg.npos);
+    EXPECT_NE(msg.find("at (1,0) (2) (-2)"), msg.npos);
+    EXPECT_NE(msg.find("at (1,1) (3) (-3)"), msg.npos);
+}
+
+TEST(MatAssertionsTest, FailureMessage_empty_msg)
+{
+    Mat a = Mat::zeros(2, 2, CV_32FC1);
+    Mat b = Mat::zeros(2, 2, CV_32FC1);
+
+    Mat cmp_out;
+    compare(a, b, cmp_out, CMP_NE);
+
+    EXPECT_TRUE( MatFailureMessageNonZero(a, b, cmp_out).empty() ) << "Failure message is not empty";
+}
+
+TEST(MatAssertionsTest, FailureMessage_non_empty)
+{
+    {
+        Mat a = Mat::zeros(3, 2, CV_8UC1);
+        Mat b = Mat::ones(3, 2, CV_8UC1);
+        Mat cmp_out;
+        compare(a, b, cmp_out, CMP_NE);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, b, cmp_out).empty() ) << "Failure message is empty";
+    }
+    {
+        Mat a = Mat::zeros(3, 2, CV_8SC1);
+        Mat b = Mat::ones(3, 2, CV_8SC1);
+        Mat cmp_out;
+        compare(a, b, cmp_out, CMP_NE);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, b, cmp_out).empty() ) << "Failure message is empty";
+    }
+    {
+        Mat a = Mat::zeros(3, 2, CV_16UC1);
+        Mat b = Mat::ones(3, 2, CV_16UC1);
+        Mat cmp_out;
+        compare(a, b, cmp_out, CMP_NE);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, b, cmp_out).empty() ) << "Failure message is empty";
+    }
+    {
+        Mat a = Mat::zeros(3, 2, CV_32SC1);
+        Mat b = Mat::ones(3, 2, CV_32SC1);
+        Mat cmp_out;
+        compare(a, b, cmp_out, CMP_NE);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, b, cmp_out).empty() ) << "Failure message is empty";
+    }
+    {
+        Mat a = Mat::zeros(3, 2, CV_32FC1);
+        Mat b = Mat::ones(3, 2, CV_32FC1);
+        Mat cmp_out;
+        compare(a, b, cmp_out, CMP_NE);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, b, cmp_out).empty() ) << "Failure message is empty";
+    }
+    {
+        Mat a = Mat::zeros(3, 2, CV_64FC1);
+        Mat b = Mat::ones(3, 2, CV_64FC1);
+        Mat cmp_out;
+        compare(a, b, cmp_out, CMP_NE);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, b, cmp_out).empty() ) << "Failure message is empty";
+    }
+}
+
+TEST(MatAssertionsTest, FailureMessage_single_float)
+{
+    Mat a = Mat::zeros(2, 2, CV_32FC1);
+    Mat1b cmp = Mat::ones(2, 2, CV_8UC1);
+    cmp.at<uchar>(0) = 0;
+
+    for(int i=0; i<4; i++) {
+
+        a.at<float>(i) = static_cast<float>(i);
+    }
+
+    string msg = MatFailureMessageNonZero(a, cmp);
+    ASSERT_FALSE( msg.empty() ) << "Failure message is empty";
+
+    EXPECT_EQ(msg.find("at (0,0)"), msg.npos);
+    EXPECT_NE(msg.find("at (0,1) (1)\n"), msg.npos);
+    EXPECT_NE(msg.find("at (1,0) (2)\n"), msg.npos);
+    EXPECT_NE(msg.find("at (1,1) (3)\n"), msg.npos);
+}
+
+TEST(MatAssertionsTest, FailureMessage_single_non_empty)
+{
+    {
+        Mat a = Mat::zeros(3, 2, CV_8UC1);
+        Mat1b cmp = Mat::ones(2, 2, CV_8UC1);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, cmp).empty() ) << "Failure message is empty";
+    }
+    {
+        Mat a = Mat::zeros(3, 2, CV_8SC1);
+        Mat1b cmp = Mat::ones(2, 2, CV_8UC1);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, cmp).empty() ) << "Failure message is empty";
+    }
+    {
+        Mat a = Mat::zeros(3, 2, CV_16UC1);
+        Mat1b cmp = Mat::ones(2, 2, CV_8UC1);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, cmp).empty() ) << "Failure message is empty";
+    }
+    {
+        Mat a = Mat::zeros(3, 2, CV_32SC1);
+        Mat1b cmp = Mat::ones(2, 2, CV_8UC1);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, cmp).empty() ) << "Failure message is empty";
+    }
+    {
+        Mat a = Mat::zeros(3, 2, CV_32FC1);
+        Mat1b cmp = Mat::ones(2, 2, CV_8UC1);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, cmp).empty() ) << "Failure message is empty";
+    }
+    {
+        Mat a = Mat::zeros(3, 2, CV_64FC1);
+        Mat1b cmp = Mat::ones(2, 2, CV_8UC1);
+        EXPECT_FALSE( MatFailureMessageNonZero(a, cmp).empty() ) << "Failure message is empty";
+    }
+}
+
+TEST(MatAssertionsTest, FailureMessage_single_empty_msg)
+{
+    Mat a = Mat::zeros(2, 2, CV_32FC1);
+    Mat cmp = Mat::zeros(2, 2, CV_8UC1);
+    EXPECT_TRUE( MatFailureMessageNonZero(a, cmp).empty() ) << "Failure message is not empty";
 }
 
 /**
