@@ -249,6 +249,24 @@ TEST_F(MatlabMATFileReaderTest, Bad_ext)
     ASSERT_FALSE(bfs::is_regular_file(tmp_filepath));
 }
 
+TEST_F(MatlabMATFileReaderTest, Bad_file)
+{
+    string tmp_filepath("foo.mat");
+    ofstream o(tmp_filepath.c_str());
+    o << "bar";
+    o.close();
+
+    ASSERT_TRUE(bfs::is_regular_file(tmp_filepath));
+
+    MatlabMATFileReader reader;
+    EXPECT_THROW(reader.ReadHeader(tmp_filepath),
+                 ExceptionFileIOError);
+
+    bfs::remove(tmp_filepath);
+
+    ASSERT_FALSE(bfs::is_regular_file(tmp_filepath));
+}
+
 TEST_F(MatlabMATFileReaderTest, ReadHeader_twice)
 {
     bfs::path p(test_filepath_);
