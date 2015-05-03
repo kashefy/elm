@@ -20,7 +20,6 @@
 
 #include "matio.h"
 
-#include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
 #include "elm/ts/container.h"
 #include "elm/ts/mat_assertions.h"
@@ -250,6 +249,22 @@ TEST_F(MatlabMATFileReaderTest, Bad_ext)
     ASSERT_FALSE(bfs::is_regular_file(tmp_filepath));
 }
 
+TEST_F(MatlabMATFileReaderTest, ReadHeader_twice)
+{
+    bfs::path p(test_filepath_);
+
+    MatlabMATFileReader to; ///< test object
+    EXPECT_NO_THROW(to.ReadHeader(p.string()));
+    EXPECT_THROW(to.ReadHeader(p.string()), ExceptionFileIOError);
+
+    vector<string> var_names = to.TopLevelVarNames();
+
+    EXPECT_SIZE(6, var_names);
+    EXPECT_EQ("x", var_names[3]);
+    EXPECT_EQ("y", var_names[4]);
+    EXPECT_EQ("z", var_names[5]);
+}
+
 TEST_F(MatlabMATFileReaderTest, TopLevelVarNames)
 {
     bfs::path p(test_filepath_);
@@ -462,7 +477,6 @@ TEST_F(MatlabMATFileReaderTest, DISABLED_MATIO)
 
     for(int i=0; i<1000; i++) {
 
-        ELM_COUT_VAR(i);
         Mat y;
         elm::SliceCopy(x.clone(), 3, i, y);
 
