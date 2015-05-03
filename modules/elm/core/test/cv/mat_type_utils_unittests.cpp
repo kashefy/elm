@@ -69,4 +69,10 @@ TEST(CV_TypeUtilsTest, TypeToStringChannels)
     }
 }
 
+TEST(CV_TypeUtilsTest, UserType)
+{
+    Mat_<string> m(2, 3);
+    EXPECT_EQ(MatTypeToString(m), "CV_USRTYPE1");
+}
+
 } // annnonymous namespace for unit tests

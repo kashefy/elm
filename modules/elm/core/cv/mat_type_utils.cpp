@@ -25,7 +25,9 @@ string elm::MatTypeToString(const Mat& m)
       case CV_32S:  type_name = "CV_32S" ; break;
       case CV_32F:  type_name = "CV_32F" ; break;
       case CV_64F:  type_name = "CV_64F" ; break;
-      default: break;
+      default:
+        type_name = "CV_USRTYPE1" ;
+        break;
     }
     return type_name;
 }
