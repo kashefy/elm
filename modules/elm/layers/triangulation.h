@@ -16,7 +16,7 @@ namespace elm {
 } // namespace elm
 #else   // __WITH_PCL
 
-#include "boost/optional.hpp"
+#include <boost/optional.hpp>
 
 #include <opencv2/core/core.hpp>
 
@@ -62,10 +62,6 @@ public:
     Triangulation(const LayerConfig &cfg);
 
     void Clear();
-
-    void Reset();
-
-    void Reset(const LayerConfig &cfg);
 
     void Reconfigure(const LayerConfig &cfg);
 

@@ -70,13 +70,50 @@ int elm::tril_flat(const Mat1f &src, Mat1f &dst)
 
 Mat1f elm::diff(const Mat1f &src, int n, int axis)
 {
-    Mat1f d(src.size());
+    Mat1f d;
 
     if(!src.empty()) {
 
-    }
+        if(axis < 0) {
 
-    ELM_THROW_NOT_IMPLEMENTED;
+            // use last axis
+            axis = src.dims-1;
+        }
+        else if(axis >= src.dims) {
+
+            stringstream s;
+            s << "Invalid axis index (" << axis << ") for "
+              << src.dims << "-dimensional Mat";
+            ELM_THROW_VALUE_ERROR(s.str());
+        }
+
+        if(src.dims > 2) {
+
+            ELM_THROW_NOT_IMPLEMENTED_WMSG("Diff on Mat with dims > 2 not yet supported.");
+        }
+
+        if(n==0) {
+
+            src.copyTo(d); // return data as is
+        }
+        else if(n==1) {
+
+            if(axis == 0) {
+
+                // across rows
+                d = src.rowRange(1, src.rows) - src.rowRange(0, src.rows-1);
+            }
+            else if(axis == 1) {
+
+                // across columns
+                d = src.colRange(1, src.cols) - src.colRange(0, src.cols-1);
+            }
+        }
+        else {
+
+            ELM_THROW_NOT_IMPLEMENTED_WMSG("higher order derivatives not yet supported.");
+        }
+    }
 
     return d;
 }
