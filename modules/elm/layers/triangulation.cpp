@@ -68,7 +68,6 @@ elm::MapIONames LayerAttr_<Triangulation>::io_pairs = boost::assign::map_list_of
 Triangulation::Triangulation()
     : base_Layer()
 {
-    Reset();
 }
 
 Triangulation::Triangulation(const LayerConfig &cfg)
@@ -80,16 +79,6 @@ Triangulation::Triangulation(const LayerConfig &cfg)
 void Triangulation::Clear()
 {
     gp3 = pcl::GreedyProjectionTriangulation<pcl::PointNormal>();
-}
-
-void Triangulation::Reset()
-{
-    Reset(LayerConfig());
-}
-
-void Triangulation::Reset(const LayerConfig &cfg)
-{
-    Reconfigure(cfg);
 }
 
 void Triangulation::Reconfigure(const LayerConfig &cfg)
@@ -137,16 +126,16 @@ void Triangulation::Activate(const Signal &signal)
     }
 
     // Normal estimation*
-    NormalEstimation<PointXYZ, Normal> n;
+    NormalEstimation<PointXYZ, Normal> norml_est;
     PointCloud<Normal>::Ptr normals(new PointCloud<Normal>);
     search::KdTree<PointXYZ>::Ptr tree(new search::KdTree<PointXYZ>);
 
     tree->setInputCloud(cld_in);
-    n.setInputCloud(cld_in);
-    n.setSearchMethod(tree);
-    n.setKSearch(20);
-    n.compute(*normals);
-    //* normals should not contain the point normals + surface curvatures
+    norml_est.setInputCloud(cld_in);
+    norml_est.setSearchMethod(tree);
+    norml_est.setKSearch(20);
+    norml_est.compute(*normals);
+    //* normals should now contain the point normals + surface curvatures
 
     // Concatenate the XYZ and normal fields*
     PointCloud<PointNormal>::Ptr cloud_with_normals(new PointCloud<PointNormal>);
