@@ -17,15 +17,13 @@
 #include <pcl/features/normal_3d.h>
 #include <pcl/surface/gp3.h>
 
-#include <pcl/io/vtk_io.h>
+//#include <pcl/io/vtk_io.h>
 
 #include "elm/core/exception.h"
 #include "elm/core/layerconfig.h"
-#include "elm/core/pcl/cloud_.h"
-#include "elm/core/pcl/vertices.h"
 #include "elm/core/signal.h"
 #include "elm/layers/layerfactory.h"
-#include "elm/ts/ts.h"
+#include "elm/ts/mat_assertions.h"
 #include "elm/ts/layer_assertions.h"
 
 using namespace std;
@@ -110,7 +108,7 @@ protected:
 
         to_ = LayerFactory::CreateShared("Triangulation", cfg_, io_names_);
 
-        sig_.Append(NAME_INPUT_POINT_CLOUD, PointCloud2Mat_<PointXYZ>(cloud_in_));
+        sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in_);
     }
 
     virtual void TearDown()

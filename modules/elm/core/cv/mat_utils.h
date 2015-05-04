@@ -53,7 +53,7 @@ int tril_flat(const cv::Mat1f &src, cv::Mat1f &dst);
  * @brief n-th order discrete forward diff along an axis.
  * @param src Mat
  * @param n no. of times values are differenced
- * @param axis along which to perform forward difference
+ * @param axis along which to perform forward difference (default is the last axis)
  * @return resulting difference
  * @todo implement
  */

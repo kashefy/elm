@@ -71,7 +71,10 @@ void MatlabMATFileReader::ReadHeader(const string &path)
 
     if (matfp_ != NULL) {
 
-        Mat_Close(matfp_);
+        stringstream s;
+        s << p.string();
+        s << " is already been opened.";
+        ELM_THROW_FILEIO_ERROR(s.str());
     }
 
     matfp_ = Mat_Open(path.c_str(), MAT_ACC_RDONLY);
@@ -86,18 +89,13 @@ void MatlabMATFileReader::ReadHeader(const string &path)
 
     path_ = path;
 
+    var_names_.clear();
+
     matvar_t *var;
     while ((var = Mat_VarReadNextInfo(matfp_)) != NULL ) {
 
         string var_name(var->name);
         var_names_.push_back(var_name);
-
-//        std::cout<<var_name<<": dims=" << var->rank << " [";
-//        for(int i=0; i<var->rank; i++) {
-
-//            std::cout << var->dims[i]<<"," <<std::endl;
-//        }
-//        std::cout << "]" <<std::endl;
 
         Mat_VarFree(var);
         var = NULL;

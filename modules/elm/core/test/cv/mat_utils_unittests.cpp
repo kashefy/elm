@@ -161,6 +161,88 @@ TEST(MatUtilsTest, CumSum_empty) {
     EXPECT_EQ(out.total(), size_t(0));
 }
 
+TEST(MatUtilsTest, Diff_empty) {
+
+    EXPECT_TRUE(elm::diff(Mat1f()).empty());
+}
+
+TEST(MatUtilsTest, Diff_axis_invalid) {
+
+    EXPECT_THROW(elm::diff(Mat1f(3, 2), 1, 2), ExceptionValueError);
+    EXPECT_THROW(elm::diff(Mat1f(3, 2), 1, 3), ExceptionValueError);
+    EXPECT_THROW(elm::diff(Mat1f(3, 2), 1, 4), ExceptionValueError);
+
+    const int _sz[3] = {2, 3, 4};
+    Mat1f in(3, _sz);
+    EXPECT_THROW(elm::diff(in, 1, 3), ExceptionValueError);
+    EXPECT_THROW(elm::diff(in, 1, 4), ExceptionValueError);
+    EXPECT_THROW(elm::diff(in, 1, 5), ExceptionValueError);
+}
+
+TEST(MatUtilsTest, Diff_not_impl) {
+
+    // higher order difference
+    EXPECT_THROW(elm::diff(Mat1f(3, 2, 1.f), 2, 0), ExceptionNotImpl);
+
+    // dims > 2
+    const int _sz[3] = {2, 3, 4};
+    Mat1f in(3, _sz);
+    EXPECT_THROW(elm::diff(in, 1, 1), ExceptionNotImpl);
+}
+
+TEST(MatUtilsTest, Diff_n0) {
+
+    Mat1f in = Mat1f(3, 2, 2.f);
+    EXPECT_MAT_EQ(in, elm::diff(in, 0, 0));
+    EXPECT_MAT_EQ(in, elm::diff(in, 0, 1));
+}
+
+TEST(MatUtilsTest, Diff_n1_rows) {
+
+    const int ROWS=2;
+    const int COLS=3;
+    float data[ROWS*COLS] = {1.f, 2.f, 3.f,
+                             4.f, 5.f, 6.f};
+    Mat1f in(ROWS, COLS, data);
+    Mat1f out = elm::diff(in, 1, 0);
+
+    EXPECT_MAT_EQ(Mat1f(ROWS-1, COLS, 3.f), out);
+
+    // negate input values
+    out = elm::diff(-in, 1, 0);
+
+    EXPECT_MAT_EQ(Mat1f(ROWS-1, COLS, -3.f), out);
+}
+
+TEST(MatUtilsTest, Diff_n1_cols) {
+
+    const int ROWS=2;
+    const int COLS=3;
+    float data[ROWS*COLS] = {1.f, 2.f, 3.f,
+                             4.f, 5.f, 6.f};
+    Mat1f in(ROWS, COLS, data);
+    Mat1f out = elm::diff(in, 1, 1);
+
+    EXPECT_MAT_EQ(Mat1f(ROWS, COLS-1, 1.f), out);
+
+    // negate input values
+    out = elm::diff(-in, 1, 1);
+
+    EXPECT_MAT_EQ(Mat1f(ROWS, COLS-1, -1.f), out);
+}
+
+TEST(MatUtilsTest, Diff_n_and_axis_default) {
+
+    const int ROWS=2;
+    const int COLS=3;
+    float data[ROWS*COLS] = {1.f, 2.f, 3.f,
+                             4.f, 5.f, 6.f};
+    Mat1f in(ROWS, COLS, data);
+    Mat1f out = elm::diff(in);
+
+    EXPECT_MAT_EQ(Mat1f(ROWS, COLS-1, 1.f), out);
+}
+
 /**
  * @brief test utility function for extracting lower triangular part of matrix
  */
