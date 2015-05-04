@@ -34,11 +34,6 @@ public:
     virtual int ReadHeader(const std::string &path) = 0;
 
     /**
-     * @brief advance to next item
-     */
-    virtual void Next() = 0;
-
-    /**
      * @brief Check if we've reached the end of the file
      * @return true on end of file reached
      */
@@ -54,7 +49,7 @@ public:
 
     virtual void Activate(const Signal &signal);
 
-    virtual void Response(Signal &signal);
+    virtual void Response(Signal &signal) = 0;
 
 protected:
     virtual ~base_Reader();

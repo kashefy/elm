@@ -70,10 +70,3 @@ void base_Reader::Activate(const Signal &signal) {
     // do nothing
 }
 
-void base_Reader::Response(Signal &signal) {
-
-    if(!IS_EOF()) {
-
-        Next();
-    }
-}
