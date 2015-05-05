@@ -37,7 +37,7 @@ public:
      * @brief Check if we've reached the end of the file
      * @return true on end of file reached
      */
-    virtual bool IS_EOF() const = 0;
+    virtual bool Is_EOF() const;
 
     virtual void Clear();
 
@@ -49,7 +49,9 @@ public:
 
     virtual void Activate(const Signal &signal);
 
-    virtual void Response(Signal &signal) = 0;
+    virtual void Response(Signal &signal);
+
+    virtual void Next(Signal &signal) = 0;
 
 protected:
     virtual ~base_Reader();
@@ -57,6 +59,10 @@ protected:
     base_Reader();
 
     base_Reader(const LayerConfig &cfg);
+
+    // members
+    int nb_items_;
+    int i_;         ///< current item index
 };
 
 } // namespace elm
