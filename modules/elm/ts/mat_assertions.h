@@ -12,7 +12,7 @@
 
 #include "gtest/gtest.h"
 
-#include "type_traits"
+#include <type_traits>
 
 #include <string>
 #include <opencv2/core/core.hpp>
