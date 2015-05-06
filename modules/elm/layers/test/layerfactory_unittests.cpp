@@ -87,6 +87,63 @@ TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared_WithConfig)
     EXPECT_FLOAT_EQ(signal.MostRecentMat1f(NAME_RESPONSE).at<float>(0), 0.5f);
 }
 
+TEST_F(LayerFactoryStaticTest, InitLayerPtrShared_WithConfig)
+{
+    PTree params;
+    params.put(WeightedSum::PARAM_A, 0.2f);
+    params.put(WeightedSum::PARAM_B, 0.3f);
+    LayerConfig config;
+    config.Params(params);
+
+    const std::string NAME_STIMULUS = "in";
+    const std::string NAME_RESPONSE = "out";
+
+    config.Input(WeightedSum::KEY_INPUT_STIMULUS, NAME_STIMULUS);
+    config.Output(WeightedSum::KEY_OUTPUT_RESPONSE, NAME_RESPONSE);
+
+    shared_ptr<base_Layer> ptr(new WeightedSum);
+    LayerFactory::Init(ptr, config, config);
+    EXPECT_TRUE(bool(ptr));
+
+    // populate signal with input feature
+    Signal signal;
+    signal.Append("in", cv::Mat1f::ones(1, 2));
+    EXPECT_TRUE(signal.Exists(NAME_STIMULUS));
+    EXPECT_FALSE(signal.Exists(NAME_RESPONSE));
+
+    // apply signal to layer
+    ptr->Activate(signal);
+    ptr->Response(signal);
+
+    // check response
+    EXPECT_TRUE(signal.Exists(NAME_RESPONSE));
+    EXPECT_MAT_DIMS_EQ(signal.MostRecentMat1f(NAME_RESPONSE), cv::Size2i(1, 1));
+    EXPECT_FLOAT_EQ(signal.MostRecentMat1f(NAME_RESPONSE).at<float>(0), 0.5f);
+}
+
+TEST_F(LayerFactoryStaticTest, InitLayerPtrShared_WithConfig_invalid_ptr)
+{
+    PTree params;
+    params.put(WeightedSum::PARAM_A, 0.2f);
+    params.put(WeightedSum::PARAM_B, 0.3f);
+    LayerConfig config;
+    config.Params(params);
+
+    const std::string NAME_STIMULUS = "in";
+    const std::string NAME_RESPONSE = "out";
+
+    config.Input(WeightedSum::KEY_INPUT_STIMULUS, NAME_STIMULUS);
+    config.Output(WeightedSum::KEY_OUTPUT_RESPONSE, NAME_RESPONSE);
+
+    shared_ptr<base_Layer> ptr;
+    ASSERT_FALSE(bool(ptr));
+    EXPECT_THROW(LayerFactory::Init(ptr, config, config), ExceptionValueError);
+
+    ptr.reset(new WeightedSum);
+    EXPECT_TRUE(bool(ptr));
+    EXPECT_NO_THROW(LayerFactory::Init(ptr, config, config));
+}
+
 class LayerFactoryTest : public ::testing::Test
 {
 };
