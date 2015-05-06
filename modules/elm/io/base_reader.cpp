@@ -36,7 +36,6 @@ base_Reader::base_Reader(const LayerConfig &cfg)
 void base_Reader::Clear() {
 
     nb_items_ = 0;
-    i_ = 0;
 }
 
 void base_Reader::Reconfigure(const LayerConfig& config) {
@@ -74,16 +73,16 @@ void base_Reader::Activate(const Signal &signal) {
 
 void base_Reader::Response(Signal &signal) {
 
-    if(i_ < nb_items_) {
+    if(!Is_EOF()) {
 
         Next(signal);
-        ++i_;
+        --nb_items_;
     }
 }
 
 bool base_Reader::Is_EOF() const {
 
-    return i_ >= nb_items_;
+    return nb_items_ <= 0;
 }
 
 int base_Reader::Nb_Items() const {

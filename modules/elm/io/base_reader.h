@@ -40,8 +40,8 @@ public:
     virtual bool Is_EOF() const;
 
     /**
-     * @brief get no. of items
-     * @return no. of items
+     * @brief get no. of items left
+     * @return no. of items left
      */
     virtual int Nb_Items() const;
 
@@ -68,8 +68,7 @@ protected:
     base_Reader(const LayerConfig &cfg);
 
     // members
-    int nb_items_;
-    int i_;         ///< current item index
+    int nb_items_;  ///< no. of items left
 };
 
 } // namespace elm

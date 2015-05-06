@@ -125,11 +125,14 @@ protected:
 TEST_F(ReaderTest, Nb_Items) {
 
     EXPECT_EQ(3, to_->Nb_Items());
+    EXPECT_EQ(3, to_->Nb_Items()) << "No. of items changing after subsequent call.";
 }
 
 TEST_F(ReaderTest, Is_EOF) {
 
     ASSERT_GT(to_->Nb_Items(), 0);
+
+    int n = to_->Nb_Items();
 
     ASSERT_FALSE(to_->Is_EOF());
 
@@ -140,16 +143,21 @@ TEST_F(ReaderTest, Is_EOF) {
         to_->Activate(s);
         to_->Response(s);
         i++;
+
+        EXPECT_EQ(to_->Nb_Items(), n-i);
     }
 
     ASSERT_TRUE(to_->Is_EOF());
 
-    EXPECT_EQ(to_->Nb_Items(), i);
+    EXPECT_EQ(to_->Nb_Items(), 0);
 }
 
 TEST_F(ReaderTest, Read) {
 
     ASSERT_GT(to_->Nb_Items(), 0);
+
+    int n = to_->Nb_Items();
+
     Signal s;
     while(!to_->Is_EOF()) {
 
@@ -158,7 +166,7 @@ TEST_F(ReaderTest, Read) {
     }
 
     VecMat x = s[DummyReader::KEY_OUTPUT_X];
-    EXPECT_SIZE(to_->Nb_Items(), x);
+    EXPECT_SIZE(n, x);
 
     float value = 11.f;
     for(size_t i=0; i<x.size(); i++, value+=1.f) {
@@ -170,6 +178,9 @@ TEST_F(ReaderTest, Read) {
 TEST_F(ReaderTest, Reconfigure) {
 
     ASSERT_GT(to_->Nb_Items(), 0);
+
+    int n = to_->Nb_Items();
+
     Signal s;
     while(!to_->Is_EOF()) {
 
@@ -178,7 +189,7 @@ TEST_F(ReaderTest, Reconfigure) {
     }
 
     VecMat x1 = s[DummyReader::KEY_OUTPUT_X];
-    EXPECT_SIZE(to_->Nb_Items(), x1);
+    EXPECT_SIZE(n, x1);
 
     EXPECT_TRUE(to_->Is_EOF());
     to_->Reset(cfg_);
