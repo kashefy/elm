@@ -14,6 +14,7 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "elm/io/base_reader.h"
 #include "elm/core/cv/typedefs_fwd.h"
 
 namespace elm {
@@ -24,12 +25,18 @@ class MatlabMATFileReader;
  * @brief class for reading the NYU Depth v2 labeled database
  * @cite SilbermanECCV12
  */
-class ReadNYUDepthV2Labeled
+class ReadNYUDepthV2Labeled : public base_Reader
 {
 public:
+    static const std::string KEY_DEPTHS;
+    static const std::string KEY_IMAGE;
+    static const std::string KEY_LABELS;
+
     virtual ~ReadNYUDepthV2Labeled();
 
     ReadNYUDepthV2Labeled();
+
+    ReadNYUDepthV2Labeled(const LayerConfig &cfg);
 
     /**
      * @brief read file header
@@ -43,24 +50,20 @@ public:
      */
     virtual void Next(cv::Mat &bgr, cv::Mat &depth, cv::Mat &labels);
 
-    /**
-     * @brief Check if we've reached the end of the file
-     * @return true on end of file reached
-     */
-    virtual bool Is_EOF() const;
+    virtual void OutputNames(const LayerOutputNames &io);
+
+    virtual void Next(Signal &signal);
 
 protected:
-    static const std::string KEY_DEPTHS;
-    static const std::string KEY_IMAGES;
-    static const std::string KEY_LABELS;
-
     MatlabMATFileReader *reader_;
-    int index_;
-    int nb_items_;
 
     cv::Mat images_;
     cv::Mat labels_;
     cv::Mat depths_;
+
+    std::string name_out_depths_;
+    std::string name_out_image_;
+    std::string name_out_labels_;
 };
 
 } // namespace elm
