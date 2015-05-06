@@ -75,6 +75,9 @@ public:
     virtual cv::Mat Next();
 };
 
+/**
+ * @brief class for Reading MNIST image data
+ */
 class ReadMNISTImages : public base_ReadMNISTFile
 {
 public:

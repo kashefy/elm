@@ -14,18 +14,18 @@
 
 namespace elm {
 
-
 namespace detail {
 
 const std::string BASE_READER_PARAM_PATH = "path";
 
-}
+} // namespace detail
 
 class base_Reader : public base_Layer
 {
 public:
     static const std::string PARAM_PATH;    ///< path parameter
 
+    // reader methods
     /**
      * @brief read file header
      * @param path
@@ -47,6 +47,7 @@ public:
 
     virtual void Next(Signal &signal) = 0;
 
+    // layer methods
     virtual void Clear();
 
     virtual void Reconfigure(const LayerConfig& config);
