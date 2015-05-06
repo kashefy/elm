@@ -70,12 +70,6 @@ Triangulation::Triangulation()
 {
 }
 
-Triangulation::Triangulation(const LayerConfig &cfg)
-    : base_Layer(cfg)
-{
-    Reset(cfg);
-}
-
 void Triangulation::Clear()
 {
     gp3 = pcl::GreedyProjectionTriangulation<pcl::PointNormal>();

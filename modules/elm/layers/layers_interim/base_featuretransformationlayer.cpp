@@ -14,12 +14,6 @@ base_FeatureTransformationLayer::base_FeatureTransformationLayer()
 {
 }
 
-base_FeatureTransformationLayer::base_FeatureTransformationLayer(const LayerConfig &config)
-    : base_SingleInputFeatureLayer(config),
-      base_MatOutputLayer(config)
-{
-}
-
 void base_FeatureTransformationLayer::IONames(const LayerIONames &io)
 {
     base_SingleInputFeatureLayer::InputNames(io);

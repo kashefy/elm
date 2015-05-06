@@ -42,8 +42,6 @@ public:
 protected:
     base_MatOutputLayer();
 
-    base_MatOutputLayer(const LayerConfig& cfg);
-
     // members
     std::string name_output_;    ///< destination name in signal object
 

@@ -41,8 +41,6 @@ public:
 protected:
     base_SingleInputFeatureLayer();
 
-    base_SingleInputFeatureLayer(const LayerConfig& cfg);
-
     // members
     std::string name_input_;    ///< name to input feature in signal object
 };

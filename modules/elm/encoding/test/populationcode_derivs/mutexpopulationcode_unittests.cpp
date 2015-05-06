@@ -32,12 +32,6 @@ protected:
     Mat1f in_;
 };
 
-TEST_F(MutexPopulationCodeTest, Constructor) {
-
-    std::shared_ptr<base_Layer> to;
-    EXPECT_NO_THROW(to.reset(new MutexPopulationCode(LayerConfig())));
-}
-
 TEST_F(MutexPopulationCodeTest, Reconfigure_not_impl) {
 
     MutexPopulationCode to;

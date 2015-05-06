@@ -43,12 +43,6 @@ ReadNYUDepthV2Labeled::ReadNYUDepthV2Labeled()
     reader_ = new MatlabMATFileReader();
 }
 
-ReadNYUDepthV2Labeled::ReadNYUDepthV2Labeled(const LayerConfig &cfg)
-    : base_Reader(cfg)
-{
-    reader_ = new MatlabMATFileReader();
-}
-
 ReadNYUDepthV2Labeled::~ReadNYUDepthV2Labeled()
 {
     if(reader_ != NULL) {

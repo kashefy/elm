@@ -77,25 +77,6 @@ TEST_F(AttentionWindowInitTest, MissingParams_Reset)
     }
 }
 
-TEST_F(AttentionWindowInitTest, MissingParams_Constructor)
-{
-    EXPECT_THROW(to_.reset(new AttentionWindow(LayerConfig())), bpt::ptree_bad_path);
-
-    {
-        PTree p(params_);
-        p.erase(AttentionWindow::PARAM_WIN_COLS);
-        cfg_.Params(p);
-        EXPECT_THROW(to_.reset(new AttentionWindow(cfg_)), bpt::ptree_bad_path);
-    }
-
-    {
-        PTree p(params_);
-        p.erase(AttentionWindow::PARAM_WIN_ROWS);
-        cfg_.Params(p);
-        EXPECT_THROW(to_.reset(new AttentionWindow(cfg_)), bpt::ptree_bad_path);
-    }
-}
-
 TEST_F(AttentionWindowInitTest, Reset_ParamsPresent)
 {
     EXPECT_NO_THROW(AttentionWindow().Reset(cfg_)) << "Any required paramters missing?";

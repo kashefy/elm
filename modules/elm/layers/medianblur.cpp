@@ -38,13 +38,6 @@ MedianBlur::MedianBlur()
     Clear();
 }
 
-MedianBlur::MedianBlur(const LayerConfig &config)
-    : base_SmoothLayer(config)
-{
-    Reset(config);
-    IONames(config);
-}
-
 void MedianBlur::Reconfigure(const LayerConfig &config)
 {
     base_SmoothLayer::Reconfigure(config);

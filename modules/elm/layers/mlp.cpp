@@ -41,12 +41,6 @@ MLP::MLP()
     Clear();
 }
 
-MLP::MLP(const LayerConfig &cfg)
-    : base_SupervisedBatch(cfg)
-{
-    Reset(cfg);
-}
-
 void MLP::Clear()
 {
     mlp_.clear();

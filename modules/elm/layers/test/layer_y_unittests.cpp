@@ -61,7 +61,9 @@ TEST_F(LayerYInitTest, ParamsInValid)
         p.put(LayerY::PARAM_DELTA_T_MSEC, 1.f);
         LayerConfig c;
         c.Params(p);
-        EXPECT_THROW(LayerY to(c), ExceptionValueError);
+        LayerY to;
+        EXPECT_THROW(to.Reset(c), ExceptionValueError);
+        EXPECT_THROW(to.Reconfigure(c), ExceptionValueError);
     }
     {
         PTree p;
@@ -69,7 +71,9 @@ TEST_F(LayerYInitTest, ParamsInValid)
         p.put(LayerY::PARAM_DELTA_T_MSEC, -1.f);
         LayerConfig c;
         c.Params(p);
-        EXPECT_THROW(LayerY to(c), ExceptionValueError);
+        LayerY to;
+        EXPECT_THROW(to.Reset(c), ExceptionValueError);
+        EXPECT_THROW(to.Reconfigure(c), ExceptionValueError);
     }
     {
         PTree p;
@@ -77,7 +81,9 @@ TEST_F(LayerYInitTest, ParamsInValid)
         p.put(LayerY::PARAM_DELTA_T_MSEC, 0.f);
         LayerConfig c;
         c.Params(p);
-        EXPECT_THROW(LayerY to(c), ExceptionValueError);
+        LayerY to;
+        EXPECT_THROW(to.Reset(c), ExceptionValueError);
+        EXPECT_THROW(to.Reconfigure(c), ExceptionValueError);
     }
 }
 
@@ -92,36 +98,18 @@ TEST_F(LayerYInitTest, ParamsMissing_Reset)
         p.put(LayerY::PARAM_DELTA_T_MSEC, 1.f);
         LayerConfig cfg;
         cfg.Params(p);
-        EXPECT_THROW(LayerY to(cfg), ptree_bad_path);
+        LayerY to;
+        EXPECT_THROW(to.Reset(cfg), ptree_bad_path);
+        EXPECT_THROW(to.Reconfigure(cfg), ptree_bad_path);
     }
     {
         PTree p;
         p.put(LayerY::PARAM_FREQ, 1.f);
         LayerConfig cfg;
         cfg.Params(p);
-        EXPECT_THROW(LayerY to(cfg), ptree_bad_path);
-    }
-}
-
-TEST_F(LayerYInitTest, ParamsMissing_Constructor)
-{
-    std::shared_ptr<base_Layer> to;
-    {
-        EXPECT_THROW(to.reset(new LayerY(LayerConfig())), ptree_bad_path);
-    }
-    {
-        PTree p;
-        p.put(LayerY::PARAM_DELTA_T_MSEC, 1.f);
-        LayerConfig cfg;
-        cfg.Params(p);
-        EXPECT_THROW(to.reset(new LayerY(cfg)), ptree_bad_path);
-    }
-    {
-        PTree p;
-        p.put(LayerY::PARAM_FREQ, 1.f);
-        LayerConfig cfg;
-        cfg.Params(p);
-        EXPECT_THROW(to.reset(new LayerY(cfg)), ptree_bad_path);
+        LayerY to;
+        EXPECT_THROW(to.Reset(cfg), ptree_bad_path);
+        EXPECT_THROW(to.Reconfigure(cfg), ptree_bad_path);
     }
 }
 

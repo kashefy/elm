@@ -23,8 +23,6 @@ public:
 
     MutexPopulationCode();
 
-    MutexPopulationCode(const LayerConfig &config);
-
     virtual void State(const cv::Mat1f& in);
 
     /**

@@ -36,12 +36,6 @@ MutexPopulationCode::MutexPopulationCode()
     Clear();
 }
 
-MutexPopulationCode::MutexPopulationCode(const LayerConfig &config)
-    : base_PopulationCode(config)
-{
-    Reset(config);
-}
-
 void MutexPopulationCode::State(const Mat1f& in)//, const VecMat1f& kernels)
 {
     pop_code_ = Mat1f::zeros(in.rows, in.cols*2);

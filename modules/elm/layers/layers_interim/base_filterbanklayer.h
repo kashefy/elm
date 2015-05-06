@@ -56,8 +56,6 @@ protected:
      */
     base_FilterBankLayer();
 
-    base_FilterBankLayer(const LayerConfig &cfg);
-
     std::string name_out_;  ///< desintation name for response in signal object
 
 };

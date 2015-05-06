@@ -31,9 +31,6 @@ protected:
     virtual ~base_FeatureTransformationLayer();
 
     base_FeatureTransformationLayer();
-
-    base_FeatureTransformationLayer(const LayerConfig &config);
-
 };
 
 } // namespace elm

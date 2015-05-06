@@ -39,8 +39,6 @@ protected:
 
     base_StatefulPopulationCode();
 
-    base_StatefulPopulationCode(const LayerConfig &config);
-
     // members
     OptS name_state_;   ///< optional destination name for state in signal object
 

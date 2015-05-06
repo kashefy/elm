@@ -84,13 +84,6 @@ public:
 
 protected:
     base_Layer();
-
-    /**
-     * @brief Construct and fully configure a layer (parameters and IO)
-     * Derived class shoudl call Reset(config) and IO(config) from here.
-     * @param config
-     */
-    base_Layer(const LayerConfig& config);
 };
 
 } // namespace elm

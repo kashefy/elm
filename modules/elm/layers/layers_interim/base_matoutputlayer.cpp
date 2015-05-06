@@ -24,11 +24,6 @@ base_MatOutputLayer::base_MatOutputLayer()
 {
 }
 
-base_MatOutputLayer::base_MatOutputLayer(const LayerConfig &cfg)
-    : base_Layer(cfg)
-{
-}
-
 void base_MatOutputLayer::OutputNames(const LayerOutputNames &io)
 {
     name_output_ = io.Output(KEY_OUTPUT_RESPONSE);

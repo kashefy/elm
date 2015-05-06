@@ -22,8 +22,6 @@ public:
 
 protected:
     base_TIVLayer();
-
-    base_TIVLayer(const LayerConfig& cfg);
 };
 
 } // namespace elm

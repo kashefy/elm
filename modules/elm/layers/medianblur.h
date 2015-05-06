@@ -31,8 +31,6 @@ public:
 
     MedianBlur();
 
-    MedianBlur(const LayerConfig &config);
-
     void Reconfigure(const LayerConfig &config);
 
     void Activate(const Signal &signal);

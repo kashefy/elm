@@ -29,11 +29,6 @@ base_StatefulPopulationCode::base_StatefulPopulationCode()
 {
 }
 
-base_StatefulPopulationCode::base_StatefulPopulationCode(const LayerConfig &config)
-    : base_PopulationCode(config)
-{
-}
-
 void base_StatefulPopulationCode::Clear()
 {
     base_PopulationCode::Clear();

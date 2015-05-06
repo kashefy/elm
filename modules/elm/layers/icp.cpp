@@ -59,28 +59,12 @@ ICP::ICP()
 {
 }
 
-ICP::ICP(const LayerConfig &cfg)
-{
-}
-
 void ICP::Clear()
 {
-
 }
 
 void ICP::Reconfigure(const LayerConfig &cfg)
 {
-
-}
-
-void ICP::Reset()
-{
-
-}
-
-void ICP::Reset(const LayerConfig &cfg)
-{
-
 }
 
 void ICP::InputNames(const LayerInputNames &io)

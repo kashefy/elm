@@ -70,10 +70,6 @@ public:
         : base_Reader()
     {}
 
-    DummyReader(const LayerConfig &cfg)
-        : base_Reader(cfg)
-    {}
-
 protected:
     // members
     std::string name_out_x_;
@@ -129,11 +125,6 @@ protected:
     LayerConfig cfg_;
     shared_ptr<base_Reader> to_; ///< test object
 };
-
-TEST_F(ReaderTest, Constructor_overloaded) {
-
-    EXPECT_NO_THROW(to_.reset(new DummyReader(cfg_)));
-}
 
 TEST_F(ReaderTest, Nb_Items) {
 

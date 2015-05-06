@@ -45,12 +45,6 @@ protected:
     LayerFactory::LayerShared to_; ///< pointer to test object
 };
 
-TEST_F(GraphCompatibilityInitTest, Constructor_overloaded)
-{
-    LayerConfig cfg;
-    EXPECT_NO_THROW(to_.reset(new GraphCompatibility(cfg)));
-}
-
 class GraphCompatibilityTest : public GraphCompatibilityInitTest
 {
 protected:

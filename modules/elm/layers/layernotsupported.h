@@ -63,8 +63,6 @@ protected:
 
     base_LayerNotSupported();
 
-    base_LayerNotSupported(const LayerConfig &config, const std::string msg=std::string());
-
     /**
      * @brief throw the elm::ExceptionNotImpl with a message.
      * Called by all methods.
@@ -80,7 +78,6 @@ protected:
 #define ELM_LAYER_NOT_SUPPORTED(TDerived, msg) base_LayerNotSupported  {        \
     public:                                                                     \
     TDerived(const std::string message=msg) : base_LayerNotSupported(msg) {}    \
-    TDerived(const LayerConfig &config, const std::string message=msg) : base_LayerNotSupported(config, msg) {} \
                                                                        }
 
 } // namespace elm

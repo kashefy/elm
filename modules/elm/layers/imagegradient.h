@@ -20,16 +20,9 @@ class ImageGradient : public base_FeatureTransformationLayer
 public:
     ImageGradient();
 
-    /** Constructor with configuration
-      * @param layer configuration
-      */
-    ImageGradient(const LayerConfig& cfg);
-
     void Clear();
 
     void Reconfigure(const LayerConfig &config);
-
-    void Reset(const LayerConfig &config);
 
     void Activate(const Signal &signal);
 };

@@ -59,8 +59,6 @@ public:
 
     Triangulation();
 
-    Triangulation(const LayerConfig &cfg);
-
     void Clear();
 
     void Reconfigure(const LayerConfig &cfg);

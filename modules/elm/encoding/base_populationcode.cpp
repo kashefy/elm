@@ -32,11 +32,6 @@ base_PopulationCode::base_PopulationCode()
 {
 }
 
-base_PopulationCode::base_PopulationCode(const LayerConfig &config)
-    : base_Layer(config)
-{
-}
-
 void base_PopulationCode::Clear()
 {
     pop_code_ = Mat1f();

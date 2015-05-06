@@ -51,10 +51,6 @@ public:
         : base_SparseMatOutputLayer()
     {}
 
-    DummySparseMatOutputLayer(const LayerConfig &cfg)
-        : base_SparseMatOutputLayer(cfg)
-    {}
-
 protected:
     string name_in_;
 };
@@ -89,7 +85,7 @@ protected:
 
 TEST_F(SparseMatOutputLayerTest, Constructor)
 {
-    EXPECT_NO_THROW(to_.reset(new DummySparseMatOutputLayer(LayerConfig())));
+    EXPECT_NO_THROW(to_.reset(new DummySparseMatOutputLayer()));
 }
 
 TEST_F(SparseMatOutputLayerTest, Destructor)

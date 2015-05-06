@@ -28,14 +28,10 @@ elm::MapIONames LayerAttr_<ImageGradient>::io_pairs = boost::assign::map_list_of
         ;
 //#endif
 
-ImageGradient::ImageGradient() {
+ImageGradient::ImageGradient()
+    : base_FeatureTransformationLayer() {
 
     Clear();
-}
-
-ImageGradient::ImageGradient(const LayerConfig& cfg)
-    : base_FeatureTransformationLayer(cfg) {
-
 }
 
 void ImageGradient::Clear() {
@@ -46,11 +42,6 @@ void ImageGradient::Clear() {
 void ImageGradient::Reconfigure(const LayerConfig &config) {
 
     Clear();
-}
-
-void ImageGradient::Reset(const LayerConfig &config) {
-
-    Reconfigure(config);
 }
 
 void ImageGradient::Activate(const Signal &signal) {

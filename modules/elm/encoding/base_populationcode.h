@@ -75,8 +75,6 @@ public:
 protected:
     base_PopulationCode();
 
-    base_PopulationCode(const LayerConfig &config);
-
     std::string name_stimulus_; ///< name of stimulus in signal object
     std::string name_pop_code_; ///< destination name of popuation code in signal
 

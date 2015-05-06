@@ -25,6 +25,8 @@ class base_Reader : public base_Layer
 public:
     static const std::string PARAM_PATH;    ///< path parameter
 
+    virtual ~base_Reader();
+
     // reader methods
     /**
      * @brief read file header
@@ -61,11 +63,7 @@ public:
     virtual void Response(Signal &signal);
 
 protected:
-    virtual ~base_Reader();
-
     base_Reader();
-
-    base_Reader(const LayerConfig &cfg);
 
     // members
     int nb_items_;  ///< no. of items left

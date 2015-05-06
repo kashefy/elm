@@ -32,8 +32,6 @@ public:
 protected:
     base_SmoothLayer();
 
-    base_SmoothLayer(const LayerConfig &config);
-
     // members
     int ksize_; ///< aperture/kernel size
 };

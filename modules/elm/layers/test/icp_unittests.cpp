@@ -74,19 +74,17 @@ protected:
     LayerIONames io_names_;
 };
 
-TEST_F(ICPInitTest, Constructor)
-{
-    EXPECT_NO_THROW(ICP to(cfg_));
-}
-
 TEST_F(ICPInitTest, MissingParams)
 {
     cfg_.Params(PTree());
-    EXPECT_NO_THROW(ICP to(cfg_));
-
-    ICP to;
-    EXPECT_NO_THROW(to.Reset(cfg_));
-    EXPECT_NO_THROW(to.Reconfigure(cfg_));
+    {
+        ICP to;
+        EXPECT_NO_THROW(to.Reset(cfg_));
+    }
+    {
+        ICP to;
+        EXPECT_NO_THROW(to.Reconfigure(cfg_));
+    }
 }
 
 TEST_F(ICPInitTest, CreateWithFactory)

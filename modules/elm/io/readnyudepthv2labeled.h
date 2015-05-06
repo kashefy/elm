@@ -36,8 +36,6 @@ public:
 
     ReadNYUDepthV2Labeled();
 
-    ReadNYUDepthV2Labeled(const LayerConfig &cfg);
-
     /**
      * @brief read file header
      * @param path

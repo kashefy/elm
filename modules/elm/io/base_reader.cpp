@@ -28,11 +28,6 @@ base_Reader::base_Reader()
 {
 }
 
-base_Reader::base_Reader(const LayerConfig &cfg)
-    : base_Layer(cfg)
-{
-}
-
 void base_Reader::Clear() {
 
     nb_items_ = 0;

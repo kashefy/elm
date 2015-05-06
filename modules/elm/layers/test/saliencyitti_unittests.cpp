@@ -105,13 +105,6 @@ const string SaliencyIttiTest::NAME_SCENE_      = "in";
 const string SaliencyIttiTest::NAME_SALIENCY_   = "saliency";
 const string SaliencyIttiTest::NAME_LOC_        = "loc";
 
-TEST_F(SaliencyIttiTest, Constructor)
-{
-    shared_ptr<base_Layer> to;
-    EXPECT_NO_THROW(to.reset(new SaliencyItti(cfg_)));
-    EXPECT_NO_THROW(to.reset());
-}
-
 TEST_F(SaliencyIttiTest, Reconfigure)
 {
     EXPECT_NO_THROW(to_.Reconfigure(cfg_));
