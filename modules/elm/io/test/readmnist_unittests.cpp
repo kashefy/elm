@@ -7,16 +7,20 @@
 //M*/
 #include "elm/io/readmnist.h"
 
-#include "elm/ts/ts.h"          ///< custom assertions
-
 #include <boost/filesystem.hpp>
 
 #include "elm/core/exception.h"
-#include "elm/io/binary.h"      ///< determine and swap endianness
+#include "elm/io/binary.h"              // determine and swap endianness
+#include "elm/ts/mat_assertions.h"      // custom assertions
+#include "elm/ts/layer_assertions.h"    // custom assertions
 
 using namespace std;
 namespace bfs=boost::filesystem; // use alias
 using namespace elm;
+
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(ReadMNISTLabels);
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(ReadMNISTImages);
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(ReadMNISTImagesTransl);
 
 class FakeMNISTLabelsWriter {
 

@@ -14,6 +14,7 @@
 #include "elm/core/layeroutputnames.h"
 #include "elm/core/signal.h"
 #include "elm/io/binary.h"
+#include "elm/ts/layerattr_.h"
 
 using namespace std;
 using namespace elm;
@@ -71,6 +72,11 @@ void base_ReadMNISTFile::OutputNames(const LayerOutputNames &io) {
     name_out_ = io.Output(KEY_OUTPUT);
 }
 
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<ReadMNISTLabels>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_OUTPUT_PAIR(ReadMNISTLabels::KEY_OUTPUT);
+
 ReadMNISTLabels::ReadMNISTLabels()
     : base_ReadMNISTFile()
 {
@@ -101,6 +107,11 @@ void ReadMNISTLabels::Next(Signal &signal) {
 
     signal.Append(name_out_, cv::Mat1f(1, 1, static_cast<float>(next_label)));
 }
+
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<ReadMNISTImages>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_OUTPUT_PAIR(ReadMNISTImages::KEY_OUTPUT);
 
 ReadMNISTImages::ReadMNISTImages()
     : base_ReadMNISTFile()
@@ -156,6 +167,11 @@ void ReadMNISTImages::Next(Signal &signal) {
 
     signal.Append(name_out_, static_cast<cv::Mat1f>(img));
 }
+
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<ReadMNISTImagesTransl>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_OUTPUT_PAIR(ReadMNISTImagesTransl::KEY_OUTPUT);
 
 ReadMNISTImagesTransl::ReadMNISTImagesTransl()
     : ReadMNISTImages(),

@@ -46,7 +46,7 @@ public:
     virtual int ReadHeader(const std::string &path);
 
     /**
-     * @brief read next item
+     * @brief read next item and advance file handle
      * @return item value encapsulated in a matrix object
      */
     virtual cv::Mat Next() = 0;
