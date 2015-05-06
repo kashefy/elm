@@ -10,12 +10,14 @@
 #ifndef _ELM_IO_READMNIST_H_
 #define _ELM_IO_READMNIST_H_
 
-#include <string>
 #include <fstream>
 
 #include <opencv2/core/core.hpp>
 
 #include "elm/core/typedefs_fwd.h"
+#include "elm/io/base_reader.h"
+
+namespace elm {
 
 /**
  * @brief base class for reading MNIST files
@@ -129,5 +131,7 @@ protected:
 
     cv::Point2i current_loc_;    ///< top-left of most recent location
 };
+
+} // namespace elm
 
 #endif // _ELM_IO_READMNIST_H_
