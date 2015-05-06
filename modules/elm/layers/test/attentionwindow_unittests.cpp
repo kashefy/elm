@@ -12,6 +12,7 @@
 #include "elm/core/signal.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 namespace bpt=boost::property_tree;
 using namespace std;

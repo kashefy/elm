@@ -15,6 +15,7 @@
 #include "elm/io/synth.h"
 #include "elm/io/readmnist.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace cv;
 using namespace std;

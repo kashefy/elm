@@ -39,6 +39,14 @@ public:
      */
     virtual bool Is_EOF() const;
 
+    /**
+     * @brief get no. of items
+     * @return no. of items
+     */
+    virtual int Nb_Items() const;
+
+    virtual void Next(Signal &signal) = 0;
+
     virtual void Clear();
 
     virtual void Reconfigure(const LayerConfig& config);
@@ -50,8 +58,6 @@ public:
     virtual void Activate(const Signal &signal);
 
     virtual void Response(Signal &signal);
-
-    virtual void Next(Signal &signal) = 0;
 
 protected:
     virtual ~base_Reader();

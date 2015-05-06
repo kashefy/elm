@@ -12,6 +12,7 @@
 #include "elm/core/signal.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace elm;
 using boost::property_tree::ptree_bad_path;

@@ -16,6 +16,7 @@
 #include "elm/core/layerconfig.h"
 #include "elm/core/inputname.h"
 #include "elm/core/signal.h"
+#include "elm/ts/container.h"
 #include "elm/ts/layer_assertions.h"
 #include "elm/ts/mat_assertions.h"
 
@@ -59,6 +60,13 @@ protected:
 };
 const std::string DummyReader::KEY_OUTPUT_X = "x";
 
+#include <boost/assign/list_of.hpp>
+template <>
+elm::MapIONames LayerAttr_<DummyReader>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_OUTPUT_PAIR(DummyReader::KEY_OUTPUT_X);
+
+ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(DummyReader);
+
 class ReaderTest : public ::testing::Test
 {
 protected:
@@ -81,7 +89,7 @@ protected:
         cfg.Params(p);
 
         LayerIONames io;
-        io.Output(DummyReader::KEY_OUTPUT_X, "x");
+        io.Output(DummyReader::KEY_OUTPUT_X, DummyReader::KEY_OUTPUT_X);
 
         to_.reset(new DummyReader);
         to_->Reset(cfg);
@@ -97,9 +105,18 @@ protected:
         ASSERT_FALSE(bfs::is_regular_file(TEST_FILEPATH)) << "test file was not removed properly.";
     }
 
-    shared_ptr<base_Layer> to_; ///< test object
+    shared_ptr<base_Reader> to_; ///< test object
 };
 
-TEST_F(ReaderTest, Constructor) {
+TEST_F(ReaderTest, Read) {
 
+    Signal s;
+    while(!to_->Is_EOF()) {
+
+        to_->Activate(s);
+        to_->Response(s);
+    }
+
+    //VecMat1f x = s[DummyReader::KEY_OUTPUT_X];
+    //EXPECT_SIZE()
 }

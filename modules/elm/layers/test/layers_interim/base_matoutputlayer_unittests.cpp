@@ -14,6 +14,7 @@
 #include "elm/core/layerionames.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace std;
 using namespace cv;

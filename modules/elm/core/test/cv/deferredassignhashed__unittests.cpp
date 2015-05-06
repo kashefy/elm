@@ -1,6 +1,6 @@
 #include "elm/core/cv/deferredassignhashed_.h"
 
-#include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace cv;
 using namespace elm;
