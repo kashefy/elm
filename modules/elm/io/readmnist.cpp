@@ -62,7 +62,7 @@ base_ReadMNISTFile::~base_ReadMNISTFile()
 {
 }
 
-bool base_ReadMNISTFile::IS_EOF() const
+bool base_ReadMNISTFile::Is_EOF() const
 {
     return nb_items_ <= 0;
 }

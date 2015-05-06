@@ -143,14 +143,14 @@ TEST_F(ReadMNISTLabelsTest, Next)
 
         if(i<N) {
 
-            EXPECT_FALSE(to.IS_EOF());
+            EXPECT_FALSE(to.Is_EOF());
             int label = static_cast<int>(to.Next().at<unsigned char>(0));
             EXPECT_EQ(label, i%N);
 
-            if(i<N-1) { EXPECT_FALSE(to.IS_EOF()); }
-            else { EXPECT_TRUE(to.IS_EOF()); }
+            if(i<N-1) { EXPECT_FALSE(to.Is_EOF()); }
+            else { EXPECT_TRUE(to.Is_EOF()); }
         }
-        else { EXPECT_TRUE(to.IS_EOF()); }
+        else { EXPECT_TRUE(to.Is_EOF()); }
     }
 }
 
@@ -238,17 +238,17 @@ TEST_F(ReadMNISTImagesTest, Next)
 
         if(i<N) {
 
-            EXPECT_FALSE(to.IS_EOF());
+            EXPECT_FALSE(to.Is_EOF());
             cv::Mat img = to.Next();
             EXPECT_MAT_DIMS_EQ(img, cv::Mat(ROWS, COLS, CV_8UC1));
             int sum = cv::sum(img)(0);
             sum /= (ROWS*COLS);
             EXPECT_EQ(sum, static_cast<unsigned char>(i%255));
 
-            if(i<N-1) { EXPECT_FALSE(to.IS_EOF()); }
-            else { EXPECT_TRUE(to.IS_EOF()); }
+            if(i<N-1) { EXPECT_FALSE(to.Is_EOF()); }
+            else { EXPECT_TRUE(to.Is_EOF()); }
         }
-        else { EXPECT_TRUE(to.IS_EOF()); }
+        else { EXPECT_TRUE(to.Is_EOF()); }
     }
 }
 
@@ -332,12 +332,12 @@ TEST_F(ReadMNISTImagesTranslTest, EndOfFile)
 
         if(i<N) {
 
-            EXPECT_FALSE(to.IS_EOF());
+            EXPECT_FALSE(to.Is_EOF());
             to.Next();
-            if(i<N-1) { EXPECT_FALSE(to.IS_EOF()); }
-            else { EXPECT_TRUE(to.IS_EOF()); }
+            if(i<N-1) { EXPECT_FALSE(to.Is_EOF()); }
+            else { EXPECT_TRUE(to.Is_EOF()); }
         }
-        else { EXPECT_TRUE(to.IS_EOF()); }
+        else { EXPECT_TRUE(to.Is_EOF()); }
     }
 }
 
@@ -354,7 +354,7 @@ TEST_F(ReadMNISTImagesTranslTest, NextAndLocation)
 
         if(i<N) {
 
-            EXPECT_FALSE(to.IS_EOF());
+            EXPECT_FALSE(to.Is_EOF());
             cv::Mat scene_img = to.Next();
             EXPECT_MAT_DIMS_EQ(scene_img, cv::Size2i(10, 20));
 
@@ -366,9 +366,9 @@ TEST_F(ReadMNISTImagesTranslTest, NextAndLocation)
             EXPECT_TRUE(scene_window.contains(loc.tl())) << "TL outside scene window." ;
             EXPECT_TRUE(scene_window.contains(loc.br())) << "BR outside scene window.";
 
-            if(i<N-1) { EXPECT_FALSE(to.IS_EOF()); }
-            else { EXPECT_TRUE(to.IS_EOF()); }
+            if(i<N-1) { EXPECT_FALSE(to.Is_EOF()); }
+            else { EXPECT_TRUE(to.Is_EOF()); }
         }
-        else { EXPECT_TRUE(to.IS_EOF()); }
+        else { EXPECT_TRUE(to.Is_EOF()); }
     }
 }

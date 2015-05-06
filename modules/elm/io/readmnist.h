@@ -50,7 +50,7 @@ public:
      * @brief Check if we've reached the end of the file
      * @return true on end of file reached
      */
-    virtual bool IS_EOF() const;
+    virtual bool Is_EOF() const;
 
 protected:
     base_ReadMNISTFile();

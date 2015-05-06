@@ -304,7 +304,7 @@ TEST_F(ReadNYUDepthV2LabeledTest, Is_eof)
 
     int count = 0;
 
-    while(!to.IS_EOF()) {
+    while(!to.Is_EOF()) {
 
         Mat bgr, depth, labels;
         to.Next(bgr, depth, labels);
@@ -319,7 +319,7 @@ TEST_F(ReadNYUDepthV2LabeledTest, Next_dims)
     ReadNYUDepthV2Labeled to;
     EXPECT_NO_THROW(to.ReadHeader(test_filepath_.string()));
 
-    while(!to.IS_EOF()) {
+    while(!to.Is_EOF()) {
 
         Mat bgr, depth, labels;
         to.Next(bgr, depth, labels);

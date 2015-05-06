@@ -128,7 +128,7 @@ void ReadNYUDepthV2Labeled::Next(Mat &bgr, Mat &depth, Mat &labels)
     index_++;
 }
 
-bool ReadNYUDepthV2Labeled::IS_EOF() const
+bool ReadNYUDepthV2Labeled::Is_EOF() const
 {
     return index_ >= nb_items_;
 }
