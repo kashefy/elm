@@ -5,8 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-/** Classes for reading MNIST database files
- *  source: http://yann.lecun.com/exdb/mnist/
+/** @file Classes for reading MNIST database files
  */
 #ifndef _ELM_IO_READMNIST_H_
 #define _ELM_IO_READMNIST_H_
@@ -20,6 +19,8 @@
 
 /**
  * @brief base class for reading MNIST files
+ * @cite LeCun1998
+ * @link http://yann.lecun.com/exdb/mnist/
  */
 class base_ReadMNISTFile
 {
