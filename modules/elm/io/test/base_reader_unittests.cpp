@@ -60,11 +60,19 @@ public:
         }
         in_.open(path.c_str());
 
-        int n;
+        int n = 0;
         in_ >> n;
 
         return n;
     }
+
+    DummyReader()
+        : base_Reader()
+    {}
+
+    DummyReader(const LayerConfig &cfg)
+        : base_Reader(cfg)
+    {}
 
 protected:
     // members
@@ -122,6 +130,11 @@ protected:
     shared_ptr<base_Reader> to_; ///< test object
 };
 
+TEST_F(ReaderTest, Constructor_overloaded) {
+
+    EXPECT_NO_THROW(to_.reset(new DummyReader(cfg_)));
+}
+
 TEST_F(ReaderTest, Nb_Items) {
 
     EXPECT_EQ(3, to_->Nb_Items());
@@ -173,6 +186,30 @@ TEST_F(ReaderTest, Read) {
 
         EXPECT_MAT_EQ(Mat1f(1, 1, value), x[i]);
     }
+}
+
+TEST_F(ReaderTest, Reconfigure_bad_path) {
+
+    PTree p = cfg_.Params();
+    p.put(DummyReader::PARAM_PATH, "wrong.txt");
+    cfg_.Params(p);
+
+    EXPECT_THROW(to_->Reconfigure(cfg_), ExceptionFileIOError);
+}
+
+class DummyReaderNoItems : public DummyReader
+{
+protected:
+    int ReadHeader(const string &path) {
+
+        return 0;
+    }
+};
+
+TEST_F(ReaderTest, Reconfigure_no_items) {
+
+    to_.reset(new DummyReaderNoItems);
+    EXPECT_THROW(to_->Reset(cfg_), ExceptionFileIOError);
 }
 
 TEST_F(ReaderTest, Reconfigure) {
