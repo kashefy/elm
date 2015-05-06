@@ -8,6 +8,7 @@
 #include "elm/io/readmnistlabels.h"
 
 #include "elm/core/exception.h"
+#include "elm/core/signal.h"
 #include "elm/ts/fakemnistlabelswriter.h"
 #include "elm/ts/layer_assertions.h"    // custom assertions
 #include "elm/ts/mat_assertions.h"      // custom assertions
@@ -96,6 +97,43 @@ TEST_F(ReadMNISTLabelsTest, Invalid)
     ReadMNISTLabels to;
     writer.Save(to.MagicNumber()+5);
     EXPECT_THROW(to.ReadHeader(p.string().c_str()), ExceptionFileIOError);
+}
+
+TEST_F(ReadMNISTLabelsTest, LayerInterface)
+{
+    LayerConfig cfg;
+
+    PTree p;
+    p.put(ReadMNISTLabels::PARAM_PATH, test_data_path_);
+    cfg.Params(p);
+
+    LayerIONames io;
+    io.Output(ReadMNISTLabels::KEY_OUTPUT, "out");
+
+    shared_ptr<base_Reader> to(new ReadMNISTLabels());
+    to->Reset(cfg);
+    to->IONames(io);
+
+    const int N = to->ReadHeader(test_data_path_.string().c_str());
+    ASSERT_GT(N, 0);
+
+    Signal s;
+
+    int i = 0;
+    ASSERT_FALSE(to->Is_EOF());
+    while(!to->Is_EOF()) {
+
+        to->Activate(s);
+        to->Response(s);
+
+        ASSERT_TRUE(s.Exists("out"));
+
+        cv::Mat1f label = s.MostRecentMat1f("out");
+
+        EXPECT_MAT_EQ(label, cv::Mat1f(1, 1, static_cast<float>(i%N)));
+
+        ++i;
+    }
 }
 
 } // anonymous namespace for unit tests

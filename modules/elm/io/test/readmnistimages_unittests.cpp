@@ -8,6 +8,7 @@
 #include "elm/io/readmnistimages.h"
 
 #include "elm/core/exception.h"
+#include "elm/core/signal.h"
 #include "elm/ts/fakemnistimageswriter.h"
 #include "elm/ts/layer_assertions.h"    // custom assertions
 #include "elm/ts/mat_assertions.h"      // custom assertions
@@ -92,6 +93,50 @@ TEST_F(ReadMNISTImagesTest, Invalid)
     ReadMNISTImages to;
     writer.Save(to.MagicNumber()+5);
     EXPECT_THROW(to.ReadHeader(p.string().c_str()), ExceptionFileIOError);
+}
+
+TEST_F(ReadMNISTImagesTest, LayerInterface)
+{
+    LayerConfig cfg;
+
+    PTree p;
+    p.put(ReadMNISTImages::PARAM_PATH, test_data_path_);
+    cfg.Params(p);
+
+    LayerIONames io;
+    io.Output(ReadMNISTImages::KEY_OUTPUT, "out");
+
+    shared_ptr<base_Reader> to(new ReadMNISTImages());
+    to->Reset(cfg);
+    to->IONames(io);
+
+    const int N = to->ReadHeader(test_data_path_.string().c_str());
+    ASSERT_GT(N, 0);
+
+    const int ROWS = FakeMNISTImagesWriter::ROWS;
+    const int COLS = FakeMNISTImagesWriter::COLS;
+
+    Signal s;
+
+    int i = 0;
+    ASSERT_FALSE(to->Is_EOF());
+    while(!to->Is_EOF()) {
+
+        to->Activate(s);
+        to->Response(s);
+
+        ASSERT_TRUE(s.Exists("out"));
+
+        cv::Mat1f img = s.MostRecentMat1f("out");
+
+        EXPECT_MAT_DIMS_EQ(img, cv::Mat(ROWS, COLS, CV_8UC1));
+
+        int sum = cv::sum(img)(0);
+        sum /= (ROWS*COLS);
+        EXPECT_EQ(sum, static_cast<unsigned char>(i%255));
+
+        ++i;
+    }
 }
 
 class ReadMNISTImagesTranslTest : public ReadMNISTImagesTest
