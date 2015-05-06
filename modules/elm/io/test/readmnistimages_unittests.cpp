@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/io/readmnist.h"
+#include "elm/io/readmnistimages.h"
 
 #include "elm/core/exception.h"
 #include "elm/ts/fakemnistimageswriter.h"
