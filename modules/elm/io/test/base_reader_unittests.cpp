@@ -32,6 +32,14 @@ class DummyReader : public base_Reader
 public:
     static const std::string KEY_OUTPUT_X;
 
+    ~DummyReader() {
+
+        if(in_.is_open()) {
+
+            in_.close();
+        }
+    }
+
     void OutputNames(const LayerOutputNames &io) {
 
         name_out_x_ = io.Output(KEY_OUTPUT_X);
@@ -46,10 +54,15 @@ public:
 
     int ReadHeader(const string &path) {
 
+        if(in_.is_open()) {
+
+            in_.close();
+        }
         in_.open(path.c_str());
 
-        float n;
+        int n;
         in_ >> n;
+
         return n;
     }
 
@@ -83,16 +96,16 @@ protected:
 
     virtual void SetUp() {
 
-        LayerConfig cfg;
+        cfg_ = LayerConfig();
         PTree p;
         p.put(DummyReader::PARAM_PATH, TEST_FILEPATH);
-        cfg.Params(p);
+        cfg_.Params(p);
 
         LayerIONames io;
         io.Output(DummyReader::KEY_OUTPUT_X, DummyReader::KEY_OUTPUT_X);
 
         to_.reset(new DummyReader);
-        to_->Reset(cfg);
+        to_->Reset(cfg_);
         to_->IONames(io);
     }
 
@@ -105,11 +118,38 @@ protected:
         ASSERT_FALSE(bfs::is_regular_file(TEST_FILEPATH)) << "test file was not removed properly.";
     }
 
+    LayerConfig cfg_;
     shared_ptr<base_Reader> to_; ///< test object
 };
 
+TEST_F(ReaderTest, Nb_Items) {
+
+    EXPECT_EQ(3, to_->Nb_Items());
+}
+
+TEST_F(ReaderTest, Is_EOF) {
+
+    ASSERT_GT(to_->Nb_Items(), 0);
+
+    ASSERT_FALSE(to_->Is_EOF());
+
+    int i = 0;
+    while(!to_->Is_EOF()) {
+
+        Signal s;
+        to_->Activate(s);
+        to_->Response(s);
+        i++;
+    }
+
+    ASSERT_TRUE(to_->Is_EOF());
+
+    EXPECT_EQ(to_->Nb_Items(), i);
+}
+
 TEST_F(ReaderTest, Read) {
 
+    ASSERT_GT(to_->Nb_Items(), 0);
     Signal s;
     while(!to_->Is_EOF()) {
 
@@ -117,6 +157,46 @@ TEST_F(ReaderTest, Read) {
         to_->Response(s);
     }
 
-    //VecMat1f x = s[DummyReader::KEY_OUTPUT_X];
-    //EXPECT_SIZE()
+    VecMat x = s[DummyReader::KEY_OUTPUT_X];
+    EXPECT_SIZE(to_->Nb_Items(), x);
+
+    float value = 11.f;
+    for(size_t i=0; i<x.size(); i++, value+=1.f) {
+
+        EXPECT_MAT_EQ(Mat1f(1, 1, value), x[i]);
+    }
+}
+
+TEST_F(ReaderTest, Reconfigure) {
+
+    ASSERT_GT(to_->Nb_Items(), 0);
+    Signal s;
+    while(!to_->Is_EOF()) {
+
+        to_->Activate(s);
+        to_->Response(s);
+    }
+
+    VecMat x1 = s[DummyReader::KEY_OUTPUT_X];
+    EXPECT_SIZE(to_->Nb_Items(), x1);
+
+    EXPECT_TRUE(to_->Is_EOF());
+    to_->Reset(cfg_);
+    EXPECT_FALSE(to_->Is_EOF());
+
+    s.Clear();
+    while(!to_->Is_EOF()) {
+
+        to_->Activate(s);
+        to_->Response(s);
+    }
+
+    VecMat x2 = s[DummyReader::KEY_OUTPUT_X];
+    EXPECT_SIZE(x1.size(), x2);
+
+    for(size_t i=0; i<x1.size(); i++) {
+
+        EXPECT_MAT_EQ(x1[i], x2[i]);
+        EXPECT_NE(x1[i].data, x2[i].data);
+    }
 }

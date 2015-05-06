@@ -83,7 +83,7 @@ void base_Reader::Response(Signal &signal) {
 
 bool base_Reader::Is_EOF() const {
 
-    return i_ < nb_items_;
+    return i_ >= nb_items_;
 }
 
 int base_Reader::Nb_Items() const {
