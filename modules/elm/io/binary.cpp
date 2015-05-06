@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/io/io.h"
+#include "elm/io/binary.h"
 
 #include <algorithm>
 
