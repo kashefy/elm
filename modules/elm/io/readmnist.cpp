@@ -11,13 +11,21 @@
 #include <sstream>
 
 #include "elm/core/exception.h"
+#include "elm/core/layeroutputnames.h"
+#include "elm/core/signal.h"
 #include "elm/io/binary.h"
 
 using namespace std;
 using namespace elm;
 
+const string base_ReadMNISTFile::KEY_OUTPUT = "out";
+
+base_ReadMNISTFile::~base_ReadMNISTFile()
+{
+}
+
 base_ReadMNISTFile::base_ReadMNISTFile()
-    : nb_items_(0)
+    : base_Reader()
 {
 }
 
@@ -58,13 +66,9 @@ int base_ReadMNISTFile::ReadHeader(const string &path)
     return nb_items_;
 }
 
-base_ReadMNISTFile::~base_ReadMNISTFile()
-{
-}
+void base_ReadMNISTFile::OutputNames(const LayerOutputNames &io) {
 
-bool base_ReadMNISTFile::Is_EOF() const
-{
-    return nb_items_ <= 0;
+    name_out_ = io.Output(KEY_OUTPUT);
 }
 
 ReadMNISTLabels::ReadMNISTLabels()
@@ -87,6 +91,15 @@ cv::Mat ReadMNISTLabels::Next()
     nb_items_--;
 
     return cv::Mat1b(1, 1, next_label);
+}
+
+void ReadMNISTLabels::Next(Signal &signal) {
+
+    unsigned char next_label;
+
+    input_.read(reinterpret_cast<char*>(&next_label), sizeof(unsigned char));
+
+    signal.Append(name_out_, cv::Mat1f(1, 1, static_cast<float>(next_label)));
 }
 
 ReadMNISTImages::ReadMNISTImages()
@@ -134,6 +147,14 @@ cv::Mat ReadMNISTImages::Next()
     nb_items_--;
 
     return img;
+}
+
+void ReadMNISTImages::Next(Signal &signal) {
+
+    cv::Mat img(rows_, cols_, CV_8UC1);
+    input_.read(reinterpret_cast<char*>(img.data), sizeof(unsigned char)*img.total());
+
+    signal.Append(name_out_, static_cast<cv::Mat1f>(img));
 }
 
 ReadMNISTImagesTransl::ReadMNISTImagesTransl()

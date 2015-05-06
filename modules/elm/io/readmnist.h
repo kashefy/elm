@@ -24,9 +24,11 @@ namespace elm {
  * @cite LeCun1998
  * @link http://yann.lecun.com/exdb/mnist/
  */
-class base_ReadMNISTFile
+class base_ReadMNISTFile : public base_Reader
 {
 public:
+    static const std::string KEY_OUTPUT;
+
     virtual ~base_ReadMNISTFile();
 
     /**
@@ -49,18 +51,14 @@ public:
      */
     virtual cv::Mat Next() = 0;
 
-    /**
-     * @brief Check if we've reached the end of the file
-     * @return true on end of file reached
-     */
-    virtual bool Is_EOF() const;
+    virtual void OutputNames(const LayerOutputNames& io);
 
 protected:
     base_ReadMNISTFile();
 
-protected:
     std::ifstream input_; ///< input stream
-    int nb_items_;        ///< total no. of items
+
+    std::string name_out_;  ///< destination name for labels in signal object
 };
 
 /**
@@ -76,6 +74,8 @@ public:
     virtual int MagicNumber() const;
 
     virtual cv::Mat Next();
+
+    virtual void Next(Signal &signal);
 };
 
 /**
@@ -93,6 +93,8 @@ public:
     virtual int MagicNumber() const;
 
     virtual cv::Mat Next();
+
+    virtual void Next(Signal &signal);
 
 protected:
     int rows_;   ///< no. of rows per image
@@ -127,9 +129,8 @@ protected:
 
     virtual bool IsSceneDimsSet() const;
 
-    cv::Size2i scene_dims_;   ///< scene dimensions
-
-    cv::Point2i current_loc_;    ///< top-left of most recent location
+    cv::Size2i scene_dims_;     ///< scene dimensions
+    cv::Point2i current_loc_;   ///< top-left of most recent location
 };
 
 } // namespace elm
