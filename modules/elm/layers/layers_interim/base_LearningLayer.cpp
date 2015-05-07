@@ -17,8 +17,3 @@ base_LearningLayer::base_LearningLayer()
     : base_Layer()
 {
 }
-
-base_LearningLayer::base_LearningLayer(const LayerConfig &config)
-    : base_Layer(config)
-{
-}

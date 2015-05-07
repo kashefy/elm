@@ -64,7 +64,8 @@ protected:
         io_.Input(MLP::KEY_INPUT_STIMULUS, NAME_IN);
         io_.Output(MLP::KEY_OUTPUT_RESPONSE, NAME_OUT_PREDICTION);
 
-        to_.reset(new MLP(config_));
+        to_.reset(new MLP());
+        to_->Reset(config_);
         to_->IONames(io_);
     }
 
@@ -85,24 +86,25 @@ TEST_F(MLPInitTest, Param_invalid_layers_too_few)
         VecI arch = {2};
         params.put(MLP::PARAM_ARCH, arch);
         config_.Params(params);
-        EXPECT_THROW(to_.reset(new MLP(config_)), ExceptionBadDims);
+        to_.reset(new MLP());
+        EXPECT_THROW(to_->Reset(config_), ExceptionBadDims);
     }
     {
         VecI arch = {200};
         params.put(MLP::PARAM_ARCH, arch);
         config_.Params(params);
-        EXPECT_THROW(to_.reset(new MLP(config_)), ExceptionBadDims);
+        to_.reset(new MLP());
+        EXPECT_THROW(to_->Reset(config_), ExceptionBadDims);
     }
 }
 
 TEST_F(MLPInitTest, Param_invalid_layers_none)
 {
     PTree params = config_.Params();
-    {
-        params.put(MLP::PARAM_ARCH, VecI());
-        config_.Params(params);
-        EXPECT_THROW(to_.reset(new MLP(config_)), ExceptionBadDims);
-    }
+    params.put(MLP::PARAM_ARCH, VecI());
+    config_.Params(params);
+    to_.reset(new MLP());
+    EXPECT_THROW(to_->Reset(config_), ExceptionBadDims);
 }
 
 class MLPTrainTest : public MLPInitTest
@@ -197,7 +199,8 @@ protected:
             config_.Params(params);
         }
 
-        to_.reset(new MLP(config_));
+        to_.reset(new MLP());
+        to_->Reset(config_);
         to_->IONames(io_);
     }
 };

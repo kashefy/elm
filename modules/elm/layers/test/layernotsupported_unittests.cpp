@@ -29,14 +29,17 @@ class DummyLayerNotSupported : public ELM_LAYER_NOT_SUPPORTED(DummyLayerNotSuppo
  */
 TEST(LayerNotSupportedTest, ConstructorsThrow)
 {
-    EXPECT_THROW(DummyLayerNotSupported to,      ExceptionNotImpl);
-
-    LayerConfig cfg;
-    EXPECT_THROW(DummyLayerNotSupported to(cfg), ExceptionNotImpl);
-
-    std::shared_ptr<base_LayerNotSupported> to_ptr;
-    EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupported()),    ExceptionNotImpl);
-    EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupported(cfg)), ExceptionNotImpl);
+    {
+        EXPECT_THROW(DummyLayerNotSupported to,      ExceptionNotImpl);
+    }
+    {
+        std::shared_ptr<base_LayerNotSupported> to_ptr;
+        EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupported()), ExceptionNotImpl);
+    }
+    {
+        std::shared_ptr<base_Layer> to_ptr;
+        EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupported()), ExceptionNotImpl);
+    }
 }
 
 TEST(LayerNotSupportedTest, Message)
@@ -93,14 +96,17 @@ class DummyLayerNotSupportedNoMsg : public ELM_LAYER_NOT_SUPPORTED(DummyLayerNot
  */
 TEST(LayerNotSupportedNoMsgTest, ConstructorsThrow)
 {
-    EXPECT_THROW(DummyLayerNotSupportedNoMsg to,      ExceptionNotImpl);
-
-    LayerConfig cfg;
-    EXPECT_THROW(DummyLayerNotSupportedNoMsg to(cfg), ExceptionNotImpl);
-
-    std::shared_ptr<base_LayerNotSupported> to_ptr;
-    EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupportedNoMsg()),    ExceptionNotImpl);
-    EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupportedNoMsg(cfg)), ExceptionNotImpl);
+    {
+        EXPECT_THROW(DummyLayerNotSupportedNoMsg to,      ExceptionNotImpl);
+    }
+    {
+        std::shared_ptr<base_LayerNotSupported> to_ptr;
+        EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupportedNoMsg()),    ExceptionNotImpl);
+    }
+    {
+        std::shared_ptr<base_Layer> to_ptr;
+        EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupportedNoMsg()),    ExceptionNotImpl);
+    }
 }
 
 } // anonymous namespace for test routines

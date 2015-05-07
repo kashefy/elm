@@ -45,23 +45,10 @@ GraphCompatibility::GraphCompatibility()
     Clear();
 }
 
-GraphCompatibility::GraphCompatibility(const LayerConfig &cfg)
-    : base_SparseMatOutputLayer(cfg)
-{
-    Reset(cfg);
-}
-
 void GraphCompatibility::Clear()
 {
     m_.clear();
 }
-
-void GraphCompatibility::Reset(const LayerConfig &config)
-{
-    Clear();
-    Reconfigure(config);
-}
-
 void GraphCompatibility::Reconfigure(const LayerConfig &config)
 {
 }

@@ -9,6 +9,7 @@
 
 #include <boost/assign/list_of.hpp>
 
+#include "elm/core/exception.h"
 #include "elm/core/registor.h"
 
 /** Whenever a new layer is imeplemented:
@@ -74,7 +75,18 @@ LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateShared(const LayerTyp
                                                                   const LayerIONames &io)
 {
     LayerRegistor::RegisteredTypeSharedPtr ptr = LayerFactory::CreateShared(type);
-    ptr->Reset(config);
-    ptr->IONames(io);
+    Init(ptr, config, io);
     return ptr;
+}
+
+void LayerFactory::Init(LayerFactory::LayerShared &layer,
+                        const LayerConfig &config,
+                        const LayerIONames &io)
+{
+    if(!bool(layer)) {
+
+        ELM_THROW_VALUE_ERROR("Undefined reference. Uninitialized pointer.");
+    }
+    layer->Reset(config);
+    layer->IONames(io);
 }

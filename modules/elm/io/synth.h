@@ -18,7 +18,7 @@
 class base_Synth
 {
 public:
-    ~base_Synth();
+    virtual ~base_Synth();
 
     /**
      * @brief Get next synthesized data point

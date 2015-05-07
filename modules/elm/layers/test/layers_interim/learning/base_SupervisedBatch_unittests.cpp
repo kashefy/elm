@@ -26,11 +26,6 @@ public:
           flag(false)
     {}
 
-    DummySupervisedBatch(const elm::LayerConfig &cfg)
-        : base_SupervisedBatch(cfg),
-          flag(false)
-    {}
-
     void Learn(const cv::Mat1f& features, const cv::Mat1f &labels)
     {
         flag = true;
@@ -65,7 +60,7 @@ class SupervisedBatchTest : public ::testing::Test
 protected:
     void SetUp()
     {
-        to_.reset(new DummySupervisedBatch(LayerConfig()));
+        to_.reset(new DummySupervisedBatch());
     }
 
     std::shared_ptr<base_Layer> to_;
@@ -101,7 +96,7 @@ class SupervisedBatchInstTest : public ::testing::Test
 protected:
     void SetUp()
     {
-        to_.reset(new DummySupervisedBatch(LayerConfig()));
+        to_.reset(new DummySupervisedBatch());
     }
 
     std::shared_ptr<base_SupervisedBatch> to_;
@@ -109,8 +104,10 @@ protected:
 
 TEST_F(SupervisedBatchInstTest, Constructor)
 {
-    EXPECT_NO_THROW(to_.reset(new DummySupervisedBatch(LayerConfig())));
+    EXPECT_NO_THROW(to_.reset(new DummySupervisedBatch()));
     EXPECT_NO_THROW(DummySupervisedBatch());
+
+    EXPECT_NO_THROW(DummySupervisedBatch x);
 }
 
 TEST_F(SupervisedBatchInstTest, Destructor)
@@ -118,7 +115,7 @@ TEST_F(SupervisedBatchInstTest, Destructor)
     EXPECT_NO_THROW(to_.reset());
 
     std::shared_ptr<DummySupervisedBatch> to2;
-    EXPECT_NO_THROW(to2.reset(new DummySupervisedBatch(LayerConfig())));
+    EXPECT_NO_THROW(to2.reset(new DummySupervisedBatch()));
     EXPECT_NO_THROW(to2.reset());
 }
 

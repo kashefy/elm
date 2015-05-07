@@ -45,13 +45,7 @@ public:
 
     ICP();
 
-    ICP(const LayerConfig &cfg);
-
     void Clear();
-
-    void Reset();
-
-    void Reset(const LayerConfig &cfg);
 
     void Reconfigure(const LayerConfig &cfg);
 

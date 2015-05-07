@@ -30,19 +30,12 @@ public:
 
     virtual void Reconfigure(const LayerConfig &config);
 
-    virtual void Reset(const LayerConfig &config);
-
     virtual void Activate(const Signal &signal);
 
-    /** Default constructor, still requires configurations
-      * \see Reconfigure
+    /** @brief Default constructor, still requires configurations
+      * @see Reconfigure
       */
     WeightedSum();
-
-    /** Constructor with configuration
-      * @param layer configuration
-      */
-    WeightedSum(const LayerConfig& config);
 
 public:
     static const std::string PARAM_A;    ///< key to factor 'a' in params structure

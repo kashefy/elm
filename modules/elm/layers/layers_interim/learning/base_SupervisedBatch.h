@@ -43,13 +43,6 @@ public:
 
 protected:
     base_SupervisedBatch();
-
-    /**
-     * @brief Construct and fully configure a layer (parameters and IO)
-     * Derived class should call Reset(config) and IO(config) from here.
-     * @param config
-     */
-    base_SupervisedBatch(const LayerConfig& config);
 };
 
 } // namespace elm

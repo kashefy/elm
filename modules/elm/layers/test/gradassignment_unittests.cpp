@@ -18,6 +18,7 @@
 #include "elm/layers/graphcompatibility.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace std;
 using namespace boost;
@@ -83,7 +84,8 @@ TEST_F(GradAssignmentInitTest, Constructor_overloaded)
 
     cfg.Params(p);
 
-    EXPECT_NO_THROW(to_.reset(new GradAssignment(cfg)));
+    EXPECT_NO_THROW(to_.reset(new GradAssignment()));
+    EXPECT_NO_THROW(to_->Reset(cfg));
 }
 
 TEST_F(GradAssignmentInitTest, Reconfigure_invalid_beta)
@@ -99,11 +101,13 @@ TEST_F(GradAssignmentInitTest, Reconfigure_invalid_beta)
 
     p.put(GradAssignment::PARAM_BETA, 0.f);
     cfg.Params(p);
-    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+    EXPECT_NO_THROW(to_.reset(new GradAssignment()));
+    EXPECT_THROW(to_->Reset(cfg), ExceptionValueError);
 
     p.put(GradAssignment::PARAM_BETA, -0.5f);
     cfg.Params(p);
-    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+    EXPECT_NO_THROW(to_.reset(new GradAssignment()));
+    EXPECT_THROW(to_->Reset(cfg), ExceptionValueError);
 }
 
 TEST_F(GradAssignmentInitTest, Reconfigure_invalid_beta_rate)
@@ -119,19 +123,23 @@ TEST_F(GradAssignmentInitTest, Reconfigure_invalid_beta_rate)
 
     p.put(GradAssignment::PARAM_BETA_RATE, 1.f);
     cfg.Params(p);
-    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+    EXPECT_NO_THROW(to_.reset(new GradAssignment()));
+    EXPECT_THROW(to_->Reset(cfg), ExceptionValueError);
 
     p.put(GradAssignment::PARAM_BETA_RATE, 0.8f);
     cfg.Params(p);
-    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+    EXPECT_NO_THROW(to_.reset(new GradAssignment()));
+    EXPECT_THROW(to_->Reset(cfg), ExceptionValueError);
 
     p.put(GradAssignment::PARAM_BETA_RATE, 0.f);
     cfg.Params(p);
-    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+    EXPECT_NO_THROW(to_.reset(new GradAssignment()));
+    EXPECT_THROW(to_->Reset(cfg), ExceptionValueError);
 
     p.put(GradAssignment::PARAM_BETA_RATE, -10.f);
     cfg.Params(p);
-    EXPECT_THROW(to_.reset(new GradAssignment(cfg)), ExceptionValueError);
+    EXPECT_NO_THROW(to_.reset(new GradAssignment()));
+    EXPECT_THROW(to_->Reset(cfg), ExceptionValueError);
 }
 
 class GradAssignmentTest : public GradAssignmentInitTest

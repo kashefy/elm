@@ -10,6 +10,8 @@
 #ifndef _ELM_TS_LAYER_ASSERTIONS_H_
 #define _ELM_TS_LAYER_ASSERTIONS_H_
 
+#include "gtest/gtest.h"
+
 #include <memory>
 
 #include "elm/core/exception.h"
@@ -18,7 +20,6 @@
 #include "elm/core/stl/stl_inl.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layerattr_.h"
-#include "elm/ts/ts.h"
 
 namespace elm {
 

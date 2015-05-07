@@ -36,8 +36,6 @@ public:
     /**
      * @brief Compute internal state
      * @param in input, see expected dimension required by dervied class
-     *
-     * @todo Drop kernel parameter, when filter bank becomes a layer
      */
     virtual void State(const cv::Mat1f& in) = 0;
 
@@ -74,8 +72,6 @@ public:
 
 protected:
     base_PopulationCode();
-
-    base_PopulationCode(const LayerConfig &config);
 
     std::string name_stimulus_; ///< name of stimulus in signal object
     std::string name_pop_code_; ///< destination name of popuation code in signal

@@ -36,21 +36,8 @@ LayerY::LayerY()
 {
 }
 
-LayerY::LayerY(const LayerConfig &config)
-    : base_FeatureTransformationLayer(config),
-      YNeuron()
-{
-    Reset(config);
-    IONames(config);
-}
-
 void LayerY::Clear()
 {
-}
-
-void LayerY::Reset(const LayerConfig &config)
-{
-    Reconfigure(config);
 }
 
 void LayerY::Reconfigure(const LayerConfig &config)

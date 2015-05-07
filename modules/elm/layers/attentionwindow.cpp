@@ -48,30 +48,19 @@ AttentionWindow::AttentionWindow()
     Clear();
 }
 
-AttentionWindow::AttentionWindow(const LayerConfig &cfg)
-    : base_Layer(cfg)
-{
-    Reset(cfg);
-}
-
 void AttentionWindow::Clear()
 {
     window_ = Mat1f(window_.size());
     tl_.x = tl_.y = -1;
 }
 
-void AttentionWindow::Reset(const LayerConfig &config)
+void AttentionWindow::Reconfigure(const LayerConfig &config)
 {
     PTree p = config.Params();
     int rows = p.get<int>(PARAM_WIN_ROWS);
     int cols = p.get<int>(PARAM_WIN_COLS);
 
     window_ = Mat1f(rows, cols);
-}
-
-void AttentionWindow::Reconfigure(const LayerConfig &config)
-{
-    Reset(config);
 }
 
 void AttentionWindow::InputNames(const LayerInputNames &config)

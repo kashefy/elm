@@ -26,11 +26,6 @@ base_SmoothLayer::base_SmoothLayer()
 {
 }
 
-base_SmoothLayer::base_SmoothLayer(const LayerConfig &config)
-    : base_FeatureTransformationLayer(config)
-{
-}
-
 void base_SmoothLayer::Clear()
 {
     m_ = Mat1f();

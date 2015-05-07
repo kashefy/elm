@@ -37,11 +37,7 @@ public:
 
     AttentionWindow();
 
-    AttentionWindow(const LayerConfig &cfg);
-
     virtual void Clear();
-
-    virtual void Reset(const LayerConfig &config);
 
     virtual void Reconfigure(const LayerConfig &config);
 

@@ -24,11 +24,6 @@ base_SparseMatOutputLayer::base_SparseMatOutputLayer()
 {
 }
 
-base_SparseMatOutputLayer::base_SparseMatOutputLayer(const LayerConfig &cfg)
-    : base_Layer(cfg)
-{
-}
-
 void base_SparseMatOutputLayer::OutputNames(const LayerOutputNames &io)
 {
     name_output_ = io.Output(KEY_OUTPUT_RESPONSE);

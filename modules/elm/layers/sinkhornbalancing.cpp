@@ -42,21 +42,9 @@ SinkhornBalancing::SinkhornBalancing()
     Clear();
 }
 
-SinkhornBalancing::SinkhornBalancing(const LayerConfig &cfg)
-    : base_Layer(cfg)
-{
-    Reset(cfg);
-}
-
 void SinkhornBalancing::Clear()
 {
     m_ = Mat1f();
-}
-
-void SinkhornBalancing::Reset(const LayerConfig &config)
-{
-    Clear();
-    Reconfigure(config);
 }
 
 void SinkhornBalancing::Reconfigure(const LayerConfig &config)

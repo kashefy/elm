@@ -42,9 +42,6 @@ public:
 
     DummyChildLearningLayer()
         : base_LearningLayer() {}
-
-    DummyChildLearningLayer(const LayerConfig &cfg)
-        : base_LearningLayer(cfg) {}
 };
 
 class LearningLayerTest : public ::testing::Test
@@ -72,12 +69,6 @@ TEST_F(LearningLayerTest, Reset_unique_ptr)
 {
     unique_ptr<base_Layer> to(new DummyChildLearningLayer());
     EXPECT_NO_THROW(to_->Reset(LayerConfig()));
-}
-
-TEST_F(LearningLayerTest, Reset_unique_ptr_overloaded)
-{
-    LayerConfig cfg;
-    EXPECT_NO_THROW(unique_ptr<base_Layer> to(new DummyChildLearningLayer(cfg)));
 }
 
 /**
@@ -110,8 +101,7 @@ TEST_F(LearningLayerInstTest, Reset_unique_ptr)
     EXPECT_NO_THROW(to_->Reset(LayerConfig()));
 }
 
-TEST_F(LearningLayerInstTest, Reset_unique_ptr_overloaded)
+TEST_F(LearningLayerInstTest, Reset_unique_ptr_as_base_Layer)
 {
-    LayerConfig cfg;
-    EXPECT_NO_THROW(unique_ptr<base_LearningLayer> to(new DummyChildLearningLayer(cfg)));
+    EXPECT_NO_THROW(unique_ptr<base_Layer> to(new DummyChildLearningLayer()));
 }

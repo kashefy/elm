@@ -23,12 +23,6 @@ base_SupervisedBatch::base_SupervisedBatch()
 {
 }
 
-base_SupervisedBatch::base_SupervisedBatch(const LayerConfig &config)
-    : base_LearningLayer(config),
-      base_FeatureTransformationLayer(config)
-{
-}
-
 void base_SupervisedBatch::Learn()
 {
     ELM_THROW_NOT_IMPLEMENTED_WMSG("Batch learning requires all training data.");

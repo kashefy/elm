@@ -47,7 +47,8 @@ protected:
         io_.Input(ImageGradient::KEY_INPUT_STIMULUS, NAME_IN);
         io_.Output(ImageGradient::KEY_OUTPUT_RESPONSE, NAME_GRAD);
 
-        to_.reset(new ImageGradient(config_));
+        to_.reset(new ImageGradient);
+        to_->Reset(config_);
         to_->IONames(io_);
     }
 

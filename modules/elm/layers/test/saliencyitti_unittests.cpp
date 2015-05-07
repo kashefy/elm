@@ -15,6 +15,7 @@
 #include "elm/io/synth.h"
 #include "elm/io/readmnist.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace cv;
 using namespace std;
@@ -103,13 +104,6 @@ protected:
 const string SaliencyIttiTest::NAME_SCENE_      = "in";
 const string SaliencyIttiTest::NAME_SALIENCY_   = "saliency";
 const string SaliencyIttiTest::NAME_LOC_        = "loc";
-
-TEST_F(SaliencyIttiTest, Constructor)
-{
-    shared_ptr<base_Layer> to;
-    EXPECT_NO_THROW(to.reset(new SaliencyItti(cfg_)));
-    EXPECT_NO_THROW(to.reset());
-}
 
 TEST_F(SaliencyIttiTest, Reconfigure)
 {

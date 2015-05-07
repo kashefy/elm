@@ -58,21 +58,9 @@ GradAssignment::GradAssignment()
     Clear();
 }
 
-GradAssignment::GradAssignment(const LayerConfig &cfg)
-    : base_MatOutputLayer(cfg)
-{
-    Reset(cfg);
-}
-
 void GradAssignment::Clear()
 {
     m_ = Mat1f();
-}
-
-void GradAssignment::Reset(const LayerConfig &config)
-{
-    Clear();
-    Reconfigure(config);
 }
 
 void GradAssignment::Reconfigure(const LayerConfig &config)

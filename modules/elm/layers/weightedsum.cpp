@@ -37,11 +37,6 @@ void WeightedSum::Clear()
     m_ = Mat1f();
 }
 
-void WeightedSum::Reset(const LayerConfig &config)
-{
-    Reconfigure(config);
-}
-
 void WeightedSum::Reconfigure(const LayerConfig &config)
 {
     // params
@@ -76,10 +71,3 @@ WeightedSum::WeightedSum()
     Clear();
 }
 
-WeightedSum::WeightedSum(const LayerConfig& config)
-    : base_FeatureTransformationLayer(config)
-{
-    Clear();
-    Reconfigure(config);
-    IONames(config);
-}

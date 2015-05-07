@@ -11,6 +11,7 @@
 #include "elm/core/layerconfig.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace std;
 using namespace cv;

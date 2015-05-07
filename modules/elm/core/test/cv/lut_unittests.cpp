@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/cv/lut.h"
 
-#include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using cv::Mat1i;
 using namespace elm;

@@ -25,13 +25,6 @@ base_LayerNotSupported::base_LayerNotSupported()
 {
 }
 
-base_LayerNotSupported::base_LayerNotSupported(const LayerConfig &config, const string message)
-    : base_Layer(config),
-      msg_(message)
-{
-    ThrowException();
-}//LCOV_EXCL_LINE
-
 void base_LayerNotSupported::Clear()
 {
     ThrowException();

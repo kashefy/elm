@@ -30,8 +30,6 @@ public:
 
     MLP();
 
-    MLP(const LayerConfig &cfg);
-
     void Clear();
 
     void Reset(const LayerConfig &config);

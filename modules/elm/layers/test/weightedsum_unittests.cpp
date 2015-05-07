@@ -15,6 +15,7 @@
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace std;
 using namespace cv;
@@ -47,7 +48,9 @@ protected:
         config_.Input(WeightedSum::KEY_INPUT_STIMULUS, NAME_STIMULUS);
         config_.Output(WeightedSum::KEY_OUTPUT_RESPONSE, NAME_RESPONSE);
 
-        to_.reset(new WeightedSum(config_));
+        to_.reset(new WeightedSum);
+        to_->Reset(config_);
+        to_->IONames(config_);
     }
 
     unique_ptr<base_Layer> to_; ///< test object
@@ -59,6 +62,31 @@ const string WeightedSumTest::NAME_RESPONSE = "out";
 TEST_F(WeightedSumTest, Reset_EmptyConfig)
 {
     EXPECT_THROW(to_->Reset(LayerConfig()), boost::property_tree::ptree_bad_path);
+}
+
+TEST_F(WeightedSumTest, IONames)
+{
+    to_.reset(new WeightedSum);
+    to_->Reset(config_);
+
+    Signal signal;
+    // feed input into signal object
+    ASSERT_FALSE(signal.Exists(NAME_STIMULUS));
+    signal.Append(NAME_STIMULUS, Mat1f::ones(3, 2));
+    EXPECT_TRUE(signal.Exists(NAME_STIMULUS));
+
+    // activate before setting io names
+    ASSERT_FALSE(signal.Exists(NAME_RESPONSE));
+    EXPECT_THROW(to_->Activate(signal), ExceptionKeyError);
+
+    to_->IONames(config_);
+
+    // re-attempt activation with I/O names properly set
+    // activate before setting io names
+    EXPECT_FALSE(signal.Exists(NAME_RESPONSE));
+    EXPECT_NO_THROW(to_->Activate(signal));\
+    to_->Response(signal);
+    EXPECT_TRUE(signal.Exists(NAME_RESPONSE)) << "Response missing";
 }
 
 TEST_F(WeightedSumTest, Activate)
@@ -73,7 +101,7 @@ TEST_F(WeightedSumTest, Activate)
     EXPECT_FALSE(signal.Exists(NAME_RESPONSE));
     to_->Activate(signal);
     to_->Response(signal);
-    EXPECT_TRUE(signal.Exists(NAME_RESPONSE)) << "Resonse missing";
+    EXPECT_TRUE(signal.Exists(NAME_RESPONSE)) << "Response missing";
 
     // Check response dimensions
     Mat1f response = signal[NAME_RESPONSE][0];

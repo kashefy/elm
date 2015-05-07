@@ -15,6 +15,7 @@
 #include "elm/core/layerionames.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace std;
 using namespace cv;
@@ -48,10 +49,6 @@ public:
 
     DummySparseMatOutputLayer()
         : base_SparseMatOutputLayer()
-    {}
-
-    DummySparseMatOutputLayer(const LayerConfig &cfg)
-        : base_SparseMatOutputLayer(cfg)
     {}
 
 protected:
@@ -88,7 +85,7 @@ protected:
 
 TEST_F(SparseMatOutputLayerTest, Constructor)
 {
-    EXPECT_NO_THROW(to_.reset(new DummySparseMatOutputLayer(LayerConfig())));
+    EXPECT_NO_THROW(to_.reset(new DummySparseMatOutputLayer()));
 }
 
 TEST_F(SparseMatOutputLayerTest, Destructor)

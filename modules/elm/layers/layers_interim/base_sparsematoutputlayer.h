@@ -43,8 +43,6 @@ public:
 protected:
     base_SparseMatOutputLayer();
 
-    base_SparseMatOutputLayer(const LayerConfig& cfg);
-
     // members
     std::string name_output_;    ///< destination name in signal object
 

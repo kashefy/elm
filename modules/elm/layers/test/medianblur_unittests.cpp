@@ -18,6 +18,7 @@
 #include "elm/core/percentile.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace std;
 using namespace cv;
@@ -45,7 +46,9 @@ protected:
         config_.Input(MedianBlur::KEY_INPUT_STIMULUS, NAME_IN);
         config_.Output(MedianBlur::KEY_OUTPUT_RESPONSE, NAME_OUT_BLURRED);
 
-        to_.reset(new MedianBlur(config_));
+        to_.reset(new MedianBlur());
+        to_->Reset(config_);
+        to_->IONames(config_);
     }
 
     shared_ptr<base_Layer> to_; ///< test object
@@ -67,17 +70,20 @@ TEST_F(MedianBlurTest, Param_invalid)
         params.add(MedianBlur::PARAM_APERTURE_SIZE, ksize);
         config_.Params(params);
 
+        to_.reset(new MedianBlur());
+
         if(ksize <= 1.f) {
 
-            EXPECT_THROW(to_.reset(new MedianBlur(config_)), ExceptionValueError);
+            EXPECT_THROW(to_->Reset(config_), ExceptionValueError);
         }
         else if(ksize % 2 != 0) {
 
-            EXPECT_NO_THROW(to_.reset(new MedianBlur(config_)));
+            to_.reset(new MedianBlur());
+            EXPECT_NO_THROW(to_->Reset(config_));
         }
         else {
 
-            EXPECT_THROW(to_.reset(new MedianBlur(config_)), ExceptionValueError);
+            EXPECT_THROW(to_->Reset(config_), ExceptionValueError);
         }
     }
 }
@@ -180,7 +186,10 @@ TEST_F(MedianBlurTest, Response_blurred_values_8u)
         PTree params;
         params.add(MedianBlur::PARAM_APERTURE_SIZE, ksize);
         config_.Params(params);
-        to_.reset(new MedianBlur(config_));
+
+        to_.reset(new MedianBlur());
+        to_->Reset(config_);
+        to_->IONames(config_);
 
         Mat1b tmp(ksize, ksize);
         randn(tmp, 125.f, 125.f);
@@ -217,7 +226,10 @@ TEST_F(MedianBlurTest, Response_blurred_values_median_center)
         PTree params;
         params.add(MedianBlur::PARAM_APERTURE_SIZE, ksize);
         config_.Params(params);
-        to_.reset(new MedianBlur(config_));
+
+        to_.reset(new MedianBlur());
+        to_->Reset(config_);
+        to_->IONames(config_);
 
         Mat1f in(ksize, ksize);
         randn(in, 0.f, 100.f);
@@ -253,7 +265,10 @@ TEST_F(MedianBlurTest, Response_blurred_values_median_center_with_nan)
         PTree params;
         params.add(MedianBlur::PARAM_APERTURE_SIZE, ksize);
         config_.Params(params);
-        to_.reset(new MedianBlur(config_));
+
+        to_.reset(new MedianBlur());
+        to_->Reset(config_);
+        to_->IONames(config_);
 
         Mat1f in(ksize, ksize);
         randn(in, 0.f, 100.f);

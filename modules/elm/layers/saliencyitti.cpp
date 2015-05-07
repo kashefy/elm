@@ -51,15 +51,9 @@ SaliencyItti::~SaliencyItti()
 }
 
 SaliencyItti::SaliencyItti()
-    : base_Layer()
+    : base_SingleInputFeatureLayer()
 {
     Clear();
-}
-
-SaliencyItti::SaliencyItti(const LayerConfig &config)
-    : base_Layer(config)
-{
-    Reset(config);
 }
 
 void SaliencyItti::Clear()
@@ -68,7 +62,7 @@ void SaliencyItti::Clear()
     percentile_orientation_response_ = DEFAULT_ORIENT_RESPONSE_PERCENTILE;
 }
 
-void SaliencyItti::Reset(const LayerConfig &config)
+void SaliencyItti::Reconfigure(const LayerConfig &config)
 {
     // orientation conspicuity
     theta_range_ = ARange_<float>(0.f, CV_PI, 90.*CV_PI/180.);
@@ -86,11 +80,6 @@ void SaliencyItti::Reset(const LayerConfig &config)
     intensity_constrast_.Init(DEFAULT_RADIUS, 1.f);
 
     percentile_orientation_response_ = DEFAULT_ORIENT_RESPONSE_PERCENTILE;
-}
-
-void SaliencyItti::Reconfigure(const LayerConfig &config)
-{
-    Reset(config);
 }
 
 void SaliencyItti::OutputNames(const LayerOutputNames &io)

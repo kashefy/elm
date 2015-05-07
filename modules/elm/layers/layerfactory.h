@@ -12,7 +12,6 @@
 #include <string>
 
 #include "elm/core/base_Layer.h"
-#include "elm/core/exception.h"
 
 namespace elm {
 
@@ -48,6 +47,17 @@ public:
     static LayerShared CreateShared(const LayerType &type,
                                     const LayerConfig &config,
                                     const LayerIONames &io);
+
+    /**
+     * @brief Fuly initialize layer instance
+     * @param layer object reference
+     * @param config paramters
+     * @param io I/O names
+     * @throws ExceptionValueError for unintialized pointers
+     */
+    static void Init(LayerShared &layer,
+                     const LayerConfig &config,
+                     const LayerIONames &io);
 };
 
 } // namesapce elm

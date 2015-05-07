@@ -29,6 +29,7 @@
 #include "elm/core/stl/stl_inl.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace std;
 using namespace cv;
@@ -73,19 +74,17 @@ protected:
     LayerIONames io_names_;
 };
 
-TEST_F(ICPInitTest, Constructor)
-{
-    EXPECT_NO_THROW(ICP to(cfg_));
-}
-
 TEST_F(ICPInitTest, MissingParams)
 {
     cfg_.Params(PTree());
-    EXPECT_NO_THROW(ICP to(cfg_));
-
-    ICP to;
-    EXPECT_NO_THROW(to.Reset(cfg_));
-    EXPECT_NO_THROW(to.Reconfigure(cfg_));
+    {
+        ICP to;
+        EXPECT_NO_THROW(to.Reset(cfg_));
+    }
+    {
+        ICP to;
+        EXPECT_NO_THROW(to.Reconfigure(cfg_));
+    }
 }
 
 TEST_F(ICPInitTest, CreateWithFactory)

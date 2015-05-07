@@ -68,15 +68,9 @@ protected:
     LayerIONames io_names_;
 };
 
-TEST_F(TriangulationInitTest, Constructor)
-{
-    EXPECT_NO_THROW(Triangulation to(cfg_));
-}
-
 TEST_F(TriangulationInitTest, MissingParams)
 {
     cfg_.Params(PTree());
-    EXPECT_NO_THROW(Triangulation to(cfg_));
 
     Triangulation to;
     EXPECT_NO_THROW(to.Reset(cfg_));

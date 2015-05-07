@@ -17,6 +17,8 @@
 
 #include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
+#include "elm/core/layerconfig.h"   // for layer interface
+#include "elm/core/signal.h"        // for layer interface
 #include "elm/ts/container.h"
 #include "elm/ts/mat_assertions.h"
 #include "elm/core/cv/mat_utils.h"
@@ -297,14 +299,14 @@ TEST_F(ReadNYUDepthV2LabeledTest, Nb_items)
     EXPECT_EQ(2, to.ReadHeader(test_filepath_.string()));
 }
 
-TEST_F(ReadNYUDepthV2LabeledTest, Is_eof)
+TEST_F(ReadNYUDepthV2LabeledTest, Is_EOF)
 {
     ReadNYUDepthV2Labeled to;
     EXPECT_NO_THROW(to.ReadHeader(test_filepath_.string()));
 
     int count = 0;
 
-    while(!to.IS_EOF()) {
+    while(!to.Is_EOF()) {
 
         Mat bgr, depth, labels;
         to.Next(bgr, depth, labels);
@@ -319,7 +321,7 @@ TEST_F(ReadNYUDepthV2LabeledTest, Next_dims)
     ReadNYUDepthV2Labeled to;
     EXPECT_NO_THROW(to.ReadHeader(test_filepath_.string()));
 
-    while(!to.IS_EOF()) {
+    while(!to.Is_EOF()) {
 
         Mat bgr, depth, labels;
         to.Next(bgr, depth, labels);
@@ -382,7 +384,122 @@ TEST_F(ReadNYUDepthV2LabeledTest, Next_first)
             EXPECT_EQ(i+12*2, static_cast<int>(el[0]));
         }
     }
+}
 
+TEST_F(ReadNYUDepthV2LabeledTest, LayerInterface_dims)
+{
+    LayerConfig cfg;
+    PTree p;
+    p.put(ReadNYUDepthV2Labeled::PARAM_PATH, test_filepath_);
+    cfg.Params(p);
+
+    LayerIONames io;
+    io.Output(ReadNYUDepthV2Labeled::KEY_DEPTHS, ReadNYUDepthV2Labeled::KEY_DEPTHS);
+    io.Output(ReadNYUDepthV2Labeled::KEY_IMAGE, ReadNYUDepthV2Labeled::KEY_IMAGE);
+    io.Output(ReadNYUDepthV2Labeled::KEY_LABELS, ReadNYUDepthV2Labeled::KEY_LABELS);
+
+    shared_ptr<base_Reader> to(new ReadNYUDepthV2Labeled);
+    to->Reset(cfg);
+    to->IONames(io);
+
+    ASSERT_FALSE(to->Is_EOF());
+
+    while(!to->Is_EOF()) {
+
+        Signal s;
+        to->Activate(s);
+        to->Response(s);
+
+        EXPECT_TRUE(s.Exists(ReadNYUDepthV2Labeled::KEY_DEPTHS));
+        EXPECT_TRUE(s.Exists(ReadNYUDepthV2Labeled::KEY_IMAGE));
+        EXPECT_TRUE(s.Exists(ReadNYUDepthV2Labeled::KEY_LABELS));
+
+        Mat1f depth = s.MostRecentMat1f(ReadNYUDepthV2Labeled::KEY_DEPTHS);
+        Mat3f bgr = s.MostRecentMat1f(ReadNYUDepthV2Labeled::KEY_IMAGE);
+        Mat1f labels = s.MostRecentMat1f(ReadNYUDepthV2Labeled::KEY_LABELS);
+
+        EXPECT_MAT_DIMS_EQ(bgr, Size2i(3, 4));
+        EXPECT_EQ(3, bgr.channels());
+        EXPECT_MAT_DIMS_EQ(depth, Size2i(3, 4));
+        EXPECT_MAT_DIMS_EQ(labels, Size2i(3, 4));
+    }
+}
+
+TEST_F(ReadNYUDepthV2LabeledTest, LayerInterface_first)
+{
+    LayerConfig cfg;
+    PTree p;
+    p.put(ReadNYUDepthV2Labeled::PARAM_PATH, test_filepath_);
+    cfg.Params(p);
+
+    LayerIONames io;
+    io.Output(ReadNYUDepthV2Labeled::KEY_DEPTHS, ReadNYUDepthV2Labeled::KEY_DEPTHS);
+    io.Output(ReadNYUDepthV2Labeled::KEY_IMAGE, ReadNYUDepthV2Labeled::KEY_IMAGE);
+    io.Output(ReadNYUDepthV2Labeled::KEY_LABELS, ReadNYUDepthV2Labeled::KEY_LABELS);
+
+    shared_ptr<base_Reader> to(new ReadNYUDepthV2Labeled);
+    to->Reset(cfg);
+    to->IONames(io);
+
+    ASSERT_FALSE(to->Is_EOF());
+
+    Signal s;
+    to->Activate(s);
+    to->Response(s);
+
+    EXPECT_TRUE(s.Exists(ReadNYUDepthV2Labeled::KEY_DEPTHS));
+    EXPECT_TRUE(s.Exists(ReadNYUDepthV2Labeled::KEY_IMAGE));
+    EXPECT_TRUE(s.Exists(ReadNYUDepthV2Labeled::KEY_LABELS));
+
+    Mat1f depth = s.MostRecentMat1f(ReadNYUDepthV2Labeled::KEY_DEPTHS);
+    Mat3f bgr = s.MostRecentMat1f(ReadNYUDepthV2Labeled::KEY_IMAGE);
+    Mat1f labels = s.MostRecentMat1f(ReadNYUDepthV2Labeled::KEY_LABELS);
+
+    // inspect depth image
+    {
+        int i = 1;
+        for(int c=0; c<depth.cols; c++) {
+
+            for(int r=0; r<depth.rows; r++, i++) {
+
+                float expected_value = static_cast<float>(i);
+                expected_value += static_cast<float>(i % 10)/10.f;
+                EXPECT_FLOAT_EQ(expected_value, depth(r, c));
+            }
+        }
+    }
+
+    // inspect labels
+
+    //ELM_COUT_VAR(labels);
+    {
+        float v = 1.f;
+        for(int c=0; c<labels.cols; c++) {
+
+            for(int r=0; r<labels.rows; r++, ++v) {
+
+                EXPECT_FLOAT_EQ(v, labels(r, c));
+            }
+        }
+    }
+
+    // inspect bgr image
+    //ELM_COUT_VAR(bgr);
+    {
+        float v = 1.f;
+        for(int c=0; c<bgr.cols; c++) {
+
+            for(int r=0; r<bgr.rows; r++, ++v) {
+
+                Vec3f el = bgr(r, c);
+
+                // switch first and last channel because of bgr to rgb conversion
+                EXPECT_EQ(v, static_cast<int>(el[2]));
+                EXPECT_EQ(v+12.f, static_cast<int>(el[1]));
+                EXPECT_EQ(v+12.f*2.f, static_cast<int>(el[0]));
+            }
+        }
+    }
 }
 
 TEST_F(ReadNYUDepthV2LabeledTest, DISABLED_NYUV2)

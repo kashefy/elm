@@ -12,6 +12,7 @@
 #include "elm/core/signal.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layer_assertions.h"
+#include "elm/ts/mat_assertions.h"
 
 namespace bpt=boost::property_tree;
 using namespace std;
@@ -73,25 +74,6 @@ TEST_F(AttentionWindowInitTest, MissingParams_Reset)
         p.erase(AttentionWindow::PARAM_WIN_ROWS);
         cfg_.Params(p);
         EXPECT_THROW(AttentionWindow().Reset(cfg_), bpt::ptree_bad_path);
-    }
-}
-
-TEST_F(AttentionWindowInitTest, MissingParams_Constructor)
-{
-    EXPECT_THROW(to_.reset(new AttentionWindow(LayerConfig())), bpt::ptree_bad_path);
-
-    {
-        PTree p(params_);
-        p.erase(AttentionWindow::PARAM_WIN_COLS);
-        cfg_.Params(p);
-        EXPECT_THROW(to_.reset(new AttentionWindow(cfg_)), bpt::ptree_bad_path);
-    }
-
-    {
-        PTree p(params_);
-        p.erase(AttentionWindow::PARAM_WIN_ROWS);
-        cfg_.Params(p);
-        EXPECT_THROW(to_.reset(new AttentionWindow(cfg_)), bpt::ptree_bad_path);
     }
 }
 

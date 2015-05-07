@@ -33,14 +33,13 @@ public:
     /**
      * @brief Reset the state of the layer with new configurations.
      * This is a hard reset.
-     * For a soft reset \see Reconfigure
+     * For a soft reset @see Reconfigure
      * @param config
      */
     virtual void Reset(const LayerConfig& config);
 
     /**
       * @brief Reconfigure the layer without modifying its state
-      * @todo Keep this?
       * @param new configuration
       */
     virtual void Reconfigure(const LayerConfig& config) = 0;
@@ -84,13 +83,6 @@ public:
 
 protected:
     base_Layer();
-
-    /**
-     * @brief Construct and fully configure a layer (parameters and IO)
-     * Derived class shoudl call Reset(config) and IO(config) from here.
-     * @param config
-     */
-    base_Layer(const LayerConfig& config);
 };
 
 } // namespace elm

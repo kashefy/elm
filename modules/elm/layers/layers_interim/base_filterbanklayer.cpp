@@ -29,11 +29,6 @@ base_FilterBankLayer::base_FilterBankLayer()
 {
 }
 
-base_FilterBankLayer::base_FilterBankLayer(const LayerConfig &cfg)
-    : base_SingleInputFeatureLayer(cfg)
-{
-}
-
 void base_FilterBankLayer::Clear()
 {
     kernels_ = VecMat1f();
