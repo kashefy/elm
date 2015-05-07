@@ -138,3 +138,7 @@ after_success:
   # Merge python coverage with coveralls-style json file and send it to api endpoint
   # Note: This file must contain "source_files" data or it will not be merged
   #- coveralls --config_file .coveragerc --merge=$ELM_BUILD_DIR/coverage.json
+  
+  # Generate and publish docs
+  - chmod -R 744 $TRAVIS_BUILD_DIR/ciscripts/travis
+  - $TRAVIS_BUILD_DIR/ciscripts/travis/push-doxygen-to-gh-pages.sh
