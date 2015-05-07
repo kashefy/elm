@@ -6,7 +6,7 @@
 #  https://github.com/robotology/icub-iaitabletop/blob/master/.travis/push-doxygen-to-gh-pages.sh
 #  http://rickfoosusa.blogspot.de/2011/10/howto-use-doxygen-with-github.html
 # Author: kashefy
-set -e
+set -e # exit with nonzero exit code if anything fails
 
 # skip builds triggered by pull-requests
 [ "${TRAVIS_PULL_REQUEST}" = "false" ] || \

@@ -88,7 +88,7 @@ install:
   
   # Generate and publish docs
   - chmod -R 744 $TRAVIS_BUILD_DIR/.ci/travis
-  - $TRAVIS_BUILD_DIR/.ci/travis/docs-to_gh-pages.sh
+  - $TRAVIS_BUILD_DIR/.ci/travis/docs_to_gh-pages.sh
   
   # HDF5
   - cd $DEPS_DIR
