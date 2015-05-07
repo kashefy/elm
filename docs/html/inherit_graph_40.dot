@@ -1,0 +1,7 @@
+digraph G
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="elm::translator_CvTermCriteria",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structelm_1_1translator__CvTermCriteria.html",tooltip="STL string &lt;-&gt; OpenCV CvTermCriteria translator for adding CvTermCriteria to boost property trees..."];
+}

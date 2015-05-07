@@ -1,0 +1,28 @@
+var classelm_1_1GradAssignment =
+[
+    [ "~GradAssignment", "classelm_1_1GradAssignment.html#af671b0f016c83e02f3868b26f99c8dc7", null ],
+    [ "GradAssignment", "classelm_1_1GradAssignment.html#ae4331f8f3fa88ae3cd3991d151de8c13", null ],
+    [ "Activate", "classelm_1_1GradAssignment.html#a1f037e4a3833c223ed36199cd8250259", null ],
+    [ "Clear", "classelm_1_1GradAssignment.html#a7559683eca5ac583f94b58143e92c2c8", null ],
+    [ "InputNames", "classelm_1_1GradAssignment.html#a6336fd74b64f0981cf7a412f91e503da", null ],
+    [ "Reconfigure", "classelm_1_1GradAssignment.html#a768f012100f80ddda5d5b7fa8af32920", null ],
+    [ "A_", "classelm_1_1GradAssignment.html#a18b733f43c998c7f56ccd751475e780a", null ],
+    [ "beta_0_", "classelm_1_1GradAssignment.html#a5a19708b849b9d09279560530eab1562", null ],
+    [ "beta_max_", "classelm_1_1GradAssignment.html#a4753d5be757b618b6e07222326002510", null ],
+    [ "beta_rate_", "classelm_1_1GradAssignment.html#adc4c64c9241892ea2ff7889ed0640393", null ],
+    [ "EPSILON", "classelm_1_1GradAssignment.html#a030d7db5a3eb8710bc43b7d8438a3d01", null ],
+    [ "I_", "classelm_1_1GradAssignment.html#aa319f6487d52aec034f1b80ba788617d", null ],
+    [ "KEY_INPUT_GRAPH_AB", "classelm_1_1GradAssignment.html#a73f9e6bdd960d274e6ede42b1a3d6da4", null ],
+    [ "KEY_INPUT_GRAPH_IJ", "classelm_1_1GradAssignment.html#aa2f1cf6b86288081a315e0f04aa99852", null ],
+    [ "KEY_INPUT_MAT_COMPATIBILITY", "classelm_1_1GradAssignment.html#a2b67f7bb3c778ab53bbf18e8cb71caa0", null ],
+    [ "max_iter_per_beta_", "classelm_1_1GradAssignment.html#afef5650f18d48af7cdba5e84e92eee35", null ],
+    [ "max_iter_sinkhorn_", "classelm_1_1GradAssignment.html#a63bb87f15cabf25d3cd2a075c2968ac3", null ],
+    [ "name_c_ai_", "classelm_1_1GradAssignment.html#a20f3e64c11361f3910394b4461233036", null ],
+    [ "name_g_ab_", "classelm_1_1GradAssignment.html#a5c3cf8dd9b5a03a4b07a1183021f877d", null ],
+    [ "name_g_ij_", "classelm_1_1GradAssignment.html#a09a271e3cf17131b6b3a1788288a06a0", null ],
+    [ "PARAM_BETA", "classelm_1_1GradAssignment.html#acb8e6749f1d3779b35a2959b21edd70e", null ],
+    [ "PARAM_BETA_MAX", "classelm_1_1GradAssignment.html#a88e8b8022177a94c4ddf3a126c7bb0ce", null ],
+    [ "PARAM_BETA_RATE", "classelm_1_1GradAssignment.html#acec9ea76924632d2761ea9ba9496ba4c", null ],
+    [ "PARAM_MAX_ITER_PER_BETA", "classelm_1_1GradAssignment.html#a818cffefb9f1c437f874cd7c3fc3d45a", null ],
+    [ "PARAM_MAX_ITER_SINKHORN", "classelm_1_1GradAssignment.html#a72c575afa7c1b2c3b610b42da97b4285", null ]
+];

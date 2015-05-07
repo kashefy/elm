@@ -1,0 +1,7 @@
+digraph G
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="boost::property_tree::translator_between\< std::basic_string\< Ch, Traits, Alloc \>, CvTermCriteria \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structboost_1_1property__tree_1_1translator__between_3_01std_1_1basic__string_3_01Ch_00_01Traits82e969b0f5199bceab33d69c62f3a369.html"];
+}
