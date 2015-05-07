@@ -87,8 +87,8 @@ install:
   - travis_retry pip install nose
   
   # Generate and publish docs
-  - chmod -R 744 $TRAVIS_BUILD_DIR/ciscripts/travis
-  - $TRAVIS_BUILD_DIR/.ciscripts/travis/push-doxygen-to-gh-pages.sh
+  - chmod -R 744 $TRAVIS_BUILD_DIR/.ci/travis
+  - $TRAVIS_BUILD_DIR/.ci/travis/push-doxygen-to-gh-pages.sh
   
   # HDF5
   - cd $DEPS_DIR
