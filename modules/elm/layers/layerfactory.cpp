@@ -58,6 +58,8 @@ LayerRegistry g_layerRegistry = map_list_of
 
 LayerFactory::LayerFactory()
 {
+    // run-time equivalent of LAYER_REGISTRY_PAIR( WeightedSum )
+    //g_layerRegistry["WeightedSum"] = &LayerRegistor::DerivedInstance<WeightedSum>;
 }
 
 /** @todo eliminate need for checking not MSVC
