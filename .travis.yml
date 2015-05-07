@@ -3,8 +3,6 @@ language: cpp
 compiler:
   #- clang
   - gcc
-  
-secure: "fvYVNecz00QbdEz9sWc5bUjaCby7fsrfKzkFCTzsYmI2PzRB1CMKDpIxjxI77z/KixFeiZkQ2IAQck13EvWCnqEccBjt/MmrmJGWBLwpK1yAaJe4opFICQcUwvmG8GN0/ppi7g+QD9Svu+mrMEsVBoQm9nX+NdvMAMSMiX7ZXFg="
 
 env:
   global:
@@ -18,7 +16,8 @@ env:
     # ELM build parameters
     - BUILD_TYPE=Coverage
     - BUILD_SHARED_LIBS=OFF
-    
+    - secure: "fvYVNecz00QbdEz9sWc5bUjaCby7fsrfKzkFCTzsYmI2PzRB1CMKDpIxjxI77z/KixFeiZkQ2IAQck13EvWCnqEccBjt/MmrmJGWBLwpK1yAaJe4opFICQcUwvmG8GN0/ppi7g+QD9Svu+mrMEsVBoQm9nX+NdvMAMSMiX7ZXFg="
+
 before_install:
   - travis_retry sudo apt-get update -qq
   
