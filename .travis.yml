@@ -86,6 +86,10 @@ install:
   #- if [ "$BUILD_TYPE" == "Coverage" ]; then travis_retry pip install nose coveralls; fi
   - travis_retry pip install nose
   
+  # Generate and publish docs
+  - chmod -R 744 $TRAVIS_BUILD_DIR/ciscripts/travis
+  - $TRAVIS_BUILD_DIR/ciscripts/travis/push-doxygen-to-gh-pages.sh
+  
   # HDF5
   - cd $DEPS_DIR
   - tar -xzf hdf5-1.8.14.tar.gz
@@ -139,6 +143,4 @@ after_success:
   # Note: This file must contain "source_files" data or it will not be merged
   #- coveralls --config_file .coveragerc --merge=$ELM_BUILD_DIR/coverage.json
   
-  # Generate and publish docs
-  - chmod -R 744 $TRAVIS_BUILD_DIR/ciscripts/travis
-  - $TRAVIS_BUILD_DIR/ciscripts/travis/push-doxygen-to-gh-pages.sh
+
