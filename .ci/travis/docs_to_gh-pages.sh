@@ -17,7 +17,7 @@ skip "Skipping docs generation builds triggered by pull-requests."
 #skip "Limit docs generation to pushes to 'master' branch (current branch is: ${TRAVIS_BRANCH})."
 
 cd $TRAVIS_BUILD_DIR
-doxygen ./docs/doxygenConf.txt
+doxygen ./docs/doxygenConf.txt > /dev/null
 
 git config --global user.email "travis@travis-ci.org"
 git config --global user.name "travis-ci"
