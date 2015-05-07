@@ -23,6 +23,10 @@ template <>
 elm::MapIONames LayerAttr_<ReadMNISTImages>::io_pairs = boost::assign::map_list_of
         ELM_ADD_OUTPUT_PAIR(detail::BASE_READERMNISTFILE_KEY_OUTPUT);
 
+template <>
+elm::MapIONames LayerAttr_<ReadMNISTImagesTransl>::io_pairs = boost::assign::map_list_of
+        ELM_ADD_OUTPUT_PAIR(detail::BASE_READERMNISTFILE_KEY_OUTPUT);
+
 ReadMNISTImages::ReadMNISTImages()
     : base_ReaderMNISTFile()
 {
@@ -77,11 +81,6 @@ void ReadMNISTImages::Next(Signal &signal) {
 
     signal.Append(name_out_, static_cast<cv::Mat1f>(img));
 }
-
-#include <boost/assign/list_of.hpp>
-template <>
-elm::MapIONames LayerAttr_<ReadMNISTImagesTransl>::io_pairs = boost::assign::map_list_of
-        ELM_ADD_OUTPUT_PAIR(ReadMNISTImagesTransl::KEY_OUTPUT);
 
 ReadMNISTImagesTransl::ReadMNISTImagesTransl()
     : ReadMNISTImages(),
