@@ -33,8 +33,6 @@ public:
 
     void Add(std::shared_ptr<base_Layer> &layer, const LayerConfig &cfg, const LayerIONames &io);
 
-    void Add(const std::string &layer_type_name, const LayerConfig &cfg, const LayerIONames &io);
-
     void AddOutput(const std::string &output_name);
 
     void RemoveOutput(const std::string &output_name);
