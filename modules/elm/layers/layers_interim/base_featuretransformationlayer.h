@@ -25,7 +25,6 @@ class base_FeatureTransformationLayer:
         public base_MatOutputLayer
 {
 public:
-    void IONames(const LayerIONames &io);
 
 protected:
     virtual ~base_FeatureTransformationLayer();
