@@ -78,7 +78,7 @@ before_install:
   - git fetch && git branch -a && git checkout 2.4
   - mkdir $OPENCV_BUILD_DIR && cd $OPENCV_BUILD_DIR
   - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF $DEPS_DIR/opencv
-  #- make -j2 > /dev/null
+  - make -j2 > /dev/null
   
   # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
@@ -92,10 +92,6 @@ install:
   - gem install coveralls-lcov
   #- if [ "$BUILD_TYPE" == "Coverage" ]; then travis_retry pip install nose coveralls; fi
   - travis_retry pip install nose
-  
-  # Generate and publish docs
-  - chmod -R 744 $TRAVIS_BUILD_DIR/.ci/travis
-  - $TRAVIS_BUILD_DIR/.ci/travis/docs_to_gh-pages.sh
   
   # HDF5
   - cd $DEPS_DIR
@@ -150,4 +146,6 @@ after_success:
   # Note: This file must contain "source_files" data or it will not be merged
   #- coveralls --config_file .coveragerc --merge=$ELM_BUILD_DIR/coverage.json
   
-
+  # Generate and publish docs
+  - chmod -R 744 $TRAVIS_BUILD_DIR/.ci/travis
+  - $TRAVIS_BUILD_DIR/.ci/travis/docs_to_gh-pages.sh
