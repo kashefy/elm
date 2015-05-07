@@ -24,7 +24,9 @@ git config --global user.name "travis-ci"
 git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/kashefy/elm gh-pages > /dev/null
 
 cd gh-pages
-git rm -rf docs
+if [ -d "docs" ]; then
+  git rm -rf docs
+fi
 mkdir -p docs/
 cp -Rf $TRAVIS_BUILD_DIR/docs/html ./docs/html
 git add -f .
