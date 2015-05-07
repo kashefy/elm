@@ -55,7 +55,6 @@ int tril_flat(const cv::Mat1f &src, cv::Mat1f &dst);
  * @param n no. of times values are differenced
  * @param axis along which to perform forward difference (default is the last axis)
  * @return resulting difference
- * @todo implement
  */
 cv::Mat1f diff(const cv::Mat1f &src, int n=1, int axis=-1);
 

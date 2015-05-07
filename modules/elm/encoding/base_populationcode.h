@@ -36,8 +36,6 @@ public:
     /**
      * @brief Compute internal state
      * @param in input, see expected dimension required by dervied class
-     *
-     * @todo Drop kernel parameter, when filter bank becomes a layer
      */
     virtual void State(const cv::Mat1f& in) = 0;
 
