@@ -3,7 +3,13 @@ language: cpp
 compiler:
   #- clang
   - gcc
-
+  
+# blacklist
+branches:
+  except:
+    - experimental
+    - /^appveyor.*$/
+    
 env:
   global:
     # Dependencies
