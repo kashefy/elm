@@ -71,7 +71,7 @@ before_install:
   - git fetch && git branch -a && git checkout 2.4
   - mkdir $OPENCV_BUILD_DIR && cd $OPENCV_BUILD_DIR
   - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF $DEPS_DIR/opencv
-  - make -j2 > /dev/null
+  #- make -j2 > /dev/null
   
   # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
@@ -88,7 +88,7 @@ install:
   
   # Generate and publish docs
   - chmod -R 744 $TRAVIS_BUILD_DIR/.ci/travis
-  - $TRAVIS_BUILD_DIR/.ci/travis/push-doxygen-to-gh-pages.sh
+  - $TRAVIS_BUILD_DIR/.ci/travis/docs-to_gh-pages.sh
   
   # HDF5
   - cd $DEPS_DIR
