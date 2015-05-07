@@ -64,6 +64,31 @@ TEST_F(WeightedSumTest, Reset_EmptyConfig)
     EXPECT_THROW(to_->Reset(LayerConfig()), boost::property_tree::ptree_bad_path);
 }
 
+TEST_F(WeightedSumTest, IONames)
+{
+    to_.reset(new WeightedSum);
+    to_->Reset(config_);
+
+    Signal signal;
+    // feed input into signal object
+    ASSERT_FALSE(signal.Exists(NAME_STIMULUS));
+    signal.Append(NAME_STIMULUS, Mat1f::ones(3, 2));
+    EXPECT_TRUE(signal.Exists(NAME_STIMULUS));
+
+    // activate before setting io names
+    ASSERT_FALSE(signal.Exists(NAME_RESPONSE));
+    EXPECT_THROW(to_->Activate(signal), ExceptionKeyError);
+
+    to_->IONames(config_);
+
+    // re-attempt activation with I/O names properly set
+    // activate before setting io names
+    EXPECT_FALSE(signal.Exists(NAME_RESPONSE));
+    EXPECT_NO_THROW(to_->Activate(signal));\
+    to_->Response(signal);
+    EXPECT_TRUE(signal.Exists(NAME_RESPONSE)) << "Response missing";
+}
+
 TEST_F(WeightedSumTest, Activate)
 {
     Signal signal;
@@ -76,7 +101,7 @@ TEST_F(WeightedSumTest, Activate)
     EXPECT_FALSE(signal.Exists(NAME_RESPONSE));
     to_->Activate(signal);
     to_->Response(signal);
-    EXPECT_TRUE(signal.Exists(NAME_RESPONSE)) << "Resonse missing";
+    EXPECT_TRUE(signal.Exists(NAME_RESPONSE)) << "Response missing";
 
     // Check response dimensions
     Mat1f response = signal[NAME_RESPONSE][0];
