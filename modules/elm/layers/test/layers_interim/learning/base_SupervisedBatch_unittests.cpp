@@ -106,6 +106,8 @@ TEST_F(SupervisedBatchInstTest, Constructor)
 {
     EXPECT_NO_THROW(to_.reset(new DummySupervisedBatch()));
     EXPECT_NO_THROW(DummySupervisedBatch());
+
+    EXPECT_NO_THROW(DummySupervisedBatch x);
 }
 
 TEST_F(SupervisedBatchInstTest, Destructor)
