@@ -7,6 +7,8 @@
 //M*/
 #include "elm/layers/layerlistimpl.h"
 
+using namespace elm;
+
 LayerListImpl::LayerListImpl()
 {
 }

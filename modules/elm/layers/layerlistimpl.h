@@ -8,10 +8,37 @@
 #ifndef _ELM_LAYERS_LAYERLISTIMPL_H_
 #define _ELM_LAYERS_LAYERLISTIMPL_H_
 
+#include <string>
+
+namespace std {
+
+template <typename T> class shared_ptr; ///< convinience typedef for point template
+
+} // namespace std
+
+namespace elm {
+
+class base_Layer;
+class LayerConfig;
+class LayerIONames;
+class Signal;
+
 class LayerListImpl
 {
 public:
     LayerListImpl();
+
+    void Add(std::shared_ptr<base_Layer> &layer, const LayerConfig &cfg, const LayerIONames &io);
+
+    void AddOutput(const std::string &output_name);
+
+    void RemoveOutput(const std::string &output_name);
+
+    bool HasInputs(const Signal &s) const;
+
+protected:
 };
+
+} // namespace elm
 
 #endif // _ELM_LAYERS_LAYERLISTIMPL_H_
