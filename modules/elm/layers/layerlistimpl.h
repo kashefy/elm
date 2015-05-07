@@ -10,6 +10,24 @@
 
 #include <string>
 
+#include <boost/graph/graph_traits.hpp>
+#include <boost/graph/adjacency_list.hpp>
+
+typedef float EdgeWeight;
+typedef boost::property<boost::edge_weight_t, EdgeWeight> EdgeWeightProp;
+
+typedef int VtxColor;
+typedef std::string VtxIdx2;
+typedef boost::property<boost::vertex_color_t, VtxColor,
+        boost::property<boost::vertex_index2_t, VtxIdx2 > >
+        VtxProp;
+
+typedef boost::adjacency_list<boost::setS, boost::listS, boost::undirectedS, VtxProp, EdgeWeightProp> GraphAttrType;
+
+typedef boost::graph_traits<GraphAttrType> GraphAttrTraits;
+typedef GraphAttrTraits::edge_iterator edge_iter;
+typedef GraphAttrTraits::vertex_descriptor VtxDescriptor;
+
 namespace std {
 
 template <typename T> class shared_ptr; ///< convinience typedef for point template
