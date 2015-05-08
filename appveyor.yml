@@ -1,6 +1,10 @@
 version: 0.0.{build}
 os: unstable
 
+branches:
+  except:
+    - /travis.*/
+
 # scripts that are called at very beginning, before repo cloning
 init:
   - cmd: cmake --version
