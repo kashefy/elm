@@ -19,6 +19,8 @@
 #include "elm/core/cv/typedefs_fwd.h"
 #include "elm/core/pcl/typedefs_fwd.h"
 
+extern template class std::vector<pcl::Vertices >;
+
 namespace elm {
 
 /**
