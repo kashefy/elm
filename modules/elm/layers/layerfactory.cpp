@@ -32,8 +32,11 @@
 using boost::assign::map_list_of;
 using namespace elm;
 
+template class std::shared_ptr<elm::base_Layer>;
+
 typedef Registor_<base_Layer> LayerRegistor;
 typedef Registor_<base_Layer>::Registry LayerRegistry;
+typedef std::shared_ptr<base_Layer> LayerShared; ///< convinience typedef to shared pointer to layer object
 
 /** Macros for creating individual registry pair items
  *  credit: J. Turcot, T. Senechal, http://stackoverflow.com/questions/138600/initializing-a-static-stdmapint-int-in-c
@@ -79,7 +82,7 @@ LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateShared(const LayerTyp
     return ptr;
 }
 
-void LayerFactory::Init(LayerFactory::LayerShared &layer,
+void LayerFactory::Init(LayerShared &layer,
                         const LayerConfig &config,
                         const LayerIONames &io)
 {
