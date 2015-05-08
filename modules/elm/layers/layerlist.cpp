@@ -7,7 +7,7 @@
 //M*/
 #include "elm/layers/layerlist.h"
 
-#include "elm/layers/layerlistimpl.h"
+#include "elm/layers/layergraph.h"
 
 using namespace elm;
 
@@ -21,6 +21,6 @@ LayerList::~LayerList()
 }
 
 LayerList::LayerList()
-    : impl_(new LayerListImpl)
+    : impl_(new LayerGraph)
 {
 }

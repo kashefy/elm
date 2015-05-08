@@ -22,7 +22,7 @@ class base_Layer;
 class LayerConfig;
 class LayerIONames;
 class Signal;
-class LayerListImpl;
+class LayerGraph;
 
 class LayerList
 {
@@ -40,7 +40,7 @@ public:
     bool HasInputs(const Signal &s) const;
 
 protected:
-    LayerListImpl *impl_;
+    LayerGraph *impl_;
 };
 
 } // namespace elm
