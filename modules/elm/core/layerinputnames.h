@@ -44,6 +44,8 @@ public:
      */
     OptS InputOpt(const std::string &key) const;
 
+    const MapSS& InputMap() const;
+
 protected:
     MapSS inputs_;
 };

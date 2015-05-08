@@ -61,3 +61,15 @@ TYPED_TEST(LayerInputNamesTypedTest, InputOpt) {
     EXPECT_THROW(this->to_.Input("k2"), ExceptionKeyError);
     EXPECT_FALSE(this->to_.InputOpt("k2"));
 }
+
+TYPED_TEST(LayerInputNamesTypedTest, InputMap) {
+
+    this->to_.Input("k1", "n1");
+    this->to_.Input("k2", "n2");
+    this->to_.Input("k2", "n22");
+
+    MapSS inputs = this->to_.InputMap();
+    EXPECT_EQ(static_cast<size_t>(2), inputs.size());
+    EXPECT_EQ(inputs["k1"], "n1");
+    EXPECT_EQ(inputs["k2"], "n22");
+}
