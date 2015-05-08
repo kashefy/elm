@@ -89,7 +89,7 @@ void LayerGraph::Add(const VtxName &name,
 //    }
 
 
-    for (auto &input : inputs) {
+    for (auto const& input : inputs) {
 
         GraphLayerTraits::vertex_iterator v, end;
         for(tie(v, end) = vertices(g_); v != end; ++v) {
@@ -106,10 +106,10 @@ void LayerGraph::Add(const VtxName &name,
 
                 add_edge(*v, vtx, edge_prop, g_);
             }
-        }
-    }
+        } // vertices
+    } // inputs
 
-    for (auto &output : outputs) {
+    for (auto const& output : outputs) {
 
         GraphLayerTraits::vertex_iterator v, end;
         for(tie(v, end) = vertices(g_); v != end; ++v) {
@@ -125,8 +125,8 @@ void LayerGraph::Add(const VtxName &name,
                 EdgeProp edge_prop = *itr;
                 add_edge(vtx, *v, edge_prop, g_);
             }
-        }
-    }
+        } // vertices
+    } // outputs
 }
 
 void LayerGraph::print() {

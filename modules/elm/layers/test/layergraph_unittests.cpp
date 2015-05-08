@@ -77,7 +77,7 @@ class LayerGraphTest : public ::testing::Test
 
 TEST_F(LayerGraphTest, Test) {
 
-    LayerGraph lg;
+    LayerGraph to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);
@@ -90,7 +90,7 @@ TEST_F(LayerGraphTest, Test) {
         LayerIONames io;
         io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
         io.Output(LayerA::KEY_INPUT_STIMULUS, "outa");
-        lg.Add("a", a, cfg, io);
+        to.Add("a", a, cfg, io);
     }
     {
         LayerConfig cfg;
@@ -99,7 +99,7 @@ TEST_F(LayerGraphTest, Test) {
         LayerIONames io;
         io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
         io.Output(LayerA::KEY_INPUT_STIMULUS, "outb");
-        lg.Add("b", a, cfg, io);
+        to.Add("b", a, cfg, io);
     }
     {
         LayerConfig cfg;
@@ -108,10 +108,128 @@ TEST_F(LayerGraphTest, Test) {
         LayerIONames io;
         io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
         io.Output(LayerA::KEY_INPUT_STIMULUS, "outc");
-        lg.Add("c", a, cfg, io);
+        to.Add("c", a, cfg, io);
     }
 
-    lg.print();
+    to.print();
+}
+
+TEST_F(LayerGraphTest, GenVtxColor_name) {
+
+    LayerGraph to;
+    VtxColor a = to.genVtxColor("a", LayerConfig(), LayerIONames());
+
+    EXPECT_EQ(a, to.genVtxColor("a", LayerConfig(), LayerIONames()));
+    EXPECT_NE(a, to.genVtxColor("a ", LayerConfig(), LayerIONames()));
+    EXPECT_NE(a, to.genVtxColor("a1", LayerConfig(), LayerIONames()));
+    EXPECT_NE(a, to.genVtxColor("b", LayerConfig(), LayerIONames()));
+}
+
+TEST_F(LayerGraphTest, GenVtxColor_cfg) {
+
+    LayerGraph to;
+    LayerConfig cfg;
+    VtxColor a = to.genVtxColor("a", cfg, LayerIONames());
+
+    EXPECT_EQ(a, to.genVtxColor("a", cfg, LayerIONames()));
+
+    PTree p;
+    p.put("foo", 1);
+    cfg.Params(p);
+
+    VtxColor a1 = to.genVtxColor("a", cfg, LayerIONames());
+
+    EXPECT_NE(a, a1);
+
+    VtxColor a2 = to.genVtxColor("a", cfg, LayerIONames());
+
+    EXPECT_EQ(a1, a2);
+
+    p = cfg.Params();
+    p.put("foo", 2);
+    cfg.Params(p);
+
+    a2 = to.genVtxColor("a", cfg, LayerIONames());
+    EXPECT_NE(a1, a2);
+
+    p = cfg.Params();
+    p.put("bar", 1);
+    cfg.Params(p);
+
+    a2 = to.genVtxColor("a", cfg, LayerIONames());
+    EXPECT_NE(a1, a2);
+
+    p = PTree();
+    p.put("bar", 1);
+    cfg.Params(p);
+
+    a2 = to.genVtxColor("a", cfg, LayerIONames());
+    EXPECT_NE(a1, a2);
+
+    p = cfg.Params();
+    p.put("bar", 3);
+    cfg.Params(p);
+
+    a2 = to.genVtxColor("a", cfg, LayerIONames());
+    EXPECT_NE(a1, a2);
+
+    p = PTree();
+    p.put("foo", 1);
+    cfg.Params(p);
+    a2 = to.genVtxColor("a", cfg, LayerIONames());
+    EXPECT_EQ(a1, a2);
+}
+
+TEST_F(LayerGraphTest, GenVtxColor_io_input) {
+
+    LayerGraph to;
+    LayerIONames io;
+
+    io.Input("foo", "bar");
+    VtxColor a = to.genVtxColor("a", LayerConfig(), io);
+
+    EXPECT_EQ(a, to.genVtxColor("a", LayerConfig(), io));
+
+    EXPECT_NE(a, to.genVtxColor("a ", LayerConfig(), LayerIONames()));
+
+    io.Input("foo", "bar");
+    EXPECT_EQ(a, to.genVtxColor("a", LayerConfig(), io));
+
+    io.Input("foo", "x");
+    EXPECT_NE(a, to.genVtxColor("a ", LayerConfig(), LayerIONames()));
+
+    io.Input("foo", "bar");
+    EXPECT_EQ(a, to.genVtxColor("a", LayerConfig(), io));
+
+    LayerIONames io2;
+    io2.Input("x", "bar");
+    EXPECT_NE(a, to.genVtxColor("a", LayerConfig(), io2)) << "Match inspite of different keys";
+}
+
+TEST_F(LayerGraphTest, GenVtxColor_io_output) {
+
+    LayerGraph to;
+    LayerIONames io;
+
+    io.Output("foo", "bar");
+    VtxColor a = to.genVtxColor("a", LayerConfig(), io);
+
+    EXPECT_EQ(a, to.genVtxColor("a", LayerConfig(), io));
+
+    EXPECT_NE(a, to.genVtxColor("a ", LayerConfig(), LayerIONames()));
+
+    io.Output("foo", "bar");
+    EXPECT_EQ(a, to.genVtxColor("a", LayerConfig(), io));
+
+    io.Output("foo", "x");
+    EXPECT_NE(a, to.genVtxColor("a ", LayerConfig(), LayerIONames()));
+
+    io.Output("foo", "bar");
+    EXPECT_EQ(a, to.genVtxColor("a", LayerConfig(), io));
+
+    LayerIONames io2;
+    io2.Output("x", "bar");
+    EXPECT_NE(a, to.genVtxColor("a", LayerConfig(), io2)) << "Match inspite of different keys";
 }
 
 } // annonymous namespace for unit tests
