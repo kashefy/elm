@@ -1,0 +1,15 @@
+<map id="G" name="G">
+<area shape="rect" id="node5" href="$classelm_1_1base__FeatureTransformationLayer.html" title="An intermediate base class for prviding a layer interface involving a transformation of a single inpu..." alt="" coords="449,139,697,168"/>
+<area shape="rect" id="node23" href="$classelm_1_1base__FilterBankLayer.html" title="base class for filter banks The interface should aid in iterating through response" alt="" coords="485,192,661,221"/>
+<area shape="rect" id="node25" href="$classelm_1_1SaliencyItti.html" title="Implement Itti et al." alt="" coords="516,245,631,275"/>
+<area shape="rect" id="node27" href="$classelm_1_1SinkhornBalancing.html" title="Layer for implementing Singhorn&#39;s balancing algorithm." alt="" coords="495,299,652,328"/>
+<area shape="rect" id="node2" href="$classelm_1_1base__Layer.html" title="The Layer base class Overloaded constructor calls overloaded Reset() so you can implement Reset(confi..." alt="" coords="7,219,124,248"/>
+<area shape="rect" id="node7" href="$classelm_1_1base__SmoothLayer.html" title="intermediate Layer for applying smoothing algorithms I/O keys already defined by parent class..." alt="" coords="759,5,921,35"/>
+<area shape="rect" id="node11" href="$classelm_1_1base__SupervisedBatch.html" title="class for defining interfaces of an abstract layer that can learn Overloaded constructor calls overlo..." alt="" coords="748,59,932,88"/>
+<area shape="rect" id="node15" href="$classelm_1_1DiffOfGaussians.html" title="Layer for difference of gaussians." alt="" coords="767,112,913,141"/>
+<area shape="rect" id="node17" href="$classelm_1_1ImageGradient.html" title="Layer for computing image gradients using forward difference." alt="" coords="772,165,908,195"/>
+<area shape="rect" id="node19" href="$classelm_1_1LayerY.html" title="The LayerY class." alt="" coords="795,219,885,248"/>
+<area shape="rect" id="node21" href="$classelm_1_1WeightedSum.html" title="class to implement base layer methods Yields weighted sum of stimulus with 2 elements Simple example ..." alt="" coords="773,272,907,301"/>
+<area shape="rect" id="node9" href="$classelm_1_1MedianBlur.html" title="Wrap layer around median blur input and output keys defined by parent." alt="" coords="983,5,1097,35"/>
+<area shape="rect" id="node13" href="$classelm_1_1MLP.html" title="Layer class for mult&#45;layer perceptrons." alt="" coords="1001,59,1079,88"/>
+</map>

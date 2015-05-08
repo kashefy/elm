@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classelm_1_1base__SingleInputFeatureLayer.html" title="base class for layer assuming single feature input, an intermediate layer implementation" alt="" coords="5,139,232,168"/>
+<area shape="rect" id="node4" href="$classelm_1_1base__Layer.html" title="The Layer base class Overloaded constructor calls overloaded Reset() so you can implement Reset(confi..." alt="" coords="99,5,216,35"/>
+<area shape="rect" id="node8" href="$classelm_1_1base__PopulationCode.html" title="The base class for population codes." alt="" coords="155,85,333,115"/>
+<area shape="rect" id="node6" href="$classelm_1_1SoftMaxPopulationCode.html" title="Population code sampled from distribution (e.g." alt="" coords="165,192,357,221"/>
+<area shape="rect" id="node11" href="$classRetGang.html" title="Implement intensity constrast measure using a model of retinal ganglion cells." alt="" coords="385,192,460,221"/>
+<area shape="rect" id="node13" href="$classbase__IntensityContrast.html" title="base class for measuring intensity contrast" alt="" coords="357,85,515,115"/>
+<area shape="rect" id="node15" href="$classelm_1_1Sampler2D.html" title="class for sampling from two&#45;dimensional PDF" alt="" coords="540,192,655,221"/>
+<area shape="rect" id="node17" href="$classelm_1_1base__Sampler.html" title="base class for sampling from a distribution" alt="" coords="539,85,672,115"/>
+</map>

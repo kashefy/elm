@@ -1,9 +1,0 @@
-digraph G
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  rankdir="LR";
-  Node1 [label="base_Competition",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classbase__Competition.html",tooltip="Base class for defining competition between learners suitable for unsupervised learning."];
-  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="base_WTA",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classbase__WTA.html",tooltip="Define interfaces for a Winner-Take-All circuit for spiking neurons."];
-}

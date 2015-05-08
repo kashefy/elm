@@ -1,0 +1,18 @@
+<map id="G" name="G">
+<area shape="rect" id="node5" href="$sampler_8h.html" title="elm/core/sampler.h" alt="" coords="347,237,480,267"/>
+<area shape="rect" id="node9" href="$intensitycontrast_8h.html" title="elm/encoding/intensitycontrast.h" alt="" coords="68,83,279,112"/>
+<area shape="rect" id="node16" href="$gabors_8h.html" title="elm/encoding/gabors.h" alt="" coords="999,83,1151,112"/>
+<area shape="rect" id="node50" href="$softmax__populationcode_8h.html" title="elm/encoding/populationcode_derivs/softmax_populationcode.h" alt="" coords="588,83,975,112"/>
+<area shape="rect" id="node58" href="$base__singleinputfeaturelayer_8h.html" title="elm/layers/layers_interim/base_singleinputfeaturelayer.h" alt="" coords="205,160,552,189"/>
+<area shape="rect" id="node13" href="$ganglion_8h.html" title="elm/encoding/ganglion.h" alt="" coords="36,237,199,267"/>
+<area shape="rect" id="node18" href="$typedefs_8h.html" title="elm/core/typedefs.h" alt="" coords="1112,160,1248,189"/>
+<area shape="rect" id="node40" href="$base__filterbank_8h.html" title="elm/encoding/base_filterbank.h" alt="" coords="885,160,1088,189"/>
+<area shape="rect" id="node20" href="$typedefs__sfwd_8h.html" title="elm/core/typedefs_sfwd.h" alt="" coords="1051,237,1221,267"/>
+<area shape="rect" id="node22" href="$typedefs__fwd_8h.html" title="elm/core/typedefs_fwd.h" alt="" coords="1229,315,1395,344"/>
+<area shape="rect" id="node32" href="$stl_2typedefs_8h.html" title="elm/core/stl/typedefs.h" alt="" coords="1051,315,1205,344"/>
+<area shape="rect" id="node24" href="$boost_2typedefs__fwd_8h.html" title="elm/core/boost/typedefs_fwd.h" alt="" coords="1403,392,1603,421"/>
+<area shape="rect" id="node30" href="$cv_2typedefs__fwd_8h.html" title="elm/core/cv/typedefs_fwd.h" alt="" coords="1197,392,1379,421"/>
+<area shape="rect" id="node45" href="$exception_8h.html" title="elm/core/exception.h" alt="" coords="784,237,925,267"/>
+<area shape="rect" id="node52" href="$base__populationcode_8h.html" title="elm/encoding/base_populationcode.h" alt="" coords="627,160,861,189"/>
+<area shape="rect" id="node55" href="$base__Layer_8h.html" title="elm/core/base_Layer.h" alt="" coords="504,237,659,267"/>
+</map>

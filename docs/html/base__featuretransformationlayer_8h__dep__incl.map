@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$diffofgaussians_8h.html" title="diffofgaussians.h" alt="" coords="5,83,125,112"/>
+<area shape="rect" id="node5" href="$imagegradient_8h.html" title="imagegradient.h" alt="" coords="149,83,264,112"/>
+<area shape="rect" id="node7" href="$layer__y_8h.html" title="layer_y.h" alt="" coords="288,83,363,112"/>
+<area shape="rect" id="node9" href="$base__smoothlayer_8h.html" title="base_smoothlayer.h" alt="" coords="387,83,525,112"/>
+<area shape="rect" id="node13" href="$base__SupervisedBatch_8h.html" title="base_SupervisedBatch.h" alt="" coords="549,83,715,112"/>
+<area shape="rect" id="node17" href="$weightedsum_8h.html" title="weightedsum.h" alt="" coords="739,83,848,112"/>
+<area shape="rect" id="node11" href="$medianblur_8h.html" title="medianblur.h" alt="" coords="408,160,504,189"/>
+<area shape="rect" id="node15" href="$mlp_8h.html" title="mlp.h" alt="" coords="605,160,659,189"/>
+</map>

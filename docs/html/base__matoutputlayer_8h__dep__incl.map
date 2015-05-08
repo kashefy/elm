@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$gradassignment_8h.html" title="gradassignment.h" alt="" coords="132,83,257,112"/>
+<area shape="rect" id="node5" href="$base__featuretransformationlayer_8h.html" title="base_featuretransformationlayer.h" alt="" coords="281,83,500,112"/>
+<area shape="rect" id="node7" href="$diffofgaussians_8h.html" title="diffofgaussians.h" alt="" coords="5,160,125,189"/>
+<area shape="rect" id="node9" href="$imagegradient_8h.html" title="imagegradient.h" alt="" coords="149,160,264,189"/>
+<area shape="rect" id="node11" href="$layer__y_8h.html" title="layer_y.h" alt="" coords="288,160,363,189"/>
+<area shape="rect" id="node13" href="$base__smoothlayer_8h.html" title="base_smoothlayer.h" alt="" coords="387,160,525,189"/>
+<area shape="rect" id="node17" href="$base__SupervisedBatch_8h.html" title="base_SupervisedBatch.h" alt="" coords="549,160,715,189"/>
+<area shape="rect" id="node21" href="$weightedsum_8h.html" title="weightedsum.h" alt="" coords="739,160,848,189"/>
+<area shape="rect" id="node15" href="$medianblur_8h.html" title="medianblur.h" alt="" coords="408,237,504,267"/>
+<area shape="rect" id="node19" href="$mlp_8h.html" title="mlp.h" alt="" coords="605,237,659,267"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node5" href="$classelm_1_1base__StatefulPopulationCode.html" title="a base class for population codes that are stateful" alt="" coords="401,5,623,35"/>
+<area shape="rect" id="node7" href="$classelm_1_1MutexPopulationCode.html" title="Mutually exclusive population code (a.k.a simple pop." alt="" coords="423,59,601,88"/>
+<area shape="rect" id="node9" href="$classelm_1_1SoftMaxPopulationCode.html" title="Population code sampled from distribution (e.g." alt="" coords="416,112,608,141"/>
+<area shape="rect" id="node2" href="$classelm_1_1base__Layer.html" title="The Layer base class Overloaded constructor calls overloaded Reset() so you can implement Reset(confi..." alt="" coords="7,59,124,88"/>
+</map>

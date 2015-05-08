@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node9" href="$classelm_1_1ReadMNISTImagesTransl.html" title="elm::ReadMNISTImagesTransl" alt="" coords="5,315,208,344"/>
+<area shape="rect" id="node2" href="$classelm_1_1base__ReaderMNISTFile.html" title="base class for reading MNIST files" alt="" coords="12,160,201,189"/>
+<area shape="rect" id="node4" href="$classelm_1_1base__Reader.html" title="elm::base_Reader" alt="" coords="43,83,171,112"/>
+<area shape="rect" id="node6" href="$classelm_1_1base__Layer.html" title="The Layer base class Overloaded constructor calls overloaded Reset() so you can implement Reset(confi..." alt="" coords="48,5,165,35"/>
+</map>

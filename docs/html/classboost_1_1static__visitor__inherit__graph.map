@@ -1,0 +1,22 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classelm_1_1VisitorPOD__.html" title="template class for scalar POD static visitors" alt="" coords="285,5,440,35"/>
+<area shape="rect" id="node5" href="$classVisitor__.html" title="template class for different static visitors" alt="" coords="313,59,412,88"/>
+<area shape="rect" id="node7" href="$classVisitor__.html" title="Visitor_\&lt; boost::shared_ptr\&lt; pcl::PointCloud\&lt; pcl::Normal \&gt; \&gt; \&gt;" alt="" coords="165,112,560,141"/>
+<area shape="rect" id="node11" href="$classVisitor__.html" title="Visitor_\&lt; boost::shared_ptr\&lt; pcl::PointCloud\&lt; pcl::PointNormal \&gt; \&gt; \&gt;" alt="" coords="151,165,575,195"/>
+<area shape="rect" id="node15" href="$classVisitor__.html" title="Visitor_\&lt; boost::shared_ptr\&lt; pcl::PointCloud\&lt; pcl::PointXYZ \&gt; \&gt; \&gt;" alt="" coords="159,219,567,248"/>
+<area shape="rect" id="node19" href="$classVisitor__.html" title="Visitor_\&lt; boost::shared_ptr\&lt; pcl::PointCloud\&lt; TPointDst \&gt; \&gt; \&gt;" alt="" coords="169,272,556,301"/>
+<area shape="rect" id="node23" href="$classVisitor__.html" title="Visitor_\&lt; cv::Mat1f \&gt;" alt="" coords="291,325,435,355"/>
+<area shape="rect" id="node27" href="$classVisitor__.html" title="Visitor_\&lt; elm::SparseMat1f \&gt;" alt="" coords="267,379,459,408"/>
+<area shape="rect" id="node31" href="$classVisitor__.html" title="Visitor_\&lt; elm::VecVertices \&gt;" alt="" coords="268,432,457,461"/>
+<area shape="rect" id="node35" href="$classVisitor__.html" title="Visitor_\&lt; VecMat1f \&gt;" alt="" coords="289,485,436,515"/>
+<area shape="rect" id="node39" href="$classVisitor__.html" title="Visitor_\&lt; void \&gt;" alt="" coords="305,539,420,568"/>
+<area shape="rect" id="node9" href="$classelm_1_1VisitorCloud__.html" title="elm::VisitorCloud_\&lt; pcl::Normal \&gt;" alt="" coords="640,112,859,141"/>
+<area shape="rect" id="node13" href="$classelm_1_1VisitorCloud__.html" title="elm::VisitorCloud_\&lt; pcl::PointNormal \&gt;" alt="" coords="624,165,875,195"/>
+<area shape="rect" id="node17" href="$classelm_1_1VisitorCloud__.html" title="elm::VisitorCloud_\&lt; pcl::PointXYZ \&gt;" alt="" coords="632,219,867,248"/>
+<area shape="rect" id="node21" href="$classelm_1_1VisitorCloud__.html" title="A template visitor class for converting to pcl point clouds, and keeping track of when a heavy conver..." alt="" coords="644,272,855,301"/>
+<area shape="rect" id="node25" href="$classelm_1_1VisitorMat1f.html" title="visitor class for converting to Mat of floats" alt="" coords="689,325,809,355"/>
+<area shape="rect" id="node29" href="$classelm_1_1VisitorSparseMat1f.html" title="visitor class for converting to a sparse Mat of floats" alt="" coords="668,379,831,408"/>
+<area shape="rect" id="node33" href="$classelm_1_1VisitorVecVertices.html" title="visitor class for converting to STL vector of PCL vertices And keeping track of when a heavy conversi..." alt="" coords="671,432,828,461"/>
+<area shape="rect" id="node37" href="$classelm_1_1VisitorVecMat1f.html" title="visitor class for converting to vector of Mats of floats" alt="" coords="677,485,821,515"/>
+<area shape="rect" id="node41" href="$classVisitorVoid.html" title="A do&#45;nothing visitor class to use in place of unsupported visitors." alt="" coords="707,539,792,568"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classbase__Competition.html" title="Base class for defining competition between learners suitable for unsupervised learning." alt="" coords="7,5,132,35"/>
+<area shape="rect" id="node3" href="$classbase__WTA.html" title="Define interfaces for a Winner&#45;Take&#45;All circuit for spiking neurons." alt="" coords="183,5,268,35"/>
+</map>
