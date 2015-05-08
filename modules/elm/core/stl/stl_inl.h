@@ -58,6 +58,25 @@ namespace elm {
     }
 
     /**
+     * @brief List all values in a map
+     * @param map
+     * @return vector of all map values
+     */
+    template <class TKey, class TVal>
+    std::vector<TVal > Values(const std::map<TKey, TVal > &m)
+    {
+        std::vector<TVal > v(m.size());
+
+        typename std::map<TKey, TVal >::const_iterator itr;
+        int i=0;
+        for(itr=m.begin(); itr != m.end(); ++itr) {
+
+            v[i++] = itr->second;
+        }
+        return v;
+    }
+
+    /**
      * @brief Push back uniformly random values into a vector
      * @param vector pushing back into
      * @param no. of items to push back

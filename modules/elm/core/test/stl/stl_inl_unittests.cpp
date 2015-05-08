@@ -63,6 +63,46 @@ TEST(STLKeysTest, Keys)
     }
 }
 
+TEST(STLValuesTest, Empty)
+{
+    EXPECT_SIZE(0, Values(map<string, string>()));
+
+    map<string, int> m;
+    m["k1"] = 100;
+    m.clear();
+    EXPECT_SIZE(0, Keys(m));
+    EXPECT_TRUE(Keys(m).empty());
+}
+
+TEST(STLValuesTest, Size)
+{
+    map<int, float> m;
+    for(int i=1; i<10; i++) {
+
+        m[i] = (i)*10;
+        EXPECT_SIZE(i, Values(m));
+    }
+}
+
+TEST(STLValuesTest, Keys)
+{
+    map<int, float> m;
+    for(int i=1; i<10; i++) {
+
+        m[i] = static_cast<float>(i)*10.f;
+        vector<float> v = Values(m);
+        EXPECT_SIZE(i, v);
+
+        // using std::find with vector and iterator:
+        vector<float>::iterator itr;
+        for(int k=i; k > 0; --k) {
+
+            itr = find(v.begin(), v.end(), static_cast<float>(k)*10.f);
+            EXPECT_NE(v.end(), itr);
+        }
+    }
+}
+
 /**
  * @brief Typed tests around Vector routines with POD types
  */
