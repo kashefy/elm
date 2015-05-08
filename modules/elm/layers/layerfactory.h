@@ -11,9 +11,7 @@
 #include <memory>
 #include <string>
 
-#include "elm/core/base_Layer.h"
-
-extern template class std::shared_ptr<elm::base_Layer>;
+#include "elm/core/typedefs_fwd.h"
 
 namespace elm {
 
@@ -46,8 +44,8 @@ public:
      * @throws ExceptionTypeError on unrecognized layer type
      */
     static std::shared_ptr<base_Layer> CreateShared(const LayerType &type,
-                                    const LayerConfig &config,
-                                    const LayerIONames &io);
+                                                    const LayerConfig &config,
+                                                    const LayerIONames &io);
 
     /**
      * @brief Fuly initialize layer instance

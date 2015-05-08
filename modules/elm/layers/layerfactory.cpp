@@ -32,8 +32,6 @@
 using boost::assign::map_list_of;
 using namespace elm;
 
-template class std::shared_ptr<elm::base_Layer>;
-
 typedef Registor_<base_Layer> LayerRegistor;
 typedef Registor_<base_Layer>::Registry LayerRegistry;
 typedef std::shared_ptr<base_Layer> LayerShared; ///< convinience typedef to shared pointer to layer object

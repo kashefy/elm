@@ -18,6 +18,7 @@
 #include "elm/core/pcl/cloud_.h"
 #include "elm/core/pcl/vertices.h"
 #include "elm/core/signal.h"
+#include "elm/core/typedefs_fwd.h"
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/ts.h"
 
@@ -152,7 +153,7 @@ protected:
     }
 
     // members
-    vector<LayerFactory::LayerShared > layers_;
+    vector<LayerShared > layers_;
     Signal sig_;
 };
 
@@ -169,7 +170,8 @@ TEST_F(GraphMatchingTest, GraphMatching)
 
             ELM_COUT_VAR(sig_.FeatureNames()[j]);
         }
-        LayerFactory::LayerShared l = layers_[i];
+
+        shared_ptr<base_Layer> l = layers_[i];
         l->Activate(sig_);
         l->Response(sig_);
 
@@ -204,7 +206,7 @@ TEST_F(GraphMatchingTest, DISABLED_GraphMatching_with_noise)
 
     for(size_t i=0; i<layers_.size(); i++) {
 
-        LayerFactory::LayerShared l = layers_[i];
+        LayerShared l = layers_[i];
         l->Activate(sig_);
         l->Response(sig_);
 

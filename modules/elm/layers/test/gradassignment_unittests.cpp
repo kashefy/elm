@@ -68,7 +68,7 @@ protected:
     }
 
     // members
-    LayerFactory::LayerShared to_; ///< ptr to test object
+    LayerShared to_; ///< ptr to test object
 };
 
 TEST_F(GradAssignmentInitTest, Constructor_overloaded)
@@ -215,7 +215,7 @@ protected:
         sig_.Clear();
     }
 
-    LayerFactory::LayerShared graph_compatibility_;
+    LayerShared graph_compatibility_;
 
     Mat1f g_ab_;                 ///< adj. matrix for test graph
     Mat1f g_ij_;                 ///< adj. matrix for test graph

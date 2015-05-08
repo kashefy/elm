@@ -32,6 +32,8 @@ typedef cv::SparseMat_<float> SparseMat1f;   ///< convinience forward typedef fo
 typedef boost::property_tree::ptree PTree;
 
 class base_Layer;
+class LayerConfig;
+class LayerIONames;
 
 typedef std::shared_ptr<base_Layer> LayerShared;
 
