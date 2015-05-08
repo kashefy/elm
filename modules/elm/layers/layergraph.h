@@ -15,12 +15,23 @@
 #include <boost/graph/adjacency_list.hpp>
 
 #include "elm/core/base_Layer.h"
+#include "elm/core/layerconfig.h"
 
-typedef boost::property<boost::edge_name_t, std::string> EdgeProp;
+typedef std::string EdgeName;
+typedef boost::property<boost::edge_name_t, EdgeName> EdgeProp;
 
+typedef std::shared_ptr<elm::base_Layer > LayerShared;
+typedef std::string VtxColor;
 typedef std::string VtxName;
-typedef boost::property<boost::vertex_name_t, VtxName,
-        boost::property<boost::vertex_index2_t, std::shared_ptr<elm::base_Layer > > >
+typedef boost::property<boost::vertex_color_t, VtxColor,
+            boost::property<boost::vertex_name_t, VtxName,
+                boost::property<boost::vertex_index1_t, elm::LayerConfig,
+                    boost::property<boost::vertex_degree_t, elm::LayerIONames,
+                        boost::property<boost::vertex_index2_t, LayerShared> // layer
+                    > // io
+                > // config
+            > // name
+        > // color
         VtxProp;
 
 typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, VtxProp, EdgeProp> GraphLayerType;
@@ -57,6 +68,10 @@ public:
     void RemoveOutput(const std::string &output_name);
 
     bool HasInputs(const Signal &s) const;
+
+    VtxColor genVtxColor(const VtxName &name,
+                         const LayerConfig &cfg,
+                         const LayerIONames &io) const;
 
     void print();
 

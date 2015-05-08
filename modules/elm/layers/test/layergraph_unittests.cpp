@@ -10,6 +10,7 @@
 #include "gtest/gtest.h"
 
 #include "elm/core/debug_utils.h"
+#include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/layers/layers_interim/base_featuretransformationlayer.h"
 
@@ -82,9 +83,33 @@ TEST_F(LayerGraphTest, Test) {
     std::shared_ptr<base_Layer> b(new LayerB);
     std::shared_ptr<base_Layer> c(new LayerC);
 
-    lg.Add("a", a, LayerConfig(), LayerIONames());
-    lg.Add("b", b, LayerConfig(), LayerIONames());
-    lg.Add("c", c, LayerConfig(), LayerIONames());
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_INPUT_STIMULUS, "outa");
+        lg.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerA::KEY_INPUT_STIMULUS, "outb");
+        lg.Add("b", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pc", "pc1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerA::KEY_INPUT_STIMULUS, "outc");
+        lg.Add("c", a, cfg, io);
+    }
 
     lg.print();
 }
