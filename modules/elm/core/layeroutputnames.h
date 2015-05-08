@@ -40,6 +40,8 @@ public:
      */
     OptS OutputOpt(const std::string &key) const;
 
+    const MapSS& OutputMap() const;
+
 private:
     MapSS outputs_;
 };

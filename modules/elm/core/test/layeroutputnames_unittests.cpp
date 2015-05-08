@@ -60,3 +60,20 @@ TYPED_TEST(LayerOutputNamesTypedTest, OutputOpt) {
     EXPECT_THROW(this->to_.Output("k2"), ExceptionKeyError);
     EXPECT_FALSE(this->to_.OutputOpt("k2"));
 }
+
+TYPED_TEST(LayerOutputNamesTypedTest, OutputMap_empty) {
+
+    EXPECT_TRUE(TypeParam().OutputMap().empty());
+}
+
+TYPED_TEST(LayerOutputNamesTypedTest, OutputMap) {
+
+    this->to_.Output("k1", "n1");
+    this->to_.Output("k2", "n2");
+    this->to_.Output("k2", "n22");
+
+    MapSS outputs = this->to_.OutputMap();
+    EXPECT_EQ(static_cast<size_t>(2), outputs.size());
+    EXPECT_EQ(outputs["k1"], "n1");
+    EXPECT_EQ(outputs["k2"], "n22");
+}

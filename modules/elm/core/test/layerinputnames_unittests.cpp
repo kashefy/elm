@@ -62,6 +62,11 @@ TYPED_TEST(LayerInputNamesTypedTest, InputOpt) {
     EXPECT_FALSE(this->to_.InputOpt("k2"));
 }
 
+TYPED_TEST(LayerInputNamesTypedTest, InputMap_empty) {
+
+    EXPECT_TRUE(TypeParam().InputMap().empty());
+}
+
 TYPED_TEST(LayerInputNamesTypedTest, InputMap) {
 
     this->to_.Input("k1", "n1");
