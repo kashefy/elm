@@ -3,7 +3,13 @@ language: cpp
 compiler:
   #- clang
   - gcc
-
+  
+# blacklist
+branches:
+  except:
+    - experimental
+    - /^appveyor.*$/
+    
 env:
   global:
     # Dependencies
@@ -16,7 +22,8 @@ env:
     # ELM build parameters
     - BUILD_TYPE=Coverage
     - BUILD_SHARED_LIBS=OFF
-    
+    - secure: "fvYVNecz00QbdEz9sWc5bUjaCby7fsrfKzkFCTzsYmI2PzRB1CMKDpIxjxI77z/KixFeiZkQ2IAQck13EvWCnqEccBjt/MmrmJGWBLwpK1yAaJe4opFICQcUwvmG8GN0/ppi7g+QD9Svu+mrMEsVBoQm9nX+NdvMAMSMiX7ZXFg="
+
 before_install:
   - travis_retry sudo apt-get update -qq
   
@@ -79,7 +86,7 @@ before_install:
 install:
   # lcov: for test coverage reporting, building with coverage info
   # gfortran fort77 are for HDF5, MATIO support
-  - travis_retry sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-graph-dev libboost-serialization-dev libboost-thread-dev libboost-python-dev libpcl-all lcov gfortran fort77 > /dev/null
+  - travis_retry sudo apt-get install -y libboost-system-dev libboost-filesystem-dev libboost-graph-dev libboost-serialization-dev libboost-thread-dev libboost-python-dev libpcl-all lcov gfortran fort77 doxygen graphviz > /dev/null
   
   # install lcov to coveralls conversion + upload tool
   - gem install coveralls-lcov
@@ -138,3 +145,7 @@ after_success:
   # Merge python coverage with coveralls-style json file and send it to api endpoint
   # Note: This file must contain "source_files" data or it will not be merged
   #- coveralls --config_file .coveragerc --merge=$ELM_BUILD_DIR/coverage.json
+  
+  # Generate and publish docs
+  - chmod -R 744 $TRAVIS_BUILD_DIR/.ci/travis
+  - $TRAVIS_BUILD_DIR/.ci/travis/docs_to_gh-pages.sh

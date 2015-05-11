@@ -11,11 +11,15 @@
 #ifndef _ELM_CORE_STL_INL_H_
 #define _ELM_CORE_STL_INL_H_
 
-#include <map>
+#include "elm/core/stl/typedefs.h" // map, string, vector
+
 #include <stdlib.h> // rand
-#include <string>
 #include <sstream>
-#include <vector>
+
+extern template class std::vector<std::string>;
+extern template class std::vector<float>;
+extern template class std::vector<int>;
+extern template class std::map<std::string, std::string>;
 
 namespace elm {
 
