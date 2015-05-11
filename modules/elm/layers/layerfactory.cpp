@@ -79,7 +79,7 @@ LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateShared(const LayerTyp
     return ptr;
 }
 
-void LayerFactory::Init(LayerFactory::LayerShared &layer,
+void LayerFactory::Init(LayerShared &layer,
                         const LayerConfig &config,
                         const LayerIONames &io)
 {

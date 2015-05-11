@@ -20,6 +20,10 @@
 #include "elm/core/cv/typedefs_fwd.h"
 #include "elm/core/pcl/typedefs_fwd.h"
 
+extern template class pcl::PointCloud<pcl::PointXYZ >;
+extern template class pcl::PointCloud<pcl::Normal >;
+extern template class pcl::PointCloud<pcl::PointNormal >;
+
 namespace elm {
 
 /**

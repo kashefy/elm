@@ -42,7 +42,7 @@ protected:
     }
 
     // members
-    LayerFactory::LayerShared to_; ///< pointer to test object
+    LayerShared to_; ///< pointer to test object
 };
 
 class GraphCompatibilityTest : public GraphCompatibilityInitTest

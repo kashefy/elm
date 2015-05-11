@@ -11,7 +11,7 @@
 #include <memory>
 #include <string>
 
-#include "elm/core/base_Layer.h"
+#include "elm/core/typedefs_fwd.h"
 
 namespace elm {
 
@@ -24,7 +24,6 @@ class LayerFactory
 {
 public:
     typedef std::string LayerType;
-    typedef std::shared_ptr<base_Layer> LayerShared; ///< convinience typedef to shared pointer to layer object
 
     LayerFactory();
 
@@ -34,7 +33,7 @@ public:
      * @return pointer to layer instance
      * @throws ExceptionTypeError on unrecognized layer type
      */
-    static LayerShared CreateShared(const LayerType &type);
+    static std::shared_ptr<base_Layer> CreateShared(const LayerType &type);
 
     /**
      * @brief Create smart pointer to an instantiated layer
@@ -44,9 +43,9 @@ public:
      * @return pointer to layer instance
      * @throws ExceptionTypeError on unrecognized layer type
      */
-    static LayerShared CreateShared(const LayerType &type,
-                                    const LayerConfig &config,
-                                    const LayerIONames &io);
+    static std::shared_ptr<base_Layer> CreateShared(const LayerType &type,
+                                                    const LayerConfig &config,
+                                                    const LayerIONames &io);
 
     /**
      * @brief Fuly initialize layer instance
@@ -55,7 +54,7 @@ public:
      * @param io I/O names
      * @throws ExceptionValueError for unintialized pointers
      */
-    static void Init(LayerShared &layer,
+    static void Init(std::shared_ptr<base_Layer> &layer,
                      const LayerConfig &config,
                      const LayerIONames &io);
 };
