@@ -34,7 +34,6 @@ using namespace elm;
 
 typedef Registor_<base_Layer> LayerRegistor;
 typedef Registor_<base_Layer>::Registry LayerRegistry;
-typedef std::shared_ptr<base_Layer> LayerShared; ///< convinience typedef to shared pointer to layer object
 
 /** Macros for creating individual registry pair items
  *  credit: J. Turcot, T. Senechal, http://stackoverflow.com/questions/138600/initializing-a-static-stdmapint-int-in-c
