@@ -11,6 +11,7 @@
 #include <opencv2/core/core.hpp>
 
 extern template class cv::Mat_<float>;
+extern template class cv::Point_<int>;
 
 namespace elm {
 
