@@ -18,7 +18,7 @@ namespace elm {
  * @param pdf as matrix of vector of floats
  * @return normalized cond. entropy. Returns 0 on empty input.
  */
-float CondEntropy(cv::InputArray &pdf);
+float CondEntropy(cv::InputArray pdf);
 
 } // namespace elm
 

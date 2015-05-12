@@ -16,6 +16,10 @@
 using namespace cv;
 using namespace elm;
 
+extern template class cv::Mat_<float>;
+extern template class cv::SparseMat_<float>;
+extern template class std::vector<cv::Mat_<float> >;
+
 SparseMat1f VisitorSparseMat1f::operator()(const SparseMat1f &m) const
 {
     return m;

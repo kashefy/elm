@@ -16,6 +16,9 @@
 using namespace cv;
 using namespace elm;
 
+extern template class cv::Mat_<float>;
+extern template class cv::SparseMat_<float>;
+
 VecMat1f VisitorVecMat1f::operator()(const VecMat1f &v) const
 {
     return v;

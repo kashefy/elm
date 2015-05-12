@@ -17,8 +17,6 @@ using namespace cv;
 using namespace pcl;
 using namespace elm;
 
-template class std::vector<pcl::Vertices >;
-
 VecVertices elm::Mat2VecVertices(const Mat &m)
 {
     VecVertices vv;

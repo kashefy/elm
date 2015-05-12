@@ -17,6 +17,14 @@
 #include "elm/core/pcl/point_traits.h"
 #include "elm/core/pcl/typedefs_fwd.h"
 
+extern template class pcl::PointCloud<pcl::PointXYZ >;
+extern template class pcl::PointCloud<pcl::Normal >;
+extern template class pcl::PointCloud<pcl::PointNormal >;
+
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ > >;
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::Normal > >;
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::PointNormal > >;
+
 extern template class cv::Mat_<float>;
 
 namespace elm {

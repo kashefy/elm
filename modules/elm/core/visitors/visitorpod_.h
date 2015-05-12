@@ -17,6 +17,10 @@
 #include "elm/core/pcl/vertices.h"
 #include "elm/core/typedefs_sfwd.h"
 
+extern template class cv::Mat_<float>;
+extern template class cv::SparseMat_<float>;
+extern template class std::vector<cv::Mat_<float> >;
+
 namespace elm {
 
 /**

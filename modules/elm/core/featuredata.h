@@ -18,6 +18,7 @@
 #include "elm/core/visitors/visitors.h"
 
 extern template class cv::Mat_<float>;
+extern template class cv::SparseMat_<float>;
 
 namespace elm {
 
