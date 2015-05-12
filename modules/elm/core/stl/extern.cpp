@@ -5,9 +5,9 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/core/stl/stl_inl.h"
+#include "elm/core/stl/typedefs.h"
 
-using namespace elm;
-
-
-
+template class std::vector<std::string>;
+template class std::vector<float>;
+template class std::vector<int>;
+template class std::map<std::string, std::string>;
