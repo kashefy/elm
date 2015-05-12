@@ -26,9 +26,10 @@ using namespace cv;
 using namespace elm;
 
 extern template class cv::Mat_<float>;
-extern template class pcl::PointCloud<pcl::PointXYZ >;
 
 #ifdef __WITH_PCL
+
+extern template class pcl::PointCloud<pcl::PointXYZ >;
 
 using namespace pcl;
 
