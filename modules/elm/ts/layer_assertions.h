@@ -21,6 +21,8 @@
 #include "elm/layers/layerfactory.h"
 #include "elm/ts/layerattr_.h"
 
+extern template class std::shared_ptr<elm::base_Layer >;
+
 namespace elm {
 
 /**

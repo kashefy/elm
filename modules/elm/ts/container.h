@@ -14,6 +14,10 @@
 
 #include <vector>
 
+extern template class std::vector<int>;
+extern template class std::vector<float>;
+extern template class std::vector<std::string>;
+
 /**
   Assert that container is empty
   */

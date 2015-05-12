@@ -11,6 +11,8 @@
 
 using namespace cv;
 
+extern template class cv::Mat_<float>;
+
 base_ZeroCrossings::~base_ZeroCrossings()
 {
 }
