@@ -17,6 +17,19 @@
 #include "elm/core/base_Layer.h"
 #include "elm/core/layerconfig.h"
 
+namespace elm {
+
+/** @brief wrap layer information into one object
+ */
+struct LayerWrap {
+
+    LayerConfig cfg;
+    LayerIONames io;
+    LayerShared ptr;
+};
+
+} // namespace elm
+
 typedef std::string EdgeName;
 typedef boost::property<boost::edge_name_t, EdgeName> EdgeProp;
 
@@ -25,11 +38,9 @@ typedef std::string VtxColor;
 typedef std::string VtxName;
 typedef boost::property<boost::vertex_color_t, VtxColor,
             boost::property<boost::vertex_name_t, VtxName,
-                boost::property<boost::vertex_index1_t, elm::LayerConfig,
-                    boost::property<boost::vertex_degree_t, elm::LayerIONames,
-                        boost::property<boost::vertex_index2_t, LayerShared> // layer
-                    > // io
-                > // config
+                boost::property<boost::vertex_index1_t, elm::LayerWrap,
+                    boost::property<boost::vertex_index2_t, int> // idx (order)
+                > // layer
             > // name
         > // color
         VtxProp;
@@ -42,13 +53,14 @@ typedef GraphLayerTraits::vertex_descriptor VtxDescriptor;
 
 namespace std {
 
-template <typename T> class shared_ptr; ///< convinience typedef for point template
+template <typename T> class shared_ptr; ///< convinience typedef for shared pointer
 
 } // namespace std
 
 namespace elm {
 
 class Signal;
+typedef std::set<std::string> SetS;     ///< convinience typedef for set of strings
 
 class LayerGraph
 {
@@ -64,6 +76,8 @@ public:
 
     void RemoveOutput(const std::string &output_name);
 
+    SetS Outputs() const;
+
     bool HasInputs(const Signal &s) const;
 
     VtxColor genVtxColor(const VtxName &name,
@@ -74,7 +88,10 @@ public:
 
 protected:
     GraphLayerType g_;  ///< graph member
-    std::set<std::string> outputs_;
+    SetS outputs_;
+
+    VecI active_;
+    int count_;
 };
 
 } // namespace elm

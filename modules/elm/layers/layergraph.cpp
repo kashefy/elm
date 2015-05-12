@@ -16,13 +16,12 @@ using namespace boost;
 using namespace elm;
 
 LayerGraph::LayerGraph()
+    : count_(0)
 {
-    g_ = GraphLayerType(); // no. of vertices unknown yet
-
 }
 
 void LayerGraph::Add(const VtxName &name,
-                        std::shared_ptr<base_Layer> &layer,
+                        std::shared_ptr<base_Layer> &layer_ptr,
                         const LayerConfig &cfg,
                         const LayerIONames &io)
 {
@@ -43,16 +42,17 @@ void LayerGraph::Add(const VtxName &name,
     vtx_name_lut[vtx] = name;
 
     property_map<GraphLayerType, vertex_index1_t>::type
-            vtx_cfg_lut = get(vertex_index1, g_);
-    vtx_cfg_lut[vtx] = cfg;
+            vtx_layer_lut = get(vertex_index1, g_);
 
-    property_map<GraphLayerType, vertex_degree_t>::type
-            vtx_io_lut = get(vertex_degree, g_);
-    vtx_io_lut[vtx] = io;
+    LayerWrap layer_vtx;
+    layer_vtx.cfg = cfg;
+    layer_vtx.io = io;
+    layer_vtx.ptr = layer_ptr;
+    vtx_layer_lut[vtx] = layer_vtx;
 
     property_map<GraphLayerType, vertex_index2_t>::type
-            vtx_ptr_lut = get(vertex_index2, g_);
-    vtx_ptr_lut[vtx] = layer;
+            vtx_idx_lut = get(vertex_index2, g_);
+    vtx_idx_lut[vtx] = count_++;
 
     //
     // inputs
@@ -94,7 +94,7 @@ void LayerGraph::Add(const VtxName &name,
         GraphLayerTraits::vertex_iterator v, end;
         for(tie(v, end) = vertices(g_); v != end; ++v) {
 
-            LayerIONames vtx_io = vtx_io_lut[*v];
+            LayerIONames vtx_io = vtx_layer_lut[*v].io;
             VecS vtx_outs = elm::Values(vtx_io.OutputMap());
 
             VecS::const_iterator itr;
@@ -114,7 +114,7 @@ void LayerGraph::Add(const VtxName &name,
         GraphLayerTraits::vertex_iterator v, end;
         for(tie(v, end) = vertices(g_); v != end; ++v) {
 
-            LayerIONames vtx_io = vtx_io_lut[*v];
+            LayerIONames vtx_io = vtx_layer_lut[*v].io;
             VecS vtx_ins = elm::Values(vtx_io.InputMap());
 
             VecS::const_iterator itr;
@@ -129,8 +129,15 @@ void LayerGraph::Add(const VtxName &name,
     } // outputs
 }
 
-void AddOutput(const std::string &output_name) {
+void LayerGraph::AddOutput(const std::string &output_name) {
 
+    outputs_.insert(output_name);
+    active_.clear();
+}
+
+void LayerGraph::RemoveOutput(const std::string &output_name) {
+
+    outputs_.erase(output_name);
 }
 
 VtxColor LayerGraph::genVtxColor(const VtxName &name,
