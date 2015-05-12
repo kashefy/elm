@@ -17,6 +17,8 @@
 using namespace std;
 using namespace cv;
 
+template class cv::Mat_<float>;
+
 namespace elm {
 
 FeatureData::FeatureData()

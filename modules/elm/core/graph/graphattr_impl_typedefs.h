@@ -15,6 +15,8 @@
 
 #include "elm/core/typedefs_fwd.h"
 
+extern template class cv::Mat_<float>;
+
 namespace elm {
 
 typedef float EdgeWeight;

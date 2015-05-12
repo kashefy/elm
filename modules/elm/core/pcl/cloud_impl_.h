@@ -15,6 +15,8 @@
 #include "elm/core/exception.h"
 #include "elm/core/pcl/point_traits.h"
 
+extern template class cv::Mat_<float>;
+
 namespace elm {
 
 /**

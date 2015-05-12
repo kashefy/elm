@@ -13,6 +13,8 @@
 
 using namespace cv;
 
+template class cv::Mat_<float>;
+
 Hist1Ch::~Hist1Ch()
 {
 }

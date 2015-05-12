@@ -10,6 +10,8 @@
 
 #include <opencv2/core/core.hpp>
 
+extern template class cv::Mat_<float>;
+
 namespace elm {
 
 /** @brief base class for sampling from a distribution

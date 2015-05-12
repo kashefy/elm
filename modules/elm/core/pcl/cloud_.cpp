@@ -23,6 +23,8 @@ template class pcl::PointCloud<pcl::PointXYZ >;
 template class pcl::PointCloud<pcl::Normal >;
 template class pcl::PointCloud<pcl::PointNormal >;
 
+extern template class cv::Mat_<float>;
+
 namespace elm {
 
 // macro for implementing Mat2PointCloud_() specializations

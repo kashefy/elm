@@ -17,6 +17,8 @@
 #include "elm/core/typedefs_sfwd.h"
 #include "elm/core/visitors/visitors.h"
 
+extern template class cv::Mat_<float>;
+
 namespace elm {
 
 /**

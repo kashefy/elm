@@ -13,6 +13,8 @@
 using namespace std;
 using namespace elm;
 
+template class cv::Mat_<float>;
+
 const string base_MatOutputLayer::KEY_OUTPUT_RESPONSE = detail::BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE;
 
 base_MatOutputLayer::~base_MatOutputLayer()

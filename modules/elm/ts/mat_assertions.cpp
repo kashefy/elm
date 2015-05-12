@@ -19,6 +19,8 @@ using namespace std;
 using namespace testing;
 using namespace cv;
 
+template class cv::Mat_<uchar>;
+
 AssertionResult IsType(const Mat &a, int mat_type)
 {
     if((a.type() & CV_MAT_DEPTH_MASK) == (mat_type & CV_MAT_DEPTH_MASK)) {

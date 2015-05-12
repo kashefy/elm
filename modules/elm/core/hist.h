@@ -10,6 +10,8 @@
 
 #include <opencv2/core/core.hpp>
 
+extern template class cv::Mat_<float>;
+
 /**
  * @brief Class for wrapping OpenCV's calcHist() routine.
  * Limited to single channel matrices.

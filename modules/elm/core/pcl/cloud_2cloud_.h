@@ -17,6 +17,8 @@
 #include "elm/core/pcl/point_traits.h"
 #include "elm/core/pcl/typedefs_fwd.h"
 
+extern template class cv::Mat_<float>;
+
 namespace elm {
 /**
  * @brief class for Point Cloud conversion of different point types
