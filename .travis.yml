@@ -99,7 +99,7 @@ install:
   - cd hdf5-1.8.14
   - mkdir $DEPS_DIR/hdf5
   - ./configure --prefix=$DEPS_DIR/hdf5 --enable-fortran --enable-fortran2003 --with-default-api-version=v18 > /dev/null
-  - make #-j2 > /dev/null 2>&1
+  - make > /dev/null # 2>&1
   - make install > /dev/null 2>&1
   
   # MATIO
