@@ -8,9 +8,7 @@
 #ifndef _ELM_CORE_REGISTOR_H_
 #define _ELM_CORE_REGISTOR_H_
 
-#include <map>
 #include <memory>
-#include <string>
 
 #include "elm/core/exception.h"
 #include "elm/core/stl/stl_inl.h"
