@@ -13,6 +13,8 @@
 #include "elm/core/exception.h"
 #include "elm/core/stl/stl_inl.h"
 
+namespace elm {
+
 /** @brief class for registering derived instantances
  * Partially inspired by:
  * http://stackoverflow.com/questions/582331/is-there-a-way-to-instantiate-objects-from-a-string-holding-their-class-name
@@ -68,5 +70,7 @@ public:
         return r.find(type) != r.end();
     }
 };
+
+} // namespace elm
 
 #endif // _ELM_CORE_REGISTOR_H_
