@@ -14,6 +14,9 @@
 #include "elm/core/defs.h"
 #include "elm/core/exception.h"
 
+extern template class cv::Mat_<float>;
+extern template class cv::Mat_<int>;
+
 namespace elm {
 
 /**
