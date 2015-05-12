@@ -87,6 +87,8 @@ public:
     void print();
 
 protected:
+    void Toposort();
+
     GraphLayerType g_;  ///< graph member
     SetS outputs_;
 

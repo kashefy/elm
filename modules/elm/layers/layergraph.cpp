@@ -7,6 +7,8 @@
 //M*/
 #include "elm/layers/layergraph.h"
 
+#include <boost/graph/topological_sort.hpp>
+
 #include "elm/core/debug_utils.h"
 #include "elm/core/boost/ptree_utils_inl.h"
 #include "elm/core/stl/stl_inl.h"
@@ -52,7 +54,9 @@ void LayerGraph::Add(const VtxName &name,
 
     property_map<GraphLayerType, vertex_index2_t>::type
             vtx_idx_lut = get(vertex_index2, g_);
-    vtx_idx_lut[vtx] = count_++;
+
+    active_.push_back(count_);
+    vtx_idx_lut[vtx] = count_;
 
     //
     // inputs
@@ -127,17 +131,33 @@ void LayerGraph::Add(const VtxName &name,
             }
         } // vertices
     } // outputs
+
+    count_++;
 }
 
 void LayerGraph::AddOutput(const std::string &output_name) {
 
     outputs_.insert(output_name);
-    active_.clear();
 }
 
 void LayerGraph::RemoveOutput(const std::string &output_name) {
 
     outputs_.erase(output_name);
+}
+
+void LayerGraph::Toposort() {
+
+    std::vector<VtxDescriptor > q;
+    topological_sort(g_, std::back_inserter(q));
+
+    property_map<GraphLayerType, vertex_name_t>::type
+            vtx_name_lut = get(vertex_name, g_);
+
+    for(size_t i=0; i<q.size(); ++i) {
+
+
+        std::cout<<vtx_name_lut[q[i]]<<std::endl;
+    }
 }
 
 VtxColor LayerGraph::genVtxColor(const VtxName &name,
@@ -198,4 +218,7 @@ void LayerGraph::print() {
 
         cout<<src_name<<"->"<<edge_name<<"->"<<dst_name<<endl;
     }
+
+    std::cout<<"Toposort..."<<std::endl;
+    Toposort();
 }
