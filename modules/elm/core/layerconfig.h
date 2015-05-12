@@ -13,7 +13,6 @@
 #include "elm/core/layerionames.h"
 
 template class std::vector<std::string>;
-template class std::map<std::string, std::string>;
 
 namespace elm {
 
