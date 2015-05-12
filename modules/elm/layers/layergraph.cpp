@@ -60,8 +60,8 @@ void LayerGraph::Add(const VtxName &name,
     VecS outputs = elm::Values(io.OutputMap());
 
     // Iterate through the edges
-    property_map<GraphLayerType, edge_name_t >::type
-        edge_name_lut = get(edge_name, g_);
+//    property_map<GraphLayerType, edge_name_t >::type
+//        edge_name_lut = get(edge_name, g_);
 
 //    edge_iter ei, ei_end;
 //    for (tie(ei, ei_end) = edges(g_); ei != ei_end; ++ei) {
@@ -129,6 +129,35 @@ void LayerGraph::Add(const VtxName &name,
     } // outputs
 }
 
+void AddOutput(const std::string &output_name) {
+
+}
+
+VtxColor LayerGraph::genVtxColor(const VtxName &name,
+                     const LayerConfig &cfg,
+                     const LayerIONames &io) const {
+
+
+    VtxColor color = name;
+
+    stringstream s;
+    PrintXML(cfg.Params(), s);
+
+    color += s.str();
+
+    // inputs
+    MapSS io_map = io.InputMap();
+    color += elm::to_string(elm::Keys(io_map));
+    color += elm::to_string(elm::Values(io_map));
+
+    // outputs
+    io_map = io.OutputMap();
+    color += elm::to_string(elm::Keys(io_map));
+    color += elm::to_string(elm::Values(io_map));
+
+    return color;
+}
+
 void LayerGraph::print() {
 
     cout<<"Vertices:"<<endl;
@@ -162,29 +191,4 @@ void LayerGraph::print() {
 
         cout<<src_name<<"->"<<edge_name<<"->"<<dst_name<<endl;
     }
-}
-
-VtxColor LayerGraph::genVtxColor(const VtxName &name,
-                     const LayerConfig &cfg,
-                     const LayerIONames &io) const {
-
-
-    VtxColor color = name;
-
-    stringstream s;
-    PrintXML(cfg.Params(), s);
-
-    color += s.str();
-
-    // inputs
-    MapSS io_map = io.InputMap();
-    color += elm::to_string(elm::Keys(io_map));
-    color += elm::to_string(elm::Values(io_map));
-
-    // outputs
-    io_map = io.OutputMap();
-    color += elm::to_string(elm::Keys(io_map));
-    color += elm::to_string(elm::Values(io_map));
-
-    return color;
 }

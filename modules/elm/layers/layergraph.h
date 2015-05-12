@@ -48,9 +48,6 @@ template <typename T> class shared_ptr; ///< convinience typedef for point templ
 
 namespace elm {
 
-class base_Layer;
-class LayerConfig;
-class LayerIONames;
 class Signal;
 
 class LayerGraph
@@ -77,6 +74,7 @@ public:
 
 protected:
     GraphLayerType g_;  ///< graph member
+    std::set<std::string> outputs_;
 };
 
 } // namespace elm
