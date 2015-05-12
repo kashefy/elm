@@ -12,6 +12,12 @@
 using namespace std;
 using namespace cv;
 
+extern template class cv::Mat_<float>;
+extern template class cv::Mat_<int>;
+extern template class cv::Mat_<uchar>;
+extern template class cv::Point_<int>;
+extern template class cv::Point3_<int>;
+
 Mat_<uchar> elm::ConvertTo8U(const Mat &src)
 {
     double min_val, max_val;
