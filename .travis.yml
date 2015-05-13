@@ -123,7 +123,11 @@ before_script:
 script:
   - cd $ELM_BUILD_DIR && make -j2
   # run unit tests
-  - cd $ELM_BUILD_DIR/bin && ./run_elm_unittests
+  - if [ "$BUILD_TYPE" == "Coverage" ]; then
+      make elm_unittests_coverage;
+    else
+      cd $ELM_BUILD_DIR/bin && ./run_elm_unittests;
+    fi
   # run nose tests
   - export PYTHONPATH=$ELM_BUILD_DIR/lib:$PYTHONPATH
   # Back to root build directory
@@ -136,7 +140,6 @@ script:
 after_success:
   # c++ test coverage
   - cd $ELM_BUILD_DIR
-  - if [ "$BUILD_TYPE" == "Coverage" ]; then make elm_unittests_coverage; fi
   - if [ "$BUILD_TYPE" == "Coverage" ]; then coveralls-lcov coverage.info; fi
   # Convert to json for merging with python coverage
   #- coveralls-lcov -v -n coverage.info > coverage.json
