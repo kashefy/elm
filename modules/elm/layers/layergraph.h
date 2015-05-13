@@ -23,9 +23,23 @@ namespace elm {
  */
 struct LayerWrap {
 
+    LayerWrap()
+        : is_active(false)
+    {}
+
+    void Set(const LayerConfig &_cfg,
+             const LayerIONames &_io,
+             const LayerShared &_ptr) {
+
+        cfg = _cfg;
+        io = _io;
+        ptr = _ptr;
+    }
+
     LayerConfig cfg;
     LayerIONames io;
     LayerShared ptr;
+    bool is_active;
 };
 
 } // namespace elm
@@ -45,7 +59,11 @@ typedef boost::property<boost::vertex_color_t, VtxColor,
         > // color
         VtxProp;
 
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, VtxProp, EdgeProp> GraphLayerType;
+typedef boost::adjacency_list<
+    boost::vecS,
+    boost::vecS,
+    boost::bidirectionalS,
+    VtxProp, EdgeProp> GraphLayerType;
 
 typedef boost::graph_traits<GraphLayerType> GraphLayerTraits;
 typedef GraphLayerTraits::edge_iterator edge_iter;
@@ -62,6 +80,9 @@ namespace elm {
 class Signal;
 typedef std::set<std::string> SetS;     ///< convinience typedef for set of strings
 
+/** @brief Layer Graph for managing layer pipelines
+  * credit: J. Turcot
+  */
 class LayerGraph
 {
 public:
@@ -86,12 +107,18 @@ public:
 
     void print();
 
+    void Sequence(std::vector<LayerShared> &layer_seq);
+
+
 protected:
-    void Toposort();
+    void findParents(const VtxDescriptor &child, std::vector<VtxDescriptor> &findParents) const;
+
+    void Toposort(std::vector<VtxDescriptor > &q);
 
     GraphLayerType g_;  ///< graph member
-    SetS outputs_;
+    SetS inputs_;
 
+    std::vector<bool> is_active_;
     VecI active_;
     int count_;
 };

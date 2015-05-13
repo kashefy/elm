@@ -8,9 +8,11 @@
 #include "elm/layers/layergraph.h"
 
 #include <boost/graph/topological_sort.hpp>
+#include <boost/graph/breadth_first_search.hpp>
 
 #include "elm/core/debug_utils.h"
 #include "elm/core/boost/ptree_utils_inl.h"
+#include "elm/core/exception.h"
 #include "elm/core/stl/stl_inl.h"
 
 using namespace std;
@@ -47,9 +49,7 @@ void LayerGraph::Add(const VtxName &name,
             vtx_layer_lut = get(vertex_index1, g_);
 
     LayerWrap layer_vtx;
-    layer_vtx.cfg = cfg;
-    layer_vtx.io = io;
-    layer_vtx.ptr = layer_ptr;
+    layer_vtx.Set(cfg, io, layer_ptr);
     vtx_layer_lut[vtx] = layer_vtx;
 
     property_map<GraphLayerType, vertex_index2_t>::type
@@ -92,7 +92,6 @@ void LayerGraph::Add(const VtxName &name,
 //        }
 //    }
 
-
     for (auto const& input : inputs) {
 
         GraphLayerTraits::vertex_iterator v, end;
@@ -133,31 +132,103 @@ void LayerGraph::Add(const VtxName &name,
     } // outputs
 
     count_++;
+
 }
 
-void LayerGraph::AddOutput(const std::string &output_name) {
+void LayerGraph::findParents(const VtxDescriptor &child, std::vector<VtxDescriptor> &parents) const
+{
+    GraphLayerType::inv_adjacency_iterator itr, end;
+    for(tie(itr, end) = inv_adjacent_vertices(child, g_);
+        itr != end;
+        ++itr) {
 
-    outputs_.insert(output_name);
+        VtxDescriptor parent = *itr;
+        parents.push_back(parent);
+        findParents(parent, parents);
+    }
 }
 
-void LayerGraph::RemoveOutput(const std::string &output_name) {
-
-    outputs_.erase(output_name);
-}
-
-void LayerGraph::Toposort() {
+void LayerGraph::Sequence(std::vector<LayerShared> &layer_seq) {
 
     std::vector<VtxDescriptor > q;
-    topological_sort(g_, std::back_inserter(q));
+    Toposort(q);
 
-    property_map<GraphLayerType, vertex_name_t>::type
-            vtx_name_lut = get(vertex_name, g_);
+    property_map<GraphLayerType, vertex_index1_t>::type
+            vtx_layer_lut = get(vertex_index1, g_);
 
-    for(size_t i=0; i<q.size(); ++i) {
+    for (std::vector<VtxDescriptor >::reverse_iterator itr=q.rbegin();
+         itr != q.rend();
+         ++itr ) {
 
+        if(vtx_layer_lut[*itr].is_active) {
 
-        std::cout<<vtx_name_lut[q[i]]<<std::endl;
+            layer_seq.push_back(vtx_layer_lut[*itr].ptr);
+        }
     }
+}
+
+void LayerGraph::AddOutput(const std::string &name) {
+
+    property_map<GraphLayerType, vertex_index1_t>::type
+            vtx_layer_lut = get(vertex_index1, g_);
+
+    bool found_name = false;
+    GraphLayerTraits::vertex_iterator v, end;
+    VtxDescriptor vtx_cur;
+    for(tie(v, end) = vertices(g_); v != end && !found_name; ++v) {
+
+        LayerIONames vtx_io = vtx_layer_lut[*v].io;
+        VecS vtx_outs = elm::Values(vtx_io.OutputMap());
+
+        VecS::const_iterator itr;
+        itr = std::find(vtx_outs.begin(), vtx_outs.end(), name);
+
+        if(itr != vtx_outs.end()) {
+
+            found_name = true;
+            vtx_cur = *v;
+        }
+    } // vertices
+
+    if(!found_name) {
+
+        stringstream s;
+        s << "Output (" << name << ") not supported.";
+        ELM_THROW_KEY_ERROR(s.str());
+    }
+    else {
+
+        property_map<GraphLayerType, vertex_name_t>::type
+                vtx_name_lut = get(vertex_name, g_);
+
+        std::cout<<"current: "<<vtx_name_lut[vtx_cur]<<std::endl;
+
+        vtx_layer_lut[vtx_cur].is_active = true;
+
+        std::vector<VtxDescriptor> parents;
+        this->findParents(vtx_cur, parents);
+        for(size_t i=0; i<parents.size(); i++) {
+
+            vtx_layer_lut[parents[i]].is_active = true;
+        }
+
+        std::cout<<"parents:";
+        for(size_t i=0; i<parents.size(); i++) {
+
+            std::cout<<vtx_name_lut[parents[i]]<<",";
+        }
+        std::cout<<std::endl;
+    }
+}
+
+void LayerGraph::RemoveOutput(const std::string &name) {
+
+}
+
+void LayerGraph::Toposort(std::vector<VtxDescriptor > &q) {
+
+    q.clear();
+    topological_sort(g_, std::back_inserter(q));
 }
 
 VtxColor LayerGraph::genVtxColor(const VtxName &name,
@@ -220,5 +291,12 @@ void LayerGraph::print() {
     }
 
     std::cout<<"Toposort..."<<std::endl;
-    Toposort();
+    std::vector<VtxDescriptor > sort_q;
+    Toposort(sort_q);
+
+    for(size_t i=0; i<sort_q.size(); ++i) {
+
+
+        std::cout<<vtx_name_lut[sort_q[i]]<<std::endl;
+    }
 }
