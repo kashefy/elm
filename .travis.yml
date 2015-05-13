@@ -41,7 +41,7 @@ before_install:
   - cd $DEPS_DIR
   
   # get HDF5, build after apt-get installation
-  - travis_retry wget --quiet http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
+  - travis_retry wget --quiet https://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.14/src/hdf5-1.8.14.tar.gz
   
   # get MATIO, build after apt-get installation
   - travis_retry wget --quiet http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz
