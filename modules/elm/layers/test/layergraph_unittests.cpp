@@ -150,6 +150,64 @@ TEST_F(LayerGraphTest, Test) {
     to.print();
 }
 
+TEST_F(LayerGraphTest, ClearActive_empty) {
+
+    EXPECT_NO_THROW(LayerGraph().ClearActive());
+}
+
+TEST_F(LayerGraphTest, ClearActive) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+
+    LayerConfig cfg;
+    PTree p;
+    p.put("pa", "pa1");
+    LayerIONames io;
+    io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+    io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+    to.Add("a", a, cfg, io);
+
+    ASSERT_TRUE(to.Outputs().empty());
+    to.AddOutput("outa");
+
+    ASSERT_FALSE(to.Outputs().empty());
+
+    to.ClearActive();
+
+    EXPECT_TRUE(to.Outputs().empty());
+}
+
+TEST_F(LayerGraphTest, Outputs_empty) {
+
+    EXPECT_TRUE(LayerGraph().Outputs().empty());
+}
+
+TEST_F(LayerGraphTest, Outputs_single) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+
+    LayerConfig cfg;
+    PTree p;
+    p.put("pa", "pa1");
+    LayerIONames io;
+    io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+    io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+    to.Add("a", a, cfg, io);
+
+    EXPECT_TRUE(to.Outputs().empty());
+    to.AddOutput("outa");
+
+    SetS outputs = to.Outputs();
+    ASSERT_FALSE(outputs.empty());
+
+    EXPECT_EQ(SetS({"outa"}), to.Outputs()) << "Unexpected outputs";
+    EXPECT_NE(SetS({"ina"}), to.Outputs()) << "Inputs confused with outputs.";
+}
+
 TEST_F(LayerGraphTest, AddOutput) {
 
     LayerGraph to;
@@ -214,7 +272,7 @@ TEST_F(LayerGraphTest, AddOutput) {
 
     EXPECT_EQ(SetS({"outb", "outa"}), to.Outputs()) << "Unexpected outputs";
 
-    to.AddOutput("outd");
+    to.AddOutput("outd"); // add second output without clearing
 
     EXPECT_EQ(SetS({"outb", "outa", "outd"}), to.Outputs()) << "Unexpected outputs";
 
@@ -240,6 +298,7 @@ TEST_F(LayerGraphTest, AddOutput_invalid) {
     }
 
     EXPECT_THROW(to.AddOutput("out"), ExceptionKeyError);
+    EXPECT_THROW(to.AddOutput("outa"), ExceptionKeyError);
 }
 
 TEST_F(LayerGraphTest, GenVtxColor_name) {
