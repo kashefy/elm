@@ -274,7 +274,7 @@ TEST_F(LayerGraphTest, AddOutput) {
 
     to.AddOutput("outd"); // add second output without clearing
 
-    EXPECT_NE(SetS({"outb", "outa", "outd"}), to.Outputs()) << "Unexpected outputs";
+    EXPECT_EQ(SetS({"outb", "outa", "outd"}), to.Outputs()) << "Unexpected outputs";
 
     to.ClearActive();
 }
