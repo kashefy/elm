@@ -38,7 +38,7 @@ struct LayerWrap {
              const LayerShared &_ptr) {
 
         cfg = _cfg;
-        io = _io;
+        io  = _io;
         ptr = _ptr;
     }
 
