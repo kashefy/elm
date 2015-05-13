@@ -98,7 +98,7 @@ install:
   - tar -xzf hdf5-1.8.14.tar.gz
   - cd hdf5-1.8.14
   - mkdir $DEPS_DIR/hdf5
-  - ./configure --prefix=$DEPS_DIR/hdf5 --enable-fortran --enable-fortran2003 --with-default-api-version=v18 --enable-silent-rules CXXFLAGS="--param ggc-min-expand=3 --param ggc-min-heapsize=5120" CFLAGS="--param ggc-min-expand=3 --param ggc-min-heapsize=5120" > /dev/null
+  - ./configure --prefix=$DEPS_DIR/hdf5 -q --enable-fortran --enable-fortran2003 --with-default-api-version=v18 --enable-silent-rules CXXFLAGS="--param ggc-min-expand=3 --param ggc-min-heapsize=5120" CFLAGS="--param ggc-min-expand=3 --param ggc-min-heapsize=5120" > /dev/null
   - make -j2 #> /dev/null 2>&1
   - make install > /dev/null 2>&1
   
