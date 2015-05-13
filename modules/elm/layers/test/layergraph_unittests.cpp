@@ -88,6 +88,24 @@ public:
     }
 };
 
+class LayerGraphProtected : public LayerGraph
+{
+public:
+    LayerGraphProtected()
+        : LayerGraph()
+    {
+    }
+};
+
+class LayerGraphProtectedTest : public ::testing::Test
+{
+
+};
+
+TEST_F(LayerGraphProtectedTest, Test) {
+
+}
+
 class LayerGraphTest : public ::testing::Test
 {
 
@@ -179,6 +197,28 @@ TEST_F(LayerGraphTest, AddOutput) {
     }
 
     to.AddOutput("outc");
+
+    EXPECT_EQ(SetS({"outc", "outb", "outa"}), to.Outputs()) << "Unexpected outputs";
+
+    to.ClearActive();
+
+    EXPECT_TRUE(to.Outputs().empty()) << "Outputs inspite of clearing active layers.";
+
+    to.AddOutput("outd");
+
+    EXPECT_EQ(SetS({"outd"}), to.Outputs()) << "Unexpected outputs";
+
+    to.ClearActive();
+
+    to.AddOutput("outb");
+
+    EXPECT_EQ(SetS({"outb", "outa"}), to.Outputs()) << "Unexpected outputs";
+
+    to.AddOutput("outd");
+
+    EXPECT_EQ(SetS({"outb", "outa", "outd"}), to.Outputs()) << "Unexpected outputs";
+
+    to.ClearActive();
 }
 
 TEST_F(LayerGraphTest, AddOutput_invalid) {

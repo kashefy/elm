@@ -20,19 +20,15 @@ using namespace boost;
 using namespace elm;
 
 LayerGraph::LayerGraph()
-    : count_(0)
 {
 }
 
 void LayerGraph::Add(const VtxName &name,
-                        std::shared_ptr<base_Layer> &layer_ptr,
-                        const LayerConfig &cfg,
-                        const LayerIONames &io)
+                     const LayerShared &layer_ptr,
+                     const LayerConfig &cfg,
+                     const LayerIONames &io)
 {
     VtxColor color = genVtxColor(name, cfg, io);
-
-//    bool is_new_vtx;
-    //VtxDescriptor vtx = retrieveVertex(value_cur, is_new_vtx);
 
     VtxDescriptor vtx = add_vertex(color, g_);
 
@@ -52,13 +48,6 @@ void LayerGraph::Add(const VtxName &name,
     layer_vtx.Set(cfg, io, layer_ptr);
     vtx_layer_lut[vtx] = layer_vtx;
 
-    property_map<GraphLayerType, vertex_index2_t>::type
-            vtx_idx_lut = get(vertex_index2, g_);
-
-    active_.push_back(count_);
-    vtx_idx_lut[vtx] = count_;
-
-    //
     // inputs
     VecS inputs = elm::Values(io.InputMap());
     VecS outputs = elm::Values(io.OutputMap());
@@ -130,9 +119,18 @@ void LayerGraph::Add(const VtxName &name,
             }
         } // vertices
     } // outputs
+}
 
-    count_++;
+void LayerGraph::ClearActive() {
 
+    property_map<GraphLayerType, vertex_index1_t>::type
+            vtx_layer_lut = get(vertex_index1, g_);
+
+    GraphLayerTraits::vertex_iterator v, end;
+    for(tie(v, end) = vertices(g_); v != end; ++v) {
+
+        vtx_layer_lut[*v].is_active = false;
+    }
 }
 
 void LayerGraph::findParents(const VtxDescriptor &child, std::vector<VtxDescriptor> &parents) const
@@ -177,8 +175,7 @@ void LayerGraph::AddOutput(const std::string &name) {
     VtxDescriptor vtx_cur;
     for(tie(v, end) = vertices(g_); v != end && !found_name; ++v) {
 
-        LayerIONames vtx_io = vtx_layer_lut[*v].io;
-        VecS vtx_outs = elm::Values(vtx_io.OutputMap());
+        VecS vtx_outs = elm::Values(vtx_layer_lut[*v].io.OutputMap());
 
         VecS::const_iterator itr;
         itr = std::find(vtx_outs.begin(), vtx_outs.end(), name);
@@ -221,8 +218,22 @@ void LayerGraph::AddOutput(const std::string &name) {
     }
 }
 
-void LayerGraph::RemoveOutput(const std::string &name) {
+SetS LayerGraph::Outputs() const {
 
+    SetS outputs;
+
+    GraphLayerTraits::vertex_iterator v, end;
+    for(tie(v, end) = vertices(g_); v != end; ++v) {
+
+        const LayerWrap &tmp = boost::get(vertex_index1, g_, *v);
+        if(tmp.is_active) {
+
+            VecS vtx_outs = elm::Values(tmp.io.OutputMap());
+            outputs.insert(vtx_outs.begin(), vtx_outs.end());
+        }
+    }
+
+    return outputs;
 }
 
 void LayerGraph::Toposort(std::vector<VtxDescriptor > &q) {
