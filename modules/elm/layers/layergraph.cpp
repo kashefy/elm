@@ -181,10 +181,9 @@ void LayerGraph::AddOutput(const std::string &name) {
     }
     else {
 
-        property_map<GraphLayerType, vertex_name_t>::type
-                vtx_name_lut = get(vertex_name, g_);
-
-        std::cout<<"current: "<<vtx_name_lut[vtx_cur]<<std::endl;
+//        property_map<GraphLayerType, vertex_name_t>::type
+//                vtx_name_lut = get(vertex_name, g_);
+//        std::cout<<"current: "<<vtx_name_lut[vtx_cur]<<std::endl;
 
         vtx_layer_lut[vtx_cur].is_active = true;
 
