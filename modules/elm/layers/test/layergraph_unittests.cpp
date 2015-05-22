@@ -207,7 +207,112 @@ TEST_F(LayerGraphTest, Outputs_single) {
     ASSERT_FALSE(outputs.empty());
 
     EXPECT_EQ(SetS({"outa"}), to.Outputs()) << "Unexpected outputs";
-    EXPECT_NE(SetS({"ina"}), to.Outputs()) << "Inputs confused with outputs.";
+    EXPECT_NE(SetS({"ina"}), to.Outputs()) << "Outputs confused with inputs.";
+}
+
+TEST_F(LayerGraphTest, Inputs_empty) {
+
+    EXPECT_TRUE(LayerGraph().Inputs().empty());
+}
+
+TEST_F(LayerGraphTest, Inputs_single) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+
+    LayerConfig cfg;
+    PTree p;
+    p.put("pa", "pa1");
+    LayerIONames io;
+    io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+    io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+    to.Add("a", a, cfg, io);
+
+    EXPECT_TRUE(to.Inputs().empty());
+    to.AddOutput("outa");
+
+    SetS inputs = to.Inputs();
+    ASSERT_FALSE(inputs.empty());
+
+    EXPECT_EQ(SetS({"ina"}), to.Inputs()) << "Unexpected inputs";
+    EXPECT_NE(SetS({"outa"}), to.Inputs()) << "Inputs confused with outputs.";
+}
+
+TEST_F(LayerGraphTest, Inputs_chained) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+
+    EXPECT_TRUE(to.Inputs().empty());
+    to.AddOutput("outb");
+
+    SetS inputs = to.Inputs();
+    ASSERT_FALSE(inputs.empty());
+    EXPECT_SIZE(1, to.Inputs());
+
+    EXPECT_EQ(SetS({"ina"}), to.Inputs()) << "Unexpected inputs";
+    EXPECT_NE(SetS({"outa"}), to.Inputs()) << "Inputs confused with outputs.";
+}
+
+TEST_F(LayerGraphTest, Inputs_multiple) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "inb");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+
+    EXPECT_TRUE(to.Inputs().empty());
+    to.AddOutput("outa");
+    to.AddOutput("outb");
+
+    SetS inputs = to.Inputs();
+    ASSERT_FALSE(inputs.empty());
+    EXPECT_SIZE(2, to.Inputs());
+
+    EXPECT_EQ(SetS({"ina", "inb"}), to.Inputs()) << "Unexpected inputs";
+    EXPECT_NE(SetS({"outa", "outb"}), to.Inputs()) << "Inputs confused with outputs.";
+    EXPECT_NE(to.Outputs(), to.Inputs()) << "Inputs confused with outputs.";
 }
 
 TEST_F(LayerGraphTest, AddOutput) {

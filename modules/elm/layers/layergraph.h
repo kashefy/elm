@@ -130,7 +130,11 @@ public:
      */
     SetS Outputs() const;
 
-    bool HasInputs(const Signal &s) const;
+    /**
+     * @brief Get list of inputs required by active layers
+     * @return list of unique input names
+     */
+    SetS Inputs() const;
 
     /**
      * @brief Generate unique id for vertex

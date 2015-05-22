@@ -251,6 +251,24 @@ SetS LayerGraph::Outputs() const {
     return outputs;
 }
 
+SetS LayerGraph::Inputs() const {
+
+    SetS inputs;
+
+    GraphLayerTraits::vertex_iterator v, end;
+    for(tie(v, end) = vertices(g_); v != end; ++v) {
+
+        const LayerWrap &tmp = boost::get(vertex_index1, g_, *v);
+        if(tmp.is_active) {
+
+            VecS vtx_ins = elm::Values(tmp.io.InputMap());
+            inputs.insert(vtx_ins.begin(), vtx_ins.end());
+        }
+    }
+
+    return inputs;
+}
+
 void LayerGraph::Toposort(std::vector<VtxDescriptor > &q) {
 
     q.clear();
