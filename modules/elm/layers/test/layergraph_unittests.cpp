@@ -13,7 +13,9 @@
 #include "elm/core/exception.h"
 #include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
+#include "elm/core/signal.h"
 #include "elm/layers/layers_interim/base_featuretransformationlayer.h"
+#include "elm/ts/container.h"
 
 using cv::Mat1f;
 using namespace elm;
@@ -417,6 +419,237 @@ TEST_F(LayerGraphTest, GenVtxColor_io_output) {
     LayerIONames io2;
     io2.Output("x", "bar");
     EXPECT_NE(a, to.genVtxColor("a", LayerConfig(), io2)) << "Match inspite of different keys";
+}
+
+TEST_F(LayerGraphTest, Sequence_appends) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    std::shared_ptr<base_Layer> c(new LayerC);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    to.AddOutput("outb");
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    EXPECT_SIZE(2, layers);
+
+    to.Sequence(layers);
+
+    EXPECT_SIZE(2+2, layers) << "sequence not appended as expected.";
+
+    EXPECT_NE(layers[0], layers[1]);
+    EXPECT_EQ(layers[0], layers[2]);
+    EXPECT_EQ(layers[1], layers[3]);
+
+    to.Sequence(layers);
+
+    EXPECT_SIZE(2+2+2, layers) << "sequence not appended as expected.";
+
+    EXPECT_NE(layers[0], layers[1]);
+    EXPECT_EQ(layers[0], layers[2]);
+    EXPECT_EQ(layers[1], layers[3]);
+    EXPECT_EQ(layers[0+2], layers[2+2]);
+    EXPECT_EQ(layers[1+2], layers[3+2]);
+}
+
+TEST_F(LayerGraphTest, Sequence_linear) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    std::shared_ptr<base_Layer> c(new LayerC);
+    std::shared_ptr<base_Layer> d(new LayerD);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pc", "pc1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outc");
+        to.Add("c", c, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        LayerIONames io;
+        io.Input(LayerD::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerD::KEY_OUTPUT_RESPONSE, "outd");
+        to.Add("d", d, cfg, io);
+    }
+    to.AddOutput("outc");
+
+    to.Configure();
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    EXPECT_SIZE(3, layers);
+
+    Signal sig;
+    sig.Append("ina", Mat1f(1, 1, 1.f));
+
+    EXPECT_FALSE(sig.Exists("outa"));
+    EXPECT_FALSE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[0]->Activate(sig);
+    layers[0]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_FALSE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[1]->Activate(sig);
+    layers[1]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_TRUE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[2]->Activate(sig);
+    layers[2]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_TRUE(sig.Exists("outb"));
+    EXPECT_TRUE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+}
+
+
+TEST_F(LayerGraphTest, Sequence_multiple_paths) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    std::shared_ptr<base_Layer> c(new LayerC);
+    std::shared_ptr<base_Layer> d(new LayerD);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pc", "pc1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outc");
+        to.Add("c", c, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        LayerIONames io;
+        io.Input(LayerD::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerD::KEY_OUTPUT_RESPONSE, "outd");
+        to.Add("d", d, cfg, io);
+    }
+    to.AddOutput("outc");
+    to.AddOutput("outd");
+
+    to.Configure();
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    EXPECT_SIZE(4, layers);
+
+    Signal sig;
+    sig.Append("ina", Mat1f(1, 1, 1.f));
+
+    EXPECT_FALSE(sig.Exists("outa"));
+    EXPECT_FALSE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[0]->Activate(sig);
+    layers[0]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_FALSE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[1]->Activate(sig);
+    layers[1]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_TRUE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[2]->Activate(sig);
+    layers[2]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_TRUE(sig.Exists("outb"));
+    EXPECT_TRUE(sig.Exists("outc") ^ sig.Exists("outd")) << "Expecting only one response";
+
+    layers[3]->Activate(sig);
+    layers[3]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_TRUE(sig.Exists("outb"));
+    EXPECT_TRUE(sig.Exists("outc"));
+    EXPECT_TRUE(sig.Exists("outd"));
 }
 
 } // annonymous namespace for unit tests

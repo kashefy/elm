@@ -165,6 +165,21 @@ void LayerGraph::Sequence(std::vector<LayerShared> &layer_seq) {
     }
 }
 
+void LayerGraph::Configure() {
+
+    property_map<GraphLayerType, vertex_index1_t>::type
+            vtx_layer_lut = get(vertex_index1, g_);
+
+    GraphLayerTraits::vertex_iterator v, end;
+    for(tie(v, end) = vertices(g_); v != end; ++v) {
+
+        if(vtx_layer_lut[*v].is_active) {
+
+            vtx_layer_lut[*v].Configure();
+        }
+    }
+}
+
 void LayerGraph::AddOutput(const std::string &name) {
 
     property_map<GraphLayerType, vertex_index1_t>::type

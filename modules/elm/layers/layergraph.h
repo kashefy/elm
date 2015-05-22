@@ -42,6 +42,12 @@ struct LayerWrap {
         ptr = _ptr;
     }
 
+    void Configure() {
+
+        ptr->Reset(cfg);
+        ptr->IONames(io);
+    }
+
     LayerConfig cfg;    ///< configuration
     LayerIONames io;    ///< I/O
     LayerShared ptr;    ///< pointer to shared instance
@@ -106,6 +112,9 @@ public:
              const LayerConfig &cfg,
              const LayerIONames &io);
 
+    /**
+     * @brief Clear Active layers
+     */
     void ClearActive();
 
     /**
@@ -135,6 +144,11 @@ public:
                          const LayerIONames &io) const;
 
     void print();
+
+    /**
+     * @brief Configure active layers
+     */
+    void Configure();
 
     /**
      * @brief Get Sequence of layers for generating requested outputs
