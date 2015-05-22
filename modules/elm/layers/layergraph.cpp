@@ -52,35 +52,6 @@ void LayerGraph::Add(const VtxName &name,
     VecS inputs = elm::Values(io.InputMap());
     VecS outputs = elm::Values(io.OutputMap());
 
-    // Iterate through the edges
-//    property_map<GraphLayerType, edge_name_t >::type
-//        edge_name_lut = get(edge_name, g_);
-
-//    edge_iter ei, ei_end;
-//    for (tie(ei, ei_end) = edges(g_); ei != ei_end; ++ei) {
-
-//        EdgeName edge_name = edge_name_lut[*ei];
-//        EdgeProp edge_prop = edge_name;
-
-//        VecS::const_iterator itr;
-
-//        itr = std::find(inputs.begin(), inputs.end(), edge_name);
-
-//        if(itr != inputs.end()) {
-
-//            VtxDescriptor src = source(*ei, g_);
-//            add_edge(src, vtx, edge_prop, g_);
-//        }
-
-//        itr = std::find(outputs.begin(), outputs.end(), edge_name);
-
-//        if(itr != outputs.end()) {
-
-//            VtxDescriptor src = target(*ei, g_);
-//            add_edge(vtx, src, edge_prop, g_);
-//        }
-//    }
-
     for (auto const& input : inputs) {
 
         GraphLayerTraits::vertex_iterator v, end;
@@ -224,12 +195,12 @@ void LayerGraph::AddOutput(const std::string &name) {
             vtx_layer_lut[parents[i]].is_active = true;
         }
 
-        std::cout<<"parents:";
-        for(size_t i=0; i<parents.size(); i++) {
+//        std::cout<<"parents:";
+//        for(size_t i=0; i<parents.size(); i++) {
 
-            std::cout<<vtx_name_lut[parents[i]]<<",";
-        }
-        std::cout<<std::endl;
+//            std::cout<<vtx_name_lut[parents[i]]<<",";
+//        }
+//        std::cout<<std::endl;
     }
 }
 
