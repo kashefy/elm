@@ -798,4 +798,40 @@ TEST_F(LayerGraphTest, Sequence_multiple_paths) {
     EXPECT_TRUE(sig.Exists("outd"));
 }
 
+TEST_F(LayerGraphTest, Reconfigure_empty) {
+
+    EXPECT_EQ(0, LayerGraph().Reconfigure<int>("x", 5));
+}
+
+TEST_F(LayerGraphTest, Reconfigure) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        cfg.Params(p);
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        cfg.Params(p);
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+
+    to.Reconfigure("pa", "pa2");
+
+}
+
 } // annonymous namespace for unit tests
