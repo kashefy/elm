@@ -315,6 +315,47 @@ TEST_F(LayerGraphTest, Inputs_multiple) {
     EXPECT_NE(to.Outputs(), to.Inputs()) << "Inputs confused with outputs.";
 }
 
+/**
+ * @brief add another layer to the graph with its own input but don't activate it
+ */
+TEST_F(LayerGraphTest, Inputs_single_active_only) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "inb");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+
+    EXPECT_TRUE(to.Inputs().empty());
+    to.AddOutput("outa");
+
+    SetS inputs = to.Inputs();
+    ASSERT_FALSE(inputs.empty());
+    EXPECT_SIZE(1, to.Inputs());
+
+    EXPECT_EQ(SetS({"ina"}), to.Inputs()) << "Unexpected inputs";
+    EXPECT_NE(SetS({"outa"}), to.Inputs()) << "Inputs confused with outputs.";
+    EXPECT_NE(to.Outputs(), to.Inputs()) << "Inputs confused with outputs.";
+}
+
 TEST_F(LayerGraphTest, AddOutput) {
 
     LayerGraph to;
