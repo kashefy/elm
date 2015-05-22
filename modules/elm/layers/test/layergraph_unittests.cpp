@@ -34,7 +34,7 @@ public:
 
     void Activate(const Signal &signal) {
 
-        ELM_COUT_VAR("LayerA::Activate()")
+        //ELM_COUT_VAR("LayerA::Activate()")
         m_ = Mat1f(1, 1, 3.f);
     }
 };
@@ -51,7 +51,7 @@ public:
 
     void Activate(const Signal &signal) {
 
-        ELM_COUT_VAR("LayerB::Activate()")
+        //ELM_COUT_VAR("LayerB::Activate()")
         m_ = Mat1f(1, 1, 4.f);
     }
 };
@@ -68,7 +68,7 @@ public:
 
     void Activate(const Signal &signal) {
 
-        ELM_COUT_VAR("LayerC::Activate()")
+        //ELM_COUT_VAR("LayerC::Activate()")
         m_ = Mat1f(1, 1, 4.f);
     }
 };
@@ -85,7 +85,7 @@ public:
 
     void Activate(const Signal &signal) {
 
-        ELM_COUT_VAR("LayerD::Activate()")
+        //ELM_COUT_VAR("LayerD::Activate()")
         m_ = Mat1f(1, 1, 5.f);
     }
 };
@@ -113,7 +113,7 @@ class LayerGraphTest : public ::testing::Test
 
 };
 
-TEST_F(LayerGraphTest, Test) {
+TEST_F(LayerGraphTest, DISABLED_print) {
 
     LayerGraph to;
 
