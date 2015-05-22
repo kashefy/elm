@@ -237,6 +237,20 @@ SetS LayerGraph::Inputs() const {
         }
     }
 
+    // remove outputs of other layers, only keep primary inputs
+
+    edge_iter e, e_end;
+    for (tie(e, e_end) = edges(g_); e != e_end; ++e) {
+
+        const EdgeName &tmp = boost::get(edge_name, g_, *e);
+
+        SetS::iterator itr = inputs.find(tmp);
+        if(itr != inputs.end()) {
+
+            inputs.erase(itr);
+        }
+    }
+
     return inputs;
 }
 
