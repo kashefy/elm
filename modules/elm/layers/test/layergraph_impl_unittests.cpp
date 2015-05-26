@@ -5,7 +5,7 @@
 // 3-clause BSD License
 //
 //M*/
-#include "elm/layers/layergraph.h"
+#include "elm/layers/layergraph_impl.h"
 
 #include "gtest/gtest.h"
 
