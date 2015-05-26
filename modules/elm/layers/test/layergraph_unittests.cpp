@@ -113,45 +113,6 @@ class LayerGraphTest : public ::testing::Test
 
 };
 
-TEST_F(LayerGraphTest, DISABLED_print) {
-
-    LayerGraph to;
-
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
-    std::shared_ptr<base_Layer> c(new LayerC);
-
-    {
-        LayerConfig cfg;
-        PTree p;
-        p.put("pb", "pb1");
-        LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
-        io.Output(LayerA::KEY_INPUT_STIMULUS, "outb");
-        to.Add("b", a, cfg, io);
-    }
-    {
-        LayerConfig cfg;
-        PTree p;
-        p.put("pc", "pc1");
-        LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
-        io.Output(LayerA::KEY_INPUT_STIMULUS, "outc");
-        to.Add("c", a, cfg, io);
-    }
-    {
-        LayerConfig cfg;
-        PTree p;
-        p.put("pa", "pa1");
-        LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
-        io.Output(LayerA::KEY_INPUT_STIMULUS, "outa");
-        to.Add("a", a, cfg, io);
-    }
-
-    to.print();
-}
-
 TEST_F(LayerGraphTest, ClearActive_empty) {
 
     EXPECT_NO_THROW(LayerGraph().ClearActive());
@@ -831,7 +792,45 @@ TEST_F(LayerGraphTest, Reconfigure) {
     }
 
     to.Reconfigure("pa", "pa2");
-
 }
+
+//TEST_F(LayerGraphTest, DISABLED_print) {
+
+//    LayerGraph to;
+
+//    std::shared_ptr<base_Layer> a(new LayerA);
+//    std::shared_ptr<base_Layer> b(new LayerB);
+//    std::shared_ptr<base_Layer> c(new LayerC);
+
+//    {
+//        LayerConfig cfg;
+//        PTree p;
+//        p.put("pb", "pb1");
+//        LayerIONames io;
+//        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
+//        io.Output(LayerA::KEY_INPUT_STIMULUS, "outb");
+//        to.Add("b", a, cfg, io);
+//    }
+//    {
+//        LayerConfig cfg;
+//        PTree p;
+//        p.put("pc", "pc1");
+//        LayerIONames io;
+//        io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
+//        io.Output(LayerA::KEY_INPUT_STIMULUS, "outc");
+//        to.Add("c", a, cfg, io);
+//    }
+//    {
+//        LayerConfig cfg;
+//        PTree p;
+//        p.put("pa", "pa1");
+//        LayerIONames io;
+//        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+//        io.Output(LayerA::KEY_INPUT_STIMULUS, "outa");
+//        to.Add("a", a, cfg, io);
+//    }
+
+//    to.print();
+//}
 
 } // annonymous namespace for unit tests

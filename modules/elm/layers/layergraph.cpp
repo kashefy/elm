@@ -284,47 +284,47 @@ VtxColor LayerGraph::genVtxColor(const VtxName &name,
     return color;
 }
 
-void LayerGraph::print() {
+//void LayerGraph::print() {
 
-    cout<<"Vertices:"<<endl;
+//    cout<<"Vertices:"<<endl;
 
-    cout<<num_vertices(g_)<<endl;
+//    cout<<num_vertices(g_)<<endl;
 
-    property_map<GraphLayerType, vertex_name_t>::type
-            vtx_name_lut = get(vertex_name, g_);
+//    property_map<GraphLayerType, vertex_name_t>::type
+//            vtx_name_lut = get(vertex_name, g_);
 
-    GraphLayerTraits::vertex_iterator v, end;
-    for(tie(v, end) = vertices(g_); v != end; ++v) {
+//    GraphLayerTraits::vertex_iterator v, end;
+//    for(tie(v, end) = vertices(g_); v != end; ++v) {
 
-        VtxName key = vtx_name_lut[*v];
-        ELM_COUT_VAR(key);
-    }
+//        VtxName key = vtx_name_lut[*v];
+//        ELM_COUT_VAR(key);
+//    }
 
-    cout<<"Edges:"<<endl;
+//    cout<<"Edges:"<<endl;
 
-    property_map<GraphLayerType, edge_name_t >::type
-        edge_name_lut = get(edge_name, g_);
-    edge_iter ei, ei_end;
-    for (tie(ei, ei_end) = edges(g_); ei != ei_end; ++ei) {
+//    property_map<GraphLayerType, edge_name_t >::type
+//        edge_name_lut = get(edge_name, g_);
+//    edge_iter ei, ei_end;
+//    for (tie(ei, ei_end) = edges(g_); ei != ei_end; ++ei) {
 
-        EdgeName edge_name = edge_name_lut[*ei];
+//        EdgeName edge_name = edge_name_lut[*ei];
 
-        VtxDescriptor src = source(*ei, g_);
-        VtxName src_name = vtx_name_lut[src];
+//        VtxDescriptor src = source(*ei, g_);
+//        VtxName src_name = vtx_name_lut[src];
 
-        VtxDescriptor dst = target(*ei, g_);
-        VtxName dst_name = vtx_name_lut[dst];
+//        VtxDescriptor dst = target(*ei, g_);
+//        VtxName dst_name = vtx_name_lut[dst];
 
-        cout<<src_name<<"->"<<edge_name<<"->"<<dst_name<<endl;
-    }
+//        cout<<src_name<<"->"<<edge_name<<"->"<<dst_name<<endl;
+//    }
 
-    std::cout<<"Toposort..."<<std::endl;
-    std::vector<VtxDescriptor > sort_q;
-    Toposort(sort_q);
+//    std::cout<<"Toposort..."<<std::endl;
+//    std::vector<VtxDescriptor > sort_q;
+//    Toposort(sort_q);
 
-    for(size_t i=0; i<sort_q.size(); ++i) {
+//    for(size_t i=0; i<sort_q.size(); ++i) {
 
 
-        std::cout<<vtx_name_lut[sort_q[i]]<<std::endl;
-    }
-}
+//        std::cout<<vtx_name_lut[sort_q[i]]<<std::endl;
+//    }
+//}

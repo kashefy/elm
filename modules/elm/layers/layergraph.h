@@ -150,8 +150,6 @@ public:
                          const LayerConfig &cfg,
                          const LayerIONames &io) const;
 
-    void print();
-
     /**
      * @brief Configure active layers
      */
@@ -171,6 +169,8 @@ public:
      * @param[out] ordered list of layers
      */
     void Sequence(std::vector<LayerShared> &layer_seq);
+
+    //void print();
 
 protected:
     /**
