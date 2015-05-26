@@ -89,7 +89,7 @@ namespace elm {
 class Signal;
 typedef std::set<std::string> SetS;     ///< convinience typedef for set of strings
 
-/** @brief Layer Graph implentatuib for managing layer pipelines
+/** @brief Layer Graph implentation for managing layer pipelines
   * credit: J. Turcot
   */
 class LayerGraph_Impl

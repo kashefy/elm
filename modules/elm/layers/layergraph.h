@@ -17,6 +17,8 @@ namespace elm {
 class Signal;
 class LayerGraph_Impl;
 
+/** @brief Layer Graph for managing non-linear layer pipelines
+  */
 class LayerGraph
 {
 public:
