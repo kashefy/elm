@@ -16,6 +16,7 @@
 
 #include "elm/core/base_Layer.h"
 #include "elm/core/layerconfig.h"
+#include "elm/core/typedefs_fwd.h"
 
 #include "elm/core/boost/ptree_utils_inl.h"
 
@@ -82,12 +83,6 @@ typedef boost::adjacency_list<
 typedef boost::graph_traits<GraphLayerType> GraphLayerTraits;
 typedef GraphLayerTraits::edge_iterator edge_iter;
 typedef GraphLayerTraits::vertex_descriptor VtxDescriptor;
-
-namespace std {
-
-template <typename T> class shared_ptr; ///< convinience typedef for shared pointer
-
-} // namespace std
 
 namespace elm {
 

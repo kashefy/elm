@@ -10,17 +10,10 @@
 
 #include <string>
 
-namespace std {
-
-template <typename T> class shared_ptr; ///< convinience typedef for point template
-
-} // namespace std
+#include "elm/core/typedefs_fwd.h"
 
 namespace elm {
 
-class base_Layer;
-class LayerConfig;
-class LayerIONames;
 class Signal;
 class LayerGraph_Impl;
 
@@ -31,7 +24,7 @@ public:
 
     LayerGraph();
 
-    void Add(std::shared_ptr<base_Layer> &layer, const LayerConfig &cfg, const LayerIONames &io);
+    void Add(LayerShared &layer, const LayerConfig &cfg, const LayerIONames &io);
 
     void AddOutput(const std::string &output_name);
 

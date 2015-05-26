@@ -8,9 +8,8 @@
 #include "elm/layers/layergraph_impl.h"
 
 #include <boost/graph/topological_sort.hpp>
-#include <boost/graph/breadth_first_search.hpp>
 
-#include "elm/core/debug_utils.h"
+//#include "elm/core/debug_utils.h"
 #include "elm/core/boost/ptree_utils_inl.h"
 #include "elm/core/exception.h"
 #include "elm/core/stl/stl_inl.h"
@@ -19,15 +18,14 @@ using namespace std;
 using namespace boost;
 using namespace elm;
 
-LayerGraph_Impl::LayerGraph_Impl()
-{
+LayerGraph_Impl::LayerGraph_Impl() {
 }
 
 void LayerGraph_Impl::Add(const VtxName &name,
                      const LayerShared &layer_ptr,
                      const LayerConfig &cfg,
-                     const LayerIONames &io)
-{
+                     const LayerIONames &io) {
+
     VtxColor color = genVtxColor(name, cfg, io);
 
     VtxDescriptor vtx = add_vertex(color, g_);
@@ -104,8 +102,9 @@ void LayerGraph_Impl::ClearActive() {
     }
 }
 
-void LayerGraph_Impl::findParents(const VtxDescriptor &child, std::vector<VtxDescriptor> &parents) const
-{
+void LayerGraph_Impl::findParents(const VtxDescriptor &child,
+                                  std::vector<VtxDescriptor> &parents) const {
+
     GraphLayerType::inv_adjacency_iterator itr, end;
     for(tie(itr, end) = inv_adjacent_vertices(child, g_);
         itr != end;
