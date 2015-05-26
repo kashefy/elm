@@ -719,4 +719,147 @@ TEST_F(LayerGraphTest, Sequence_multiple_paths_signal_feature) {
     EXPECT_MAT_EQ(expected_d, sig.MostRecentMat1f("outd"));
 }
 
+TEST_F(LayerGraphTest, Reconfigure_empty) {
+
+    EXPECT_EQ(0, LayerGraph().Reconfigure<int>("x", 5));
+}
+
+TEST_F(LayerGraphTest, Reconfigure_count) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("p", 1);
+        p.put("pb", "pb1");
+        cfg.Params(p);
+        LayerIONames io;
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("p", 1);
+        p.put("pa", "pa1");
+        cfg.Params(p);
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+
+    EXPECT_EQ(1, to.Reconfigure("pa", std::string("pa2"))) << "Parameter key defined once in one layer only.";
+    EXPECT_EQ(2, to.Reconfigure("p", 5)) << "Parameter key defined once for both layers.";
+    EXPECT_EQ(2, to.Reconfigure("p", 5.1f)) << "Parameter key defined once for both layers.";
+    EXPECT_EQ(0, to.Reconfigure("foo", std::string("bar"))) << "No modifications for non-existent paramter key";
+
+    // Reconfigure with new type
+    EXPECT_EQ(1, to.Reconfigure("pa", 1));
+}
+
+/**
+ * @brief inspect signal features after multiple reconfigurations
+ */
+TEST_F(LayerGraphTest, Reconfigure) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put(LayerB::PARAM_CAPITAL, true);
+        cfg.Params(p);
+        LayerIONames io;
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put(LayerA::PARAM_CAPITAL, true);
+        p.put(LayerA::PARAM_DUPLICATE, false);
+        cfg.Params(p);
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+
+    to.AddOutput("outb");
+    to.Configure();
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    Mat1f in = Mat1f(1, 1, 1.f);
+    Mat1f expected = in.clone();
+
+    Signal sig;
+    sig.Append("ina", in);
+
+    for(auto const& l : layers) {
+
+        l->Activate(sig);
+        l->Response(sig);
+    }
+
+    expected.push_back(Mat1f(VecF({static_cast<float>('A'),
+                                   static_cast<float>('B')})).reshape(1, 2));
+
+    // inspect signal features from initial configuration
+
+    EXPECT_MAT_EQ(expected.rowRange(0, 2), sig.MostRecentMat1f("outa"));
+    EXPECT_MAT_EQ(expected, sig.MostRecentMat1f("outb"));
+
+    EXPECT_EQ(1, to.Reconfigure(LayerA::PARAM_DUPLICATE, true)) << "Parameter key defined once in one layer only.";
+
+    sig.Clear();
+    sig.Append("ina", in);
+
+    for(auto const& l : layers) {
+
+        l->Activate(sig);
+        l->Response(sig);
+    }
+
+    expected = in.clone();
+    expected.push_back(Mat1f(VecF({static_cast<float>('A'),
+                                   static_cast<float>('A'),
+                                   static_cast<float>('B')})).reshape(1, 3));
+
+    // inspect signal features after altering paramter for 1 layer
+
+    EXPECT_MAT_EQ(expected.rowRange(0, 3), sig.MostRecentMat1f("outa"));
+    EXPECT_MAT_EQ(expected, sig.MostRecentMat1f("outb"));
+
+    EXPECT_EQ(2, to.Reconfigure(LayerB::PARAM_CAPITAL, false)) << "Parameter key defined once in one layer only.";
+
+    sig.Clear();
+    sig.Append("ina", in);
+
+    for(auto const& l : layers) {
+
+        l->Activate(sig);
+        l->Response(sig);
+    }
+
+    expected = in.clone();
+    expected.push_back(Mat1f(VecF({static_cast<float>('a'),
+                                   static_cast<float>('a'),
+                                   static_cast<float>('b')})).reshape(1, 3));
+
+    // inspect signal features after altering common paramter
+
+    EXPECT_MAT_EQ(expected.rowRange(0, 3), sig.MostRecentMat1f("outa"));
+    EXPECT_MAT_EQ(expected, sig.MostRecentMat1f("outb"));
+}
+
 } // annonymous namespace for unit tests

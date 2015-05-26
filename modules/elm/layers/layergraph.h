@@ -72,6 +72,15 @@ public:
     void Configure();
 
     /**
+     * @brief reconfigure any layers with configured with given parameter key value pair
+     * @param key parameter key
+     * @param value new parameter value
+     * @return no. of layers updated with new value
+     */
+    template <class TVal>
+    int Reconfigure(std::string key, const TVal& value);
+
+    /**
      * @brief Get Sequence of layers for generating requested outputs
      * @param[out] ordered list of layers
      */
@@ -80,6 +89,23 @@ public:
 protected:
     LayerGraph_Impl *impl_;
 };
+
+} // namespace elm
+
+namespace elm {
+
+// template specializations for LayerGraph::Reconfigure()
+template <>
+int LayerGraph::Reconfigure<bool>(std::string key, const bool& value);
+
+template <>
+int LayerGraph::Reconfigure<float>(std::string key, const float& value);
+
+template <>
+int LayerGraph::Reconfigure<int>(std::string key, const int& value);
+
+template <>
+int LayerGraph::Reconfigure<std::string>(std::string key, const std::string& value);
 
 } // namespace elm
 

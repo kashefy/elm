@@ -62,3 +62,28 @@ void LayerGraph::Sequence(std::vector<LayerShared> &layer_seq) {
 
     impl_->Sequence(layer_seq);
 }
+
+// template specializations for LayerGraph::Reconfigure()
+template <>
+int LayerGraph::Reconfigure<bool>(std::string key, const bool& value) {
+
+    return impl_->Reconfigure<bool>(key, value);
+}
+
+template <>
+int LayerGraph::Reconfigure<float>(std::string key, const float& value) {
+
+    return impl_->Reconfigure<float>(key, value);
+}
+
+template <>
+int LayerGraph::Reconfigure<int>(std::string key, const int& value) {
+
+    return impl_->Reconfigure<int>(key, value);
+}
+
+template <>
+int LayerGraph::Reconfigure<std::string>(std::string key, const std::string& value) {
+
+    return impl_->Reconfigure<std::string>(key, value);
+}
