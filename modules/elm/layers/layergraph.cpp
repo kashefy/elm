@@ -10,6 +10,7 @@
 #include <fstream>
 
 #include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/graph/adj_list_serialize.hpp>
 
@@ -88,13 +89,40 @@ void LayerGraph::Save(const std::string &file_path) const {
 
     if(bfs::is_directory(p)) {
 
-        ELM_THROW_FILEIO_ERROR("Path to regular file required to save layer graph.");
+        stringstream s;
+        s << "Path to regular file required for saving layer graph. " <<
+             "Encountered path to directory " << p;
+        ELM_THROW_FILEIO_ERROR(s.str());
     }
 
     ofstream stream(p.string().c_str());
     boost::archive::text_oarchive oa(stream);
 
     detail::Save(oa, impl_->g_);
+}
+
+void LayerGraph::Load(const std::string &file_path) {
+
+    bfs::path p(file_path);
+
+    if(bfs::is_directory(p)) {
+
+        stringstream s;
+        s << "Path to regular file required to load layer graph. " <<
+             "Encountered path to directory " << p;
+        ELM_THROW_FILEIO_ERROR(s.str());
+    }
+    else if(!bfs::is_regular_file(p)) {
+
+        stringstream s;
+        s << "Cannot load layer graph from" << p;
+        ELM_THROW_FILEIO_ERROR(s.str());
+    }
+
+    ifstream stream(p.string().c_str());
+    boost::archive::text_iarchive oa(stream);
+
+    detail::Load(oa, impl_->g_);
 }
 
 // template specializations for LayerGraph::Reconfigure()

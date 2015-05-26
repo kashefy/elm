@@ -99,6 +99,12 @@ public:
      */
     void Save(const std::string &file_path) const;
 
+    /**
+     * @brief Load graph from file
+     * @param[in] file_path
+     */
+    void Load(const std::string &file_path);
+
 protected:
     LayerGraph_Impl *impl_;
 };

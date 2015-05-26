@@ -17,6 +17,7 @@
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/layers/layers_interim/base_featuretransformationlayer.h"
+#include "elm/layers/weightedsum.h"
 #include "elm/ts/container.h"
 #include "elm/ts/mat_assertions.h"
 
@@ -869,6 +870,72 @@ TEST_F(LayerGraphSerializationTest, Save_invalid) {
     ASSERT_TRUE(bfs::is_directory(p));
 
     EXPECT_THROW(LayerGraph().Save(p.string()), ExceptionFileIOError);
+}
+
+TEST_F(LayerGraphSerializationTest, Load_invalid) {
+
+    bfs::path p("foo");
+    ASSERT_TRUE(bfs::is_directory(p));
+
+    EXPECT_THROW(LayerGraph().Load(p.string()), ExceptionFileIOError);
+
+    p = p / "g.txt";
+
+    ASSERT_FALSE(bfs::is_regular_file(p));
+
+    EXPECT_THROW(LayerGraph().Load(p.string()), ExceptionFileIOError);
+}
+
+TEST_F(LayerGraphSerializationTest, Serialize) {
+
+    bfs::path p = bfs::path("foo") / "g.txt";
+
+    {
+        LayerGraph to;
+
+        std::shared_ptr<base_Layer> a(new WeightedSum);
+        std::shared_ptr<base_Layer> b(new WeightedSum);
+        {
+            LayerConfig cfg;
+            PTree p;
+            p.put(WeightedSum::PARAM_A, 0.5f);
+            p.put(WeightedSum::PARAM_B, 0.f);
+            cfg.Params(p);
+            LayerIONames io;
+            io.Input(WeightedSum::KEY_INPUT_STIMULUS, "outa");
+            io.Output(WeightedSum::KEY_OUTPUT_RESPONSE, "outb");
+            to.Add("WeightedSum", b, cfg, io);
+        }
+        {
+            LayerConfig cfg;
+            PTree p;
+            p.put(WeightedSum::PARAM_A, 2.f);
+            p.put(WeightedSum::PARAM_B, 1.f);
+            cfg.Params(p);
+            LayerIONames io;
+            io.Input(WeightedSum::KEY_INPUT_STIMULUS, "ina");
+            io.Output(WeightedSum::KEY_OUTPUT_RESPONSE, "outa");
+            to.Add("WeightedSum", a, cfg, io);
+        }
+
+        to.Save(p.string());
+    }
+
+    LayerGraph to; // must be a new object
+    to.Load(p.string());
+
+    to.AddOutput("outb");
+    to.Configure();
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    Signal sig;
+    sig.Append("ina", Mat1f(1, 2, 1.f));
+    to.ActivateForResponse(layers, sig);
+
+    EXPECT_MAT_EQ(Mat1f(1, 1, 3.f), sig.MostRecentMat1f("outa"));
+    EXPECT_MAT_EQ(Mat1f(1, 1, 1.5f), sig.MostRecentMat1f("outb"));
 }
 
 } // annonymous namespace for unit tests

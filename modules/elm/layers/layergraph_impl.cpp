@@ -43,7 +43,7 @@ void LayerGraph_Impl::Add(const VtxName &name,
             vtx_layer_lut = get(vertex_index1, g_);
 
     LayerVertex layer_vtx;
-    layer_vtx.Set(cfg, io, layer_ptr);
+    layer_vtx.Set(name, cfg, io, layer_ptr);
     vtx_layer_lut[vtx] = layer_vtx;
 
     // inputs
