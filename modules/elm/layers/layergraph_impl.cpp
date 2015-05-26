@@ -22,9 +22,9 @@ LayerGraph_Impl::LayerGraph_Impl() {
 }
 
 void LayerGraph_Impl::Add(const VtxName &name,
-                     const LayerShared &layer_ptr,
-                     const LayerConfig &cfg,
-                     const LayerIONames &io) {
+                          const LayerShared &layer_ptr,
+                          const LayerConfig &cfg,
+                          const LayerIONames &io) {
 
     VtxColor color = genVtxColor(name, cfg, io);
 
