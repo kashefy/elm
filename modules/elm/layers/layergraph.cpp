@@ -7,8 +7,12 @@
 //M*/
 #include "elm/layers/layergraph.h"
 
+#include <boost/filesystem.hpp>
+
+#include "elm/core/exception.h"
 #include "elm/layers/layergraph_impl.h"
 
+namespace bfs=boost::filesystem;
 using namespace elm;
 
 LayerGraph::~LayerGraph()
@@ -69,6 +73,16 @@ void LayerGraph::ActivateForResponse(const std::vector<LayerShared> &layers, Sig
 
         l->Activate(signal);
         l->Response(signal);
+    }
+}
+
+void LayerGraph::Save(const std::string &file_path) const {
+
+    bfs::path p(file_path);
+
+    if(bfs::is_directory(p)) {
+
+        ELM_THROW_FILEIO_ERROR("Path to regular file required to save layer graph.");
     }
 }
 

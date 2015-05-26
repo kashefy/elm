@@ -93,6 +93,12 @@ public:
      */
     void ActivateForResponse(const std::vector<LayerShared> &layers, Signal &s);
 
+    /**
+     * @brief Save graph to file
+     * @param[in] file_path
+     */
+    void Save(const std::string &file_path) const;
+
 protected:
     LayerGraph_Impl *impl_;
 };

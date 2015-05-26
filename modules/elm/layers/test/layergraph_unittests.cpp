@@ -9,6 +9,8 @@
 
 #include "gtest/gtest.h"
 
+#include <boost/filesystem.hpp>
+
 #include "elm/core/debug_utils.h"
 #include "elm/core/exception.h"
 #include "elm/core/inputname.h"
@@ -19,6 +21,7 @@
 #include "elm/ts/mat_assertions.h"
 
 using cv::Mat1f;
+namespace bfs=boost::filesystem;
 using namespace elm;
 
 namespace {
@@ -841,6 +844,31 @@ TEST_F(LayerGraphTest, Reconfigure) {
 
     EXPECT_MAT_EQ(expected.rowRange(0, 3), sig.MostRecentMat1f("outa"));
     EXPECT_MAT_EQ(expected, sig.MostRecentMat1f("outb"));
+}
+
+class LayerGraphSerializationTest : public ::testing::Test
+{
+protected:
+    static void SetUpTestCase() {
+
+        bfs::create_directory("foo");
+    }
+
+    static void TearDownTestCase() {
+
+        if(bfs::is_directory("foo")) {
+
+            bfs::remove_all("foo");
+        }
+    }
+};
+
+TEST_F(LayerGraphSerializationTest, Save_invalid) {
+
+    bfs::path p("foo");
+    ASSERT_TRUE(bfs::is_directory(p));
+
+    EXPECT_THROW(LayerGraph().Save(p.string()), ExceptionFileIOError);
 }
 
 } // annonymous namespace for unit tests
