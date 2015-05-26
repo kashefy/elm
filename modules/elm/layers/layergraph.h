@@ -208,7 +208,7 @@ int LayerGraph::Reconfigure(std::string key, const TVal& value) {
         LayerConfig cfg = vtx_layer_lut[*v].cfg;
 
         PTree p = cfg.Params();
-        PrintXML(p, std::cout);std::cout<<std::endl;
+        //PrintXML(p, std::cout);std::cout<<std::endl;
         PTree::assoc_iterator tmp_itr = p.find(key);
 
         if(tmp_itr != p.not_found()) {
@@ -216,13 +216,15 @@ int LayerGraph::Reconfigure(std::string key, const TVal& value) {
             PTree::iterator itr = p.to_iterator(tmp_itr);
             itr->second.put_value<TVal>(value);
 
-            PrintXML(p, std::cout);std::cout<<std::endl;
+            //PrintXML(p, std::cout);std::cout<<std::endl;
 
             cfg.Params(p); // update layer config
 
+            vtx_layer_lut[*v].cfg = cfg; // update configuration object
+            vtx_layer_lut[*v].ptr->Reconfigure(cfg); // reconfigure layer
+
             count++;
         }
-
     } // vertices
 
     return count;

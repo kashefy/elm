@@ -26,30 +26,59 @@ namespace {
 class LayerA : public base_FeatureTransformationLayer
 {
 public:
+    static const std::string PARAM_CAPITAL;     ///< parameter for capital letters
+    static const std::string PARAM_DUPLICATE;   ///< parameter for duplicating last row
+
     void Clear() {}
 
-    void Reconfigure(const LayerConfig &config) {}
+    void Reconfigure(const LayerConfig &config) {
+
+        do_capital_ = config.Params().get<bool>(PARAM_CAPITAL, false);
+        do_duplicate_ = config.Params().get<bool>(PARAM_DUPLICATE, false);
+    }
 
     void Activate(const Signal &signal) {
 
         m_ = signal.MostRecentMat1f(name_input_).clone();
-        m_.push_back(Mat1f(1, 1, static_cast<float>('a')));
+
+        char c = do_capital_ ? 'A' : 'a';
+        m_.push_back(Mat1f(1, 1, static_cast<float>(c)));
+
+        if(do_duplicate_) {
+
+            m_.push_back(m_.row(m_.rows-1));
+        }
     }
+
+    bool do_capital_;    ///< flag for capital letters
+    bool do_duplicate_;  ///< flag for duplicating last row
 };
+const std::string LayerA::PARAM_CAPITAL      = "capital";
+const std::string LayerA::PARAM_DUPLICATE    = "dup";
 
 class LayerB : public base_FeatureTransformationLayer
 {
 public:
+    static const std::string PARAM_CAPITAL;    ///< parameter for capital letters
+
     void Clear() {}
 
-    void Reconfigure(const LayerConfig &config) {}
+    void Reconfigure(const LayerConfig &config) {
+
+        do_capital_ = config.Params().get<bool>(PARAM_CAPITAL, false);
+    }
 
     void Activate(const Signal &signal) {
 
         m_ = signal.MostRecentMat1f(name_input_).clone();
-        m_.push_back(Mat1f(1, 1, static_cast<float>('b')));
+
+        char c = do_capital_ ? 'B' : 'b';
+        m_.push_back(Mat1f(1, 1, static_cast<float>(c)));
     }
+
+    bool do_capital_;
 };
+const std::string LayerB::PARAM_CAPITAL = "capital";
 
 class LayerC : public base_FeatureTransformationLayer
 {
@@ -191,8 +220,8 @@ TEST_F(LayerGraphTest, Inputs_chained) {
         PTree p;
         p.put("pb", "pb1");
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
         to.Add("b", b, cfg, io);
     }
 
@@ -228,8 +257,8 @@ TEST_F(LayerGraphTest, Inputs_multiple) {
         PTree p;
         p.put("pb", "pb1");
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "inb");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "inb");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
         to.Add("b", b, cfg, io);
     }
 
@@ -270,8 +299,8 @@ TEST_F(LayerGraphTest, Inputs_single_active_only) {
         PTree p;
         p.put("pb", "pb1");
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "inb");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "inb");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
         to.Add("b", b, cfg, io);
     }
 
@@ -301,8 +330,8 @@ TEST_F(LayerGraphTest, AddOutput) {
         PTree p;
         p.put("pb", "pb1");
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        io.Input(LayerC::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerC::KEY_OUTPUT_RESPONSE, "outb");
         to.Add("b", b, cfg, io);
     }
     {
@@ -504,15 +533,14 @@ TEST_F(LayerGraphTest, Sequence_appends) {
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);
-    std::shared_ptr<base_Layer> c(new LayerC);
 
     {
         LayerConfig cfg;
         PTree p;
         p.put("pb", "pb1");
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
         to.Add("b", b, cfg, io);
     }
     {
@@ -564,8 +592,8 @@ TEST_F(LayerGraphTest, Sequence_linear) {
         PTree p;
         p.put("pb", "pb1");
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
         to.Add("b", b, cfg, io);
     }
     {
@@ -573,8 +601,8 @@ TEST_F(LayerGraphTest, Sequence_linear) {
         PTree p;
         p.put("pc", "pc1");
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outc");
+        io.Input(LayerC::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerC::KEY_OUTPUT_RESPONSE, "outc");
         to.Add("c", c, cfg, io);
     }
     {
@@ -649,8 +677,8 @@ TEST_F(LayerGraphTest, Sequence_multiple_paths) {
         PTree p;
         p.put("pb", "pb1");
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
         to.Add("b", b, cfg, io);
     }
     {
@@ -658,8 +686,8 @@ TEST_F(LayerGraphTest, Sequence_multiple_paths) {
         PTree p;
         p.put("pc", "pc1");
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outc");
+        io.Input(LayerC::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerC::KEY_OUTPUT_RESPONSE, "outc");
         to.Add("c", c, cfg, io);
     }
     {
@@ -743,8 +771,8 @@ TEST_F(LayerGraphTest, Sequence_multiple_paths_signal_feature) {
         PTree p;
         p.put("pb", "pb1");
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
         to.Add("b", b, cfg, io);
     }
     {
@@ -752,8 +780,8 @@ TEST_F(LayerGraphTest, Sequence_multiple_paths_signal_feature) {
         PTree p;
         p.put("pc", "pc1");
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outc");
+        io.Input(LayerC::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerC::KEY_OUTPUT_RESPONSE, "outc");
         to.Add("c", c, cfg, io);
     }
     {
@@ -814,6 +842,46 @@ TEST_F(LayerGraphTest, Reconfigure_empty) {
     EXPECT_EQ(0, LayerGraph().Reconfigure<int>("x", 5));
 }
 
+TEST_F(LayerGraphTest, Reconfigure_count) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("p", 1);
+        p.put("pb", "pb1");
+        cfg.Params(p);
+        LayerIONames io;
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("p", 1);
+        p.put("pa", "pa1");
+        cfg.Params(p);
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+
+    EXPECT_EQ(1, to.Reconfigure("pa", "pa2")) << "Parameter key defined once in one layer only.";
+    EXPECT_EQ(2, to.Reconfigure("p", 5)) << "Parameter key defined once for both layers.";
+    EXPECT_EQ(0, to.Reconfigure("foo", "bar")) << "No modifications for non-existent paramter key";
+
+    // Reconfigure with new type
+    EXPECT_EQ(1, to.Reconfigure("pa", 1));
+}
+
+/**
+ * @brief inspect signal features after multiple reconfigurations
+ */
 TEST_F(LayerGraphTest, Reconfigure) {
 
     LayerGraph to;
@@ -823,17 +891,18 @@ TEST_F(LayerGraphTest, Reconfigure) {
     {
         LayerConfig cfg;
         PTree p;
-        p.put("pb", "pb1");
+        p.put(LayerB::PARAM_CAPITAL, true);
         cfg.Params(p);
         LayerIONames io;
-        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
-        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
         to.Add("b", b, cfg, io);
     }
     {
         LayerConfig cfg;
         PTree p;
-        p.put("pa", "pa1");
+        p.put(LayerA::PARAM_CAPITAL, true);
+        p.put(LayerA::PARAM_DUPLICATE, false);
         cfg.Params(p);
         LayerIONames io;
         io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
@@ -841,7 +910,69 @@ TEST_F(LayerGraphTest, Reconfigure) {
         to.Add("a", a, cfg, io);
     }
 
-    to.Reconfigure("pa", "pa2");
+    to.AddOutput("outb");
+    to.Configure();
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    Mat1f in = Mat1f(1, 1, 1.f);
+    Mat1f expected = in.clone();
+
+    Signal sig;
+    sig.Append("ina", in);
+
+    for(auto const& l : layers) {
+
+        l->Activate(sig);
+        l->Response(sig);
+    }
+
+    expected.push_back(Mat1f(VecF({static_cast<float>('A'),
+                                   static_cast<float>('B')})).reshape(1, 2));
+
+    // inspect signal features from initial configuration
+
+    EXPECT_MAT_EQ(expected.rowRange(0, 2), sig.MostRecentMat1f("outa"));
+    EXPECT_MAT_EQ(expected, sig.MostRecentMat1f("outb"));
+
+    EXPECT_EQ(1, to.Reconfigure(LayerA::PARAM_DUPLICATE, true)) << "Parameter key defined once in one layer only.";
+
+    sig.Clear();
+    sig.Append("ina", in);
+
+    for(auto const& l : layers) {
+
+        l->Activate(sig);
+        l->Response(sig);
+    }
+
+    expected = in.clone();
+    expected.push_back(Mat1f(VecF({static_cast<float>('A'),
+                                   static_cast<float>('A'),
+                                   static_cast<float>('B')})).reshape(1, 3));
+
+    EXPECT_MAT_EQ(expected.rowRange(0, 3), sig.MostRecentMat1f("outa"));
+    EXPECT_MAT_EQ(expected, sig.MostRecentMat1f("outb"));
+
+    EXPECT_EQ(2, to.Reconfigure(LayerB::PARAM_CAPITAL, false)) << "Parameter key defined once in one layer only.";
+
+    sig.Clear();
+    sig.Append("ina", in);
+
+    for(auto const& l : layers) {
+
+        l->Activate(sig);
+        l->Response(sig);
+    }
+
+    expected = in.clone();
+    expected.push_back(Mat1f(VecF({static_cast<float>('a'),
+                                   static_cast<float>('a'),
+                                   static_cast<float>('b')})).reshape(1, 3));
+
+    EXPECT_MAT_EQ(expected.rowRange(0, 3), sig.MostRecentMat1f("outa"));
+    EXPECT_MAT_EQ(expected, sig.MostRecentMat1f("outb"));
 }
 
 //TEST_F(LayerGraphTest, DISABLED_print) {
