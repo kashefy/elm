@@ -19,11 +19,11 @@ using namespace std;
 using namespace boost;
 using namespace elm;
 
-LayerGraph::LayerGraph()
+LayerGraph_Impl::LayerGraph_Impl()
 {
 }
 
-void LayerGraph::Add(const VtxName &name,
+void LayerGraph_Impl::Add(const VtxName &name,
                      const LayerShared &layer_ptr,
                      const LayerConfig &cfg,
                      const LayerIONames &io)
@@ -44,7 +44,7 @@ void LayerGraph::Add(const VtxName &name,
     property_map<GraphLayerType, vertex_index1_t>::type
             vtx_layer_lut = get(vertex_index1, g_);
 
-    LayerWrap layer_vtx;
+    LayerVertex layer_vtx;
     layer_vtx.Set(cfg, io, layer_ptr);
     vtx_layer_lut[vtx] = layer_vtx;
 
@@ -92,7 +92,7 @@ void LayerGraph::Add(const VtxName &name,
     } // outputs
 }
 
-void LayerGraph::ClearActive() {
+void LayerGraph_Impl::ClearActive() {
 
     property_map<GraphLayerType, vertex_index1_t>::type
             vtx_layer_lut = get(vertex_index1, g_);
@@ -104,7 +104,7 @@ void LayerGraph::ClearActive() {
     }
 }
 
-void LayerGraph::findParents(const VtxDescriptor &child, std::vector<VtxDescriptor> &parents) const
+void LayerGraph_Impl::findParents(const VtxDescriptor &child, std::vector<VtxDescriptor> &parents) const
 {
     GraphLayerType::inv_adjacency_iterator itr, end;
     for(tie(itr, end) = inv_adjacent_vertices(child, g_);
@@ -117,7 +117,7 @@ void LayerGraph::findParents(const VtxDescriptor &child, std::vector<VtxDescript
     }
 }
 
-void LayerGraph::Sequence(std::vector<LayerShared> &layer_seq) {
+void LayerGraph_Impl::Sequence(std::vector<LayerShared> &layer_seq) {
 
     std::vector<VtxDescriptor > q;
     Toposort(q);
@@ -136,7 +136,7 @@ void LayerGraph::Sequence(std::vector<LayerShared> &layer_seq) {
     }
 }
 
-void LayerGraph::Configure() {
+void LayerGraph_Impl::Configure() {
 
     property_map<GraphLayerType, vertex_index1_t>::type
             vtx_layer_lut = get(vertex_index1, g_);
@@ -151,7 +151,7 @@ void LayerGraph::Configure() {
     }
 }
 
-void LayerGraph::AddOutput(const std::string &name) {
+void LayerGraph_Impl::AddOutput(const std::string &name) {
 
     property_map<GraphLayerType, vertex_index1_t>::type
             vtx_layer_lut = get(vertex_index1, g_);
@@ -203,14 +203,14 @@ void LayerGraph::AddOutput(const std::string &name) {
     }
 }
 
-SetS LayerGraph::Outputs() const {
+SetS LayerGraph_Impl::Outputs() const {
 
     SetS outputs;
 
     GraphLayerTraits::vertex_iterator v, end;
     for(tie(v, end) = vertices(g_); v != end; ++v) {
 
-        const LayerWrap &tmp = boost::get(vertex_index1, g_, *v);
+        const LayerVertex &tmp = boost::get(vertex_index1, g_, *v);
         if(tmp.is_active) {
 
             VecS vtx_outs = elm::Values(tmp.io.OutputMap());
@@ -221,14 +221,14 @@ SetS LayerGraph::Outputs() const {
     return outputs;
 }
 
-SetS LayerGraph::Inputs() const {
+SetS LayerGraph_Impl::Inputs() const {
 
     SetS inputs;
 
     GraphLayerTraits::vertex_iterator v, end;
     for(tie(v, end) = vertices(g_); v != end; ++v) {
 
-        const LayerWrap &tmp = boost::get(vertex_index1, g_, *v);
+        const LayerVertex &tmp = boost::get(vertex_index1, g_, *v);
         if(tmp.is_active) {
 
             VecS vtx_ins = elm::Values(tmp.io.InputMap());
@@ -253,13 +253,13 @@ SetS LayerGraph::Inputs() const {
     return inputs;
 }
 
-void LayerGraph::Toposort(std::vector<VtxDescriptor > &q) {
+void LayerGraph_Impl::Toposort(std::vector<VtxDescriptor > &q) {
 
     q.clear();
     topological_sort(g_, std::back_inserter(q));
 }
 
-VtxColor LayerGraph::genVtxColor(const VtxName &name,
+VtxColor LayerGraph_Impl::genVtxColor(const VtxName &name,
                      const LayerConfig &cfg,
                      const LayerIONames &io) const {
 

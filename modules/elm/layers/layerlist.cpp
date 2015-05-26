@@ -11,7 +11,7 @@
 
 using namespace elm;
 
-LayerList::~LayerList()
+LayerGraph::~LayerGraph()
 {
     if(impl_ == NULL) {
 
@@ -20,7 +20,7 @@ LayerList::~LayerList()
     impl_ = NULL;
 }
 
-LayerList::LayerList()
-    : impl_(new LayerGraph)
+LayerGraph::LayerGraph()
+    : impl_(new LayerGraph_Impl)
 {
 }

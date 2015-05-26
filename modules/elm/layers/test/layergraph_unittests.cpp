@@ -108,18 +108,18 @@ public:
     }
 };
 
-class LayerGraphTest : public ::testing::Test
+class LayerGraphImplTest : public ::testing::Test
 {
 };
 
-TEST_F(LayerGraphTest, ClearActive_empty) {
+TEST_F(LayerGraphImplTest, ClearActive_empty) {
 
-    EXPECT_NO_THROW(LayerGraph().ClearActive());
+    EXPECT_NO_THROW(LayerGraph_Impl().ClearActive());
 }
 
-TEST_F(LayerGraphTest, ClearActive) {
+TEST_F(LayerGraphImplTest, ClearActive) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
 
@@ -141,14 +141,14 @@ TEST_F(LayerGraphTest, ClearActive) {
     EXPECT_TRUE(to.Outputs().empty());
 }
 
-TEST_F(LayerGraphTest, Outputs_empty) {
+TEST_F(LayerGraphImplTest, Outputs_empty) {
 
-    EXPECT_TRUE(LayerGraph().Outputs().empty());
+    EXPECT_TRUE(LayerGraph_Impl().Outputs().empty());
 }
 
-TEST_F(LayerGraphTest, Outputs_single) {
+TEST_F(LayerGraphImplTest, Outputs_single) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
 
@@ -170,14 +170,14 @@ TEST_F(LayerGraphTest, Outputs_single) {
     EXPECT_NE(SetS({"ina"}), to.Outputs()) << "Outputs confused with inputs.";
 }
 
-TEST_F(LayerGraphTest, Inputs_empty) {
+TEST_F(LayerGraphImplTest, Inputs_empty) {
 
-    EXPECT_TRUE(LayerGraph().Inputs().empty());
+    EXPECT_TRUE(LayerGraph_Impl().Inputs().empty());
 }
 
-TEST_F(LayerGraphTest, Inputs_single) {
+TEST_F(LayerGraphImplTest, Inputs_single) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
 
@@ -199,9 +199,9 @@ TEST_F(LayerGraphTest, Inputs_single) {
     EXPECT_NE(SetS({"outa"}), to.Inputs()) << "Inputs confused with outputs.";
 }
 
-TEST_F(LayerGraphTest, Inputs_chained) {
+TEST_F(LayerGraphImplTest, Inputs_chained) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);
@@ -236,9 +236,9 @@ TEST_F(LayerGraphTest, Inputs_chained) {
     EXPECT_NE(SetS({"outa"}), to.Inputs()) << "Inputs confused with outputs.";
 }
 
-TEST_F(LayerGraphTest, Inputs_multiple) {
+TEST_F(LayerGraphImplTest, Inputs_multiple) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);
@@ -278,9 +278,9 @@ TEST_F(LayerGraphTest, Inputs_multiple) {
 /**
  * @brief add another layer to the graph with its own input but don't activate it
  */
-TEST_F(LayerGraphTest, Inputs_single_active_only) {
+TEST_F(LayerGraphImplTest, Inputs_single_active_only) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);
@@ -316,9 +316,9 @@ TEST_F(LayerGraphTest, Inputs_single_active_only) {
     EXPECT_NE(to.Outputs(), to.Inputs()) << "Inputs confused with outputs.";
 }
 
-TEST_F(LayerGraphTest, AddOutput) {
+TEST_F(LayerGraphImplTest, AddOutput) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);
@@ -387,9 +387,9 @@ TEST_F(LayerGraphTest, AddOutput) {
     to.ClearActive();
 }
 
-TEST_F(LayerGraphTest, AddOutput_invalid) {
+TEST_F(LayerGraphImplTest, AddOutput_invalid) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     EXPECT_THROW(to.AddOutput("outa"), ExceptionKeyError);
 
@@ -409,9 +409,9 @@ TEST_F(LayerGraphTest, AddOutput_invalid) {
     EXPECT_THROW(to.AddOutput("outa"), ExceptionKeyError);
 }
 
-TEST_F(LayerGraphTest, GenVtxColor_name) {
+TEST_F(LayerGraphImplTest, GenVtxColor_name) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
     VtxColor a = to.genVtxColor("a", LayerConfig(), LayerIONames());
 
     EXPECT_EQ(a, to.genVtxColor("a", LayerConfig(), LayerIONames()));
@@ -420,9 +420,9 @@ TEST_F(LayerGraphTest, GenVtxColor_name) {
     EXPECT_NE(a, to.genVtxColor("b", LayerConfig(), LayerIONames()));
 }
 
-TEST_F(LayerGraphTest, GenVtxColor_cfg) {
+TEST_F(LayerGraphImplTest, GenVtxColor_cfg) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
     LayerConfig cfg;
     VtxColor a = to.genVtxColor("a", cfg, LayerIONames());
 
@@ -475,9 +475,9 @@ TEST_F(LayerGraphTest, GenVtxColor_cfg) {
     EXPECT_EQ(a1, a2);
 }
 
-TEST_F(LayerGraphTest, GenVtxColor_io_input) {
+TEST_F(LayerGraphImplTest, GenVtxColor_io_input) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
     LayerIONames io;
 
     io.Input("foo", "bar");
@@ -501,9 +501,9 @@ TEST_F(LayerGraphTest, GenVtxColor_io_input) {
     EXPECT_NE(a, to.genVtxColor("a", LayerConfig(), io2)) << "Match inspite of different keys";
 }
 
-TEST_F(LayerGraphTest, GenVtxColor_io_output) {
+TEST_F(LayerGraphImplTest, GenVtxColor_io_output) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
     LayerIONames io;
 
     io.Output("foo", "bar");
@@ -527,9 +527,9 @@ TEST_F(LayerGraphTest, GenVtxColor_io_output) {
     EXPECT_NE(a, to.genVtxColor("a", LayerConfig(), io2)) << "Match inspite of different keys";
 }
 
-TEST_F(LayerGraphTest, Sequence_appends) {
+TEST_F(LayerGraphImplTest, Sequence_appends) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);
@@ -578,9 +578,9 @@ TEST_F(LayerGraphTest, Sequence_appends) {
     EXPECT_EQ(layers[1+2], layers[3+2]);
 }
 
-TEST_F(LayerGraphTest, Sequence_linear) {
+TEST_F(LayerGraphImplTest, Sequence_linear) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);
@@ -663,9 +663,9 @@ TEST_F(LayerGraphTest, Sequence_linear) {
     EXPECT_FALSE(sig.Exists("outd"));
 }
 
-TEST_F(LayerGraphTest, Sequence_multiple_paths) {
+TEST_F(LayerGraphImplTest, Sequence_multiple_paths) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);
@@ -757,9 +757,9 @@ TEST_F(LayerGraphTest, Sequence_multiple_paths) {
 }
 
 
-TEST_F(LayerGraphTest, Sequence_multiple_paths_signal_feature) {
+TEST_F(LayerGraphImplTest, Sequence_multiple_paths_signal_feature) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);
@@ -837,14 +837,14 @@ TEST_F(LayerGraphTest, Sequence_multiple_paths_signal_feature) {
     EXPECT_MAT_EQ(expected_d, sig.MostRecentMat1f("outd"));
 }
 
-TEST_F(LayerGraphTest, Reconfigure_empty) {
+TEST_F(LayerGraphImplTest, Reconfigure_empty) {
 
-    EXPECT_EQ(0, LayerGraph().Reconfigure<int>("x", 5));
+    EXPECT_EQ(0, LayerGraph_Impl().Reconfigure<int>("x", 5));
 }
 
-TEST_F(LayerGraphTest, Reconfigure_count) {
+TEST_F(LayerGraphImplTest, Reconfigure_count) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);
@@ -882,9 +882,9 @@ TEST_F(LayerGraphTest, Reconfigure_count) {
 /**
  * @brief inspect signal features after multiple reconfigurations
  */
-TEST_F(LayerGraphTest, Reconfigure) {
+TEST_F(LayerGraphImplTest, Reconfigure) {
 
-    LayerGraph to;
+    LayerGraph_Impl to;
 
     std::shared_ptr<base_Layer> a(new LayerA);
     std::shared_ptr<base_Layer> b(new LayerB);

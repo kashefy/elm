@@ -5,8 +5,8 @@
 // 3-clause BSD License
 //
 //M*/
-#ifndef _ELM_LAYERS_LAYERLGRAPH_H_
-#define _ELM_LAYERS_LAYERLGRAPH_H_
+#ifndef _ELM_LAYERS_LAYERLGRAPH_IMPL_H_
+#define _ELM_LAYERS_LAYERLGRAPH_IMPL_H_
 
 #include <memory>
 #include <string>
@@ -21,11 +21,11 @@
 
 namespace elm {
 
-/** @brief wrap layer information
+/** @brief wrap layer information to store as vertex
  */
-struct LayerWrap {
+struct LayerVertex {
 
-    LayerWrap()
+    LayerVertex()
         : is_active(false)
     {}
 
@@ -66,7 +66,7 @@ typedef std::string VtxColor;
 typedef std::string VtxName;
 typedef boost::property<boost::vertex_color_t, VtxColor,
             boost::property<boost::vertex_name_t, VtxName,
-                boost::property<boost::vertex_index1_t, elm::LayerWrap,
+                boost::property<boost::vertex_index1_t, elm::LayerVertex,
                     boost::property<boost::vertex_index2_t, int> // idx (order)
                 > // layer
             > // name
@@ -94,13 +94,13 @@ namespace elm {
 class Signal;
 typedef std::set<std::string> SetS;     ///< convinience typedef for set of strings
 
-/** @brief Layer Graph for managing layer pipelines
+/** @brief Layer Graph implentatuib for managing layer pipelines
   * credit: J. Turcot
   */
-class LayerGraph
+class LayerGraph_Impl
 {
 public:
-    LayerGraph();
+    LayerGraph_Impl();
 
     /**
      * @brief Add layer info as vertex to graph
@@ -195,7 +195,7 @@ protected:
 namespace elm {
 
 template <class TVal>
-int LayerGraph::Reconfigure(std::string key, const TVal& value) {
+int LayerGraph_Impl::Reconfigure(std::string key, const TVal& value) {
 
     int count = 0;
 
@@ -232,4 +232,4 @@ int LayerGraph::Reconfigure(std::string key, const TVal& value) {
 
 } // namespace elm
 
-#endif // _ELM_LAYERS_LAYERLGRAPH_H_
+#endif // _ELM_LAYERS_LAYERLGRAPH_IMPL_H_

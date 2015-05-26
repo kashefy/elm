@@ -1,12 +1,12 @@
-/*M///////////////////////////////////////////////////////////////////////////////////////
+﻿/*M///////////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright (c) 2015, Youssef Kashef
 // Copyright (c) 2015, ELM Library Project
 // 3-clause BSD License
 //
 //M*/
-#ifndef _ELM_LAYERS_LAYERLIST_H_
-#define _ELM_LAYERS_LAYERLIST_H_
+#ifndef _ELM_LAYERS_LAYERGRAPH_H_
+#define _ELM_LAYERS_LAYERGRAPH_H_
 
 #include <string>
 
@@ -22,14 +22,14 @@ class base_Layer;
 class LayerConfig;
 class LayerIONames;
 class Signal;
-class LayerGraph;
+class LayerGraph_Impl;
 
-class LayerList
+class LayerGraph
 {
 public:
-    ~LayerList();
+    ~LayerGraph();
 
-    LayerList();
+    LayerGraph();
 
     void Add(std::shared_ptr<base_Layer> &layer, const LayerConfig &cfg, const LayerIONames &io);
 
@@ -40,9 +40,9 @@ public:
     bool HasInputs(const Signal &s) const;
 
 protected:
-    LayerGraph *impl_;
+    LayerGraph_Impl *impl_;
 };
 
 } // namespace elm
 
-#endif // _ELM_LAYERS_LAYERLIST_H_
+#endif // _ELM_LAYERS_LAYERGRAPH_H_
