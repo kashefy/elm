@@ -16,6 +16,7 @@
 #include "elm/core/signal.h"
 #include "elm/layers/layers_interim/base_featuretransformationlayer.h"
 #include "elm/ts/container.h"
+#include "elm/ts/mat_assertions.h"
 
 using cv::Mat1f;
 using namespace elm;
@@ -27,15 +28,12 @@ class LayerA : public base_FeatureTransformationLayer
 public:
     void Clear() {}
 
-    void Reconfigure(const LayerConfig &config) {
-
-
-    }
+    void Reconfigure(const LayerConfig &config) {}
 
     void Activate(const Signal &signal) {
 
-        //ELM_COUT_VAR("LayerA::Activate()")
-        m_ = Mat1f(1, 1, 3.f);
+        m_ = signal.MostRecentMat1f(name_input_).clone();
+        m_.push_back(Mat1f(1, 1, static_cast<float>('a')));
     }
 };
 
@@ -44,15 +42,12 @@ class LayerB : public base_FeatureTransformationLayer
 public:
     void Clear() {}
 
-    void Reconfigure(const LayerConfig &config) {
-
-
-    }
+    void Reconfigure(const LayerConfig &config) {}
 
     void Activate(const Signal &signal) {
 
-        //ELM_COUT_VAR("LayerB::Activate()")
-        m_ = Mat1f(1, 1, 4.f);
+        m_ = signal.MostRecentMat1f(name_input_).clone();
+        m_.push_back(Mat1f(1, 1, static_cast<float>('b')));
     }
 };
 
@@ -61,15 +56,12 @@ class LayerC : public base_FeatureTransformationLayer
 public:
     void Clear() {}
 
-    void Reconfigure(const LayerConfig &config) {
-
-
-    }
+    void Reconfigure(const LayerConfig &config) {}
 
     void Activate(const Signal &signal) {
 
-        //ELM_COUT_VAR("LayerC::Activate()")
-        m_ = Mat1f(1, 1, 4.f);
+        m_ = signal.MostRecentMat1f(name_input_).clone();
+        m_.push_back(Mat1f(1, 1, static_cast<float>('c')));
     }
 };
 
@@ -78,21 +70,17 @@ class LayerD : public base_FeatureTransformationLayer
 public:
     void Clear() {}
 
-    void Reconfigure(const LayerConfig &config) {
-
-
-    }
+    void Reconfigure(const LayerConfig &config) {}
 
     void Activate(const Signal &signal) {
 
-        //ELM_COUT_VAR("LayerD::Activate()")
-        m_ = Mat1f(1, 1, 5.f);
+        m_ = signal.MostRecentMat1f(name_input_).clone();
+        m_.push_back(Mat1f(1, 1, static_cast<float>('d')));
     }
 };
 
 class LayerGraphTest : public ::testing::Test
 {
-
 };
 
 TEST_F(LayerGraphTest, ClearActive_empty) {
@@ -647,7 +635,6 @@ TEST_F(LayerGraphTest, Sequence_linear) {
     EXPECT_FALSE(sig.Exists("outd"));
 }
 
-
 TEST_F(LayerGraphTest, Sequence_multiple_paths) {
 
     LayerGraph to;
@@ -739,6 +726,87 @@ TEST_F(LayerGraphTest, Sequence_multiple_paths) {
     EXPECT_TRUE(sig.Exists("outb"));
     EXPECT_TRUE(sig.Exists("outc"));
     EXPECT_TRUE(sig.Exists("outd"));
+}
+
+
+TEST_F(LayerGraphTest, Sequence_multiple_paths_signal_feature) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    std::shared_ptr<base_Layer> c(new LayerC);
+    std::shared_ptr<base_Layer> d(new LayerD);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pc", "pc1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outc");
+        to.Add("c", c, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        LayerIONames io;
+        io.Input(LayerD::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerD::KEY_OUTPUT_RESPONSE, "outd");
+        to.Add("d", d, cfg, io);
+    }
+    to.AddOutput("outc");
+    to.AddOutput("outd");
+
+    to.Configure();
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    EXPECT_SIZE(4, layers);
+
+    Mat1f in = Mat1f(1, 1, 1.f);
+    Mat1f expected = in.clone();
+
+    Signal sig;
+    sig.Append("ina", in);
+
+    for(size_t i=0; i<layers.size(); i++) {
+
+        layers[i]->Activate(sig);
+        layers[i]->Response(sig);
+    }
+
+    expected.push_back(Mat1f(1, 1, static_cast<float>('a')));
+    expected.push_back(Mat1f(1, 1, static_cast<float>('b')));
+
+    EXPECT_MAT_EQ(expected.rowRange(0, 2), sig.MostRecentMat1f("outa"));
+    EXPECT_MAT_EQ(expected.rowRange(0, 3), sig.MostRecentMat1f("outb"));
+
+    Mat1f expected_c = expected.clone();
+    expected_c.push_back(Mat1f(1, 1, static_cast<float>('c')));
+    EXPECT_MAT_EQ(expected_c, sig.MostRecentMat1f("outc"));
+
+    Mat1f expected_d = expected.clone();
+    expected_d.push_back(Mat1f(1, 1, static_cast<float>('d')));
+    EXPECT_MAT_EQ(expected_d, sig.MostRecentMat1f("outd"));
 }
 
 TEST_F(LayerGraphTest, Reconfigure_empty) {
