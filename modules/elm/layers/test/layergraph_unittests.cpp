@@ -952,6 +952,8 @@ TEST_F(LayerGraphTest, Reconfigure) {
                                    static_cast<float>('A'),
                                    static_cast<float>('B')})).reshape(1, 3));
 
+    // inspect signal features after altering paramter for 1 layer
+
     EXPECT_MAT_EQ(expected.rowRange(0, 3), sig.MostRecentMat1f("outa"));
     EXPECT_MAT_EQ(expected, sig.MostRecentMat1f("outb"));
 
@@ -970,6 +972,8 @@ TEST_F(LayerGraphTest, Reconfigure) {
     expected.push_back(Mat1f(VecF({static_cast<float>('a'),
                                    static_cast<float>('a'),
                                    static_cast<float>('b')})).reshape(1, 3));
+
+    // inspect signal features after altering common paramter
 
     EXPECT_MAT_EQ(expected.rowRange(0, 3), sig.MostRecentMat1f("outa"));
     EXPECT_MAT_EQ(expected, sig.MostRecentMat1f("outb"));
