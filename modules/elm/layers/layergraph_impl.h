@@ -182,7 +182,6 @@ protected:
     void Toposort(std::vector<VtxDescriptor > &q);
 
     GraphLayerType g_;  ///< graph member
-    SetS inputs_;
 };
 
 } // namespace elm
