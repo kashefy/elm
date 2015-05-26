@@ -11,6 +11,9 @@
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/archive/xml_iarchive.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/graph/adj_list_serialize.hpp>
 
@@ -96,9 +99,9 @@ void LayerGraph::Save(const std::string &file_path) const {
     }
 
     ofstream stream(p.string().c_str());
-    boost::archive::text_oarchive oa(stream);
+    boost::archive::xml_oarchive oa(stream);
 
-    detail::Save(oa, impl_->g_);
+    oa & boost::serialization::make_nvp("graph", impl_->g_);
 }
 
 void LayerGraph::Load(const std::string &file_path) {
@@ -120,9 +123,9 @@ void LayerGraph::Load(const std::string &file_path) {
     }
 
     ifstream stream(p.string().c_str());
-    boost::archive::text_iarchive oa(stream);
+    boost::archive::xml_iarchive oa(stream);
 
-    detail::Load(oa, impl_->g_);
+    oa & boost::serialization::make_nvp("graph", impl_->g_);
 }
 
 // template specializations for LayerGraph::Reconfigure()

@@ -879,7 +879,7 @@ TEST_F(LayerGraphSerializationTest, Load_invalid) {
 
     EXPECT_THROW(LayerGraph().Load(p.string()), ExceptionFileIOError);
 
-    p = p / "g.txt";
+    p = p / "g.xml";
 
     ASSERT_FALSE(bfs::is_regular_file(p));
 
@@ -888,7 +888,7 @@ TEST_F(LayerGraphSerializationTest, Load_invalid) {
 
 TEST_F(LayerGraphSerializationTest, Serialize) {
 
-    bfs::path p = bfs::path("foo") / "g.txt";
+    bfs::path p = bfs::path("foo") / "g.xml";
 
     {
         LayerGraph to;

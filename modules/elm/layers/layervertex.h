@@ -42,26 +42,26 @@ struct LayerVertex {
     template<class Archive>
     void save(Archive & ar, const unsigned int version) const {
 
-        ar & name;
+        ar & BOOST_SERIALIZATION_NVP(name);
 
-        PTree p = cfg.Params();
-        ar & p;
+        PTree params = cfg.Params();
+        ar & BOOST_SERIALIZATION_NVP(params);
 
-        ar & io.InputMap();
-        ar & io.OutputMap();
+        ar & boost::serialization::make_nvp("inputs", io.InputMap());
+        ar & boost::serialization::make_nvp("outputs", io.OutputMap());
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int version) {
 
-        ar & name;
+        ar & BOOST_SERIALIZATION_NVP(name);
 
-        PTree p;
-        ar & p;
-        cfg.Params(p);
+        PTree params;
+        ar & BOOST_SERIALIZATION_NVP(params);
+        cfg.Params(params);
 
         MapSS m;
-        ar & m;
+        ar & boost::serialization::make_nvp("inputs", m);
 
         for(MapSS::const_iterator itr=m.begin(); itr != m.end(); ++itr) {
 
@@ -69,7 +69,7 @@ struct LayerVertex {
         }
 
         m.clear();
-        ar & m;
+        ar & boost::serialization::make_nvp("outputs", m);
 
         for(MapSS::const_iterator itr=m.begin(); itr != m.end(); ++itr) {
 

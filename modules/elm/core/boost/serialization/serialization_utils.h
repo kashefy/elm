@@ -13,14 +13,12 @@ namespace elm {
 namespace detail {
 
 template<class Tarchive, class TObj>
-void Save(Tarchive &ar, const TObj &obj)
-{
+void Save(Tarchive &ar, const TObj &obj) {
     ar & obj;
 }
 
 template<class Tarchive, class TObj>
-void Load(Tarchive &ar, TObj &obj)
-{
+void Load(Tarchive &ar, TObj &obj) {
     ar & obj;
 }
 
