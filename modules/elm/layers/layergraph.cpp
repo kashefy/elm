@@ -63,6 +63,15 @@ void LayerGraph::Sequence(std::vector<LayerShared> &layer_seq) {
     impl_->Sequence(layer_seq);
 }
 
+void LayerGraph::ActivateForResponse(const std::vector<LayerShared> &layers, Signal &signal) {
+
+    for(auto const& l : layers) {
+
+        l->Activate(signal);
+        l->Response(signal);
+    }
+}
+
 // template specializations for LayerGraph::Reconfigure()
 template <>
 int LayerGraph::Reconfigure<bool>(std::string key, const bool& value) {

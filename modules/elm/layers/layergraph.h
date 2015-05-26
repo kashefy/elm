@@ -86,6 +86,13 @@ public:
      */
     void Sequence(std::vector<LayerShared> &layer_seq);
 
+    /**
+     * @brief Process active layers and gather their response
+     * @param[in] layers ordered list of layers
+     * @param s signal with external input, populated with layer responses
+     */
+    void ActivateForResponse(const std::vector<LayerShared> &layers, Signal &s);
+
 protected:
     LayerGraph_Impl *impl_;
 };

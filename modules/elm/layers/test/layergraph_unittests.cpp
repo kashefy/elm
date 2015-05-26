@@ -698,11 +698,7 @@ TEST_F(LayerGraphTest, Sequence_multiple_paths_signal_feature) {
     Signal sig;
     sig.Append("ina", in);
 
-    for(size_t i=0; i<layers.size(); i++) {
-
-        layers[i]->Activate(sig);
-        layers[i]->Response(sig);
-    }
+    to.ActivateForResponse(layers, sig);
 
     expected.push_back(Mat1f(1, 1, static_cast<float>('a')));
     expected.push_back(Mat1f(1, 1, static_cast<float>('b')));
@@ -804,12 +800,7 @@ TEST_F(LayerGraphTest, Reconfigure) {
 
     Signal sig;
     sig.Append("ina", in);
-
-    for(auto const& l : layers) {
-
-        l->Activate(sig);
-        l->Response(sig);
-    }
+    to.ActivateForResponse(layers, sig);
 
     expected.push_back(Mat1f(VecF({static_cast<float>('A'),
                                    static_cast<float>('B')})).reshape(1, 2));
@@ -823,12 +814,7 @@ TEST_F(LayerGraphTest, Reconfigure) {
 
     sig.Clear();
     sig.Append("ina", in);
-
-    for(auto const& l : layers) {
-
-        l->Activate(sig);
-        l->Response(sig);
-    }
+    to.ActivateForResponse(layers, sig);
 
     expected = in.clone();
     expected.push_back(Mat1f(VecF({static_cast<float>('A'),
@@ -844,12 +830,7 @@ TEST_F(LayerGraphTest, Reconfigure) {
 
     sig.Clear();
     sig.Append("ina", in);
-
-    for(auto const& l : layers) {
-
-        l->Activate(sig);
-        l->Response(sig);
-    }
+    to.ActivateForResponse(layers, sig);
 
     expected = in.clone();
     expected.push_back(Mat1f(VecF({static_cast<float>('a'),
