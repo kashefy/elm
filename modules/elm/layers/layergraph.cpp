@@ -7,12 +7,18 @@
 //M*/
 #include "elm/layers/layergraph.h"
 
+#include <fstream>
+
+#include <boost/archive/text_oarchive.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/graph/adj_list_serialize.hpp>
 
 #include "elm/core/exception.h"
+#include "elm/core/boost/serialization/serialization_utils.h"
 #include "elm/layers/layergraph_impl.h"
 
 namespace bfs=boost::filesystem;
+using namespace std;
 using namespace elm;
 
 LayerGraph::~LayerGraph()
@@ -84,6 +90,11 @@ void LayerGraph::Save(const std::string &file_path) const {
 
         ELM_THROW_FILEIO_ERROR("Path to regular file required to save layer graph.");
     }
+
+    ofstream stream(p.string().c_str());
+    boost::archive::text_oarchive oa(stream);
+
+    detail::Save(oa, impl_->g_);
 }
 
 // template specializations for LayerGraph::Reconfigure()

@@ -8,56 +8,13 @@
 #ifndef _ELM_LAYERS_LAYERLGRAPH_IMPL_H_
 #define _ELM_LAYERS_LAYERLGRAPH_IMPL_H_
 
-#include <memory>
 #include <string>
 
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
-#include "elm/core/base_Layer.h"
-#include "elm/core/layerconfig.h"
-#include "elm/core/typedefs_fwd.h"
-
 #include "elm/core/boost/ptree_utils_inl.h"
-
-namespace elm {
-
-/** @brief wrap layer information to store as vertex
- */
-struct LayerVertex {
-
-    LayerVertex()
-        : is_active(false)
-    {}
-
-    /**
-     * @brief Set necessary info
-     * @param _cfg configuration
-     * @param _io I/O names
-     * @param _ptr pointer to instance
-     */
-    void Set(const LayerConfig &_cfg,
-             const LayerIONames &_io,
-             const LayerShared &_ptr) {
-
-        cfg = _cfg;
-        io  = _io;
-        ptr = _ptr;
-    }
-
-    void Configure() {
-
-        ptr->Reset(cfg);
-        ptr->IONames(io);
-    }
-
-    LayerConfig cfg;    ///< configuration
-    LayerIONames io;    ///< I/O
-    LayerShared ptr;    ///< pointer to shared instance
-    bool is_active;     ///< flag if active or not
-};
-
-} // namespace elm
+#include "elm/layers/layervertex.h"
 
 typedef std::string EdgeName;
 typedef boost::property<boost::edge_name_t, EdgeName> EdgeProp;
@@ -95,6 +52,8 @@ typedef std::set<std::string> SetS;     ///< convinience typedef for set of stri
 class LayerGraph_Impl
 {
 public:
+    friend class LayerGraph;
+
     LayerGraph_Impl();
 
     /**
