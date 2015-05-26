@@ -1,0 +1,722 @@
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015, Youssef Kashef
+// Copyright (c) 2015, ELM Library Project
+// 3-clause BSD License
+//
+//M*/
+#include "elm/layers/layergraph.h"
+
+#include "gtest/gtest.h"
+
+#include "elm/core/debug_utils.h"
+#include "elm/core/exception.h"
+#include "elm/core/inputname.h"
+#include "elm/core/layerconfig.h"
+#include "elm/core/signal.h"
+#include "elm/layers/layers_interim/base_featuretransformationlayer.h"
+#include "elm/ts/container.h"
+#include "elm/ts/mat_assertions.h"
+
+using cv::Mat1f;
+using namespace elm;
+
+namespace {
+
+class LayerA : public base_FeatureTransformationLayer
+{
+public:
+    static const std::string PARAM_CAPITAL;     ///< parameter for capital letters
+    static const std::string PARAM_DUPLICATE;   ///< parameter for duplicating last row
+
+    void Clear() {}
+
+    void Reconfigure(const LayerConfig &config) {
+
+        do_capital_ = config.Params().get<bool>(PARAM_CAPITAL, false);
+        do_duplicate_ = config.Params().get<bool>(PARAM_DUPLICATE, false);
+    }
+
+    void Activate(const Signal &signal) {
+
+        m_ = signal.MostRecentMat1f(name_input_).clone();
+
+        char c = do_capital_ ? 'A' : 'a';
+        m_.push_back(Mat1f(1, 1, static_cast<float>(c)));
+
+        if(do_duplicate_) {
+
+            m_.push_back(m_.row(m_.rows-1));
+        }
+    }
+
+    bool do_capital_;    ///< flag for capital letters
+    bool do_duplicate_;  ///< flag for duplicating last row
+};
+const std::string LayerA::PARAM_CAPITAL      = "capital";
+const std::string LayerA::PARAM_DUPLICATE    = "dup";
+
+class LayerB : public base_FeatureTransformationLayer
+{
+public:
+    static const std::string PARAM_CAPITAL;    ///< parameter for capital letters
+
+    void Clear() {}
+
+    void Reconfigure(const LayerConfig &config) {
+
+        do_capital_ = config.Params().get<bool>(PARAM_CAPITAL, false);
+    }
+
+    void Activate(const Signal &signal) {
+
+        m_ = signal.MostRecentMat1f(name_input_).clone();
+
+        char c = do_capital_ ? 'B' : 'b';
+        m_.push_back(Mat1f(1, 1, static_cast<float>(c)));
+    }
+
+    bool do_capital_;
+};
+const std::string LayerB::PARAM_CAPITAL = "capital";
+
+class LayerC : public base_FeatureTransformationLayer
+{
+public:
+    void Clear() {}
+
+    void Reconfigure(const LayerConfig &config) {}
+
+    void Activate(const Signal &signal) {
+
+        m_ = signal.MostRecentMat1f(name_input_).clone();
+        m_.push_back(Mat1f(1, 1, static_cast<float>('c')));
+    }
+};
+
+class LayerD : public base_FeatureTransformationLayer
+{
+public:
+    void Clear() {}
+
+    void Reconfigure(const LayerConfig &config) {}
+
+    void Activate(const Signal &signal) {
+
+        m_ = signal.MostRecentMat1f(name_input_).clone();
+        m_.push_back(Mat1f(1, 1, static_cast<float>('d')));
+    }
+};
+
+class LayerGraphTest : public ::testing::Test
+{
+};
+
+TEST_F(LayerGraphTest, ClearActive_empty) {
+
+    EXPECT_NO_THROW(LayerGraph().ClearActive());
+}
+
+TEST_F(LayerGraphTest, ClearActive) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+
+    LayerConfig cfg;
+    PTree p;
+    p.put("pa", "pa1");
+    LayerIONames io;
+    io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+    io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+    to.Add("a", a, cfg, io);
+
+    ASSERT_TRUE(to.Outputs().empty());
+    to.AddOutput("outa");
+
+    ASSERT_FALSE(to.Outputs().empty());
+
+    to.ClearActive();
+
+    EXPECT_TRUE(to.Outputs().empty());
+}
+
+TEST_F(LayerGraphTest, Outputs_empty) {
+
+    EXPECT_TRUE(LayerGraph().Outputs().empty());
+}
+
+TEST_F(LayerGraphTest, Outputs_single) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+
+    LayerConfig cfg;
+    PTree p;
+    p.put("pa", "pa1");
+    LayerIONames io;
+    io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+    io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+    to.Add("a", a, cfg, io);
+
+    EXPECT_TRUE(to.Outputs().empty());
+    to.AddOutput("outa");
+
+    SetS outputs = to.Outputs();
+    ASSERT_FALSE(outputs.empty());
+
+    EXPECT_EQ(SetS({"outa"}), to.Outputs()) << "Unexpected outputs";
+    EXPECT_NE(SetS({"ina"}), to.Outputs()) << "Outputs confused with inputs.";
+}
+
+TEST_F(LayerGraphTest, Inputs_empty) {
+
+    EXPECT_TRUE(LayerGraph().Inputs().empty());
+}
+
+TEST_F(LayerGraphTest, Inputs_single) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+
+    LayerConfig cfg;
+    PTree p;
+    p.put("pa", "pa1");
+    LayerIONames io;
+    io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+    io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+    to.Add("a", a, cfg, io);
+
+    EXPECT_TRUE(to.Inputs().empty());
+    to.AddOutput("outa");
+
+    SetS inputs = to.Inputs();
+    ASSERT_FALSE(inputs.empty());
+
+    EXPECT_EQ(SetS({"ina"}), to.Inputs()) << "Unexpected inputs";
+    EXPECT_NE(SetS({"outa"}), to.Inputs()) << "Inputs confused with outputs.";
+}
+
+TEST_F(LayerGraphTest, Inputs_chained) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+
+    EXPECT_TRUE(to.Inputs().empty());
+    to.AddOutput("outb");
+
+    SetS inputs = to.Inputs();
+    ASSERT_FALSE(inputs.empty());
+    EXPECT_SIZE(1, to.Inputs());
+
+    EXPECT_EQ(SetS({"ina"}), to.Inputs()) << "Unexpected inputs";
+    EXPECT_NE(SetS({"outa"}), to.Inputs()) << "Inputs confused with outputs.";
+}
+
+TEST_F(LayerGraphTest, Inputs_multiple) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "inb");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+
+    EXPECT_TRUE(to.Inputs().empty());
+    to.AddOutput("outa");
+    to.AddOutput("outb");
+
+    SetS inputs = to.Inputs();
+    ASSERT_FALSE(inputs.empty());
+    EXPECT_SIZE(2, to.Inputs());
+
+    EXPECT_EQ(SetS({"ina", "inb"}), to.Inputs()) << "Unexpected inputs";
+    EXPECT_NE(SetS({"outa", "outb"}), to.Inputs()) << "Inputs confused with outputs.";
+    EXPECT_NE(to.Outputs(), to.Inputs()) << "Inputs confused with outputs.";
+}
+
+/**
+ * @brief add another layer to the graph with its own input but don't activate it
+ */
+TEST_F(LayerGraphTest, Inputs_single_active_only) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "inb");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+
+    EXPECT_TRUE(to.Inputs().empty());
+    to.AddOutput("outa");
+
+    SetS inputs = to.Inputs();
+    ASSERT_FALSE(inputs.empty());
+    EXPECT_SIZE(1, to.Inputs());
+
+    EXPECT_EQ(SetS({"ina"}), to.Inputs()) << "Unexpected inputs";
+    EXPECT_NE(SetS({"outa"}), to.Inputs()) << "Inputs confused with outputs.";
+    EXPECT_NE(to.Outputs(), to.Inputs()) << "Inputs confused with outputs.";
+}
+
+TEST_F(LayerGraphTest, AddOutput) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    std::shared_ptr<base_Layer> c(new LayerC);
+    std::shared_ptr<base_Layer> d(new LayerD);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerC::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerC::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pc", "pc1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outc");
+        to.Add("c", c, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pd", "pd1");
+        LayerIONames io;
+        io.Input(LayerD::KEY_INPUT_STIMULUS, "ind");
+        io.Output(LayerD::KEY_OUTPUT_RESPONSE, "outd");
+        to.Add("d", d, cfg, io);
+    }
+
+    to.AddOutput("outc");
+
+    EXPECT_EQ(SetS({"outc", "outb", "outa"}), to.Outputs()) << "Unexpected outputs";
+
+    to.ClearActive();
+
+    EXPECT_TRUE(to.Outputs().empty()) << "Outputs inspite of clearing active layers.";
+
+    to.AddOutput("outd");
+
+    EXPECT_EQ(SetS({"outd"}), to.Outputs()) << "Unexpected outputs";
+
+    to.ClearActive();
+
+    to.AddOutput("outb");
+
+    EXPECT_EQ(SetS({"outb", "outa"}), to.Outputs()) << "Unexpected outputs";
+
+    to.AddOutput("outd"); // add second output without clearing
+
+    EXPECT_EQ(SetS({"outb", "outa", "outd"}), to.Outputs()) << "Unexpected outputs";
+
+    to.ClearActive();
+}
+
+TEST_F(LayerGraphTest, AddOutput_invalid) {
+
+    LayerGraph to;
+
+    EXPECT_THROW(to.AddOutput("outa"), ExceptionKeyError);
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerA::KEY_INPUT_STIMULUS, "outb");
+        to.Add("b", a, cfg, io);
+    }
+
+    EXPECT_THROW(to.AddOutput("out"), ExceptionKeyError);
+    EXPECT_THROW(to.AddOutput("outa"), ExceptionKeyError);
+}
+
+TEST_F(LayerGraphTest, Sequence_appends) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    to.AddOutput("outb");
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    EXPECT_SIZE(2, layers);
+
+    to.Sequence(layers);
+
+    EXPECT_SIZE(2+2, layers) << "sequence not appended as expected.";
+
+    EXPECT_NE(layers[0], layers[1]);
+    EXPECT_EQ(layers[0], layers[2]);
+    EXPECT_EQ(layers[1], layers[3]);
+
+    to.Sequence(layers);
+
+    EXPECT_SIZE(2+2+2, layers) << "sequence not appended as expected.";
+
+    EXPECT_NE(layers[0], layers[1]);
+    EXPECT_EQ(layers[0], layers[2]);
+    EXPECT_EQ(layers[1], layers[3]);
+    EXPECT_EQ(layers[0+2], layers[2+2]);
+    EXPECT_EQ(layers[1+2], layers[3+2]);
+}
+
+TEST_F(LayerGraphTest, Sequence_linear) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    std::shared_ptr<base_Layer> c(new LayerC);
+    std::shared_ptr<base_Layer> d(new LayerD);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pc", "pc1");
+        LayerIONames io;
+        io.Input(LayerC::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerC::KEY_OUTPUT_RESPONSE, "outc");
+        to.Add("c", c, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        LayerIONames io;
+        io.Input(LayerD::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerD::KEY_OUTPUT_RESPONSE, "outd");
+        to.Add("d", d, cfg, io);
+    }
+    to.AddOutput("outc");
+
+    to.Configure();
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    EXPECT_SIZE(3, layers);
+
+    Signal sig;
+    sig.Append("ina", Mat1f(1, 1, 1.f));
+
+    EXPECT_FALSE(sig.Exists("outa"));
+    EXPECT_FALSE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[0]->Activate(sig);
+    layers[0]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_FALSE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[1]->Activate(sig);
+    layers[1]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_TRUE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[2]->Activate(sig);
+    layers[2]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_TRUE(sig.Exists("outb"));
+    EXPECT_TRUE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+}
+
+TEST_F(LayerGraphTest, Sequence_multiple_paths) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    std::shared_ptr<base_Layer> c(new LayerC);
+    std::shared_ptr<base_Layer> d(new LayerD);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pc", "pc1");
+        LayerIONames io;
+        io.Input(LayerC::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerC::KEY_OUTPUT_RESPONSE, "outc");
+        to.Add("c", c, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        LayerIONames io;
+        io.Input(LayerD::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerD::KEY_OUTPUT_RESPONSE, "outd");
+        to.Add("d", d, cfg, io);
+    }
+    to.AddOutput("outc");
+    to.AddOutput("outd");
+
+    to.Configure();
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    EXPECT_SIZE(4, layers);
+
+    Signal sig;
+    sig.Append("ina", Mat1f(1, 1, 1.f));
+
+    EXPECT_FALSE(sig.Exists("outa"));
+    EXPECT_FALSE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[0]->Activate(sig);
+    layers[0]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_FALSE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[1]->Activate(sig);
+    layers[1]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_TRUE(sig.Exists("outb"));
+    EXPECT_FALSE(sig.Exists("outc"));
+    EXPECT_FALSE(sig.Exists("outd"));
+
+    layers[2]->Activate(sig);
+    layers[2]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_TRUE(sig.Exists("outb"));
+    EXPECT_TRUE(sig.Exists("outc") ^ sig.Exists("outd")) << "Expecting only one response";
+
+    layers[3]->Activate(sig);
+    layers[3]->Response(sig);
+
+    EXPECT_TRUE(sig.Exists("outa"));
+    EXPECT_TRUE(sig.Exists("outb"));
+    EXPECT_TRUE(sig.Exists("outc"));
+    EXPECT_TRUE(sig.Exists("outd"));
+}
+
+
+TEST_F(LayerGraphTest, Sequence_multiple_paths_signal_feature) {
+
+    LayerGraph to;
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    std::shared_ptr<base_Layer> c(new LayerC);
+    std::shared_ptr<base_Layer> d(new LayerD);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerB::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerB::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pc", "pc1");
+        LayerIONames io;
+        io.Input(LayerC::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerC::KEY_OUTPUT_RESPONSE, "outc");
+        to.Add("c", c, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+    }
+    {
+        LayerConfig cfg;
+        LayerIONames io;
+        io.Input(LayerD::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerD::KEY_OUTPUT_RESPONSE, "outd");
+        to.Add("d", d, cfg, io);
+    }
+    to.AddOutput("outc");
+    to.AddOutput("outd");
+
+    to.Configure();
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    EXPECT_SIZE(4, layers);
+
+    Mat1f in = Mat1f(1, 1, 1.f);
+    Mat1f expected = in.clone();
+
+    Signal sig;
+    sig.Append("ina", in);
+
+    for(size_t i=0; i<layers.size(); i++) {
+
+        layers[i]->Activate(sig);
+        layers[i]->Response(sig);
+    }
+
+    expected.push_back(Mat1f(1, 1, static_cast<float>('a')));
+    expected.push_back(Mat1f(1, 1, static_cast<float>('b')));
+
+    EXPECT_MAT_EQ(expected.rowRange(0, 2), sig.MostRecentMat1f("outa"));
+    EXPECT_MAT_EQ(expected.rowRange(0, 3), sig.MostRecentMat1f("outb"));
+
+    Mat1f expected_c = expected.clone();
+    expected_c.push_back(Mat1f(1, 1, static_cast<float>('c')));
+    EXPECT_MAT_EQ(expected_c, sig.MostRecentMat1f("outc"));
+
+    Mat1f expected_d = expected.clone();
+    expected_d.push_back(Mat1f(1, 1, static_cast<float>('d')));
+    EXPECT_MAT_EQ(expected_d, sig.MostRecentMat1f("outd"));
+}
+
+} // annonymous namespace for unit tests
