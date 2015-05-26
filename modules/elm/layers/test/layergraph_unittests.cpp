@@ -90,24 +90,6 @@ public:
     }
 };
 
-class LayerGraphProtected : public LayerGraph
-{
-public:
-    LayerGraphProtected()
-        : LayerGraph()
-    {
-    }
-};
-
-class LayerGraphProtectedTest : public ::testing::Test
-{
-
-};
-
-TEST_F(LayerGraphProtectedTest, Test) {
-
-}
-
 class LayerGraphTest : public ::testing::Test
 {
 
