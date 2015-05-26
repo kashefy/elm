@@ -78,7 +78,7 @@ public:
      * @return no. of layers updated with new value
      */
     template <class TVal>
-    int Reconfigure(std::string key, const TVal& value);
+    int Reconfigure(const std::string &key, const TVal& value);
 
     /**
      * @brief Get Sequence of layers for generating requested outputs
@@ -109,16 +109,16 @@ namespace elm {
 
 // template specializations for LayerGraph::Reconfigure()
 template <>
-int LayerGraph::Reconfigure<bool>(std::string key, const bool& value);
+int LayerGraph::Reconfigure<bool>(const std::string &key, const bool& value);
 
 template <>
-int LayerGraph::Reconfigure<float>(std::string key, const float& value);
+int LayerGraph::Reconfigure<float>(const std::string &key, const float& value);
 
 template <>
-int LayerGraph::Reconfigure<int>(std::string key, const int& value);
+int LayerGraph::Reconfigure<int>(const std::string &key, const int& value);
 
 template <>
-int LayerGraph::Reconfigure<std::string>(std::string key, const std::string& value);
+int LayerGraph::Reconfigure<std::string>(const std::string &key, const std::string& value);
 
 } // namespace elm
 

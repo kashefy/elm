@@ -88,25 +88,25 @@ void LayerGraph::Save(const std::string &file_path) const {
 
 // template specializations for LayerGraph::Reconfigure()
 template <>
-int LayerGraph::Reconfigure<bool>(std::string key, const bool& value) {
+int LayerGraph::Reconfigure<bool>(const std::string &key, const bool& value) {
 
     return impl_->Reconfigure<bool>(key, value);
 }
 
 template <>
-int LayerGraph::Reconfigure<float>(std::string key, const float& value) {
+int LayerGraph::Reconfigure<float>(const std::string &key, const float& value) {
 
     return impl_->Reconfigure<float>(key, value);
 }
 
 template <>
-int LayerGraph::Reconfigure<int>(std::string key, const int& value) {
+int LayerGraph::Reconfigure<int>(const std::string &key, const int& value) {
 
     return impl_->Reconfigure<int>(key, value);
 }
 
 template <>
-int LayerGraph::Reconfigure<std::string>(std::string key, const std::string& value) {
+int LayerGraph::Reconfigure<std::string>(const std::string &key, const std::string& value) {
 
     return impl_->Reconfigure<std::string>(key, value);
 }
