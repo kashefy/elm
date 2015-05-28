@@ -852,15 +852,12 @@ class LayerGraphSerializationTest : public ::testing::Test
 protected:
     static void SetUpTestCase() {
 
-        bfs::create_directory("foo");
-    }
-
-    static void TearDownTestCase() {
-
         if(bfs::is_directory("foo")) {
 
             bfs::remove_all("foo");
         }
+
+        bfs::create_directory("foo");
     }
 };
 
@@ -923,6 +920,58 @@ TEST_F(LayerGraphSerializationTest, Serialize) {
 
     LayerGraph to; // must be a new object
     to.Load(p.string());
+
+    to.AddOutput("outb");
+    to.Configure();
+
+    std::vector<LayerShared> layers;
+    to.Sequence(layers);
+
+    Signal sig;
+    sig.Append("ina", Mat1f(1, 2, 1.f));
+    to.ActivateForResponse(layers, sig);
+
+    EXPECT_MAT_EQ(Mat1f(1, 1, 3.f), sig.MostRecentMat1f("outa"));
+    EXPECT_MAT_EQ(Mat1f(1, 1, 1.5f), sig.MostRecentMat1f("outb"));
+}
+
+TEST_F(LayerGraphSerializationTest, Serialize_json) {
+
+    bfs::path p = bfs::path("foo") / "g.json";
+
+    {
+        LayerGraph to;
+
+        std::shared_ptr<base_Layer> a(new WeightedSum);
+        std::shared_ptr<base_Layer> b(new WeightedSum);
+        {
+            LayerConfig cfg;
+            PTree p;
+            p.put(WeightedSum::PARAM_A, 0.5f);
+            p.put(WeightedSum::PARAM_B, 0.f);
+            cfg.Params(p);
+            LayerIONames io;
+            io.Input(WeightedSum::KEY_INPUT_STIMULUS, "outa");
+            io.Output(WeightedSum::KEY_OUTPUT_RESPONSE, "outb");
+            to.Add("WeightedSum", b, cfg, io);
+        }
+        {
+            LayerConfig cfg;
+            PTree p;
+            p.put(WeightedSum::PARAM_A, 2.f);
+            p.put(WeightedSum::PARAM_B, 1.f);
+            cfg.Params(p);
+            LayerIONames io;
+            io.Input(WeightedSum::KEY_INPUT_STIMULUS, "ina");
+            io.Output(WeightedSum::KEY_OUTPUT_RESPONSE, "outa");
+            to.Add("WeightedSum", a, cfg, io);
+        }
+
+        to.SaveJSON(p.string());
+    }
+
+    LayerGraph to; // must be a new object
+    to.LoadJSON(p.string());
 
     to.AddOutput("outb");
     to.Configure();

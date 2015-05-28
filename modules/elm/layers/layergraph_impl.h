@@ -124,6 +124,8 @@ public:
      */
     void Sequence(std::vector<LayerShared> &layer_seq);
 
+    void to_ptree(PTree &p) const;
+
     //void print();
 
 protected:

@@ -34,6 +34,8 @@ struct LayerVertex {
 
     void Configure();
 
+    void to_ptree(PTree &p) const;
+
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     // When the class Archive corresponds to an output archive, the

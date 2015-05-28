@@ -283,6 +283,23 @@ VtxColor LayerGraph_Impl::genVtxColor(const VtxName &name,
     return color;
 }
 
+void LayerGraph_Impl::to_ptree(PTree &p) const {
+
+    PTree nodes_array;
+
+    GraphLayerTraits::vertex_iterator v, end;
+    for(tie(v, end) = vertices(g_); v != end; ++v) {
+
+        const LayerVertex &tmp = boost::get(vertex_index1, g_, *v);
+
+        PTree node;
+        tmp.to_ptree(node);
+        nodes_array.push_back(std::make_pair("", node));
+    }
+
+    p.add_child("layers", nodes_array);
+}
+
 //void LayerGraph::print() {
 
 //    cout<<"Vertices:"<<endl;

@@ -756,7 +756,6 @@ TEST_F(LayerGraphImplTest, Sequence_multiple_paths) {
     EXPECT_TRUE(sig.Exists("outd"));
 }
 
-
 TEST_F(LayerGraphImplTest, Sequence_multiple_paths_signal_feature) {
 
     LayerGraph_Impl to;
