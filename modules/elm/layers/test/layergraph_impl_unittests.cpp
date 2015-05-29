@@ -409,6 +409,64 @@ TEST_F(LayerGraphImplTest, AddOutput_invalid) {
     EXPECT_THROW(to.AddOutput("outa"), ExceptionKeyError);
 }
 
+TEST_F(LayerGraphImplTest, Get_num_layers) {
+
+    LayerGraph_Impl to;
+
+    size_t expected_sz = 0;
+    EXPECT_EQ(expected_sz++, to.num_layers());
+
+    std::shared_ptr<base_Layer> a(new LayerA);
+    std::shared_ptr<base_Layer> b(new LayerB);
+    std::shared_ptr<base_Layer> c(new LayerC);
+    std::shared_ptr<base_Layer> d(new LayerD);
+
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pb", "pb1");
+        LayerIONames io;
+        io.Input(LayerC::KEY_INPUT_STIMULUS, "outa");
+        io.Output(LayerC::KEY_OUTPUT_RESPONSE, "outb");
+        to.Add("b", b, cfg, io);
+
+        EXPECT_EQ(expected_sz++, to.num_layers());
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pc", "pc1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "outb");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outc");
+        to.Add("c", c, cfg, io);
+
+        EXPECT_EQ(expected_sz++, to.num_layers());
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pa", "pa1");
+        LayerIONames io;
+        io.Input(LayerA::KEY_INPUT_STIMULUS, "ina");
+        io.Output(LayerA::KEY_OUTPUT_RESPONSE, "outa");
+        to.Add("a", a, cfg, io);
+
+        EXPECT_EQ(expected_sz++, to.num_layers());
+    }
+    {
+        LayerConfig cfg;
+        PTree p;
+        p.put("pd", "pd1");
+        LayerIONames io;
+        io.Input(LayerD::KEY_INPUT_STIMULUS, "ind");
+        io.Output(LayerD::KEY_OUTPUT_RESPONSE, "outd");
+        to.Add("d", d, cfg, io);
+
+        EXPECT_EQ(expected_sz++, to.num_layers());
+    }
+}
+
 TEST_F(LayerGraphImplTest, GenVtxColor_name) {
 
     LayerGraph_Impl to;

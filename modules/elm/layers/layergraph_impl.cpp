@@ -283,6 +283,11 @@ VtxColor LayerGraph_Impl::genVtxColor(const VtxName &name,
     return color;
 }
 
+size_t LayerGraph_Impl::num_layers() const {
+
+    return static_cast<size_t>(num_vertices(g_));
+}
+
 void LayerGraph_Impl::to_ptree(PTree &p) const {
 
     PTree nodes_array;

@@ -42,6 +42,16 @@ public:
              const LayerIONames &io);
 
     /**
+     * @brief Add registered layer and associated info to graph
+     * @param name registered layer name, registered with layer factory
+     * @param cfg configuration
+     * @param io I/O
+     */
+    void Add(const std::string &name,
+             const LayerConfig &cfg,
+             const LayerIONames &io);
+
+    /**
      * @brief Request output
      * @param output_name
      * @throws ExceptionKeyError if unavailable
@@ -85,6 +95,12 @@ public:
      * @param[out] ordered list of layers
      */
     void Sequence(std::vector<LayerShared> &layer_seq);
+
+    /**
+     * @brief get number of layers in graph
+     * @return number of layers
+     */
+    size_t num_layers() const;
 
     /**
      * @brief Process active layers and gather their response

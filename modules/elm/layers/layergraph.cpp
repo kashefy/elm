@@ -22,6 +22,7 @@
 
 #include "elm/core/exception.h"
 #include "elm/core/boost/serialization/serialization_utils.h"
+#include "elm/layers/layerfactory.h"
 #include "elm/layers/layergraph_impl.h"
 
 namespace bfs=boost::filesystem;
@@ -42,7 +43,7 @@ LayerGraph::LayerGraph()
 {
 }
 
-void LayerGraph::Add(const std::string &name,
+void LayerGraph::Add(const string &name,
                      LayerShared &layer,
                      const LayerConfig &cfg,
                      const LayerIONames &io) {
@@ -50,7 +51,14 @@ void LayerGraph::Add(const std::string &name,
     impl_->Add(name, layer, cfg, io);
 }
 
-void LayerGraph::AddOutput(const std::string &output_name) {
+void LayerGraph::Add(const string &name,
+                     const LayerConfig &cfg,
+                     const LayerIONames &io) {
+
+    impl_->Add(name, LayerFactory::CreateShared(name), cfg, io);
+}
+
+void LayerGraph::AddOutput(const string &output_name) {
 
     impl_->AddOutput(output_name);
 }
@@ -75,12 +83,17 @@ void LayerGraph::Configure() {
     impl_->Configure();
 }
 
-void LayerGraph::Sequence(std::vector<LayerShared> &layer_seq) {
+void LayerGraph::Sequence(vector<LayerShared> &layer_seq) {
 
     impl_->Sequence(layer_seq);
 }
 
-void LayerGraph::ActivateForResponse(const std::vector<LayerShared> &layers, Signal &signal) {
+size_t LayerGraph::num_layers() const {
+
+    return impl_->num_layers();
+}
+
+void LayerGraph::ActivateForResponse(const vector<LayerShared> &layers, Signal &signal) {
 
     for(auto const& l : layers) {
 
@@ -89,7 +102,7 @@ void LayerGraph::ActivateForResponse(const std::vector<LayerShared> &layers, Sig
     }
 }
 
-void LayerGraph::Save(const std::string &file_path) const {
+void LayerGraph::Save(const string &file_path) const {
 
     bfs::path p(file_path);
 
@@ -107,7 +120,7 @@ void LayerGraph::Save(const std::string &file_path) const {
     oa & boost::serialization::make_nvp("graph", impl_->g_);
 }
 
-void LayerGraph::SaveJSON(const std::string &file_path) const {
+void LayerGraph::SaveJSON(const string &file_path) const {
 
     bfs::path p(file_path);
 
@@ -135,7 +148,7 @@ void LayerGraph::SaveJSON(const std::string &file_path) const {
     boost::property_tree::json_parser::write_json(p.string(), tree);
 }
 
-void LayerGraph::Load(const std::string &file_path) {
+void LayerGraph::Load(const string &file_path) {
 
     bfs::path p(file_path);
 
@@ -159,7 +172,7 @@ void LayerGraph::Load(const std::string &file_path) {
     oa & boost::serialization::make_nvp("graph", impl_->g_);
 }
 
-void LayerGraph::LoadJSON(const std::string &file_path) {
+void LayerGraph::LoadJSON(const string &file_path) {
 
     bfs::path p(file_path);
 
@@ -204,31 +217,35 @@ void LayerGraph::LoadJSON(const std::string &file_path) {
         }
 
         PTree ptree_vtx = itr->second;
-        PrintXML(ptree_vtx, std::cout); std::cout<<std::endl;
+        //PrintXML(ptree_vtx, std::cout); std::cout<<std::endl;
+        LayerVertex vtx_info;
+        vtx_info.from_ptree(ptree_vtx);
+
+        Add(vtx_info.name, vtx_info.cfg, vtx_info.io);
     }
 }
 
 // template specializations for LayerGraph::Reconfigure()
 template <>
-int LayerGraph::Reconfigure<bool>(const std::string &key, const bool& value) {
+int LayerGraph::Reconfigure<bool>(const string &key, const bool& value) {
 
     return impl_->Reconfigure<bool>(key, value);
 }
 
 template <>
-int LayerGraph::Reconfigure<float>(const std::string &key, const float& value) {
+int LayerGraph::Reconfigure<float>(const string &key, const float& value) {
 
     return impl_->Reconfigure<float>(key, value);
 }
 
 template <>
-int LayerGraph::Reconfigure<int>(const std::string &key, const int& value) {
+int LayerGraph::Reconfigure<int>(const string &key, const int& value) {
 
     return impl_->Reconfigure<int>(key, value);
 }
 
 template <>
-int LayerGraph::Reconfigure<std::string>(const std::string &key, const std::string& value) {
+int LayerGraph::Reconfigure<string>(const string &key, const string& value) {
 
-    return impl_->Reconfigure<std::string>(key, value);
+    return impl_->Reconfigure<string>(key, value);
 }

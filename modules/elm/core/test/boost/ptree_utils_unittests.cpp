@@ -211,4 +211,47 @@ template<> std::vector<uchar> PTreeV_<uchar>::values{255, 0, 1, 100, 101, 200};
 typedef testing::Types<float, int, uchar> PODTypes;  ///< // lists the usual suspects of matrices
 INSTANTIATE_TYPED_TEST_CASE_P(PTreeUtilsPODTypesTest, PTreePODTypesTest, PODTypes);
 
+TEST(PTreeToMapSSTest, Empty) {
 
+    PTree p;
+    MapSS m;
+    EXPECT_NO_THROW(PTreeToMapSS(p, m));
+    EXPECT_TRUE(m.empty());
+}
+
+TEST(PTreeToMapSSTest, PTreeToMapSS) {
+
+    PTree p;
+    p.put("foo", "bar");
+    p.put("x", "y");
+
+    MapSS m;
+    EXPECT_NO_THROW(PTreeToMapSS(p, m));
+
+    EXPECT_SIZE(2, m);
+    EXPECT_EQ("bar", m["foo"]);
+    EXPECT_EQ("y", m["x"]);
+    EXPECT_EQ(m.end(), m.find("y"));
+}
+
+TEST(MapSSToPTreeTest, Empty) {
+
+    PTree p;
+    MapSS m;
+    EXPECT_NO_THROW(MapSSToPTree(m, p));
+    EXPECT_TRUE(p.empty());
+}
+
+TEST(MapSSToPTreeTest, MapSSToPTree) {
+
+    PTree p;
+    MapSS m;
+    m["foo"] = "bar";
+    m["x"] = "y";
+    EXPECT_NO_THROW(MapSSToPTree(m, p));
+
+    EXPECT_SIZE(2, p);
+    EXPECT_EQ("bar", p.get<string>("foo"));
+    EXPECT_EQ("y", p.get<string>("x"));
+    EXPECT_EQ(p.not_found(), p.find("y"));
+}

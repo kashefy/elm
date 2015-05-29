@@ -32,9 +32,22 @@ struct LayerVertex {
              const LayerIONames &_io,
              const LayerShared &_ptr);
 
+    /**
+     * @brief Configure layer
+     */
     void Configure();
 
+    /**
+     * @brief Serialize information to property tree
+     * @param[out] p destination property tree
+     */
     void to_ptree(PTree &p) const;
+
+    /**
+     * @brief Initialize information from property tree
+     * @param[in] p information source
+     */
+    void from_ptree(const PTree &p);
 
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 

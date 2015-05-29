@@ -28,3 +28,20 @@ bool elm::UnusedNodes(const PTree &p, const vector<string> &keys_used, vector<st
     }
     return keys_unused.size() > 0;
 }
+
+void elm::PTreeToMapSS(const PTree &src, MapSS &dst) {
+
+    for(PTree::const_iterator itr=src.begin(); itr != src.end(); ++itr) {
+
+        string key = (*itr).first;
+        dst[key] = src.get<std::string>(key);
+    }
+}
+
+void elm::MapSSToPTree(const MapSS &src, PTree &dst) {
+
+    for(MapSS::const_iterator itr=src.begin(); itr != src.end(); ++itr) {
+
+        dst.put(itr->first, itr->second);
+    }
+}

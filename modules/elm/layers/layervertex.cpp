@@ -1,5 +1,7 @@
 #include "elm/layers/layervertex.h"
 
+#include "elm/core/boost/ptree_utils.h"
+#include "elm/core/inputname.h"
 #include "elm/layers/layerfactory.h"
 
 using namespace elm;
@@ -38,25 +40,43 @@ void LayerVertex::to_ptree(PTree &p) const {
     p.put_child("params", params);
 
     PTree in;
-    MapSS m;
-
-    m = io.InputMap();
-    for(MapSS::const_iterator itr=m.begin(); itr != m.end(); ++itr) {
-
-        in.put(itr->first, itr->second);
-    }
+    MapSSToPTree(io.InputMap(), in);
 
     PTree out, ptree_io;
     ptree_io.put_child("inputs", in);
 
-    m = io.OutputMap();
-    for(MapSS::const_iterator itr=m.begin(); itr != m.end(); ++itr) {
-
-        out.put(itr->first, itr->second);
-    }
+    MapSSToPTree(io.OutputMap(), out);
 
     ptree_io.put_child("outputs", out);
     p.put_child("io", ptree_io);
 
     p.put("name", name);
+}
+
+void LayerVertex::from_ptree(const PTree &p) {
+
+    cfg.Params(p.get_child("params"));
+
+    PTree ptree_io = p.get_child("io");
+
+    {
+        MapSS in;
+        PTreeToMapSS(ptree_io.get_child("inputs"), in);
+
+        for(MapSS::const_iterator itr=in.begin(); itr != in.end(); ++itr) {
+
+            io.Input(itr->first, itr->second);
+        }
+    }
+    {
+        MapSS out;
+        PTreeToMapSS(ptree_io.get_child("outputs"), out);
+
+        for(MapSS::const_iterator itr=out.begin(); itr != out.end(); ++itr) {
+
+            io.Output(itr->first, itr->second);
+        }
+    }
+
+    name = p.get("name", name);
 }

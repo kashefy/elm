@@ -124,6 +124,12 @@ public:
      */
     void Sequence(std::vector<LayerShared> &layer_seq);
 
+    /**
+     * @brief get number of layers in graph
+     * @return number of layers
+     */
+    size_t num_layers() const;
+
     void to_ptree(PTree &p) const;
 
     //void print();
