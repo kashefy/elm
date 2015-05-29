@@ -1001,6 +1001,42 @@ TEST_F(LayerGraphSerializationTest, Serialize) {
     EXPECT_MAT_EQ(Mat1f(1, 1, 1.5f), sig.MostRecentMat1f("outb"));
 }
 
+TEST_F(LayerGraphSerializationTest, SaveJSON_invalid) {
+
+    bfs::path p("foo");
+    ASSERT_TRUE(bfs::is_directory(p));
+
+    EXPECT_THROW(LayerGraph().SaveJSON(p.string()), ExceptionFileIOError);
+
+    p = p / "g.xml";
+
+    EXPECT_THROW(LayerGraph().SaveJSON(p.string()), ExceptionFileIOError);
+}
+
+TEST_F(LayerGraphSerializationTest, LoadJSON_invalid) {
+
+    bfs::path p("foo");
+    ASSERT_TRUE(bfs::is_directory(p));
+
+    EXPECT_THROW(LayerGraph().LoadJSON(p.string()), ExceptionFileIOError);
+
+    p = p / "g.json";
+
+    ASSERT_FALSE(bfs::is_regular_file(p));
+
+    EXPECT_THROW(LayerGraph().LoadJSON(p.string()), ExceptionFileIOError);
+}
+
+TEST_F(LayerGraphSerializationTest, LoadJSON_invalid_ext) {
+
+    bfs::path p = bfs::path("foo") / "g.xml";
+
+    LayerGraph().Save(p.string());
+
+    EXPECT_NO_THROW(LayerGraph().Load(p.string()));
+    EXPECT_THROW(LayerGraph().LoadJSON(p.string()), ExceptionFileIOError);
+}
+
 TEST_F(LayerGraphSerializationTest, Serialize_json) {
 
     bfs::path p = bfs::path("foo") / "g.json";
