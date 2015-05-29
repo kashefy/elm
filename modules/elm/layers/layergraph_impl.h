@@ -19,7 +19,6 @@
 typedef std::string EdgeName;
 typedef boost::property<boost::edge_name_t, EdgeName> EdgeProp;
 
-typedef std::shared_ptr<elm::base_Layer > LayerShared;
 typedef std::string VtxColor;
 typedef std::string VtxName;
 typedef boost::property<boost::vertex_color_t, VtxColor,
