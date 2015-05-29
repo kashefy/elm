@@ -859,6 +859,14 @@ protected:
 
         bfs::create_directory("foo");
     }
+
+    static void TearDownTestCase() {
+
+        if(bfs::is_directory("foo")) {
+
+            bfs::remove_all("foo");
+        }
+    }
 };
 
 TEST_F(LayerGraphSerializationTest, Save_invalid) {
