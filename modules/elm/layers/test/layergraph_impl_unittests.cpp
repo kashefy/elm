@@ -121,7 +121,7 @@ TEST_F(LayerGraphImplTest, ClearActive) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
+    LayerShared a(new LayerA);
 
     LayerConfig cfg;
     PTree p;
@@ -150,7 +150,7 @@ TEST_F(LayerGraphImplTest, Outputs_single) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
+    LayerShared a(new LayerA);
 
     LayerConfig cfg;
     PTree p;
@@ -179,7 +179,7 @@ TEST_F(LayerGraphImplTest, Inputs_single) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
+    LayerShared a(new LayerA);
 
     LayerConfig cfg;
     PTree p;
@@ -203,8 +203,8 @@ TEST_F(LayerGraphImplTest, Inputs_chained) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
+    LayerShared a(new LayerA);
+    LayerShared b(new LayerB);
 
     {
         LayerConfig cfg;
@@ -240,8 +240,8 @@ TEST_F(LayerGraphImplTest, Inputs_multiple) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
+    LayerShared a(new LayerA);
+    LayerShared b(new LayerB);
 
     {
         LayerConfig cfg;
@@ -282,8 +282,8 @@ TEST_F(LayerGraphImplTest, Inputs_single_active_only) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
+    LayerShared a(new LayerA);
+    LayerShared b(new LayerB);
 
     {
         LayerConfig cfg;
@@ -320,10 +320,10 @@ TEST_F(LayerGraphImplTest, AddOutput) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
-    std::shared_ptr<base_Layer> c(new LayerC);
-    std::shared_ptr<base_Layer> d(new LayerD);
+    LayerShared a(new LayerA);
+    LayerShared b(new LayerB);
+    LayerShared c(new LayerC);
+    LayerShared d(new LayerD);
 
     {
         LayerConfig cfg;
@@ -393,7 +393,7 @@ TEST_F(LayerGraphImplTest, AddOutput_invalid) {
 
     EXPECT_THROW(to.AddOutput("outa"), ExceptionKeyError);
 
-    std::shared_ptr<base_Layer> a(new LayerA);
+    LayerShared a(new LayerA);
 
     {
         LayerConfig cfg;
@@ -416,10 +416,10 @@ TEST_F(LayerGraphImplTest, Get_num_layers) {
     size_t expected_sz = 0;
     EXPECT_EQ(expected_sz++, to.num_layers());
 
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
-    std::shared_ptr<base_Layer> c(new LayerC);
-    std::shared_ptr<base_Layer> d(new LayerD);
+    LayerShared a(new LayerA);
+    LayerShared b(new LayerB);
+    LayerShared c(new LayerC);
+    LayerShared d(new LayerD);
 
     {
         LayerConfig cfg;
@@ -589,8 +589,8 @@ TEST_F(LayerGraphImplTest, Sequence_appends) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
+    LayerShared a(new LayerA);
+    LayerShared b(new LayerB);
 
     {
         LayerConfig cfg;
@@ -640,10 +640,10 @@ TEST_F(LayerGraphImplTest, Sequence_linear) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
-    std::shared_ptr<base_Layer> c(new LayerC);
-    std::shared_ptr<base_Layer> d(new LayerD);
+    LayerShared a(new LayerA);
+    LayerShared b(new LayerB);
+    LayerShared c(new LayerC);
+    LayerShared d(new LayerD);
 
     {
         LayerConfig cfg;
@@ -725,10 +725,10 @@ TEST_F(LayerGraphImplTest, Sequence_multiple_paths) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
-    std::shared_ptr<base_Layer> c(new LayerC);
-    std::shared_ptr<base_Layer> d(new LayerD);
+    LayerShared a(new LayerA);
+    LayerShared b(new LayerB);
+    LayerShared c(new LayerC);
+    LayerShared d(new LayerD);
 
     {
         LayerConfig cfg;
@@ -818,10 +818,10 @@ TEST_F(LayerGraphImplTest, Sequence_multiple_paths_signal_feature) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
-    std::shared_ptr<base_Layer> c(new LayerC);
-    std::shared_ptr<base_Layer> d(new LayerD);
+    LayerShared a(new LayerA);
+    LayerShared b(new LayerB);
+    LayerShared c(new LayerC);
+    LayerShared d(new LayerD);
 
     {
         LayerConfig cfg;
@@ -903,8 +903,8 @@ TEST_F(LayerGraphImplTest, Reconfigure_count) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
+    LayerShared a(new LayerA);
+    LayerShared b(new LayerB);
     {
         LayerConfig cfg;
         PTree p;
@@ -943,8 +943,8 @@ TEST_F(LayerGraphImplTest, Reconfigure) {
 
     LayerGraph_Impl to;
 
-    std::shared_ptr<base_Layer> a(new LayerA);
-    std::shared_ptr<base_Layer> b(new LayerB);
+    LayerShared a(new LayerA);
+    LayerShared b(new LayerB);
     {
         LayerConfig cfg;
         PTree p;
@@ -1040,9 +1040,9 @@ TEST_F(LayerGraphImplTest, Reconfigure) {
 
 //    LayerGraph to;
 
-//    std::shared_ptr<base_Layer> a(new LayerA);
-//    std::shared_ptr<base_Layer> b(new LayerB);
-//    std::shared_ptr<base_Layer> c(new LayerC);
+//    LayerShared a(new LayerA);
+//    LayerShared b(new LayerB);
+//    LayerShared c(new LayerC);
 
 //    {
 //        LayerConfig cfg;
