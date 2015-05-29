@@ -31,7 +31,7 @@ using namespace elm;
 
 LayerGraph::~LayerGraph()
 {
-    if(impl_ == NULL) {
+    if(impl_ != NULL) {
 
         delete impl_;
     }
