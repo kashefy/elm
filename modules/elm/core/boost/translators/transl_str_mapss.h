@@ -13,8 +13,6 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-extern template class std::map<std::string, std::string>;
-
 namespace elm {
 
 /**
