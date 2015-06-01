@@ -19,9 +19,7 @@ using namespace cv;
 using namespace pcl;
 using namespace elm;
 
-template class pcl::PointCloud<pcl::PointXYZ >;
-template class pcl::PointCloud<pcl::Normal >;
-template class pcl::PointCloud<pcl::PointNormal >;
+extern template class cv::Mat_<float>;
 
 namespace elm {
 

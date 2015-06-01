@@ -11,6 +11,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+extern template class cv::Mat_<float>;
+
 namespace elm
 {
 

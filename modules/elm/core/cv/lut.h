@@ -12,6 +12,8 @@
 
 #include "elm/core/cv/typedefs_fwd.h"
 
+extern template class std::vector<int>;
+
 namespace elm {
 
 /**

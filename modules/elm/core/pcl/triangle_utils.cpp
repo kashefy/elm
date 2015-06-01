@@ -19,6 +19,8 @@ using namespace cv;
 using namespace pcl;
 using namespace elm;
 
+extern template class cv::Mat_<float>;
+
 Mat1f elm::TriangleEdges(const PointXYZ &p0,
                          const PointXYZ &p1,
                          const PointXYZ &p2)

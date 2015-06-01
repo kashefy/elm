@@ -14,6 +14,8 @@
 
 #include "elm/core/base_Layer.h"
 
+extern template class cv::Mat_<float>;
+
 namespace elm {
 
 class Signal;

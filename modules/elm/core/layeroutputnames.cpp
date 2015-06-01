@@ -36,3 +36,8 @@ OptS LayerOutputNames::OutputOpt(const string &key) const
     string name;
     return Find<string>(outputs_, key, name)? name : o;
 }
+
+const MapSS& LayerOutputNames::OutputMap() const {
+
+    return outputs_;
+}

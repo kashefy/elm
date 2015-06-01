@@ -25,6 +25,20 @@ namespace elm
  */
 bool UnusedNodes(const PTree &p, const VecS &keys_used, VecS &keys_unused);
 
+/**
+ * @brief Convert property tree to map
+ * @param[in] src source property tree
+ * @param[out] dst map
+ */
+void PTreeToMapSS(const PTree &src, MapSS &dst);
+
+/**
+ * @brief Convert map to property tree
+ * @param[in] src map
+ * @param[out] dst property tree
+ */
+void MapSSToPTree(const MapSS &src, PTree &dst);
+
 }
 
 #endif // _ELM_CORE_BOOST_PTREE_UTILS_H_

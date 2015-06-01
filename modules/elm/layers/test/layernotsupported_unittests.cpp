@@ -81,6 +81,8 @@ TEST(LayerNotSupportedTest, Methods)
     EXPECT_THROW( to.Activate(sig),      ExceptionNotImpl );
     EXPECT_THROW( to.Clear(),            ExceptionNotImpl );
     EXPECT_THROW( to.IONames(io),        ExceptionNotImpl );
+    EXPECT_THROW( to.OutputNames(io),        ExceptionNotImpl );
+    EXPECT_THROW( to.InputNames(io),        ExceptionNotImpl );
     EXPECT_THROW( to.Reconfigure(cfg),   ExceptionNotImpl );
     EXPECT_THROW( to.Reset(cfg),         ExceptionNotImpl );
     EXPECT_THROW( to.Response(sig),      ExceptionNotImpl );

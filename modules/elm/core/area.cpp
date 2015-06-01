@@ -13,6 +13,8 @@
 
 using namespace cv;
 
+extern template class cv::Mat_<float>;
+
 base_AUC::base_AUC()
 {
 }

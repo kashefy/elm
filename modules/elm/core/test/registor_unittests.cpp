@@ -12,6 +12,8 @@
 #include "elm/core/exception.h"
 #include "elm/ts/ts.h"
 
+using namespace elm;
+
 namespace {
 
 using boost::assign::map_list_of;

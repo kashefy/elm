@@ -16,6 +16,10 @@
 using namespace cv;
 using namespace elm;
 
+extern template class cv::Mat_<float>;
+extern template class cv::SparseMat_<float>;
+extern template class std::vector<cv::Mat_<float> >;
+
 Mat1f VisitorMat1f::operator()(const Mat &m) const
 {
     if((m.type() & CV_MAT_DEPTH_MASK) != (CV_32F & CV_MAT_DEPTH_MASK)) {
@@ -80,6 +84,14 @@ Mat1f VisitorMat1f::operator()(uchar c) const
 }
 
 #ifdef __WITH_PCL // definitions below require PCL support
+
+extern template class pcl::PointCloud<pcl::PointXYZ >;
+extern template class pcl::PointCloud<pcl::Normal >;
+extern template class pcl::PointCloud<pcl::PointNormal >;
+
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ > >;
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::Normal > >;
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::PointNormal > >;
 
 Mat1f VisitorMat1f::operator()(const VecVertices &vv) const
 {

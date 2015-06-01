@@ -8,12 +8,12 @@
 #ifndef _ELM_CORE_REGISTOR_H_
 #define _ELM_CORE_REGISTOR_H_
 
-#include <map>
 #include <memory>
-#include <string>
 
 #include "elm/core/exception.h"
 #include "elm/core/stl/stl_inl.h"
+
+namespace elm {
 
 /** @brief class for registering derived instantances
  * Partially inspired by:
@@ -70,5 +70,7 @@ public:
         return r.find(type) != r.end();
     }
 };
+
+} // namespace elm
 
 #endif // _ELM_CORE_REGISTOR_H_

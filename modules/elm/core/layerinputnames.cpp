@@ -41,3 +41,8 @@ OptS LayerInputNames::InputOpt(const string &key) const
     string name;
     return Find<string>(inputs_, key, name)? name : o;
 }
+
+const MapSS& LayerInputNames::InputMap() const {
+
+    return inputs_;
+}

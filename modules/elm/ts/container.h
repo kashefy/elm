@@ -14,6 +14,12 @@
 
 #include <vector>
 
+#if !_MSC_VER
+extern template class std::vector<std::string>;
+extern template class std::vector<float>;
+extern template class std::vector<int>;
+#endif // _MSC_VER
+
 /**
   Assert that container is empty
   */

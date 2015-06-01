@@ -13,8 +13,6 @@
 
 namespace elm {
 
-class Graph;
-
 #ifdef __WITH_PCL
 
 /**

@@ -16,10 +16,12 @@
 #include <stdlib.h> // rand
 #include <sstream>
 
+#if !_MSC_VER
 extern template class std::vector<std::string>;
 extern template class std::vector<float>;
 extern template class std::vector<int>;
 extern template class std::map<std::string, std::string>;
+#endif // _MSC_VER
 
 namespace elm {
 
@@ -57,6 +59,25 @@ namespace elm {
         for(itr=m.begin(); itr != m.end(); ++itr) {
 
             v[i++] = itr->first;
+        }
+        return v;
+    }
+
+    /**
+     * @brief List all values in a map
+     * @param map
+     * @return vector of all map values
+     */
+    template <class TKey, class TVal>
+    std::vector<TVal > Values(const std::map<TKey, TVal > &m)
+    {
+        std::vector<TVal > v(m.size());
+
+        typename std::map<TKey, TVal >::const_iterator itr;
+        int i=0;
+        for(itr=m.begin(); itr != m.end(); ++itr) {
+
+            v[i++] = itr->second;
         }
         return v;
     }

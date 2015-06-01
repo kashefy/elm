@@ -12,6 +12,8 @@
 
 #include "elm/core/layerionames.h"
 
+template class std::vector<std::string>;
+
 namespace elm {
 
 typedef boost::property_tree::ptree PTree;

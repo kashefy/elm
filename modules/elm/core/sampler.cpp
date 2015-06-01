@@ -14,6 +14,8 @@
 using namespace cv;
 using namespace elm;
 
+template class cv::Mat_<float>;
+
 void base_Sampler::pdf(const Mat1f &pdf) {
 
     float s = sum(pdf)(0);

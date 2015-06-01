@@ -20,6 +20,7 @@
 #include "elm/layers/gradassignment.h"
 #include "elm/layers/graphcompatibility.h"
 #include "elm/layers/icp.h"
+#include "elm/layers/imagegradient.h"
 #include "elm/layers/layer_y.h"
 #include "elm/layers/medianblur.h"
 #include "elm/layers/mlp.h"
@@ -46,6 +47,7 @@ LayerRegistry g_layerRegistry = map_list_of
         LAYER_REGISTRY_PAIR( GradAssignment )
         LAYER_REGISTRY_PAIR( GraphCompatibility )
         LAYER_REGISTRY_PAIR( ICP )
+        LAYER_REGISTRY_PAIR( ImageGradient )
         LAYER_REGISTRY_PAIR( LayerY )
         LAYER_REGISTRY_PAIR( MedianBlur )
         LAYER_REGISTRY_PAIR( MLP )
@@ -58,6 +60,8 @@ LayerRegistry g_layerRegistry = map_list_of
 
 LayerFactory::LayerFactory()
 {
+    // run-time equivalent of LAYER_REGISTRY_PAIR( WeightedSum )
+    //g_layerRegistry["WeightedSum"] = &LayerRegistor::DerivedInstance<WeightedSum>;
 }
 
 /** @todo eliminate need for checking not MSVC

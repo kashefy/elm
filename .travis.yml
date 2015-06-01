@@ -33,7 +33,7 @@ before_install:
   
   # Build Google Test Framework from source
   - cd $DEPS_DIR
-  - wget --quiet https://googletest.googlecode.com/files/gtest-1.7.0.zip
+  - travis_retry wget --quiet https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - unzip -qq gtest-1.7.0.zip
   - cd gtest-1.7.0
   - cmake . > /dev/null
@@ -41,10 +41,10 @@ before_install:
   - cd $DEPS_DIR
   
   # get HDF5, build after apt-get installation
-  - wget --quiet http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
+  - travis_retry wget --quiet https://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.14/src/hdf5-1.8.14.tar.gz
   
   # get MATIO, build after apt-get installation
-  - wget --quiet http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz
+  - travis_retry wget --quiet http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz
   
   # for PCL
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
@@ -77,7 +77,7 @@ before_install:
   - cd $DEPS_DIR/opencv
   - git fetch && git branch -a && git checkout 2.4
   - mkdir $OPENCV_BUILD_DIR && cd $OPENCV_BUILD_DIR
-  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF $DEPS_DIR/opencv
+  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF -DBUILD_opencv_calib3d=OFF -DBUILD_opencv_stitching=OFF $DEPS_DIR/opencv
   - make -j2 > /dev/null
   
   # back to ELM source directory
@@ -98,8 +98,8 @@ install:
   - tar -xzf hdf5-1.8.14.tar.gz
   - cd hdf5-1.8.14
   - mkdir $DEPS_DIR/hdf5
-  - ./configure --prefix=$DEPS_DIR/hdf5 --enable-fortran --enable-fortran2003 --with-default-api-version=v18 > /dev/null
-  - make -j2 > /dev/null 2>&1
+  - ./configure --prefix=$DEPS_DIR/hdf5 -q --enable-fortran --enable-fortran2003 --with-default-api-version=v18 --enable-silent-rules CXXFLAGS="--param ggc-min-expand=3 --param ggc-min-heapsize=5120 -w" CFLAGS="--param ggc-min-expand=3 --param ggc-min-heapsize=5120 -w" > /dev/null
+  - make -j2 #> /dev/null 2>&1
   - make install > /dev/null 2>&1
   
   # MATIO
@@ -123,7 +123,11 @@ before_script:
 script:
   - cd $ELM_BUILD_DIR && make -j2
   # run unit tests
-  - cd $ELM_BUILD_DIR/bin && ./run_elm_unittests
+  - if [ "$BUILD_TYPE" == "Coverage" ]; then
+      make elm_unittests_coverage;
+    else
+      cd $ELM_BUILD_DIR/bin && ./run_elm_unittests;
+    fi
   # run nose tests
   - export PYTHONPATH=$ELM_BUILD_DIR/lib:$PYTHONPATH
   # Back to root build directory
@@ -136,7 +140,6 @@ script:
 after_success:
   # c++ test coverage
   - cd $ELM_BUILD_DIR
-  - if [ "$BUILD_TYPE" == "Coverage" ]; then make elm_unittests_coverage; fi
   - if [ "$BUILD_TYPE" == "Coverage" ]; then coveralls-lcov coverage.info; fi
   # Convert to json for merging with python coverage
   #- coveralls-lcov -v -n coverage.info > coverage.json

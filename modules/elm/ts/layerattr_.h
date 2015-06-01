@@ -13,13 +13,21 @@
 
 namespace elm {
 
-class base_Layer;
-
 enum LayerIOKeyType
 {
     INPUT,
     OUTPUT
 };
+
+} // namespace elm
+
+extern template class std::pair<bool, std::string>;
+extern template class std::map<std::string, std::pair<bool, std::string> >;
+extern template class std::map< std::string, std::pair<elm::LayerIOKeyType, std::string> >;
+
+namespace elm {
+
+class base_Layer;
 
 typedef std::pair<bool, std::string> IOName; ///< convinience typedef to layer io name with bool indicating input (0) or output (1)
 typedef std::map< std::string, std::pair<bool, std::string> > MapIONamesB; ///< convinience typedef for a map of io keys and corresponding io name

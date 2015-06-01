@@ -16,6 +16,10 @@
 using namespace pcl;
 using namespace elm;
 
+extern template class cv::Mat_<float>;
+extern template class cv::SparseMat_<float>;
+extern template class std::vector<cv::Mat_<float> >;
+
 void VisitorVecVertices::Reset()
 {
     vv_.clear();

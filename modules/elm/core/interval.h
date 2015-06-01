@@ -14,7 +14,7 @@
 class base_Interval {
 
 public:
-    virtual ~base_Interval() {};
+    virtual ~base_Interval();
 
     /**
      * @brief Check whether value is part of interval

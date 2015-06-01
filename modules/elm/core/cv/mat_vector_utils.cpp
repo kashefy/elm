@@ -15,6 +15,8 @@ using namespace std;
 using namespace cv;
 using namespace elm;
 
+extern template class cv::Mat_<float>;
+
 Mat1f elm::ElementsAt(const VecMat1f &v, int r, int c)
 {
     Mat1f values(1, static_cast<int>(v.size()));

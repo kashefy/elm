@@ -25,6 +25,11 @@ namespace {
  */
 class LayerFactoryStaticTest : public ::testing::Test
 {
+protected:
+    static void SetUpTestCase() {
+
+        LayerFactory();
+    }
 };
 
 TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared)

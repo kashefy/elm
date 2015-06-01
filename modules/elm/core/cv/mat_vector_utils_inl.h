@@ -15,6 +15,11 @@
 #include "elm/core/cv/typedefs_fwd.h"
 #include "elm/core/exception.h"
 
+extern template class std::vector<float>;
+extern template class std::vector<int>;
+extern template class cv::Mat_<float>;
+extern template class cv::Mat_<int>;
+
 namespace elm {
 
 /**
