@@ -75,7 +75,9 @@ test_script:
   - cmd: CD .\bin
   - cmd: if "%generator%"=="Visual Studio 12 2013" cd .\Release
   - set PATH=C:\OpenCV249\opencv\build\v12\bin;..\gtest-1.7.0;%PATH%
-  - cmd: .\run_elm_unittests.exe --gtest_output=xml:results_unittests.xml --gtest_filter=-*PODTypesTest*.*:SignalTP*.*:*.FullTestName 
+  - ls .
+  - cmd: .\run_elm_unittests.exe --gtest_output=xml:results_unittests.xml --gtest_filter=*.*
+  - cmd: .\run_elm_unittests.exe --gtest_output=xml:results_unittests.xml --gtest_filter=-*PODTypesTest*.*:SignalTP*.*:*.FullTestName
 after_test:
   # upload results to AppVeyor
   - $wc = New-Object 'System.Net.WebClient'
