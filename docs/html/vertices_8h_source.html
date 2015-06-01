@@ -94,24 +94,26 @@
 <a name="l00019"></a>00019 <span class="preprocessor">#include &quot;<a class="code" href="cv_2typedefs__fwd_8h.html">elm/core/cv/typedefs_fwd.h</a>&quot;</span>
 <a name="l00020"></a>00020 <span class="preprocessor">#include &quot;<a class="code" href="pcl_2typedefs__fwd_8h.html">elm/core/pcl/typedefs_fwd.h</a>&quot;</span>
 <a name="l00021"></a>00021 
-<a name="l00022"></a>00022 <span class="keyword">namespace </span>elm {
+<a name="l00022"></a>00022 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>std::vector&lt;pcl::Vertices &gt;;
 <a name="l00023"></a>00023 
-<a name="l00034"></a>00034 <a class="code" href="namespaceelm.html#a920280bb0e893412086bdea6aa980e9d">VecVertices</a> <a class="code" href="namespaceelm.html#a45180339ab7fe4e54b975a589b590424" title="Convert Mat of floats to vector of pcl Vertices.">Mat2VecVertices</a>(<span class="keyword">const</span> cv::Mat &amp;m);
-<a name="l00035"></a>00035 
-<a name="l00045"></a>00045 <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> <a class="code" href="namespaceelm.html#abf4cc23596a9d94b46c1c482507777f8" title="Convert vector of Vertices to a Mat of floats.">VecVertices2Mat</a>(<span class="keyword">const</span> <a class="code" href="namespaceelm.html#a920280bb0e893412086bdea6aa980e9d">VecVertices</a>&amp; vv, <span class="keywordtype">bool</span> do_row_mat=<span class="keyword">true</span>);
-<a name="l00046"></a>00046 
-<a name="l00047"></a>00047 }
+<a name="l00024"></a>00024 <span class="keyword">namespace </span>elm {
+<a name="l00025"></a>00025 
+<a name="l00036"></a>00036 <a class="code" href="namespaceelm.html#a920280bb0e893412086bdea6aa980e9d">VecVertices</a> <a class="code" href="namespaceelm.html#a45180339ab7fe4e54b975a589b590424" title="Convert Mat of floats to vector of pcl Vertices.">Mat2VecVertices</a>(<span class="keyword">const</span> cv::Mat &amp;m);
+<a name="l00037"></a>00037 
+<a name="l00047"></a>00047 <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> <a class="code" href="namespaceelm.html#abf4cc23596a9d94b46c1c482507777f8" title="Convert vector of Vertices to a Mat of floats.">VecVertices2Mat</a>(<span class="keyword">const</span> <a class="code" href="namespaceelm.html#a920280bb0e893412086bdea6aa980e9d">VecVertices</a>&amp; vv, <span class="keywordtype">bool</span> do_row_mat=<span class="keyword">true</span>);
 <a name="l00048"></a>00048 
-<a name="l00049"></a>00049 <span class="preprocessor">#endif // __WITH_PCL</span>
-<a name="l00050"></a>00050 <span class="preprocessor"></span>
-<a name="l00051"></a>00051 <span class="preprocessor">#endif // _ELM_CORE_PCL_UTILS_H_</span>
+<a name="l00049"></a>00049 }
+<a name="l00050"></a>00050 
+<a name="l00051"></a>00051 <span class="preprocessor">#endif // __WITH_PCL</span>
+<a name="l00052"></a>00052 <span class="preprocessor"></span>
+<a name="l00053"></a>00053 <span class="preprocessor">#endif // _ELM_CORE_PCL_UTILS_H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="vertices_8h.html">vertices.h</a>      </li>
 
-    <li class="footer">Generated on Fri May 8 2015 22:11:45 for ELM Library by
+    <li class="footer">Generated on Mon Jun 1 2015 22:36:08 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

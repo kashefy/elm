@@ -86,24 +86,24 @@
 <a name="l00008"></a>00008 <span class="preprocessor">#ifndef _ELM_CORE_REGISTOR_H_</span>
 <a name="l00009"></a>00009 <span class="preprocessor"></span><span class="preprocessor">#define _ELM_CORE_REGISTOR_H_</span>
 <a name="l00010"></a>00010 <span class="preprocessor"></span>
-<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;map&gt;</span>
-<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;memory&gt;</span>
-<a name="l00013"></a>00013 <span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00014"></a>00014 
-<a name="l00015"></a>00015 <span class="preprocessor">#include &quot;<a class="code" href="exception_8h.html">elm/core/exception.h</a>&quot;</span>
-<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;<a class="code" href="stl__inl_8h.html">elm/core/stl/stl_inl.h</a>&quot;</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;memory&gt;</span>
+<a name="l00012"></a>00012 
+<a name="l00013"></a>00013 <span class="preprocessor">#include &quot;<a class="code" href="exception_8h.html">elm/core/exception.h</a>&quot;</span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &quot;<a class="code" href="stl__inl_8h.html">elm/core/stl/stl_inl.h</a>&quot;</span>
+<a name="l00015"></a>00015 
+<a name="l00016"></a>00016 <span class="keyword">namespace </span>elm {
 <a name="l00017"></a>00017 
 <a name="l00022"></a>00022 <span class="keyword">template</span> &lt;<span class="keyword">class</span> TBase&gt;
-<a name="l00023"></a><a class="code" href="classRegistor__.html">00023</a> <span class="keyword">class </span><a class="code" href="classRegistor__.html" title="class for registering derived instantances Partially inspired by: http://stackoverflow.com/questions/582331/is-there-a-way-to-instantiate-objects-from-a-string-holding-their-class-name">Registor_</a>
+<a name="l00023"></a><a class="code" href="classelm_1_1Registor__.html">00023</a> <span class="keyword">class </span><a class="code" href="classelm_1_1Registor__.html" title="class for registering derived instantances Partially inspired by: http://stackoverflow.com/questions/582331/is-there-a-way-to-instantiate-objects-from-a-string-holding-their-class-name">Registor_</a>
 <a name="l00024"></a>00024 {
 <a name="l00025"></a>00025 <span class="keyword">public</span>:
-<a name="l00026"></a><a class="code" href="classRegistor__.html#a5f36039af829f8679bf6873f79939e0a">00026</a>     <span class="keyword">typedef</span> std::string <a class="code" href="classRegistor__.html#a5f36039af829f8679bf6873f79939e0a" title="convinience for name of instance type">RegisteredTypeKey</a>;      
-<a name="l00027"></a><a class="code" href="classRegistor__.html#aeef540f8c11d1a879afae7f08da32ee1">00027</a>     <span class="keyword">typedef</span> std::shared_ptr&lt;TBase&gt; <a class="code" href="classRegistor__.html#aeef540f8c11d1a879afae7f08da32ee1" title="convinience for shared pointer to instance">RegisteredTypeSharedPtr</a>;    
-<a name="l00028"></a><a class="code" href="classRegistor__.html#a79c13647a1df3b53675381d48b33d31e">00028</a>     <span class="keyword">typedef</span> std::map&lt; RegisteredTypeKey, RegisteredTypeSharedPtr(*)() &gt; <a class="code" href="classRegistor__.html#a79c13647a1df3b53675381d48b33d31e" title="convinience for registry map">Registry</a>;    
+<a name="l00026"></a><a class="code" href="classelm_1_1Registor__.html#a927648270368a734f423e2b4597e1867">00026</a>     <span class="keyword">typedef</span> std::string <a class="code" href="classelm_1_1Registor__.html#a927648270368a734f423e2b4597e1867" title="convinience for name of instance type">RegisteredTypeKey</a>;      
+<a name="l00027"></a><a class="code" href="classelm_1_1Registor__.html#afc2b7434b2b467a4a61815e168a88187">00027</a>     <span class="keyword">typedef</span> std::shared_ptr&lt;TBase&gt; <a class="code" href="classelm_1_1Registor__.html#afc2b7434b2b467a4a61815e168a88187" title="convinience for shared pointer to instance">RegisteredTypeSharedPtr</a>;    
+<a name="l00028"></a><a class="code" href="classelm_1_1Registor__.html#a08e5823664b2dd900125d1633db0b124">00028</a>     <span class="keyword">typedef</span> std::map&lt; RegisteredTypeKey, RegisteredTypeSharedPtr(*)() &gt; <a class="code" href="classelm_1_1Registor__.html#a08e5823664b2dd900125d1633db0b124" title="convinience for registry map">Registry</a>;    
 <a name="l00029"></a>00029 
-<a name="l00036"></a><a class="code" href="classRegistor__.html#ab891042b4d88460baac104013937f829">00036</a>     <span class="keyword">static</span> <a class="code" href="classRegistor__.html#aeef540f8c11d1a879afae7f08da32ee1" title="convinience for shared pointer to instance">RegisteredTypeSharedPtr</a> <a class="code" href="classRegistor__.html#ab891042b4d88460baac104013937f829" title="Factory method for instantiating a shared pointer to an instance.">CreatePtrShared</a>(<span class="keyword">const</span> <a class="code" href="classRegistor__.html#a79c13647a1df3b53675381d48b33d31e" title="convinience for registry map">Registry</a> &amp;r, <span class="keyword">const</span> <a class="code" href="classRegistor__.html#a5f36039af829f8679bf6873f79939e0a" title="convinience for name of instance type">RegisteredTypeKey</a> &amp;type) {
+<a name="l00036"></a><a class="code" href="classelm_1_1Registor__.html#aca7638d3eb7b6fcf6e70b4924a8b5d8f">00036</a>     <span class="keyword">static</span> <a class="code" href="classelm_1_1Registor__.html#afc2b7434b2b467a4a61815e168a88187" title="convinience for shared pointer to instance">RegisteredTypeSharedPtr</a> <a class="code" href="classelm_1_1Registor__.html#aca7638d3eb7b6fcf6e70b4924a8b5d8f" title="Factory method for instantiating a shared pointer to an instance.">CreatePtrShared</a>(<span class="keyword">const</span> <a class="code" href="classelm_1_1Registor__.html#a08e5823664b2dd900125d1633db0b124" title="convinience for registry map">Registry</a> &amp;r, <span class="keyword">const</span> <a class="code" href="classelm_1_1Registor__.html#a927648270368a734f423e2b4597e1867" title="convinience for name of instance type">RegisteredTypeKey</a> &amp;type) {
 <a name="l00037"></a>00037 
-<a name="l00038"></a>00038         <a class="code" href="classRegistor__.html#aeef540f8c11d1a879afae7f08da32ee1" title="convinience for shared pointer to instance">RegisteredTypeSharedPtr</a> ptr;
+<a name="l00038"></a>00038         <a class="code" href="classelm_1_1Registor__.html#afc2b7434b2b467a4a61815e168a88187" title="convinience for shared pointer to instance">RegisteredTypeSharedPtr</a> ptr;
 <a name="l00039"></a>00039 
 <a name="l00040"></a>00040         <span class="keyword">typename</span> Registry::const_iterator itr = r.find(type);
 <a name="l00041"></a>00041         <span class="keywordtype">bool</span> found = itr != r.end();
@@ -121,25 +121,27 @@
 <a name="l00053"></a>00053     }
 <a name="l00054"></a>00054 
 <a name="l00055"></a>00055     <span class="keyword">template</span> &lt;<span class="keyword">class</span> TDerived&gt;
-<a name="l00056"></a><a class="code" href="classRegistor__.html#adfa9b0a43567b3c958b75fd476b8ced5">00056</a>     <span class="keyword">static</span> <a class="code" href="classRegistor__.html#aeef540f8c11d1a879afae7f08da32ee1" title="convinience for shared pointer to instance">RegisteredTypeSharedPtr</a> <a class="code" href="classRegistor__.html#adfa9b0a43567b3c958b75fd476b8ced5">DerivedInstance</a>() {
+<a name="l00056"></a><a class="code" href="classelm_1_1Registor__.html#ad10de0614fa788f7d0e468ca07939e02">00056</a>     <span class="keyword">static</span> <a class="code" href="classelm_1_1Registor__.html#afc2b7434b2b467a4a61815e168a88187" title="convinience for shared pointer to instance">RegisteredTypeSharedPtr</a> <a class="code" href="classelm_1_1Registor__.html#ad10de0614fa788f7d0e468ca07939e02">DerivedInstance</a>() {
 <a name="l00057"></a>00057 
-<a name="l00058"></a>00058         <span class="keywordflow">return</span> <a class="code" href="classRegistor__.html#aeef540f8c11d1a879afae7f08da32ee1" title="convinience for shared pointer to instance">RegisteredTypeSharedPtr</a>(<span class="keyword">new</span> TDerived());
+<a name="l00058"></a>00058         <span class="keywordflow">return</span> <a class="code" href="classelm_1_1Registor__.html#afc2b7434b2b467a4a61815e168a88187" title="convinience for shared pointer to instance">RegisteredTypeSharedPtr</a>(<span class="keyword">new</span> TDerived());
 <a name="l00059"></a>00059     }
 <a name="l00060"></a>00060 
-<a name="l00068"></a><a class="code" href="classRegistor__.html#a144090dc2150093a2bbceb1da9173a39">00068</a>     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classRegistor__.html#a144090dc2150093a2bbceb1da9173a39" title="Find type in registry Effectively a wrapper around STL Map&#39;s find routine.">Find</a>(<span class="keyword">const</span> <a class="code" href="classRegistor__.html#a79c13647a1df3b53675381d48b33d31e" title="convinience for registry map">Registry</a> &amp;r, <span class="keyword">const</span> <a class="code" href="classRegistor__.html#a5f36039af829f8679bf6873f79939e0a" title="convinience for name of instance type">RegisteredTypeKey</a> &amp;type) {
+<a name="l00068"></a><a class="code" href="classelm_1_1Registor__.html#a2faab3e63450fea0311bf30181f7c86e">00068</a>     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classelm_1_1Registor__.html#a2faab3e63450fea0311bf30181f7c86e" title="Find type in registry Effectively a wrapper around STL Map&#39;s find routine.">Find</a>(<span class="keyword">const</span> <a class="code" href="classelm_1_1Registor__.html#a08e5823664b2dd900125d1633db0b124" title="convinience for registry map">Registry</a> &amp;r, <span class="keyword">const</span> <a class="code" href="classelm_1_1Registor__.html#a927648270368a734f423e2b4597e1867" title="convinience for name of instance type">RegisteredTypeKey</a> &amp;type) {
 <a name="l00069"></a>00069 
 <a name="l00070"></a>00070         <span class="keywordflow">return</span> r.find(type) != r.end();
 <a name="l00071"></a>00071     }
 <a name="l00072"></a>00072 };
 <a name="l00073"></a>00073 
-<a name="l00074"></a>00074 <span class="preprocessor">#endif // _ELM_CORE_REGISTOR_H_</span>
+<a name="l00074"></a>00074 } <span class="comment">// namespace elm</span>
+<a name="l00075"></a>00075 
+<a name="l00076"></a>00076 <span class="preprocessor">#endif // _ELM_CORE_REGISTOR_H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="registor_8h.html">registor.h</a>      </li>
 
-    <li class="footer">Generated on Fri May 8 2015 22:11:45 for ELM Library by
+    <li class="footer">Generated on Mon Jun 1 2015 22:36:08 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

@@ -90,43 +90,45 @@
 <a name="l00012"></a>00012 
 <a name="l00013"></a>00013 <span class="preprocessor">#include &quot;<a class="code" href="cv_2typedefs__fwd_8h.html">elm/core/cv/typedefs_fwd.h</a>&quot;</span>
 <a name="l00014"></a>00014 
-<a name="l00015"></a>00015 <span class="keyword">namespace </span>elm {
+<a name="l00015"></a>00015 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>std::vector&lt;int&gt;;
 <a name="l00016"></a>00016 
-<a name="l00022"></a><a class="code" href="classelm_1_1LUT.html">00022</a> <span class="keyword">class </span><a class="code" href="classelm_1_1LUT.html" title="LUT class since OpenCV&#39;s only supports LUT with 8-bit depth.">LUT</a>
-<a name="l00023"></a>00023 {
-<a name="l00024"></a>00024 <span class="keyword">public</span>:
-<a name="l00025"></a>00025     <span class="keyword">virtual</span> <a class="code" href="classelm_1_1LUT.html#a0066c4ada8508fe5db642ae4517d8d7f">~LUT</a>();
-<a name="l00026"></a>00026 
-<a name="l00031"></a>00031     <a class="code" href="classelm_1_1LUT.html#a21d09386be10c2acd79de519bf608c31" title="alternate constructor calling Capacity() still required.">LUT</a>();
-<a name="l00032"></a>00032 
-<a name="l00038"></a>00038     <a class="code" href="classelm_1_1LUT.html#a21d09386be10c2acd79de519bf608c31" title="alternate constructor calling Capacity() still required.">LUT</a>(<span class="keywordtype">int</span> capacity);
-<a name="l00039"></a>00039 
-<a name="l00045"></a>00045     <span class="keywordtype">void</span> <a class="code" href="classelm_1_1LUT.html#a5b783645cd1e91da688508b0a57f9c29" title="Set expected look-up table capacity The capacity should also equal the largest value you expect inser...">Capacity</a>(<span class="keywordtype">int</span> n);
-<a name="l00046"></a>00046 
-<a name="l00051"></a>00051     <span class="keywordtype">void</span> <a class="code" href="classelm_1_1LUT.html#a4bbb34c7ee41118ba49b7918cd0214bf" title="insert entry into look up table">insert</a>(<span class="keywordtype">int</span> lut_entry);
-<a name="l00052"></a>00052 
-<a name="l00060"></a>00060     <span class="keywordtype">int</span> <a class="code" href="classelm_1_1LUT.html#a19d113874197a1d16480885f600577a3" title="update an entry">update</a>(<span class="keywordtype">int</span> a, <span class="keywordtype">int</span> b);
-<a name="l00061"></a>00061 
-<a name="l00066"></a>00066     <span class="keywordtype">void</span> <a class="code" href="classelm_1_1LUT.html#a026b85d3f510184d21557c56d99df7e6" title="apply look-up table to matrix">apply</a>(<a class="code" href="namespacecv.html#a87332e283de569e7bb029d4f4b401dcc" title="convinience typedef for Mat of integers">cv::Mat1i</a> &amp;m) <span class="keyword">const</span>;
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068 <span class="keyword">protected</span>:
+<a name="l00017"></a>00017 <span class="keyword">namespace </span>elm {
+<a name="l00018"></a>00018 
+<a name="l00024"></a><a class="code" href="classelm_1_1LUT.html">00024</a> <span class="keyword">class </span><a class="code" href="classelm_1_1LUT.html" title="LUT class since OpenCV&#39;s only supports LUT with 8-bit depth.">LUT</a>
+<a name="l00025"></a>00025 {
+<a name="l00026"></a>00026 <span class="keyword">public</span>:
+<a name="l00027"></a>00027     <span class="keyword">virtual</span> ~<a class="code" href="classelm_1_1LUT.html" title="LUT class since OpenCV&#39;s only supports LUT with 8-bit depth.">LUT</a>();
+<a name="l00028"></a>00028 
+<a name="l00033"></a>00033     <a class="code" href="classelm_1_1LUT.html" title="LUT class since OpenCV&#39;s only supports LUT with 8-bit depth.">LUT</a>();
+<a name="l00034"></a>00034 
+<a name="l00040"></a>00040     <a class="code" href="classelm_1_1LUT.html" title="LUT class since OpenCV&#39;s only supports LUT with 8-bit depth.">LUT</a>(<span class="keywordtype">int</span> capacity);
+<a name="l00041"></a>00041 
+<a name="l00047"></a>00047     <span class="keywordtype">void</span> Capacity(<span class="keywordtype">int</span> n);
+<a name="l00048"></a>00048 
+<a name="l00053"></a>00053     <span class="keywordtype">void</span> insert(<span class="keywordtype">int</span> lut_entry);
+<a name="l00054"></a>00054 
+<a name="l00062"></a>00062     <span class="keywordtype">int</span> update(<span class="keywordtype">int</span> a, <span class="keywordtype">int</span> b);
+<a name="l00063"></a>00063 
+<a name="l00068"></a>00068     <span class="keywordtype">void</span> apply(<a class="code" href="namespacecv.html#a87332e283de569e7bb029d4f4b401dcc" title="convinience typedef for Mat of integers">cv::Mat1i</a> &amp;m) <span class="keyword">const</span>;
 <a name="l00069"></a>00069 
-<a name="l00070"></a>00070     <span class="comment">// members</span>
-<a name="l00071"></a><a class="code" href="classelm_1_1LUT.html#ab345a2588b883a3cdbd204e3d2b30f78">00071</a>     std::vector&lt;int&gt; <a class="code" href="classelm_1_1LUT.html#ab345a2588b883a3cdbd204e3d2b30f78" title="underlying look-up table with index serving as hash">table_</a>;    
-<a name="l00072"></a><a class="code" href="classelm_1_1LUT.html#a5f7a23ddd215a6aad19af75e407561b7">00072</a>     <span class="keywordtype">int</span> <a class="code" href="classelm_1_1LUT.html#a5f7a23ddd215a6aad19af75e407561b7" title="no. of inserted elements">count_</a>;                 
-<a name="l00073"></a><a class="code" href="classelm_1_1LUT.html#a5c6860ad8394ecff44c73ae90a31d81f">00073</a>     <span class="keywordtype">int</span> <a class="code" href="classelm_1_1LUT.html#a5c6860ad8394ecff44c73ae90a31d81f" title="keeps track of highest values entry inserted">max_entry_</a>;             
-<a name="l00074"></a>00074 };
-<a name="l00075"></a>00075 
-<a name="l00076"></a>00076 } <span class="comment">// namespace elm</span>
+<a name="l00070"></a>00070 <span class="keyword">protected</span>:
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072     <span class="comment">// members</span>
+<a name="l00073"></a><a class="code" href="classelm_1_1LUT.html#ab345a2588b883a3cdbd204e3d2b30f78">00073</a>     std::vector&lt;int&gt; <a class="code" href="classelm_1_1LUT.html#ab345a2588b883a3cdbd204e3d2b30f78" title="underlying look-up table with index serving as hash">table_</a>;    
+<a name="l00074"></a><a class="code" href="classelm_1_1LUT.html#a5f7a23ddd215a6aad19af75e407561b7">00074</a>     <span class="keywordtype">int</span> <a class="code" href="classelm_1_1LUT.html#a5f7a23ddd215a6aad19af75e407561b7" title="no. of inserted elements">count_</a>;                 
+<a name="l00075"></a><a class="code" href="classelm_1_1LUT.html#a5c6860ad8394ecff44c73ae90a31d81f">00075</a>     <span class="keywordtype">int</span> <a class="code" href="classelm_1_1LUT.html#a5c6860ad8394ecff44c73ae90a31d81f" title="keeps track of highest values entry inserted">max_entry_</a>;             
+<a name="l00076"></a>00076 };
 <a name="l00077"></a>00077 
-<a name="l00078"></a>00078 <span class="preprocessor">#endif // _ELM_CORE_CV_LUT_H_</span>
+<a name="l00078"></a>00078 } <span class="comment">// namespace elm</span>
+<a name="l00079"></a>00079 
+<a name="l00080"></a>00080 <span class="preprocessor">#endif // _ELM_CORE_CV_LUT_H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="lut_8h.html">lut.h</a>      </li>
 
-    <li class="footer">Generated on Fri May 8 2015 22:11:45 for ELM Library by
+    <li class="footer">Generated on Mon Jun 1 2015 22:36:08 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

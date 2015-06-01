@@ -1,4 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="node1" href="$classelm_1_1FakeMNISTLabelsWriter.html" title="elm::FakeMNISTLabelsWriter" alt="" coords="5,5,200,35"/>
-<area shape="rect" id="node3" href="$classelm_1_1FakeMNISTImagesWriter.html" title="elm::FakeMNISTImagesWriter" alt="" coords="248,5,448,35"/>
+<area shape="rect" id="node1" href="$classelm_1_1Exception.html" title="elm::Exception" alt="" coords="5,139,115,168"/>
+<area shape="rect" id="node3" href="$classelm_1_1ExceptionBadDims.html" title="elm::ExceptionBadDims" alt="" coords="168,5,331,35"/>
+<area shape="rect" id="node5" href="$classelm_1_1ExceptionFileIOError.html" title="elm::ExceptionFileIOError" alt="" coords="164,59,335,88"/>
+<area shape="rect" id="node7" href="$classelm_1_1ExceptionKeyError.html" title="elm::ExceptionKeyError" alt="" coords="169,112,329,141"/>
+<area shape="rect" id="node9" href="$classelm_1_1ExceptionNotImpl.html" title="elm::ExceptionNotImpl" alt="" coords="172,165,327,195"/>
+<area shape="rect" id="node11" href="$classelm_1_1ExceptionTypeError.html" title="elm::ExceptionTypeError" alt="" coords="167,219,332,248"/>
+<area shape="rect" id="node13" href="$classelm_1_1ExceptionValueError.html" title="elm::ExceptionValueError" alt="" coords="164,272,335,301"/>
 </map>

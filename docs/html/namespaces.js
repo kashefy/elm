@@ -8,5 +8,6 @@ var namespaces =
     [ "elm::detail", "namespaceelm_1_1detail.html", "namespaceelm_1_1detail" ],
     [ "elm::pod", "namespaceelm_1_1pod.html", "namespaceelm_1_1pod" ],
     [ "elm::ts", "namespaceelm_1_1ts.html", "namespaceelm_1_1ts" ],
-    [ "pcl", "namespacepcl.html", null ]
+    [ "pcl", "namespacepcl.html", null ],
+    [ "std", "namespacestd.html", null ]
 ];

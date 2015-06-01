@@ -92,46 +92,48 @@
 <a name="l00014"></a>00014 
 <a name="l00015"></a>00015 <span class="preprocessor">#include &quot;<a class="code" href="base__Layer_8h.html">elm/core/base_Layer.h</a>&quot;</span>
 <a name="l00016"></a>00016 
-<a name="l00017"></a>00017 <span class="keyword">namespace </span>elm {
+<a name="l00017"></a>00017 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>cv::Mat_&lt;float&gt;;
 <a name="l00018"></a>00018 
-<a name="l00019"></a>00019 <span class="keyword">class </span>Signal;
+<a name="l00019"></a>00019 <span class="keyword">namespace </span>elm {
 <a name="l00020"></a>00020 
-<a name="l00021"></a>00021 <span class="keyword">namespace </span>detail {
+<a name="l00021"></a>00021 <span class="keyword">class </span>Signal;
 <a name="l00022"></a>00022 
-<a name="l00023"></a><a class="code" href="namespaceelm_1_1detail.html#a6acc08f22cf077da9a61fbcdaa7a76e9">00023</a> <span class="keyword">const</span> std::string <a class="code" href="namespaceelm_1_1detail.html#a6acc08f22cf077da9a61fbcdaa7a76e9" title="define string here to ensure early initialization for test purposes">BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE</a> = <span class="stringliteral">&quot;m&quot;</span>;   
+<a name="l00023"></a>00023 <span class="keyword">namespace </span>detail {
 <a name="l00024"></a>00024 
-<a name="l00025"></a>00025 }
+<a name="l00025"></a><a class="code" href="namespaceelm_1_1detail.html#a6acc08f22cf077da9a61fbcdaa7a76e9">00025</a> <span class="keyword">const</span> std::string <a class="code" href="namespaceelm_1_1detail.html#a6acc08f22cf077da9a61fbcdaa7a76e9" title="define string here to ensure early initialization for test purposes">BASE_MATOUTPUT_LAYER__KEY_OUTPUT_RESPONSE</a> = <span class="stringliteral">&quot;m&quot;</span>;   
 <a name="l00026"></a>00026 
-<a name="l00031"></a><a class="code" href="classelm_1_1base__MatOutputLayer.html">00031</a> <span class="keyword">class </span><a class="code" href="classelm_1_1base__MatOutputLayer.html" title="class for time-invariant layer">base_MatOutputLayer</a> : <span class="keyword">virtual</span> <span class="keyword">public</span> <a class="code" href="classelm_1_1base__Layer.html" title="The Layer base class Overloaded constructor calls overloaded Reset() so you can implement Reset(confi...">base_Layer</a>
-<a name="l00032"></a>00032 {
-<a name="l00033"></a>00033 <span class="keyword">public</span>:
-<a name="l00034"></a><a class="code" href="classelm_1_1base__MatOutputLayer.html#af1df73d200e0d04592a729d5122ab080">00034</a>     <span class="keyword">static</span> <span class="keyword">const</span> std::string <a class="code" href="classelm_1_1base__MatOutputLayer.html#af1df73d200e0d04592a729d5122ab080">KEY_OUTPUT_RESPONSE</a>;
-<a name="l00035"></a>00035 
-<a name="l00036"></a>00036     <span class="keyword">virtual</span> <a class="code" href="classelm_1_1base__MatOutputLayer.html#a7679ec46dd8ed8da79e7672d0119ab3c">~base_MatOutputLayer</a>();
+<a name="l00027"></a>00027 }
+<a name="l00028"></a>00028 
+<a name="l00033"></a><a class="code" href="classelm_1_1base__MatOutputLayer.html">00033</a> <span class="keyword">class </span><a class="code" href="classelm_1_1base__MatOutputLayer.html" title="class for time-invariant layer">base_MatOutputLayer</a> : <span class="keyword">virtual</span> <span class="keyword">public</span> <a class="code" href="classelm_1_1base__Layer.html" title="The Layer base class Overloaded constructor calls overloaded Reset() so you can implement Reset(confi...">base_Layer</a>
+<a name="l00034"></a>00034 {
+<a name="l00035"></a>00035 <span class="keyword">public</span>:
+<a name="l00036"></a><a class="code" href="classelm_1_1base__MatOutputLayer.html#af1df73d200e0d04592a729d5122ab080">00036</a>     <span class="keyword">static</span> <span class="keyword">const</span> std::string <a class="code" href="classelm_1_1base__MatOutputLayer.html#af1df73d200e0d04592a729d5122ab080">KEY_OUTPUT_RESPONSE</a>;
 <a name="l00037"></a>00037 
-<a name="l00038"></a>00038     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1base__MatOutputLayer.html#a5ca6bf40db8ca254f10552a22adb1a6b" title="Set layer response/output names.">OutputNames</a>(<span class="keyword">const</span> <a class="code" href="classelm_1_1LayerOutputNames.html" title="class for encapsulating layer IO key-name pairs">LayerOutputNames</a> &amp;io);
+<a name="l00038"></a>00038     <span class="keyword">virtual</span> ~<a class="code" href="classelm_1_1base__MatOutputLayer.html" title="class for time-invariant layer">base_MatOutputLayer</a>();
 <a name="l00039"></a>00039 
-<a name="l00040"></a>00040     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1base__MatOutputLayer.html#acfb54f1af5c412c6e1d85d5f5c3bdac9" title="Get layer response due to most recent stimuli.">Response</a>(<a class="code" href="classelm_1_1Signal.html" title="The Signal class, a class for holding single and multiple samples of features.">Signal</a> &amp;signal);
+<a name="l00040"></a>00040     <span class="keyword">virtual</span> <span class="keywordtype">void</span> OutputNames(<span class="keyword">const</span> <a class="code" href="classelm_1_1LayerOutputNames.html" title="class for encapsulating layer IO key-name pairs">LayerOutputNames</a> &amp;io);
 <a name="l00041"></a>00041 
-<a name="l00042"></a>00042 <span class="keyword">protected</span>:
-<a name="l00043"></a>00043     <a class="code" href="classelm_1_1base__MatOutputLayer.html#aa8ac7f21818869fe00f417d140669d8d">base_MatOutputLayer</a>();
-<a name="l00044"></a>00044 
-<a name="l00045"></a>00045     <span class="comment">// members</span>
-<a name="l00046"></a><a class="code" href="classelm_1_1base__MatOutputLayer.html#a4f7babf3ae0bc8046e036f81cf28d5b1">00046</a>     std::string <a class="code" href="classelm_1_1base__MatOutputLayer.html#a4f7babf3ae0bc8046e036f81cf28d5b1" title="destination name in signal object">name_output_</a>;    
-<a name="l00047"></a>00047 
-<a name="l00048"></a><a class="code" href="classelm_1_1base__MatOutputLayer.html#a069305e5ea63998816a0d31c333995b1">00048</a>     <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> <a class="code" href="classelm_1_1base__MatOutputLayer.html#a069305e5ea63998816a0d31c333995b1" title="most recent response/output">m_</a>;   
-<a name="l00049"></a>00049 };
-<a name="l00050"></a>00050 
-<a name="l00051"></a>00051 } <span class="comment">// namespace elm</span>
+<a name="l00042"></a>00042     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Response(<a class="code" href="classelm_1_1Signal.html" title="The Signal class, a class for holding single and multiple samples of features.">Signal</a> &amp;signal);
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044 <span class="keyword">protected</span>:
+<a name="l00045"></a>00045     <a class="code" href="classelm_1_1base__MatOutputLayer.html" title="class for time-invariant layer">base_MatOutputLayer</a>();
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047     <span class="comment">// members</span>
+<a name="l00048"></a><a class="code" href="classelm_1_1base__MatOutputLayer.html#a4f7babf3ae0bc8046e036f81cf28d5b1">00048</a>     std::string <a class="code" href="classelm_1_1base__MatOutputLayer.html#a4f7babf3ae0bc8046e036f81cf28d5b1" title="destination name in signal object">name_output_</a>;    
+<a name="l00049"></a>00049 
+<a name="l00050"></a><a class="code" href="classelm_1_1base__MatOutputLayer.html#a069305e5ea63998816a0d31c333995b1">00050</a>     <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> <a class="code" href="classelm_1_1base__MatOutputLayer.html#a069305e5ea63998816a0d31c333995b1" title="most recent response/output">m_</a>;   
+<a name="l00051"></a>00051 };
 <a name="l00052"></a>00052 
-<a name="l00053"></a>00053 <span class="preprocessor">#endif // _ELM_LAYERS_LAYERS_INTERIM_BASE_MATOUTPUTLAYER_H</span>
+<a name="l00053"></a>00053 } <span class="comment">// namespace elm</span>
+<a name="l00054"></a>00054 
+<a name="l00055"></a>00055 <span class="preprocessor">#endif // _ELM_LAYERS_LAYERS_INTERIM_BASE_MATOUTPUTLAYER_H</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="base__matoutputlayer_8h.html">base_matoutputlayer.h</a>      </li>
 
-    <li class="footer">Generated on Fri May 8 2015 22:11:45 for ELM Library by
+    <li class="footer">Generated on Mon Jun 1 2015 22:36:08 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

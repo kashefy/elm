@@ -1,4 +1,4 @@
 var entropy_8h =
 [
-    [ "CondEntropy", "namespaceelm.html#a399bc9e5ec7206ee2d9d2d8bebadc556", null ]
+    [ "CondEntropy", "namespaceelm.html#a4c9565cace7f9e79b2884fb1a0b8f7f8", null ]
 ];

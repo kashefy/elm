@@ -95,26 +95,34 @@
 <a name="l00020"></a>00020 <span class="preprocessor">#include &quot;<a class="code" href="cv_2typedefs__fwd_8h.html">elm/core/cv/typedefs_fwd.h</a>&quot;</span>
 <a name="l00021"></a>00021 <span class="preprocessor">#include &quot;<a class="code" href="pcl_2typedefs__fwd_8h.html">elm/core/pcl/typedefs_fwd.h</a>&quot;</span>
 <a name="l00022"></a>00022 
-<a name="l00023"></a>00023 <span class="keyword">namespace </span>elm {
-<a name="l00024"></a>00024 
-<a name="l00039"></a>00039 <span class="keyword">template</span> &lt;<span class="keyword">class</span> TPo<span class="keywordtype">int</span>&gt;
-<a name="l00040"></a>00040 boost::shared_ptr&lt;pcl::PointCloud&lt;TPoint &gt; &gt; <a class="code" href="namespaceelm.html#a51484199ba2c17f38e34678f33821e62" title="Convert a single-channel Mat of floats to point cloud.">Mat2PointCloud_</a>(<span class="keyword">const</span> <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> &amp;m);
-<a name="l00041"></a>00041 
-<a name="l00055"></a>00055 <span class="keyword">template</span> &lt;<span class="keyword">class</span> TPo<span class="keywordtype">int</span>&gt;
-<a name="l00056"></a>00056 <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> <a class="code" href="namespaceelm.html#a3bb5480fb3881faf63af4a429a8d0a4c" title="Convert point cloud to OpenCV&#39;s single-channel Mat of floats.">PointCloud2Mat_</a>(boost::shared_ptr&lt;pcl::PointCloud&lt;TPoint &gt; &gt; &amp;cloud_ptr);
-<a name="l00057"></a>00057 
-<a name="l00058"></a>00058 } <span class="comment">// namespace elm</span>
-<a name="l00059"></a>00059 
-<a name="l00060"></a>00060 <span class="preprocessor">#endif // __WITH_PCL</span>
-<a name="l00061"></a>00061 <span class="preprocessor"></span>
-<a name="l00062"></a>00062 <span class="preprocessor">#endif // _ELM_CORE_PCL_CLOUD__H_</span>
+<a name="l00023"></a>00023 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>pcl::PointCloud&lt;pcl::PointXYZ &gt;;
+<a name="l00024"></a>00024 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>pcl::PointCloud&lt;pcl::Normal &gt;;
+<a name="l00025"></a>00025 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>pcl::PointCloud&lt;pcl::PointNormal &gt;;
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>boost::shared_ptr&lt;pcl::PointCloud&lt;pcl::PointXYZ &gt; &gt;;
+<a name="l00028"></a>00028 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>boost::shared_ptr&lt;pcl::PointCloud&lt;pcl::Normal &gt; &gt;;
+<a name="l00029"></a>00029 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>boost::shared_ptr&lt;pcl::PointCloud&lt;pcl::PointNormal &gt; &gt;;
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031 <span class="keyword">namespace </span>elm {
+<a name="l00032"></a>00032 
+<a name="l00047"></a>00047 <span class="keyword">template</span> &lt;<span class="keyword">class</span> TPo<span class="keywordtype">int</span>&gt;
+<a name="l00048"></a>00048 boost::shared_ptr&lt;pcl::PointCloud&lt;TPoint &gt; &gt; <a class="code" href="namespaceelm.html#a51484199ba2c17f38e34678f33821e62" title="Convert a single-channel Mat of floats to point cloud.">Mat2PointCloud_</a>(<span class="keyword">const</span> <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> &amp;m);
+<a name="l00049"></a>00049 
+<a name="l00063"></a>00063 <span class="keyword">template</span> &lt;<span class="keyword">class</span> TPo<span class="keywordtype">int</span>&gt;
+<a name="l00064"></a>00064 <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> <a class="code" href="namespaceelm.html#a3bb5480fb3881faf63af4a429a8d0a4c" title="Convert point cloud to OpenCV&#39;s single-channel Mat of floats.">PointCloud2Mat_</a>(boost::shared_ptr&lt;pcl::PointCloud&lt;TPoint &gt; &gt; &amp;cloud_ptr);
+<a name="l00065"></a>00065 
+<a name="l00066"></a>00066 } <span class="comment">// namespace elm</span>
+<a name="l00067"></a>00067 
+<a name="l00068"></a>00068 <span class="preprocessor">#endif // __WITH_PCL</span>
+<a name="l00069"></a>00069 <span class="preprocessor"></span>
+<a name="l00070"></a>00070 <span class="preprocessor">#endif // _ELM_CORE_PCL_CLOUD__H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="cloud___8h.html">cloud_.h</a>      </li>
 
-    <li class="footer">Generated on Fri May 8 2015 22:11:45 for ELM Library by
+    <li class="footer">Generated on Mon Jun 1 2015 22:36:08 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

@@ -1,6 +1,8 @@
 <map id="G" name="G">
 <area shape="rect" id="node3" href="$base__statefulpopulationcode_8h.html" title="base_statefulpopulationcode.h" alt="" coords="5,83,203,112"/>
-<area shape="rect" id="node5" href="$layer__assertions_8h.html" title="layer_assertions.h" alt="" coords="227,83,355,112"/>
-<area shape="rect" id="node9" href="$learninglayer__assertions_8h.html" title="learninglayer_assertions.h" alt="" coords="379,83,552,112"/>
-<area shape="rect" id="node7" href="$layer__feat__transf__assertions_8h.html" title="layer_feat_transf_assertions.h" alt="" coords="192,160,389,189"/>
+<area shape="rect" id="node5" href="$layervertex_8h.html" title="layervertex.h" alt="" coords="227,83,323,112"/>
+<area shape="rect" id="node9" href="$layer__assertions_8h.html" title="layer_assertions.h" alt="" coords="347,83,475,112"/>
+<area shape="rect" id="node13" href="$learninglayer__assertions_8h.html" title="learninglayer_assertions.h" alt="" coords="499,83,672,112"/>
+<area shape="rect" id="node7" href="$layergraph__impl_8h.html" title="layergraph_impl.h" alt="" coords="189,160,312,189"/>
+<area shape="rect" id="node11" href="$layer__feat__transf__assertions_8h.html" title="layer_feat_transf_assertions.h" alt="" coords="336,160,533,189"/>
 </map>

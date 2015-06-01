@@ -137,6 +137,8 @@ var hierarchy =
     [ "elm::LayerAttr_< TLayer >", "structelm_1_1LayerAttr__.html", null ],
     [ "elm::LayerFactory", "classelm_1_1LayerFactory.html", null ],
     [ "elm::LayerFeatTransf_TP_< TLayer >", "classelm_1_1LayerFeatTransf__TP__.html", null ],
+    [ "elm::LayerGraph", "classelm_1_1LayerGraph.html", null ],
+    [ "elm::LayerGraph_Impl", "classelm_1_1LayerGraph__Impl.html", null ],
     [ "elm::LayerInputNames", "classelm_1_1LayerInputNames.html", [
       [ "elm::LayerIONames", "classelm_1_1LayerIONames.html", [
         [ "elm::LayerConfig", "classelm_1_1LayerConfig.html", null ]
@@ -146,6 +148,7 @@ var hierarchy =
     [ "elm::LayerOutputNames", "classelm_1_1LayerOutputNames.html", [
       [ "elm::LayerIONames", "classelm_1_1LayerIONames.html", null ]
     ] ],
+    [ "elm::LayerVertex", "structelm_1_1LayerVertex.html", null ],
     [ "elm::LearningLayer_TP_< TLayer >", "classelm_1_1LearningLayer__TP__.html", null ],
     [ "elm::LUT", "classelm_1_1LUT.html", null ],
     [ "NumpyAllocator", "classNumpyAllocator.html", null ],
@@ -153,7 +156,7 @@ var hierarchy =
     [ "elm::Percentile", "classelm_1_1Percentile.html", null ],
     [ "PyAllowThreads", "classPyAllowThreads.html", null ],
     [ "PyEnsureGIL", "classPyEnsureGIL.html", null ],
-    [ "Registor_< TBase >", "classRegistor__.html", null ],
+    [ "elm::Registor_< TBase >", "classelm_1_1Registor__.html", null ],
     [ "SerializationTypeAttr_< T >", "structSerializationTypeAttr__.html", null ],
     [ "SerializationTypedTest< T >", "classSerializationTypedTest.html", null ],
     [ "elm::Signal", "classelm_1_1Signal.html", null ],
@@ -174,8 +177,10 @@ var hierarchy =
       [ "Visitor_< void >", "classVisitor__.html", null ]
     ] ],
     [ "boost::property_tree::translator_between< std::basic_string< Ch, Traits, Alloc >, CvTermCriteria >", "structboost_1_1property__tree_1_1translator__between_3_01std_1_1basic__string_3_01Ch_00_01Traits82e969b0f5199bceab33d69c62f3a369.html", null ],
+    [ "boost::property_tree::translator_between< std::basic_string< Ch, Traits, Alloc >, std::map< std::string, std::string > >", "structboost_1_1property__tree_1_1translator__between_3_01std_1_1basic__string_3_01Ch_00_01Traitsc18399d3a6b786283e74e9510f940a0f.html", null ],
     [ "boost::property_tree::translator_between< std::basic_string< Ch, Traits, Alloc >, std::vector< int > >", "structboost_1_1property__tree_1_1translator__between_3_01std_1_1basic__string_3_01Ch_00_01Traits071788ddc13a16fec2b1928372c4ec9a.html", null ],
     [ "elm::translator_CvTermCriteria", "structelm_1_1translator__CvTermCriteria.html", null ],
+    [ "elm::translator_MapSS", "structelm_1_1translator__MapSS.html", null ],
     [ "elm::translator_VecI", "structelm_1_1translator__VecI.html", null ],
     [ "type_from_python< T >", "structtype__from__python.html", null ],
     [ "type_into_python< T >", "structtype__into__python.html", null ],

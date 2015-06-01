@@ -91,38 +91,43 @@
 <a name="l00015"></a>00015 <span class="preprocessor">#include &quot;<a class="code" href="cv_2typedefs__fwd_8h.html">elm/core/cv/typedefs_fwd.h</a>&quot;</span>
 <a name="l00016"></a>00016 <span class="preprocessor">#include &quot;<a class="code" href="exception_8h.html">elm/core/exception.h</a>&quot;</span>
 <a name="l00017"></a>00017 
-<a name="l00018"></a>00018 <span class="keyword">namespace </span>elm {
-<a name="l00019"></a>00019 
-<a name="l00031"></a>00031 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
-<a name="l00032"></a><a class="code" href="namespaceelm.html#a83700a389d44a79354197cd9e7db179a">00032</a> std::vector&lt;T&gt; <a class="code" href="namespaceelm.html#a83700a389d44a79354197cd9e7db179a" title="Function for converting a Mat_ object into a vector of same type The mat is flattened beforehand...">Mat_ToVec_</a>(<span class="keyword">const</span> cv::Mat_&lt;T&gt; &amp;m) {
-<a name="l00033"></a>00033 
-<a name="l00034"></a>00034     <span class="keywordflow">if</span>(!m.empty() &amp;&amp; !m.isContinuous()) {
-<a name="l00035"></a>00035 
-<a name="l00036"></a>00036         <a class="code" href="exception_8h.html#afd14f2601efa7936206c3a6cac63859c">ELM_THROW_TYPE_ERROR</a>(<span class="stringliteral">&quot;Only conitnuous matrices supported.&quot;</span>);
-<a name="l00037"></a>00037     }
-<a name="l00038"></a>00038     <span class="comment">// syntax learned from posts here:</span>
-<a name="l00039"></a>00039     <span class="comment">// http://stackoverflow.com/questions/610245/where-and-why-do-i-have-to-put-the-template-and-typename-keywords</span>
-<a name="l00040"></a>00040     <span class="keyword">const</span> T* p = m.template ptr&lt;T&gt;(0);
-<a name="l00041"></a>00041     std::vector&lt;T&gt; v(p, p+m.total());
-<a name="l00042"></a>00042     <span class="keywordflow">return</span> v;
-<a name="l00043"></a>00043 }
-<a name="l00044"></a>00044 
-<a name="l00055"></a>00055 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
-<a name="l00056"></a><a class="code" href="namespaceelm.html#adc7b5c3a1b48d23c88e688db04d452ea">00056</a> cv::Mat_&lt;T&gt; <a class="code" href="namespaceelm.html#adc7b5c3a1b48d23c88e688db04d452ea" title="Function for converting STL vector of POD type into an OpenCV Mat.">Vec_ToRowMat_</a>(std::vector&lt;T&gt; &amp;v)
-<a name="l00057"></a>00057 {
-<a name="l00058"></a>00058     <span class="keywordflow">return</span> cv::Mat_&lt;T&gt;(1, <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(v.size()), v.data());
-<a name="l00059"></a>00059 }
-<a name="l00060"></a>00060 
-<a name="l00061"></a>00061 }
-<a name="l00062"></a>00062 
-<a name="l00063"></a>00063 <span class="preprocessor">#endif // _ELM_CORE_MAT_VECTOR_UTILS_INL_H_</span>
+<a name="l00018"></a>00018 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>std::vector&lt;float&gt;;
+<a name="l00019"></a>00019 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>std::vector&lt;int&gt;;
+<a name="l00020"></a>00020 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>cv::Mat_&lt;float&gt;;
+<a name="l00021"></a>00021 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>cv::Mat_&lt;int&gt;;
+<a name="l00022"></a>00022 
+<a name="l00023"></a>00023 <span class="keyword">namespace </span>elm {
+<a name="l00024"></a>00024 
+<a name="l00036"></a>00036 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
+<a name="l00037"></a><a class="code" href="namespaceelm.html#a83700a389d44a79354197cd9e7db179a">00037</a> std::vector&lt;T&gt; <a class="code" href="namespaceelm.html#a83700a389d44a79354197cd9e7db179a" title="Function for converting a Mat_ object into a vector of same type The mat is flattened beforehand...">Mat_ToVec_</a>(<span class="keyword">const</span> cv::Mat_&lt;T&gt; &amp;m) {
+<a name="l00038"></a>00038 
+<a name="l00039"></a>00039     <span class="keywordflow">if</span>(!m.empty() &amp;&amp; !m.isContinuous()) {
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041         <a class="code" href="exception_8h.html#afd14f2601efa7936206c3a6cac63859c">ELM_THROW_TYPE_ERROR</a>(<span class="stringliteral">&quot;Only conitnuous matrices supported.&quot;</span>);
+<a name="l00042"></a>00042     }
+<a name="l00043"></a>00043     <span class="comment">// syntax learned from posts here:</span>
+<a name="l00044"></a>00044     <span class="comment">// http://stackoverflow.com/questions/610245/where-and-why-do-i-have-to-put-the-template-and-typename-keywords</span>
+<a name="l00045"></a>00045     <span class="keyword">const</span> T* p = m.template ptr&lt;T&gt;(0);
+<a name="l00046"></a>00046     std::vector&lt;T&gt; v(p, p+m.total());
+<a name="l00047"></a>00047     <span class="keywordflow">return</span> v;
+<a name="l00048"></a>00048 }
+<a name="l00049"></a>00049 
+<a name="l00060"></a>00060 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
+<a name="l00061"></a><a class="code" href="namespaceelm.html#adc7b5c3a1b48d23c88e688db04d452ea">00061</a> cv::Mat_&lt;T&gt; <a class="code" href="namespaceelm.html#adc7b5c3a1b48d23c88e688db04d452ea" title="Function for converting STL vector of POD type into an OpenCV Mat.">Vec_ToRowMat_</a>(std::vector&lt;T&gt; &amp;v)
+<a name="l00062"></a>00062 {
+<a name="l00063"></a>00063     <span class="keywordflow">return</span> cv::Mat_&lt;T&gt;(1, <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(v.size()), v.data());
+<a name="l00064"></a>00064 }
+<a name="l00065"></a>00065 
+<a name="l00066"></a>00066 }
+<a name="l00067"></a>00067 
+<a name="l00068"></a>00068 <span class="preprocessor">#endif // _ELM_CORE_MAT_VECTOR_UTILS_INL_H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="mat__vector__utils__inl_8h.html">mat_vector_utils_inl.h</a>      </li>
 
-    <li class="footer">Generated on Fri May 8 2015 22:11:45 for ELM Library by
+    <li class="footer">Generated on Mon Jun 1 2015 22:36:08 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

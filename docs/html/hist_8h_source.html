@@ -88,35 +88,37 @@
 <a name="l00010"></a>00010 <span class="preprocessor"></span>
 <a name="l00011"></a>00011 <span class="preprocessor">#include &lt;opencv2/core/core.hpp&gt;</span>
 <a name="l00012"></a>00012 
-<a name="l00018"></a><a class="code" href="classHist1Ch.html">00018</a> <span class="keyword">class </span><a class="code" href="classHist1Ch.html" title="Class for wrapping OpenCV&#39;s calcHist() routine.">Hist1Ch</a>
-<a name="l00019"></a>00019 {
-<a name="l00020"></a>00020 <span class="keyword">public</span>:
-<a name="l00021"></a>00021     <a class="code" href="classHist1Ch.html#a1bb757440e5478a5a1dad0f9bece08a0">~Hist1Ch</a>();
-<a name="l00022"></a>00022 
-<a name="l00023"></a>00023     <a class="code" href="classHist1Ch.html#a9ff8ae2a9ce42f2da4d3d5cd825540f7">Hist1Ch</a>();
+<a name="l00013"></a>00013 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>cv::Mat_&lt;float&gt;;
+<a name="l00014"></a>00014 
+<a name="l00020"></a><a class="code" href="classHist1Ch.html">00020</a> <span class="keyword">class </span><a class="code" href="classHist1Ch.html" title="Class for wrapping OpenCV&#39;s calcHist() routine.">Hist1Ch</a>
+<a name="l00021"></a>00021 {
+<a name="l00022"></a>00022 <span class="keyword">public</span>:
+<a name="l00023"></a>00023     ~<a class="code" href="classHist1Ch.html" title="Class for wrapping OpenCV&#39;s calcHist() routine.">Hist1Ch</a>();
 <a name="l00024"></a>00024 
-<a name="l00032"></a>00032     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classHist1Ch.html#ae0d771c466864cf8d0eb9b693e74d5b8" title="Reconfigure.">Reconfigure</a>(<span class="keywordtype">int</span> size, <span class="keyword">const</span> std::pair&lt;float, float&gt; &amp;range, <span class="keywordtype">bool</span> do_uniform, <span class="keywordtype">bool</span> do_accumulate);
-<a name="l00033"></a>00033 
-<a name="l00042"></a>00042     <span class="keyword">virtual</span> <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> <a class="code" href="classHist1Ch.html#a14f1e4ba1382e65eb5cfa0ae267428d0" title="Compute histogram from most recent input.">Compute</a>(<span class="keyword">const</span> cv::Mat &amp;in, cv::InputArray mask=cv::noArray());
-<a name="l00043"></a>00043 
-<a name="l00044"></a>00044 <span class="keyword">protected</span>:
+<a name="l00025"></a>00025     <a class="code" href="classHist1Ch.html" title="Class for wrapping OpenCV&#39;s calcHist() routine.">Hist1Ch</a>();
+<a name="l00026"></a>00026 
+<a name="l00034"></a>00034     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Reconfigure(<span class="keywordtype">int</span> size, <span class="keyword">const</span> std::pair&lt;float, float&gt; &amp;range, <span class="keywordtype">bool</span> do_uniform, <span class="keywordtype">bool</span> do_accumulate);
+<a name="l00035"></a>00035 
+<a name="l00044"></a>00044     <span class="keyword">virtual</span> <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> Compute(<span class="keyword">const</span> cv::Mat &amp;in, cv::InputArray mask=cv::noArray());
 <a name="l00045"></a>00045 
-<a name="l00046"></a><a class="code" href="classHist1Ch.html#ae5bc6b05eed1ff04ccb9f8b93dfa4cfa">00046</a>     <span class="keywordtype">int</span> <a class="code" href="classHist1Ch.html#ae5bc6b05eed1ff04ccb9f8b93dfa4cfa" title="histogram size, no. of bins">size_</a>;                      
-<a name="l00047"></a><a class="code" href="classHist1Ch.html#af1ce40883f00a43ec52c68e150d26249">00047</a>     std::pair&lt;float, float&gt; <a class="code" href="classHist1Ch.html#af1ce40883f00a43ec52c68e150d26249" title="hist. range">range_</a>; 
-<a name="l00048"></a><a class="code" href="classHist1Ch.html#aa33686958dbc2432b710d2cb6d7124ca">00048</a>     <span class="keywordtype">bool</span> <a class="code" href="classHist1Ch.html#aa33686958dbc2432b710d2cb6d7124ca" title="uniformity of bins, if true, keep equally sized bins">do_uniform_</a>;               
-<a name="l00049"></a><a class="code" href="classHist1Ch.html#ad20f11696b1994ec72aaa44fa83c5ab2">00049</a>     <span class="keywordtype">bool</span> <a class="code" href="classHist1Ch.html#ad20f11696b1994ec72aaa44fa83c5ab2" title="if false, clear histograms first, otherwise accumulate from previous input">do_accumulate_</a>;            
-<a name="l00050"></a>00050 
-<a name="l00051"></a><a class="code" href="classHist1Ch.html#a30a59c55aa1c466fea7435b826f2329e">00051</a>     <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> <a class="code" href="classHist1Ch.html#a30a59c55aa1c466fea7435b826f2329e" title="computed histogram">hist_</a>;                  
-<a name="l00052"></a>00052 };
-<a name="l00053"></a>00053 
-<a name="l00054"></a>00054 <span class="preprocessor">#endif // _ELM_CORE_HIST_H_</span>
+<a name="l00046"></a>00046 <span class="keyword">protected</span>:
+<a name="l00047"></a>00047 
+<a name="l00048"></a><a class="code" href="classHist1Ch.html#ae5bc6b05eed1ff04ccb9f8b93dfa4cfa">00048</a>     <span class="keywordtype">int</span> <a class="code" href="classHist1Ch.html#ae5bc6b05eed1ff04ccb9f8b93dfa4cfa" title="histogram size, no. of bins">size_</a>;                      
+<a name="l00049"></a><a class="code" href="classHist1Ch.html#af1ce40883f00a43ec52c68e150d26249">00049</a>     std::pair&lt;float, float&gt; <a class="code" href="classHist1Ch.html#af1ce40883f00a43ec52c68e150d26249" title="hist. range">range_</a>; 
+<a name="l00050"></a><a class="code" href="classHist1Ch.html#aa33686958dbc2432b710d2cb6d7124ca">00050</a>     <span class="keywordtype">bool</span> <a class="code" href="classHist1Ch.html#aa33686958dbc2432b710d2cb6d7124ca" title="uniformity of bins, if true, keep equally sized bins">do_uniform_</a>;               
+<a name="l00051"></a><a class="code" href="classHist1Ch.html#ad20f11696b1994ec72aaa44fa83c5ab2">00051</a>     <span class="keywordtype">bool</span> <a class="code" href="classHist1Ch.html#ad20f11696b1994ec72aaa44fa83c5ab2" title="if false, clear histograms first, otherwise accumulate from previous input">do_accumulate_</a>;            
+<a name="l00052"></a>00052 
+<a name="l00053"></a><a class="code" href="classHist1Ch.html#a30a59c55aa1c466fea7435b826f2329e">00053</a>     <a class="code" href="namespacecv.html#a9747ac59f97cbb93ddd719c4fb3e2d5d" title="convinience typedef for Mat of floats without constraints on no. of channels">cv::Mat1f</a> <a class="code" href="classHist1Ch.html#a30a59c55aa1c466fea7435b826f2329e" title="computed histogram">hist_</a>;                  
+<a name="l00054"></a>00054 };
+<a name="l00055"></a>00055 
+<a name="l00056"></a>00056 <span class="preprocessor">#endif // _ELM_CORE_HIST_H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="hist_8h.html">hist.h</a>      </li>
 
-    <li class="footer">Generated on Fri May 8 2015 22:11:45 for ELM Library by
+    <li class="footer">Generated on Mon Jun 1 2015 22:36:08 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>
