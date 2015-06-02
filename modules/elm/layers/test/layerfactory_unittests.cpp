@@ -48,7 +48,7 @@ TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared)
 
 TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared_WrongType)
 {
-    EXPECT_THROW(LayerFactory::CreateShared("Blahbla"), elm::ExceptionTypeError);
+    EXPECT_THROW(LayerFactory::CreateShared("Blahbla"), ExceptionTypeError);
 }
 
 TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared_UniqueInstancesSameType)
