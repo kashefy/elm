@@ -1,5 +1,5 @@
 /*
- * Sinc our module is initialized elsewhere and we call import_array() there,
+ * Since our module is initialized elsewhere and we call import_array() there,
  * we need to avoid over-importing the array module
  * according to these instructions: http://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
  */
