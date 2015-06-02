@@ -83,6 +83,11 @@ LayerRegistor::RegisteredTypeSharedPtr LayerFactory::CreateShared(const LayerTyp
     return ptr;
 }
 
+bool LayerFactory::Exists(const LayerType &type) {
+
+    return LayerRegistor::Find(g_layerRegistry, type);
+}
+
 void LayerFactory::Init(LayerShared &layer,
                         const LayerConfig &config,
                         const LayerIONames &io)
