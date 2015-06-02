@@ -116,4 +116,15 @@ TEST_F(WeightedSumTest, Activate)
     }
 }
 
+TEST_F(WeightedSumTest, Activate_invalid)
+{
+    Signal signal;
+    // feed input into signal object
+    ASSERT_FALSE(signal.Exists(NAME_STIMULUS));
+    signal.Append(NAME_STIMULUS, Mat1f::ones(3, 3));
+
+    // compute response
+    EXPECT_THROW(to_->Activate(signal), ExceptionBadDims);
+}
+
 } // annonymous namespace for test cases and fixtures
