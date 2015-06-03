@@ -79,7 +79,6 @@ TYPED_TEST_P(Layer_TP_, Destructor)
  */
 TYPED_TEST_P(Layer_TP_, RequiredIONamesValidation)
 {
-    typedef std::vector<std::string > VecS;
     using namespace elm;
     MapIONames io_pairs = LayerAttr_<TypeParam >::io_pairs;
     VecS keys = Keys(io_pairs);
