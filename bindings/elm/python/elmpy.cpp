@@ -22,6 +22,7 @@
 #include "opencv2/core/core.hpp"
 
 #include "elm/core/core.h"
+#include "elm/core/typedefs_sfwd.h"
 
 #include "elm/python/conversions.h"
 #include "elm/python/conversions_cv.cpp"
@@ -131,6 +132,8 @@ BOOST_PYTHON_MODULE(elm) {
     bp::numeric::array::set_module_and_type("numpy", "ndarray");
 
     // register custom converters
+    bp::to_python_converter< VecS, type_into_python<VecS> >();
+
     bp::to_python_converter< Mat, type_into_python<Mat> >();
     bp::to_python_converter< Mat1f, type_into_python<Mat1f> >();
 
