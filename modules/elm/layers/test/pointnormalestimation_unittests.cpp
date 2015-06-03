@@ -29,6 +29,12 @@ using namespace cv;
 using namespace pcl;
 using namespace elm;
 
+extern template class pcl::PointCloud<pcl::PointXYZ >;
+extern template class pcl::PointCloud<pcl::Normal >;
+
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ > >;
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::Normal > >;
+
 namespace {
 
 ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(PointNormalEstimation);
@@ -155,19 +161,40 @@ TEST_F(PointNormalEstimationTest, ActivateAndResponse)
     EXPECT_EQ(normals->height, response->height);
     EXPECT_EQ(normals->size(), response->size());
 
-    for(uint32_t r=0; r<normals->height; r++) {
+    PointCloud<Normal>::const_iterator itr1 = normals->begin();
+    PointCloud<Normal>::const_iterator itr2 = response->begin();
+    for(int i=0; itr1 != normals->end(); i++, ++itr1, ++itr2) {
 
-        for(uint32_t c=0; c<normals->width; c++) {
+        Normal _p1 = *itr1;
+        Normal _p2 = *itr2;
 
-            Normal _p1 = normals->at(c, r);
-            Normal _p2 = response->at(c, r);
+        EXPECT_NE(_p1.normal, _p2.normal);
 
-            EXPECT_NE(_p1.normal, _p2.normal);
+        for(int k=0; k<3; k++) {
 
-            for(int i=0; i<3; i++) {
+            EXPECT_FLOAT_EQ(_p1.normal[k], _p2.normal[k]) << "normal component k=" << k << "mismatch at element i=" << i;
+        }
+    }
+}
 
-                EXPECT_FLOAT_EQ(_p1.normal[i], _p2.normal[i]) << "normal component i=" << i << "mismatch at r=" << r << ", c=" << c;
-            }
+TEST_F(PointNormalEstimationTest, ResponseDims)
+{
+    for(uint32_t r=30; r<46; r+=3) {
+
+        for(uint32_t c=30; c<46; c+=3) {
+
+            sig_.Clear();
+
+            cloud_in_.reset(new CloudXYZ(c, r));
+            sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in_);
+
+            to_->Activate(sig_);
+            to_->Response(sig_);
+
+            CloudNrmlPtr response = sig_.MostRecent(NAME_OUTPUT_POINT_CLOUD).get<CloudNrmlPtr>();
+            EXPECT_EQ(c, response->width);
+            EXPECT_EQ(r, response->height);
+            EXPECT_EQ(static_cast<size_t>(r*c), response->size());
         }
     }
 }
