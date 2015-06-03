@@ -25,6 +25,7 @@
 #include "elm/layers/medianblur.h"
 #include "elm/layers/mlp.h"
 #include "elm/encoding/populationcode_derivs/mutex_populationcode.h"
+#include "elm/layers/pointnormalestimation.h"
 #include "elm/layers/saliencyitti.h"
 #include "elm/layers/sinkhornbalancing.h"
 #include "elm/layers/triangulation.h"
@@ -52,6 +53,7 @@ LayerRegistry g_layerRegistry = map_list_of
         LAYER_REGISTRY_PAIR( MedianBlur )
         LAYER_REGISTRY_PAIR( MLP )
         LAYER_REGISTRY_PAIR( MutexPopulationCode )
+        LAYER_REGISTRY_PAIR( PointNormalEstimation )
         LAYER_REGISTRY_PAIR( SaliencyItti )
         LAYER_REGISTRY_PAIR( SinkhornBalancing )
         LAYER_REGISTRY_PAIR( Triangulation )
