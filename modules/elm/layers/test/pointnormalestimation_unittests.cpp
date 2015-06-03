@@ -43,8 +43,8 @@ const bfs::path TEST_DIR("testdata");
 const bfs::path TEST_PATH_PCD = TEST_DIR/"bun0.pcd";
 
 // Names for I/O
-const string NAME_INPUT_POINT_CLOUD     = "in";     ///< name of input point cloud
-const string NAME_OUTPUT_POINT_CLOUD    = "out";    ///< name of output cloud with nornals
+const string NAME_INPUT     = "in";     ///< name of input point cloud
+const string NAME_OUTPUT    = "out";    ///< name of output cloud with nornals
 
 class PointNormalEstimationInitTest : public ::testing::Test
 {
@@ -56,8 +56,8 @@ protected:
         params_.put<int>(PointNormalEstimation::PARAM_K_SEARCH, 20);
         cfg_.Params(params_);
 
-        io_names_.Input(PointNormalEstimation::KEY_INPUT_STIMULUS, NAME_INPUT_POINT_CLOUD);
-        io_names_.Output(PointNormalEstimation::KEY_OUTPUT_POINT_CLOUD, NAME_OUTPUT_POINT_CLOUD);
+        io_names_.Input(PointNormalEstimation::KEY_INPUT_STIMULUS, NAME_INPUT);
+        io_names_.Output(PointNormalEstimation::KEY_OUTPUT_POINT_CLOUD, NAME_OUTPUT);
     }
 
     virtual void TearDown()
@@ -108,7 +108,7 @@ protected:
 
         to_ = LayerFactory::CreateShared("PointNormalEstimation", cfg_, io_names_);
 
-        sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in_);
+        sig_.Append(NAME_INPUT, cloud_in_);
     }
 
     virtual void TearDown()
@@ -125,7 +125,7 @@ protected:
 TEST_F(PointNormalEstimationTest, ActivateEmptyInput)
 {
     cloud_in_->clear();
-    sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in_);
+    sig_.Append(NAME_INPUT, cloud_in_);
     EXPECT_THROW(to_->Activate(sig_), ExceptionBadDims);
 }
 
@@ -150,13 +150,13 @@ TEST_F(PointNormalEstimationTest, ActivateAndResponse)
 
     to_->Activate(sig_);
 
-    EXPECT_FALSE(sig_.Exists(NAME_OUTPUT_POINT_CLOUD)) << "Output feature already exists, better clear signal first.";
+    EXPECT_FALSE(sig_.Exists(NAME_OUTPUT)) << "Output feature already exists, better clear signal first.";
 
     to_->Response(sig_);
 
-    EXPECT_TRUE(sig_.Exists(NAME_OUTPUT_POINT_CLOUD)) << "Output feature is missing.";
+    EXPECT_TRUE(sig_.Exists(NAME_OUTPUT)) << "Output feature is missing.";
 
-    CloudNrmlPtr response = sig_.MostRecent(NAME_OUTPUT_POINT_CLOUD).get<CloudNrmlPtr>();
+    CloudNrmlPtr response = sig_.MostRecent(NAME_OUTPUT).get<CloudNrmlPtr>();
     EXPECT_EQ(normals->width, response->width);
     EXPECT_EQ(normals->height, response->height);
     EXPECT_EQ(normals->size(), response->size());
@@ -186,12 +186,12 @@ TEST_F(PointNormalEstimationTest, ResponseDims)
             sig_.Clear();
 
             cloud_in_.reset(new CloudXYZ(c, r));
-            sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in_);
+            sig_.Append(NAME_INPUT, cloud_in_);
 
             to_->Activate(sig_);
             to_->Response(sig_);
 
-            CloudNrmlPtr response = sig_.MostRecent(NAME_OUTPUT_POINT_CLOUD).get<CloudNrmlPtr>();
+            CloudNrmlPtr response = sig_.MostRecent(NAME_OUTPUT).get<CloudNrmlPtr>();
             EXPECT_EQ(c, response->width);
             EXPECT_EQ(r, response->height);
             EXPECT_EQ(static_cast<size_t>(r*c), response->size());
