@@ -63,7 +63,7 @@ protected:
         to_.reset(new DummySupervisedBatch());
     }
 
-    std::shared_ptr<base_Layer> to_;
+   LayerShared to_;
 };
 
 TEST_F(SupervisedBatchTest, Constructor)

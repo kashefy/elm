@@ -118,7 +118,7 @@ TEST_F(LayerYInitTest, Create)
     LayerIONames io;
     io.Input(LayerY::KEY_INPUT_STIMULUS, NAME_STIMULUS);
     io.Output(LayerY::KEY_OUTPUT_RESPONSE, NAME_SPIKES);
-    std::shared_ptr<base_Layer> ptr = LayerFactory::CreateShared(
+    LayerShared ptr = LayerFactory::CreateShared(
                 "LayerY",
                 config_,
                 io);
@@ -153,7 +153,7 @@ protected:
     }
 
     LayerIONames io_;
-    std::shared_ptr<base_Layer> to_;    ///< test object
+    LayerShared to_;    ///< test object
 };
 
 TEST_F(LayerYTest, Clear)

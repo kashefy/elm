@@ -37,7 +37,7 @@ TEST(LayerNotSupportedTest, ConstructorsThrow)
         EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupported()), ExceptionNotImpl);
     }
     {
-        std::shared_ptr<base_Layer> to_ptr;
+        LayerShared to_ptr;
         EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupported()), ExceptionNotImpl);
     }
 }
@@ -106,7 +106,7 @@ TEST(LayerNotSupportedNoMsgTest, ConstructorsThrow)
         EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupportedNoMsg()),    ExceptionNotImpl);
     }
     {
-        std::shared_ptr<base_Layer> to_ptr;
+        LayerShared to_ptr;
         EXPECT_THROW(to_ptr.reset(new DummyLayerNotSupportedNoMsg()),    ExceptionNotImpl);
     }
 }
