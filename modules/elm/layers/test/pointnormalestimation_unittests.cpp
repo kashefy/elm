@@ -179,9 +179,9 @@ TEST_F(PointNormalEstimationTest, ActivateAndResponse)
 
 TEST_F(PointNormalEstimationTest, ResponseDims)
 {
-    for(uint32_t r=30; r<46; r+=3) {
+    for(uint32_t r=30; r<40; r+=3) {
 
-        for(uint32_t c=30; c<46; c+=3) {
+        for(uint32_t c=30; c<40; c+=3) {
 
             sig_.Clear();
 
