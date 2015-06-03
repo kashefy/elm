@@ -20,9 +20,12 @@
 //#include <pcl/io/vtk_io.h>
 
 #include "elm/core/exception.h"
+#include "elm/core/featuredata.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
+#include "elm/layers/concatentatecloudxyzandnormal.h"
 #include "elm/layers/layerfactory.h"
+#include "elm/layers/pointnormalestimation.h"
 #include "elm/ts/mat_assertions.h"
 #include "elm/ts/layer_assertions.h"
 
@@ -48,7 +51,7 @@ const bfs::path TEST_DIR("testdata");
 const bfs::path TEST_PATH_PCD = TEST_DIR/"bun0.pcd";
 
 // Names for I/O
-const string NAME_INPUT_POINT_CLOUD = "in";   ///< name of input point cloud
+const string NAME_INPUT_CLOUD       = "in";   ///< name of input point cloud
 const string NAME_OUTPUT_VERTICES   = "v";    ///< name of output vertices
 const string NAME_OUTPUT_OPT_ADJ    = "adj";  ///< name of optional output adjacency matrix
 
@@ -60,8 +63,8 @@ protected:
         cfg_ = LayerConfig();
         cfg_.Params(params_);
 
-        io_names_.Input(Triangulation::KEY_INPUT_POINT_CLOUD,   NAME_INPUT_POINT_CLOUD);
-        io_names_.Output(Triangulation::KEY_OUTPUT_VERTICES,     NAME_OUTPUT_VERTICES);
+        io_names_.Input(Triangulation::KEY_INPUT_CLOUD_POINT_NORMAL, NAME_INPUT_CLOUD);
+        io_names_.Output(Triangulation::KEY_OUTPUT_VERTICES,         NAME_OUTPUT_VERTICES);
     }
 
     virtual void TearDown()
@@ -102,15 +105,47 @@ protected:
     {
         TriangulationInitTest::SetUp();
 
-        // Load input file into a PointCloudXYZ
-        cloud_in_.reset(new CloudXYZ);
-        PCLPointCloud2 cloud_blob;
-        pcl::io::loadPCDFile(TEST_PATH_PCD.string(), cloud_blob);
-        fromPCLPointCloud2 (cloud_blob, *cloud_in_);
-
         to_ = LayerFactory::CreateShared("Triangulation", cfg_, io_names_);
 
-        sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in_);
+        // Load input file into a PointCloudXYZ
+        cloud_in_xyz_.reset(new CloudXYZ);
+        PCLPointCloud2 cloud_blob;
+        pcl::io::loadPCDFile(TEST_PATH_PCD.string(), cloud_blob);
+        fromPCLPointCloud2 (cloud_blob, *cloud_in_xyz_);
+
+        std::vector<LayerShared> layers;
+        {
+            LayerConfig cfg;
+            PTree p;
+            p.put<int>(PointNormalEstimation::PARAM_K_SEARCH, 20);
+            cfg.Params(p);
+
+            LayerIONames io;
+            io.Input(PointNormalEstimation::KEY_INPUT_STIMULUS, "xyz");
+            io.Output(PointNormalEstimation::KEY_OUTPUT_POINT_CLOUD, "normal");
+
+            layers.push_back(LayerFactory::CreateShared("PointNormalEstimation",
+                                                        cfg,
+                                                        io));
+        }
+        {
+            LayerIONames io;
+            io.Input(ConcatentateCloudXYZAndNormal::KEY_INPUT_XYZ, "xyz");
+            io.Input(ConcatentateCloudXYZAndNormal::KEY_INPUT_NORMAL, "normal");
+            io.Output(ConcatentateCloudXYZAndNormal::KEY_OUTPUT_POINT_NORMAL, NAME_INPUT_CLOUD);
+
+            layers.push_back(LayerFactory::CreateShared("ConcatentateCloudXYZAndNormal",
+                                                        LayerConfig(),
+                                                        io));
+        }
+
+        sig_.Append("xyz", cloud_in_xyz_);
+
+        for(const auto& l : layers) {
+
+            l->Activate(sig_);
+            l->Response(sig_);
+        }
     }
 
     virtual void TearDown()
@@ -119,35 +154,22 @@ protected:
         sig_.Clear();
     }
 
-    shared_ptr<base_Layer> to_; ///< pointer to test object
+    LayerShared to_; ///< pointer to test object
     Signal sig_;
-    CloudXYZPtr cloud_in_;
+
+    CloudXYZPtr cloud_in_xyz_;
+    CloudPtNrmlPtr cloud_in_;
 };
 
 TEST_F(TriangulationTest, ActivateEmptyInput)
 {
-    sig_.Append(NAME_INPUT_POINT_CLOUD, Mat1f());
+    sig_.Append(NAME_INPUT_CLOUD, Mat1f());
     EXPECT_THROW(to_->Activate(sig_), ExceptionBadDims);
 }
 
 TEST_F(TriangulationTest, ActivateAndResponse)
 {
-    // Normal estimation*
-    NormalEstimation<PointXYZ, Normal> n;
-    PointCloud<Normal>::Ptr normals(new PointCloud<Normal>);
-    search::KdTree<PointXYZ>::Ptr tree(new search::KdTree<PointXYZ>);
-
-    tree->setInputCloud(cloud_in_);
-    n.setInputCloud(cloud_in_);
-    n.setSearchMethod(tree);
-    n.setKSearch(20);
-    n.compute(*normals);
-    //* normals should not contain the point normals + surface curvatures
-
-    // Concatenate the XYZ and normal fields*
-    PointCloud<PointNormal>::Ptr cloud_with_normals(new PointCloud<PointNormal>);
-    concatenateFields(*cloud_in_, *normals, *cloud_with_normals);
-    //* cloud_with_normals = cloud + normals
+    PointCloud<PointNormal>::Ptr cloud_with_normals = sig_.MostRecent(NAME_INPUT_CLOUD).get<CloudPtNrmlPtr>();
 
     // Create search tree*
     search::KdTree<PointNormal>::Ptr tree2(new search::KdTree<PointNormal>);
@@ -224,7 +246,7 @@ protected:
 TEST_F(TriangulationAdjacencyTest, NoAdjacency)
 {
     LayerIONames io_names;
-    io_names.Input(Triangulation::KEY_INPUT_POINT_CLOUD,    NAME_INPUT_POINT_CLOUD);
+    io_names.Input(Triangulation::KEY_INPUT_CLOUD_POINT_NORMAL,    NAME_INPUT_CLOUD);
     io_names.Output(Triangulation::KEY_OUTPUT_VERTICES,     NAME_OUTPUT_VERTICES);
 
     to_ = LayerFactory::CreateShared("Triangulation", cfg_, io_names);
