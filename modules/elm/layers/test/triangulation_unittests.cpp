@@ -32,6 +32,14 @@ using namespace cv;
 using namespace pcl;
 using namespace elm;
 
+extern template class pcl::PointCloud<pcl::PointXYZ >;
+extern template class pcl::PointCloud<pcl::Normal >;
+extern template class pcl::PointCloud<pcl::PointNormal >;
+
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ > >;
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::Normal > >;
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::PointNormal > >;
+
 namespace {
 
 ELM_INSTANTIATE_LAYER_TYPED_TEST_CASE_P(Triangulation);
