@@ -9,8 +9,6 @@
 
 #ifdef __WITH_PCL   // the layer is otherwise implemented as unsupported
 
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/features/normal_3d.h>
 

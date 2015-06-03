@@ -11,7 +11,6 @@
 
 #ifdef __WITH_PCL   // the layer is otherwise implemented as unsupported
 
-#include <pcl/point_types.h>
 #include <pcl/kdtree/kdtree_flann.h>
 //#include <opencv2/core/eigen.hpp>   // for eigen2cv(), must be preceeded definitio of Eigen either PCL or #include <Eigen/Dense>
 

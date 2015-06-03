@@ -9,8 +9,6 @@
 
 #ifdef __WITH_PCL   // the layer is otherwise implemented as unsupported
 
-#include <pcl/point_types.h>
-
 #include "elm/core/featuredata.h"
 #include "elm/core/inputname.h"
 #include "elm/core/layerinputnames.h"
