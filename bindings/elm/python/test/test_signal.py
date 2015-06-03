@@ -15,7 +15,11 @@ class TestSignalInit:
         
         assert_is_not_none(self._to)
         
-    def test_instance_type(self):
-        # awkward way of determining type, usual way doesn't pass although behaves correctly...
+    def test_instance_type_name(self):
+        
         assert_true("Signal" in str(type(self._to)))
+        
+    def test_instance_type(self):
+        
+        assert_is_instance(self._to, elm.Signal)
         
