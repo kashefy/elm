@@ -7,15 +7,17 @@
 //M*/
 #include "elm/layers/layerfactory.h"
 
+#include "gtest/gtest.h"
+
 #include "elm/core/exception.h"
 #include "elm/core/inputname.h"
 #include "elm/core/layerconfig.h"
 #include "elm/core/signal.h"
 #include "elm/layers/saliencyitti.h" ///< to have layer dervied classes to test with
 #include "elm/layers/weightedsum.h"  ///< to have layer dervied classes to test with
-#include "elm/ts/ts.h"
+#include "elm/ts/mat_assertions.h"
 
-using std::shared_ptr;
+using std::string;
 using namespace elm;
 
 namespace {
@@ -35,26 +37,26 @@ protected:
 TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared)
 {
     {
-        shared_ptr<base_Layer> ptr = LayerFactory::CreateShared("LayerY");
+        LayerShared ptr = LayerFactory::CreateShared("LayerY");
         EXPECT_TRUE(bool(ptr));
     }
     {
-        shared_ptr<base_Layer> ptr = LayerFactory::CreateShared("WeightedSum");
+        LayerShared ptr = LayerFactory::CreateShared("WeightedSum");
         EXPECT_TRUE(bool(ptr));
     }
 }
 
 TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared_WrongType)
 {
-    EXPECT_THROW(LayerFactory::CreateShared("Blahbla"), elm::ExceptionTypeError);
+    EXPECT_THROW(LayerFactory::CreateShared("Blahbla"), ExceptionTypeError);
 }
 
 TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared_UniqueInstancesSameType)
 {
-    const std::string TYPE="WeightedSum";
+    const string TYPE="WeightedSum";
 
-    shared_ptr<base_Layer> ptr1 = LayerFactory::CreateShared(TYPE);
-    shared_ptr<base_Layer> ptr2 = LayerFactory::CreateShared(TYPE);
+    LayerShared ptr1 = LayerFactory::CreateShared(TYPE);
+    LayerShared ptr2 = LayerFactory::CreateShared(TYPE);
 
     EXPECT_NE(ptr1, ptr2);
 }
@@ -67,13 +69,13 @@ TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared_WithConfig)
     LayerConfig config;
     config.Params(params);
 
-    const std::string NAME_STIMULUS = "in";
-    const std::string NAME_RESPONSE = "out";
+    const string NAME_STIMULUS = "in";
+    const string NAME_RESPONSE = "out";
 
     config.Input(WeightedSum::KEY_INPUT_STIMULUS, NAME_STIMULUS);
     config.Output(WeightedSum::KEY_OUTPUT_RESPONSE, NAME_RESPONSE);
 
-    shared_ptr<base_Layer> ptr = LayerFactory::CreateShared("WeightedSum", config, config);
+    LayerShared ptr = LayerFactory::CreateShared("WeightedSum", config, config);
     EXPECT_TRUE(bool(ptr));
 
     // populate signal with input feature
@@ -92,6 +94,12 @@ TEST_F(LayerFactoryStaticTest, CreateLayerPtrShared_WithConfig)
     EXPECT_FLOAT_EQ(signal.MostRecentMat1f(NAME_RESPONSE).at<float>(0), 0.5f);
 }
 
+TEST_F(LayerFactoryStaticTest, Exists)
+{
+    EXPECT_FALSE(LayerFactory::Exists("Blahbla"));
+    EXPECT_TRUE(LayerFactory::Exists("WeightedSum"));
+}
+
 TEST_F(LayerFactoryStaticTest, InitLayerPtrShared_WithConfig)
 {
     PTree params;
@@ -100,13 +108,13 @@ TEST_F(LayerFactoryStaticTest, InitLayerPtrShared_WithConfig)
     LayerConfig config;
     config.Params(params);
 
-    const std::string NAME_STIMULUS = "in";
-    const std::string NAME_RESPONSE = "out";
+    const string NAME_STIMULUS = "in";
+    const string NAME_RESPONSE = "out";
 
     config.Input(WeightedSum::KEY_INPUT_STIMULUS, NAME_STIMULUS);
     config.Output(WeightedSum::KEY_OUTPUT_RESPONSE, NAME_RESPONSE);
 
-    shared_ptr<base_Layer> ptr(new WeightedSum);
+    LayerShared ptr(new WeightedSum);
     LayerFactory::Init(ptr, config, config);
     EXPECT_TRUE(bool(ptr));
 
@@ -134,13 +142,13 @@ TEST_F(LayerFactoryStaticTest, InitLayerPtrShared_WithConfig_invalid_ptr)
     LayerConfig config;
     config.Params(params);
 
-    const std::string NAME_STIMULUS = "in";
-    const std::string NAME_RESPONSE = "out";
+    const string NAME_STIMULUS = "in";
+    const string NAME_RESPONSE = "out";
 
     config.Input(WeightedSum::KEY_INPUT_STIMULUS, NAME_STIMULUS);
     config.Output(WeightedSum::KEY_OUTPUT_RESPONSE, NAME_RESPONSE);
 
-    shared_ptr<base_Layer> ptr;
+    LayerShared ptr;
     ASSERT_FALSE(bool(ptr));
     EXPECT_THROW(LayerFactory::Init(ptr, config, config), ExceptionValueError);
 
