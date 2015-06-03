@@ -47,7 +47,7 @@ TEST_F(LUTTest, Apply_empty_table_empty_mat)
     EXPECT_NO_THROW(to.apply(m));
 }
 
-TEST_F(LUTTest, Apply)
+TEST_F(LUTTest, Apply_continuous)
 {
     const int N = 6;
     int data[N] = {1, 2,
@@ -63,6 +63,40 @@ TEST_F(LUTTest, Apply)
     to.insert(6);
 
     EXPECT_EQ(2, to.update(2, 4)) << "not returning smaller value.";
+
+    ASSERT_TRUE(m.isContinuous());
+
+    to.apply(m);
+
+    int data2[N] = {1, 2,
+                    1, 2,
+                    6, 1};
+    Mat1i expected = Mat1i(3, 2, data2).clone();
+    EXPECT_MAT_EQ(expected, m);
+}
+
+TEST_F(LUTTest, Apply_non_continuous)
+{
+    const int N = 6;
+    int data[N] = {1, 2,
+                   1, 4,
+                   6, 1};
+    Mat1i m0 = Mat1i(3, 2, data).clone();
+
+    LUT to(N);
+
+    to.insert(1);
+    to.insert(2);
+    to.insert(4);
+    to.insert(6);
+
+    EXPECT_EQ(2, to.update(2, 4)) << "not returning smaller value.";
+
+    cv::hconcat(m0, Mat1i::zeros(m0.rows, 1), m0);
+
+    Mat1i m = m0.colRange(0, m0.cols-1);
+
+    ASSERT_FALSE(m.isContinuous());
 
     to.apply(m);
 

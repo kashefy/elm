@@ -115,7 +115,7 @@ TEST(NeighMeanVarTest, Radius_zero)
  */
 TEST(NeighMeanVarTest, Radius_negative)
 {
-    for(int radius=-1; radius<-10; radius--) {
+    for(int radius=-1; radius >= -10; radius--) {
 
         Mat1f in(5, 5, randu<float>()), neigh_mean, neigh_var;
         EXPECT_THROW(NeighMeanVar(in, radius, neigh_mean, neigh_var), ExceptionValueError);
