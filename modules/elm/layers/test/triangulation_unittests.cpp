@@ -109,9 +109,7 @@ protected:
 
         // Load input file into a PointCloudXYZ
         cloud_in_xyz_.reset(new CloudXYZ);
-        PCLPointCloud2 cloud_blob;
-        pcl::io::loadPCDFile(TEST_PATH_PCD.string(), cloud_blob);
-        fromPCLPointCloud2 (cloud_blob, *cloud_in_xyz_);
+        pcl::io::loadPCDFile(TEST_PATH_PCD.string(), *cloud_in_xyz_);
 
         std::vector<LayerShared> layers;
         {

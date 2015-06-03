@@ -149,9 +149,7 @@ protected:
 
         // load data
         CloudXYZPtr cloud_in_xyz(new CloudXYZ);
-        PCLPointCloud2 cloud_blob;
-        pcl::io::loadPCDFile(TEST_PATH_PCD.string(), cloud_blob);
-        fromPCLPointCloud2(cloud_blob, *cloud_in_xyz);
+        pcl::io::loadPCDFile(TEST_PATH_PCD.string(), *cloud_in_xyz);
 
         //approxVG(cloud_in, cloud_in, 0.02f);
 
@@ -168,7 +166,6 @@ protected:
          * sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in);
          */
         sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in_xyz);
-
     }
 
     virtual void TearDown()
@@ -181,8 +178,6 @@ protected:
     vector<LayerShared > layers_;
     Signal sig_;
 };
-
-
 
 TEST_F(GraphMatchingTest, GraphMatching)
 {
