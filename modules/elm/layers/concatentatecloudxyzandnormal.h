@@ -25,12 +25,12 @@ namespace elm {
 
 namespace elm {
 
-class ConcatentateCloudXYZAndNormal : base_Layer
+class ConcatentateCloudXYZAndNormal : public base_Layer
 {
 public:
     static const std::string KEY_INPUT_XYZ;     ///< key to xyz cloud
     static const std::string KEY_INPUT_NORMAL;  ///< key to normal cloud
-    static const std::string KEY_OUTPUT;        ///< key output
+    static const std::string KEY_OUTPUT_POINT_NORMAL;        ///< key output
 
     ConcatentateCloudXYZAndNormal();
 
@@ -49,7 +49,7 @@ public:
 protected:
     std::string name_xyz_;      ///< name of xyz input in signal object
     std::string name_norml_;    ///< name of normal input in signal object
-    std::string name_out_;      ///< desitnation name of output cloud
+    std::string name_out_pnt_nrml_; ///< desitnation name of output cloud
 
     CloudPtNrmlPtr dst_cloud_;
 };

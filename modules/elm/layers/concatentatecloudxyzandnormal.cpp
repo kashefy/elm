@@ -32,14 +32,14 @@ extern template class boost::shared_ptr<pcl::PointCloud<pcl::PointNormal > >;
 
 const string ConcatentateCloudXYZAndNormal::KEY_INPUT_XYZ       = "xyz";
 const string ConcatentateCloudXYZAndNormal::KEY_INPUT_NORMAL    = "normal";
-const string ConcatentateCloudXYZAndNormal::KEY_OUTPUT          = "output";
+const string ConcatentateCloudXYZAndNormal::KEY_OUTPUT_POINT_NORMAL          = "output";
 
 #include <boost/assign/list_of.hpp>
 template <>
 elm::MapIONames LayerAttr_<ConcatentateCloudXYZAndNormal>::io_pairs = boost::assign::map_list_of
         ELM_ADD_INPUT_PAIR(ConcatentateCloudXYZAndNormal::KEY_INPUT_XYZ)
         ELM_ADD_INPUT_PAIR(ConcatentateCloudXYZAndNormal::KEY_INPUT_NORMAL)
-        ELM_ADD_OUTPUT_PAIR(ConcatentateCloudXYZAndNormal::KEY_OUTPUT)
+        ELM_ADD_OUTPUT_PAIR(ConcatentateCloudXYZAndNormal::KEY_OUTPUT_POINT_NORMAL)
         ;
 
 ConcatentateCloudXYZAndNormal::ConcatentateCloudXYZAndNormal()
@@ -64,7 +64,7 @@ void ConcatentateCloudXYZAndNormal::InputNames(const LayerInputNames &in_names) 
 
 void ConcatentateCloudXYZAndNormal::OutputNames(const LayerOutputNames &out_names) {
 
-    name_out_  = out_names.Output(KEY_OUTPUT);
+    name_out_pnt_nrml_  = out_names.Output(KEY_OUTPUT_POINT_NORMAL);
 }
 
 void ConcatentateCloudXYZAndNormal::Activate(const Signal &signal)
@@ -79,7 +79,7 @@ void ConcatentateCloudXYZAndNormal::Activate(const Signal &signal)
 
 void ConcatentateCloudXYZAndNormal::Response(Signal &signal)
 {
-    signal.Append(name_out_, dst_cloud_);
+    signal.Append(name_out_pnt_nrml_, dst_cloud_);
 }
 
 #endif // __WITH_PCL
