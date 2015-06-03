@@ -19,6 +19,7 @@ namespace elm {
 #include "elm/layers/layers_interim/base_singleinputfeaturelayer.h"
 
 #include <boost/shared_ptr.hpp>
+
 #include "elm/core/pcl/typedefs_fwd.h"
 
 namespace elm {
