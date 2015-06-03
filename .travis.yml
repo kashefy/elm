@@ -121,7 +121,10 @@ before_script:
   - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="-fPIC --param ggc-min-expand=3 --param ggc-min-heapsize=5120" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 -DBUILD_python=ON $TRAVIS_BUILD_DIR
 
 script:
-  - cd $ELM_BUILD_DIR && make -j2
+  - cd $ELM_BUILD_DIR && make -j2 elm_core
+  - make -j2 elm_encoding elm_neuron
+  - make -j2 elm_layers
+  - make -j2
   # run unit tests
   - if [ "$BUILD_TYPE" == "Coverage" ]; then
       make elm_unittests_coverage;
