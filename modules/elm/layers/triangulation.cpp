@@ -125,15 +125,18 @@ void Triangulation::Activate(const Signal &signal)
     gp3.setSearchMethod(tree2);
 
     // Get result
-    std::vector<Vertices > vertices;
+    Triangles vertices;
     gp3.reconstruct(vertices);
 
     vertices_ = VecVertices2Mat(vertices, false);
 
-//    if(name_opt_adj_) {
+    if(name_opt_adj_) {
 
-//        TriangulatedCloudToAdjacency(in, vertices, adj_);
-//    }
+        CloudXYZPtr cld_xyz(new CloudXYZ);
+        copyPointCloud(*in, *cld_xyz);
+
+        TriangulatedCloudToAdjacency(cld_xyz, vertices, adj_);
+    }
 }
 
 void Triangulation::Response(Signal &signal)
@@ -144,10 +147,10 @@ void Triangulation::Response(Signal &signal)
 
     signal.Append(name_vertices_, vertices_);
 
-//    if(name_opt_adj_) {
+    if(name_opt_adj_) {
 
-//        signal.Append(name_opt_adj_.get(), adj_);
-//    }
+        signal.Append(name_opt_adj_.get(), adj_);
+    }
 }
 
 #endif // __WITH_PCL
