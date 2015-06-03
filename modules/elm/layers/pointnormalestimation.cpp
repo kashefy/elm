@@ -25,6 +25,12 @@ using namespace cv;
 using namespace pcl;
 using namespace elm;
 
+extern template class pcl::PointCloud<pcl::PointXYZ >;
+extern template class pcl::PointCloud<pcl::Normal >;
+
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ > >;
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::Normal > >;
+
 // initialize paramter keys
 const string PointNormalEstimation::PARAM_K_SEARCH        = "k_search";
 
