@@ -173,6 +173,8 @@ TEST_F(PointNormalEstimationTest, ActivateAndResponse)
         for(int k=0; k<3; k++) {
 
             EXPECT_FLOAT_EQ(_p1.normal[k], _p2.normal[k]) << "normal component k=" << k << "mismatch at element i=" << i;
+
+            EXPECT_FLOAT_EQ(_p1.curvature, _p2.curvature) << "curvature mismatch at element i=" << i;
         }
     }
 }
