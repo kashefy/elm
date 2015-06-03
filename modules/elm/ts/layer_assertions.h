@@ -46,7 +46,7 @@ protected:
     }
 
     // members
-    std::shared_ptr<base_Layer > layer_ptr_; ///< pointer to test object used in fixtures
+    LayerShared layer_ptr_; ///< pointer to test object used in fixtures
 };
 
 TYPED_TEST_CASE_P(Layer_TP_);
