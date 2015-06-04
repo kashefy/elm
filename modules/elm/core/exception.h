@@ -56,7 +56,6 @@
 
 #include <string>
 #include <exception>
-#include <opencv2/core/core.hpp>
 
 /** Preprocessor macros for throwing types of Exceptions with custom error messages
  */
