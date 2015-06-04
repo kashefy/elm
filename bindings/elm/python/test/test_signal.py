@@ -1,4 +1,4 @@
-from nose.tools import assert_equals, assert_is_instance, assert_is_not_none, assert_list_equal, assert_true, assert_false
+from nose.tools import assert_equals, assert_greater, assert_is_instance, assert_is_not_none, assert_list_equal, assert_true, assert_false, assert_raises
 import numpy as np
 import elm as elm
 
@@ -76,5 +76,23 @@ class TestSignal:
         
         foo += 100
         assert_true(np.all(foo2==foo))
+        
+    def test_clear(self):
+                
+        foo = np.arange(1,5, dtype='float32').reshape((2, 2))
+        bar = np.arange(1,5, dtype='float32').reshape((2, 2))+10
+        
+        self._to.append('foo', foo)
+        self._to.append('bar', bar)
+        
+        assert_greater(len(self._to.feature_names()), 0)
+        assert_is_not_none(self._to.most_recent_mat1f("foo"))
+        assert_is_not_none(self._to.most_recent_mat1f("bar"))
+        
+        self._to.clear()
+        
+        assert_equals(len(self._to.feature_names()), 0)
+        assert_raises(KeyError, self._to.most_recent_mat1f, "foo")
+        assert_raises(KeyError, self._to.most_recent_mat1f, "bar")
         
         

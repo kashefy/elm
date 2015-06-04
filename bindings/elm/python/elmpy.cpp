@@ -11,6 +11,7 @@
 #endif
 
 #include <boost/python.hpp>
+#include <boost/python/exception_translator.hpp>
 
 // STL includes need to be included after boost on OS X
 #include <vector>
@@ -22,6 +23,7 @@
 #include "opencv2/core/core.hpp"
 
 #include "elm/core/core.h"
+#include "elm/core/exception.h"
 #include "elm/core/typedefs_sfwd.h"
 
 #include "elm/python/conversions.h"
@@ -184,6 +186,12 @@ protected:
 // select overloaded method
 void (SignalPy::*AppendMat1f)(const std::string&, const Mat1f&) = &SignalPy::Append;
 
+void translate_exception(ExceptionKeyError const& e) {
+
+    // Use the Python 'C' API to set up an exception object
+    PyErr_SetString(PyExc_KeyError, e.what());
+}
+
 BOOST_PYTHON_MODULE(elm) {
 
     // import additional python modules
@@ -191,13 +199,16 @@ BOOST_PYTHON_MODULE(elm) {
     bp::numeric::array::set_module_and_type("numpy", "ndarray");
 
     // register custom converters
-    bp::to_python_converter< VecS, type_into_python<VecS> >();
+    bp::to_python_converter< VecS, type_into_python<VecS > >();
 
     type_from_python< Mat >();
-    bp::to_python_converter< Mat, type_into_python<Mat> >();
+    bp::to_python_converter< Mat, type_into_python<Mat > >();
 
     type_from_python< Mat1f >();
-    bp::to_python_converter< Mat1f, type_into_python<Mat1f> >();
+    bp::to_python_converter< Mat1f, type_into_python<Mat1f > >();
+
+    // exceptions
+    bp::register_exception_translator<ExceptionKeyError >(&translate_exception);
 
     // define top-level attributes
     bp::scope().attr("__version__") = GetVersion();
@@ -212,7 +223,6 @@ BOOST_PYTHON_MODULE(elm) {
     bp::class_<SignalPy>("Signal")
             .def("append",  AppendMat1f )
             .def("clear",   &SignalPy::Clear    )
-            .def("exists",  &SignalPy::Exists   )
             .def("feature_names", &SignalPy::FeatureNames)
             .def("most_recent_mat1f", &SignalPy::MostRecentMat1f)
             ;
