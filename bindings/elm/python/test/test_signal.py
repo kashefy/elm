@@ -51,6 +51,6 @@ class TestSignal:
             
             acc.append(n)
             self._to.append(n, x)
-            assert_list_equal(self._to.feature_names(), acc)
+            assert_list_equal(sorted(self._to.feature_names()), sorted(acc))
         
         
