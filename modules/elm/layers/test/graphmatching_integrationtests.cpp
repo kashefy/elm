@@ -1,5 +1,7 @@
+#include "elm/layers/concatentatecloudxyzandnormal.h"
 #include "elm/layers/gradassignment.h"
 #include "elm/layers/graphcompatibility.h"
+#include "elm/layers/pointnormalestimation.h"
 #include "elm/layers/triangulation.h"
 
 #ifdef __WITH_PCL
@@ -34,7 +36,8 @@ const bfs::path TEST_DIR("testdata");
 const bfs::path TEST_PATH_PCD = TEST_DIR/"bun0.pcd";
 
 // Names for Triangulation I/O
-const string NAME_INPUT_POINT_CLOUD = "in";   ///< name of input point cloud
+const string NAME_INPUT_POINT_CLOUD = "xyz";   ///< name of input point cloud
+const string NAME_POINT_NORMAL      = "point_normal";   ///< name of input point cloud
 const string NAME_OUTPUT_VERTICES   = "v";    ///< name of output vertices
 const string NAME_ADJACENCY         = "adj";  ///< name of output adjacency matrix
 
@@ -77,19 +80,42 @@ protected:
         // set up layers
         {
             LayerConfig cfg;
+            PTree p;
+            p.put<int>(PointNormalEstimation::PARAM_K_SEARCH, 20);
+            cfg.Params(p);
+
+            LayerIONames io;
+            io.Input(PointNormalEstimation::KEY_INPUT_STIMULUS, NAME_INPUT_POINT_CLOUD);
+            io.Output(PointNormalEstimation::KEY_OUTPUT_POINT_CLOUD, "normal");
+
+            layers_.push_back(LayerFactory::CreateShared("PointNormalEstimation",
+                                                         cfg,
+                                                         io));
+        }
+        {
+            LayerIONames io;
+            io.Input(ConcatentateCloudXYZAndNormal::KEY_INPUT_XYZ, NAME_INPUT_POINT_CLOUD);
+            io.Input(ConcatentateCloudXYZAndNormal::KEY_INPUT_NORMAL, "normal");
+            io.Output(ConcatentateCloudXYZAndNormal::KEY_OUTPUT_POINT_NORMAL, NAME_POINT_NORMAL);
+
+            layers_.push_back(LayerFactory::CreateShared("ConcatentateCloudXYZAndNormal",
+                                                         LayerConfig(),
+                                                         io));
+        }
+        {
+            LayerConfig cfg;
 
             PTree p;
 
             cfg.Params(p);
 
             LayerIONames io;
-            io.Input(Triangulation::KEY_INPUT_POINT_CLOUD,  NAME_INPUT_POINT_CLOUD);
+            io.Input(Triangulation::KEY_INPUT_CLOUD_POINT_NORMAL,  NAME_POINT_NORMAL);
             io.Output(Triangulation::KEY_OUTPUT_VERTICES,   NAME_OUTPUT_VERTICES);
             io.Output(Triangulation::KEY_OUTPUT_OPT_ADJACENCY, NAME_ADJACENCY);
 
             layers_.push_back(LayerFactory::CreateShared("Triangulation", cfg, io));
         }
-
         {
             LayerConfig cfg;
 
@@ -100,7 +126,6 @@ protected:
 
             layers_.push_back(LayerFactory::CreateShared("GraphCompatibility", cfg, io));
         }
-
         {
             LayerConfig cfg;
 
@@ -123,10 +148,8 @@ protected:
         }
 
         // load data
-        CloudXYZPtr cloud_in(new CloudXYZ);
-        PCLPointCloud2 cloud_blob;
-        pcl::io::loadPCDFile(TEST_PATH_PCD.string(), cloud_blob);
-        fromPCLPointCloud2(cloud_blob, *cloud_in);
+        CloudXYZPtr cloud_in_xyz(new CloudXYZ);
+        pcl::io::loadPCDFile(TEST_PATH_PCD.string(), *cloud_in_xyz);
 
         //approxVG(cloud_in, cloud_in, 0.02f);
 
@@ -142,8 +165,7 @@ protected:
          * Scenario c) where data is preserved through increment of reference count (of cloud object): (used below)
          * sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in);
          */
-        sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in);
-
+        sig_.Append(NAME_INPUT_POINT_CLOUD, cloud_in_xyz);
     }
 
     virtual void TearDown()
@@ -156,8 +178,6 @@ protected:
     vector<LayerShared > layers_;
     Signal sig_;
 };
-
-
 
 TEST_F(GraphMatchingTest, GraphMatching)
 {

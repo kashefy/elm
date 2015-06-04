@@ -11,14 +11,13 @@
 #define _ELM_CORE_TYPEDEFS_SFWD_H_
 
 #include "elm/core/typedefs_fwd.h"
+#include "elm/core/boost/typedefs_sfwd.h"
 #include "elm/core/stl/typedefs.h"
 
 namespace elm {
 
 typedef std::vector< cv::Mat1f > VecMat1f;  ///< Convinience typedef for vector of single channel float matrices
 typedef std::vector< cv::Mat > VecMat;      ///< Convinience typedef for vector of matrices
-
-typedef boost::optional<std::string> OptS;  ///< Convinience typedef for optional string
 
 } // namespace elm
 

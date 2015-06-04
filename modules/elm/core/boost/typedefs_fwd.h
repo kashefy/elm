@@ -16,7 +16,6 @@
 namespace boost {
 
 template <typename T> class shared_ptr;
-template <typename T> class optional;
 
 } // fake namespace boost for fwd declarations
 
