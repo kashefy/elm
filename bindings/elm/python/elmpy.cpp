@@ -27,8 +27,7 @@
 #include "elm/core/typedefs_sfwd.h"
 
 #include "elm/python/conversions.h"
-#include "elm/python/conversions_cv.cpp"
-//#include "elm/python/conversions_cv.h"
+#include "elm/python/conversions_cv.h"
 #include "elm/python/signalpy.h"
 
 namespace bp=boost::python;
@@ -282,6 +281,6 @@ BOOST_PYTHON_MODULE(elm) {
             .def("feature_names",   &SignalPy::FeatureNames     )
             .def("most_recent_mat1f", &SignalPy::MostRecentMat1f)
             .def("to_dict",         &SignalPy::toPythonDict     )
-            .def("from_dict",       &SignalPy::fromPythonDict     )
+            .def("from_dict",       &SignalPy::fromPythonDict   )
             ;
 }
