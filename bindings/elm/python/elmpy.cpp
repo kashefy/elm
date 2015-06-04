@@ -27,6 +27,7 @@
 #include "elm/python/conversions.h"
 #include "elm/python/conversions_cv.cpp"
 //#include "elm/python/conversions_cv.h"
+#include "elm/python/signalpy.h"
 
 namespace bp=boost::python;
 using namespace cv;
@@ -36,6 +37,33 @@ using namespace elm;
 #  pragma GCC diagnostic ignored "-Wunused-parameter"
 #  pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #endif
+
+template<>  void* type_from_python<Mat>::convertible( PyObject* obj )
+{
+    return PyArray_Check( obj ) ? obj : 0;
+}
+
+template<> void type_from_python<Mat>::construct( PyObject* obj, bp::converter::rvalue_from_python_stage1_data* data )
+{
+    Mat m;
+    ArgInfo info("mat", false);
+
+    if(!pyopencv_to(obj, m, info)) {
+
+        std::string msg("Failed to convert array to Mat");
+        PyErr_SetString(PyExc_ValueError, msg.c_str());
+        bp::throw_error_already_set();
+    }
+
+    // Grab pointer to memory into which to construct the new C++ object
+    void* storage = ((bp::converter::rvalue_from_python_storage<Mat >*) data)->storage.bytes;
+
+    // in-place construct the new target C++ object using the character data extracted from the python object
+    new (storage) Mat(m);
+
+    // Stash the memory chunk pointer for later use by boost.python
+    data->convertible = storage;
+}
 
 /**
  * @brief cv::Mat to numpy.ndarray conversion. With shallow copy of data.
@@ -69,6 +97,32 @@ template<> PyObject* type_into_python<Mat>::convert(Mat const& t) {
     Py_RETURN_NONE;
 }
 
+template<>  void* type_from_python<Mat1f>::convertible( PyObject* obj )
+{
+    return PyArray_Check( obj ) ? obj : 0;
+}
+
+template<> void type_from_python<Mat1f>::construct( PyObject* obj, bp::converter::rvalue_from_python_stage1_data* data )
+{
+    Mat1f m;
+    ArgInfo info("mat", false);
+
+    if(!pyopencv_to(obj, m, info)) {
+
+        std::string msg("Failed to convert array to Mat1f");
+        PyErr_SetString(PyExc_ValueError, msg.c_str());
+        bp::throw_error_already_set();
+    }
+
+    // Grab pointer to memory into which to construct the new C++ object
+    void* storage = ((bp::converter::rvalue_from_python_storage<Mat1f >*) data)->storage.bytes;
+
+    // in-place construct the new target C++ object using the character data extracted from the python object
+    new (storage) Mat1f(m);
+
+    // Stash the memory chunk pointer for later use by boost.python
+    data->convertible = storage;
+}
 
 /**
  * @brief Mat1f to numpy.ndarray conversion (shallow copy)
@@ -89,18 +143,28 @@ public:
     DummyPy(){;}
 
     /**
+     * @brief invokes numpy.ndarray to Mat conversion
+     */
+    void SetMat(const Mat& m)
+    {
+        m_ = m;
+    }
+
+    /**
+     * @brief invokes Mat -> numpy.ndarray conversion
+     * @return Mat initialized with mock values
+     */
+    Mat GetMat()
+    {
+        return m_;
+    }
+
+    /**
      * @brief invokes numpy.ndarray to Mat1f conversion
      */
-    void SetMat(const bp::numeric::array& arr)
+    void SetMat1f(const Mat& m)
     {
-        mat1f_ = Mat1f();
-        ArgInfo info("mat", false);
-        if(!pyopencv_to(arr.ptr(), mat1f_, info)) {
-
-            std::string msg("Failed to convert array to Mat1f");
-            PyErr_SetString(PyExc_ValueError, msg.c_str());
-            bp::throw_error_already_set();
-        }
+        mat1f_ = static_cast<Mat1f>(m);
     }
 
     /**
@@ -112,18 +176,13 @@ public:
         return mat1f_;
     }
 
-    /**
-     * @brief invokes Mat1f -> numpy.ndarray conversion
-     * @return Mat1f initialized with mock values
-     */
-    Mat GetMat()
-    {
-        return static_cast<Mat>(mat1f_);
-    }
-
 protected:
     Mat1f mat1f_;
+    Mat m_;
 };
+
+// select overloaded method
+void (SignalPy::*AppendMat1f)(const std::string&, const Mat1f&) = &SignalPy::Append;
 
 BOOST_PYTHON_MODULE(elm) {
 
@@ -134,7 +193,10 @@ BOOST_PYTHON_MODULE(elm) {
     // register custom converters
     bp::to_python_converter< VecS, type_into_python<VecS> >();
 
+    type_from_python< Mat >();
     bp::to_python_converter< Mat, type_into_python<Mat> >();
+
+    type_from_python< Mat1f >();
     bp::to_python_converter< Mat1f, type_into_python<Mat1f> >();
 
     // define top-level attributes
@@ -142,7 +204,15 @@ BOOST_PYTHON_MODULE(elm) {
 
     bp::class_<DummyPy>("Dummy")
             .def("setMat",   &DummyPy::SetMat    )
-            .def("getMat1f", &DummyPy::GetMat1f  )
             .def("getMat",   &DummyPy::GetMat    )
+            .def("setMat1f", &DummyPy::SetMat1f  )
+            .def("getMat1f", &DummyPy::GetMat1f  )
+            ;
+
+    bp::class_<SignalPy>("Signal")
+            .def("append",  AppendMat1f )
+            .def("clear",   &SignalPy::Clear    )
+            .def("exists",  &SignalPy::Exists   )
+            .def("feature_names", &SignalPy::FeatureNames)
             ;
 }

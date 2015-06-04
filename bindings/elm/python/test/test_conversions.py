@@ -1,15 +1,17 @@
 from nose.tools import assert_greater, assert_equal, assert_is_instance, assert_true, assert_tuple_equal
 import numpy as np
 import elm as elm
-
+            
 def test_Mat1f_ndarray_2d_dims():
     
     for rows in range(1, 11):
         for cols in range(1, 11):
             
             x = np.random.rand(rows, cols)*100.
+            x = x.astype('float32')
+            
             test_dummy = elm.Dummy()
-            test_dummy.setMat(x)
+            test_dummy.setMat1f(x)
             y = test_dummy.getMat1f()
             
             assert_equal(x.ndim, 2)
@@ -26,8 +28,10 @@ def test_Mat1f_ndarray_2d_dims():
 def test_Mat1f_ndarray_2d_values():
         
     x = np.random.rand(3, 2)*100.
+    x = x.astype('float32')
+    
     test_dummy = elm.Dummy()
-    test_dummy.setMat(x)
+    test_dummy.setMat1f(x)
     y = test_dummy.getMat1f()
     
     assert_is_instance(y, np.ndarray)
@@ -44,6 +48,7 @@ def test_Mat_ndarray_2d_dims():
         for cols in range(1, 11):
             
             x = np.random.rand(rows, cols)*100.
+            
             test_dummy = elm.Dummy()
             test_dummy.setMat(x)
             y = test_dummy.getMat()
@@ -54,6 +59,7 @@ def test_Mat_ndarray_2d_dims():
             assert_is_instance(y, np.ndarray)
             assert_greater(y.size, 0)
             assert_equal(y.shape, x.shape)
+            
             assert_true(np.all(x==y))
             x += 10
             assert_true(np.all(x==y))

@@ -8,6 +8,8 @@
 #ifndef _ELM_PYTHON_SIGNALPY_H_
 #define _ELM_PYTHON_SIGNALPY_H_
 
+#include <boost/python/numeric.hpp>
+
 #include "elm/core/signal.h"
 
 namespace elm {

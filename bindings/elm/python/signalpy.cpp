@@ -7,6 +7,13 @@
 //M*/
 #include "elm/python/signalpy.h"
 
+#include <opencv2/core/core.hpp>
+
+#include "elm/python/arginfo.h"
+
+using std::string;
+namespace bp=boost::python;
+using namespace cv;
 using namespace elm;
 
 SignalPy::SignalPy()
