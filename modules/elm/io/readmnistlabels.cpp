@@ -7,6 +7,8 @@
 //M*/
 #include "elm/io/readmnistlabels.h"
 
+#include <opencv2/core/core.hpp>
+
 #include "elm/core/exception.h"
 #include "elm/core/signal.h"
 #include "elm/ts/layerattr_.h"

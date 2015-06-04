@@ -53,6 +53,8 @@
 //M*/
 #include "elm/core/exception.h"
 
+#include <opencv2/core/core.hpp>
+#include <cmath>
 #include <opencv2/core/operations.hpp>
 #include <opencv2/core/types_c.h>
 
