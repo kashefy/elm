@@ -1,4 +1,4 @@
-from nose.tools import assert_is_instance, assert_is_not_none, assert_list_equal, assert_true
+from nose.tools import assert_equals, assert_is_instance, assert_is_not_none, assert_list_equal, assert_true, assert_false
 import numpy as np
 import elm as elm
 
@@ -39,6 +39,7 @@ class TestSignal:
         
         names = self._to.feature_names()
         assert_is_instance(names, list)
+        assert_equals(len(names), 0)
         
     def test_feature_names(self):
         
@@ -52,5 +53,28 @@ class TestSignal:
             acc.append(n)
             self._to.append(n, x)
             assert_list_equal(sorted(self._to.feature_names()), sorted(acc))
+            
+    def test_append(self):
+                
+        foo = np.arange(1,5, dtype='float32').reshape((2, 2))
+        bar = np.arange(1,5, dtype='float32').reshape((2, 2))+10
+        
+        self._to.append('foo', foo)
+        self._to.append('bar', bar)
+        
+        foo2 = self._to.most_recent_mat1f("foo")
+        
+        assert_equals(foo2.shape, foo.shape)
+        assert_true(np.all(foo2==foo))
+        
+        bar2 = self._to.most_recent_mat1f("bar")
+        
+        assert_equals(bar2.shape, bar.shape)
+        assert_true(np.all(bar2==bar))
+        
+        assert_false(np.any(bar==foo))
+        
+        foo += 100
+        assert_true(np.all(foo2==foo))
         
         

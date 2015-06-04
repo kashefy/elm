@@ -214,5 +214,6 @@ BOOST_PYTHON_MODULE(elm) {
             .def("clear",   &SignalPy::Clear    )
             .def("exists",  &SignalPy::Exists   )
             .def("feature_names", &SignalPy::FeatureNames)
+            .def("most_recent_mat1f", &SignalPy::MostRecentMat1f)
             ;
 }
