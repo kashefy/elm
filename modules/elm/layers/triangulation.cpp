@@ -11,13 +11,10 @@
 
 #ifdef __WITH_PCL   // the layer is otherwise implemented as unsupported
 
-#include <pcl/point_types.h>
-#include <pcl/io/pcd_io.h>
 #include <pcl/kdtree/kdtree_flann.h>
-#include <pcl/features/normal_3d.h>
-#include <opencv2/core/eigen.hpp> // for eigen2cv(), must be preceeded definitio of Eigen either PCL or #include <Eigen/Dense>
+//#include <opencv2/core/eigen.hpp>   // for eigen2cv(), must be preceeded definitio of Eigen either PCL or #include <Eigen/Dense>
 
-#include "elm/core/defs.h"
+#include "elm/core/defs.h"          // ELM_PI2
 #include "elm/core/exception.h"
 #include "elm/core/featuredata.h"
 #include "elm/core/graph/adjacency.h"
@@ -30,6 +27,12 @@ using namespace std;
 using namespace cv;
 using namespace pcl;
 using namespace elm;
+
+extern template class pcl::PointCloud<pcl::PointXYZ >;
+extern template class pcl::PointCloud<pcl::PointNormal >;
+
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ > >;
+extern template class boost::shared_ptr<pcl::PointCloud<pcl::PointNormal > >;
 
 // initialize paramter keys
 const string Triangulation::PARAM_SEARCH_RADIUS        = "radius";
@@ -50,20 +53,16 @@ const int   Triangulation::DEFAULT_MAX_NN                   = 100;  ///< maximum
 const bool  Triangulation::DEFAULT_IS_NORMAL_CONSISTENCY    = false;
 
 // initialize I/O names
-const string Triangulation::KEY_INPUT_POINT_CLOUD   = "cloud";
-const string Triangulation::KEY_OUTPUT_VERTICES     = "vertices";
-const string Triangulation::KEY_OUTPUT_OPT_ADJACENCY = "adjacency";
+const string Triangulation::KEY_INPUT_CLOUD_POINT_NORMAL    = "cloud";
+const string Triangulation::KEY_OUTPUT_VERTICES             = "vertices";
+const string Triangulation::KEY_OUTPUT_OPT_ADJACENCY        = "adjacency";
 
-/** @todo why does define guard lead to undefined reference error?
- */
-//#ifdef __WITH_GTEST
 #include <boost/assign/list_of.hpp>
 template <>
 elm::MapIONames LayerAttr_<Triangulation>::io_pairs = boost::assign::map_list_of
-        ELM_ADD_INPUT_PAIR(Triangulation::KEY_INPUT_POINT_CLOUD)
+        ELM_ADD_INPUT_PAIR(Triangulation::KEY_INPUT_CLOUD_POINT_NORMAL)
         ELM_ADD_OUTPUT_PAIR(Triangulation::KEY_OUTPUT_VERTICES)
         ;
-//#endif
 
 Triangulation::Triangulation()
     : base_Layer()
@@ -102,7 +101,7 @@ void Triangulation::Reconfigure(const LayerConfig &cfg)
 
 void Triangulation::InputNames(const LayerInputNames &io)
 {
-    name_src_cloud_ = io.Input(KEY_INPUT_POINT_CLOUD);
+    name_src_cloud_ = io.Input(KEY_INPUT_CLOUD_POINT_NORMAL);
 }
 
 void Triangulation::OutputNames(const LayerOutputNames &io)
@@ -113,48 +112,31 @@ void Triangulation::OutputNames(const LayerOutputNames &io)
 
 void Triangulation::Activate(const Signal &signal)
 {
-    CloudXYZPtr cld_in = signal.MostRecent(name_src_cloud_).get<CloudXYZPtr>();
-    if(cld_in->empty()) {
+    CloudPtNrmlPtr in = signal.MostRecent(name_src_cloud_).get<CloudPtNrmlPtr>();
+    if(in->empty()) {
 
         ELM_THROW_BAD_DIMS("Cannot Activate Triangulation layer with empty input point cloud.");
     }
 
-    // Normal estimation*
-    NormalEstimation<PointXYZ, Normal> norml_est;
-    PointCloud<Normal>::Ptr normals(new PointCloud<Normal>);
-    search::KdTree<PointXYZ>::Ptr tree(new search::KdTree<PointXYZ>);
-
-    tree->setInputCloud(cld_in);
-    norml_est.setInputCloud(cld_in);
-    norml_est.setSearchMethod(tree);
-    norml_est.setKSearch(20);
-    norml_est.compute(*normals);
-    //* normals should now contain the point normals + surface curvatures
-
-    // Concatenate the XYZ and normal fields*
-    PointCloud<PointNormal>::Ptr cloud_with_normals(new PointCloud<PointNormal>);
-    concatenateFields(*cld_in, *normals, *cloud_with_normals);
-    //* cloud_with_normals = cloud + normals
-
     // Create search tree*
     search::KdTree<PointNormal>::Ptr tree2(new search::KdTree<PointNormal>);
-    tree2->setInputCloud(cloud_with_normals);
+    tree2->setInputCloud(in);
 
-    // Get result
-    gp3.setInputCloud(cloud_with_normals);
+    gp3.setInputCloud(in);
     gp3.setSearchMethod(tree2);
 
-    // PolygonMesh triangles;
-    // gp3.reconstruct(triangles);
-
-    std::vector<Vertices > vertices;
+    // Get result
+    Triangles vertices;
     gp3.reconstruct(vertices);
 
     vertices_ = VecVertices2Mat(vertices, false);
 
     if(name_opt_adj_) {
 
-        TriangulatedCloudToAdjacency(cld_in, vertices, adj_);
+        CloudXYZPtr cld_xyz(new CloudXYZ);
+        copyPointCloud(*in, *cld_xyz);
+
+        TriangulatedCloudToAdjacency(cld_xyz, vertices, adj_);
     }
 }
 

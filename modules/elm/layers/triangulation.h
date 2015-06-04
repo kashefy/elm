@@ -43,7 +43,7 @@ public:
     static const std::string PARAM_IS_NORMAL_CONSISTENT;///< yes/no
 
     // I/O names
-    static const std::string KEY_INPUT_POINT_CLOUD;         ///< key to source cloud
+    static const std::string KEY_INPUT_CLOUD_POINT_NORMAL;  ///< key to xyz and normal source cloud
     static const std::string KEY_OUTPUT_VERTICES;           ///< key to output vertices
     static const std::string KEY_OUTPUT_OPT_ADJACENCY;      ///< key to optional output of triangulated graph adjacency matrix
 
