@@ -95,4 +95,43 @@ class TestSignal:
         assert_raises(KeyError, self._to.most_recent_mat1f, "foo")
         assert_raises(KeyError, self._to.most_recent_mat1f, "bar")
         
+    def test_to_dict(self):
+                
+        foo = np.arange(1,5, dtype='float32').reshape((2, 2))
+        bar = np.arange(1,5, dtype='float32').reshape((2, 2))+10
+        
+        self._to.append('foo', foo)
+        self._to.append('foo', foo+100)
+        self._to.append('bar', bar)
+        
+        d = self._to.to_dict()
+        
+        assert_is_instance(d, dict)
+        
+        assert_list_equal(sorted(d.keys()), sorted(['foo', 'bar']), 'keys missing')
+        
+        feat = d['foo']
+        
+        assert_is_instance(feat, list)
+        assert_equals(len(feat), 2)
+        
+        assert_is_instance(feat[0], np.ndarray)
+        assert_equals(feat[0].shape, (2, 2))
+        assert_true(np.all(feat[0]==foo))
+        
+        assert_is_instance(feat[1], np.ndarray)
+        assert_equals(feat[1].shape, (2, 2))
+        assert_true(np.all(feat[1]==foo+100))
+        
+        feat = d['bar']
+        
+        assert_is_instance(feat, list)
+        assert_equals(len(feat), 1)
+        
+        assert_is_instance(feat[0], np.ndarray)
+        assert_equals(feat[0].shape, (2, 2))
+        assert_true(np.all(feat[0]==bar))
+            
+            
+        
         

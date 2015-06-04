@@ -8,6 +8,7 @@
 #ifndef _ELM_PYTHON_SIGNALPY_H_
 #define _ELM_PYTHON_SIGNALPY_H_
 
+#include <boost/python/dict.hpp>
 #include <boost/python/numeric.hpp>
 
 #include "elm/core/signal.h"
@@ -21,6 +22,8 @@ class SignalPy : public Signal
 {
 public:
     SignalPy();
+
+    boost::python::dict toPythonDict() const;
 };
 
 } // namespace elm

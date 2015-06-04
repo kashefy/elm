@@ -221,9 +221,10 @@ BOOST_PYTHON_MODULE(elm) {
             ;
 
     bp::class_<SignalPy>("Signal")
-            .def("append",  AppendMat1f )
-            .def("clear",   &SignalPy::Clear    )
-            .def("feature_names", &SignalPy::FeatureNames)
+            .def("append",          AppendMat1f                 )
+            .def("clear",           &SignalPy::Clear            )
+            .def("feature_names",   &SignalPy::FeatureNames     )
             .def("most_recent_mat1f", &SignalPy::MostRecentMat1f)
+            .def("to_dict",         &SignalPy::toPythonDict     )
             ;
 }

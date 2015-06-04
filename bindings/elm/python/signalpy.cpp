@@ -7,9 +7,12 @@
 //M*/
 #include "elm/python/signalpy.h"
 
+#include <boost/python/list.hpp>
+
 #include <opencv2/core/core.hpp>
 
 #include "elm/python/arginfo.h"
+#include "elm/python/stl_inl.h"
 
 using std::string;
 namespace bp=boost::python;
@@ -19,4 +22,21 @@ using namespace elm;
 SignalPy::SignalPy()
     : Signal()
 {
+}
+
+bp::dict SignalPy::toPythonDict() const {
+
+    bp::dict d;
+    VecS names = FeatureNames();
+
+    for(VecS::const_iterator itr = names.begin();
+        itr != names.end();
+        ++itr) {
+
+        string n = *itr;
+        VecMat feats = this->operator [](n);
+        d[n] = toPythonList(feats);
+    }
+
+    return d;
 }
