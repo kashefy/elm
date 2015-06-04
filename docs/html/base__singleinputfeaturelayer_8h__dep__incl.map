@@ -1,8 +1,9 @@
 <map id="G" name="G">
 <area shape="rect" id="node3" href="$base__featuretransformationlayer_8h.html" title="base_featuretransformationlayer.h" alt="" coords="281,83,500,112"/>
 <area shape="rect" id="node21" href="$base__filterbanklayer_8h.html" title="base_filterbanklayer.h" alt="" coords="524,83,673,112"/>
-<area shape="rect" id="node23" href="$saliencyitti_8h.html" title="saliencyitti.h" alt="" coords="697,83,791,112"/>
-<area shape="rect" id="node25" href="$sinkhornbalancing_8h.html" title="sinkhornbalancing.h" alt="" coords="815,83,951,112"/>
+<area shape="rect" id="node23" href="$pointnormalestimation_8h.html" title="pointnormalestimation.h" alt="" coords="697,83,857,112"/>
+<area shape="rect" id="node25" href="$saliencyitti_8h.html" title="saliencyitti.h" alt="" coords="881,83,975,112"/>
+<area shape="rect" id="node27" href="$sinkhornbalancing_8h.html" title="sinkhornbalancing.h" alt="" coords="999,83,1135,112"/>
 <area shape="rect" id="node5" href="$diffofgaussians_8h.html" title="diffofgaussians.h" alt="" coords="5,160,125,189"/>
 <area shape="rect" id="node7" href="$imagegradient_8h.html" title="imagegradient.h" alt="" coords="149,160,264,189"/>
 <area shape="rect" id="node9" href="$layer__y_8h.html" title="layer_y.h" alt="" coords="288,160,363,189"/>

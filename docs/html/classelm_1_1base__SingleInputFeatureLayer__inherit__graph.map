@@ -1,9 +1,10 @@
 <map id="G" name="G">
 <area shape="rect" id="node5" href="$classelm_1_1base__FeatureTransformationLayer.html" title="An intermediate base class for prviding a layer interface involving a transformation of a single inpu..." alt="" coords="449,139,697,168"/>
 <area shape="rect" id="node23" href="$classelm_1_1base__FilterBankLayer.html" title="base class for filter banks The interface should aid in iterating through response" alt="" coords="485,192,661,221"/>
-<area shape="rect" id="node25" href="$classelm_1_1SaliencyItti.html" title="Implement Itti et al." alt="" coords="516,245,631,275"/>
-<area shape="rect" id="node27" href="$classelm_1_1SinkhornBalancing.html" title="Layer for implementing Singhorn&#39;s balancing algorithm." alt="" coords="495,299,652,328"/>
-<area shape="rect" id="node2" href="$classelm_1_1base__Layer.html" title="The Layer base class Overloaded constructor calls overloaded Reset() so you can implement Reset(confi..." alt="" coords="7,219,124,248"/>
+<area shape="rect" id="node25" href="$classelm_1_1PointNormalEstimation.html" title="Layer for estimating normals in point cloud." alt="" coords="481,245,665,275"/>
+<area shape="rect" id="node27" href="$classelm_1_1SaliencyItti.html" title="Implement Itti et al." alt="" coords="516,299,631,328"/>
+<area shape="rect" id="node29" href="$classelm_1_1SinkhornBalancing.html" title="Layer for implementing Singhorn&#39;s balancing algorithm." alt="" coords="495,352,652,381"/>
+<area shape="rect" id="node2" href="$classelm_1_1base__Layer.html" title="The Layer base class Overloaded constructor calls overloaded Reset() so you can implement Reset(confi..." alt="" coords="7,245,124,275"/>
 <area shape="rect" id="node7" href="$classelm_1_1base__SmoothLayer.html" title="intermediate Layer for applying smoothing algorithms I/O keys already defined by parent class..." alt="" coords="759,5,921,35"/>
 <area shape="rect" id="node11" href="$classelm_1_1base__SupervisedBatch.html" title="class for defining interfaces of an abstract layer that can learn Overloaded constructor calls overlo..." alt="" coords="748,59,932,88"/>
 <area shape="rect" id="node15" href="$classelm_1_1DiffOfGaussians.html" title="Layer for difference of gaussians." alt="" coords="767,112,913,141"/>

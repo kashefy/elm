@@ -16,7 +16,7 @@ var classelm_1_1Triangulation =
     [ "DEFAULT_MU", "classelm_1_1Triangulation.html#a30a0e70131dec764615742bf8be1a749", null ],
     [ "DEFAULT_SEARCH_RADIUS", "classelm_1_1Triangulation.html#a7a4e51949eaf16b6d92f9bddafcb6bcd", null ],
     [ "gp3", "classelm_1_1Triangulation.html#a101ede57e1817f7a5993b643e24169e5", null ],
-    [ "KEY_INPUT_POINT_CLOUD", "classelm_1_1Triangulation.html#ab809bb19ad7c867ae9016721d1748e3f", null ],
+    [ "KEY_INPUT_CLOUD_POINT_NORMAL", "classelm_1_1Triangulation.html#aefd716f7fdb14219486207673b8dfae9", null ],
     [ "KEY_OUTPUT_OPT_ADJACENCY", "classelm_1_1Triangulation.html#a9af70f7cc85c95c45e91aecab4786af7", null ],
     [ "KEY_OUTPUT_VERTICES", "classelm_1_1Triangulation.html#a7922abf732c4d0fe77499fe74bc1e698", null ],
     [ "name_opt_adj_", "classelm_1_1Triangulation.html#a6e9f83e3f13bee149a1d5a5b60b8ec7f", null ],

@@ -1,8 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="node9" href="$exception_8h.html" title="elm/core/exception.h" alt="" coords="34,83,175,112"/>
-<area shape="rect" id="node13" href="$typedefs__sfwd_8h.html" title="elm/core/typedefs_sfwd.h" alt="" coords="307,83,478,112"/>
-<area shape="rect" id="node15" href="$typedefs__fwd_8h.html" title="elm/core/typedefs_fwd.h" alt="" coords="486,160,651,189"/>
-<area shape="rect" id="node25" href="$stl_2typedefs_8h.html" title="elm/core/stl/typedefs.h" alt="" coords="307,160,462,189"/>
-<area shape="rect" id="node17" href="$boost_2typedefs__fwd_8h.html" title="elm/core/boost/typedefs_fwd.h" alt="" coords="659,237,859,267"/>
-<area shape="rect" id="node23" href="$cv_2typedefs__fwd_8h.html" title="elm/core/cv/typedefs_fwd.h" alt="" coords="454,237,635,267"/>
+<area shape="rect" id="node9" href="$exception_8h.html" title="elm/core/exception.h" alt="" coords="613,83,755,112"/>
+<area shape="rect" id="node13" href="$typedefs__sfwd_8h.html" title="elm/core/typedefs_sfwd.h" alt="" coords="327,83,497,112"/>
+<area shape="rect" id="node15" href="$typedefs__fwd_8h.html" title="elm/core/typedefs_fwd.h" alt="" coords="249,237,415,267"/>
+<area shape="rect" id="node25" href="$boost_2typedefs__sfwd_8h.html" title="elm/core/boost/typedefs_sfwd.h" alt="" coords="299,160,507,189"/>
+<area shape="rect" id="node29" href="$stl_2typedefs_8h.html" title="elm/core/stl/typedefs.h" alt="" coords="632,160,787,189"/>
+<area shape="rect" id="node17" href="$boost_2typedefs__fwd_8h.html" title="elm/core/boost/typedefs_fwd.h" alt="" coords="125,315,325,344"/>
+<area shape="rect" id="node23" href="$cv_2typedefs__fwd_8h.html" title="elm/core/cv/typedefs_fwd.h" alt="" coords="349,315,531,344"/>
 </map>

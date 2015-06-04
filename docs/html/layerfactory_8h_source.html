@@ -100,27 +100,29 @@
 <a name="l00027"></a>00027 
 <a name="l00028"></a>00028     <a class="code" href="classelm_1_1LayerFactory.html#a185c9baef153a2bb5fb797df1d213813">LayerFactory</a>();
 <a name="l00029"></a>00029 
-<a name="l00036"></a>00036     <span class="keyword">static</span> std::shared_ptr&lt;base_Layer&gt; <a class="code" href="classelm_1_1LayerFactory.html#a5d491bd31e215d846f2d418472feb8d0" title="Create smart pointer to an instantiated layer.">CreateShared</a>(<span class="keyword">const</span> <a class="code" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;type);
+<a name="l00036"></a>00036     <span class="keyword">static</span> <a class="code" href="namespaceelm.html#a45faaf73c009a4dcaf1438996550bfcc">LayerShared</a> <a class="code" href="classelm_1_1LayerFactory.html#a8e76328d660fcfa754f0e92ccfec8dcc" title="Create smart pointer to an instantiated layer.">CreateShared</a>(<span class="keyword">const</span> <a class="code" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;type);
 <a name="l00037"></a>00037 
-<a name="l00046"></a>00046     <span class="keyword">static</span> std::shared_ptr&lt;base_Layer&gt; <a class="code" href="classelm_1_1LayerFactory.html#a5d491bd31e215d846f2d418472feb8d0" title="Create smart pointer to an instantiated layer.">CreateShared</a>(<span class="keyword">const</span> <a class="code" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;type,
+<a name="l00046"></a>00046     <span class="keyword">static</span> <a class="code" href="namespaceelm.html#a45faaf73c009a4dcaf1438996550bfcc">LayerShared</a> <a class="code" href="classelm_1_1LayerFactory.html#a8e76328d660fcfa754f0e92ccfec8dcc" title="Create smart pointer to an instantiated layer.">CreateShared</a>(<span class="keyword">const</span> <a class="code" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;type,
 <a name="l00047"></a>00047                                                     <span class="keyword">const</span> <a class="code" href="classelm_1_1LayerConfig.html">LayerConfig</a> &amp;config,
 <a name="l00048"></a>00048                                                     <span class="keyword">const</span> <a class="code" href="classelm_1_1LayerIONames.html" title="class for merging input/stimuli and output/response layer names">LayerIONames</a> &amp;io);
 <a name="l00049"></a>00049 
-<a name="l00057"></a>00057     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1LayerFactory.html#a9a05d703d9da0e2b970b2988c1b0154b" title="Fuly initialize layer instance.">Init</a>(std::shared_ptr&lt;base_Layer&gt; &amp;layer,
-<a name="l00058"></a>00058                      <span class="keyword">const</span> <a class="code" href="classelm_1_1LayerConfig.html">LayerConfig</a> &amp;config,
-<a name="l00059"></a>00059                      <span class="keyword">const</span> <a class="code" href="classelm_1_1LayerIONames.html" title="class for merging input/stimuli and output/response layer names">LayerIONames</a> &amp;io);
-<a name="l00060"></a>00060 };
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062 } <span class="comment">// namesapce elm</span>
-<a name="l00063"></a>00063 
-<a name="l00064"></a>00064 <span class="preprocessor">#endif // _ELM_LAYERS_LAYERFACTORY_H_</span>
+<a name="l00055"></a>00055     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classelm_1_1LayerFactory.html#a35d1af962a25f7d468190bbc72788cce" title="Check if layer type is registered.">Exists</a>(<span class="keyword">const</span> <a class="code" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;type);
+<a name="l00056"></a>00056 
+<a name="l00064"></a>00064     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1LayerFactory.html#a5d54bf2b1da94566edc120bf5a242a21" title="Fuly initialize layer instance.">Init</a>(<a class="code" href="namespaceelm.html#a45faaf73c009a4dcaf1438996550bfcc">LayerShared</a> &amp;layer,
+<a name="l00065"></a>00065                      <span class="keyword">const</span> <a class="code" href="classelm_1_1LayerConfig.html">LayerConfig</a> &amp;config,
+<a name="l00066"></a>00066                      <span class="keyword">const</span> <a class="code" href="classelm_1_1LayerIONames.html" title="class for merging input/stimuli and output/response layer names">LayerIONames</a> &amp;io);
+<a name="l00067"></a>00067 };
+<a name="l00068"></a>00068 
+<a name="l00069"></a>00069 } <span class="comment">// namesapce elm</span>
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071 <span class="preprocessor">#endif // _ELM_LAYERS_LAYERFACTORY_H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="layerfactory_8h.html">layerfactory.h</a>      </li>
 
-    <li class="footer">Generated on Tue Jun 2 2015 07:40:50 for ELM Library by
+    <li class="footer">Generated on Thu Jun 4 2015 13:21:34 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

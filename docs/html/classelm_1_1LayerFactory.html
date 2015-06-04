@@ -95,11 +95,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1LayerFactory.html#a185c9baef153a2bb5fb797df1d213813">LayerFactory</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static std::shared_ptr<br class="typebreak"/>
-&lt; <a class="el" href="classelm_1_1base__Layer.html">base_Layer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1LayerFactory.html#a5d491bd31e215d846f2d418472feb8d0">CreateShared</a> (const <a class="el" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;type)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static std::shared_ptr<br class="typebreak"/>
-&lt; <a class="el" href="classelm_1_1base__Layer.html">base_Layer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1LayerFactory.html#ae97932e5d536379f23091b1015718089">CreateShared</a> (const <a class="el" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;type, const <a class="el" href="classelm_1_1LayerConfig.html">LayerConfig</a> &amp;config, const <a class="el" href="classelm_1_1LayerIONames.html">LayerIONames</a> &amp;io)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1LayerFactory.html#a9a05d703d9da0e2b970b2988c1b0154b">Init</a> (std::shared_ptr&lt; <a class="el" href="classelm_1_1base__Layer.html">base_Layer</a> &gt; &amp;layer, const <a class="el" href="classelm_1_1LayerConfig.html">LayerConfig</a> &amp;config, const <a class="el" href="classelm_1_1LayerIONames.html">LayerIONames</a> &amp;io)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceelm.html#a45faaf73c009a4dcaf1438996550bfcc">LayerShared</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1LayerFactory.html#a8e76328d660fcfa754f0e92ccfec8dcc">CreateShared</a> (const <a class="el" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;type)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceelm.html#a45faaf73c009a4dcaf1438996550bfcc">LayerShared</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1LayerFactory.html#ae0081c88fa88481f9b8da5bb198fbdb5">CreateShared</a> (const <a class="el" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;type, const <a class="el" href="classelm_1_1LayerConfig.html">LayerConfig</a> &amp;config, const <a class="el" href="classelm_1_1LayerIONames.html">LayerIONames</a> &amp;io)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1LayerFactory.html#a35d1af962a25f7d468190bbc72788cce">Exists</a> (const <a class="el" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;type)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1LayerFactory.html#a5d54bf2b1da94566edc120bf5a242a21">Init</a> (<a class="el" href="namespaceelm.html#a45faaf73c009a4dcaf1438996550bfcc">LayerShared</a> &amp;layer, const <a class="el" href="classelm_1_1LayerConfig.html">LayerConfig</a> &amp;config, const <a class="el" href="classelm_1_1LayerIONames.html">LayerIONames</a> &amp;io)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>class for implementing layer related factory methods Such as instantiation and sequencing of multiple layer applications (e.g. </p>
@@ -141,12 +140,12 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a5d491bd31e215d846f2d418472feb8d0"></a><!-- doxytag: member="elm::LayerFactory::CreateShared" ref="a5d491bd31e215d846f2d418472feb8d0" args="(const LayerType &amp;type)" -->
+<a class="anchor" id="a8e76328d660fcfa754f0e92ccfec8dcc"></a><!-- doxytag: member="elm::LayerFactory::CreateShared" ref="a8e76328d660fcfa754f0e92ccfec8dcc" args="(const LayerType &amp;type)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static std::shared_ptr&lt;<a class="el" href="classelm_1_1base__Layer.html">base_Layer</a>&gt; <a class="el" href="classelm_1_1LayerFactory.html#a5d491bd31e215d846f2d418472feb8d0">elm::LayerFactory::CreateShared</a> </td>
+          <td class="memname">static <a class="el" href="namespaceelm.html#a45faaf73c009a4dcaf1438996550bfcc">LayerShared</a> <a class="el" href="classelm_1_1LayerFactory.html#a8e76328d660fcfa754f0e92ccfec8dcc">elm::LayerFactory::CreateShared</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;&#160;</td>
           <td class="paramname"><em>type</em></td><td>)</td>
@@ -173,12 +172,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae97932e5d536379f23091b1015718089"></a><!-- doxytag: member="elm::LayerFactory::CreateShared" ref="ae97932e5d536379f23091b1015718089" args="(const LayerType &amp;type, const LayerConfig &amp;config, const LayerIONames &amp;io)" -->
+<a class="anchor" id="ae0081c88fa88481f9b8da5bb198fbdb5"></a><!-- doxytag: member="elm::LayerFactory::CreateShared" ref="ae0081c88fa88481f9b8da5bb198fbdb5" args="(const LayerType &amp;type, const LayerConfig &amp;config, const LayerIONames &amp;io)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static std::shared_ptr&lt;<a class="el" href="classelm_1_1base__Layer.html">base_Layer</a>&gt; <a class="el" href="classelm_1_1LayerFactory.html#a5d491bd31e215d846f2d418472feb8d0">elm::LayerFactory::CreateShared</a> </td>
+          <td class="memname">static <a class="el" href="namespaceelm.html#a45faaf73c009a4dcaf1438996550bfcc">LayerShared</a> <a class="el" href="classelm_1_1LayerFactory.html#a8e76328d660fcfa754f0e92ccfec8dcc">elm::LayerFactory::CreateShared</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;&#160;</td>
           <td class="paramname"><em>type</em>, </td>
@@ -223,14 +222,40 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9a05d703d9da0e2b970b2988c1b0154b"></a><!-- doxytag: member="elm::LayerFactory::Init" ref="a9a05d703d9da0e2b970b2988c1b0154b" args="(std::shared_ptr&lt; base_Layer &gt; &amp;layer, const LayerConfig &amp;config, const LayerIONames &amp;io)" -->
+<a class="anchor" id="a35d1af962a25f7d468190bbc72788cce"></a><!-- doxytag: member="elm::LayerFactory::Exists" ref="a35d1af962a25f7d468190bbc72788cce" args="(const LayerType &amp;type)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static void <a class="el" href="classelm_1_1LayerFactory.html#a9a05d703d9da0e2b970b2988c1b0154b">elm::LayerFactory::Init</a> </td>
+          <td class="memname">static bool <a class="el" href="classelm_1_1LayerFactory.html#a35d1af962a25f7d468190bbc72788cce">elm::LayerFactory::Exists</a> </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classelm_1_1base__Layer.html">base_Layer</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classelm_1_1LayerFactory.html#a271e4a37bfc6690265d4c2134304d963">LayerType</a> &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Check if layer type is registered. </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>true if exists </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5d54bf2b1da94566edc120bf5a242a21"></a><!-- doxytag: member="elm::LayerFactory::Init" ref="a5d54bf2b1da94566edc120bf5a242a21" args="(LayerShared &amp;layer, const LayerConfig &amp;config, const LayerIONames &amp;io)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classelm_1_1LayerFactory.html#a5d54bf2b1da94566edc120bf5a242a21">elm::LayerFactory::Init</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceelm.html#a45faaf73c009a4dcaf1438996550bfcc">LayerShared</a> &amp;&#160;</td>
           <td class="paramname"><em>layer</em>, </td>
         </tr>
         <tr>
@@ -282,7 +307,7 @@ Static Public Member Functions</h2></td></tr>
       <li class="navelem"><a class="el" href="namespaceelm.html">elm</a>      </li>
       <li class="navelem"><a class="el" href="classelm_1_1LayerFactory.html">LayerFactory</a>      </li>
 
-    <li class="footer">Generated on Tue Jun 2 2015 07:40:51 for ELM Library by
+    <li class="footer">Generated on Thu Jun 4 2015 13:21:34 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

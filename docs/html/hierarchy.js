@@ -81,6 +81,7 @@ var hierarchy =
       [ "elm::base_SingleInputFeatureLayer", "classelm_1_1base__SingleInputFeatureLayer.html", [
         [ "elm::base_FeatureTransformationLayer", "classelm_1_1base__FeatureTransformationLayer.html", null ],
         [ "elm::base_FilterBankLayer", "classelm_1_1base__FilterBankLayer.html", null ],
+        [ "elm::PointNormalEstimation", "classelm_1_1PointNormalEstimation.html", null ],
         [ "elm::SaliencyItti", "classelm_1_1SaliencyItti.html", null ],
         [ "elm::SinkhornBalancing", "classelm_1_1SinkhornBalancing.html", null ]
       ] ],
@@ -88,6 +89,7 @@ var hierarchy =
         [ "elm::GraphCompatibility", "classelm_1_1GraphCompatibility.html", null ]
       ] ],
       [ "elm::base_TIVLayer", "classelm_1_1base__TIVLayer.html", null ],
+      [ "elm::ConcatentateCloudXYZAndNormal", "classelm_1_1ConcatentateCloudXYZAndNormal.html", null ],
       [ "elm::ICP", "classelm_1_1ICP.html", null ],
       [ "elm::Triangulation", "classelm_1_1Triangulation.html", null ]
     ] ],

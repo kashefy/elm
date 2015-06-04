@@ -1,34 +1,36 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classelm_1_1AttentionWindow.html" title="layer for sampling patch around attended location (e.g." alt="" coords="212,35,361,64"/>
-<area shape="rect" id="node5" href="$classelm_1_1base__LayerNotSupported.html" title="This is not an ordinary layer implementation This derived layer only aids in conditionally defined la..." alt="" coords="188,88,385,117"/>
-<area shape="rect" id="node7" href="$classelm_1_1base__LearningLayer.html" title="class for defining interfaces of an abstract layer that can learn Overloaded constructor calls overlo..." alt="" coords="491,5,656,35"/>
-<area shape="rect" id="node13" href="$classelm_1_1base__MatOutputLayer.html" title="class for time&#45;invariant layer" alt="" coords="197,192,376,221"/>
-<area shape="rect" id="node32" href="$classelm_1_1base__PopulationCode.html" title="The base class for population codes." alt="" coords="197,312,376,341"/>
-<area shape="rect" id="node40" href="$classelm_1_1base__Reader.html" title="elm::base_Reader" alt="" coords="223,365,351,395"/>
-<area shape="rect" id="node50" href="$classelm_1_1base__SingleInputFeatureLayer.html" title="base class for layer assuming single feature input, an intermediate layer implementation" alt="" coords="173,245,400,275"/>
-<area shape="rect" id="node59" href="$classelm_1_1base__SparseMatOutputLayer.html" title="intermediate layer class assuming single sparse matrix output" alt="" coords="177,419,396,448"/>
-<area shape="rect" id="node63" href="$classelm_1_1base__TIVLayer.html" title="class for time&#45;invariant layer" alt="" coords="217,472,356,501"/>
-<area shape="rect" id="node65" href="$classelm_1_1ICP.html" title="class for an iterative&#45;closest&#45;point layer This is basciallly a wrapper around PCL&#39;s ICP implementati..." alt="" coords="249,525,324,555"/>
-<area shape="rect" id="node67" href="$classelm_1_1Triangulation.html" title="The triangulation layer wraps around the greedy projection algorithm usign pcl." alt="" coords="224,579,349,608"/>
-<area shape="rect" id="node9" href="$classelm_1_1base__SupervisedBatch.html" title="class for defining interfaces of an abstract layer that can learn Overloaded constructor calls overlo..." alt="" coords="748,5,932,35"/>
-<area shape="rect" id="node11" href="$classelm_1_1MLP.html" title="Layer class for mult&#45;layer perceptrons." alt="" coords="1044,5,1121,35"/>
-<area shape="rect" id="node15" href="$classelm_1_1base__FeatureTransformationLayer.html" title="An intermediate base class for prviding a layer interface involving a transformation of a single inpu..." alt="" coords="449,112,697,141"/>
-<area shape="rect" id="node30" href="$classelm_1_1GradAssignment.html" title="Layer for implementing Graduated Assignment algorithm for graph matching." alt="" coords="500,59,647,88"/>
-<area shape="rect" id="node17" href="$classelm_1_1base__SmoothLayer.html" title="intermediate Layer for applying smoothing algorithms I/O keys already defined by parent class..." alt="" coords="759,59,921,88"/>
-<area shape="rect" id="node22" href="$classelm_1_1DiffOfGaussians.html" title="Layer for difference of gaussians." alt="" coords="767,112,913,141"/>
-<area shape="rect" id="node24" href="$classelm_1_1ImageGradient.html" title="Layer for computing image gradients using forward difference." alt="" coords="772,165,908,195"/>
-<area shape="rect" id="node26" href="$classelm_1_1LayerY.html" title="The LayerY class." alt="" coords="795,219,885,248"/>
-<area shape="rect" id="node28" href="$classelm_1_1WeightedSum.html" title="class to implement base layer methods Yields weighted sum of stimulus with 2 elements Simple example ..." alt="" coords="773,272,907,301"/>
-<area shape="rect" id="node19" href="$classelm_1_1MedianBlur.html" title="Wrap layer around median blur input and output keys defined by parent." alt="" coords="1025,59,1140,88"/>
-<area shape="rect" id="node34" href="$classelm_1_1base__StatefulPopulationCode.html" title="a base class for population codes that are stateful" alt="" coords="463,325,684,355"/>
-<area shape="rect" id="node36" href="$classelm_1_1MutexPopulationCode.html" title="Mutually exclusive population code (a.k.a simple pop." alt="" coords="484,379,663,408"/>
-<area shape="rect" id="node38" href="$classelm_1_1SoftMaxPopulationCode.html" title="Population code sampled from distribution (e.g." alt="" coords="477,432,669,461"/>
-<area shape="rect" id="node42" href="$classelm_1_1base__ReaderMNISTFile.html" title="base class for reading MNIST files" alt="" coords="479,485,668,515"/>
-<area shape="rect" id="node44" href="$classelm_1_1ReadMNISTImages.html" title="class for Reading MNIST image data" alt="" coords="757,459,923,488"/>
-<area shape="rect" id="node48" href="$classelm_1_1ReadMNISTLabels.html" title="class for reading MNIST label data" alt="" coords="759,512,921,541"/>
-<area shape="rect" id="node46" href="$classelm_1_1ReadMNISTImagesTransl.html" title="elm::ReadMNISTImagesTransl" alt="" coords="981,459,1184,488"/>
-<area shape="rect" id="node53" href="$classelm_1_1base__FilterBankLayer.html" title="base class for filter banks The interface should aid in iterating through response" alt="" coords="485,165,661,195"/>
-<area shape="rect" id="node55" href="$classelm_1_1SaliencyItti.html" title="Implement Itti et al." alt="" coords="516,219,631,248"/>
-<area shape="rect" id="node57" href="$classelm_1_1SinkhornBalancing.html" title="Layer for implementing Singhorn&#39;s balancing algorithm." alt="" coords="495,272,652,301"/>
-<area shape="rect" id="node61" href="$classelm_1_1GraphCompatibility.html" title="elm::GraphCompatibility" alt="" coords="492,539,655,568"/>
+<area shape="rect" id="node3" href="$classelm_1_1AttentionWindow.html" title="layer for sampling patch around attended location (e.g." alt="" coords="227,61,376,91"/>
+<area shape="rect" id="node5" href="$classelm_1_1base__LayerNotSupported.html" title="This is not an ordinary layer implementation This derived layer only aids in conditionally defined la..." alt="" coords="203,115,400,144"/>
+<area shape="rect" id="node7" href="$classelm_1_1base__LearningLayer.html" title="class for defining interfaces of an abstract layer that can learn Overloaded constructor calls overlo..." alt="" coords="520,5,685,35"/>
+<area shape="rect" id="node13" href="$classelm_1_1base__MatOutputLayer.html" title="class for time&#45;invariant layer" alt="" coords="212,219,391,248"/>
+<area shape="rect" id="node32" href="$classelm_1_1base__PopulationCode.html" title="The base class for population codes." alt="" coords="212,352,391,381"/>
+<area shape="rect" id="node40" href="$classelm_1_1base__Reader.html" title="elm::base_Reader" alt="" coords="237,405,365,435"/>
+<area shape="rect" id="node50" href="$classelm_1_1base__SingleInputFeatureLayer.html" title="base class for layer assuming single feature input, an intermediate layer implementation" alt="" coords="188,272,415,301"/>
+<area shape="rect" id="node61" href="$classelm_1_1base__SparseMatOutputLayer.html" title="intermediate layer class assuming single sparse matrix output" alt="" coords="192,459,411,488"/>
+<area shape="rect" id="node65" href="$classelm_1_1base__TIVLayer.html" title="class for time&#45;invariant layer" alt="" coords="232,512,371,541"/>
+<area shape="rect" id="node67" href="$classelm_1_1ConcatentateCloudXYZAndNormal.html" title="elm::ConcatentateCloudXYZAndNormal" alt="" coords="175,565,428,595"/>
+<area shape="rect" id="node69" href="$classelm_1_1ICP.html" title="class for an iterative&#45;closest&#45;point layer This is basciallly a wrapper around PCL&#39;s ICP implementati..." alt="" coords="264,619,339,648"/>
+<area shape="rect" id="node71" href="$classelm_1_1Triangulation.html" title="The triangulation layer wraps around the greedy projection algorithm usign pcl." alt="" coords="239,672,364,701"/>
+<area shape="rect" id="node9" href="$classelm_1_1base__SupervisedBatch.html" title="class for defining interfaces of an abstract layer that can learn Overloaded constructor calls overlo..." alt="" coords="777,5,961,35"/>
+<area shape="rect" id="node11" href="$classelm_1_1MLP.html" title="Layer class for mult&#45;layer perceptrons." alt="" coords="1073,5,1151,35"/>
+<area shape="rect" id="node15" href="$classelm_1_1base__FeatureTransformationLayer.html" title="An intermediate base class for prviding a layer interface involving a transformation of a single inpu..." alt="" coords="479,112,727,141"/>
+<area shape="rect" id="node30" href="$classelm_1_1GradAssignment.html" title="Layer for implementing Graduated Assignment algorithm for graph matching." alt="" coords="529,59,676,88"/>
+<area shape="rect" id="node17" href="$classelm_1_1base__SmoothLayer.html" title="intermediate Layer for applying smoothing algorithms I/O keys already defined by parent class..." alt="" coords="788,59,951,88"/>
+<area shape="rect" id="node22" href="$classelm_1_1DiffOfGaussians.html" title="Layer for difference of gaussians." alt="" coords="796,112,943,141"/>
+<area shape="rect" id="node24" href="$classelm_1_1ImageGradient.html" title="Layer for computing image gradients using forward difference." alt="" coords="801,165,937,195"/>
+<area shape="rect" id="node26" href="$classelm_1_1LayerY.html" title="The LayerY class." alt="" coords="824,219,915,248"/>
+<area shape="rect" id="node28" href="$classelm_1_1WeightedSum.html" title="class to implement base layer methods Yields weighted sum of stimulus with 2 elements Simple example ..." alt="" coords="803,272,936,301"/>
+<area shape="rect" id="node19" href="$classelm_1_1MedianBlur.html" title="Wrap layer around median blur input and output keys defined by parent." alt="" coords="1055,59,1169,88"/>
+<area shape="rect" id="node34" href="$classelm_1_1base__StatefulPopulationCode.html" title="a base class for population codes that are stateful" alt="" coords="492,379,713,408"/>
+<area shape="rect" id="node36" href="$classelm_1_1MutexPopulationCode.html" title="Mutually exclusive population code (a.k.a simple pop." alt="" coords="513,432,692,461"/>
+<area shape="rect" id="node38" href="$classelm_1_1SoftMaxPopulationCode.html" title="Population code sampled from distribution (e.g." alt="" coords="507,485,699,515"/>
+<area shape="rect" id="node42" href="$classelm_1_1base__ReaderMNISTFile.html" title="base class for reading MNIST files" alt="" coords="508,539,697,568"/>
+<area shape="rect" id="node44" href="$classelm_1_1ReadMNISTImages.html" title="class for Reading MNIST image data" alt="" coords="787,512,952,541"/>
+<area shape="rect" id="node48" href="$classelm_1_1ReadMNISTLabels.html" title="class for reading MNIST label data" alt="" coords="788,565,951,595"/>
+<area shape="rect" id="node46" href="$classelm_1_1ReadMNISTImagesTransl.html" title="elm::ReadMNISTImagesTransl" alt="" coords="1011,512,1213,541"/>
+<area shape="rect" id="node53" href="$classelm_1_1base__FilterBankLayer.html" title="base class for filter banks The interface should aid in iterating through response" alt="" coords="515,165,691,195"/>
+<area shape="rect" id="node55" href="$classelm_1_1PointNormalEstimation.html" title="Layer for estimating normals in point cloud." alt="" coords="511,219,695,248"/>
+<area shape="rect" id="node57" href="$classelm_1_1SaliencyItti.html" title="Implement Itti et al." alt="" coords="545,272,660,301"/>
+<area shape="rect" id="node59" href="$classelm_1_1SinkhornBalancing.html" title="Layer for implementing Singhorn&#39;s balancing algorithm." alt="" coords="524,325,681,355"/>
+<area shape="rect" id="node63" href="$classelm_1_1GraphCompatibility.html" title="elm::GraphCompatibility" alt="" coords="521,592,684,621"/>
 </map>

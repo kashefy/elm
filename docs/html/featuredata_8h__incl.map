@@ -1,17 +1,18 @@
 <map id="G" name="G">
-<area shape="rect" id="node9" href="$typedefs__sfwd_8h.html" title="elm/core/typedefs_sfwd.h" alt="" coords="294,237,465,267"/>
-<area shape="rect" id="node29" href="$visitors_8h.html" title="elm/core/visitors/visitors.h" alt="" coords="666,83,840,112"/>
-<area shape="rect" id="node11" href="$typedefs__fwd_8h.html" title="elm/core/typedefs_fwd.h" alt="" coords="24,315,189,344"/>
-<area shape="rect" id="node21" href="$stl_2typedefs_8h.html" title="elm/core/stl/typedefs.h" alt="" coords="372,392,526,421"/>
-<area shape="rect" id="node13" href="$boost_2typedefs__fwd_8h.html" title="elm/core/boost/typedefs_fwd.h" alt="" coords="550,392,750,421"/>
-<area shape="rect" id="node19" href="$cv_2typedefs__fwd_8h.html" title="elm/core/cv/typedefs_fwd.h" alt="" coords="845,392,1026,421"/>
-<area shape="rect" id="node31" href="$visitor___8h.html" title="elm/core/visitors/visitor_.h" alt="" coords="760,237,933,267"/>
-<area shape="rect" id="node35" href="$visitorcloud___8h.html" title="elm/core/visitors/visitorcloud_.h" alt="" coords="862,160,1068,189"/>
-<area shape="rect" id="node73" href="$visitorvertices_8h.html" title="elm/core/visitors/visitorvertices.h" alt="" coords="574,160,788,189"/>
-<area shape="rect" id="node37" href="$cloud___8h.html" title="elm/core/pcl/cloud_.h" alt="" coords="1037,237,1184,267"/>
-<area shape="rect" id="node48" href="$cloud__2cloud___8h.html" title="elm/core/pcl/cloud_2cloud_.h" alt="" coords="1208,237,1397,267"/>
-<area shape="rect" id="node62" href="$vertices_8h.html" title="elm/core/pcl/vertices.h" alt="" coords="489,237,644,267"/>
-<area shape="rect" id="node44" href="$pcl_2typedefs__fwd_8h.html" title="elm/core/pcl/typedefs_fwd.h" alt="" coords="557,315,744,344"/>
-<area shape="rect" id="node52" href="$exception_8h.html" title="elm/core/exception.h" alt="" coords="1320,392,1461,421"/>
-<area shape="rect" id="node56" href="$point__traits_8h.html" title="elm/core/pcl/point_traits.h" alt="" coords="1432,315,1602,344"/>
+<area shape="rect" id="node9" href="$typedefs__sfwd_8h.html" title="elm/core/typedefs_sfwd.h" alt="" coords="1567,237,1737,267"/>
+<area shape="rect" id="node33" href="$visitors_8h.html" title="elm/core/visitors/visitors.h" alt="" coords="871,83,1044,112"/>
+<area shape="rect" id="node11" href="$typedefs__fwd_8h.html" title="elm/core/typedefs_fwd.h" alt="" coords="1583,392,1748,421"/>
+<area shape="rect" id="node21" href="$boost_2typedefs__sfwd_8h.html" title="elm/core/boost/typedefs_sfwd.h" alt="" coords="1749,315,1957,344"/>
+<area shape="rect" id="node26" href="$stl_2typedefs_8h.html" title="elm/core/stl/typedefs.h" alt="" coords="1856,392,2011,421"/>
+<area shape="rect" id="node13" href="$boost_2typedefs__fwd_8h.html" title="elm/core/boost/typedefs_fwd.h" alt="" coords="1483,469,1683,499"/>
+<area shape="rect" id="node19" href="$cv_2typedefs__fwd_8h.html" title="elm/core/cv/typedefs_fwd.h" alt="" coords="1013,469,1195,499"/>
+<area shape="rect" id="node35" href="$visitor___8h.html" title="elm/core/visitors/visitor_.h" alt="" coords="947,237,1120,267"/>
+<area shape="rect" id="node39" href="$visitorcloud___8h.html" title="elm/core/visitors/visitorcloud_.h" alt="" coords="785,160,991,189"/>
+<area shape="rect" id="node77" href="$visitorvertices_8h.html" title="elm/core/visitors/visitorvertices.h" alt="" coords="1065,160,1279,189"/>
+<area shape="rect" id="node41" href="$cloud___8h.html" title="elm/core/pcl/cloud_.h" alt="" coords="517,237,664,267"/>
+<area shape="rect" id="node52" href="$cloud__2cloud___8h.html" title="elm/core/pcl/cloud_2cloud_.h" alt="" coords="703,237,892,267"/>
+<area shape="rect" id="node66" href="$vertices_8h.html" title="elm/core/pcl/vertices.h" alt="" coords="1275,237,1429,267"/>
+<area shape="rect" id="node48" href="$pcl_2typedefs__fwd_8h.html" title="elm/core/pcl/typedefs_fwd.h" alt="" coords="920,315,1107,344"/>
+<area shape="rect" id="node56" href="$exception_8h.html" title="elm/core/exception.h" alt="" coords="812,392,953,421"/>
+<area shape="rect" id="node60" href="$point__traits_8h.html" title="elm/core/pcl/point_traits.h" alt="" coords="675,315,845,344"/>
 </map>

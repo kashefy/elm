@@ -1,10 +1,11 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$typedefs_8h.html" title="elm/core/typedefs.h" alt="" coords="396,83,532,112"/>
-<area shape="rect" id="node25" href="$base__filterbank_8h.html" title="elm/encoding/base_filterbank.h" alt="" coords="556,83,759,112"/>
-<area shape="rect" id="node5" href="$typedefs__sfwd_8h.html" title="elm/core/typedefs_sfwd.h" alt="" coords="380,160,551,189"/>
-<area shape="rect" id="node7" href="$typedefs__fwd_8h.html" title="elm/core/typedefs_fwd.h" alt="" coords="209,237,375,267"/>
-<area shape="rect" id="node17" href="$stl_2typedefs_8h.html" title="elm/core/stl/typedefs.h" alt="" coords="399,237,553,267"/>
-<area shape="rect" id="node9" href="$boost_2typedefs__fwd_8h.html" title="elm/core/boost/typedefs_fwd.h" alt="" coords="211,315,411,344"/>
-<area shape="rect" id="node15" href="$cv_2typedefs__fwd_8h.html" title="elm/core/cv/typedefs_fwd.h" alt="" coords="5,315,187,344"/>
-<area shape="rect" id="node31" href="$exception_8h.html" title="elm/core/exception.h" alt="" coords="692,160,833,189"/>
+<area shape="rect" id="node3" href="$typedefs_8h.html" title="elm/core/typedefs.h" alt="" coords="372,83,508,112"/>
+<area shape="rect" id="node29" href="$base__filterbank_8h.html" title="elm/encoding/base_filterbank.h" alt="" coords="541,83,744,112"/>
+<area shape="rect" id="node5" href="$typedefs__sfwd_8h.html" title="elm/core/typedefs_sfwd.h" alt="" coords="336,160,507,189"/>
+<area shape="rect" id="node7" href="$typedefs__fwd_8h.html" title="elm/core/typedefs_fwd.h" alt="" coords="249,315,415,344"/>
+<area shape="rect" id="node17" href="$boost_2typedefs__sfwd_8h.html" title="elm/core/boost/typedefs_sfwd.h" alt="" coords="299,237,507,267"/>
+<area shape="rect" id="node22" href="$stl_2typedefs_8h.html" title="elm/core/stl/typedefs.h" alt="" coords="632,237,787,267"/>
+<area shape="rect" id="node9" href="$boost_2typedefs__fwd_8h.html" title="elm/core/boost/typedefs_fwd.h" alt="" coords="125,392,325,421"/>
+<area shape="rect" id="node15" href="$cv_2typedefs__fwd_8h.html" title="elm/core/cv/typedefs_fwd.h" alt="" coords="349,392,531,421"/>
+<area shape="rect" id="node35" href="$exception_8h.html" title="elm/core/exception.h" alt="" coords="581,160,723,189"/>
 </map>

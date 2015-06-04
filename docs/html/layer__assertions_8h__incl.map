@@ -1,16 +1,17 @@
 <map id="G" name="G">
-<area shape="rect" id="node7" href="$exception_8h.html" title="elm/core/exception.h" alt="" coords="585,83,727,112"/>
-<area shape="rect" id="node13" href="$inputname_8h.html" title="elm/core/inputname.h" alt="" coords="955,315,1101,344"/>
-<area shape="rect" id="node16" href="$layerconfig_8h.html" title="elm/core/layerconfig.h" alt="" coords="751,83,900,112"/>
-<area shape="rect" id="node46" href="$stl__inl_8h.html" title="elm/core/stl/stl_inl.h" alt="" coords="1229,83,1368,112"/>
-<area shape="rect" id="node53" href="$layerfactory_8h.html" title="elm/layers/layerfactory.h" alt="" coords="369,83,535,112"/>
-<area shape="rect" id="node58" href="$layerattr___8h.html" title="elm/ts/layerattr_.h" alt="" coords="881,392,1007,421"/>
-<area shape="rect" id="node20" href="$layerionames_8h.html" title="elm/core/layerionames.h" alt="" coords="719,160,881,189"/>
-<area shape="rect" id="node22" href="$layerinputnames_8h.html" title="elm/core/layerinputnames.h" alt="" coords="916,237,1097,267"/>
-<area shape="rect" id="node43" href="$layeroutputnames_8h.html" title="elm/core/layeroutputnames.h" alt="" coords="703,237,892,267"/>
-<area shape="rect" id="node24" href="$typedefs__sfwd_8h.html" title="elm/core/typedefs_sfwd.h" alt="" coords="736,315,907,344"/>
-<area shape="rect" id="node26" href="$typedefs__fwd_8h.html" title="elm/core/typedefs_fwd.h" alt="" coords="249,392,415,421"/>
-<area shape="rect" id="node36" href="$stl_2typedefs_8h.html" title="elm/core/stl/typedefs.h" alt="" coords="1031,392,1185,421"/>
-<area shape="rect" id="node28" href="$boost_2typedefs__fwd_8h.html" title="elm/core/boost/typedefs_fwd.h" alt="" coords="125,469,325,499"/>
-<area shape="rect" id="node34" href="$cv_2typedefs__fwd_8h.html" title="elm/core/cv/typedefs_fwd.h" alt="" coords="349,469,531,499"/>
+<area shape="rect" id="node7" href="$exception_8h.html" title="elm/core/exception.h" alt="" coords="631,83,772,112"/>
+<area shape="rect" id="node13" href="$inputname_8h.html" title="elm/core/inputname.h" alt="" coords="732,315,879,344"/>
+<area shape="rect" id="node16" href="$layerconfig_8h.html" title="elm/core/layerconfig.h" alt="" coords="457,83,607,112"/>
+<area shape="rect" id="node50" href="$stl__inl_8h.html" title="elm/core/stl/stl_inl.h" alt="" coords="989,83,1128,112"/>
+<area shape="rect" id="node57" href="$layerfactory_8h.html" title="elm/layers/layerfactory.h" alt="" coords="268,83,433,112"/>
+<area shape="rect" id="node62" href="$layerattr___8h.html" title="elm/ts/layerattr_.h" alt="" coords="753,392,879,421"/>
+<area shape="rect" id="node20" href="$layerionames_8h.html" title="elm/core/layerionames.h" alt="" coords="199,160,361,189"/>
+<area shape="rect" id="node22" href="$layerinputnames_8h.html" title="elm/core/layerinputnames.h" alt="" coords="396,237,577,267"/>
+<area shape="rect" id="node47" href="$layeroutputnames_8h.html" title="elm/core/layeroutputnames.h" alt="" coords="183,237,372,267"/>
+<area shape="rect" id="node24" href="$typedefs__sfwd_8h.html" title="elm/core/typedefs_sfwd.h" alt="" coords="388,315,559,344"/>
+<area shape="rect" id="node26" href="$typedefs__fwd_8h.html" title="elm/core/typedefs_fwd.h" alt="" coords="249,469,415,499"/>
+<area shape="rect" id="node36" href="$boost_2typedefs__sfwd_8h.html" title="elm/core/boost/typedefs_sfwd.h" alt="" coords="369,392,577,421"/>
+<area shape="rect" id="node40" href="$stl_2typedefs_8h.html" title="elm/core/stl/typedefs.h" alt="" coords="903,392,1057,421"/>
+<area shape="rect" id="node28" href="$boost_2typedefs__fwd_8h.html" title="elm/core/boost/typedefs_fwd.h" alt="" coords="125,547,325,576"/>
+<area shape="rect" id="node34" href="$cv_2typedefs__fwd_8h.html" title="elm/core/cv/typedefs_fwd.h" alt="" coords="349,547,531,576"/>
 </map>
