@@ -183,14 +183,70 @@ protected:
     Mat m_;
 };
 
-// select overloaded method
-void (SignalPy::*AppendMat1f)(const std::string&, const Mat1f&) = &SignalPy::Append;
+void SignalPy::fromPythonDict(const bp::dict &d) {
+
+    bp::list keys = d.keys();
+    const size_t NB_KEYS = bp::len(keys);
+
+    for(size_t i=0; i<NB_KEYS; i++) {
+
+        bp::object obj = keys[i];
+        if(!PyString_Check(obj.ptr())) {
+
+            PyErr_SetString(PyExc_TypeError, "Only keys of strings supported.");
+            bp::throw_error_already_set();
+        }
+        else {
+
+            string key = bp::extract<string >(bp::str(obj));
+            bp::object obj_vals = d.get(key);
+            if(PyList_Check(obj_vals.ptr())) {
+
+                const bp::list vals = bp::extract<bp::list >(obj_vals);
+                const size_t NB_ELEMS = bp::len(vals);
+
+                for(size_t j=0; j<NB_ELEMS; j++) {
+
+                    bp::object obj_elem = vals[j];
+                    if(PyArray_Check(obj_elem.ptr())) {
+
+                        Mat1f m;
+                        ArgInfo info("mat", false);
+                        if(!pyopencv_to(obj_elem.ptr(), m, info)) {
+
+                            string msg("Failed to convert array to Mat");
+                            PyErr_SetString(PyExc_ValueError, msg.c_str());
+                            bp::throw_error_already_set();
+                        }
+
+                        Append(key, m);
+                    }
+                    else {
+
+                        PyErr_SetString(PyExc_TypeError,
+                                        "Only values of ndarray supported.");
+                        bp::throw_error_already_set();
+                    }
+                }
+            }
+            else {
+
+                PyErr_SetString(PyExc_TypeError,
+                                "Unsupported value types");
+                bp::throw_error_already_set();
+            }
+        }
+    }
+}
 
 void translate_exception(ExceptionKeyError const& e) {
 
     // Use the Python 'C' API to set up an exception object
     PyErr_SetString(PyExc_KeyError, e.what());
 }
+
+// select overloaded method
+void (SignalPy::*AppendMat1f)(const std::string&, const Mat1f&) = &SignalPy::Append;
 
 BOOST_PYTHON_MODULE(elm) {
 
@@ -226,5 +282,6 @@ BOOST_PYTHON_MODULE(elm) {
             .def("feature_names",   &SignalPy::FeatureNames     )
             .def("most_recent_mat1f", &SignalPy::MostRecentMat1f)
             .def("to_dict",         &SignalPy::toPythonDict     )
+            .def("from_dict",       &SignalPy::fromPythonDict     )
             ;
 }

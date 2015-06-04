@@ -7,7 +7,10 @@
 //M*/
 #include "elm/python/signalpy.h"
 
+#include <boost/python/extract.hpp>
 #include <boost/python/list.hpp>
+#include <boost/python/str.hpp>
+#include <numpy/ndarrayobject.h>
 
 #include <opencv2/core/core.hpp>
 

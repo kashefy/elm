@@ -23,7 +23,17 @@ class SignalPy : public Signal
 public:
     SignalPy();
 
+    /**
+     * @brief convert Signal content to Python dict
+     * @return signal content
+     */
     boost::python::dict toPythonDict() const;
+
+    /**
+     * @brief add dict to signal content
+     * @param source dict
+     */
+    void fromPythonDict(const boost::python::dict &d);
 };
 
 } // namespace elm
