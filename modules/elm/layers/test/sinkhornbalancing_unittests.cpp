@@ -56,7 +56,7 @@ protected:
         sig_.Clear();
     }
 
-    std::shared_ptr<base_Layer> to_; ///< ptr to test object
+    LayerShared to_; ///< ptr to test object
 
     Mat1f m_;
     Signal sig_;

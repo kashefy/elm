@@ -7,6 +7,5 @@
 //M*/
 #include "elm/ts/layerattr_.h"
 
-template class std::pair<bool, std::string>;
-template class std::map<std::string, std::pair<bool, std::string> >;
+template class std::pair<elm::LayerIOKeyType, std::string>;
 template class std::map< std::string, std::pair<elm::LayerIOKeyType, std::string> >;

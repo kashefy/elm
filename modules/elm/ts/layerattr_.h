@@ -21,18 +21,15 @@ enum LayerIOKeyType
 
 } // namespace elm
 
-extern template class std::pair<bool, std::string>;
-extern template class std::map<std::string, std::pair<bool, std::string> >;
 extern template class std::map< std::string, std::pair<elm::LayerIOKeyType, std::string> >;
 
 namespace elm {
 
 class base_Layer;
 
-typedef std::pair<bool, std::string> IOName; ///< convinience typedef to layer io name with bool indicating input (0) or output (1)
-typedef std::map< std::string, std::pair<bool, std::string> > MapIONamesB; ///< convinience typedef for a map of io keys and corresponding io name
+typedef std::pair<LayerIOKeyType, std::string> IOName; ///< convinience typedef to layer io name with bool indicating input (0) or output (1)
 
-typedef std::map< std::string, std::pair<LayerIOKeyType, std::string> > MapIONames; ///< convinience typedef for a map of io keys and corresponding io name
+typedef std::map< std::string, IOName > MapIONames; ///< convinience typedef for a map of io keys and corresponding io name
 
 /**
  * @brief Layer Attributes struct, a helper struct for layer p-typed test cases.
@@ -40,7 +37,7 @@ typedef std::map< std::string, std::pair<LayerIOKeyType, std::string> > MapIONam
  *
  * Caution when defining members for your layer type:
  *
- * - statc members such as io_pairs depend on static initializations in the layer.
+ * - static members such as io_pairs depend on static initializations in the layer.
  *   Initilizing them in the layer's unittest source file, leads to a "static initialization order fiasco"
  *   To avoid this, initialize the LayerAttr_ member for your layer type in your layer's implementation file.
  *   Preferrably inside __WITH_GTEST define-guards.

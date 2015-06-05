@@ -26,6 +26,14 @@ extern template class std::shared_ptr<elm::base_Layer >;
 namespace elm {
 
 /**
+ * @brief Facotry function for initializing io names from a subset of io pairs
+ * @param[in] io_pairs
+ * @param[in] keys I/O keys to use in initialization
+ * @param[out] dst resulting object
+ */
+void InitializeIONames(const MapIONames &io_pairs, const VecS& keys, LayerIONames& dst);
+
+/**
  * @brief A type-parameterized test case for repeating tests with different layer types
  */
 template <class TLayer>
@@ -38,7 +46,7 @@ protected:
     }
 
     // members
-    std::shared_ptr<base_Layer > layer_ptr_; ///< pointer to test object used in fixtures
+    LayerShared layer_ptr_; ///< pointer to test object used in fixtures
 };
 
 TYPED_TEST_CASE_P(Layer_TP_);
@@ -71,7 +79,6 @@ TYPED_TEST_P(Layer_TP_, Destructor)
  */
 TYPED_TEST_P(Layer_TP_, RequiredIONamesValidation)
 {
-    typedef std::vector<std::string > VecS;
     using namespace elm;
     MapIONames io_pairs = LayerAttr_<TypeParam >::io_pairs;
     VecS keys = Keys(io_pairs);
@@ -83,17 +90,7 @@ TYPED_TEST_P(Layer_TP_, RequiredIONamesValidation)
 
             // populate layer io names with subset
             LayerIONames io;
-            for(size_t i=0; i<subset.size(); i++) {
-
-                IOName _v = io_pairs.at(subset[i]);
-
-                if(_v.first == LayerIOKeyType::INPUT) {
-                    io.Input(subset[i], _v.second);
-                }
-                else if(_v.first == LayerIOKeyType::OUTPUT) {
-                    io.Output(subset[i], _v.second);
-                }
-            }
+            InitializeIONames(io_pairs, subset, io);
 
             if(subset.size() == io_pairs.size()) {
 
