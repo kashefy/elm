@@ -10,6 +10,8 @@
 
 #include "elm/core/visitors/visitor_.h"
 
+#include <opencv2/core/core.hpp>
+
 #include "elm/core/exception.h"
 #include "elm/core/cv/mat_utils.h"
 #include "elm/core/cv/sparsemat_utils.h"

@@ -10,6 +10,8 @@
 
 #ifdef __WITH_PCL // the template class definitions require PCL support
 
+#include <opencv2/core/core.hpp>
+
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 

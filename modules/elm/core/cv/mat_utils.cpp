@@ -7,6 +7,8 @@
 //M*/
 #include "elm/core/cv/mat_utils.h"
 
+#include <opencv2/core/core.hpp>
+
 #include "elm/core/exception.h"
 
 using namespace std;

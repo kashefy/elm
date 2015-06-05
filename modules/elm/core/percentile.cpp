@@ -7,6 +7,7 @@
 //M*/
 #include "elm/core/percentile.h"
 
+#include <opencv2/core/core.hpp>
 #include "elm/core/exception.h"
 
 using namespace cv;

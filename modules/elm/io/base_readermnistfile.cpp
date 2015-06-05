@@ -7,6 +7,8 @@
 //M*/
 #include "elm/io/base_readermnistfile.h"
 
+#include <sstream>
+
 #include "elm/core/exception.h"
 #include "elm/core/layeroutputnames.h"
 #include "elm/io/binary.h"

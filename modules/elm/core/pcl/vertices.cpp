@@ -9,6 +9,8 @@
 
 #ifdef __WITH_PCL
 
+#include <opencv2/core/core.hpp>
+
 #include "elm/core/exception.h"
 #include "elm/core/cv/mat_utils.h"
 

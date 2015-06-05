@@ -10,6 +10,8 @@
 #ifndef _ELM_CORE_MAT_UTILS_INL_H__
 #define _ELM_CORE_MAT_UTILS_INL_H__
 
+#include <opencv2/core/core.hpp>
+
 #include "elm/core/cv/typedefs_fwd.h"
 #include "elm/core/defs.h"
 #include "elm/core/exception.h"

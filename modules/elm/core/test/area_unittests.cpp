@@ -8,6 +8,9 @@
 #include "elm/core/area.h"
 
 #include "gtest/gtest.h"
+
+#include <opencv2/core/core.hpp>
+
 #include "elm/core/exception.h"
 
 using cv::Mat1f;

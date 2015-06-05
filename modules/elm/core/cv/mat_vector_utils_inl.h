@@ -10,7 +10,7 @@
 #ifndef _ELM_CORE_MAT_VECTOR_UTILS_INL_H_
 #define _ELM_CORE_MAT_VECTOR_UTILS_INL_H_
 
-#include <vector>
+#include <opencv2/core/core.hpp>    // includes vector too
 
 #include "elm/core/cv/typedefs_fwd.h"
 #include "elm/core/exception.h"
