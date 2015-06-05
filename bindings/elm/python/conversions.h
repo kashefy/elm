@@ -4,7 +4,8 @@
 #ifndef _ELM_PYTHON_CONVERSIONS_H_
 #define _ELM_PYTHON_CONVERSIONS_H_
 
-#include <boost/python.hpp>
+#include <boost/python/converter/registry.hpp>
+#include <boost/python/type_id.hpp>
 
 /**
  *  Conversion template
