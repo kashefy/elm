@@ -75,7 +75,8 @@
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">elm::Exception Class Reference</div>  </div>
 </div><!--header-->
@@ -94,18 +95,49 @@ Inheritance diagram for elm::Exception:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#a30a647b10a452420b3663390f9a97c72">Exception</a> (int _code, const std::string &amp;msg, const std::string &amp;_func, const std::string &amp;_file, int _line)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#a25442546d4f70c3b622c1edea0efe4ed">Exception</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#adfa309dfcc7a079a089615e6bda38a11">Exception</a> (int _code, const std::string &amp;_err, const std::string &amp;_func, const std::string &amp;_file, int _line)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#a3b16846394bdf90226b416c5ffeeab1b">~Exception</a> ()  throw ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#aaa6a5a82770b71154043e110481c7a02">what</a> () const   throw ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#a29d3f117d84767a0273fc810b790e089">formatMessage</a> ()</td></tr>
+<tr><td colspan="2"><h2><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#ab31b031fb87f8ae87209dd84b5a1896c">msg</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#aae8c6a244178bbf87dcd506f6b8487eb">code</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#a4489381518faded9cbc41dc776e0a607">err</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#acc36b634d3b165146eedd67b11130d94">func</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#adf30944a44d0259ce85199b0acdb2157">file</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classelm_1_1Exception.html#a25f9813765f4ee65d794bb80ca1e7bc4">line</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="exception_8h_source.html#l00031">31</a> of file <a class="el" href="exception_8h_source.html">exception.h</a>.</p>
+<div class="textblock"><p>The <a class="el" href="classelm_1_1Exception.html" title="The Exception class adapted from OpenCV&#39;s Exception class.">Exception</a> class adapted from OpenCV's <a class="el" href="classelm_1_1Exception.html" title="The Exception class adapted from OpenCV&#39;s Exception class.">Exception</a> class. </p>
+
+<p>Definition at line <a class="el" href="exception_8h_source.html#l00080">80</a> of file <a class="el" href="exception_8h_source.html">exception.h</a>.</p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a30a647b10a452420b3663390f9a97c72"></a><!-- doxytag: member="elm::Exception::Exception" ref="a30a647b10a452420b3663390f9a97c72" args="(int _code, const std::string &amp;msg, const std::string &amp;_func, const std::string &amp;_file, int _line)" -->
+<a class="anchor" id="a25442546d4f70c3b622c1edea0efe4ed"></a><!-- doxytag: member="elm::Exception::Exception" ref="a25442546d4f70c3b622c1edea0efe4ed" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classelm_1_1Exception.html#a30a647b10a452420b3663390f9a97c72">elm::Exception::Exception</a> </td>
+          <td class="memname"><a class="el" href="classelm_1_1Exception.html#a25442546d4f70c3b622c1edea0efe4ed">elm::Exception::Exception</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Default constructor. </p>
+
+</div>
+</div>
+<a class="anchor" id="adfa309dfcc7a079a089615e6bda38a11"></a><!-- doxytag: member="elm::Exception::Exception" ref="adfa309dfcc7a079a089615e6bda38a11" args="(int _code, const std::string &amp;_err, const std::string &amp;_func, const std::string &amp;_file, int _line)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classelm_1_1Exception.html#a25442546d4f70c3b622c1edea0efe4ed">elm::Exception::Exception</a> </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>_code</em>, </td>
@@ -114,7 +146,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>msg</em>, </td>
+          <td class="paramname"><em>_err</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -143,6 +175,177 @@ Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Full constructor. </p>
+<p>Normally the constuctor is not called explicitly. Instead, the macros ELM_THROW_* are used. </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_code</td><td>error code </td></tr>
+    <tr><td class="paramname">_err</td><td>error message </td></tr>
+    <tr><td class="paramname">_func</td><td>function in which the error occured </td></tr>
+    <tr><td class="paramname">_file</td><td>file in which the function is located </td></tr>
+    <tr><td class="paramname">_line</td><td>the line in the file where the error was detected </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a3b16846394bdf90226b416c5ffeeab1b"></a><!-- doxytag: member="elm::Exception::~Exception" ref="a3b16846394bdf90226b416c5ffeeab1b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classelm_1_1Exception.html#a3b16846394bdf90226b416c5ffeeab1b">elm::Exception::~Exception</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td>  throw ()<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a29d3f117d84767a0273fc810b790e089"></a><!-- doxytag: member="elm::Exception::formatMessage" ref="a29d3f117d84767a0273fc810b790e089" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classelm_1_1Exception.html#a29d3f117d84767a0273fc810b790e089">elm::Exception::formatMessage</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>format the error message </p>
+
+</div>
+</div>
+<a class="anchor" id="aaa6a5a82770b71154043e110481c7a02"></a><!-- doxytag: member="elm::Exception::what" ref="aaa6a5a82770b71154043e110481c7a02" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const char* <a class="el" href="classelm_1_1Exception.html#aaa6a5a82770b71154043e110481c7a02">elm::Exception::what</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const  throw ()<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>the error description and the context as a text string </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>message describing the error </dd></dl>
+
+</div>
+</div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="aae8c6a244178bbf87dcd506f6b8487eb"></a><!-- doxytag: member="elm::Exception::code" ref="aae8c6a244178bbf87dcd506f6b8487eb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classelm_1_1Exception.html#aae8c6a244178bbf87dcd506f6b8487eb">elm::Exception::code</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>error code </p>
+<dl class="see"><dt><b>See also:</b></dt><dd>CVStatus </dd></dl>
+
+<p>Definition at line <a class="el" href="exception_8h_source.html#l00117">117</a> of file <a class="el" href="exception_8h_source.html">exception.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4489381518faded9cbc41dc776e0a607"></a><!-- doxytag: member="elm::Exception::err" ref="a4489381518faded9cbc41dc776e0a607" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="classelm_1_1Exception.html#a4489381518faded9cbc41dc776e0a607">elm::Exception::err</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>error description </p>
+
+<p>Definition at line <a class="el" href="exception_8h_source.html#l00118">118</a> of file <a class="el" href="exception_8h_source.html">exception.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adf30944a44d0259ce85199b0acdb2157"></a><!-- doxytag: member="elm::Exception::file" ref="adf30944a44d0259ce85199b0acdb2157" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="classelm_1_1Exception.html#adf30944a44d0259ce85199b0acdb2157">elm::Exception::file</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>source file name where the error has occured </p>
+
+<p>Definition at line <a class="el" href="exception_8h_source.html#l00120">120</a> of file <a class="el" href="exception_8h_source.html">exception.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acc36b634d3b165146eedd67b11130d94"></a><!-- doxytag: member="elm::Exception::func" ref="acc36b634d3b165146eedd67b11130d94" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="classelm_1_1Exception.html#acc36b634d3b165146eedd67b11130d94">elm::Exception::func</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>function name. Available only when the compiler supports getting it </p>
+
+<p>Definition at line <a class="el" href="exception_8h_source.html#l00119">119</a> of file <a class="el" href="exception_8h_source.html">exception.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a25f9813765f4ee65d794bb80ca1e7bc4"></a><!-- doxytag: member="elm::Exception::line" ref="a25f9813765f4ee65d794bb80ca1e7bc4" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classelm_1_1Exception.html#a25f9813765f4ee65d794bb80ca1e7bc4">elm::Exception::line</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>line number in the source file where the error has occured </p>
+
+<p>Definition at line <a class="el" href="exception_8h_source.html#l00121">121</a> of file <a class="el" href="exception_8h_source.html">exception.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab31b031fb87f8ae87209dd84b5a1896c"></a><!-- doxytag: member="elm::Exception::msg" ref="ab31b031fb87f8ae87209dd84b5a1896c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="classelm_1_1Exception.html#ab31b031fb87f8ae87209dd84b5a1896c">elm::Exception::msg</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>the formatted error message </p>
+
+<p>Definition at line <a class="el" href="exception_8h_source.html#l00115">115</a> of file <a class="el" href="exception_8h_source.html">exception.h</a>.</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
@@ -155,7 +358,7 @@ Public Member Functions</h2></td></tr>
       <li class="navelem"><a class="el" href="namespaceelm.html">elm</a>      </li>
       <li class="navelem"><a class="el" href="classelm_1_1Exception.html">Exception</a>      </li>
 
-    <li class="footer">Generated on Thu Jun 4 2015 13:21:34 for ELM Library by
+    <li class="footer">Generated on Fri Jun 5 2015 13:40:11 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

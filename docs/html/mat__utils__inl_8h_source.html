@@ -86,89 +86,91 @@
 <a name="l00010"></a>00010 <span class="preprocessor">#ifndef _ELM_CORE_MAT_UTILS_INL_H__</span>
 <a name="l00011"></a>00011 <span class="preprocessor"></span><span class="preprocessor">#define _ELM_CORE_MAT_UTILS_INL_H__</span>
 <a name="l00012"></a>00012 <span class="preprocessor"></span>
-<a name="l00013"></a>00013 <span class="preprocessor">#include &quot;<a class="code" href="cv_2typedefs__fwd_8h.html">elm/core/cv/typedefs_fwd.h</a>&quot;</span>
-<a name="l00014"></a>00014 <span class="preprocessor">#include &quot;<a class="code" href="defs_8h.html">elm/core/defs.h</a>&quot;</span>
-<a name="l00015"></a>00015 <span class="preprocessor">#include &quot;<a class="code" href="exception_8h.html">elm/core/exception.h</a>&quot;</span>
-<a name="l00016"></a>00016 
-<a name="l00017"></a>00017 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>cv::Mat_&lt;float&gt;;
-<a name="l00018"></a>00018 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>cv::Mat_&lt;int&gt;;
-<a name="l00019"></a>00019 
-<a name="l00020"></a>00020 <span class="keyword">namespace </span>elm {
+<a name="l00013"></a>00013 <span class="preprocessor">#include &lt;opencv2/core/core.hpp&gt;</span>
+<a name="l00014"></a>00014 
+<a name="l00015"></a>00015 <span class="preprocessor">#include &quot;<a class="code" href="cv_2typedefs__fwd_8h.html">elm/core/cv/typedefs_fwd.h</a>&quot;</span>
+<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;<a class="code" href="defs_8h.html">elm/core/defs.h</a>&quot;</span>
+<a name="l00017"></a>00017 <span class="preprocessor">#include &quot;<a class="code" href="exception_8h.html">elm/core/exception.h</a>&quot;</span>
+<a name="l00018"></a>00018 
+<a name="l00019"></a>00019 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>cv::Mat_&lt;float&gt;;
+<a name="l00020"></a>00020 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>cv::Mat_&lt;int&gt;;
 <a name="l00021"></a>00021 
-<a name="l00033"></a>00033 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00034"></a><a class="code" href="namespaceelm.html#aeebe2356ec3446a39abcaf5d09f731eb">00034</a> <span class="keywordtype">bool</span> <a class="code" href="namespaceelm.html#aeebe2356ec3446a39abcaf5d09f731eb" title="get first index of element with a specific value in matrix Inspired by this Stack Overflow post:...">find_first_of</a>(<span class="keyword">const</span> cv::Mat &amp;m, <span class="keyword">const</span> T &amp;<a class="code" href="binary_8h.html#ae7f66047e6e39ba2bb6af8b95f00d1dd">value</a>, <span class="keywordtype">int</span> &amp;index=<a class="code" href="namespaceelm.html#a7713a3d419c89693eab7bf0f82f4540e" title="= -1; non-applicable index">elm::NA_IDX</a>)
-<a name="l00035"></a>00035 {
-<a name="l00036"></a>00036     <span class="keywordflow">if</span>(!m.empty()) {
-<a name="l00037"></a>00037 
-<a name="l00038"></a>00038         <span class="keywordflow">if</span>(m.channels() != 1) { <a class="code" href="exception_8h.html#a831d00c6c7633739bd34e53b0d6455dc" title="Preprocessor macros for throwing types of Exceptions with custom error messages.">ELM_THROW_BAD_DIMS</a>(<span class="stringliteral">&quot;Only single-channel matrices supported for now.&quot;</span>); }
-<a name="l00039"></a>00039         <span class="keywordflow">if</span>(!m.isContinuous()) { <a class="code" href="exception_8h.html#afd14f2601efa7936206c3a6cac63859c">ELM_THROW_TYPE_ERROR</a>(<span class="stringliteral">&quot;Only continuous matrices supported for now.&quot;</span>); }
-<a name="l00040"></a>00040     }
-<a name="l00041"></a>00041     <span class="keywordflow">else</span> <span class="keywordflow">if</span>(m.channels() &gt; 1) { <a class="code" href="exception_8h.html#a831d00c6c7633739bd34e53b0d6455dc" title="Preprocessor macros for throwing types of Exceptions with custom error messages.">ELM_THROW_BAD_DIMS</a>(<span class="stringliteral">&quot;Only single-channel matrices supported for now.&quot;</span>); }
-<a name="l00042"></a>00042 
-<a name="l00043"></a>00043     <span class="keywordflow">for</span>(<span class="keywordtype">int</span> r=0; r &lt; m.rows; r++) {
+<a name="l00022"></a>00022 <span class="keyword">namespace </span>elm {
+<a name="l00023"></a>00023 
+<a name="l00035"></a>00035 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00036"></a><a class="code" href="namespaceelm.html#aeebe2356ec3446a39abcaf5d09f731eb">00036</a> <span class="keywordtype">bool</span> <a class="code" href="namespaceelm.html#aeebe2356ec3446a39abcaf5d09f731eb" title="get first index of element with a specific value in matrix Inspired by this Stack Overflow post:...">find_first_of</a>(<span class="keyword">const</span> cv::Mat &amp;m, <span class="keyword">const</span> T &amp;<a class="code" href="binary_8h.html#ae7f66047e6e39ba2bb6af8b95f00d1dd">value</a>, <span class="keywordtype">int</span> &amp;index=<a class="code" href="namespaceelm.html#a7713a3d419c89693eab7bf0f82f4540e" title="= -1; non-applicable index">elm::NA_IDX</a>)
+<a name="l00037"></a>00037 {
+<a name="l00038"></a>00038     <span class="keywordflow">if</span>(!m.empty()) {
+<a name="l00039"></a>00039 
+<a name="l00040"></a>00040         <span class="keywordflow">if</span>(m.channels() != 1) { <a class="code" href="exception_8h.html#a831d00c6c7633739bd34e53b0d6455dc" title="Preprocessor macros for throwing types of Exceptions with custom error messages.">ELM_THROW_BAD_DIMS</a>(<span class="stringliteral">&quot;Only single-channel matrices supported for now.&quot;</span>); }
+<a name="l00041"></a>00041         <span class="keywordflow">if</span>(!m.isContinuous()) { <a class="code" href="exception_8h.html#afd14f2601efa7936206c3a6cac63859c">ELM_THROW_TYPE_ERROR</a>(<span class="stringliteral">&quot;Only continuous matrices supported for now.&quot;</span>); }
+<a name="l00042"></a>00042     }
+<a name="l00043"></a>00043     <span class="keywordflow">else</span> <span class="keywordflow">if</span>(m.channels() &gt; 1) { <a class="code" href="exception_8h.html#a831d00c6c7633739bd34e53b0d6455dc" title="Preprocessor macros for throwing types of Exceptions with custom error messages.">ELM_THROW_BAD_DIMS</a>(<span class="stringliteral">&quot;Only single-channel matrices supported for now.&quot;</span>); }
 <a name="l00044"></a>00044 
-<a name="l00045"></a>00045         <span class="keyword">const</span> T* row = m.ptr&lt;T&gt;(r);
-<a name="l00046"></a>00046         <span class="keyword">const</span> T* result = std::find(row, row + m.cols, value);
-<a name="l00047"></a>00047         <span class="keywordflow">if</span>(result != row + m.cols) {
-<a name="l00048"></a>00048 
-<a name="l00049"></a>00049             index = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(result - m.ptr&lt;T&gt;(0));
-<a name="l00050"></a>00050             <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00051"></a>00051         }
-<a name="l00052"></a>00052     }
-<a name="l00053"></a>00053     index = -1;
-<a name="l00054"></a>00054     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00055"></a>00055 }
-<a name="l00056"></a>00056 
-<a name="l00064"></a>00064 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00065"></a><a class="code" href="namespaceelm.html#aba4d101c9dee988ae21a72c9b79ce2c4">00065</a> cv::Mat_&lt;T&gt; <a class="code" href="namespaceelm.html#aba4d101c9dee988ae21a72c9b79ce2c4" title="Create Mat object (row vector) and fill with range.">ARange_</a>(T start, T stop, T step)
-<a name="l00066"></a>00066 {
-<a name="l00067"></a>00067     <span class="keywordtype">double</span> <a class="code" href="namespaceelm.html#af074d4ceef14f0102ce06b4367a732d2" title="n-th order discrete forward diff along an axis.">diff</a> = <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(stop)-static_cast&lt;double&gt;(start);
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069     <span class="keywordflow">if</span>((diff &gt; 0 &amp;&amp; step &lt; 0) || (diff &lt; 0 &amp;&amp; step &gt; 0)) {
+<a name="l00045"></a>00045     <span class="keywordflow">for</span>(<span class="keywordtype">int</span> r=0; r &lt; m.rows; r++) {
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047         <span class="keyword">const</span> T* row = m.ptr&lt;T&gt;(r);
+<a name="l00048"></a>00048         <span class="keyword">const</span> T* result = std::find(row, row + m.cols, value);
+<a name="l00049"></a>00049         <span class="keywordflow">if</span>(result != row + m.cols) {
+<a name="l00050"></a>00050 
+<a name="l00051"></a>00051             index = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(result - m.ptr&lt;T&gt;(0));
+<a name="l00052"></a>00052             <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00053"></a>00053         }
+<a name="l00054"></a>00054     }
+<a name="l00055"></a>00055     index = -1;
+<a name="l00056"></a>00056     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00057"></a>00057 }
+<a name="l00058"></a>00058 
+<a name="l00066"></a>00066 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00067"></a><a class="code" href="namespaceelm.html#aba4d101c9dee988ae21a72c9b79ce2c4">00067</a> cv::Mat_&lt;T&gt; <a class="code" href="namespaceelm.html#aba4d101c9dee988ae21a72c9b79ce2c4" title="Create Mat object (row vector) and fill with range.">ARange_</a>(T start, T stop, T step)
+<a name="l00068"></a>00068 {
+<a name="l00069"></a>00069     <span class="keywordtype">double</span> <a class="code" href="namespaceelm.html#af074d4ceef14f0102ce06b4367a732d2" title="n-th order discrete forward diff along an axis.">diff</a> = <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(stop)-static_cast&lt;double&gt;(start);
 <a name="l00070"></a>00070 
-<a name="l00071"></a>00071         <a class="code" href="exception_8h.html#a4852bb6d038873a76000daac543c4e8a">ELM_THROW_VALUE_ERROR</a>(<span class="stringliteral">&quot;step incompatible with start and stop.&quot;</span>);
-<a name="l00072"></a>00072     }
-<a name="l00073"></a>00073 
-<a name="l00074"></a>00074     <span class="keywordtype">int</span> cols;
-<a name="l00075"></a>00075     <span class="keywordflow">if</span>(step == 0) {
-<a name="l00076"></a>00076 
-<a name="l00077"></a>00077         cols = 0;
-<a name="l00078"></a>00078     }
-<a name="l00079"></a>00079     <span class="keywordflow">else</span> {
-<a name="l00080"></a>00080 
-<a name="l00081"></a>00081         <span class="comment">// Need full integer columns</span>
-<a name="l00082"></a>00082         <span class="keywordtype">double</span> tmp = (diff &lt; 0)? abs(diff) : <a class="code" href="namespaceelm.html#af074d4ceef14f0102ce06b4367a732d2" title="n-th order discrete forward diff along an axis.">diff</a>;
-<a name="l00083"></a>00083         tmp = (tmp+1)/fabs(static_cast&lt;double&gt;(step));
-<a name="l00084"></a>00084         cols = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(tmp);
-<a name="l00085"></a>00085     }
-<a name="l00086"></a>00086 
-<a name="l00087"></a>00087     cv::Mat_&lt;T&gt; m(1, cols);
-<a name="l00088"></a>00088     T <a class="code" href="binary_8h.html#ae7f66047e6e39ba2bb6af8b95f00d1dd">value</a> = start;
-<a name="l00089"></a>00089     <span class="keywordtype">int</span> count = 0;
-<a name="l00090"></a>00090     <span class="keywordtype">bool</span> done = (step &gt; 0)? value &gt;= stop : value &lt;= stop;
-<a name="l00091"></a>00091     <span class="keywordflow">while</span>(!done &amp;&amp; count &lt; cols) {
-<a name="l00092"></a>00092 
-<a name="l00093"></a>00093         m(count++) = <a class="code" href="binary_8h.html#ae7f66047e6e39ba2bb6af8b95f00d1dd">value</a>;
-<a name="l00094"></a>00094         value += step;
-<a name="l00095"></a>00095         done = (step &gt; 0)? value &gt;= stop : value &lt;= stop;
-<a name="l00096"></a>00096     }
-<a name="l00097"></a>00097 
-<a name="l00098"></a>00098     <span class="comment">// exclude stop value</span>
-<a name="l00099"></a>00099     <span class="keywordflow">if</span>(count &lt; cols) { m = m.colRange(0, count); }
-<a name="l00100"></a>00100 
-<a name="l00101"></a>00101     <span class="keywordflow">return</span> m;
-<a name="l00102"></a>00102 }
-<a name="l00103"></a>00103 
-<a name="l00104"></a>00104 } <span class="comment">// elm namespace</span>
+<a name="l00071"></a>00071     <span class="keywordflow">if</span>((diff &gt; 0 &amp;&amp; step &lt; 0) || (diff &lt; 0 &amp;&amp; step &gt; 0)) {
+<a name="l00072"></a>00072 
+<a name="l00073"></a>00073         <a class="code" href="exception_8h.html#a4852bb6d038873a76000daac543c4e8a">ELM_THROW_VALUE_ERROR</a>(<span class="stringliteral">&quot;step incompatible with start and stop.&quot;</span>);
+<a name="l00074"></a>00074     }
+<a name="l00075"></a>00075 
+<a name="l00076"></a>00076     <span class="keywordtype">int</span> cols;
+<a name="l00077"></a>00077     <span class="keywordflow">if</span>(step == 0) {
+<a name="l00078"></a>00078 
+<a name="l00079"></a>00079         cols = 0;
+<a name="l00080"></a>00080     }
+<a name="l00081"></a>00081     <span class="keywordflow">else</span> {
+<a name="l00082"></a>00082 
+<a name="l00083"></a>00083         <span class="comment">// Need full integer columns</span>
+<a name="l00084"></a>00084         <span class="keywordtype">double</span> tmp = (diff &lt; 0)? abs(diff) : <a class="code" href="namespaceelm.html#af074d4ceef14f0102ce06b4367a732d2" title="n-th order discrete forward diff along an axis.">diff</a>;
+<a name="l00085"></a>00085         tmp = (tmp+1)/fabs(static_cast&lt;double&gt;(step));
+<a name="l00086"></a>00086         cols = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(tmp);
+<a name="l00087"></a>00087     }
+<a name="l00088"></a>00088 
+<a name="l00089"></a>00089     cv::Mat_&lt;T&gt; m(1, cols);
+<a name="l00090"></a>00090     T <a class="code" href="binary_8h.html#ae7f66047e6e39ba2bb6af8b95f00d1dd">value</a> = start;
+<a name="l00091"></a>00091     <span class="keywordtype">int</span> count = 0;
+<a name="l00092"></a>00092     <span class="keywordtype">bool</span> done = (step &gt; 0)? value &gt;= stop : value &lt;= stop;
+<a name="l00093"></a>00093     <span class="keywordflow">while</span>(!done &amp;&amp; count &lt; cols) {
+<a name="l00094"></a>00094 
+<a name="l00095"></a>00095         m(count++) = <a class="code" href="binary_8h.html#ae7f66047e6e39ba2bb6af8b95f00d1dd">value</a>;
+<a name="l00096"></a>00096         value += step;
+<a name="l00097"></a>00097         done = (step &gt; 0)? value &gt;= stop : value &lt;= stop;
+<a name="l00098"></a>00098     }
+<a name="l00099"></a>00099 
+<a name="l00100"></a>00100     <span class="comment">// exclude stop value</span>
+<a name="l00101"></a>00101     <span class="keywordflow">if</span>(count &lt; cols) { m = m.colRange(0, count); }
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103     <span class="keywordflow">return</span> m;
+<a name="l00104"></a>00104 }
 <a name="l00105"></a>00105 
-<a name="l00106"></a>00106 <span class="preprocessor">#endif // _ELM_CORE_MAT_UTILS_INL_H__</span>
+<a name="l00106"></a>00106 } <span class="comment">// elm namespace</span>
+<a name="l00107"></a>00107 
+<a name="l00108"></a>00108 <span class="preprocessor">#endif // _ELM_CORE_MAT_UTILS_INL_H__</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="mat__utils__inl_8h.html">mat_utils_inl.h</a>      </li>
 
-    <li class="footer">Generated on Thu Jun 4 2015 13:21:34 for ELM Library by
+    <li class="footer">Generated on Fri Jun 5 2015 13:40:11 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>
