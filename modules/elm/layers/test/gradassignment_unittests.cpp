@@ -430,7 +430,7 @@ TEST_F(GradAssignmentTest, MoreNoise)
 
         // add more noise to g_ij_ for next iteration
         Mat1f noise(g_ij_.size());
-        randn(noise, 0.f, 0.05f);
+        randn(noise, 0.f, 0.1f);
         g_ij_ += noise;
         g_ij_.setTo(0.f, g_ij_ < 0.f);
         g_ij_.setTo(1.f, g_ij_ > 1.f);
