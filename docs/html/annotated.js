@@ -103,6 +103,7 @@ var annotated =
     [ "elm::Signal_< TFeat >", "classelm_1_1Signal__.html", "classelm_1_1Signal__" ],
     [ "elm::Signal_Impl", "classelm_1_1Signal__Impl.html", "classelm_1_1Signal__Impl" ],
     [ "elm::Signal_TP_< T >", "classelm_1_1Signal__TP__.html", "classelm_1_1Signal__TP__" ],
+    [ "elm::SignalPy", "classelm_1_1SignalPy.html", "classelm_1_1SignalPy" ],
     [ "elm::SinkhornBalancing", "classelm_1_1SinkhornBalancing.html", "classelm_1_1SinkhornBalancing" ],
     [ "elm::SoftMaxPopulationCode", "classelm_1_1SoftMaxPopulationCode.html", "classelm_1_1SoftMaxPopulationCode" ],
     [ "SpikingHistory", "classSpikingHistory.html", "classSpikingHistory" ],

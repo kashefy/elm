@@ -87,7 +87,7 @@
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceelm.html#a7dfc981023f342dac94948f9f38724ae">elm::MapIONames</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structelm_1_1LayerAttr__.html#ac886967b0d4e6e5d937a4f1226a08b0c">io_pairs</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceelm.html#a2b8eb7cd84832a6a64c0da7dad94304a">elm::MapIONames</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structelm_1_1LayerAttr__.html#ac886967b0d4e6e5d937a4f1226a08b0c">io_pairs</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><h3>template&lt;class TLayer&gt;<br/>
@@ -97,11 +97,11 @@ struct elm::LayerAttr_&lt; TLayer &gt;</h3>
 <p>It enables defining values to be used inside the tests</p>
 <p>Caution when defining members for your layer type:</p>
 <ul>
-<li>statc members such as io_pairs depend on static initializations in the layer. Initilizing them in the layer's unittest source file, leads to a "static initialization order fiasco" To avoid this, initialize the <a class="el" href="structelm_1_1LayerAttr__.html" title="Layer Attributes struct, a helper struct for layer p-typed test cases.">LayerAttr_</a> member for your layer type in your layer's implementation file. Preferrably inside __WITH_GTEST define-guards.</li>
+<li>static members such as io_pairs depend on static initializations in the layer. Initilizing them in the layer's unittest source file, leads to a "static initialization order fiasco" To avoid this, initialize the <a class="el" href="structelm_1_1LayerAttr__.html" title="Layer Attributes struct, a helper struct for layer p-typed test cases.">LayerAttr_</a> member for your layer type in your layer's implementation file. Preferrably inside __WITH_GTEST define-guards.</li>
 </ul>
 <p>These values are set once per type before INSTANTIATE_TYPED_TEST_CASE_P(...) in subscribing layer's unittest source file. </p>
 
-<p>Definition at line <a class="el" href="layerattr___8h_source.html#l00052">52</a> of file <a class="el" href="layerattr___8h_source.html">layerattr_.h</a>.</p>
+<p>Definition at line <a class="el" href="layerattr___8h_source.html#l00049">49</a> of file <a class="el" href="layerattr___8h_source.html">layerattr_.h</a>.</p>
 </div><hr/><h2>Member Data Documentation</h2>
 <a class="anchor" id="ac886967b0d4e6e5d937a4f1226a08b0c"></a><!-- doxytag: member="elm::LayerAttr_::io_pairs" ref="ac886967b0d4e6e5d937a4f1226a08b0c" args="" -->
 <div class="memitem">
@@ -110,7 +110,7 @@ struct elm::LayerAttr_&lt; TLayer &gt;</h3>
 template&lt;class TLayer &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceelm.html#a7dfc981023f342dac94948f9f38724ae">elm::MapIONames</a> <a class="el" href="structelm_1_1LayerAttr__.html">elm::LayerAttr_</a>&lt; TLayer &gt;::<a class="el" href="structelm_1_1LayerAttr__.html#ac886967b0d4e6e5d937a4f1226a08b0c">io_pairs</a><code> [static]</code></td>
+          <td class="memname"><a class="el" href="namespaceelm.html#a2b8eb7cd84832a6a64c0da7dad94304a">elm::MapIONames</a> <a class="el" href="structelm_1_1LayerAttr__.html">elm::LayerAttr_</a>&lt; TLayer &gt;::<a class="el" href="structelm_1_1LayerAttr__.html#ac886967b0d4e6e5d937a4f1226a08b0c">io_pairs</a><code> [static]</code></td>
         </tr>
       </table>
 </div>
@@ -118,7 +118,7 @@ template&lt;class TLayer &gt; </div>
 
 <p>needs to be initialized in layer's implementation file. </p>
 
-<p>Definition at line <a class="el" href="layerattr___8h_source.html#l00054">54</a> of file <a class="el" href="layerattr___8h_source.html">layerattr_.h</a>.</p>
+<p>Definition at line <a class="el" href="layerattr___8h_source.html#l00051">51</a> of file <a class="el" href="layerattr___8h_source.html">layerattr_.h</a>.</p>
 
 </div>
 </div>
@@ -132,7 +132,7 @@ template&lt;class TLayer &gt; </div>
       <li class="navelem"><a class="el" href="namespaceelm.html">elm</a>      </li>
       <li class="navelem"><a class="el" href="structelm_1_1LayerAttr__.html">LayerAttr_</a>      </li>
 
-    <li class="footer">Generated on Fri Jun 5 2015 13:40:12 for ELM Library by
+    <li class="footer">Generated on Fri Jun 5 2015 19:35:12 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

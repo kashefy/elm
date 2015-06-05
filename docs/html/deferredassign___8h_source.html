@@ -76,128 +76,135 @@
 <div class="title">deferredassign_.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="deferredassign___8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef _ELM_CORE_CV_DEFERREDASSIGN__H_</span>
-<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define _ELM_CORE_CV_DEFERREDASSIGN__H_</span>
-<a name="l00003"></a>00003 <span class="preprocessor"></span>
-<a name="l00004"></a>00004 <span class="preprocessor">#include &lt;boost/tuple/tuple.hpp&gt;</span>
-<a name="l00005"></a>00005 
-<a name="l00006"></a>00006 <span class="preprocessor">#include &lt;opencv2/core/core.hpp&gt;</span>
-<a name="l00007"></a>00007 
-<a name="l00008"></a>00008 <span class="keyword">namespace </span>elm {
-<a name="l00009"></a>00009 
-<a name="l00013"></a>00013 <span class="keyword">template</span>&lt;<span class="keyword">class</span> TElem&gt;
-<a name="l00014"></a><a class="code" href="classelm_1_1DeferredAssign__.html">00014</a> <span class="keyword">class </span><a class="code" href="classelm_1_1DeferredAssign__.html" title="class for deferring Mat element assignment operations">DeferredAssign_</a>
-<a name="l00015"></a>00015 {
-<a name="l00016"></a>00016 <span class="keyword">public</span>:
-<a name="l00017"></a><a class="code" href="classelm_1_1DeferredAssign__.html#ac2c5647a3b4c1ed70f466393f3de1902">00017</a>     <span class="keyword">virtual</span> <a class="code" href="classelm_1_1DeferredAssign__.html#ac2c5647a3b4c1ed70f466393f3de1902">~DeferredAssign_</a>()
-<a name="l00018"></a>00018     {
-<a name="l00019"></a>00019     }
-<a name="l00020"></a>00020 
-<a name="l00021"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a8846a5e8cecdc0bb5d302c282a5caffc">00021</a>     <a class="code" href="classelm_1_1DeferredAssign__.html#a8846a5e8cecdc0bb5d302c282a5caffc">DeferredAssign_</a>()
-<a name="l00022"></a>00022     {
-<a name="l00023"></a>00023     }
-<a name="l00024"></a>00024 
-<a name="l00030"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a658b2007c729c537bd3d566f81d68f17">00030</a>     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1DeferredAssign__.html#a658b2007c729c537bd3d566f81d68f17" title="push_back record for deferred assignment/substitution">push_back</a>(<span class="keyword">const</span> TElem &amp;src, <span class="keyword">const</span> TElem &amp;dst)
-<a name="l00031"></a>00031     {
-<a name="l00032"></a>00032         <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>.push_back(std::make_pair(src, dst));
-<a name="l00033"></a>00033     }
-<a name="l00034"></a>00034 
-<a name="l00038"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a12ee833898643c1a61c7c4bca0a4aba7">00038</a>     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1DeferredAssign__.html#a12ee833898643c1a61c7c4bca0a4aba7" title="clear substitution records">clear</a>()
-<a name="l00039"></a>00039     {
-<a name="l00040"></a>00040         <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>.clear();
-<a name="l00041"></a>00041     }
-<a name="l00042"></a>00042 
-<a name="l00047"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a9c1ca8e3f29172199cae9fd69596a638">00047</a>     <span class="keywordtype">void</span> <a class="code" href="classelm_1_1DeferredAssign__.html#a9c1ca8e3f29172199cae9fd69596a638" title="perform deferred assignment and clear substition records">assign</a>(cv::Mat_&lt;TElem &gt; &amp;m)
-<a name="l00048"></a>00048     {
-<a name="l00049"></a>00049         <span class="keywordflow">if</span>(!m.empty()) {
-<a name="l00050"></a>00050 
-<a name="l00051"></a>00051             <a class="code" href="classelm_1_1DeferredAssign__.html#a54345d89dccbd829d49eac60fb74ad28" title="traverse backwards in substitution list to short-circuit intermediate substitutions">backwards</a>();
-<a name="l00052"></a>00052             <a class="code" href="classelm_1_1DeferredAssign__.html#af3822733b0f8870e2ee4365f0712cee6" title="forward traversal by OR-ing masks with common destination value">forwards</a>(m);
-<a name="l00053"></a>00053             <a class="code" href="classelm_1_1DeferredAssign__.html#a12ee833898643c1a61c7c4bca0a4aba7" title="clear substitution records">clear</a>();
-<a name="l00054"></a>00054         }
-<a name="l00055"></a>00055     }
-<a name="l00056"></a>00056 
-<a name="l00057"></a>00057 <span class="keyword">protected</span>:
-<a name="l00058"></a><a class="code" href="classelm_1_1DeferredAssign__.html#ad4d4654da8093abb8a56e207fd9b1631">00058</a>     <span class="keyword">typedef</span> std::pair&lt;TElem, TElem&gt; <a class="code" href="classelm_1_1DeferredAssign__.html#ad4d4654da8093abb8a56e207fd9b1631" title="typedef for substitution">Substitution</a>;   
-<a name="l00059"></a>00059 
-<a name="l00064"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a54345d89dccbd829d49eac60fb74ad28">00064</a>     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1DeferredAssign__.html#a54345d89dccbd829d49eac60fb74ad28" title="traverse backwards in substitution list to short-circuit intermediate substitutions">backwards</a>()
-<a name="l00065"></a>00065     {
-<a name="l00066"></a>00066         <span class="keyword">const</span> <span class="keywordtype">int</span> nb_subs = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>.size());
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069         <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=nb_subs-1; i&gt;=0; i--) {
-<a name="l00070"></a>00070 
-<a name="l00071"></a>00071             <span class="keywordtype">float</span> src_i, dst_i;
-<a name="l00072"></a>00072             boost::tie(src_i, dst_i) = <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[i];
-<a name="l00073"></a>00073 
-<a name="l00074"></a>00074             <span class="keywordflow">if</span>(src_i != dst_i) {
+<a href="deferredassign___8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*M///////////////////////////////////////////////////////////////////////////////////////</span>
+<a name="l00002"></a>00002 <span class="comment">//</span>
+<a name="l00003"></a>00003 <span class="comment">// Copyright (c) 2015, Youssef Kashef</span>
+<a name="l00004"></a>00004 <span class="comment">// Copyright (c) 2015, ELM Library Project</span>
+<a name="l00005"></a>00005 <span class="comment">// 3-clause BSD License</span>
+<a name="l00006"></a>00006 <span class="comment">//</span>
+<a name="l00007"></a>00007 <span class="comment">//M*/</span>
+<a name="l00008"></a>00008 <span class="preprocessor">#ifndef _ELM_CORE_CV_DEFERREDASSIGN__H_</span>
+<a name="l00009"></a>00009 <span class="preprocessor"></span><span class="preprocessor">#define _ELM_CORE_CV_DEFERREDASSIGN__H_</span>
+<a name="l00010"></a>00010 <span class="preprocessor"></span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;boost/tuple/tuple.hpp&gt;</span>
+<a name="l00012"></a>00012 
+<a name="l00013"></a>00013 <span class="preprocessor">#include &lt;opencv2/core/core.hpp&gt;</span>
+<a name="l00014"></a>00014 
+<a name="l00015"></a>00015 <span class="keyword">namespace </span>elm {
+<a name="l00016"></a>00016 
+<a name="l00020"></a>00020 <span class="keyword">template</span>&lt;<span class="keyword">class</span> TElem&gt;
+<a name="l00021"></a><a class="code" href="classelm_1_1DeferredAssign__.html">00021</a> <span class="keyword">class </span><a class="code" href="classelm_1_1DeferredAssign__.html" title="class for deferring Mat element assignment operations">DeferredAssign_</a>
+<a name="l00022"></a>00022 {
+<a name="l00023"></a>00023 <span class="keyword">public</span>:
+<a name="l00024"></a><a class="code" href="classelm_1_1DeferredAssign__.html#ac2c5647a3b4c1ed70f466393f3de1902">00024</a>     <span class="keyword">virtual</span> <a class="code" href="classelm_1_1DeferredAssign__.html#ac2c5647a3b4c1ed70f466393f3de1902">~DeferredAssign_</a>()
+<a name="l00025"></a>00025     {
+<a name="l00026"></a>00026     }
+<a name="l00027"></a>00027 
+<a name="l00028"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a8846a5e8cecdc0bb5d302c282a5caffc">00028</a>     <a class="code" href="classelm_1_1DeferredAssign__.html#a8846a5e8cecdc0bb5d302c282a5caffc">DeferredAssign_</a>()
+<a name="l00029"></a>00029     {
+<a name="l00030"></a>00030     }
+<a name="l00031"></a>00031 
+<a name="l00037"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a658b2007c729c537bd3d566f81d68f17">00037</a>     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1DeferredAssign__.html#a658b2007c729c537bd3d566f81d68f17" title="push_back record for deferred assignment/substitution">push_back</a>(<span class="keyword">const</span> TElem &amp;src, <span class="keyword">const</span> TElem &amp;dst)
+<a name="l00038"></a>00038     {
+<a name="l00039"></a>00039         <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>.push_back(std::make_pair(src, dst));
+<a name="l00040"></a>00040     }
+<a name="l00041"></a>00041 
+<a name="l00045"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a12ee833898643c1a61c7c4bca0a4aba7">00045</a>     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1DeferredAssign__.html#a12ee833898643c1a61c7c4bca0a4aba7" title="clear substitution records">clear</a>()
+<a name="l00046"></a>00046     {
+<a name="l00047"></a>00047         <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>.clear();
+<a name="l00048"></a>00048     }
+<a name="l00049"></a>00049 
+<a name="l00054"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a9c1ca8e3f29172199cae9fd69596a638">00054</a>     <span class="keywordtype">void</span> <a class="code" href="classelm_1_1DeferredAssign__.html#a9c1ca8e3f29172199cae9fd69596a638" title="perform deferred assignment and clear substition records">assign</a>(cv::Mat_&lt;TElem &gt; &amp;m)
+<a name="l00055"></a>00055     {
+<a name="l00056"></a>00056         <span class="keywordflow">if</span>(!m.empty()) {
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058             <a class="code" href="classelm_1_1DeferredAssign__.html#a54345d89dccbd829d49eac60fb74ad28" title="traverse backwards in substitution list to short-circuit intermediate substitutions">backwards</a>();
+<a name="l00059"></a>00059             <a class="code" href="classelm_1_1DeferredAssign__.html#af3822733b0f8870e2ee4365f0712cee6" title="forward traversal by OR-ing masks with common destination value">forwards</a>(m);
+<a name="l00060"></a>00060             <a class="code" href="classelm_1_1DeferredAssign__.html#a12ee833898643c1a61c7c4bca0a4aba7" title="clear substitution records">clear</a>();
+<a name="l00061"></a>00061         }
+<a name="l00062"></a>00062     }
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064 <span class="keyword">protected</span>:
+<a name="l00065"></a><a class="code" href="classelm_1_1DeferredAssign__.html#ad4d4654da8093abb8a56e207fd9b1631">00065</a>     <span class="keyword">typedef</span> std::pair&lt;TElem, TElem&gt; <a class="code" href="classelm_1_1DeferredAssign__.html#ad4d4654da8093abb8a56e207fd9b1631" title="typedef for substitution">Substitution</a>;   
+<a name="l00066"></a>00066 
+<a name="l00071"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a54345d89dccbd829d49eac60fb74ad28">00071</a>     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1DeferredAssign__.html#a54345d89dccbd829d49eac60fb74ad28" title="traverse backwards in substitution list to short-circuit intermediate substitutions">backwards</a>()
+<a name="l00072"></a>00072     {
+<a name="l00073"></a>00073         <span class="keyword">const</span> <span class="keywordtype">int</span> nb_subs = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>.size());
+<a name="l00074"></a>00074 
 <a name="l00075"></a>00075 
-<a name="l00076"></a>00076                 <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j=i-1; j&gt;=0; j--) {
+<a name="l00076"></a>00076         <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=nb_subs-1; i&gt;=0; i--) {
 <a name="l00077"></a>00077 
-<a name="l00078"></a>00078                     <span class="keywordtype">float</span> src_j, dst_j;
-<a name="l00079"></a>00079                     boost::tie(src_j, dst_j) = <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[j];
+<a name="l00078"></a>00078             <span class="keywordtype">float</span> src_i, dst_i;
+<a name="l00079"></a>00079             boost::tie(src_i, dst_i) = <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[i];
 <a name="l00080"></a>00080 
-<a name="l00081"></a>00081                     <span class="keywordflow">if</span>(src_i == dst_j) {
+<a name="l00081"></a>00081             <span class="keywordflow">if</span>(src_i != dst_i) {
 <a name="l00082"></a>00082 
-<a name="l00083"></a>00083                         <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[j].second = dst_i;
-<a name="l00084"></a>00084                     }
-<a name="l00085"></a>00085                 }
-<a name="l00086"></a>00086             }
-<a name="l00087"></a>00087         }
-<a name="l00088"></a>00088     }
+<a name="l00083"></a>00083                 <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j=i-1; j&gt;=0; j--) {
+<a name="l00084"></a>00084 
+<a name="l00085"></a>00085                     <span class="keywordtype">float</span> src_j, dst_j;
+<a name="l00086"></a>00086                     boost::tie(src_j, dst_j) = <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[j];
+<a name="l00087"></a>00087 
+<a name="l00088"></a>00088                     <span class="keywordflow">if</span>(src_i == dst_j) {
 <a name="l00089"></a>00089 
-<a name="l00093"></a><a class="code" href="classelm_1_1DeferredAssign__.html#af3822733b0f8870e2ee4365f0712cee6">00093</a>     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1DeferredAssign__.html#af3822733b0f8870e2ee4365f0712cee6" title="forward traversal by OR-ing masks with common destination value">forwards</a>(cv::Mat_&lt;TElem &gt; &amp;m)
-<a name="l00094"></a>00094     {
-<a name="l00095"></a>00095         <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i=0; i&lt;<a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>.size(); i++) {
+<a name="l00090"></a>00090                         <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[j].second = dst_i;
+<a name="l00091"></a>00091                     }
+<a name="l00092"></a>00092                 }
+<a name="l00093"></a>00093             }
+<a name="l00094"></a>00094         }
+<a name="l00095"></a>00095     }
 <a name="l00096"></a>00096 
-<a name="l00097"></a>00097             <span class="keywordtype">float</span> src_i, dst_i;
-<a name="l00098"></a>00098             boost::tie(src_i, dst_i) = <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[i];
-<a name="l00099"></a>00099 
-<a name="l00100"></a>00100             <span class="keywordflow">if</span>(src_i != dst_i) {
-<a name="l00101"></a>00101 
-<a name="l00102"></a>00102                 cv::Mat mask = m == src_i;
+<a name="l00100"></a><a class="code" href="classelm_1_1DeferredAssign__.html#af3822733b0f8870e2ee4365f0712cee6">00100</a>     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1DeferredAssign__.html#af3822733b0f8870e2ee4365f0712cee6" title="forward traversal by OR-ing masks with common destination value">forwards</a>(cv::Mat_&lt;TElem &gt; &amp;m)
+<a name="l00101"></a>00101     {
+<a name="l00102"></a>00102         <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i=0; i&lt;<a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>.size(); i++) {
 <a name="l00103"></a>00103 
-<a name="l00104"></a>00104                 <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> j=i+1; j&lt;<a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>.size(); j++) {
-<a name="l00105"></a>00105 
-<a name="l00106"></a>00106                     <span class="keywordtype">float</span> src_j, dst_j;
-<a name="l00107"></a>00107                     boost::tie(src_j, dst_j) = <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[j];
+<a name="l00104"></a>00104             <span class="keywordtype">float</span> src_i, dst_i;
+<a name="l00105"></a>00105             boost::tie(src_i, dst_i) = <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[i];
+<a name="l00106"></a>00106 
+<a name="l00107"></a>00107             <span class="keywordflow">if</span>(src_i != dst_i) {
 <a name="l00108"></a>00108 
-<a name="l00109"></a>00109                     <span class="keywordflow">if</span>(dst_j == dst_i) {
+<a name="l00109"></a>00109                 cv::Mat mask = m == src_i;
 <a name="l00110"></a>00110 
-<a name="l00111"></a>00111                         <span class="keywordflow">if</span>(src_i != src_j) {
+<a name="l00111"></a>00111                 <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> j=i+1; j&lt;<a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>.size(); j++) {
 <a name="l00112"></a>00112 
-<a name="l00113"></a>00113                             cv::Mat mask_j = m == src_j;
-<a name="l00114"></a>00114 
-<a name="l00115"></a>00115                             cv::bitwise_or(mask, mask_j, mask, mask_j);
-<a name="l00116"></a>00116                         }
+<a name="l00113"></a>00113                     <span class="keywordtype">float</span> src_j, dst_j;
+<a name="l00114"></a>00114                     boost::tie(src_j, dst_j) = <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[j];
+<a name="l00115"></a>00115 
+<a name="l00116"></a>00116                     <span class="keywordflow">if</span>(dst_j == dst_i) {
 <a name="l00117"></a>00117 
-<a name="l00118"></a>00118                         <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[j].second = src_i;
-<a name="l00119"></a>00119                     }
-<a name="l00120"></a>00120                 }
+<a name="l00118"></a>00118                         <span class="keywordflow">if</span>(src_i != src_j) {
+<a name="l00119"></a>00119 
+<a name="l00120"></a>00120                             cv::Mat mask_j = m == src_j;
 <a name="l00121"></a>00121 
-<a name="l00122"></a>00122                 <span class="keywordflow">if</span>(countNonZero(mask) &gt; 0) {
-<a name="l00123"></a>00123 
-<a name="l00124"></a>00124                     m.setTo(dst_i, mask); <span class="comment">// overwrite values with OR&#39;ed mask</span>
-<a name="l00125"></a>00125                 }
-<a name="l00126"></a>00126             }
-<a name="l00127"></a>00127         }
-<a name="l00128"></a>00128     }
-<a name="l00129"></a>00129 
-<a name="l00130"></a>00130     <span class="comment">// members</span>
-<a name="l00131"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1">00131</a>     std::vector&lt;Substitution &gt; <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>; 
-<a name="l00132"></a>00132 
-<a name="l00133"></a>00133 };
-<a name="l00134"></a>00134 
-<a name="l00135"></a>00135 } <span class="comment">// namespace elm</span>
+<a name="l00122"></a>00122                             cv::bitwise_or(mask, mask_j, mask, mask_j);
+<a name="l00123"></a>00123                         }
+<a name="l00124"></a>00124 
+<a name="l00125"></a>00125                         <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>[j].second = src_i;
+<a name="l00126"></a>00126                     }
+<a name="l00127"></a>00127                 }
+<a name="l00128"></a>00128 
+<a name="l00129"></a>00129                 <span class="keywordflow">if</span>(countNonZero(mask) &gt; 0) {
+<a name="l00130"></a>00130 
+<a name="l00131"></a>00131                     m.setTo(dst_i, mask); <span class="comment">// overwrite values with OR&#39;ed mask</span>
+<a name="l00132"></a>00132                 }
+<a name="l00133"></a>00133             }
+<a name="l00134"></a>00134         }
+<a name="l00135"></a>00135     }
 <a name="l00136"></a>00136 
-<a name="l00137"></a>00137 <span class="preprocessor">#endif // _ELM_CORE_CV_DEFERREDASSIGN__H_</span>
+<a name="l00137"></a>00137     <span class="comment">// members</span>
+<a name="l00138"></a><a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1">00138</a>     std::vector&lt;Substitution &gt; <a class="code" href="classelm_1_1DeferredAssign__.html#a99857c8f82638fe25657575ad1fb41f1" title="record substitutions">subs_</a>; 
+<a name="l00139"></a>00139 
+<a name="l00140"></a>00140 };
+<a name="l00141"></a>00141 
+<a name="l00142"></a>00142 } <span class="comment">// namespace elm</span>
+<a name="l00143"></a>00143 
+<a name="l00144"></a>00144 <span class="preprocessor">#endif // _ELM_CORE_CV_DEFERREDASSIGN__H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="deferredassign___8h.html">deferredassign_.h</a>      </li>
 
-    <li class="footer">Generated on Fri Jun 5 2015 13:40:11 for ELM Library by
+    <li class="footer">Generated on Fri Jun 5 2015 19:35:11 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

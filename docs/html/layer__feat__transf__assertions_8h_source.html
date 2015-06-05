@@ -107,13 +107,13 @@
 <a name="l00036"></a>00036 
 <a name="l00037"></a>00037         <span class="keyword">typedef</span> std::vector&lt;std::string &gt; <a class="code" href="namespaceelm.html#acebbd34f9c41c07c407aca3a77311412" title="Convinience typedef for vector of strings.">VecS</a>;
 <a name="l00038"></a>00038         <span class="keyword">using namespace </span>elm;
-<a name="l00039"></a>00039         <a class="code" href="namespaceelm.html#a7dfc981023f342dac94948f9f38724ae" title="convinience typedef for a map of io keys and corresponding io name">MapIONames</a> io_pairs = <a class="code" href="structelm_1_1LayerAttr__.html" title="Layer Attributes struct, a helper struct for layer p-typed test cases.">LayerAttr_&lt;TLayer &gt;::io_pairs</a>;
+<a name="l00039"></a>00039         <a class="code" href="namespaceelm.html#a2b8eb7cd84832a6a64c0da7dad94304a" title="convinience typedef for a map of io keys and corresponding io name">MapIONames</a> io_pairs = <a class="code" href="structelm_1_1LayerAttr__.html" title="Layer Attributes struct, a helper struct for layer p-typed test cases.">LayerAttr_&lt;TLayer &gt;::io_pairs</a>;
 <a name="l00040"></a>00040         VecS keys = <a class="code" href="namespaceelm.html#a639456db50fb0568bf034200fee2c8e4" title="List all keys in a map.">Keys</a>(io_pairs);
 <a name="l00041"></a>00041 
 <a name="l00042"></a>00042         <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i=0; i&lt;keys.size(); i++) {
 <a name="l00043"></a>00043 
 <a name="l00044"></a>00044             std::string key = keys[i];
-<a name="l00045"></a>00045             <a class="code" href="namespaceelm.html#a9cc6506283177425587b43dd573a8c20" title="convinience typedef to layer io name with bool indicating input (0) or output (1)">IOName</a> _v = io_pairs.at(key);
+<a name="l00045"></a>00045             <a class="code" href="namespaceelm.html#ad02cf63865f194878427a1829f471da9" title="convinience typedef to layer io name with bool indicating input (0) or output (1)">IOName</a> _v = io_pairs.at(key);
 <a name="l00046"></a>00046 
 <a name="l00047"></a>00047             <span class="keywordflow">if</span>(_v.first == <a class="code" href="namespaceelm.html#ac5c73e977e493677f8bddc01b875db02a545de7206d5b4db861ab95949110fa41">LayerIOKeyType::INPUT</a>) {
 <a name="l00048"></a>00048                 io_names.<a class="code" href="classelm_1_1LayerInputNames.html#ab75a4111ce419d386a198fae79913121" title="Set input key-name-pair.">Input</a>(key, _v.second);
@@ -172,7 +172,7 @@
     <ul>
       <li class="navelem"><a class="el" href="layer__feat__transf__assertions_8h.html">layer_feat_transf_assertions.h</a>      </li>
 
-    <li class="footer">Generated on Fri Jun 5 2015 13:40:11 for ELM Library by
+    <li class="footer">Generated on Fri Jun 5 2015 19:35:11 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

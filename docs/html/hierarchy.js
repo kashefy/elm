@@ -161,7 +161,9 @@ var hierarchy =
     [ "elm::Registor_< TBase >", "classelm_1_1Registor__.html", null ],
     [ "SerializationTypeAttr_< T >", "structSerializationTypeAttr__.html", null ],
     [ "SerializationTypedTest< T >", "classSerializationTypedTest.html", null ],
-    [ "elm::Signal", "classelm_1_1Signal.html", null ],
+    [ "elm::Signal", "classelm_1_1Signal.html", [
+      [ "elm::SignalPy", "classelm_1_1SignalPy.html", null ]
+    ] ],
     [ "elm::Signal_< TFeat >", "classelm_1_1Signal__.html", null ],
     [ "elm::Signal_< FeatureData >", "classelm_1_1Signal__.html", [
       [ "elm::Signal_Impl", "classelm_1_1Signal__Impl.html", null ]
