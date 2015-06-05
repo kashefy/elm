@@ -10,6 +10,8 @@
 
 #ifdef __WITH_PCL // the following template Converter Cloud Mat class requires PCL support
 
+#include <opencv2/core/core.hpp>
+
 #include <pcl/point_cloud.h>
 
 #include "elm/core/exception.h"

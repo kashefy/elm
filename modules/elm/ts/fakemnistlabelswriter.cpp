@@ -7,6 +7,8 @@
 //M*/
 #include "elm/ts/fakemnistlabelswriter.h"
 
+#include <sstream>
+
 #include "elm/core/exception.h"
 #include "elm/io/binary.h"              // determine and swap endianness
 

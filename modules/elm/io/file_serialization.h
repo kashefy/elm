@@ -55,9 +55,10 @@ void Save(const boost::filesystem::path &p, const T &obj)
 
     if(!stream.is_open()) {
 
-        std::stringstream s;
-        s << "Failed to open file (" << p.string() << ") for writing.";
-        ELM_THROW_FILEIO_ERROR(s.str());
+        std::string s = "Failed to open file (";
+        s += p.string();
+        s += ") for writing.";
+        ELM_THROW_FILEIO_ERROR(s);
     }
 
     switch(archive_type) {
@@ -103,9 +104,11 @@ void Load(const boost::filesystem::path &p, T &obj)
 
     if(!stream.is_open()) {
 
-        std::stringstream s;
-        s << "Failed to open file (" << p.string() << ") for reading.";
-        ELM_THROW_FILEIO_ERROR(s.str());
+        std::string s;
+        s += "Failed to open file (";
+        s += p.string();
+        s += ") for reading.";
+        ELM_THROW_FILEIO_ERROR(s);
     }
 
     switch(archive_type) {
