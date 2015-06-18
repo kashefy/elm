@@ -7,10 +7,7 @@
 //M*/
 #include "elm/core/exception.h"
 
-#include <string>
-
 #include "gtest/gtest.h"
-#include <opencv2/core/core.hpp>
 
 using namespace elm;
 
