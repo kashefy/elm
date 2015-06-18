@@ -13,6 +13,9 @@ template class cv::Mat_<float>;
 template class cv::Mat_<int>;
 template class cv::Mat_<uchar>;
 
+template class std::vector<cv::Mat>;
+template class std::vector<cv::Mat_<float> >;
+
 template class cv::SparseMat_<float>;
 
 template class cv::Rect_<int>;
