@@ -14,7 +14,7 @@
 #include "elm/core/exception.h"
 #include "elm/core/cv/mat_utils_inl.h"
 //#include "elm/core/cv/mat_utils.h"
-#include "elm/ts/ts.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace cv;
 using namespace elm;

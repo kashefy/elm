@@ -9,8 +9,9 @@
 
 #ifdef __WITH_PCL // the following tests require PCL support
 
+#include <gtest/gtest.h>
+
 #include "elm/ts/pcl_point_typed_tests.h"
-#include "elm/ts/ts.h"
 
 using namespace pcl;
 using namespace elm;

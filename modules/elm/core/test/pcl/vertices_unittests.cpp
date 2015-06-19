@@ -11,7 +11,8 @@
 
 #include "elm/core/exception.h"
 #include "elm/core/typedefs_fwd.h"
-#include "elm/ts/ts.h"
+#include "elm/ts/container.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace std;
 using namespace cv;

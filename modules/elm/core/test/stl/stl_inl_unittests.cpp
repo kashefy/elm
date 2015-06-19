@@ -7,12 +7,14 @@
 //M*/
 #include "elm/core/stl/stl_inl.h"
 
-#include "elm/ts/ts.h"
+#include "elm/core/typedefs_fwd.h"
+#include "elm/ts/container.h"
 
-#include <string>
+#include <algorithm>
 
 using namespace std;
 using namespace elm;
+using pod::uchar;
 
 TEST(STLFindTest, Find)
 {

@@ -12,7 +12,7 @@
 #include "elm/core/exception.h"
 #include "elm/core/pcl/point_traits.h"
 #include "elm/ts/pcl_point_typed_tests.h"
-#include "elm/ts/ts.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace std;
 using namespace cv;
