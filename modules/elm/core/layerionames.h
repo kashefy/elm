@@ -11,7 +11,7 @@
 #include "elm/core/layerinputnames.h"
 #include "elm/core/layeroutputnames.h"
 
-template class std::map<std::string, std::string>;
+extern template class std::vector<std::string>;
 
 namespace elm {
 

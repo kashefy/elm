@@ -12,14 +12,7 @@
 
 #include "elm/core/layerionames.h"
 
-template class std::vector<std::string>;
-
 namespace elm {
-
-typedef boost::property_tree::ptree PTree;
-typedef boost::optional<std::string> OptS;
-typedef std::vector<std::string> VecS;
-typedef std::map<std::string, std::string> MapSS;
 
 class LayerConfig : public LayerIONames
 {

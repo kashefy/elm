@@ -15,6 +15,8 @@
 #include "elm/core/exception.h"
 #include "elm/core/inputname.h"
 
+extern template class boost::optional<std::string>;
+
 using namespace std;
 using namespace elm;
 
