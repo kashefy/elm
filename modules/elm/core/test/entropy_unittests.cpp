@@ -7,7 +7,7 @@
 //M*/
 #include "elm/core/entropy.h"
 
-#include "elm/ts/ts.h"
+#include "elm/ts/mat_assertions.h"
 
 #include "elm/core/exception.h"
 #include "elm/core/stl/typedefs.h"

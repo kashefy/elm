@@ -8,7 +8,7 @@
 #include "elm/core/zerocrossings.h"
 
 #include "elm/core/exception.h"
-#include "elm/ts/ts.h"
+#include "elm/ts/mat_assertions.h"
 
 using namespace cv;
 
