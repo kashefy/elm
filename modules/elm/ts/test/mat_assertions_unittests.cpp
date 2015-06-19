@@ -8,7 +8,7 @@
 /** Write unit tests around Mat assertions.
  * @todo: Refactor into TYPED_TEST to reduce clutter
  */
-#include "elm/ts/ts.h"
+#include "elm/ts/mat_assertions.h"
 
 #include "elm/core/exception.h"
 #include "elm/core/typedefs.h"
