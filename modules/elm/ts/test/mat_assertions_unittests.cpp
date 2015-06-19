@@ -12,6 +12,7 @@
 
 #include "elm/core/exception.h"
 #include "elm/core/typedefs.h"
+#include "elm/ts/container.h"
 
 using namespace cv;
 using namespace elm;
