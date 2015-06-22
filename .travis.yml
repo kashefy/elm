@@ -21,7 +21,7 @@ env:
     - TRAVIS_PYTHON_VERSION="2.7"
     # ELM build parameters
     - BUILD_TYPE=Coverage
-    - BUILD_SHARED_LIBS=OFF
+    - BUILD_SHARED_LIBS=ON
     - secure: "fvYVNecz00QbdEz9sWc5bUjaCby7fsrfKzkFCTzsYmI2PzRB1CMKDpIxjxI77z/KixFeiZkQ2IAQck13EvWCnqEccBjt/MmrmJGWBLwpK1yAaJe4opFICQcUwvmG8GN0/ppi7g+QD9Svu+mrMEsVBoQm9nX+NdvMAMSMiX7ZXFg="
 
 before_install:
@@ -36,7 +36,7 @@ before_install:
   - travis_retry wget --quiet https://googletest.googlecode.com/files/gtest-1.7.0.zip
   - unzip -qq gtest-1.7.0.zip
   - cd gtest-1.7.0
-  - cmake . > /dev/null
+  - cmake -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS . > /dev/null
   - make > /dev/null
   - cd $DEPS_DIR
   
