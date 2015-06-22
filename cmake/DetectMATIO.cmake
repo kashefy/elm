@@ -20,8 +20,11 @@ set(MATIO_DEFINITIONS ${PC_MATIO_CFLAGS_OTHER})
 
 file(TO_CMAKE_PATH ${MATIO_DIR}/lib MATIO_TMP_LIB_DIR)
 
+set(MATIO_LIB_NAME_CANDIDATE matio)
+add_lib_prefix_suffix(MATIO_LIB_NAME_CANDIDATE ${MATIO_LIB_NAME_CANDIDATE})
+
 find_library(MATIO_LIBS
-             NAMES libmatio.a matio
+             NAMES ${MATIO_LIB_NAME_CANDIDATE} matio
              HINTS ${PC_MATIO_LIBDIR} ${PC_MATIO_LIBRARY_DIRS}
              PATHS ${MATIO_DIR} ${MATIO_TMP_LIB_DIR}
              DOC "find MATIO library")
@@ -55,8 +58,11 @@ if(MATIO_FOUND)
 
         file(TO_CMAKE_PATH ${HDF5_DIR}/lib HDF5_TMP_LIB_DIR)
 
+        set(HDF5_LIB_NAME_CANDIDATE hdf5)
+        add_lib_prefix_suffix(HDF5_LIB_NAME_CANDIDATE ${HDF5_LIB_NAME_CANDIDATE})
+
         find_library(HDF5_LIBS
-                     NAMES libhdf5.a hdf5
+                     NAMES ${HDF5_LIB_NAME_CANDIDATE} hdf5
                      HINTS ${HDF5_DIR} ${HDF5_TMP_LIB_DIR}
                      PATHS ${HDF5_DIR} ${HDF5_TMP_LIB_DIR}
                      DOC "find HDF5 library"

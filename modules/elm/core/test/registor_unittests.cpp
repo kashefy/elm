@@ -10,7 +10,7 @@
 #include <boost/assign/list_of.hpp>
 
 #include "elm/core/exception.h"
-#include "elm/ts/ts.h"
+#include "elm/ts/container.h"
 
 using namespace elm;
 

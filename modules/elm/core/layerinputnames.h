@@ -10,6 +10,8 @@
 
 #include "elm/core/typedefs_sfwd.h"
 
+extern template class std::map<std::string, std::string>;
+
 namespace elm {
 
 class InputName;

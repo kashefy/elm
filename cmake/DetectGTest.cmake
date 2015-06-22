@@ -12,6 +12,16 @@
 status("GTEST_ROOT=${GTEST_ROOT}")
 find_package(GTest REQUIRED)
 if(GTEST_FOUND)
+
+        if(BUILD_SHARED_LIBS)
+            get_filename_component(__GTEST_LIB_EXT ${GTEST_LIBRARIES} EXT)
+
+            if(NOT ${__GTEST_LIB_EXT} EQUAL ${CMAKE_SHARED_LIBRARY_SUFFIX})
+                message(WARNING "Linking shared build to static gtest may lead to testrunner crash due to memory leaks.")
+            endif()
+
+        endif(BUILD_SHARED_LIBS)
+
 	list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${GTEST_INCLUDE_DIRS})
 	list(APPEND ${ROOT_PROJECT}_LIBS ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
 else(GTEST_FOUND)

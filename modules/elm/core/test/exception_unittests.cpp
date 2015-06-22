@@ -7,14 +7,59 @@
 //M*/
 #include "elm/core/exception.h"
 
-#include <string>
-
 #include "gtest/gtest.h"
-#include <opencv2/core/core.hpp>
 
 using namespace elm;
 
 namespace {
+
+TEST(ExceptionTest, Constructor)
+{
+    EXPECT_NO_THROW(Exception e);
+}
+
+TEST(ExceptionTest, What_empty)
+{
+    Exception e;
+    std::string msg(e.what());
+    EXPECT_TRUE(msg.empty());
+}
+
+TEST(ExceptionTest, What)
+{
+    {
+        std::string msg(ExceptionBadDims("foo").what());
+        EXPECT_NE(msg.find("foo"), msg.npos);
+    }
+    // change message
+    {
+        std::string msg(ExceptionBadDims("bar").what());
+        EXPECT_NE(msg.find("bar"), msg.npos);
+    }
+    // change exception type
+    {
+        std::string msg(ExceptionKeyError("bar").what());
+        EXPECT_NE(msg.find("bar"), msg.npos);
+    }
+}
+
+TEST(ExceptionTest, FormattedMessage)
+{
+    {
+        std::string msg(ExceptionBadDims("foo").what());
+        EXPECT_NE(msg.find("foo"), msg.npos);
+        EXPECT_NE(msg.find("in function ExceptionBadDims"), msg.npos);
+        EXPECT_NE(msg.find("error"), msg.npos);
+    }
+
+    {
+        std::string msg(ExceptionValueError("bar").what());
+        EXPECT_NE(msg.find("bar"), msg.npos);
+        EXPECT_NE(msg.find("in function ExceptionValueError"), msg.npos);
+        EXPECT_NE(msg.find("error"), msg.npos);
+    }
+}
+
 
 TEST(ExceptionTest, Throw)
 {

@@ -31,6 +31,7 @@ else(UNIX)
     set(BUILD_python OFF CACHE BOOL "Whether to build python bindings.")
 endif(UNIX)
 
+include(cmake/BuildUtils.cmake)
 include(cmake/CompilerUtils.cmake)
 include(cmake/FileSystemUtils.cmake)
 include(cmake/ListUtils.cmake)

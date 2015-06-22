@@ -32,13 +32,15 @@ public:
 
     void InputNames(const LayerInputNames &io) {}
 
-    void OutputNames(const LayerOutputNames &io);
+    void OutputNames(const LayerOutputNames &io) {}
 
     void Activate(const Signal &signal) {}
 
     void Response(Signal &signal) {}
 
-    DummyChildLayer() {}
+    DummyChildLayer()
+        : base_Layer()
+    {}
 };
 
 class LayerTest : public ::testing::Test
