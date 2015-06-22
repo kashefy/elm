@@ -88,33 +88,35 @@
 <a name="l00010"></a>00010 <span class="preprocessor"></span>
 <a name="l00011"></a>00011 <span class="preprocessor">#include &quot;<a class="code" href="typedefs__sfwd_8h.html">elm/core/typedefs_sfwd.h</a>&quot;</span>
 <a name="l00012"></a>00012 
-<a name="l00013"></a>00013 <span class="keyword">namespace </span>elm {
+<a name="l00013"></a>00013 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>std::map&lt;std::string, std::string&gt;;
 <a name="l00014"></a>00014 
-<a name="l00018"></a><a class="code" href="classelm_1_1LayerOutputNames.html">00018</a> <span class="keyword">class </span><a class="code" href="classelm_1_1LayerOutputNames.html" title="class for encapsulating layer IO key-name pairs">LayerOutputNames</a>
-<a name="l00019"></a>00019 {
-<a name="l00020"></a>00020 <span class="keyword">public</span>:
-<a name="l00026"></a>00026     <span class="keywordtype">void</span> <a class="code" href="classelm_1_1LayerOutputNames.html#ade749e4cb921bb81c37d0d2f804856aa" title="Set output key-name-pair.">Output</a>(<span class="keyword">const</span> std::string &amp;key, <span class="keyword">const</span> std::string &amp;name);
-<a name="l00027"></a>00027 
-<a name="l00034"></a>00034     std::string <a class="code" href="classelm_1_1LayerOutputNames.html#ade749e4cb921bb81c37d0d2f804856aa" title="Set output key-name-pair.">Output</a>(<span class="keyword">const</span> std::string &amp;key) <span class="keyword">const</span>;
-<a name="l00035"></a>00035 
-<a name="l00041"></a>00041     <a class="code" href="namespaceelm.html#ab2fed88eb971a6c54880df1879086cd0" title="Convinience typedef for optional string.">OptS</a> <a class="code" href="classelm_1_1LayerOutputNames.html#a5dbed1d047dd46421bd0587c019b21e1" title="Get name to optional output feature key.">OutputOpt</a>(<span class="keyword">const</span> std::string &amp;key) <span class="keyword">const</span>;
-<a name="l00042"></a>00042 
-<a name="l00043"></a>00043     <span class="keyword">const</span> <a class="code" href="namespaceelm.html#ad2324f1476b247785a7bc2223feb260a" title="Convinience typedef for map of string keys and string values.">MapSS</a>&amp; <a class="code" href="classelm_1_1LayerOutputNames.html#a66ba5e186c946fa56346c12928faae8b">OutputMap</a>() <span class="keyword">const</span>;
+<a name="l00015"></a>00015 <span class="keyword">namespace </span>elm {
+<a name="l00016"></a>00016 
+<a name="l00020"></a><a class="code" href="classelm_1_1LayerOutputNames.html">00020</a> <span class="keyword">class </span><a class="code" href="classelm_1_1LayerOutputNames.html" title="class for encapsulating layer IO key-name pairs">LayerOutputNames</a>
+<a name="l00021"></a>00021 {
+<a name="l00022"></a>00022 <span class="keyword">public</span>:
+<a name="l00028"></a>00028     <span class="keywordtype">void</span> Output(<span class="keyword">const</span> std::string &amp;key, <span class="keyword">const</span> std::string &amp;name);
+<a name="l00029"></a>00029 
+<a name="l00036"></a>00036     std::string Output(<span class="keyword">const</span> std::string &amp;key) <span class="keyword">const</span>;
+<a name="l00037"></a>00037 
+<a name="l00043"></a>00043     <a class="code" href="namespaceelm.html#ac4548af7c6485d3354a27d70456a7162" title="Convinience typedef for optional string.">OptS</a> OutputOpt(<span class="keyword">const</span> std::string &amp;key) <span class="keyword">const</span>;
 <a name="l00044"></a>00044 
-<a name="l00045"></a>00045 <span class="keyword">private</span>:
-<a name="l00046"></a><a class="code" href="classelm_1_1LayerOutputNames.html#aae9e5a6b75335408821bccf4ca2ba707">00046</a>     <a class="code" href="namespaceelm.html#ad2324f1476b247785a7bc2223feb260a" title="Convinience typedef for map of string keys and string values.">MapSS</a> <a class="code" href="classelm_1_1LayerOutputNames.html#aae9e5a6b75335408821bccf4ca2ba707">outputs_</a>;
-<a name="l00047"></a>00047 };
-<a name="l00048"></a>00048 
-<a name="l00049"></a>00049 } <span class="comment">// namespace elm</span>
+<a name="l00045"></a>00045     <span class="keyword">const</span> <a class="code" href="namespaceelm.html#a1ef23d8f68e89b761cfbfdb617b09f49" title="Convinience typedef for map of string keys and string values.">MapSS</a>&amp; OutputMap() <span class="keyword">const</span>;
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047 <span class="keyword">private</span>:
+<a name="l00048"></a><a class="code" href="classelm_1_1LayerOutputNames.html#aae9e5a6b75335408821bccf4ca2ba707">00048</a>     <a class="code" href="namespaceelm.html#a1ef23d8f68e89b761cfbfdb617b09f49" title="Convinience typedef for map of string keys and string values.">MapSS</a> <a class="code" href="classelm_1_1LayerOutputNames.html#aae9e5a6b75335408821bccf4ca2ba707">outputs_</a>;
+<a name="l00049"></a>00049 };
 <a name="l00050"></a>00050 
-<a name="l00051"></a>00051 <span class="preprocessor">#endif // _ELM_CORE_LAYEROUTPUTNAMES_H_</span>
+<a name="l00051"></a>00051 } <span class="comment">// namespace elm</span>
+<a name="l00052"></a>00052 
+<a name="l00053"></a>00053 <span class="preprocessor">#endif // _ELM_CORE_LAYEROUTPUTNAMES_H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="layeroutputnames_8h.html">layeroutputnames.h</a>      </li>
 
-    <li class="footer">Generated on Fri Jun 5 2015 19:35:11 for ELM Library by
+    <li class="footer">Generated on Mon Jun 22 2015 15:33:25 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

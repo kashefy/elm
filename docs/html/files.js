@@ -64,7 +64,7 @@ var files =
     [ "layer_feat_transf_assertions.h", "layer__feat__transf__assertions_8h.html", "layer__feat__transf__assertions_8h" ],
     [ "layer_y.h", "layer__y_8h.html", null ],
     [ "layerattr_.h", "layerattr___8h.html", "layerattr___8h" ],
-    [ "layerconfig.h", "layerconfig_8h.html", "layerconfig_8h" ],
+    [ "layerconfig.h", "layerconfig_8h.html", null ],
     [ "layerfactory.h", "layerfactory_8h.html", null ],
     [ "layergraph.h", "layergraph_8h.html", "layergraph_8h" ],
     [ "layergraph_impl.h", "layergraph__impl_8h.html", "layergraph__impl_8h" ],

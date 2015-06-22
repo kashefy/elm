@@ -88,37 +88,39 @@
 <a name="l00010"></a>00010 <span class="preprocessor"></span>
 <a name="l00011"></a>00011 <span class="preprocessor">#include &quot;<a class="code" href="typedefs__sfwd_8h.html">elm/core/typedefs_sfwd.h</a>&quot;</span>
 <a name="l00012"></a>00012 
-<a name="l00013"></a>00013 <span class="keyword">namespace </span>elm {
+<a name="l00013"></a>00013 <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>std::map&lt;std::string, std::string&gt;;
 <a name="l00014"></a>00014 
-<a name="l00015"></a>00015 <span class="keyword">class </span>InputName;
+<a name="l00015"></a>00015 <span class="keyword">namespace </span>elm {
 <a name="l00016"></a>00016 
-<a name="l00020"></a><a class="code" href="classelm_1_1LayerInputNames.html">00020</a> <span class="keyword">class </span><a class="code" href="classelm_1_1LayerInputNames.html" title="class for encapsulating layer input/stimulus key-name pairs">LayerInputNames</a>
-<a name="l00021"></a>00021 {
-<a name="l00022"></a>00022 <span class="keyword">public</span>:
-<a name="l00023"></a>00023     <a class="code" href="classelm_1_1LayerInputNames.html#a0f6c8e10a831474f9f5411775b32aad7">LayerInputNames</a>();
-<a name="l00024"></a>00024 
-<a name="l00030"></a>00030     <span class="keywordtype">void</span> <a class="code" href="classelm_1_1LayerInputNames.html#ab75a4111ce419d386a198fae79913121" title="Set input key-name-pair.">Input</a>(<span class="keyword">const</span> std::string &amp;key, <span class="keyword">const</span> <a class="code" href="classelm_1_1InputName.html" title="class for repsresenting layer input names">InputName</a> &amp;name);
-<a name="l00031"></a>00031 
-<a name="l00038"></a>00038     <a class="code" href="classelm_1_1InputName.html" title="class for repsresenting layer input names">InputName</a> <a class="code" href="classelm_1_1LayerInputNames.html#ab75a4111ce419d386a198fae79913121" title="Set input key-name-pair.">Input</a>(<span class="keyword">const</span> std::string &amp;key) <span class="keyword">const</span>;
-<a name="l00039"></a>00039 
-<a name="l00045"></a>00045     <a class="code" href="namespaceelm.html#ab2fed88eb971a6c54880df1879086cd0" title="Convinience typedef for optional string.">OptS</a> <a class="code" href="classelm_1_1LayerInputNames.html#a5a3aa49826ba8a38536b9c7e860da7c4" title="Get name to optional input feature key.">InputOpt</a>(<span class="keyword">const</span> std::string &amp;key) <span class="keyword">const</span>;
-<a name="l00046"></a>00046 
-<a name="l00047"></a>00047     <span class="keyword">const</span> <a class="code" href="namespaceelm.html#ad2324f1476b247785a7bc2223feb260a" title="Convinience typedef for map of string keys and string values.">MapSS</a>&amp; <a class="code" href="classelm_1_1LayerInputNames.html#aec4c1d148cd31e9587e7b32ad2e1db34">InputMap</a>() <span class="keyword">const</span>;
+<a name="l00017"></a>00017 <span class="keyword">class </span>InputName;
+<a name="l00018"></a>00018 
+<a name="l00022"></a><a class="code" href="classelm_1_1LayerInputNames.html">00022</a> <span class="keyword">class </span><a class="code" href="classelm_1_1LayerInputNames.html" title="class for encapsulating layer input/stimulus key-name pairs">LayerInputNames</a>
+<a name="l00023"></a>00023 {
+<a name="l00024"></a>00024 <span class="keyword">public</span>:
+<a name="l00025"></a>00025     <a class="code" href="classelm_1_1LayerInputNames.html" title="class for encapsulating layer input/stimulus key-name pairs">LayerInputNames</a>();
+<a name="l00026"></a>00026 
+<a name="l00032"></a>00032     <span class="keywordtype">void</span> Input(<span class="keyword">const</span> std::string &amp;key, <span class="keyword">const</span> <a class="code" href="classelm_1_1InputName.html" title="class for repsresenting layer input names">InputName</a> &amp;name);
+<a name="l00033"></a>00033 
+<a name="l00040"></a>00040     <a class="code" href="classelm_1_1InputName.html" title="class for repsresenting layer input names">InputName</a> Input(<span class="keyword">const</span> std::string &amp;key) <span class="keyword">const</span>;
+<a name="l00041"></a>00041 
+<a name="l00047"></a>00047     <a class="code" href="namespaceelm.html#ac4548af7c6485d3354a27d70456a7162" title="Convinience typedef for optional string.">OptS</a> InputOpt(<span class="keyword">const</span> std::string &amp;key) <span class="keyword">const</span>;
 <a name="l00048"></a>00048 
-<a name="l00049"></a>00049 <span class="keyword">protected</span>:
-<a name="l00050"></a><a class="code" href="classelm_1_1LayerInputNames.html#a292efc615bb9a4bb141d9152f5089345">00050</a>     <a class="code" href="namespaceelm.html#ad2324f1476b247785a7bc2223feb260a" title="Convinience typedef for map of string keys and string values.">MapSS</a> <a class="code" href="classelm_1_1LayerInputNames.html#a292efc615bb9a4bb141d9152f5089345">inputs_</a>;
-<a name="l00051"></a>00051 };
-<a name="l00052"></a>00052 
-<a name="l00053"></a>00053 } <span class="comment">// namespace elm</span>
+<a name="l00049"></a>00049     <span class="keyword">const</span> <a class="code" href="namespaceelm.html#a1ef23d8f68e89b761cfbfdb617b09f49" title="Convinience typedef for map of string keys and string values.">MapSS</a>&amp; InputMap() <span class="keyword">const</span>;
+<a name="l00050"></a>00050 
+<a name="l00051"></a>00051 <span class="keyword">protected</span>:
+<a name="l00052"></a><a class="code" href="classelm_1_1LayerInputNames.html#a292efc615bb9a4bb141d9152f5089345">00052</a>     <a class="code" href="namespaceelm.html#a1ef23d8f68e89b761cfbfdb617b09f49" title="Convinience typedef for map of string keys and string values.">MapSS</a> <a class="code" href="classelm_1_1LayerInputNames.html#a292efc615bb9a4bb141d9152f5089345">inputs_</a>;
+<a name="l00053"></a>00053 };
 <a name="l00054"></a>00054 
-<a name="l00055"></a>00055 <span class="preprocessor">#endif // _ELM_CORE_LAYERINPUTNAMES_H_</span>
+<a name="l00055"></a>00055 } <span class="comment">// namespace elm</span>
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057 <span class="preprocessor">#endif // _ELM_CORE_LAYERINPUTNAMES_H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="layerinputnames_8h.html">layerinputnames.h</a>      </li>
 
-    <li class="footer">Generated on Fri Jun 5 2015 19:35:11 for ELM Library by
+    <li class="footer">Generated on Mon Jun 22 2015 15:33:25 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>
