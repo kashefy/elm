@@ -10,6 +10,7 @@
 #include "elm/ts/ts.h"
 
 using namespace cv;
+using namespace elm;
 
 namespace {
 

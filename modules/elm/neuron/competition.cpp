@@ -7,13 +7,14 @@
 //M*/
 #include "elm/neuron/competition.h"
 
+using namespace elm;
+
 base_Competition::base_Competition()
 {
 }
 
 base_Competition::~base_Competition()
 {
-
 }
 
 base_WTA::base_WTA(float delta_t_msec)

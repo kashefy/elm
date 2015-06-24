@@ -13,6 +13,8 @@
 
 #include "elm/neuron/base_learner.h"
 
+namespace elm {
+
 /**
  * @brief Base class for defining competition between learners
  * suitable for unsupervised learning
@@ -55,5 +57,7 @@ protected:
 
     float delta_t_sec_;    ///< time resolution in seconds
 };
+
+} // namespace elm
 
 #endif // _ELM_NEURON_COMPETITION_H_
