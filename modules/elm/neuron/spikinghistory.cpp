@@ -8,6 +8,7 @@
 #include "elm/neuron/spikinghistory.h"
 
 using namespace cv;
+using namespace elm;
 
 SpikingHistory::SpikingHistory(int dims, int len)
     : len_(len),

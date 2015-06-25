@@ -7,6 +7,8 @@
 //M*/
 #include "elm/neuron/base_learner.h"
 
+using namespace elm;
+
 base_Learner::~base_Learner()
 {
 }

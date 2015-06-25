@@ -8,7 +8,9 @@
 #ifndef _ELM_NEURON_BASE_LEARNER_H_
 #define _ELM_NEURON_BASE_LEARNER_H_
 
-#include <opencv2/core/core.hpp>
+#include "elm/core/cv/typedefs_fwd.h"
+
+namespace elm {
 
 /**
  * @brief Define interface for learning neurons
@@ -45,5 +47,7 @@ public:
 protected:
     base_Learner();
 };
+
+} // namespace elm
 
 #endif // _ELM_NEURON_BASE_LEARNER_H_

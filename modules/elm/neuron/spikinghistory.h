@@ -10,6 +10,8 @@
 
 #include <opencv2/core/core.hpp>
 
+namespace elm {
+
 /**
  * @brief Class for tracking spiking history
  */
@@ -83,5 +85,7 @@ protected:
     int dims_;       ///< no. of input dimensions to track
     cv::Mat1i history_;  ///< input history
 };
+
+} // namespace elm
 
 #endif // _ELM_NEURON_SPIKINGHISTORY_H_

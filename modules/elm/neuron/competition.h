@@ -8,10 +8,11 @@
 #ifndef _ELM_NEURON_COMPETITION_H_
 #define _ELM_NEURON_COMPETITION_H_
 
-#include <vector>
-#include <memory>
+#include "elm/core/typedefs_sfwd.h"
 
-#include "elm/neuron/base_learner.h"
+namespace elm {
+
+class base_Learner;
 
 /**
  * @brief Base class for defining competition between learners
@@ -55,5 +56,7 @@ protected:
 
     float delta_t_sec_;    ///< time resolution in seconds
 };
+
+} // namespace elm
 
 #endif // _ELM_NEURON_COMPETITION_H_
