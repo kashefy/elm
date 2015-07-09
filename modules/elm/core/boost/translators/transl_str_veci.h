@@ -8,6 +8,9 @@
 #ifndef _ELM_CORE_BOOST_TRANSLATORS_TRANSL_STR_VECI_H_
 #define _ELM_CORE_BOOST_TRANSLATORS_TRANSL_STR_VECI_H_
 
+#include <string>
+#include <vector>
+
 #include <boost/property_tree/ptree.hpp>
 
 namespace elm {
