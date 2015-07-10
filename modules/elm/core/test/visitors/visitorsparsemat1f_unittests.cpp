@@ -355,7 +355,7 @@ TYPED_TEST_CASE(VisitorSparseMat1fCloud_TypedTest, PCLPointTypes);
 TYPED_TEST(VisitorSparseMat1fCloud_TypedTest, EmptyCLoud) {
 
     typename pcl::PointCloud<TypeParam >::Ptr cld(new pcl::PointCloud<TypeParam >);
-    EXPECT_EQ(0, to_(cld).size());
+    EXPECT_EQ(0, this->to_(cld).size());
 }
 
 TYPED_TEST(VisitorSparseMat1fCloud_TypedTest, FromCloud) {
@@ -365,7 +365,7 @@ TYPED_TEST(VisitorSparseMat1fCloud_TypedTest, FromCloud) {
     typename pcl::PointCloud<TypeParam >::Ptr cloud = Mat2PointCloud_<TypeParam >(m);
 
     Mat1f m2;
-    to_(cloud).convertTo(m2, CV_32FC1);
+    this->to_(cloud).convertTo(m2, CV_32FC1);
 
     Mat1f m_ref = PointCloud2Mat_<TypeParam> (cloud);
 
