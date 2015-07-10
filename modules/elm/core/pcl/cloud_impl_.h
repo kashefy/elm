@@ -178,7 +178,6 @@ public:
         using namespace pcl;
 
         typedef PointCloud<TPoint> CloudTP;
-        typedef typename PointCloud<TPoint>::iterator CloudTPIter;
 
         // all types and namespaces defined.
 

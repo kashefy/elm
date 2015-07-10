@@ -857,7 +857,6 @@ TYPED_TEST(MatPODTypesTest, FindFirstOf_Invalid_MultiChannel) {
 TYPED_TEST(MatPODTypesTest, FindFirstOf_Invalid_MultiChannelEmpty) {
 
     std::vector<TypeParam> v = V_<TypeParam>::values;
-    typedef Mat_<TypeParam> MatTP;
 
     // effectively single-channel
     EXPECT_NO_THROW( find_first_of(Mat_<Vec<TypeParam, 1> >(), v[0]) );
