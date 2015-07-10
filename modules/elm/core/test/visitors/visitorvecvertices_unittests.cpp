@@ -106,7 +106,7 @@ TYPED_TEST_CASE(VisitorVecVerticesCloud_TypedTest, PCLPointTypes);
 TYPED_TEST(VisitorVecVerticesCloud_TypedTest, Empty)
 {
     typename pcl::PointCloud<TypeParam >::Ptr cld(new pcl::PointCloud<TypeParam >);
-    EXPECT_SIZE(0, to_(cld));
+    EXPECT_SIZE(0, this->to_(cld));
 }
 
 /**
@@ -118,7 +118,7 @@ TYPED_TEST(VisitorVecVerticesCloud_TypedTest, Twos)
 
     typename pcl::PointCloud<TypeParam >::Ptr in = Mat2PointCloud_<TypeParam >(m);
 
-    VecVertices vv = to_(in);
+    VecVertices vv = this->to_(in);
 
     EXPECT_SIZE(m.rows, vv);
 
@@ -172,7 +172,7 @@ TYPED_TEST(VisitorVecVerticesTypedTest, Twos)
 {
     TypeParam in = Twos_<TypeParam >::val;
 
-    VecVertices vv = to_(in);
+    VecVertices vv = this->to_(in);
 
     EXPECT_SIZE(1, vv);
     EXPECT_SIZE(1, vv[0].vertices);
