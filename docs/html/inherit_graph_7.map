@@ -1,4 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="node1" href="$classbase__ReverseCorr.html" title="base class for Reverse correlation algorithms" alt="" coords="5,5,136,35"/>
-<area shape="rect" id="node3" href="$classSTA.html" title="class for computing spike&#45;triggered average" alt="" coords="184,5,232,35"/>
+<area shape="rect" id="node1" href="$classbase__ZeroCrossings.html" title="base class for computing zero corssings" alt="" coords="7,5,148,35"/>
+<area shape="rect" id="node3" href="$classZeroCrossingsDiff.html" title="Use forward difference (1st derivative) to detect zero crossings src[i]*src[i+1] &lt; 0 indicates a zero..." alt="" coords="197,5,325,35"/>
 </map>

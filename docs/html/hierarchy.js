@@ -4,8 +4,8 @@ var hierarchy =
     [ "base_AUC", "classbase__AUC.html", [
       [ "Trapz", "classTrapz.html", null ]
     ] ],
-    [ "base_Competition", "classbase__Competition.html", [
-      [ "base_WTA", "classbase__WTA.html", null ]
+    [ "elm::base_Competition", "classelm_1_1base__Competition.html", [
+      [ "elm::base_WTA", "classelm_1_1base__WTA.html", null ]
     ] ],
     [ "base_ConversionCache", "classbase__ConversionCache.html", [
       [ "elm::VisitorPOD_< T >", "classelm_1_1VisitorPOD__.html", null ],
@@ -93,7 +93,7 @@ var hierarchy =
       [ "elm::ICP", "classelm_1_1ICP.html", null ],
       [ "elm::Triangulation", "classelm_1_1Triangulation.html", null ]
     ] ],
-    [ "base_Learner", "classbase__Learner.html", null ],
+    [ "elm::base_Learner", "classelm_1_1base__Learner.html", null ],
     [ "base_ReverseCorr", "classbase__ReverseCorr.html", [
       [ "STA", "classSTA.html", null ]
     ] ],
@@ -169,7 +169,7 @@ var hierarchy =
       [ "elm::Signal_Impl", "classelm_1_1Signal__Impl.html", null ]
     ] ],
     [ "elm::Signal_TP_< T >", "classelm_1_1Signal__TP__.html", null ],
-    [ "SpikingHistory", "classSpikingHistory.html", null ],
+    [ "elm::SpikingHistory", "classelm_1_1SpikingHistory.html", null ],
     [ "static_visitor", "classboost_1_1static__visitor.html", [
       [ "elm::VisitorPOD_< T >", "classelm_1_1VisitorPOD__.html", null ],
       [ "Visitor_< T >", "classVisitor__.html", null ],

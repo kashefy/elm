@@ -1,4 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="node1" href="$classbase__Ganglion.html" title="base class for modeling retinal ganglion cells" alt="" coords="7,5,113,35"/>
-<area shape="rect" id="node3" href="$classDiffOfGaussians2dSq.html" title="Model Retinal Ganglion cells using two&#45;dimensionaldifference of gaussians class." alt="" coords="163,5,312,35"/>
+<area shape="rect" id="node1" href="$classbase__IntensityContrast.html" title="base class for measuring intensity contrast" alt="" coords="5,5,163,35"/>
+<area shape="rect" id="node3" href="$classRetGang.html" title="Implement intensity constrast measure using a model of retinal ganglion cells." alt="" coords="211,5,285,35"/>
 </map>

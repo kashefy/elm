@@ -86,43 +86,46 @@
 <a name="l00008"></a>00008 <span class="preprocessor">#ifndef _ELM_NEURON_COMPETITION_H_</span>
 <a name="l00009"></a>00009 <span class="preprocessor"></span><span class="preprocessor">#define _ELM_NEURON_COMPETITION_H_</span>
 <a name="l00010"></a>00010 <span class="preprocessor"></span>
-<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;vector&gt;</span>
-<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;memory&gt;</span>
-<a name="l00013"></a>00013 
-<a name="l00014"></a>00014 <span class="preprocessor">#include &quot;<a class="code" href="base__learner_8h.html">elm/neuron/base_learner.h</a>&quot;</span>
-<a name="l00015"></a>00015 
-<a name="l00020"></a><a class="code" href="classbase__Competition.html">00020</a> <span class="keyword">class </span><a class="code" href="classbase__Competition.html" title="Base class for defining competition between learners suitable for unsupervised learning.">base_Competition</a>
-<a name="l00021"></a>00021 {
-<a name="l00022"></a>00022 <span class="keyword">public</span>:
-<a name="l00023"></a>00023     <span class="keyword">virtual</span> <a class="code" href="classbase__Competition.html#acbe13adf46380a6f7fa495ba7de0fcd5">~base_Competition</a>();
-<a name="l00024"></a>00024 
-<a name="l00030"></a>00030     <span class="keyword">virtual</span> cv::Mat <a class="code" href="classbase__Competition.html#a0d12d8ce5d8400cac2affb429da1f227" title="Let learners compete.">Compete</a>(std::vector&lt;std::shared_ptr&lt;base_Learner&gt; &gt;&amp; learners) = 0;
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032 <span class="keyword">protected</span>:
-<a name="l00033"></a>00033     <a class="code" href="classbase__Competition.html#a7f6feffc5708c2fdeb1b127532bc6281">base_Competition</a>();
-<a name="l00034"></a>00034 };
-<a name="l00035"></a>00035 
-<a name="l00039"></a><a class="code" href="classbase__WTA.html">00039</a> <span class="keyword">class </span><a class="code" href="classbase__WTA.html" title="Define interfaces for a Winner-Take-All circuit for spiking neurons.">base_WTA</a> : <span class="keyword">public</span> <a class="code" href="classbase__Competition.html" title="Base class for defining competition between learners suitable for unsupervised learning.">base_Competition</a>
-<a name="l00040"></a>00040 {
-<a name="l00041"></a>00041 <span class="keyword">public</span>:
-<a name="l00042"></a>00042     <span class="keyword">virtual</span> <a class="code" href="classbase__WTA.html#a4537605736463251d0574a47fc066891">~base_WTA</a>();
-<a name="l00043"></a>00043 
-<a name="l00047"></a>00047     <span class="keyword">virtual</span> cv::Mat <a class="code" href="classbase__WTA.html#a57e164a23573a9a50bb9e15922c2a690">Compete</a>(std::vector&lt;std::shared_ptr&lt;base_Learner&gt; &gt; &amp;learners) = 0;
-<a name="l00048"></a>00048 
-<a name="l00049"></a>00049 <span class="keyword">protected</span>:
-<a name="l00054"></a>00054     <a class="code" href="classbase__WTA.html#a94e40b3e68d1d4b9cdafb5c9efa76b66" title="base_WTA constructor">base_WTA</a>(<span class="keywordtype">float</span> delta_t_msec);
-<a name="l00055"></a>00055 
-<a name="l00056"></a><a class="code" href="classbase__WTA.html#a1f8aaed244aeed070560ae0fcbb62b36">00056</a>     <span class="keywordtype">float</span> <a class="code" href="classbase__WTA.html#a1f8aaed244aeed070560ae0fcbb62b36" title="time resolution in seconds">delta_t_sec_</a>;    
-<a name="l00057"></a>00057 };
-<a name="l00058"></a>00058 
-<a name="l00059"></a>00059 <span class="preprocessor">#endif // _ELM_NEURON_COMPETITION_H_</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &quot;<a class="code" href="typedefs__sfwd_8h.html">elm/core/typedefs_sfwd.h</a>&quot;</span>
+<a name="l00012"></a>00012 
+<a name="l00013"></a>00013 <span class="keyword">namespace </span>elm {
+<a name="l00014"></a>00014 
+<a name="l00015"></a>00015 <span class="keyword">class </span>base_Learner;
+<a name="l00016"></a>00016 
+<a name="l00021"></a><a class="code" href="classelm_1_1base__Competition.html">00021</a> <span class="keyword">class </span><a class="code" href="classelm_1_1base__Competition.html" title="Base class for defining competition between learners suitable for unsupervised learning.">base_Competition</a>
+<a name="l00022"></a>00022 {
+<a name="l00023"></a>00023 <span class="keyword">public</span>:
+<a name="l00024"></a>00024     <span class="keyword">virtual</span> <a class="code" href="classelm_1_1base__Competition.html#a86d5d3618d7c7bf1c6c4a607e3238dad">~base_Competition</a>();
+<a name="l00025"></a>00025 
+<a name="l00031"></a>00031     <span class="keyword">virtual</span> cv::Mat <a class="code" href="classelm_1_1base__Competition.html#a6177008c5f7cec9eff7bc4f99f8de6f2" title="Let learners compete.">Compete</a>(std::vector&lt;std::shared_ptr&lt;base_Learner&gt; &gt;&amp; learners) = 0;
+<a name="l00032"></a>00032 
+<a name="l00033"></a>00033 <span class="keyword">protected</span>:
+<a name="l00034"></a>00034     <a class="code" href="classelm_1_1base__Competition.html#ad9c2593f000d18adf6e171208095bdaa">base_Competition</a>();
+<a name="l00035"></a>00035 };
+<a name="l00036"></a>00036 
+<a name="l00040"></a><a class="code" href="classelm_1_1base__WTA.html">00040</a> <span class="keyword">class </span><a class="code" href="classelm_1_1base__WTA.html" title="Define interfaces for a Winner-Take-All circuit for spiking neurons.">base_WTA</a> : <span class="keyword">public</span> <a class="code" href="classelm_1_1base__Competition.html" title="Base class for defining competition between learners suitable for unsupervised learning.">base_Competition</a>
+<a name="l00041"></a>00041 {
+<a name="l00042"></a>00042 <span class="keyword">public</span>:
+<a name="l00043"></a>00043     <span class="keyword">virtual</span> <a class="code" href="classelm_1_1base__WTA.html#a9dd6896d8a37eb1a9919f29589e0890f">~base_WTA</a>();
+<a name="l00044"></a>00044 
+<a name="l00048"></a>00048     <span class="keyword">virtual</span> cv::Mat <a class="code" href="classelm_1_1base__WTA.html#a09cbd5fb39972d9f350e267da4e36f7b">Compete</a>(std::vector&lt;std::shared_ptr&lt;base_Learner&gt; &gt; &amp;learners) = 0;
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050 <span class="keyword">protected</span>:
+<a name="l00055"></a>00055     <a class="code" href="classelm_1_1base__WTA.html#a5a9af717578cc5e618415d0dbee1f639" title="base_WTA constructor">base_WTA</a>(<span class="keywordtype">float</span> delta_t_msec);
+<a name="l00056"></a>00056 
+<a name="l00057"></a><a class="code" href="classelm_1_1base__WTA.html#a1e5119e040a063381a0e02f411b359a3">00057</a>     <span class="keywordtype">float</span> <a class="code" href="classelm_1_1base__WTA.html#a1e5119e040a063381a0e02f411b359a3" title="time resolution in seconds">delta_t_sec_</a>;    
+<a name="l00058"></a>00058 };
+<a name="l00059"></a>00059 
+<a name="l00060"></a>00060 } <span class="comment">// namespace elm</span>
+<a name="l00061"></a>00061 
+<a name="l00062"></a>00062 <span class="preprocessor">#endif // _ELM_NEURON_COMPETITION_H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="competition_8h.html">competition.h</a>      </li>
 
-    <li class="footer">Generated on Mon Jun 22 2015 15:33:25 for ELM Library by
+    <li class="footer">Generated on Mon Sep 7 2015 11:03:42 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>

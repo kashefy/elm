@@ -88,43 +88,47 @@
 <a name="l00010"></a>00010 <span class="preprocessor"></span>
 <a name="l00011"></a>00011 <span class="preprocessor">#include &lt;opencv2/core/core.hpp&gt;</span>
 <a name="l00012"></a>00012 
-<a name="l00016"></a><a class="code" href="classSpikingHistory.html">00016</a> <span class="keyword">class </span><a class="code" href="classSpikingHistory.html" title="Class for tracking spiking history.">SpikingHistory</a>
-<a name="l00017"></a>00017 {
-<a name="l00018"></a>00018 <span class="keyword">public</span>:
-<a name="l00024"></a>00024     <a class="code" href="classSpikingHistory.html#ab57640de46fe57477277c041ead12199" title="Constructor.">SpikingHistory</a>(<span class="keywordtype">int</span> dims, <span class="keywordtype">int</span> len);
-<a name="l00025"></a>00025 
-<a name="l00029"></a>00029     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classSpikingHistory.html#acfb3177f4f1de2ff9864f7d504469e85" title="Advance history.">Advance</a>();
-<a name="l00030"></a>00030 
-<a name="l00035"></a>00035     <span class="keyword">virtual</span> <a class="code" href="namespacecv.html#a87332e283de569e7bb029d4f4b401dcc" title="convinience typedef for Mat of integers">cv::Mat1i</a> <a class="code" href="classSpikingHistory.html#a68ef108481f0ac10cbed3b702ba00a08" title="Get History.">History</a>() <span class="keyword">const</span>;
-<a name="l00036"></a>00036 
-<a name="l00040"></a>00040     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classSpikingHistory.html#af68345b9509a7bc10b626a00dcc64bb4" title="Reset history so far.">Reset</a>();
-<a name="l00041"></a>00041 
-<a name="l00045"></a>00045     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classSpikingHistory.html#af68345b9509a7bc10b626a00dcc64bb4" title="Reset history so far.">Reset</a>(<span class="keywordtype">int</span> index);
-<a name="l00046"></a>00046 
-<a name="l00052"></a>00052     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classSpikingHistory.html#a7b37eb0ae96493c234fda6d2fb354c84" title="Obtain vector indicating which indice recently fired.">Recent</a>(<span class="keywordtype">int</span> index) <span class="keyword">const</span>;
-<a name="l00053"></a>00053 
-<a name="l00058"></a>00058     <span class="keyword">virtual</span> cv::Mat <a class="code" href="classSpikingHistory.html#a7b37eb0ae96493c234fda6d2fb354c84" title="Obtain vector indicating which indice recently fired.">Recent</a>() <span class="keyword">const</span>;
-<a name="l00059"></a>00059 
-<a name="l00064"></a>00064     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classSpikingHistory.html#a9578cda1af9d40bd013b77bc6d38af18" title="update history with new set of spiking input">Update</a>(<span class="keyword">const</span> cv::Mat &amp;spike_mask);
-<a name="l00065"></a>00065 
-<a name="l00073"></a>00073     <span class="keyword">virtual</span> <a class="code" href="classSpikingHistory.html" title="Class for tracking spiking history.">SpikingHistory</a> <a class="code" href="classSpikingHistory.html#adafc999b873a88383485a09e6e523707" title="Obtain reference of a spiking history with a column range of underlying histry.">ColRange</a>(<span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end) <span class="keyword">const</span>;
-<a name="l00074"></a>00074 
-<a name="l00075"></a>00075 <span class="keyword">protected</span>:
-<a name="l00080"></a>00080     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classSpikingHistory.html#a68ef108481f0ac10cbed3b702ba00a08" title="Get History.">History</a>(<span class="keyword">const</span> <a class="code" href="namespacecv.html#a87332e283de569e7bb029d4f4b401dcc" title="convinience typedef for Mat of integers">cv::Mat1i</a>&amp; h);
-<a name="l00081"></a>00081 
-<a name="l00082"></a><a class="code" href="classSpikingHistory.html#a958dcfcb24afbd855b73395f5f53bca3">00082</a>     <span class="keywordtype">int</span> <a class="code" href="classSpikingHistory.html#a958dcfcb24afbd855b73395f5f53bca3" title="history length">len_</a>;        
-<a name="l00083"></a><a class="code" href="classSpikingHistory.html#a830b7dc989466903156d3498533059e5">00083</a>     <span class="keywordtype">int</span> <a class="code" href="classSpikingHistory.html#a830b7dc989466903156d3498533059e5" title="no. of input dimensions to track">dims_</a>;       
-<a name="l00084"></a><a class="code" href="classSpikingHistory.html#ade6d6c80a36d828f231f772ee97aa622">00084</a>     <a class="code" href="namespacecv.html#a87332e283de569e7bb029d4f4b401dcc" title="convinience typedef for Mat of integers">cv::Mat1i</a> <a class="code" href="classSpikingHistory.html#ade6d6c80a36d828f231f772ee97aa622" title="input history">history_</a>;  
-<a name="l00085"></a>00085 };
-<a name="l00086"></a>00086 
-<a name="l00087"></a>00087 <span class="preprocessor">#endif // _ELM_NEURON_SPIKINGHISTORY_H_</span>
+<a name="l00013"></a>00013 <span class="keyword">namespace </span>elm {
+<a name="l00014"></a>00014 
+<a name="l00018"></a><a class="code" href="classelm_1_1SpikingHistory.html">00018</a> <span class="keyword">class </span><a class="code" href="classelm_1_1SpikingHistory.html" title="Class for tracking spiking history.">SpikingHistory</a>
+<a name="l00019"></a>00019 {
+<a name="l00020"></a>00020 <span class="keyword">public</span>:
+<a name="l00026"></a>00026     <a class="code" href="classelm_1_1SpikingHistory.html#a3f21ba9a7011257f062f3ab6427d3009" title="Constructor.">SpikingHistory</a>(<span class="keywordtype">int</span> dims, <span class="keywordtype">int</span> len);
+<a name="l00027"></a>00027 
+<a name="l00031"></a>00031     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1SpikingHistory.html#a53d9c91f36f5b09a28c8d84a899b1323" title="Advance history.">Advance</a>();
+<a name="l00032"></a>00032 
+<a name="l00037"></a>00037     <span class="keyword">virtual</span> <a class="code" href="namespacecv.html#a87332e283de569e7bb029d4f4b401dcc" title="convinience typedef for Mat of integers">cv::Mat1i</a> <a class="code" href="classelm_1_1SpikingHistory.html#aa72dbf83805397105b7bccb0fdf851b3" title="Get History.">History</a>() <span class="keyword">const</span>;
+<a name="l00038"></a>00038 
+<a name="l00042"></a>00042     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1SpikingHistory.html#a48cc58e3384f1ee988e8a808347f77b9" title="Reset history so far.">Reset</a>();
+<a name="l00043"></a>00043 
+<a name="l00047"></a>00047     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1SpikingHistory.html#a48cc58e3384f1ee988e8a808347f77b9" title="Reset history so far.">Reset</a>(<span class="keywordtype">int</span> index);
+<a name="l00048"></a>00048 
+<a name="l00054"></a>00054     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classelm_1_1SpikingHistory.html#a5284f53681b175dd637b36f1b426ebb6" title="Obtain vector indicating which indice recently fired.">Recent</a>(<span class="keywordtype">int</span> index) <span class="keyword">const</span>;
+<a name="l00055"></a>00055 
+<a name="l00060"></a>00060     <span class="keyword">virtual</span> cv::Mat <a class="code" href="classelm_1_1SpikingHistory.html#a5284f53681b175dd637b36f1b426ebb6" title="Obtain vector indicating which indice recently fired.">Recent</a>() <span class="keyword">const</span>;
+<a name="l00061"></a>00061 
+<a name="l00066"></a>00066     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1SpikingHistory.html#a051aca8c2cd11c2a67801986d87e91d8" title="update history with new set of spiking input">Update</a>(<span class="keyword">const</span> cv::Mat &amp;spike_mask);
+<a name="l00067"></a>00067 
+<a name="l00075"></a>00075     <span class="keyword">virtual</span> <a class="code" href="classelm_1_1SpikingHistory.html" title="Class for tracking spiking history.">SpikingHistory</a> <a class="code" href="classelm_1_1SpikingHistory.html#a7a37a3db3f96fe8739bf359304d0119b" title="Obtain reference of a spiking history with a column range of underlying histry.">ColRange</a>(<span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end) <span class="keyword">const</span>;
+<a name="l00076"></a>00076 
+<a name="l00077"></a>00077 <span class="keyword">protected</span>:
+<a name="l00082"></a>00082     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classelm_1_1SpikingHistory.html#aa72dbf83805397105b7bccb0fdf851b3" title="Get History.">History</a>(<span class="keyword">const</span> <a class="code" href="namespacecv.html#a87332e283de569e7bb029d4f4b401dcc" title="convinience typedef for Mat of integers">cv::Mat1i</a>&amp; h);
+<a name="l00083"></a>00083 
+<a name="l00084"></a><a class="code" href="classelm_1_1SpikingHistory.html#a6fdb136a236f42db256fd836222ad22e">00084</a>     <span class="keywordtype">int</span> <a class="code" href="classelm_1_1SpikingHistory.html#a6fdb136a236f42db256fd836222ad22e" title="history length">len_</a>;        
+<a name="l00085"></a><a class="code" href="classelm_1_1SpikingHistory.html#a9add54b7907305e81ab3133a67fde4f7">00085</a>     <span class="keywordtype">int</span> <a class="code" href="classelm_1_1SpikingHistory.html#a9add54b7907305e81ab3133a67fde4f7" title="no. of input dimensions to track">dims_</a>;       
+<a name="l00086"></a><a class="code" href="classelm_1_1SpikingHistory.html#acfc4c094faa75f0b0ffbc8b4ff68acce">00086</a>     <a class="code" href="namespacecv.html#a87332e283de569e7bb029d4f4b401dcc" title="convinience typedef for Mat of integers">cv::Mat1i</a> <a class="code" href="classelm_1_1SpikingHistory.html#acfc4c094faa75f0b0ffbc8b4ff68acce" title="input history">history_</a>;  
+<a name="l00087"></a>00087 };
+<a name="l00088"></a>00088 
+<a name="l00089"></a>00089 } <span class="comment">// namespace elm</span>
+<a name="l00090"></a>00090 
+<a name="l00091"></a>00091 <span class="preprocessor">#endif // _ELM_NEURON_SPIKINGHISTORY_H_</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="spikinghistory_8h.html">spikinghistory.h</a>      </li>
 
-    <li class="footer">Generated on Mon Jun 22 2015 15:33:25 for ELM Library by
+    <li class="footer">Generated on Mon Sep 7 2015 11:03:42 for ELM Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.6.1 </li>
    </ul>
