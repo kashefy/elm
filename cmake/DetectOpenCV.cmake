@@ -34,6 +34,10 @@ endif(DEFINED OpenCV_DIR)
 if(OpenCV_FOUND)
 
     list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${OpenCV_INCLUDE_DIRS})
+
+    list(LENGTH ${OpenCV_LIBS} OpenCV_NUM_LIBS)
+    message(STATUS "OpenCV_NUM_LIBS=${OpenCV_NUM_LIBS}")
+    message(STATUS "OpenCV_LIBS=${OpenCV_LIBS}")
     list(APPEND ${ROOT_PROJECT}_LIBS ${OpenCV_LIBS})
 
 else(OpenCV_FOUND)
