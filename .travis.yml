@@ -72,14 +72,6 @@ before_install:
   # list installed python packages
   - pip freeze
   
-    # Build OpenCV 2.4 from source
-  - travis_retry git clone https://github.com/Itseez/opencv.git $DEPS_DIR/opencv
-  - cd $DEPS_DIR/opencv
-  - git fetch && git branch -a && git checkout 2.4
-  - mkdir $OPENCV_BUILD_DIR && cd $OPENCV_BUILD_DIR
-  - cmake -DBUILD_SHARED_LIBS=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_opencv_ts=OFF -DBUILD_opencv_gpu=OFF -DBUILD_opencv_java=OFF -DBUILD_opencv_calib3d=OFF -DBUILD_opencv_stitching=OFF $DEPS_DIR/opencv
-  - make -j2 > /dev/null
-  
   # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
   
