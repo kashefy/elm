@@ -67,7 +67,7 @@ before_install:
   # Useful for debugging any issues with conda
   - conda info -a
   # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip numpy opencv=2.4.10
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip numpy nose opencv=2.4.10
   - source activate test-environment
   # list installed python packages
   - pip freeze
@@ -82,8 +82,6 @@ install:
   
   # install lcov to coveralls conversion + upload tool
   - gem install coveralls-lcov
-  #- if [ "$BUILD_TYPE" == "Coverage" ]; then travis_retry pip install nose coveralls; fi
-  - travis_retry pip install nose
   
   # HDF5
   - cd $DEPS_DIR
