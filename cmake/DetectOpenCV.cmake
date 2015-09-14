@@ -5,8 +5,8 @@
 # Defines: OpenCV_FOUND, OpenCV_INCLUDE_DIRS, OpenCV_LIBS, OpenCV_LINK_LIBRARIES
 # ----------------------------------------------------------------------------
 if(DEFINED OpenCV_DIR)
-    get_filename_component(OpenCV_DIR_TYPE ${OpenCV_DIR} EXT)
-    message(STATUS "OpenCV_DIR_EXT${OpenCV_DIR_EXT}")
+    get_filename_component(OpenCV_DIR_EXT ${OpenCV_DIR} EXT)
+    message(STATUS "OpenCV_DIR_EXT${OpenCV_DIR_EXT}...")
     if(OpenCV_DIR_EXT STREQUAL ".pc")
 
         message(STATUS "PC file ${OpenCV_DIR}")
