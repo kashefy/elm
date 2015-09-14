@@ -9,6 +9,10 @@ if(DEFINED OpenCV_DIR)
 
     if(OpenCV_DIR_EXT STREQUAL ".pc")
 
+        if(NOT EXISTS ${OpenCV_DIR})
+            message(SEND_ERROR "${OpenCV_DIR}. File does not exist.")
+        else(NOT EXISTS ${OpenCV_DIR})
+
         find_package(PkgConfig)
         pkg_check_modules(OpenCV opencv)
 
