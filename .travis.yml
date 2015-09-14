@@ -14,7 +14,7 @@ env:
   global:
     # Dependencies
     - DEPS_DIR="`readlink -f $TRAVIS_BUILD_DIR/..`"
-    - OPENCV_BUILD_DIR=$DEPS_DIR/opencv/build
+    - OPENCV_BUILD_DIR=/home/travis/miniconda/envs/test-environment/lib/pkgconfig/opencv.pc
     # TRAVIS_BUILD_DIR: The absolute path to the directory where the repository being built has been copied on the worker.
     - ELM_BUILD_DIR=$TRAVIS_BUILD_DIR/build
     # since we've set language to cpp we have to define python vars oursevles
