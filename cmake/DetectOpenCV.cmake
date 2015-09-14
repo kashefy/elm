@@ -9,6 +9,7 @@ if(DEFINED OpenCV_DIR)
 
     if(OpenCV_DIR_EXT STREQUAL ".pc")
 
+        message(STATUS "PC file ${OpenCV_DIR}")
         if(NOT EXISTS ${OpenCV_DIR})
             message(SEND_ERROR "${OpenCV_DIR}. File does not exist.")
         endif(NOT EXISTS ${OpenCV_DIR})
