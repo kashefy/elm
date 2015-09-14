@@ -14,7 +14,9 @@ env:
   global:
     # Dependencies
     - DEPS_DIR="`readlink -f $TRAVIS_BUILD_DIR/..`"
-    - OPENCV_BUILD_DIR=/home/travis/miniconda/envs/test-environment/lib/pkgconfig/opencv.pc
+    - CONDA_ENV=test-environment
+    - CONDA_ENV_PREFIX=$HOME/miniconda/envs/$CONDA_ENV
+    - OPENCV_BUILD_DIR=$CONDA_ENV_PREFIX/lib/pkgconfig/opencv.pc
     # TRAVIS_BUILD_DIR: The absolute path to the directory where the repository being built has been copied on the worker.
     - ELM_BUILD_DIR=$TRAVIS_BUILD_DIR/build
     # since we've set language to cpp we have to define python vars oursevles
@@ -60,6 +62,7 @@ before_install:
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
+  - export PKG_CONFIG_PATH=$CONDA_ENV_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   # miniconda is not always updated with conda
@@ -67,8 +70,8 @@ before_install:
   # Useful for debugging any issues with conda
   - conda info -a
   # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip numpy nose opencv=2.4.10
-  - source activate test-environment
+  - conda create -q -n $CONDA_ENV python=$TRAVIS_PYTHON_VERSION pip numpy nose opencv=2.4.10
+  - source activate $CONDA_ENV
   # list installed python packages
   - pip freeze
   
