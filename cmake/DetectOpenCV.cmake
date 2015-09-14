@@ -10,7 +10,6 @@ if(DEFINED OpenCV_DIR)
 
 else(DEFINED OpenCV_DIR)
 
-    set(OpenCV_DIR "" CACHE PATH "Root directory for OpenCV build directory." )
     find_package(OpenCV REQUIRED core highgui imgproc ml)
 
 endif(DEFINED OpenCV_DIR)
