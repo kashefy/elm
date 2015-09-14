@@ -9,10 +9,13 @@ if(DEFINED OpenCV_DIR)
     message(STATUS "OpenCV_DIR_EXT${OpenCV_DIR_EXT}...")
     if(OpenCV_DIR_EXT STREQUAL ".pc")
 
-        message(STATUS "PC file ${OpenCV_DIR}")
         if(NOT EXISTS ${OpenCV_DIR})
             message(SEND_ERROR "${OpenCV_DIR}. File does not exist.")
         endif(NOT EXISTS ${OpenCV_DIR})
+
+        message(STATUS "Prepending PKG_CONFIG_PATH with ${OpenCV_DIR}")
+        get_filename_component(OpenCV_DIR_PKG_CONFIG_PATH ${OpenCV_DIR} DIRECTORY)
+        set(ENV{PKG_CONFIG_PATH} "${OpenCV_DIR_PKG_CONFIG_PATH}:$ENV{PKG_CONFIG_PATH}" )
 
         find_package(PkgConfig)
         pkg_check_modules(OpenCV opencv)
@@ -24,7 +27,6 @@ if(DEFINED OpenCV_DIR)
     endif(OpenCV_DIR_EXT STREQUAL ".pc")
 
 else(DEFINED OpenCV_DIR)
-
     message(STATUS "OpenCV_DIR not defined")
     find_package(OpenCV REQUIRED core highgui imgproc ml)
 endif(DEFINED OpenCV_DIR)

@@ -62,7 +62,6 @@ before_install:
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
-  - export PKG_CONFIG_PATH=$CONDA_ENV_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   # miniconda is not always updated with conda
