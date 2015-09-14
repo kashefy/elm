@@ -67,7 +67,7 @@ before_install:
   # Useful for debugging any issues with conda
   - conda info -a
   # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip numpy
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip numpy opencv=2.4.10
   - source activate test-environment
   # list installed python packages
   - pip freeze
