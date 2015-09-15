@@ -15,7 +15,7 @@ if(DEFINED OpenCV_DIR)
 
         # Get parent directory of .pc file
         # GET_PARENT_DIR is a custom macro (may need include(cmake/FileSystemUtils.cmake))
-        GET_PARENT_DIR(OpenCV_DIR_PKG_CONFIG_PATH {${OpenCV_DIR})
+        GET_PARENT_DIR(OpenCV_DIR_PKG_CONFIG_PATH ${OpenCV_DIR})
 
         message(STATUS "Prepending PKG_CONFIG_PATH with ${OpenCV_DIR_PKG_CONFIG_PATH}")
         set(ENV{PKG_CONFIG_PATH} "${OpenCV_DIR_PKG_CONFIG_PATH}:$ENV{PKG_CONFIG_PATH}" )
