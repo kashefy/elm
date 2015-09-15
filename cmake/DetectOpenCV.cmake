@@ -29,6 +29,10 @@ if(DEFINED OpenCV_DIR)
         find_package(PkgConfig)
         pkg_check_modules(OpenCV opencv)
 
+
+        message(STATUS "OpenCV_prefix=${OpenCV_prefix}")
+        message(STATUS "OpenCV_PREFIX=${OpenCV_PREFIX}")
+
     else(OpenCV_DIR_EXT STREQUAL ".pc")
 
         message(STATUS "OpenCV_DIR not .pc")
