@@ -22,9 +22,9 @@ MACRO(GET_PARENT_DIR result curpath)
     if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" STREQUAL "2.8"
         AND ${CMAKE_PATCH_VERSION} LESS 12)
 
-        get_filename_component(result ${OpenCV_DIR} PATH)
+        get_filename_component(result ${curpath} PATH)
     else()
-        get_filename_component(result ${OpenCV_DIR} DIRECTORY)
+        get_filename_component(result ${curpath} DIRECTORY)
     endif()
 ENDMACRO()
 
