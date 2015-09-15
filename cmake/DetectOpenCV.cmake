@@ -17,6 +17,7 @@ if(DEFINED OpenCV_DIR)
         get_filename_component(OpenCV_DIR_PKG_CONFIG_PATH ${OpenCV_DIR} DIRECTORY)
         set(ENV{PKG_CONFIG_PATH} "${OpenCV_DIR_PKG_CONFIG_PATH}:$ENV{PKG_CONFIG_PATH}" )
 
+        message(STATUS "PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
         find_package(PkgConfig)
         pkg_check_modules(OpenCV opencv)
 
