@@ -18,7 +18,7 @@ if(DEFINED OpenCV_DIR)
         GET_PARENT_DIR(OpenCV_DIR_PKG_CONFIG_PATH ${OpenCV_DIR})
 
         message(STATUS "Prepending PKG_CONFIG_PATH with ${OpenCV_DIR_PKG_CONFIG_PATH}")
-        set(ENV{PKG_CONFIG_PATH} "${OpenCV_DIR_PKG_CONFIG_PATH}:$ENV{PKG_CONFIG_PATH}" )
+        set(ENV{PKG_CONFIG_PATH} "${OpenCV_DIR_PKG_CONFIG_PATH}:$ENV{PKG_CONFIG_PATH}")
         message(STATUS "PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
 
         find_package(PkgConfig)
@@ -26,7 +26,9 @@ if(DEFINED OpenCV_DIR)
 
         message(STATUS "OpenCV_PREFIX=${OpenCV_PREFIX}")
         message(STATUS "OpenCV_CFLAGS=${OpenCV_CFLAGS}")
-        message(STATUS "OpenCV_CFLAGS_OTHER=${OpenCV_CFLAGS_OTHER}")
+
+        message(STATUS "Prepending CFLAGS with ${OpenCV_CFLAGS}")
+        set(CMAKE_C_FLAGS "${OpenCV_CFLAGS} ${CMAKE_C_FLAGS}")
 
     else(OpenCV_DIR_EXT STREQUAL ".pc")
 

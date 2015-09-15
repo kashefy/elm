@@ -334,6 +334,9 @@ status("        include Dir.:  "   OpenCV_FOUND THEN "${OpenCV_INCLUDE_DIRS}" EL
 set(OpenCV_MODULES ${OpenCV_LIBS})
 convert_to_lib_name(OpenCV_MODULES ${OpenCV_MODULES})
 status("        modules :  "      OpenCV_FOUND THEN ${OpenCV_MODULES} ELSE "-")
+status("        extra C Flags :"  OpenCV_FOUND THEN ${OpenCV_CFLAGS} ELSE "-")
+
+        message(STATUS "Prepending CFLAGS with ${OpenCV_CFLAGS}")
 status("")
 status("    Boost:    "   Boost_FOUND THEN "${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION} (${Boost_VERSION})"  ELSE NO)
 status("        lib Dir.:  "   Boost_FOUND THEN "${Boost_LIBRARY_DIRS};${Boost_LIBRARY_DIR}" ELSE "-")
