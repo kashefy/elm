@@ -1,6 +1,7 @@
 # ----------------------------------------------------------------------------
 #  Root CMake file for modules
 # ----------------------------------------------------------------------------
+# SUBDIRLIST is a custom macro (may need include(cmake/FileSystemUtils.cmake))
 SUBDIRLIST(MODULES_LIST ${CMAKE_CURRENT_SOURCE_DIR})
 foreach(MODULE_NAME ${MODULES_LIST})
     add_subdirectory(${MODULE_NAME})
