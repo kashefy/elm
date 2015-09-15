@@ -40,8 +40,8 @@ if(DEFINED OpenCV_DIR)
         #message(STATUS "OpenCV_LIBDIR=${OpenCV_LIBDIR}")               # <XPREFIX>_LIBDIR...lib-dir of the module
 
         message(STATUS "Prepending linker flags with ${OpenCV_LDFLAGS}")
-        set(CMAKE_EXE_LINKER_FLAGS "${OpenCV_CFLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
-        set(CMAKE_MODULE_LINKER_FLAGS "${OpenCV_CFLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
+        set(CMAKE_EXE_LINKER_FLAGS "${OpenCV_LDFLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
+        set(CMAKE_MODULE_LINKER_FLAGS "${OpenCV_LDFLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
 
         list(APPEND OpenCV_LIBS ${OpenCV_LIBRARIES})
 
