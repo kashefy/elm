@@ -61,18 +61,18 @@ if(OpenCV_FOUND)
     # Define OpenCV_LIBRARY_DIR if missing
     if(NOT DEFINED OpenCV_LIBRARY_DIR)
 
-    message(STATUS "a")
+        message(STATUS "a")
         if(DEFINED OpenCV_LIBDIR AND NOT "${OpenCV_LIBDIR}" STREQUAL "")
 
-    message(STATUS "b")
+            message(STATUS "b")
             set(OpenCV_LIBRARY_DIR ${OpenCV_LIBDIR})
-        else(DEFINED OpenCV_LIBDIR)
+        else(DEFINED OpenCV_LIBDIR  AND NOT "${OpenCV_LIBDIR}" STREQUAL "")
 
     message(STATUS "c")
             # Append lib to prefix
             file(TO_CMAKE_PATH ${OpenCV_PREFIX}/lib OpenCV_LIBRARY_DIR)
     message(STATUS "OpenCV_LIBRARY_DIR=${OpenCV_LIBRARY_DIR}")
-        endif(DEFINED OpenCV_LIBDIR)
+        endif(DEFINED OpenCV_LIBDIR AND NOT "${OpenCV_LIBDIR}" STREQUAL "")
 
     endif(NOT DEFINED OpenCV_LIBRARY_DIR)
 
