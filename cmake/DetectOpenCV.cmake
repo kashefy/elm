@@ -6,8 +6,9 @@
 # ----------------------------------------------------------------------------
 set(OpenCV_REQUIRED_MODULES core highgui imgproc ml)
 if(DEFINED OpenCV_DIR)
+
     get_filename_component(OpenCV_DIR_EXT ${OpenCV_DIR} EXT)
-    message(STATUS "OpenCV_DIR_EXT${OpenCV_DIR_EXT}...")
+
     if(OpenCV_DIR_EXT STREQUAL ".pc")
 
         if(NOT EXISTS ${OpenCV_DIR})
