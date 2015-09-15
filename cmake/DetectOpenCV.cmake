@@ -24,8 +24,6 @@ if(DEFINED OpenCV_DIR)
         find_package(PkgConfig)
         pkg_check_modules(OpenCV opencv)
 
-
-        message(STATUS "OpenCV_prefix=${OpenCV_prefix}")
         message(STATUS "OpenCV_PREFIX=${OpenCV_PREFIX}")
 
     else(OpenCV_DIR_EXT STREQUAL ".pc")
@@ -46,11 +44,13 @@ if(OpenCV_FOUND)
     list(LENGTH ${OpenCV_LIBS} OpenCV_NUM_LIBS)
     message(STATUS "OpenCV_NUM_LIBS=${OpenCV_NUM_LIBS}")
     message(STATUS "OpenCV_LIBS=${OpenCV_LIBS}")
-    message(STATUS "OpenCV_Libs=${OpenCV_Lib}")
+    message(STATUS "OpenCV_Libs=${OpenCV_Libs}")
     list(APPEND ${ROOT_PROJECT}_LIBS ${OpenCV_LIBS})
 
     # Define OpenCV_LIBRARY_DIR if missing
     if(NOT DEFINED OpenCV_LIBRARY_DIR)
+        # Append lib to prefix
+        file(TO_CMAKE_PATH ${OpenCV_PREFIX}/lib OpenCV_LIBRARY_DIR)
     endif(NOT DEFINED OpenCV_LIBRARY_DIR)
 
 else(OpenCV_FOUND)
