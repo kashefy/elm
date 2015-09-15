@@ -73,7 +73,7 @@ before_install:
   - conda create -q -n $CONDA_ENV python=$TRAVIS_PYTHON_VERSION pip numpy nose opencv=2.4.10
   - source activate $CONDA_ENV
   # list installed python packages
-  - pip freeze
+  #- pip freeze
   
   # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
