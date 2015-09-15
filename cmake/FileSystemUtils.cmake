@@ -26,8 +26,7 @@ MACRO(GET_PARENT_DIR result curpath)
     else()
         get_filename_component(result_tmp ${curpath} DIRECTORY)
     endif()
-
+    # expose result to caller
     set(${result} ${result_tmp})
-    MESSAGE(STATUS "result=${result}")
 ENDMACRO()
 
