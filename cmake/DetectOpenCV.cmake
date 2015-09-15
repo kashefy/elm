@@ -23,7 +23,7 @@ if(DEFINED OpenCV_DIR)
         message(STATUS "PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
 
         find_package(PkgConfig)
-        pkg_check_modules(OpenCV opencv ${OpenCV_REQUIRED_MODULES})
+        pkg_check_modules(OpenCV opencv)
 
 #   <XPREFIX>_LIBRARIES      ... only the libraries (w/o the '-l')
 #   <XPREFIX>_LIBRARY_DIRS   ... the paths of the libraries (w/o the '-L')
@@ -53,7 +53,6 @@ if(DEFINED OpenCV_DIR)
 
     else(OpenCV_DIR_EXT STREQUAL ".pc")
 
-        message(STATUS "OpenCV_DIR not .pc")
         find_package(OpenCV REQUIRED ${OpenCV_REQUIRED_MODULES} PATHS ${OpenCV_DIR})
     endif(OpenCV_DIR_EXT STREQUAL ".pc")
 
