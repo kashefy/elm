@@ -26,5 +26,6 @@ MACRO(GET_PARENT_DIR result curpath)
     else()
         get_filename_component(result ${curpath} DIRECTORY)
     endif()
+    MESSAGE(STATUS "result=${result}")
 ENDMACRO()
 
