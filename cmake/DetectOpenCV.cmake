@@ -69,6 +69,7 @@ if(OpenCV_FOUND)
     message(STATUS "OpenCV_NUM_LIBS=${OpenCV_NUM_LIBS}")
     message(STATUS "OpenCV_LIBS=${OpenCV_LIBS}")
     message(STATUS "OpenCV_Libs=${OpenCV_Libs}")
+    message(STATUS "OpenCV_LIBRARIES=${OpenCV_LIBRARIES}")
     list(APPEND ${ROOT_PROJECT}_LIBS ${OpenCV_LIBS} ${OpenCV_LIBRARIES})
 
     # Define OpenCV_LIBRARY_DIR if missing
