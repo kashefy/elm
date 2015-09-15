@@ -19,7 +19,7 @@ env:
     - OPENCV_BUILD_DIR=$CONDA_ENV_PREFIX/lib/pkgconfig/opencv.pc
     # TRAVIS_BUILD_DIR: The absolute path to the directory where the repository being built has been copied on the worker.
     - ELM_BUILD_DIR=$TRAVIS_BUILD_DIR/build
-    # since we've set language to cpp we have to define python vars oursevles
+    # since we've set language to cpp we have to define python vars ourselves
     - TRAVIS_PYTHON_VERSION="2.7"
     # ELM build parameters
     - BUILD_TYPE=Coverage
