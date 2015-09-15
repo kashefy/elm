@@ -25,6 +25,8 @@ if(DEFINED OpenCV_DIR)
         pkg_check_modules(OpenCV opencv)
 
         message(STATUS "OpenCV_PREFIX=${OpenCV_PREFIX}")
+        message(STATUS "OpenCV_CFLAGS=${OpenCV_CFLAGS}")
+        message(STATUS "OpenCV_CFLAGS_OTHER=${OpenCV_CFLAGS_OTHER}")
 
     else(OpenCV_DIR_EXT STREQUAL ".pc")
 
