@@ -22,10 +22,12 @@ MACRO(GET_PARENT_DIR result curpath)
     if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" STREQUAL "2.8"
         AND ${CMAKE_PATCH_VERSION} LESS 12)
 
-        get_filename_component(result ${curpath} PATH)
+        get_filename_component(result_tmp ${curpath} PATH)
     else()
-        get_filename_component(result ${curpath} DIRECTORY)
+        get_filename_component(result_tmp ${curpath} DIRECTORY)
     endif()
+
+    set(${result} ${result_tmp})
     MESSAGE(STATUS "result=${result}")
 ENDMACRO()
 
