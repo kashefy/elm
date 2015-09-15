@@ -14,13 +14,8 @@ if(DEFINED OpenCV_DIR)
         endif(NOT EXISTS ${OpenCV_DIR})
 
         # Get parent directory of .pc file
-        if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" STREQUAL "2.8"
-            AND ${CMAKE_PATCH_VERSION} LESS 12)
-
-            get_filename_component(OpenCV_DIR_PKG_CONFIG_PATH ${OpenCV_DIR} PATH)
-        else()
-            get_filename_component(OpenCV_DIR_PKG_CONFIG_PATH ${OpenCV_DIR} DIRECTORY)
-        endif()
+        # GET_PARENT_DIR is a custom macro (may need include(cmake/FileSystemUtils.cmake))
+        GET_PARENT_DIR(OpenCV_DIR_PKG_CONFIG_PATH {${OpenCV_DIR})
 
         message(STATUS "Prepending PKG_CONFIG_PATH with ${OpenCV_DIR_PKG_CONFIG_PATH}")
         set(ENV{PKG_CONFIG_PATH} "${OpenCV_DIR_PKG_CONFIG_PATH}:$ENV{PKG_CONFIG_PATH}" )
@@ -53,6 +48,10 @@ if(OpenCV_FOUND)
     message(STATUS "OpenCV_LIBS=${OpenCV_LIBS}")
     message(STATUS "OpenCV_Libs=${OpenCV_Lib}")
     list(APPEND ${ROOT_PROJECT}_LIBS ${OpenCV_LIBS})
+
+    # Define OpenCV_LIBRARY_DIR if missing
+    if(NOT DEFINED OpenCV_LIBRARY_DIR)
+    endif(NOT DEFINED OpenCV_LIBRARY_DIR)
 
 else(OpenCV_FOUND)
     message(SEND_ERROR "Failed to find OpenCV. Double check that \"OpenCV_DIR\" points to the root of an OpenCV build directory.")

@@ -12,3 +12,19 @@ MACRO(SUBDIRLIST result curdir)
   ENDFOREACH()
   SET(${result} ${dirlist})
 ENDMACRO()
+
+# ----------------------------------------------------------------------------
+# Custom CMake Macro to get parent directory and support CMake version before and after 2.8.12
+# Info: http://stackoverflow.com/questions/7035734/cmake-parent-directory
+# ----------------------------------------------------------------------------
+MACRO(GET_PARENT_DIR result curpath)
+    # Get parent directory of .pc file
+    if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" STREQUAL "2.8"
+        AND ${CMAKE_PATCH_VERSION} LESS 12)
+
+        get_filename_component(result ${OpenCV_DIR} PATH)
+    else()
+        get_filename_component(result ${OpenCV_DIR} DIRECTORY)
+    endif()
+ENDMACRO()
+
