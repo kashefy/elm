@@ -51,6 +51,20 @@ if(DEFINED OpenCV_DIR)
         message(STATUS "Prepending CFLAGS with ${OpenCV_CFLAGS}")
         set(CMAKE_C_FLAGS "${OpenCV_CFLAGS} ${CMAKE_C_FLAGS}")
 
+        #message(STATUS "OpenCV_LIBS=${OpenCV_LIBS}")
+        #message(STATUS "OpenCV_Libs=${OpenCV_Libs}")
+        #message(STATUS "OpenCV_LIBRARIES=${OpenCV_LIBRARIES}")
+        #message(STATUS "OpenCV_LIBRARY_DIRS=${OpenCV_LIBRARY_DIRS}")
+        #message(STATUS "OpenCV_LDFLAGS=${OpenCV_LDFLAGS}")
+        #message(STATUS "OpenCV_LDFLAGS_OTHER=${OpenCV_LDFLAGS_OTHER}")
+        #message(STATUS "OpenCV_LIBDIR=${OpenCV_LIBDIR}")
+
+        message(STATUS "Prepending linker flags with ${OpenCV_LDFLAGS}")
+        set(CMAKE_EXE_LINKER_FLAGS "${OpenCV_CFLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
+        set(CMAKE_MODULE_LINKER_FLAGS "${OpenCV_CFLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
+
+        list(APPEND OpenCV_LIBS ${OpenCV_LIBRARIES})
+
     else(OpenCV_DIR_EXT STREQUAL ".pc")
 
         find_package(OpenCV REQUIRED ${OpenCV_REQUIRED_MODULES} PATHS ${OpenCV_DIR})
@@ -64,17 +78,7 @@ endif(DEFINED OpenCV_DIR)
 if(OpenCV_FOUND)
 
     list(APPEND ${ROOT_PROJECT}_INCLUDE_DIRS ${OpenCV_INCLUDE_DIRS})
-
-    list(LENGTH ${OpenCV_LIBS} OpenCV_NUM_LIBS)
-    message(STATUS "OpenCV_NUM_LIBS=${OpenCV_NUM_LIBS}")
-    message(STATUS "OpenCV_LIBS=${OpenCV_LIBS}")
-    message(STATUS "OpenCV_Libs=${OpenCV_Libs}")
-    message(STATUS "OpenCV_LIBRARIES=${OpenCV_LIBRARIES}")
-    message(STATUS "OpenCV_LIBRARY_DIRS=${OpenCV_LIBRARY_DIRS}")
-    message(STATUS "OpenCV_LDFLAGS=${OpenCV_LDFLAGS}")
-    message(STATUS "OpenCV_LDFLAGS_OTHER=${OpenCV_LDFLAGS_OTHER}")
-    message(STATUS "OpenCV_LIBDIR=${OpenCV_LIBDIR}")
-    list(APPEND ${ROOT_PROJECT}_LIBS ${OpenCV_LIBS} ${OpenCV_LIBRARIES})
+    list(APPEND ${ROOT_PROJECT}_LIBS ${OpenCV_LIBS})
 
     # Define OpenCV_LIBRARY_DIR if missing
     if(NOT DEFINED OpenCV_LIBRARY_DIR)
