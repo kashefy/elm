@@ -310,6 +310,7 @@ status("    C Flags:\t\t${CMAKE_C_FLAGS}")
 status("    C Flags: (${CMAKE_BUILD_TYPE})\t${CMAKE_C_FLAGS_${BUILD_TYPE_UPPER}}")
 status("    C++ Flags:\t\t${CMAKE_CXX_FLAGS}")
 status("    C++ Flags (${CMAKE_BUILD_TYPE}):\t${CMAKE_CXX_FLAGS_${BUILD_TYPE_UPPER}}")
+status("    Linking:\t" BUILD_SHARED_LIBS THEN "shared" ELSE "static")
 
 status("")
 status("Targets:")
