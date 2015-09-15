@@ -24,14 +24,14 @@ if(DEFINED OpenCV_DIR)
 
         message(STATUS "Prepending PKG_CONFIG_PATH with ${OpenCV_DIR_PKG_CONFIG_PATH}")
         set(ENV{PKG_CONFIG_PATH} "${OpenCV_DIR_PKG_CONFIG_PATH}:$ENV{PKG_CONFIG_PATH}" )
-
         message(STATUS "PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
+
         find_package(PkgConfig)
         pkg_check_modules(OpenCV opencv)
 
     else(OpenCV_DIR_EXT STREQUAL ".pc")
 
-    message(STATUS "OpenCV_DIR not .pc")
+        message(STATUS "OpenCV_DIR not .pc")
         find_package(OpenCV REQUIRED core highgui imgproc ml PATHS ${OpenCV_DIR})
     endif(OpenCV_DIR_EXT STREQUAL ".pc")
 
@@ -47,6 +47,7 @@ if(OpenCV_FOUND)
     list(LENGTH ${OpenCV_LIBS} OpenCV_NUM_LIBS)
     message(STATUS "OpenCV_NUM_LIBS=${OpenCV_NUM_LIBS}")
     message(STATUS "OpenCV_LIBS=${OpenCV_LIBS}")
+    message(STATUS "OpenCV_Libs=${OpenCV_Lib}")
     list(APPEND ${ROOT_PROJECT}_LIBS ${OpenCV_LIBS})
 
 else(OpenCV_FOUND)
