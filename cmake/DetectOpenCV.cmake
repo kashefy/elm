@@ -13,8 +13,16 @@ if(DEFINED OpenCV_DIR)
             message(SEND_ERROR "${OpenCV_DIR}. File does not exist.")
         endif(NOT EXISTS ${OpenCV_DIR})
 
-        message(STATUS "Prepending PKG_CONFIG_PATH with ${OpenCV_DIR}")
-        get_filename_component(OpenCV_DIR_PKG_CONFIG_PATH ${OpenCV_DIR} DIRECTORY)
+        # Get parent directory of .pc file
+        if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" STREQUAL "2.8"
+            AND ${CMAKE_PATCH_VERSION} LESS 12)
+
+            get_filename_component(OpenCV_DIR_PKG_CONFIG_PATH ${OpenCV_DIR} PATH)
+        else()
+            get_filename_component(OpenCV_DIR_PKG_CONFIG_PATH ${OpenCV_DIR} DIRECTORY)
+        endif()
+
+        message(STATUS "Prepending PKG_CONFIG_PATH with ${OpenCV_DIR_PKG_CONFIG_PATH}")
         set(ENV{PKG_CONFIG_PATH} "${OpenCV_DIR_PKG_CONFIG_PATH}:$ENV{PKG_CONFIG_PATH}" )
 
         message(STATUS "PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH}")
