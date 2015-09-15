@@ -25,39 +25,18 @@ if(DEFINED OpenCV_DIR)
         find_package(PkgConfig)
         pkg_check_modules(OpenCV opencv)
 
-#   <XPREFIX>_LIBRARIES      ... only the libraries (w/o the '-l')
-#   <XPREFIX>_LIBRARY_DIRS   ... the paths of the libraries (w/o the '-L')
-#   <XPREFIX>_LDFLAGS        ... all required linker flags
-#   <XPREFIX>_LDFLAGS_OTHER  ... all other linker flags
-#   <XPREFIX>_INCLUDE_DIRS   ... the '-I' preprocessor flags (w/o the '-I')
-#   <XPREFIX>_CFLAGS         ... all required cflags
-#   <XPREFIX>_CFLAGS_OTHER   ... the other compiler flags
-#
-#   <XPREFIX> = <PREFIX>        for common case
-#   <XPREFIX> = <PREFIX>_STATIC for static linking
-#
-# There are some special variables whose prefix depends on the count
-# of given modules. When there is only one module, <PREFIX> stays
-# unchanged. When there are multiple modules, the prefix will be
-# changed to <PREFIX>_<MODNAME>:
-#   <XPREFIX>_VERSION    ... version of the module
-#   <XPREFIX>_PREFIX     ... prefix-directory of the module
-#   <XPREFIX>_INCLUDEDIR ... include-dir of the module
-#   <XPREFIX>_LIBDIR     ... lib-dir of the module
-
         message(STATUS "OpenCV_PREFIX=${OpenCV_PREFIX}")
-        message(STATUS "OpenCV_CFLAGS=${OpenCV_CFLAGS}")
 
         message(STATUS "Prepending CFLAGS with ${OpenCV_CFLAGS}")
         set(CMAKE_C_FLAGS "${OpenCV_CFLAGS} ${CMAKE_C_FLAGS}")
 
         #message(STATUS "OpenCV_LIBS=${OpenCV_LIBS}")
         #message(STATUS "OpenCV_Libs=${OpenCV_Libs}")
-        #message(STATUS "OpenCV_LIBRARIES=${OpenCV_LIBRARIES}")
-        #message(STATUS "OpenCV_LIBRARY_DIRS=${OpenCV_LIBRARY_DIRS}")
-        #message(STATUS "OpenCV_LDFLAGS=${OpenCV_LDFLAGS}")
-        #message(STATUS "OpenCV_LDFLAGS_OTHER=${OpenCV_LDFLAGS_OTHER}")
-        #message(STATUS "OpenCV_LIBDIR=${OpenCV_LIBDIR}")
+        #message(STATUS "OpenCV_LIBRARIES=${OpenCV_LIBRARIES}")         # <XPREFIX>_LIBRARIES...only the libraries (w/o the '-l')
+        #message(STATUS "OpenCV_LIBRARY_DIRS=${OpenCV_LIBRARY_DIRS}")   # <XPREFIX>_LIBRARY_DIRS...the paths of the libraries (w/o the '-L')
+        #message(STATUS "OpenCV_LDFLAGS=${OpenCV_LDFLAGS}")             # <XPREFIX>_LDFLAGS...all required linker flags
+        #message(STATUS "OpenCV_LDFLAGS_OTHER=${OpenCV_LDFLAGS_OTHER}") # <XPREFIX>_LDFLAGS_OTHER...all other linker flags
+        #message(STATUS "OpenCV_LIBDIR=${OpenCV_LIBDIR}")               # <XPREFIX>_LIBDIR...lib-dir of the module
 
         message(STATUS "Prepending linker flags with ${OpenCV_LDFLAGS}")
         set(CMAKE_EXE_LINKER_FLAGS "${OpenCV_CFLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
@@ -66,7 +45,6 @@ if(DEFINED OpenCV_DIR)
         list(APPEND OpenCV_LIBS ${OpenCV_LIBRARIES})
 
     else(OpenCV_DIR_EXT STREQUAL ".pc")
-
         find_package(OpenCV REQUIRED ${OpenCV_REQUIRED_MODULES} PATHS ${OpenCV_DIR})
     endif(OpenCV_DIR_EXT STREQUAL ".pc")
 
@@ -84,7 +62,7 @@ if(OpenCV_FOUND)
     if(NOT DEFINED OpenCV_LIBRARY_DIR)
 
     message(STATUS "a")
-        if(DEFINED OpenCV_LIBDIR)
+        if(DEFINED OpenCV_LIBDIR AND NOT "${OpenCV_LIBDIR}" STREQUAL "")
 
     message(STATUS "b")
             set(OpenCV_LIBRARY_DIR ${OpenCV_LIBDIR})
