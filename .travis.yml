@@ -131,7 +131,7 @@ before_script:
       export EXTRA_BUILD_PARAMS="-DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 $EXTRA_BUILD_PARAMS";
     fi
   - if [ "$WITH_PCL" == "ON" ]; then
-      export EXTRA_BUILD_PARAMS="-DCMAKE_EXE_LINKER_FLAGS="-lssl" -DCMAKE_MODULE_LINKER_FLAGS="-lssl" $EXTRA_BUILD_PARAMS";
+      export EXTRA_BUILD_PARAMS="-DCMAKE_EXE_LINKER_FLAGS="-lssl -lcrypto" -DCMAKE_MODULE_LINKER_FLAGS="-lssl -lcrypto" $EXTRA_BUILD_PARAMS";
     fi
   - echo $EXTRA_BUILD_PARAMS
   - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="-fPIC --param ggc-min-expand=3 --param ggc-min-heapsize=5120" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_MATIO=$WITH_MATIO -DBUILD_python=ON -DPYTHON_LIBRARY=$CONDA_ENV_PREFIX/lib/libpython2.7.so -DWITH_PCL=$WITH_PCL $EXTRA_BUILD_PARAMS $TRAVIS_BUILD_DIR;
@@ -139,7 +139,7 @@ before_script:
     
 script:
   - cd $ELM_BUILD_DIR
-  - travis_retry make -j2
+  - travis_retry make VERBOSE=1
   # run unit tests
   - if [ "$BUILD_TYPE" == "Coverage" ]; then
       make elm_unittests_coverage;
