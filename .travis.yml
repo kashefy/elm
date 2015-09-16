@@ -65,8 +65,8 @@ before_install:
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
-  - export LD_LIBRARY_PATH="$HOME/miniconda/lib:$LD_LIBRARY_PATH"
-  - export C_INCLUDE_PATH="$HOME/miniconda/include:$C_INCLUDE_PATH"
+  - export LD_LIBRARY_PATH="$CONDA_ENV_PREFIX/lib:$LD_LIBRARY_PATH"
+  - export C_INCLUDE_PATH="$CONDA_ENV_PREFIX/lib/include:$C_INCLUDE_PATH"
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   # miniconda is not always updated with conda
@@ -119,9 +119,9 @@ before_script:
   - mkdir -p $ELM_BUILD_DIR && cd $ELM_BUILD_DIR
   # PCL has little support for C++11, same for boost < 1.48
   - if [ "$WITH_MATIO" == "ON" ]; then
-      cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="-fPIC --param ggc-min-expand=3 --param ggc-min-heapsize=5120" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 -DBUILD_python=ON $TRAVIS_BUILD_DIR;
+      cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="-fPIC --param ggc-min-expand=3 --param ggc-min-heapsize=5120" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_MATIO=ON -DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 -DBUILD_python=ON -DPYTHON_LIBRARY=$CONDA_ENV_PREFIX/lib/libpython2.7.so $TRAVIS_BUILD_DIR;
     else
-      cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="-fPIC --param ggc-min-expand=3 --param ggc-min-heapsize=5120" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_MATIO=OFF -DBUILD_python=ON $TRAVIS_BUILD_DIR;
+      cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="-fPIC --param ggc-min-expand=3 --param ggc-min-heapsize=5120" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_MATIO=OFF -DBUILD_python=ON -DPYTHON_LIBRARY=$CONDA_ENV_PREFIX/lib/libpython2.7.so $TRAVIS_BUILD_DIR;
     fi
     
 script:
