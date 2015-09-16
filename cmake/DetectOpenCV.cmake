@@ -42,11 +42,12 @@ if(DEFINED OpenCV_DIR)
         #message(STATUS "Prepending linker flags with ${OpenCV_LDFLAGS}")
         #set(CMAKE_EXE_LINKER_FLAGS "${OpenCV_LDFLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
         #set(CMAKE_MODULE_LINKER_FLAGS "${OpenCV_LDFLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
-        foreach(LDFLAGS_ITEM ${OpenCV_LDFLAGS})
-            if(LDFLAGS_ITEM MATCHES ".so$")
 
-                message(STATUS "is .so ${LDFLAGS_ITEM}")
-            endif(LDFLAGS_ITEM MATCHES ".so$")
+        # loop over opencv ldflags and add libs missing in OpenCV_LIBS
+        foreach(__LDFLAGS_ITEM ${OpenCV_LDFLAGS})
+            if(__LDFLAGS_ITEM MATCHES "(.so$)|(.a$)" AND NOT __LDFLAGS_ITEM MATCHES "^-l")
+                list(APPEND OpenCV_LIBS ${__LDFLAGS_ITEM})
+            endif()
         endforeach()
 
         list(APPEND OpenCV_LIBS ${OpenCV_LIBRARIES})
