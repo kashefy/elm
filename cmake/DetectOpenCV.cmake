@@ -44,10 +44,24 @@ if(DEFINED OpenCV_DIR)
         #set(CMAKE_MODULE_LINKER_FLAGS "${OpenCV_LDFLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
 
         # loop over opencv ldflags and add libs missing in OpenCV_LIBS
+        set(__OpenCV_LIBS_MISSING "")
         foreach(__LDFLAGS_ITEM ${OpenCV_LDFLAGS})
             if(__LDFLAGS_ITEM MATCHES "(.so$)|(.a$)" AND NOT __LDFLAGS_ITEM MATCHES "^-l")
-                list(APPEND OpenCV_LIBS ${__LDFLAGS_ITEM})
+                list(APPEND __OpenCV_LIBS_MISSING ${__LDFLAGS_ITEM})
             endif()
+        endforeach()
+
+            message(STATUS "__OpenCV_LIBS_MISSING=${__OpenCV_LIBS_MISSING}")
+        foreach(__OpenCV_LIBS_MISSING_ITEM ${__OpenCV_LIBS_MISSING})
+
+            convert_to_lib_name(__OpenCV_LIBS_MISSING_ITEM_MODULE ${__OpenCV_LIBS_MISSING_ITEM})
+
+            message(STATUS "__OpenCV_LIBS_MISSING_ITEM_MODULE=${__OpenCV_LIBS_MISSING_ITEM_MODULE}")
+            list(FIND OpenCV_REQUIRED_MODULES ${__OpenCV_LIBS_MISSING_ITEM_MODULE} __MODULE_FOUND)
+            if(NOT ${__MODULE_FOUND} EQUAL -1)
+
+                list(APPEND OpenCV_LIBS ${__OpenCV_LIBS_MISSING_ITEM})
+            endif(${__MODULE_FOUND} EQUAL -1)
         endforeach()
 
         list(APPEND OpenCV_LIBS ${OpenCV_LIBRARIES})
