@@ -66,23 +66,12 @@ before_install:
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
-  - export LD_LIBRARY_PATH="$HOME/miniconda/lib:$LD_LIBRARY_PATH"
-  - export C_INCLUDE_PATH="$HOME/miniconda/include:$C_INCLUDE_PATH"
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   # miniconda is not always updated with conda
   - conda update -q conda
   # Useful for debugging any issues with conda
   - conda info -a
-  # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n $CONDA_ENV python=$TRAVIS_PYTHON_VERSION pip numpy nose opencv=2.4.10
-  - export LD_LIBRARY_PATH="$CONDA_ENV_PREFIX/lib:$LD_LIBRARY_PATH"
-  - export C_INCLUDE_PATH="$CONDA_ENV_PREFIX/include:$C_INCLUDE_PATH"
-  - echo $C_INCLUDE_PATH
-  - ls $CONDA_ENV_PREFIX/include
-  - source activate $CONDA_ENV
-  # list installed python packages
-  #- pip freeze
   
   # back to ELM source directory
   - cd $TRAVIS_BUILD_DIR
@@ -91,6 +80,23 @@ install:
   # lcov: for test coverage reporting, building with coverage info
   # gfortran fort77 are for HDF5, MATIO support
   - travis_retry sudo apt-get install -y -qq libboost-system-dev libboost-filesystem-dev libboost-graph-dev libboost-serialization-dev libboost-thread-dev libboost-python-dev libpcl-all lcov gfortran fort77 doxygen graphviz > /dev/null
+  
+  # conda packages
+  # Replace dep1 dep2 ... with your dependencies
+  - conda create -q -n $CONDA_ENV python=$TRAVIS_PYTHON_VERSION pip numpy nose opencv=2.4.10
+  
+  - more $CONDA_ENV_PREFIX/lib/pkg-config/opencv.pc
+  
+  - export LD_LIBRARY_PATH="$HOME/miniconda/lib:$LD_LIBRARY_PATH"
+  - export C_INCLUDE_PATH="$HOME/miniconda/include:$C_INCLUDE_PATH"
+  
+  - export LD_LIBRARY_PATH="$CONDA_ENV_PREFIX/lib:$LD_LIBRARY_PATH"
+  - export C_INCLUDE_PATH="$CONDA_ENV_PREFIX/include:$C_INCLUDE_PATH"
+  - echo $C_INCLUDE_PATH
+  - ls $CONDA_ENV_PREFIX/include
+  - source activate $CONDA_ENV
+  # list installed python packages
+  #- pip freeze
   
   # install lcov to coveralls conversion + upload tool
   - gem install coveralls-lcov
