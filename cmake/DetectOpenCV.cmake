@@ -56,6 +56,8 @@ if(DEFINED OpenCV_DIR)
 
             convert_to_lib_name(__OpenCV_LIBS_MISSING_ITEM_MODULE ${__OpenCV_LIBS_MISSING_ITEM})
 
+            string(REGEX REPLACE "opencv_" "" __OpenCV_LIBS_MISSING_ITEM_MODULE ${__OpenCV_LIBS_MISSING_ITEM_MODULE})
+
             message(STATUS "__OpenCV_LIBS_MISSING_ITEM_MODULE=${__OpenCV_LIBS_MISSING_ITEM_MODULE}")
             list(FIND OpenCV_REQUIRED_MODULES ${__OpenCV_LIBS_MISSING_ITEM_MODULE} __MODULE_FOUND)
             if(NOT ${__MODULE_FOUND} EQUAL -1)
