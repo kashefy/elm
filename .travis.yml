@@ -65,8 +65,8 @@ before_install:
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
-  - export LD_LIBRARY_PATH="$CONDA_ENV_PREFIX/lib:$LD_LIBRARY_PATH"
-  - export C_INCLUDE_PATH="$CONDA_ENV_PREFIX/lib/include:$C_INCLUDE_PATH"
+  - export LD_LIBRARY_PATH="$HOME/miniconda/lib:$LD_LIBRARY_PATH"
+  - export C_INCLUDE_PATH="$HOME/miniconda/include:$C_INCLUDE_PATH"
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   # miniconda is not always updated with conda
@@ -75,6 +75,8 @@ before_install:
   - conda info -a
   # Replace dep1 dep2 ... with your dependencies
   - conda create -q -n $CONDA_ENV python=$TRAVIS_PYTHON_VERSION pip numpy nose opencv=2.4.10
+  - export LD_LIBRARY_PATH="$CONDA_ENV_PREFIX/lib:$LD_LIBRARY_PATH"
+  - export C_INCLUDE_PATH="$CONDA_ENV_PREFIX/include:$C_INCLUDE_PATH"
   - source activate $CONDA_ENV
   # list installed python packages
   #- pip freeze
