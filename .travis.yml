@@ -43,14 +43,13 @@ before_install:
   - make > /dev/null
   - cd $DEPS_DIR
   
-  - if [ "$WITH_MATIO" == "ON" ]; then
-   
+  - |
+    if [ "$WITH_MATIO" == "ON" ]; then
       # get HDF5, build after apt-get installation
-      travis_retry wget --quiet https://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.14/src/hdf5-1.8.14.tar.gz
+      travis_retry wget --quiet https://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.14/src/hdf5-1.8.14.tar.gz;
       # get MATIO, build after apt-get installation
-      travis_retry wget --quiet http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz
+      travis_retry wget --quiet http://downloads.sourceforge.net/project/matio/matio/1.5.2/matio-1.5.2.tar.gz;
     fi
-  
   # for PCL
   - sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y
   - travis_retry sudo apt-get update -qq
@@ -58,7 +57,8 @@ before_install:
   # Setup anaconda for python bindings
   - echo "Python $TRAVIS_PYTHON_VERSION"
   # CREDIT: https://github.com/SmokinCaterpillar/pypet/blob/master/.travis.yml
-  - if [[ $TRAVIS_PYTHON_VERSION == 2.* ]]; then
+  - |
+    if [[ $TRAVIS_PYTHON_VERSION == 2.* ]]; then
       travis_retry wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
     else
       travis_retry wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
@@ -88,25 +88,25 @@ install:
   # install lcov to coveralls conversion + upload tool
   - gem install coveralls-lcov
   
-  - if [ "$WITH_MATIO" == "ON" ]; then
-   
+  - |
+    if [ "$WITH_MATIO" == "ON" ]; then
       # HDF5
-      cd $DEPS_DIR
-      tar -xzf hdf5-1.8.14.tar.gz
-      cd hdf5-1.8.14
-      mkdir $DEPS_DIR/hdf5
-      ./configure --prefix=$DEPS_DIR/hdf5 -q --enable-fortran --enable-fortran2003 --with-default-api-version=v18 --enable-silent-rules CXXFLAGS="--param ggc-min-expand=3 --param ggc-min-heapsize=5120 -w" CFLAGS="--param ggc-min-expand=3 --param ggc-min-heapsize=5120 -w" > /dev/null
-      make -j2 #> /dev/null 2>&1
-      make install > /dev/null 2>&1
+      cd $DEPS_DIR;
+      tar -xzf hdf5-1.8.14.tar.gz;
+      cd hdf5-1.8.14;
+      mkdir $DEPS_DIR/hdf5;
+      ./configure --prefix=$DEPS_DIR/hdf5 -q --enable-fortran --enable-fortran2003 --with-default-api-version=v18 --enable-silent-rules CXXFLAGS="--param ggc-min-expand=3 --param ggc-min-heapsize=5120 -w" CFLAGS="--param ggc-min-expand=3 --param ggc-min-heapsize=5120 -w" > /dev/null;
+      make -j2 #> /dev/null 2>&1;
+      make install > /dev/null 2>&1;
       
       # MATIO
-      cd $DEPS_DIR
-      tar -xzf matio-1.5.2.tar.gz
-      cd matio-1.5.2
-      mkdir $DEPS_DIR/matio
-      ./configure --prefix=$DEPS_DIR/matio --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=$DEPS_DIR/hdf5 > /dev/null
-      make -j2 > /dev/null 2>&1
-      make install > /dev/null 2>&1
+      cd $DEPS_DIR;
+      tar -xzf matio-1.5.2.tar.gz;
+      cd matio-1.5.2;
+      mkdir $DEPS_DIR/matio;
+      ./configure --prefix=$DEPS_DIR/matio --enable-mat73=yes --with-default-file-ver=7.3 --with-hdf5=$DEPS_DIR/hdf5 > /dev/null;
+      make -j2 > /dev/null 2>&1;
+      make install > /dev/null 2>&1;
     fi
     
   # back to ELM source directory
