@@ -83,7 +83,7 @@ install:
   
   # conda packages
   # Replace dep1 dep2 ... with your dependencies
-  # Installing opencv via conda is faster
+  # Installing opencv via conda is faster but messier (prepend search paths, higher risk of linking issues)
   - conda create -q -n $CONDA_ENV python=$TRAVIS_PYTHON_VERSION pip numpy nose opencv=2.4.10
   
   - export LD_LIBRARY_PATH="$CONDA_ENV_PREFIX/lib:$LD_LIBRARY_PATH"
@@ -132,7 +132,7 @@ before_script:
     
 script:
   - cd $ELM_BUILD_DIR
-  - travis_retry make VERBOSE=1
+  - travis_retry make -j2
   # run unit tests
   - if [ "$BUILD_TYPE" == "Coverage" ]; then
       make elm_unittests_coverage;
