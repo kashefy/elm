@@ -16,7 +16,7 @@ if(GTEST_FOUND)
         if(BUILD_SHARED_LIBS)
             get_filename_component(__GTEST_LIB_EXT ${GTEST_LIBRARIES} EXT)
 
-            if(NOT ${__GTEST_LIB_EXT} EQUAL ${CMAKE_SHARED_LIBRARY_SUFFIX})
+            if(NOT ${__GTEST_LIB_EXT} MATCHES ${CMAKE_SHARED_LIBRARY_SUFFIX})
                 message(WARNING "Linking shared build to static gtest may lead to testrunner crash due to memory leaks.")
             endif()
 
