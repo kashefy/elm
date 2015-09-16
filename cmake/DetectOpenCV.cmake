@@ -61,7 +61,7 @@ if(DEFINED OpenCV_DIR)
             if(NOT ${__MODULE_FOUND} EQUAL -1)
 
                 list(APPEND OpenCV_LIBS ${__OpenCV_LIBS_MISSING_ITEM})
-            endif(${__MODULE_FOUND} EQUAL -1)
+            endif()
         endforeach()
 
         list(APPEND OpenCV_LIBS ${OpenCV_LIBRARIES})
