@@ -65,6 +65,8 @@ before_install:
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
+  - export LD_LIBRARY_PATH="$HOME/miniconda/lib:$LD_LIBRARY_PATH"
+  - export C_INCLUDE_PATH="$HOME/miniconda/include:$C_INCLUDE_PATH"
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   # miniconda is not always updated with conda
