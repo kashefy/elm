@@ -78,6 +78,8 @@ before_install:
   - conda create -q -n $CONDA_ENV python=$TRAVIS_PYTHON_VERSION pip numpy nose opencv=2.4.10
   - export LD_LIBRARY_PATH="$CONDA_ENV_PREFIX/lib:$LD_LIBRARY_PATH"
   - export C_INCLUDE_PATH="$CONDA_ENV_PREFIX/include:$C_INCLUDE_PATH"
+  - echo $C_INCLUDE_PATH
+  - ls $CONDA_ENV_PREFIX/include
   - source activate $CONDA_ENV
   # list installed python packages
   #- pip freeze
