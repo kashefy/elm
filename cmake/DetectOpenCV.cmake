@@ -39,9 +39,15 @@ if(DEFINED OpenCV_DIR)
         #message(STATUS "OpenCV_LDFLAGS_OTHER=${OpenCV_LDFLAGS_OTHER}") # <XPREFIX>_LDFLAGS_OTHER...all other linker flags
         #message(STATUS "OpenCV_LIBDIR=${OpenCV_LIBDIR}")               # <XPREFIX>_LIBDIR...lib-dir of the module
 
-        message(STATUS "Prepending linker flags with ${OpenCV_LDFLAGS}")
-        set(CMAKE_EXE_LINKER_FLAGS "${OpenCV_LDFLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
-        set(CMAKE_MODULE_LINKER_FLAGS "${OpenCV_LDFLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
+        #message(STATUS "Prepending linker flags with ${OpenCV_LDFLAGS}")
+        #set(CMAKE_EXE_LINKER_FLAGS "${OpenCV_LDFLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
+        #set(CMAKE_MODULE_LINKER_FLAGS "${OpenCV_LDFLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
+        foreach(LDFLAGS_ITEM ${OpenCV_LDFLAGS})
+            if(LDFLAGS_ITEM MATCHES ".so$")
+
+                message(STATUS "is .so ${LDFLAGS_ITEM}")
+            endif(LDFLAGS_ITEM MATCHES ".so$")
+        endforeach()
 
         list(APPEND OpenCV_LIBS ${OpenCV_LIBRARIES})
 
