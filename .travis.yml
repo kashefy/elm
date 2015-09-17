@@ -127,17 +127,17 @@ before_script:
   - mkdir -p $ELM_BUILD_DIR && cd $ELM_BUILD_DIR
   # PCL has little support for C++11, same for boost < 1.48
   - export EXTRA_BUILD_PARAMS=""
+  # make gcc's memory usage more economical, not to run out of memory on travis VMs
   - export EXTRA_CXX_FLAGS="-fPIC --param ggc-min-expand=3 --param ggc-min-heapsize=5120"
   - if [ "$WITH_MATIO" == "ON" ]; then
       export EXTRA_BUILD_PARAMS="-DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 $EXTRA_BUILD_PARAMS";
     fi
   - if [ "$WITH_PCL" == "ON" ]; then
+      # eplxicit linking to ssl and crypto libs to avoid linking errors, related to conda's opencv build and conda's lib path
       export EXTRA_CXX_FLAGS="-lssl -lcrypto $EXTRA_CXX_FLAGS";
     fi
   - echo $EXTRA_BUILD_PARAMS
   - echo $EXTRA_CXX_FLAGS
-  - echo cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="$EXTRA_CXX_FLAGS" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_MATIO=$WITH_MATIO -DBUILD_python=ON -DPYTHON_LIBRARY=$CONDA_ENV_PREFIX/lib/libpython2.7.so -DWITH_PCL=$WITH_PCL $EXTRA_BUILD_PARAMS $TRAVIS_BUILD_DIR;
-   
   - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="$EXTRA_CXX_FLAGS" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_MATIO=$WITH_MATIO -DBUILD_python=ON -DPYTHON_LIBRARY=$CONDA_ENV_PREFIX/lib/libpython2.7.so -DWITH_PCL=$WITH_PCL $EXTRA_BUILD_PARAMS $TRAVIS_BUILD_DIR;
     
     
