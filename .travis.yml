@@ -16,8 +16,8 @@ env:
     - DEPS_DIR="`readlink -f $TRAVIS_BUILD_DIR/..`"
     - CONDA_ENV=test-environment
     - CONDA_ENV_PREFIX=$HOME/miniconda/envs/$CONDA_ENV
-    - OPENCV_BUILD_DIR=$CONDA_ENV_PREFIX/lib/pkgconfig/opencv.pc
     # TRAVIS_BUILD_DIR: The absolute path to the directory where the repository being built has been copied on the worker.
+tra    - OPENCV_BUILD_DIR=$CONDA_ENV_PREFIX/lib/pkgconfig/opencv.pc
     - ELM_BUILD_DIR=$TRAVIS_BUILD_DIR/build
     # since we've set language to cpp we have to define python vars ourselves
     - TRAVIS_PYTHON_VERSION="2.7"
@@ -28,6 +28,7 @@ env:
   matrix:
     - WITH_PCL=ON
     - WITH_PCL=OFF
+  matrix:
     - WITH_MATIO=ON
     - WITH_MATIO=OFF
     
