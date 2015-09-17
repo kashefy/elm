@@ -17,7 +17,7 @@ env:
     - CONDA_ENV=test-environment
     - CONDA_ENV_PREFIX=$HOME/miniconda/envs/$CONDA_ENV
     # TRAVIS_BUILD_DIR: The absolute path to the directory where the repository being built has been copied on the worker.
-tra    - OPENCV_BUILD_DIR=$CONDA_ENV_PREFIX/lib/pkgconfig/opencv.pc
+    - OPENCV_BUILD_DIR=$CONDA_ENV_PREFIX/lib/pkgconfig/opencv.pc
     - ELM_BUILD_DIR=$TRAVIS_BUILD_DIR/build
     # since we've set language to cpp we have to define python vars ourselves
     - TRAVIS_PYTHON_VERSION="2.7"
@@ -28,7 +28,6 @@ tra    - OPENCV_BUILD_DIR=$CONDA_ENV_PREFIX/lib/pkgconfig/opencv.pc
   matrix:
     - WITH_PCL=ON
     - WITH_PCL=OFF
-  matrix:
     - WITH_MATIO=ON
     - WITH_MATIO=OFF
     
@@ -134,15 +133,15 @@ before_script:
   - if [ "$WITH_MATIO" == "ON" ]; then
       export EXTRA_BUILD_PARAMS="-DMATIO_DIR=$DEPS_DIR/matio -DHDF5_DIR=$DEPS_DIR/hdf5 $EXTRA_BUILD_PARAMS";
     fi
-  - if [ "$WITH_PCL" == "ON" ]; then
+  - |
+    if [ "$WITH_PCL" == "ON" ]; then
       # eplxicit linking to ssl and crypto libs to avoid linking errors, related to conda's opencv build and conda's lib path
       export EXTRA_CXX_FLAGS="-lssl -lcrypto $EXTRA_CXX_FLAGS";
     fi
   - echo $EXTRA_BUILD_PARAMS
   - echo $EXTRA_CXX_FLAGS
-  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="$EXTRA_CXX_FLAGS" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_MATIO=$WITH_MATIO -DBUILD_python=ON -DPYTHON_LIBRARY=$CONDA_ENV_PREFIX/lib/libpython2.7.so -DWITH_PCL=$WITH_PCL $EXTRA_BUILD_PARAMS $TRAVIS_BUILD_DIR;
-    
-    
+  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS -DCMAKE_CXX_FLAGS="$EXTRA_CXX_FLAGS" -DOpenCV_DIR=$OPENCV_BUILD_DIR -DGTEST_ROOT=$DEPS_DIR/gtest-1.7.0 -DCMAKE_INSTALL_PREFIX=install -DWITH_MATIO=$WITH_MATIO -DBUILD_python=ON -DPYTHON_LIBRARY=$CONDA_ENV_PREFIX/lib/libpython2.7.so -DWITH_PCL=$WITH_PCL $EXTRA_BUILD_PARAMS $TRAVIS_BUILD_DIR
+  
 script:
   - cd $ELM_BUILD_DIR
   - travis_retry make VERBOSE=1
