@@ -144,7 +144,7 @@ before_script:
   
 script:
   - cd $ELM_BUILD_DIR
-  - travis_retry make VERBOSE=1
+  - travis_retry make -j2
   # run unit tests
   - if [ "$BUILD_TYPE" == "Coverage" ]; then
       make elm_unittests_coverage;
