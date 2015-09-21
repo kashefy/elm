@@ -26,10 +26,10 @@ env:
     - BUILD_SHARED_LIBS=ON
     - secure: "fvYVNecz00QbdEz9sWc5bUjaCby7fsrfKzkFCTzsYmI2PzRB1CMKDpIxjxI77z/KixFeiZkQ2IAQck13EvWCnqEccBjt/MmrmJGWBLwpK1yAaJe4opFICQcUwvmG8GN0/ppi7g+QD9Svu+mrMEsVBoQm9nX+NdvMAMSMiX7ZXFg="
   matrix:
-    - WITH_PCL=ON WITH_MATIO=ON
-    - WITH_PCL=ON WITH_MATIO=OFF
-    - WITH_PCL=OFF WITH_MATIO=ON
-    - WITH_PCL=OFF WITH_MATIO=OFF
+    - WITH_PCL=ON WITH_MATIO=ON WITH_COVERAGE=ON WITH_DOCS=ON
+    - WITH_PCL=ON WITH_MATIO=OFF WITH_COVERAGE=OFF WITH_DOCS=OFF
+    - WITH_PCL=OFF WITH_MATIO=ON WITH_COVERAGE=OFF WITH_DOCS=OFF
+    - WITH_PCL=OFF WITH_MATIO=OFF WITH_COVERAGE=OFF WITH_DOCS=OFF
     
 before_install:
   - travis_retry sudo apt-get update -qq
@@ -146,7 +146,7 @@ script:
   - cd $ELM_BUILD_DIR
   - travis_retry make -j2
   # run unit tests
-  - if [ "$BUILD_TYPE" == "Coverage" ]; then
+  - if [ "$BUILD_TYPE" == "Coverage" -a "$WITH_COVERAGE" == "ON" ]; then
       make elm_unittests_coverage;
     else
       cd $ELM_BUILD_DIR/bin && ./run_elm_unittests;
@@ -163,7 +163,7 @@ script:
 after_success:
   # c++ test coverage
   - cd $ELM_BUILD_DIR
-  - if [ "$BUILD_TYPE" == "Coverage" ]; then coveralls-lcov coverage.info; fi
+  - if [ "$BUILD_TYPE" == "Coverage" -a "$WITH_COVERAGE" == "ON" ]; then coveralls-lcov coverage.info; fi
   # Convert to json for merging with python coverage
   #- coveralls-lcov -v -n coverage.info > coverage.json
   # python test coverage TODO
@@ -173,5 +173,8 @@ after_success:
   #- coveralls --config_file .coveragerc --merge=$ELM_BUILD_DIR/coverage.json
   
   # Generate and publish docs
-  - chmod -R 744 $TRAVIS_BUILD_DIR/.ci/travis
-  - $TRAVIS_BUILD_DIR/.ci/travis/docs_to_gh-pages.sh
+  - if [ "$WITH_DOCS" == "ON" ]; then
+      chmod -R 744 $TRAVIS_BUILD_DIR/.ci/travis
+      $TRAVIS_BUILD_DIR/.ci/travis/docs_to_gh-pages.sh
+    fi
+    
